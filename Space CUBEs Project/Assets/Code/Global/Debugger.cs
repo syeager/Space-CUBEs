@@ -14,6 +14,13 @@ using System.IO;
 /// </summary>
 public class Debugger : MonoBehaviour
 {
+    #region References
+
+    public GameObject FPS;
+    public GameObject FPS_Prefab;
+
+    #endregion
+
     #region Public Fields
 
     public static Debugger Main;

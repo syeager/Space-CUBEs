@@ -97,7 +97,7 @@ public class Player : Ship
 
         #else
 
-        
+        return 0f;
 
         #endif
     }

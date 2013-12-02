@@ -19,6 +19,8 @@ public class GameMaster : MonoBehaviour
         if (Main == null)
         {
             Main = this;
+
+            Application.targetFrameRate = 60;
         }
         else
         {

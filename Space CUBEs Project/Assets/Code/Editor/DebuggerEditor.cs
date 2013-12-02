@@ -19,7 +19,7 @@ public class DebuggerEditor : Editor
     private void OnEnable()
     {
         sObject = new SerializedObject(target);
-        myDebugger = (Debugger) target;
+        myDebugger = (Debugger)target;
         logTypes = Enum.GetNames(typeof(Debugger.LogTypes));
     }
 
@@ -27,6 +27,19 @@ public class DebuggerEditor : Editor
     public override void OnInspectorGUI()
     {
         sObject.Update();
+
+        if (GUILayout.Button(myDebugger.FPS == null ? "Show" : "Hide" + " FPS"))
+        {
+            if (sObject.FindProperty("FPS").objectReferenceValue == null)
+            {
+                sObject.FindProperty("FPS").objectReferenceValue = Instantiate(sObject.FindProperty("FPS_Prefab").objectReferenceValue, new Vector3(0.99f, 0.99f, 0f), Quaternion.identity);
+            }
+            else
+            {
+                DestroyImmediate(sObject.FindProperty("FPS").objectReferenceValue);
+                sObject.FindProperty("FPS").objectReferenceValue = null;
+            }
+        }
 
         EditorGUILayout.PropertyField(sObject.FindProperty("overwrite"), new GUIContent("Overwrite Saved Logs"));
 

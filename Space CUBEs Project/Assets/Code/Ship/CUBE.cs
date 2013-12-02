@@ -13,10 +13,11 @@ public class CUBE : MonoBehaviour
 
     public enum CUBETypes
     {
-        Normal,
+        Armor,
         Weapon,
         Cockpit,
         Engine,
+        Wing
     }
     public CUBETypes CUBEType;
 

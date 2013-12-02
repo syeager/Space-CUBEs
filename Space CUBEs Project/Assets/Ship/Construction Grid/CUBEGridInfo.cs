@@ -3,15 +3,17 @@
 
 using UnityEngine;
 
-public struct CUBEGridInfo
+public class CUBEGridInfo
 {
-    public readonly Vector3 position;
-    public readonly Vector3 rotation;
+    public Vector3 position;
+    public Vector3 rotation;
+    public int weaponMap;
 
 
-    public CUBEGridInfo(Vector3 position, Vector3 rotation)
+    public CUBEGridInfo(Vector3 position, Vector3 rotation, int weaponMap)
     {
         this.position = position;
         this.rotation = rotation;
+        this.weaponMap = weaponMap;
     }
 }

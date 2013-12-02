@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Xml;
 using System.IO;
+using System.Linq;
 
 public class ConstructionGrid : MonoBehaviour
 {
@@ -17,7 +18,12 @@ public class ConstructionGrid : MonoBehaviour
     public Material CellOpen_Mat;
     public Material CellClosed_Mat;
     public Material CellHover_Mat;
-    public int currentLayer = -1;
+    public enum CursorStatuses
+    {
+        None,
+        Hover,
+        Holding,
+    }
 
     public bool showWholeGrid = true;
 
@@ -29,13 +35,11 @@ public class ConstructionGrid : MonoBehaviour
 
     private CUBE[][][] grid;
     private GameObject[][][] cells;
-    public Vector3 cursor;
-    public Vector3 cursorOffset;
+    private Vector3 cursorOffset;
     private Dictionary<CUBE, CUBEGridInfo> currentBuild = new Dictionary<CUBE, CUBEGridInfo>();
+    public List<Weapon> weapons = new List<Weapon>(6);
     private GameObject ship;
-
-    public Vector3 cursorRotation;
-    public Quaternion rotation;
+    private Quaternion rotation;
 
     #endregion
 
@@ -48,12 +52,30 @@ public class ConstructionGrid : MonoBehaviour
     #region Properties
 
     public int size { get; private set; }
+    public Vector3 cursor { get; private set; }
+    public Vector3 cursorRotation { get; private set; }
+    public int currentLayer { get; private set; }
+    public CursorStatuses cursorStatus { get; private set; }
     public CUBE currentCUBE { get; private set; }
     private Vector3 cursorPosition
     {
         get
         {
             return cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].transform.position;
+        }
+    }
+    private int weaponsIndex
+    {
+        get
+        {
+            for (int i = 0; i < weapons.Count; i++)
+            {
+                if (weapons[i] == null)
+                {
+                    return i;
+                }
+            }
+            return -1;
         }
     }
 
@@ -153,6 +175,19 @@ public class ConstructionGrid : MonoBehaviour
         {
             currentCUBE.transform.position += vector;
         }
+
+        if (currentCUBE != null)
+        {
+            cursorStatus = CursorStatuses.Holding;
+        }
+        else if (grid[(int)cursor.y][(int)cursor.z][(int)cursor.x] != null)
+        {
+            cursorStatus = CursorStatuses.Hover;
+        }
+        else
+        {
+            cursorStatus = CursorStatuses.None;
+        }
     }
 
 
@@ -182,7 +217,7 @@ public class ConstructionGrid : MonoBehaviour
         }
 
         // move camera
-        //Camera.main.transform.position += Vector3.up * amount;
+        Camera.main.transform.position += Vector3.up * amount;
 
         currentLayer = newLayer;
         MoveCursor(Vector3.up * amount);
@@ -201,6 +236,8 @@ public class ConstructionGrid : MonoBehaviour
         currentCUBE = (CUBE)GameObject.Instantiate(GameResources.GetCUBE(CUBEID));
         currentCUBE.transform.position = cursorPosition;
         currentCUBE.transform.eulerAngles = cursorRotation;
+
+        cursorStatus = CursorStatuses.Holding;
     }
 
 
@@ -224,6 +261,8 @@ public class ConstructionGrid : MonoBehaviour
         RemoveCUBE(currentCUBE);
         Destroy(currentCUBE.gameObject);
         currentCUBE = null;
+        cursorStatus = CursorStatuses.None;
+
         return true;
     }
 
@@ -253,9 +292,11 @@ public class ConstructionGrid : MonoBehaviour
                     xml.WriteWhitespace("\r\n");
                     xml.WriteElementString("ID", piece.Key.ID.ToString());
                     xml.WriteWhitespace("\r\n");
-                    xml.WriteElementString("P", piece.Value.position.ToString());
+                    xml.WriteElementString("Position", piece.Value.position.ToString());
                     xml.WriteWhitespace("\r\n");
-                    xml.WriteElementString("R", piece.Value.rotation.ToString());
+                    xml.WriteElementString("Rotation", piece.Value.rotation.ToString());
+                    xml.WriteWhitespace("\r\n");
+                    xml.WriteElementString("WeaponMap", piece.Value.weaponMap.ToString());
                     xml.WriteWhitespace("\r\n");
                 }
                 xml.WriteEndElement();
@@ -281,6 +322,8 @@ public class ConstructionGrid : MonoBehaviour
     public List<KeyValuePair<int, CUBEGridInfo>> LoadBuild(string buildName)
     {
         currentBuild.Clear();
+        weapons = weapons.Select(w => w = null).ToList();
+
         this.buildName = buildName;
         string build = PlayerPrefs.GetString(BUILDPATH + buildName);
         var buildList = new List<KeyValuePair<int, CUBEGridInfo>>();
@@ -291,6 +334,7 @@ public class ConstructionGrid : MonoBehaviour
             int pieceID = -1;
             Vector3 pieceP = Vector3.zero;
             Vector3 pieceR = Vector3.zero;
+            int weaponMap = -1;
             while (xml.Read())
             {
                 if (xml.IsStartElement())
@@ -305,12 +349,15 @@ public class ConstructionGrid : MonoBehaviour
                         case "ID":
                             pieceID = int.Parse(xml.ReadString());
                             break;
-                        case "P":
+                        case "Position":
                             pieceP = ToVector3(xml.ReadString());
                             break;
-                        case "R":
+                        case "Rotation":
                             pieceR = ToVector3(xml.ReadString());
-                            buildList.Add(new KeyValuePair<int, CUBEGridInfo>(pieceID, new CUBEGridInfo(pieceP, pieceR)));
+                            break;
+                        case "WeaponMap":
+                            weaponMap = int.Parse(xml.ReadString());
+                            buildList.Add(new KeyValuePair<int, CUBEGridInfo>(pieceID, new CUBEGridInfo(pieceP, pieceR, weaponMap)));
                             break;
 
                         default:
@@ -328,11 +375,29 @@ public class ConstructionGrid : MonoBehaviour
             cursor = piece.Value.position;
             cursorRotation = piece.Value.rotation;
             CreateCUBE(piece.Key);
-            PlaceCUBE();
+            PlaceCUBE(piece.Value.weaponMap);
         }
         cursor = position;
 
         return buildList;
+    }
+
+
+    // need to update CUBEInfo in currentBuild
+    public void MoveWeaponMap(int index, int direction)
+    {
+        if (index == -1) return;
+        if (index + direction >= weapons.Count || index + direction < 0) return;
+        if (weapons[index] == null) return;
+
+        Weapon saved = weapons[index];
+        currentBuild[saved.GetComponent<CUBE>()].weaponMap += direction;
+        weapons[index] = weapons[index + direction];
+        if (weapons[index] != null)
+        {
+            currentBuild[weapons[index].GetComponent<CUBE>()].weaponMap -= direction;
+        }
+        weapons[index + direction] = saved;
     }
 
     #endregion
@@ -415,15 +480,28 @@ public class ConstructionGrid : MonoBehaviour
         rotation = Quaternion.Euler(cursorRotation);
         cursorOffset = cursorPosition - currentCUBE.transform.position;
         RemoveCUBE(cube);
+        cursorStatus = CursorStatuses.Holding;
     }
 
 
-    private bool PlaceCUBE()
+    private bool PlaceCUBE(int weaponIndex = -1)
     {
         if (currentCUBE == null) return false;
         if (!Fits()) return false;
 
-        currentBuild.Add(currentCUBE, new CUBEGridInfo(cursor - cursorOffset, cursorRotation));
+        if (currentCUBE.CUBEType == CUBE.CUBETypes.Weapon)
+        {
+            if (weaponIndex == -1)
+            {
+                weaponIndex = weaponsIndex;
+            }
+            weapons[weaponIndex] = currentCUBE.GetComponent<Weapon>();
+            currentBuild.Add(currentCUBE, new CUBEGridInfo(cursor - cursorOffset, cursorRotation, weaponIndex));
+        }
+        else
+        {
+            currentBuild.Add(currentCUBE, new CUBEGridInfo(cursor - cursorOffset, cursorRotation, -1));
+        }
 
         // add all pieces
         foreach (var piece in currentCUBE.pieces)
@@ -436,6 +514,7 @@ public class ConstructionGrid : MonoBehaviour
         currentCUBE.transform.parent = ship.transform;
         currentCUBE = null;
         cursorOffset = Vector3.zero;
+        cursorStatus = CursorStatuses.Hover;
         return true;
     }
 
@@ -461,6 +540,10 @@ public class ConstructionGrid : MonoBehaviour
             cells[(int)rotatedPiece.y][(int)rotatedPiece.z][(int)rotatedPiece.x].renderer.material = CellOpen_Mat;
         }
 
+        if (currentCUBE.CUBEType == CUBE.CUBETypes.Weapon && weapons.IndexOf(currentCUBE.GetComponent<Weapon>()) != -1)
+        {
+            weapons[weapons.IndexOf(currentCUBE.GetComponent<Weapon>())] = null;
+        }
         currentBuild.Remove(cube);
 
         cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].renderer.material = CellCursor_Mat;
