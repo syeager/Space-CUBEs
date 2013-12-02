@@ -288,12 +288,13 @@ MeshFilter:
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 100000, guid: aeed59aee1ea3714da2eb46ccb6175bd, type: 2}
-  m_PrefabInternal: {fileID: 1222186692}
+  m_PrefabInternal: {fileID: 1153873935}
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 768662255}
   - 114: {fileID: 768662254}
   - 114: {fileID: 768662253}
+  - 114: {fileID: 768662256}
   m_Layer: 0
   m_Name: __GameMaster
   m_TagString: Untagged
@@ -306,7 +307,7 @@ MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 11400000, guid: aeed59aee1ea3714da2eb46ccb6175bd,
     type: 2}
-  m_PrefabInternal: {fileID: 1222186692}
+  m_PrefabInternal: {fileID: 1153873935}
   m_GameObject: {fileID: 768662252}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -327,7 +328,7 @@ MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 11400002, guid: aeed59aee1ea3714da2eb46ccb6175bd,
     type: 2}
-  m_PrefabInternal: {fileID: 1222186692}
+  m_PrefabInternal: {fileID: 1153873935}
   m_GameObject: {fileID: 768662252}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -338,13 +339,27 @@ MonoBehaviour:
 Transform:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 400000, guid: aeed59aee1ea3714da2eb46ccb6175bd, type: 2}
-  m_PrefabInternal: {fileID: 1222186692}
+  m_PrefabInternal: {fileID: 1153873935}
   m_GameObject: {fileID: 768662252}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
+--- !u!114 &768662256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400004, guid: aeed59aee1ea3714da2eb46ccb6175bd,
+    type: 2}
+  m_PrefabInternal: {fileID: 1153873935}
+  m_GameObject: {fileID: 768662252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd532088234b3c1489d098decb38d5c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  overwrite: 0
+  logFlags: 0101
 --- !u!1 &821642093
 GameObject:
   m_ObjectHideFlags: 0
@@ -435,7 +450,7 @@ Light:
   m_ShadowAngle: 0
   m_IndirectIntensity: 1
   m_AreaSize: {x: 1, y: 1}
---- !u!1001 &1222186692
+--- !u!1001 &1153873935
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2

@@ -72,14 +72,12 @@ public class GarageManager : MonoBehaviour
 
         GUILayout.BeginArea(new Rect(Screen.width - 200, 0, 200, Screen.height));
         {
-            int cursor = 0;
             foreach (var cube in GameResources.Main.CUBEs)
             {
                 if (GUILayout.Button(cube.name.Substring(5)))
                 {
-                    Grid.CreateCUBE(cursor);
+                    Grid.CreateCUBE(cube.ID);
                 }
-                cursor++;
             }
         }
         GUILayout.EndArea();
@@ -155,6 +153,18 @@ public class GarageManager : MonoBehaviour
             {
                 Debug.LogWarning("Can't delete CUBE.");
             }
+        }
+
+        // build
+        if (Input.GetKeyUp(KeyCode.Return))
+        {
+            Grid.SaveBuild();
+        }
+
+        // load
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            Grid.LoadBuild("Test Build");
         }
     }
 

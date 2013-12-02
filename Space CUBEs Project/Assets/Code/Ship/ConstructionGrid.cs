@@ -4,6 +4,8 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using System.Xml;
+using System.IO;
 
 public class ConstructionGrid : MonoBehaviour
 {
@@ -19,6 +21,8 @@ public class ConstructionGrid : MonoBehaviour
 
     public bool showWholeGrid = true;
 
+    public string buildName;
+
     #endregion
 
     #region Private Fields
@@ -32,6 +36,12 @@ public class ConstructionGrid : MonoBehaviour
 
     public Vector3 cursorRotation;
     public Quaternion rotation;
+
+    #endregion
+
+    #region Const Fields
+
+    private const string BUILDPATH = "Build: ";
 
     #endregion
 
@@ -179,7 +189,7 @@ public class ConstructionGrid : MonoBehaviour
     }
 
 
-    public void CreateCUBE(int index)
+    public void CreateCUBE(int CUBEID)
     {
         if (currentCUBE != null)
         {
@@ -188,7 +198,7 @@ public class ConstructionGrid : MonoBehaviour
 
         cursorOffset = Vector3.zero;
 
-        currentCUBE = (CUBE)GameObject.Instantiate(GameResources.Main.CUBEs[index]);
+        currentCUBE = (CUBE)GameObject.Instantiate(GameResources.GetCUBE(CUBEID));
         currentCUBE.transform.position = cursorPosition;
         currentCUBE.transform.eulerAngles = cursorRotation;
     }
@@ -215,6 +225,114 @@ public class ConstructionGrid : MonoBehaviour
         Destroy(currentCUBE.gameObject);
         currentCUBE = null;
         return true;
+    }
+
+
+    public string SaveBuild()
+    {
+        string build;
+        using (StringWriter str = new StringWriter())
+        using (XmlTextWriter xml = new XmlTextWriter(str))
+        {
+            // root
+            xml.WriteStartDocument();
+            xml.WriteWhitespace("\r\n");
+            xml.WriteStartElement("Ship");
+            xml.WriteWhitespace("\r\n");
+
+            // main
+            xml.WriteElementString("Name", buildName);
+            xml.WriteWhitespace("\r\n");
+            // weapons
+
+            // pieces
+            foreach (var piece in currentBuild)
+            {
+                xml.WriteStartElement("Piece");
+                {
+                    xml.WriteWhitespace("\r\n");
+                    xml.WriteElementString("ID", piece.Key.ID.ToString());
+                    xml.WriteWhitespace("\r\n");
+                    xml.WriteElementString("P", piece.Value.position.ToString());
+                    xml.WriteWhitespace("\r\n");
+                    xml.WriteElementString("R", piece.Value.rotation.ToString());
+                    xml.WriteWhitespace("\r\n");
+                }
+                xml.WriteEndElement();
+                xml.WriteWhitespace("\r\n");
+            }
+
+            // end
+            xml.WriteEndElement();
+            xml.WriteEndDocument();
+
+            build = str.ToString();
+        }
+
+        // save
+        PlayerPrefs.SetString(BUILDPATH + buildName, build);
+        // add to list of all buildNames
+
+        Debugger.Log(build, true, Debugger.LogTypes.Data);
+        return build;
+    }
+
+
+    public List<KeyValuePair<int, CUBEGridInfo>> LoadBuild(string buildName)
+    {
+        currentBuild.Clear();
+        this.buildName = buildName;
+        string build = PlayerPrefs.GetString(BUILDPATH + buildName);
+        var buildList = new List<KeyValuePair<int, CUBEGridInfo>>();
+
+        using (StringReader str = new StringReader(build))
+        using (XmlTextReader xml = new XmlTextReader(str))
+        {
+            int pieceID = -1;
+            Vector3 pieceP = Vector3.zero;
+            Vector3 pieceR = Vector3.zero;
+            while (xml.Read())
+            {
+                if (xml.IsStartElement())
+                {
+                    switch (xml.Name)
+                    {
+                        case "Ship":
+                        case "Name":
+                        case "Piece":
+                            break;
+
+                        case "ID":
+                            pieceID = int.Parse(xml.ReadString());
+                            break;
+                        case "P":
+                            pieceP = ToVector3(xml.ReadString());
+                            break;
+                        case "R":
+                            pieceR = ToVector3(xml.ReadString());
+                            buildList.Add(new KeyValuePair<int, CUBEGridInfo>(pieceID, new CUBEGridInfo(pieceP, pieceR)));
+                            break;
+
+                        default:
+                            Debugger.LogWarning("Incorrect XML Element in build: " + xml.Name);
+                            break;
+                    }
+                }
+            }
+        }
+
+        // build
+        var position = cursor;
+        foreach (var piece in buildList)
+        {
+            cursor = piece.Value.position;
+            cursorRotation = piece.Value.rotation;
+            CreateCUBE(piece.Key);
+            PlaceCUBE();
+        }
+        cursor = position;
+
+        return buildList;
     }
 
     #endregion
@@ -382,6 +500,19 @@ public class ConstructionGrid : MonoBehaviour
             m20 = -Sin(angle), m21 = 0, m22 = Cos(angle), m23 = 0,
             m30 = 0, m31 = 0, m32 = 0, m33 = 1
         };
+    }
+
+
+    private Vector3 ToVector3(string vectorString)
+    {
+        Vector3 vector;
+        vectorString = vectorString.Substring(1, vectorString.Length-2).Replace(" ", "");
+        string[] split = vectorString.Split(',');
+        vector.x = float.Parse(split[0]);
+        vector.y = float.Parse(split[1]);
+        vector.z = float.Parse(split[2]);
+
+        return vector;
     }
 
     #endregion

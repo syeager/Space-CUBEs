@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class GameResources : MonoBehaviour
 {
@@ -27,6 +28,15 @@ public class GameResources : MonoBehaviour
         {
             Main = this;
         }
+    }
+
+    #endregion
+
+    #region Static Methods
+
+    public static CUBE GetCUBE(int ID)
+    {
+        return Main.CUBEs.Find(c => c.ID == ID);
     }
 
     #endregion
