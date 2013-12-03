@@ -39,7 +39,7 @@ public class ConstructionGrid : MonoBehaviour
     private Dictionary<CUBE, CUBEGridInfo> currentBuild = new Dictionary<CUBE, CUBEGridInfo>();
     public List<Weapon> weapons = new List<Weapon>(6);
     private GameObject ship;
-    private Quaternion rotation;
+    private Quaternion rotation = new Quaternion(0, 0, 0, 1);
 
     #endregion
 
@@ -241,11 +241,11 @@ public class ConstructionGrid : MonoBehaviour
     }
 
 
-    public void CursorAction()
+    public void CursorAction(bool loadAnother)
     {
         if (currentCUBE != null)
         {
-            PlaceCUBE();
+            PlaceCUBE(loadAnother);
         }
         else if (grid[(int)cursor.y][(int)cursor.z][(int)cursor.x] != null)
         {
@@ -282,7 +282,6 @@ public class ConstructionGrid : MonoBehaviour
             // main
             xml.WriteElementString("Name", buildName);
             xml.WriteWhitespace("\r\n");
-            // weapons
 
             // pieces
             foreach (var piece in currentBuild)
@@ -325,7 +324,11 @@ public class ConstructionGrid : MonoBehaviour
         weapons = weapons.Select(w => w = null).ToList();
 
         this.buildName = buildName;
-        string build = PlayerPrefs.GetString(BUILDPATH + buildName);
+        string build = PlayerPrefs.GetString(BUILDPATH + buildName, "NA");
+        if (build == "NA")
+        {
+            return null;
+        }
         var buildList = new List<KeyValuePair<int, CUBEGridInfo>>();
 
         using (StringReader str = new StringReader(build))
@@ -516,6 +519,22 @@ public class ConstructionGrid : MonoBehaviour
         cursorOffset = Vector3.zero;
         cursorStatus = CursorStatuses.Hover;
         return true;
+    }
+
+
+    private bool PlaceCUBE(bool loadAnother, int weaponIndex = -1)
+    {
+        if (currentCUBE == null) return false;
+        int id = currentCUBE.ID;
+        if (PlaceCUBE(weaponIndex))
+        {
+            if (loadAnother)
+            {
+                CreateCUBE(id);
+            }
+            return true;
+        }
+        return false;
     }
 
 

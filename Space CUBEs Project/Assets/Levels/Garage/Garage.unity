@@ -556,8 +556,8 @@ Camera:
   near clip plane: .300000012
   far clip plane: 1000
   field of view: 60
-  orthographic: 0
-  orthographic size: 5
+  orthographic: 1
+  orthographic size: 6
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -573,7 +573,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1294868597}
   m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: 0, y: 25, z: 0}
+  m_LocalPosition: {x: -1.5, y: 25, z: .600000024}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -608,18 +608,37 @@ MonoBehaviour:
   mainCamera: {fileID: 0}
   gridSize: 10
   CUBEScroll: {x: 0, y: 0}
-  LeftToolsPer:
+  menu: 0
+  LeftMenuPer:
     serializedVersion: 2
     x: 0
-    y: .100000001
+    y: 0
     width: .300000012
-    height: .899999976
-  RightToolsPer:
+    height: 1
+  RightMenuPer:
     serializedVersion: 2
-    x: .699999988
-    y: .100000001
-    width: .300000012
-    height: .899999976
+    x: .899999976
+    y: .150000006
+    width: .100000001
+    height: .699999988
+  DeletePer:
+    serializedVersion: 2
+    x: .850000024
+    y: 0
+    width: .150000006
+    height: .150000006
+  ActionPer:
+    serializedVersion: 2
+    x: .850000024
+    y: .850000024
+    width: .150000006
+    height: .150000006
+  NamePer:
+    serializedVersion: 2
+    x: .328999996
+    y: 0
+    width: .5
+    height: .100000001
   CUBEPer: .100000001
 --- !u!4 &1356246780
 Transform:
