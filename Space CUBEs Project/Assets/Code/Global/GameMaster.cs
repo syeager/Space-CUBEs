@@ -19,6 +19,7 @@ public class GameMaster : MonoBehaviour
         if (Main == null)
         {
             Main = this;
+            DontDestroyOnLoad(gameObject);
 
             Application.targetFrameRate = 60;
             Screen.sleepTimeout = SleepTimeout.NeverSleep;

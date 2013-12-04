@@ -34,7 +34,7 @@ public class GarageManager : MonoBehaviour
     private Rect RightMenuRect;
     private Rect DeleteRect;
     private Rect ActionRect;
-    private Rect NameRect;
+    private Rect InfoRect;
     private float CUBESize;
     private int weaponIndex = -1;
 
@@ -55,7 +55,7 @@ public class GarageManager : MonoBehaviour
     public Rect RightMenuPer = new Rect(0.9f, 0f, 0.1f, 0.9f);
     public Rect DeletePer = new Rect(0.5f, 0.9f, 0.5f, 0.1f);
     public Rect ActionPer = new Rect(0.5f, 0.9f, 0.5f, 0.1f);
-    public Rect NamePer = new Rect(0.5f, 0.9f, 0.5f, 0.1f);
+    public Rect InfoPer = new Rect(0.5f, 0.9f, 0.5f, 0.1f);
     public float CUBEPer = 0.1f;
 
     #endregion
@@ -75,7 +75,7 @@ public class GarageManager : MonoBehaviour
 
     private void OnGUI()
     {
-        Name();
+        Info();
         LeftMenu();
         RightMenu();
         DeleteButton();
@@ -163,7 +163,7 @@ public class GarageManager : MonoBehaviour
         // load
         if (Input.GetKeyDown(KeyCode.L))
         {
-            Grid.LoadBuild("Test Build");
+            Grid.Load("Test Build");
         }
     }
 
@@ -180,7 +180,7 @@ public class GarageManager : MonoBehaviour
         RightMenuRect = new Rect(W * RightMenuPer.x, H * RightMenuPer.y, W * RightMenuPer.width, H * RightMenuPer.height);
         DeleteRect = new Rect(W * DeletePer.x, H * DeletePer.y, W * DeletePer.width, H * DeletePer.height);
         ActionRect = new Rect(W * ActionPer.x, H * ActionPer.y, W * ActionPer.width, H * ActionPer.height);
-        NameRect = new Rect(W * NamePer.x, H * NamePer.y, W * NamePer.width, H * NamePer.height);
+        InfoRect = new Rect(W * InfoPer.x, H * InfoPer.y, W * InfoPer.width, H * InfoPer.height);
         CUBESize = H * CUBEPer;
     }
 
@@ -218,7 +218,11 @@ public class GarageManager : MonoBehaviour
         }
         if (GUI.Button(new Rect(0f, LeftMenuRect.height * 0.2f, LeftMenuRect.width, LeftMenuRect.height * 0.2f), "Load"))
         {
-            Grid.LoadBuild(Grid.buildName);
+            Grid.Load(Grid.buildName);
+        }
+        if (GUI.Button(new Rect(0f, LeftMenuRect.height * 0.4f, LeftMenuRect.width, LeftMenuRect.height * 0.2f), "Test"))
+        {
+            GameData.Main.LoadScene("Test Room", false, Grid.buildName);
         }
     }
 
@@ -397,7 +401,6 @@ public class GarageManager : MonoBehaviour
         float h = LeftMenuRect.height;
 
         // top
-        string[] cubeTypes = Enum.GetNames(typeof(CUBE.CUBETypes));
         if (GUI.Button(new Rect(0f, 0f, w*0.25f, h*0.15f), allCUBEs ? "|" : "←") && !allCUBEs)
         {
             int cursor = (int)CUBEFilter;
@@ -467,15 +470,22 @@ public class GarageManager : MonoBehaviour
     }
 
 
-    private void Name()
+    private void Info()
     {
-        //GUI.BeginGroup(NameRect);
-        //{
-            //GUI.Box(new Rect(0f, 0f, NameRect.width, NameRect.height), "");
-        //}
-        //GUI.EndGroup();
+        GUI.BeginGroup(InfoRect);
+        {
+            // name
+            Grid.buildName = GUI.TextField(new Rect(0f, 0f, InfoRect.width, InfoRect.height*0.4f), Grid.buildName);
 
-        Grid.buildName = GUI.TextField(NameRect, Grid.buildName);
+            // health
+            GUI.Label(new Rect(0f, InfoRect.height * 0.45f, InfoRect.width * 0.3f, InfoRect.height * 0.5f), "Health: " + Grid.shipHealth);
+            // shield
+            GUI.Label(new Rect(InfoRect.width * 0.33f, InfoRect.height * 0.45f, InfoRect.width * 0.3f, InfoRect.height * 0.5f), "Shield: " + Grid.shipShield);
+            // weapons
+            GUI.Label(new Rect(InfoRect.width * 0.66f, InfoRect.height * 0.45f, InfoRect.width * 0.3f, InfoRect.height * 0.5f), "Weapons: " + Grid.shipWeapons);
+        }
+        GUI.EndGroup();
+
     }
 
     #endregion

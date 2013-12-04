@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.IO;
 using System.Linq;
+using System.Collections;
 
 public class ConstructionGrid : MonoBehaviour
 {
@@ -78,6 +79,16 @@ public class ConstructionGrid : MonoBehaviour
             return -1;
         }
     }
+
+    public float shipHealth { get; private set; }
+    public float shipShield { get; private set; }
+    public int shipWeapons { get; private set; }
+
+    #endregion
+
+    #region Events
+
+    public EventHandler<BuildFinishedArgs> BuildFinishedEvent;
 
     #endregion
 
@@ -280,7 +291,7 @@ public class ConstructionGrid : MonoBehaviour
             xml.WriteWhitespace("\r\n");
 
             // main
-            xml.WriteElementString("Name", buildName);
+            xml.WriteElementString("Info", buildName);
             xml.WriteWhitespace("\r\n");
 
             // pieces
@@ -318,62 +329,12 @@ public class ConstructionGrid : MonoBehaviour
     }
 
 
-    public List<KeyValuePair<int, CUBEGridInfo>> LoadBuild(string buildName)
+    public void Load(string build)
     {
-        currentBuild.Clear();
-        weapons = weapons.Select(w => w = null).ToList();
+        var partList = LoadBuild(build);
 
-        this.buildName = buildName;
-        string build = PlayerPrefs.GetString(BUILDPATH + buildName, "NA");
-        if (build == "NA")
-        {
-            return null;
-        }
-        var buildList = new List<KeyValuePair<int, CUBEGridInfo>>();
-
-        using (StringReader str = new StringReader(build))
-        using (XmlTextReader xml = new XmlTextReader(str))
-        {
-            int pieceID = -1;
-            Vector3 pieceP = Vector3.zero;
-            Vector3 pieceR = Vector3.zero;
-            int weaponMap = -1;
-            while (xml.Read())
-            {
-                if (xml.IsStartElement())
-                {
-                    switch (xml.Name)
-                    {
-                        case "Ship":
-                        case "Name":
-                        case "Piece":
-                            break;
-
-                        case "ID":
-                            pieceID = int.Parse(xml.ReadString());
-                            break;
-                        case "Position":
-                            pieceP = ToVector3(xml.ReadString());
-                            break;
-                        case "Rotation":
-                            pieceR = ToVector3(xml.ReadString());
-                            break;
-                        case "WeaponMap":
-                            weaponMap = int.Parse(xml.ReadString());
-                            buildList.Add(new KeyValuePair<int, CUBEGridInfo>(pieceID, new CUBEGridInfo(pieceP, pieceR, weaponMap)));
-                            break;
-
-                        default:
-                            Debugger.LogWarning("Incorrect XML Element in build: " + xml.Name);
-                            break;
-                    }
-                }
-            }
-        }
-
-        // build
         var position = cursor;
-        foreach (var piece in buildList)
+        foreach (var piece in partList)
         {
             cursor = piece.Value.position;
             cursorRotation = piece.Value.rotation;
@@ -381,12 +342,9 @@ public class ConstructionGrid : MonoBehaviour
             PlaceCUBE(piece.Value.weaponMap);
         }
         cursor = position;
-
-        return buildList;
     }
 
 
-    // need to update CUBEInfo in currentBuild
     public void MoveWeaponMap(int index, int direction)
     {
         if (index == -1) return;
@@ -401,6 +359,64 @@ public class ConstructionGrid : MonoBehaviour
             currentBuild[weapons[index].GetComponent<CUBE>()].weaponMap -= direction;
         }
         weapons[index + direction] = saved;
+    }
+
+
+    public IEnumerator Build(string build, Vector3 startPosition, Vector3 startRotation, float maxTime)
+    {
+        var partList = LoadBuild(build);
+        if (partList == null)
+        {
+            if (BuildFinishedEvent != null)
+            {
+                BuildFinishedEvent(this, new BuildFinishedArgs(null, 0f, 0f, 0f, null));
+            }
+            yield break;
+        }
+
+        Weapon[] weaponMaps = new Weapon[6];
+        List<BuildInfo> pieces = new List<BuildInfo>();
+
+        yield return null;
+        const float distance = 50f;
+
+        GameObject finishedShip = new GameObject("Player");
+        finishedShip.transform.position = startPosition;
+        finishedShip.transform.eulerAngles = startRotation;
+
+        foreach (var piece in partList)
+        {
+            var cube = (CUBE)GameObject.Instantiate(GameResources.GetCUBE(piece.Key));
+            cube.transform.parent = finishedShip.transform;
+
+            cube.transform.localPosition = piece.Value.position*distance;
+            cube.transform.localPosition = Quaternion.Euler(UnityEngine.Random.Range(0, 360), UnityEngine.Random.Range(0, 360), UnityEngine.Random.Range(0, 360)) * cube.transform.localPosition;
+
+            cube.transform.localEulerAngles = piece.Value.rotation;
+            if (piece.Value.weaponMap != -1)
+            {
+                weaponMaps[piece.Value.weaponMap] = cube.GetComponent<Weapon>();
+            }
+
+            pieces.Add(new BuildInfo(cube.transform, piece.Value.position, maxTime / UnityEngine.Random.Range(1f, 3f)));
+        }
+
+        float time = maxTime;
+        while (time > 0f)
+        {
+            float deltaTime = Time.deltaTime;
+            foreach (var piece in pieces)
+            {
+                piece.Update(deltaTime);
+            }
+            time -= deltaTime;
+            yield return null;
+        }
+        
+        if (BuildFinishedEvent != null)
+        {
+            BuildFinishedEvent(this, new BuildFinishedArgs(finishedShip, 0f, 0f, 0f, null));
+        }
     }
 
     #endregion
@@ -617,5 +633,104 @@ public class ConstructionGrid : MonoBehaviour
         return vector;
     }
 
+
+    private List<KeyValuePair<int, CUBEGridInfo>> LoadBuild(string buildName)
+    {
+        currentBuild.Clear();
+        weapons = weapons.Select(w => w = null).ToList();
+
+        this.buildName = buildName;
+        string build = PlayerPrefs.GetString(BUILDPATH + buildName, "NA");
+        if (build == "NA")
+        {
+            return null;
+        }
+        var buildList = new List<KeyValuePair<int, CUBEGridInfo>>();
+
+        using (StringReader str = new StringReader(build))
+        using (XmlTextReader xml = new XmlTextReader(str))
+        {
+            int pieceID = -1;
+            Vector3 pieceP = Vector3.zero;
+            Vector3 pieceR = Vector3.zero;
+            int weaponMap = -1;
+            while (xml.Read())
+            {
+                if (xml.IsStartElement())
+                {
+                    switch (xml.Name)
+                    {
+                        case "Name":
+                        case "Ship":
+                        case "Info":
+                        case "Piece":
+                            break;
+
+                        case "ID":
+                            pieceID = int.Parse(xml.ReadString());
+                            break;
+                        case "Position":
+                            pieceP = ToVector3(xml.ReadString());
+                            break;
+                        case "Rotation":
+                            pieceR = ToVector3(xml.ReadString());
+                            break;
+                        case "WeaponMap":
+                            weaponMap = int.Parse(xml.ReadString());
+                            buildList.Add(new KeyValuePair<int, CUBEGridInfo>(pieceID, new CUBEGridInfo(pieceP, pieceR, weaponMap)));
+                            break;
+
+                        default:
+                            Debugger.LogWarning("Incorrect XML Element in build: " + xml.Name);
+                            break;
+                    }
+                }
+            }
+        }
+
+        return buildList;
+    }
+
     #endregion
+}
+
+
+public class BuildInfo
+{
+    private readonly Transform transform;
+    private readonly Vector3 localTarget;
+    private float time;
+    private readonly float speed;
+    public readonly Vector3 vector;
+    private bool done;
+
+
+    public BuildInfo(Transform transform, Vector3 localTarget, float time)
+    {
+        this.transform = transform;
+        this.localTarget = localTarget;
+        this.time = time;
+        done = false;
+
+        vector = localTarget - transform.localPosition;
+        speed = vector.magnitude / time;
+        vector.Normalize();
+    }
+
+
+    public void Update(float deltaTime)
+    {
+        if (done) return;
+        time -= deltaTime;
+        if (time <= 0f || Vector3.Distance(transform.localPosition, localTarget) <= 1f)
+        {
+            done = true;
+            transform.localPosition = localTarget;
+        }
+        else
+        {
+            
+            transform.localPosition += vector * speed * deltaTime;
+        }
+    }
 }
