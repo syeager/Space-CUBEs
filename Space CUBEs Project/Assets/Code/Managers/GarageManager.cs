@@ -157,7 +157,7 @@ public class GarageManager : MonoBehaviour
         // build
         if (Input.GetKeyUp(KeyCode.Return))
         {
-            Grid.SaveBuild();
+            Grid.SaveToData();
         }
 
         // load
@@ -214,7 +214,7 @@ public class GarageManager : MonoBehaviour
     {
         if (GUI.Button(new Rect(0f, 0f, LeftMenuRect.width, LeftMenuRect.height * 0.2f), "Save"))
         {
-            Grid.SaveBuild();
+            Grid.SaveToData();
         }
         if (GUI.Button(new Rect(0f, LeftMenuRect.height * 0.2f, LeftMenuRect.width, LeftMenuRect.height * 0.2f), "Load"))
         {
@@ -478,11 +478,13 @@ public class GarageManager : MonoBehaviour
             Grid.buildName = GUI.TextField(new Rect(0f, 0f, InfoRect.width, InfoRect.height*0.4f), Grid.buildName);
 
             // health
-            GUI.Label(new Rect(0f, InfoRect.height * 0.45f, InfoRect.width * 0.3f, InfoRect.height * 0.5f), "Health: " + Grid.shipHealth);
+            GUI.Label(new Rect(0f, InfoRect.height * 0.45f, InfoRect.width * 0.25f, InfoRect.height * 0.5f), "Health: " + Grid.shipHealth);
             // shield
-            GUI.Label(new Rect(InfoRect.width * 0.33f, InfoRect.height * 0.45f, InfoRect.width * 0.3f, InfoRect.height * 0.5f), "Shield: " + Grid.shipShield);
+            GUI.Label(new Rect(InfoRect.width * 0.25f, InfoRect.height * 0.45f, InfoRect.width * 0.25f, InfoRect.height * 0.5f), "Shield: " + Grid.shipShield);
+            // speed
+            GUI.Label(new Rect(InfoRect.width * 0.50f, InfoRect.height * 0.45f, InfoRect.width * 0.25f, InfoRect.height * 0.5f), "Speed: " + Grid.shipSpeed);
             // weapons
-            GUI.Label(new Rect(InfoRect.width * 0.66f, InfoRect.height * 0.45f, InfoRect.width * 0.3f, InfoRect.height * 0.5f), "Weapons: " + Grid.shipWeapons);
+            GUI.Label(new Rect(InfoRect.width * 0.75f, InfoRect.height * 0.45f, InfoRect.width * 0.25f, InfoRect.height * 0.5f), "Weapons: " + Grid.shipWeapons);
         }
         GUI.EndGroup();
 

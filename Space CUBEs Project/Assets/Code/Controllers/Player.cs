@@ -50,7 +50,6 @@ public class Player : Ship
 
     private void Start()
     {
-        Debug.Log("0");
         StartInitialState(null);
     }
 

@@ -9,7 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Collections;
 
-public class ConstructionGrid : MonoBehaviour
+public class ConstructionGrid : MonoBase
 {
     #region Public Fields
 
@@ -82,6 +82,7 @@ public class ConstructionGrid : MonoBehaviour
 
     public float shipHealth { get; private set; }
     public float shipShield { get; private set; }
+    public float shipSpeed { get; private set; }
     public int shipWeapons { get; private set; }
 
     #endregion
@@ -278,39 +279,33 @@ public class ConstructionGrid : MonoBehaviour
     }
 
 
-    public string SaveBuild()
+    public string SaveToData()
     {
         string build;
         using (StringWriter str = new StringWriter())
         using (XmlTextWriter xml = new XmlTextWriter(str))
         {
             // root
-            xml.WriteStartDocument();
-            xml.WriteWhitespace("\r\n");
-            xml.WriteStartElement("Ship");
-            xml.WriteWhitespace("\r\n");
+            xml.WriteStartDocumentLine();
+            xml.WriteStartElementLine("Ship");
 
             // main
-            xml.WriteElementString("Info", buildName);
-            xml.WriteWhitespace("\r\n");
+            xml.WriteElementStringLine("Info", buildName);
+            xml.WriteElementStringLine("Health", shipHealth.ToString());
+            xml.WriteElementStringLine("Shield", shipShield.ToString());
+            xml.WriteElementStringLine("Speed", shipSpeed.ToString());
 
             // pieces
             foreach (var piece in currentBuild)
             {
-                xml.WriteStartElement("Piece");
+                xml.WriteStartElementLine("Piece");
                 {
-                    xml.WriteWhitespace("\r\n");
-                    xml.WriteElementString("ID", piece.Key.ID.ToString());
-                    xml.WriteWhitespace("\r\n");
-                    xml.WriteElementString("Position", piece.Value.position.ToString());
-                    xml.WriteWhitespace("\r\n");
-                    xml.WriteElementString("Rotation", piece.Value.rotation.ToString());
-                    xml.WriteWhitespace("\r\n");
-                    xml.WriteElementString("WeaponMap", piece.Value.weaponMap.ToString());
-                    xml.WriteWhitespace("\r\n");
+                    xml.WriteElementStringLine("ID", piece.Key.ID.ToString());
+                    xml.WriteElementStringLine("Position", piece.Value.position.ToString());
+                    xml.WriteElementStringLine("Rotation", piece.Value.rotation.ToString());
+                    xml.WriteElementStringLine("WeaponMap", piece.Value.weaponMap.ToString());
                 }
-                xml.WriteEndElement();
-                xml.WriteWhitespace("\r\n");
+                xml.WriteEndElementLine();
             }
 
             // end
@@ -331,10 +326,10 @@ public class ConstructionGrid : MonoBehaviour
 
     public void Load(string build)
     {
-        var partList = LoadBuild(build);
+        var buildInfo = LoadFromData(build);
 
         var position = cursor;
-        foreach (var piece in partList)
+        foreach (var piece in buildInfo.partList)
         {
             cursor = piece.Value.position;
             cursorRotation = piece.Value.rotation;
@@ -364,8 +359,8 @@ public class ConstructionGrid : MonoBehaviour
 
     public IEnumerator Build(string build, int buildSize, Vector3 startPosition, Vector3 startRotation, float maxTime)
     {
-        var partList = LoadBuild(build);
-        if (partList == null)
+        var buildInfo = LoadFromData(build);
+        if (buildInfo == null)
         {
             if (BuildFinishedEvent != null)
             {
@@ -385,7 +380,7 @@ public class ConstructionGrid : MonoBehaviour
         finishedShip.transform.eulerAngles = startRotation;
         float speed = (finishedShip.transform.position * maxDist).magnitude / maxTime;
 
-        foreach (var piece in partList)
+        foreach (var piece in buildInfo.partList)
         {
             var cube = (CUBE)GameObject.Instantiate(GameResources.GetCUBE(piece.Key));
             cube.transform.parent = finishedShip.transform;
@@ -416,7 +411,7 @@ public class ConstructionGrid : MonoBehaviour
         
         if (BuildFinishedEvent != null)
         {
-            BuildFinishedEvent(this, new BuildFinishedArgs(finishedShip, 0f, 0f, 0f, weaponMaps));
+            BuildFinishedEvent(this, new BuildFinishedArgs(finishedShip, buildInfo.health, buildInfo.shield, buildInfo.speed, weaponMaps));
         }
     }
 
@@ -531,6 +526,11 @@ public class ConstructionGrid : MonoBehaviour
             //cells[(int)rotatedPiece.y][(int)rotatedPiece.z][(int)rotatedPiece.x].renderer.material = CellClosed_Mat;
         }
 
+        // stats
+        shipHealth += currentCUBE.health;
+        shipShield += currentCUBE.shield;
+        shipSpeed += currentCUBE.speed;
+
         currentCUBE.transform.parent = ship.transform;
         currentCUBE = null;
         cursorOffset = Vector3.zero;
@@ -581,6 +581,11 @@ public class ConstructionGrid : MonoBehaviour
             weapons[weapons.IndexOf(currentCUBE.GetComponent<Weapon>())] = null;
         }
         currentBuild.Remove(cube);
+
+        // stats
+        shipHealth -= cube.health;
+        shipShield -= cube.shield;
+        shipSpeed -= cube.speed;
 
         cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].renderer.material = CellCursor_Mat;
     }
@@ -635,7 +640,7 @@ public class ConstructionGrid : MonoBehaviour
     }
 
 
-    private List<KeyValuePair<int, CUBEGridInfo>> LoadBuild(string buildName)
+    private BuildInfo LoadFromData(string buildName)
     {
         currentBuild.Clear();
         weapons = weapons.Select(w => w = null).ToList();
@@ -646,7 +651,10 @@ public class ConstructionGrid : MonoBehaviour
         {
             return null;
         }
-        var buildList = new List<KeyValuePair<int, CUBEGridInfo>>();
+        BuildInfo buildInfo = new BuildInfo();
+        buildInfo.partList = new List<KeyValuePair<int, CUBEGridInfo>>();
+
+        Log(build, true, Debugger.LogTypes.Data);
 
         using (StringReader str = new StringReader(build))
         using (XmlTextReader xml = new XmlTextReader(str))
@@ -664,6 +672,18 @@ public class ConstructionGrid : MonoBehaviour
                         case "Name":
                         case "Ship":
                         case "Info":
+                            break;
+
+                        case "Health":
+                            buildInfo.health = float.Parse(xml.ReadString());
+                            break;
+                        case "Shield":
+                            buildInfo.shield = float.Parse(xml.ReadString());
+                            break;
+                        case "Speed":
+                            buildInfo.speed = float.Parse(xml.ReadString());
+                            break;
+
                         case "Piece":
                             break;
 
@@ -678,7 +698,7 @@ public class ConstructionGrid : MonoBehaviour
                             break;
                         case "WeaponMap":
                             weaponMap = int.Parse(xml.ReadString());
-                            buildList.Add(new KeyValuePair<int, CUBEGridInfo>(pieceID, new CUBEGridInfo(pieceP, pieceR, weaponMap)));
+                            buildInfo.partList.Add(new KeyValuePair<int, CUBEGridInfo>(pieceID, new CUBEGridInfo(pieceP, pieceR, weaponMap)));
                             break;
 
                         default:
@@ -689,7 +709,7 @@ public class ConstructionGrid : MonoBehaviour
             }
         }
 
-        return buildList;
+        return buildInfo;
     }
 
     #endregion

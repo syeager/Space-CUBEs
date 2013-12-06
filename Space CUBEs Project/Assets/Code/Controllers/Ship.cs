@@ -10,6 +10,7 @@ using UnityEngine;
 /// </summary>
 [RequireComponent(typeof(ShipMotor))]
 [RequireComponent(typeof(WeaponManager))]
+[RequireComponent(typeof(ShieldHealth))]
 public class Ship : MonoBase
 {
     #region References
@@ -17,6 +18,7 @@ public class Ship : MonoBase
     protected Transform myTransform;
     protected ShipMotor myMotor;
     protected WeaponManager myWeapons;
+    protected ShieldHealth myHealth;
 
     #endregion
 
@@ -36,8 +38,9 @@ public class Ship : MonoBase
     {
         // get references
         myTransform = transform;
-        myMotor = GetComponent<ShipMotor>();
+        myMotor = GetComponent<ShipMotor>() ?? gameObject.AddComponent<ShipMotor>();
         myWeapons = GetComponent<WeaponManager>() ?? gameObject.AddComponent<WeaponManager>();
+        myHealth = GetComponent<ShieldHealth>() ?? gameObject.AddComponent<ShieldHealth>();
     }
 
     #endregion
