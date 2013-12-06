@@ -1,8 +1,5 @@
 ﻿// Steve Yeager
 // 8.18.2013
-#define LOG
-#define WARNING
-#define ERROR
 
 using System;
 using UnityEngine;
@@ -73,15 +70,12 @@ public class Debugger : MonoBehaviour
 
     #endregion
 
-    #region Public Methods
+    #region Static Methods
 
     [System.Diagnostics.Conditional("LOG")]
     public static void Log(object message, bool save = true, LogTypes logType = LogTypes.Default)
     {
-        if (Main.logFlags[(int) logType])
-        {
-            Debug.Log(message);
-        }
+        if (Main.logFlags[(int) logType]) Debug.Log(message);
 
         if (save)
         {
@@ -109,44 +103,62 @@ public class Debugger : MonoBehaviour
 
 
     [System.Diagnostics.Conditional("WARNING")]
-    public static void LogWarning(object message)
+    public static void LogWarning(object message, bool save = true, LogTypes logType = LogTypes.Default)
     {
-        Debug.LogWarning(message);
+        if (Main.logFlags[(int)logType]) Debug.LogWarning(message);
+
+        if (save)
+        {
+            using (StreamWriter writer = new StreamWriter(Application.dataPath + LOGPATH + logType + ".txt", true))
+            {
+                writer.WriteLine("Time: " + Time.realtimeSinceStartup + " Warning\r\n" + message);
+            }
+        }
     }
 
 
     [System.Diagnostics.Conditional("WARNING")]
-    public static void LogWarning(object message, Object context)
+    public static void LogWarning(object message, Object context, bool save = true, LogTypes logType = LogTypes.Default)
     {
-        Debug.LogWarning(message, context);
-    }
+        if (Main.logFlags[(int)logType]) Debug.LogWarning(message, context);
 
-
-    [System.Diagnostics.Conditional("WARNING")]
-    public static void LogError(object message)
-    {
-        Debug.LogError(message);
-    }
-
-
-    [System.Diagnostics.Conditional("ERROR")]
-    public static void LogError(object message, Object context)
-    {
-        Debug.LogError(message, context);
+        if (save)
+        {
+            using (StreamWriter writer = new StreamWriter(Application.dataPath + LOGPATH + logType + ".txt", true))
+            {
+                writer.WriteLine("Time: " + Time.realtimeSinceStartup + "Warning\r\n" + message);
+            }
+        }
     }
 
 
     [System.Diagnostics.Conditional("ERROR")]
-    public static void LogException(System.Exception exception)
+    public static void LogError(object message, bool save = true, LogTypes logType = LogTypes.Default)
     {
-        Debug.LogException(exception);
+        if (Main.logFlags[(int)logType]) Debug.LogError(message);
+
+        if (save)
+        {
+            using (StreamWriter writer = new StreamWriter(Application.dataPath + LOGPATH + logType + ".txt", true))
+            {
+                writer.WriteLine("Time: " + Time.realtimeSinceStartup + "Error\r\n" + message);
+            }
+        }
     }
 
 
     [System.Diagnostics.Conditional("ERROR")]
-    public static void LogException(System.Exception exception, Object context)
+    public static void LogError(object message, Object context, bool save = true, LogTypes logType = LogTypes.Default)
     {
-        Debug.LogException(exception, context);
+        if (Main.logFlags[(int)logType]) Debug.LogError(message, context);
+
+        if (save)
+        {
+            using (StreamWriter writer = new StreamWriter(Application.dataPath + LOGPATH + logType + ".txt", true))
+            {
+                writer.WriteLine("Time: " + Time.realtimeSinceStartup + "Error\r\n" + message);
+            }
+        }
     }
 
     #endregion

@@ -362,7 +362,7 @@ public class ConstructionGrid : MonoBehaviour
     }
 
 
-    public IEnumerator Build(string build, Vector3 startPosition, Vector3 startRotation, float maxTime)
+    public IEnumerator Build(string build, int buildSize, Vector3 startPosition, Vector3 startRotation, float maxTime)
     {
         var partList = LoadBuild(build);
         if (partList == null)
@@ -375,21 +375,22 @@ public class ConstructionGrid : MonoBehaviour
         }
 
         Weapon[] weaponMaps = new Weapon[6];
-        List<BuildInfo> pieces = new List<BuildInfo>();
-
-        yield return null;
-        const float distance = 50f;
-
+        List<BuildCUBE> pieces = new List<BuildCUBE>();
         GameObject finishedShip = new GameObject("Player");
+
+        const float minDist = 10f;
+        const float maxDist = 25f;
+        Vector3 halfGrid = Vector3.one * (buildSize/2f - 0.5f);
         finishedShip.transform.position = startPosition;
         finishedShip.transform.eulerAngles = startRotation;
+        float speed = (finishedShip.transform.position * maxDist).magnitude / maxTime;
 
         foreach (var piece in partList)
         {
             var cube = (CUBE)GameObject.Instantiate(GameResources.GetCUBE(piece.Key));
             cube.transform.parent = finishedShip.transform;
 
-            cube.transform.localPosition = piece.Value.position*distance;
+            cube.transform.localPosition = piece.Value.position*UnityEngine.Random.Range(minDist, maxDist);
             cube.transform.localPosition = Quaternion.Euler(UnityEngine.Random.Range(0, 360), UnityEngine.Random.Range(0, 360), UnityEngine.Random.Range(0, 360)) * cube.transform.localPosition;
 
             cube.transform.localEulerAngles = piece.Value.rotation;
@@ -398,7 +399,7 @@ public class ConstructionGrid : MonoBehaviour
                 weaponMaps[piece.Value.weaponMap] = cube.GetComponent<Weapon>();
             }
 
-            pieces.Add(new BuildInfo(cube.transform, piece.Value.position, maxTime / UnityEngine.Random.Range(1f, 3f)));
+            pieces.Add(new BuildCUBE(cube.transform, piece.Value.position-halfGrid, speed));
         }
 
         float time = maxTime;
@@ -415,7 +416,7 @@ public class ConstructionGrid : MonoBehaviour
         
         if (BuildFinishedEvent != null)
         {
-            BuildFinishedEvent(this, new BuildFinishedArgs(finishedShip, 0f, 0f, 0f, null));
+            BuildFinishedEvent(this, new BuildFinishedArgs(finishedShip, 0f, 0f, 0f, weaponMaps));
         }
     }
 
@@ -692,45 +693,4 @@ public class ConstructionGrid : MonoBehaviour
     }
 
     #endregion
-}
-
-
-public class BuildInfo
-{
-    private readonly Transform transform;
-    private readonly Vector3 localTarget;
-    private float time;
-    private readonly float speed;
-    public readonly Vector3 vector;
-    private bool done;
-
-
-    public BuildInfo(Transform transform, Vector3 localTarget, float time)
-    {
-        this.transform = transform;
-        this.localTarget = localTarget;
-        this.time = time;
-        done = false;
-
-        vector = localTarget - transform.localPosition;
-        speed = vector.magnitude / time;
-        vector.Normalize();
-    }
-
-
-    public void Update(float deltaTime)
-    {
-        if (done) return;
-        time -= deltaTime;
-        if (time <= 0f || Vector3.Distance(transform.localPosition, localTarget) <= 1f)
-        {
-            done = true;
-            transform.localPosition = localTarget;
-        }
-        else
-        {
-            
-            transform.localPosition += vector * speed * deltaTime;
-        }
-    }
 }

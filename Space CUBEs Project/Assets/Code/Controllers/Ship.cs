@@ -9,12 +9,14 @@ using UnityEngine;
 /// Base class for all ships.
 /// </summary>
 [RequireComponent(typeof(ShipMotor))]
-public class Ship : MonoBehaviour
+[RequireComponent(typeof(WeaponManager))]
+public class Ship : MonoBase
 {
     #region References
 
     protected Transform myTransform;
     protected ShipMotor myMotor;
+    protected WeaponManager myWeapons;
 
     #endregion
 
@@ -35,6 +37,7 @@ public class Ship : MonoBehaviour
         // get references
         myTransform = transform;
         myMotor = GetComponent<ShipMotor>();
+        myWeapons = GetComponent<WeaponManager>() ?? gameObject.AddComponent<WeaponManager>();
     }
 
     #endregion
@@ -61,6 +64,8 @@ public class Ship : MonoBehaviour
     /// <param name="info">Info to pass to the exit and enter states.</param>
     public void SetState(string stateName, Dictionary<string, object> info)
     {
+        Log(name + ": " + currentState + "→" + stateName);
+
         // save previous state
         if (info == null)
         {
@@ -72,7 +77,6 @@ public class Ship : MonoBehaviour
         exitMethods[currentState](info);
 
         // enter state
-        //Log(name + " Entering: " + stateName + " - " + Time.timeSinceLevelLoad);
         currentState = stateName;
         enterMethods[currentState](info);
     }
@@ -84,6 +88,8 @@ public class Ship : MonoBehaviour
     /// <param name="info">Info to pass to state enter method.</param>
     protected void StartInitialState(Dictionary<string, object> info)
     {
+        Log(name + ": Initial State = " + initialState);
+
         currentState = initialState;
         enterMethods[initialState](info);
     }

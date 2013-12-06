@@ -16,6 +16,7 @@ public class Weapon : MonoBehaviour
     #region Protected Fields
 
     protected float power;
+    protected bool canActivate = true;
 
     #endregion
 
@@ -30,13 +31,13 @@ public class Weapon : MonoBehaviour
 
     public virtual bool CanActivate()
     {
-        return false;
+        return true;
     }
 
 
     public virtual void Activate()
     {
-
+        Debug.Log("pew pew");
     }
 
     #endregion
@@ -45,6 +46,7 @@ public class Weapon : MonoBehaviour
 
     protected IEnumerator Cooldown()
     {
+        canActivate = false;
         while (power < FULLPOWER)
         {
             power += cooldownSpeed*Time.deltaTime;
@@ -52,6 +54,7 @@ public class Weapon : MonoBehaviour
         }
 
         power = FULLPOWER;
+        canActivate = true;
     }
 
     #endregion

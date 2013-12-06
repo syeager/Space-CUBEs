@@ -11,10 +11,10 @@ public class BuildFinishedArgs : EventArgs
     public readonly float health;
     public readonly float shield;
     public readonly float speed;
-    public readonly List<Weapon> weapons;
+    public readonly Weapon[] weapons;
 
 
-    public BuildFinishedArgs(GameObject ship, float health, float shield, float speed, List<Weapon> weapons)
+    public BuildFinishedArgs(GameObject ship, float health, float shield, float speed, Weapon[] weapons)
     {
         this.ship = ship;
         this.health = health;
