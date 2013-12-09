@@ -1,6 +1,8 @@
 ﻿// Steve Yeager
 // 12.4.2013
 
+using System;
+using System.Collections;
 using System.Diagnostics;
 using UnityEngine;
 
@@ -25,7 +27,7 @@ public class MonoBase : MonoBehaviour
 
     #endregion
 
-    #region Protected Methods
+    #region Log Methods
 
     [Conditional("LOG")]
     protected void Log(object message, bool save = true, Debugger.LogTypes logType = Debugger.LogTypes.Default)
@@ -54,6 +56,27 @@ public class MonoBase : MonoBehaviour
         {
             Debugger.LogError(message, gameObject, save, logType);
         }
+    }
+
+    #endregion
+
+    #region Invoke Methods
+
+    /// <summary>
+    /// Call delayed Action.
+    /// </summary>
+    /// <param name="action">Action to call.</param>
+    /// <param name="time">Time in GameTimeSeconds.</param>
+    public void InvokeAction(Action action, float time)
+    {
+        StartCoroutine(InvokedAction(action, time));
+    }
+
+
+    private IEnumerator InvokedAction(Action action, float time)
+    {
+        yield return new WaitForSeconds(time);
+        action.Invoke();
     }
 
     #endregion

@@ -115,11 +115,21 @@ public class Player : Ship
 
     private float HorizontalInput()
     {
+        float input = 0f;
+        float ypos = Camera.main.WorldToViewportPoint(myTransform.position).y;
+
         #if UNITY_STANDALONE
 
-        float input = Input.GetAxis("Horizontal");
-        float ypos = Camera.main.WorldToViewportPoint(myTransform.position).y;
-        
+        input = Input.GetAxis("Horizontal");
+
+        #else
+
+        Debugger.LogConsoleLine(Input.acceleration.ToString());
+        input = Input.acceleration.y;
+        Debugger.Log(Input.acceleration);
+
+        #endif
+
         // down
         if (input > 0f && ypos <= horizontalBounds)
         {
@@ -134,12 +144,6 @@ public class Player : Ship
         {
             return input;
         }
-
-        #else
-
-        return 0f;
-
-        #endif
     }
 
 

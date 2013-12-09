@@ -39,6 +39,7 @@ public class GameData : Singleton<GameData>
         #if UNITY_EDITOR
 
         // clear console
+        // make own method
         if (Input.GetKeyDown(KeyCode.KeypadEnter))
         {
             Assembly assembly = Assembly.GetAssembly(typeof(UnityEditor.SceneView));

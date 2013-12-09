@@ -34,9 +34,16 @@ public class LevelManager : MonoBehaviour
             GameData.Main.LoadScene("Garage");
         }
 
-        if (Input.touchCount > 0 && Input.GetTouch(0).tapCount == 2)
+        if (Input.touchCount > 0)
         {
-            GameData.Main.ReloadScene(build);
+            if (Input.GetTouch(0).tapCount == 2)
+            {
+                GameData.Main.ReloadScene(build);
+            }
+            else if (Input.GetTouch(0).tapCount == 1)
+            {
+                Debugger.LogConsoleLine("2 taps to reload.");
+            }
         }
     }
 
@@ -47,7 +54,7 @@ public class LevelManager : MonoBehaviour
     private void CreatePlayer(string build)
     {
         Grid.BuildFinishedEvent += OnBuildFinished;
-        StartCoroutine(Grid.Build(build, 10, new Vector3(-35f, 0, 0), new Vector3(0f, 90f, 270f), 1f));
+        StartCoroutine(Grid.Build(build, 10, new Vector3(-35f, 0, 0), new Vector3(0f, 90f, 270f), 2f));
     }
 
     #endregion

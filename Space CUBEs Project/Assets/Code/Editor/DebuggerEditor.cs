@@ -28,7 +28,8 @@ public class DebuggerEditor : Editor
     {
         sObject.Update();
 
-        if (GUILayout.Button(myDebugger.FPS == null ? "Show" : "Hide" + " FPS"))
+        // FPS
+        if (GUILayout.Button((myDebugger.FPS == null ? "Show" : "Hide") + " FPS"))
         {
             if (sObject.FindProperty("FPS").objectReferenceValue == null)
             {
@@ -38,6 +39,20 @@ public class DebuggerEditor : Editor
             {
                 DestroyImmediate(sObject.FindProperty("FPS").objectReferenceValue);
                 sObject.FindProperty("FPS").objectReferenceValue = null;
+            }
+        }
+
+        // ConsoleLine
+        if (GUILayout.Button((myDebugger.ConsoleLine == null ? "Show" : "Hide") + " ConsoleLine"))
+        {
+            if (sObject.FindProperty("ConsoleLine").objectReferenceValue == null)
+            {
+                sObject.FindProperty("ConsoleLine").objectReferenceValue = Instantiate(sObject.FindProperty("ConsoleLine_Prefab").objectReferenceValue, new Vector3(0.5f, 0.01f, 0f), Quaternion.identity);
+            }
+            else
+            {
+                DestroyImmediate(sObject.FindProperty("ConsoleLine").objectReferenceValue);
+                sObject.FindProperty("ConsoleLine").objectReferenceValue = null;
             }
         }
 

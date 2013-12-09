@@ -286,32 +286,32 @@ public class ConstructionGrid : MonoBase
         using (XmlTextWriter xml = new XmlTextWriter(str))
         {
             // root
-            xml.WriteStartDocumentLine();
-            xml.WriteStartElementLine("Ship");
+            xml.WriteStartDocument();
+            xml.WriteStartElement("Ship");
 
             // main
-            xml.WriteElementStringLine("Info", buildName);
-            xml.WriteElementStringLine("Health", shipHealth.ToString());
-            xml.WriteElementStringLine("Shield", shipShield.ToString());
-            xml.WriteElementStringLine("Speed", shipSpeed.ToString());
+            xml.WriteElementString("Info", buildName);
+            xml.WriteElementString("Health", shipHealth.ToString());
+            xml.WriteElementString("Shield", shipShield.ToString());
+            xml.WriteElementString("Speed", shipSpeed.ToString());
 
             // pieces
             foreach (var piece in currentBuild)
             {
-                xml.WriteStartElementLine("Piece");
+                xml.WriteStartElement("Piece");
                 {
-                    xml.WriteElementStringLine("ID", piece.Key.ID.ToString());
-                    xml.WriteElementStringLine("Position", piece.Value.position.ToString());
-                    xml.WriteElementStringLine("Rotation", piece.Value.rotation.ToString());
-                    xml.WriteElementStringLine("WeaponMap", piece.Value.weaponMap.ToString());
+                    xml.WriteElementString("ID", piece.Key.ID.ToString());
+                    xml.WriteElementString("Position", piece.Value.position.ToString());
+                    xml.WriteElementString("Rotation", piece.Value.rotation.ToString());
+                    xml.WriteElementString("WeaponMap", piece.Value.weaponMap.ToString());
                 }
-                xml.WriteEndElementLine();
+                xml.WriteEndElement();
             }
 
             // end
             xml.WriteEndElement();
             xml.WriteEndDocument();
-
+            
             build = str.ToString();
         }
 
@@ -319,7 +319,7 @@ public class ConstructionGrid : MonoBase
         PlayerPrefs.SetString(BUILDPATH + buildName, build);
         // add to list of all buildNames
 
-        Debugger.Log(build, true, Debugger.LogTypes.Data);
+        Debugger.Log(build, true, Debugger.LogTypes.Data); // causes crash in mobile
         return build;
     }
 

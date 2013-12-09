@@ -3,13 +3,13 @@
 
 using UnityEngine;
 
-public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
+public class Singleton<T> : MonoBase where T : MonoBehaviour
 {
     public static T Main { get; protected set; }
 
 
 
-    private void Awake()
+    protected virtual void Awake()
     {
         if (Main != null)
         {
