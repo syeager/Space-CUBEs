@@ -67,7 +67,7 @@ public class LevelManager : MonoBehaviour
         var player = args.ship.AddComponent<Player>();
         player.GetComponent<WeaponManager>().weapons = args.weapons;
         player.GetComponent<ShieldHealth>().Initialize(args.health, args.shield);
-        player.GetComponent<ShipMotor>().horizontalSpeed = args.speed;
+        player.GetComponent<ShipMotor>().speed = args.speed;
     }
 
     #endregion

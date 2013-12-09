@@ -17,7 +17,7 @@ public class ShipMotor : MonoBehaviour
 
     #region Public Fields
 
-    public float horizontalSpeed;
+    public float speed;
 
     #endregion
 
@@ -36,7 +36,7 @@ public class ShipMotor : MonoBehaviour
 
     public void MoveHorizontal(float input)
     {
-        myTransform.Translate(input * horizontalSpeed * Vector3.right * Time.deltaTime);
+        myTransform.Translate(input * speed * Vector3.right * Time.deltaTime);
     }
 
     #endregion

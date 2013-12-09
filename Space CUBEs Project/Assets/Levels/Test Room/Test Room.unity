@@ -989,6 +989,7 @@ GameObject:
   - 20: {fileID: 1154554647}
   - 92: {fileID: 1154554646}
   - 124: {fileID: 1154554645}
+  - 114: {fileID: 1154554644}
   m_Layer: 8
   m_Name: HUD Camera
   m_TagString: Untagged
@@ -996,6 +997,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1154554644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1154554643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21055c664d8f8944380e003083ae2e10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NAVPER:
+    serializedVersion: 2
+    x: 0
+    y: .850000024
+    width: .25
+    height: .150000006
 --- !u!124 &1154554645
 Behaviour:
   m_ObjectHideFlags: 0
@@ -1150,6 +1168,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f5c9741c4dba0741a287cd0177b0581, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  log: 1
+  timeScale: 1
   updateInterval: .5
 --- !u!132 &1500230691
 GUIText:

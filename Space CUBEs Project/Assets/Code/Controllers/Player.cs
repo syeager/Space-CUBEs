@@ -67,9 +67,6 @@ public class Player : Ship
     {
         while (true)
         {
-            // move
-            myMotor.MoveHorizontal(HorizontalInput());
-
             // attack
             var weapons = AttackInput();
             if (weapons.Count > 0)
@@ -77,6 +74,9 @@ public class Player : Ship
                 SetState(AttackingState, new Dictionary<string, object> { { "weapons", weapons } });
                 yield break;
             }
+
+            // move
+            myMotor.MoveHorizontal(HorizontalInput());
 
             yield return null;
         }
@@ -124,9 +124,7 @@ public class Player : Ship
 
         #else
 
-        Debugger.LogConsoleLine(Input.acceleration.ToString());
-        input = Input.acceleration.y;
-        Debugger.Log(Input.acceleration);
+        input = HUD.NavButton;
 
         #endif
 
