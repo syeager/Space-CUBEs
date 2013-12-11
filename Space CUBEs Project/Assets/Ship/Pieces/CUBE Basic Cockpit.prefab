@@ -11,7 +11,6 @@ GameObject:
   - 33: {fileID: 3300000}
   - 23: {fileID: 2300000}
   - 114: {fileID: 11400000}
-  - 65: {fileID: 6500000}
   m_Layer: 0
   m_Name: CUBE Basic Cockpit
   m_TagString: Untagged
@@ -59,18 +58,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_Mesh: {fileID: 4300004, guid: 7f65a124eff9bc3409fcdef9abe1016e, type: 3}
---- !u!65 &6500000
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 2.00000024, y: 2, z: 2.00000048}
-  m_Center: {x: .500000119, y: .5, z: .499999821}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
