@@ -33,18 +33,6 @@ public class LevelManager : MonoBehaviour
         {
             GameData.Main.LoadScene("Garage");
         }
-
-        if (Input.touchCount > 0)
-        {
-            if (Input.GetTouch(0).tapCount == 2)
-            {
-                GameData.Main.ReloadScene(build);
-            }
-            else if (Input.GetTouch(0).tapCount == 1)
-            {
-                Debugger.LogConsoleLine("2 taps to reload.");
-            }
-        }
     }
 
     #endregion
@@ -68,6 +56,7 @@ public class LevelManager : MonoBehaviour
         player.GetComponent<WeaponManager>().weapons = args.weapons;
         player.GetComponent<ShieldHealth>().Initialize(args.health, args.shield);
         player.GetComponent<ShipMotor>().speed = args.speed;
+        player.GenerateCollider();
     }
 
     #endregion

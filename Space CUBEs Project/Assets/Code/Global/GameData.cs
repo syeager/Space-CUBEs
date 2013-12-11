@@ -37,13 +37,11 @@ public class GameData : Singleton<GameData>
     private void Update()
     {
         #if UNITY_EDITOR
-
+        
         // clear console
-        // make own method
         if (Input.GetKeyDown(KeyCode.KeypadEnter))
         {
             Assembly assembly = Assembly.GetAssembly(typeof(UnityEditor.SceneView));
-
             Type type = assembly.GetType("UnityEditorInternal.LogEntries");
             MethodInfo method = type.GetMethod("Clear");
             method.Invoke(new object(), null);
