@@ -43,6 +43,12 @@ public class Ship : MonoBase
         myHealth = GetComponent<ShieldHealth>() ?? gameObject.AddComponent<ShieldHealth>();
     }
 
+    protected virtual void Start()
+    {
+        // weapons
+        myWeapons.Initialize(this);
+    }
+
     #endregion
 
     #region State Methods
@@ -95,6 +101,27 @@ public class Ship : MonoBase
 
         currentState = initialState;
         enterMethods[initialState](info);
+    }
+
+    #endregion
+
+    #region Public Methods
+
+    public void GenerateCollider()
+    {
+        Bounds bounds = new Bounds();
+        bounds.center = myTransform.position;
+
+        var children = gameObject.GetComponentsInChildren<Renderer>();
+        foreach (var child in children)
+        {
+            bounds.Encapsulate(child.bounds);
+        }
+
+        var boxCol = gameObject.AddComponent<BoxCollider>();
+        boxCol.isTrigger = true;
+        boxCol.size = new Vector3(bounds.size.y, 10f, bounds.size.x);
+        boxCol.center = new Vector3(0f, 0, -0.5f); // z is wrong
     }
 
     #endregion

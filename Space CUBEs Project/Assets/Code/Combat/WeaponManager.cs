@@ -17,6 +17,17 @@ public class WeaponManager : MonoBehaviour
 
     #region Public Methods
 
+    public void Initialize(Ship sender)
+    {
+        for (int i = 0; i < weapons.Length; i++)
+        {
+            if (weapons[i] != null)
+            {
+                weapons[i].Initialize(sender);
+            }
+        }
+    }
+
     public bool CanActivate(int weapon)
     {
         if (canActivate && weapons[weapon] != null)
@@ -30,9 +41,9 @@ public class WeaponManager : MonoBehaviour
     }
 
 
-    public void Activate(int weapon)
+    public void Activate(int weapon, bool pressed)
     {
-        weapons[weapon].Activate();
+        weapons[weapon].Activate(pressed);
     }
 
     #endregion

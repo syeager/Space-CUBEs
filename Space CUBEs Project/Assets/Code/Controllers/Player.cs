@@ -41,6 +41,10 @@ public class Player : Ship
     {
         base.Awake();
 
+        // setup
+        tag = "Player";
+        gameObject.layer = LayerMask.NameToLayer("Player");
+
         // create states
         CreateState(MovingState, MovingEnter, MovingExit);
         CreateState(AttackingState, AttackingEnter, AttackingExit);
@@ -48,8 +52,9 @@ public class Player : Ship
     }
 
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         StartInitialState(null);
     }
 
@@ -71,8 +76,9 @@ public class Player : Ship
             var weapons = AttackInput();
             if (weapons.Count > 0)
             {
-                SetState(AttackingState, new Dictionary<string, object> { { "weapons", weapons } });
-                yield break;
+                //SetState(AttackingState, new Dictionary<string, object> { { "weapons", weapons } });
+                //yield break;
+                Attack(weapons);
             }
 
             // move
@@ -91,7 +97,7 @@ public class Player : Ship
 
     private void AttackingEnter(Dictionary<string, object> info)
     {
-        Attack((List<int>)info["weapons"]);
+        Attack((List<KeyValuePair<int, bool>>)info["weapons"]);
         
         StartCoroutine("AttackingUpdate");
     }
@@ -99,8 +105,16 @@ public class Player : Ship
 
     private IEnumerator AttackingUpdate()
     {
+        while (true)
+        {
+            var weapons = AttackInput();
+            if (weapons.Count > 0)
+            {
+                Attack(weapons);
+            }
 
-        yield return null;
+            yield return null;
+        }
     }
 
 
@@ -145,26 +159,44 @@ public class Player : Ship
     }
 
 
-    private List<int> AttackInput()
+    private List<KeyValuePair<int, bool>> AttackInput()
     {
-        var weapons = new List<int>();
+        var weapons = new List<KeyValuePair<int, bool>>();
 
         #if UNITY_STANDALONE
 
         for (int i = 0; i < WeaponKeys.Length; i++)
         {
-            if (Input.GetKeyDown(WeaponKeys[i]) || (Input.GetKeyUp(WeaponKeys[i])))
+            if (myWeapons.CanActivate(i))
             {
-                if (myWeapons.CanActivate(i))
+                if (Input.GetKeyDown(WeaponKeys[i]))
                 {
-                    weapons.Add(i);
+                    weapons.Add(new KeyValuePair<int, bool>(i, true));
+                }
+                else if (Input.GetKeyUp(WeaponKeys[i]))
+                {
+                    weapons.Add(new KeyValuePair<int, bool>(i, false));
                 }
             }
         }
 
         #else
-        
-        
+
+        for (int i = 0; i < WeaponKeys.Length; i++)
+        {
+            var buttonState = HUD.Main.WeaponButtons[i].state;
+            if (myWeapons.CanActivate(i))
+            {
+                if (buttonState == TouchButton.States.Pressed)
+                {
+                    weapons.Add(new KeyValuePair<int, bool>(i, true));
+                }
+                else if (buttonState == TouchButton.States.Released)
+                {
+                    weapons.Add(new KeyValuePair<int, bool>(i, false));
+                }
+            }
+        }
 
         #endif
 
@@ -175,11 +207,11 @@ public class Player : Ship
 
     #region Combat Methods
 
-    private void Attack(List<int> weapons)
+    private void Attack(List<KeyValuePair<int, bool>> weapons)
     {
         foreach (var weapon in weapons)
         {
-            myWeapons.Activate(weapon);
+            myWeapons.Activate(weapon.Key, weapon.Value);
         }
     }
 

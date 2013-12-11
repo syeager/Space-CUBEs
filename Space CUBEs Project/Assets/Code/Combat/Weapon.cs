@@ -6,6 +6,13 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
+    #region References
+
+    protected Transform myTransform;
+    protected Ship myShip;
+
+    #endregion
+
     #region Public Fields
 
     /// <summary>1 per second.</summary>
@@ -27,6 +34,25 @@ public class Weapon : MonoBehaviour
     #endregion
 
 
+    #region MonoBehaviours
+
+    private void Awake()
+    {
+        // get references
+        myTransform = transform;
+    }
+
+    #endregion
+
+    #region Public Methods
+
+    public void Initialize(Ship sender)
+    {
+        myShip = sender;
+    }
+
+    #endregion
+
     #region Virtual Methods
 
     public virtual bool CanActivate()
@@ -35,9 +61,9 @@ public class Weapon : MonoBehaviour
     }
 
 
-    public virtual void Activate()
+    public virtual void Activate(bool pressed)
     {
-        Debug.Log("pew pew");
+
     }
 
     #endregion

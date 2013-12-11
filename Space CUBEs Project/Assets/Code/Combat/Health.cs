@@ -1,6 +1,7 @@
 ﻿// Steve Yeager
 // 12.5.2013
 
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -8,12 +9,25 @@ using UnityEngine;
 /// </summary>
 public class Health : MonoBase
 {
-    #region Properties
+    #region Protected Fields
 
-    public float maxHealth { get; protected set; }
-    public float health { get; protected set; }
+    protected int lastHitID = 0;
 
     #endregion
+
+    #region Properties
+
+    public float maxHealth;// { get; protected set; }
+    public float health;// { get; protected set; }
+
+    #endregion
+
+    #region Events
+
+    public EventHandler DieEvent;
+
+    #endregion
+
 
     #region Public Methods
 
@@ -21,6 +35,22 @@ public class Health : MonoBase
     {
         this.maxHealth = maxHealth;
         health = maxHealth;
+    }
+
+
+    public virtual void RecieveHit(Ship sender, int hitID, HitInfo hitInfo)
+    {
+        if (hitID == lastHitID) return;
+
+        lastHitID = hitID;
+        ChangeHealth(hitInfo.damage);
+    }
+
+
+    public bool ChangeHealth(float amount)
+    {
+        health = Mathf.Clamp(health + amount, 0f, maxHealth);
+        return health == 0f;
     }
 
     #endregion
