@@ -12,7 +12,7 @@ public class Hitbox : MonoBase
     #region References
 
     private Transform myTransform;
-    private GameObject myGameObject;
+    private PoolObject myPoolObject;
 
     #endregion
 
@@ -35,7 +35,7 @@ public class Hitbox : MonoBase
     private void Awake()
     {
         myTransform = transform;
-        myGameObject = gameObject;
+        myPoolObject = GetComponent<PoolObject>();
     }
 
 
@@ -60,7 +60,7 @@ public class Hitbox : MonoBase
         gameObject.layer = sender.gameObject.layer;
         UpdateID();
 
-        InvokeAction(() => myGameObject.SetActive(false), time);
+        myPoolObject.StartLifeTimer(time);
     }
 
 

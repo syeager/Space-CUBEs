@@ -13,7 +13,7 @@ public class GameResources : MonoBehaviour
 
     #endregion
 
-    #region CUBEs
+    #region Public Fields
 
     public List<CUBE> CUBEs;
 
