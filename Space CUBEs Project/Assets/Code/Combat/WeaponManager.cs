@@ -25,8 +25,11 @@ public class WeaponManager : MonoBehaviour
             {
                 weapons[i].Initialize(sender);
             }
+
+            HUD.Main.WeaponButtons[i].ActivateEvent += OnActivate;
         }
     }
+
 
     public bool CanActivate(int weapon)
     {
@@ -41,9 +44,27 @@ public class WeaponManager : MonoBehaviour
     }
 
 
-    public void Activate(int weapon, bool pressed)
+    public void Activate(int weapon, bool isPressed)
     {
-        weapons[weapon].Activate(pressed);
+        weapons[weapon].Activate(isPressed);
+    }
+
+
+    public void TryActivate(int weapon, bool isPressed)
+    {
+        if (CanActivate(weapon))
+        {
+            Activate(weapon, isPressed);
+        }
+    }
+
+    #endregion
+
+    #region Event Handlers
+
+    private void OnActivate(object sender, ActivateButtonArgs args)
+    {
+        TryActivate(int.Parse(args.value), args.isPressed);
     }
 
     #endregion

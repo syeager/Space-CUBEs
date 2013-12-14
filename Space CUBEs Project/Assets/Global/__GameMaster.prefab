@@ -48,6 +48,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9622fa8d2469027468623f9cdce011d9, type: 2}
   - {fileID: 11400000, guid: a74ea41d719f80541996489a6433aed8, type: 2}
   - {fileID: 11400000, guid: aa994873d8f99724daed1f7daa1a6467, type: 2}
+  - {fileID: 11400000, guid: 5587242fe97c6fe4abb67efae50313ec, type: 2}
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -70,6 +71,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd532088234b3c1489d098decb38d5c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  log: 1
+  timeScale: 1
   FPS: {fileID: 0}
   FPS_Prefab: {fileID: 100000, guid: ede73768352859c47b0ceadd2ebf76fa, type: 2}
   ConsoleLine: {fileID: 0}
@@ -87,6 +90,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e25fa86cd00c46479ea0fa3aa2a2cf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  log: 1
+  timeScale: 1
   volumeSE: 5
   volumeMusic: 0
 --- !u!114 &11400008
@@ -100,6 +105,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1e8a7edb674f82419d1c54602d84506, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  log: 1
+  timeScale: 1
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

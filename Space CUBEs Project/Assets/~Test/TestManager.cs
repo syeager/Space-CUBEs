@@ -17,4 +17,9 @@ public class TestManager : MonoBehaviour
             PoolManager.Pop("Super Square", 2f);
         }
     }
+
+    public void CreateLaser()
+    {
+        PoolManager.Pop("Test Laser", 1f);
+    }
 }

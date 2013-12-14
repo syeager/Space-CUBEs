@@ -13,7 +13,6 @@ public class Player : Ship
     #region State Fields
 
     private const string MovingState = "Moving";
-    private const string AttackingState = "Attacking";
 
     #endregion
 
@@ -47,7 +46,6 @@ public class Player : Ship
 
         // create states
         CreateState(MovingState, MovingEnter, MovingExit);
-        CreateState(AttackingState, AttackingEnter, AttackingExit);
         initialState = MovingState;
     }
 
@@ -92,35 +90,6 @@ public class Player : Ship
     private void MovingExit(Dictionary<string, object> info)
     {
         StopCoroutine("MovingUpdate");
-    }
-
-
-    private void AttackingEnter(Dictionary<string, object> info)
-    {
-        Attack((List<KeyValuePair<int, bool>>)info["weapons"]);
-        
-        StartCoroutine("AttackingUpdate");
-    }
-
-
-    private IEnumerator AttackingUpdate()
-    {
-        while (true)
-        {
-            var weapons = AttackInput();
-            if (weapons.Count > 0)
-            {
-                Attack(weapons);
-            }
-
-            yield return null;
-        }
-    }
-
-
-    private void AttackingExit(Dictionary<string, object> info)
-    {
-        StopCoroutine("AttackingUpdate");
     }
 
     #endregion
@@ -174,24 +143,6 @@ public class Player : Ship
                     weapons.Add(new KeyValuePair<int, bool>(i, true));
                 }
                 else if (Input.GetKeyUp(WeaponKeys[i]))
-                {
-                    weapons.Add(new KeyValuePair<int, bool>(i, false));
-                }
-            }
-        }
-
-        #else
-
-        for (int i = 0; i < WeaponKeys.Length; i++)
-        {
-            var buttonState = HUD.Main.WeaponButtons[i].state;
-            if (myWeapons.CanActivate(i))
-            {
-                if (buttonState == TouchButton.States.Pressed)
-                {
-                    weapons.Add(new KeyValuePair<int, bool>(i, true));
-                }
-                else if (buttonState == TouchButton.States.Released)
                 {
                     weapons.Add(new KeyValuePair<int, bool>(i, false));
                 }

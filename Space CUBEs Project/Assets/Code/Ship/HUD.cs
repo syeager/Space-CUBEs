@@ -6,12 +6,11 @@ using UnityEngine;
 /// <summary>
 /// Player HUD in level.
 /// </summary>
-public class HUD : MonoBehaviour
+public class HUD : Singleton<HUD>
 {
-    #region Private Fields
+    #region References
 
-    private float H;
-    private float W;
+    private ShieldHealth PlayerHealth;
 
     #endregion
 
@@ -21,60 +20,34 @@ public class HUD : MonoBehaviour
 
     #endregion
 
-    #region Const Fields
 
-    public Rect NAVPER;
-    private Rect NavRect;
-
-    #endregion
-
-    
+    public PressButton[] WeaponButtons = new PressButton[6];
+    public PressButton LeftButton;
+    public PressButton RightButton;
 
 
     #region MonoBehaviour Overrides
 
-    private void Update()
+    private void Start()
     {
-        UpdateScreen();
-    }
-
-
-    private void OnGUI()
-    {
-        Nav();
+        LeftButton.ActivateEvent += OnActivateNav;
+        RightButton.ActivateEvent += OnActivateNav;
     }
 
     #endregion
 
-    #region Private Methods
+    #region Event Handlers
 
-    private void UpdateScreen()
+    private void OnActivateNav(object sender, ActivateButtonArgs args)
     {
-        H = Screen.height;
-        W = Screen.width;
-
-        NavRect = new Rect(NAVPER.x * W, NAVPER.y * H, NAVPER.width * W, NAVPER.height * H);
-    }
-
-
-    private void Nav()
-    {
-        NavButton = 0f;
-
-        GUI.BeginGroup(NavRect);
+        if (args.isPressed)
         {
-            // up
-            if (GUI.RepeatButton(new Rect(0f, 0f, NavRect.width / 2f, NavRect.height), "↑"))
-            {
-                NavButton = -1f;
-            }
-            // down
-            if (GUI.RepeatButton(new Rect(NavRect.width / 2f, 0f, NavRect.width / 2f, NavRect.height), "↓"))
-            {
-                NavButton = 1f;
-            }
+            NavButton += float.Parse(args.value);
         }
-        GUI.EndGroup();
+        else
+        {
+            NavButton -= float.Parse(args.value);
+        }
     }
 
     #endregion

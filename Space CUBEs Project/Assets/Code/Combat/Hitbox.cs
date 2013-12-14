@@ -52,14 +52,19 @@ public class Hitbox : MonoBase
 
     #region Public Methods
 
-    public void Initialize(Ship sender, HitInfo hitInfo, float time)
+    public void Initialize(Ship sender, HitInfo hitInfo)
     {
         this.sender = sender;
         this.hitInfo = hitInfo;
 
         gameObject.layer = sender.gameObject.layer;
         UpdateID();
+    }
 
+
+    public void Initialize(Ship sender, HitInfo hitInfo, float time)
+    {
+        Initialize(sender, hitInfo);
         myPoolObject.StartLifeTimer(time);
     }
 
