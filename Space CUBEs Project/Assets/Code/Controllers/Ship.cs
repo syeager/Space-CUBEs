@@ -136,7 +136,10 @@ public class Ship : MonoBase
 
     private void OnDie(object sender, DieArgs args)
     {
-        SetState(DyingState, new Dictionary<string, object> { { "sender", sender } });
+        if (currentState != DyingState)
+        {
+            SetState(DyingState, new Dictionary<string, object> { { "sender", sender } });
+        }
     }
 
     #endregion

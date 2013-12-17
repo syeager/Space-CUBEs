@@ -18,7 +18,7 @@ public class Hitbox : MonoBase
 
     #region Public Fields
 
-    public bool oneShot;
+    public bool continuous;
     public int hitNumber = 1;
 
     #endregion
@@ -27,15 +27,10 @@ public class Hitbox : MonoBase
 
     private HitInfo hitInfo;
     private Ship sender;
-    private int ID;
+    private int hitCount;
 
     #endregion
 
-    #region Static Fields
-
-    private static int IDs;
-
-    #endregion
 
     #region MonoBehavoiur Overrides
 
@@ -46,13 +41,34 @@ public class Hitbox : MonoBase
     }
 
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
+        if (continuous) return;
+
         var oppHealth = other.gameObject.GetComponent<Health>();
         if (oppHealth != null)
         {
-            oppHealth.RecieveHit(sender, ID, hitInfo);
-            if (oneShot) GetComponent<PoolObject>().Disable();
+            oppHealth.RecieveHit(sender, hitInfo);
+            if (hitNumber > 0)
+            {
+                hitCount++;
+                if (hitCount >= hitNumber)
+                {
+                    GetComponent<PoolObject>().Disable();
+                }
+            }
+        }
+    }
+
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (!continuous) return;
+
+        var oppHealth = other.gameObject.GetComponent<Health>();
+        if (oppHealth != null)
+        {
+            oppHealth.RecieveHit(sender, new HitInfo { damage = hitInfo.damage * deltaTime });
         }
     }
 
@@ -66,7 +82,7 @@ public class Hitbox : MonoBase
         this.hitInfo = hitInfo;
 
         gameObject.layer = sender.gameObject.layer;
-        UpdateID();
+        hitCount = 0;
     }
 
 
@@ -74,12 +90,6 @@ public class Hitbox : MonoBase
     {
         Initialize(sender, hitInfo);
         myPoolObject.StartLifeTimer(time);
-
-        if (hitNumber > 1)
-        {
-            StopCoroutine("MultiHit");
-            StartCoroutine("MultiHit", time);
-        }
     }
 
 
@@ -93,30 +103,12 @@ public class Hitbox : MonoBase
 
     #region Private Methods
 
-    private void UpdateID()
-    {
-        IDs++;
-        ID = IDs;
-    }
-
-
     private IEnumerator Move(Vector3 moveVec)
     {
         while (true)
         {
             myTransform.Translate(moveVec, Space.World);
             yield return null;
-        }
-    }
-
-
-    private IEnumerator MultiHit(float time)
-    {
-        float segTime = time / hitNumber;
-        for (int i = 1; i <= hitNumber; i++)
-        {
-            yield return new WaitForSeconds(segTime);
-            UpdateID();
         }
     }
 

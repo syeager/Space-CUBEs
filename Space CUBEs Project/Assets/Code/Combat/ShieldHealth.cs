@@ -16,6 +16,12 @@ public class ShieldHealth : Health
 
     #endregion
 
+    #region Private Fields
+
+    private Job rechargeJob;
+
+    #endregion
+
     #region Properties
 
     public float maxShield;// { get; private set; }
@@ -26,15 +32,13 @@ public class ShieldHealth : Health
 
     #region Health Overrides
 
-    public override void RecieveHit(Ship sender, int hitID, HitInfo hitInfo)
+    public override void RecieveHit(Ship sender, HitInfo hitInfo)
     {
-        if (hitID == lastHitID) return;
-
-        lastHitID = hitID;
         if (ApplyDamage(hitInfo.damage))
         {
             if (DieEvent != null)
             {
+                rechargeJob.Kill();
                 DieEvent(sender, new DieArgs());
             }
         }
@@ -60,8 +64,8 @@ public class ShieldHealth : Health
 
         if (amount < 0f)
         {
-            StopCoroutine("Recharge");
-            StartCoroutine("Recharge");
+            if (rechargeJob != null) rechargeJob.Kill();
+            rechargeJob = new Job(Recharge());
         }
 
         if (extraDamage < 0f)

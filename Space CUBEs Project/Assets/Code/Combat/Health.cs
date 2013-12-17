@@ -9,12 +9,6 @@ using UnityEngine;
 /// </summary>
 public class Health : MonoBase
 {
-    #region Protected Fields
-
-    protected int lastHitID = 0;
-
-    #endregion
-
     #region Properties
 
     public float maxHealth;// { get; protected set; }
@@ -38,11 +32,8 @@ public class Health : MonoBase
     }
 
 
-    public virtual void RecieveHit(Ship sender, int hitID, HitInfo hitInfo)
+    public virtual void RecieveHit(Ship sender, HitInfo hitInfo)
     {
-        if (hitID == lastHitID) return;
-
-        lastHitID = hitID;
         ChangeHealth(hitInfo.damage);
     }
 

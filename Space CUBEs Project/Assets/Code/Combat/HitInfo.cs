@@ -8,6 +8,7 @@ public class HitInfo
 {
     #region Public Fields
 
+    /// <summary>Damage/hit or damage/second.</summary>
     public float damage;
 
     #endregion
