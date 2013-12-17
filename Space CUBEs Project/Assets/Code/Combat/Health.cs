@@ -24,7 +24,7 @@ public class Health : MonoBase
 
     #region Events
 
-    public EventHandler DieEvent;
+    public EventHandler<DieArgs> DieEvent;
 
     #endregion
 

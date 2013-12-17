@@ -31,7 +31,13 @@ public class ShieldHealth : Health
         if (hitID == lastHitID) return;
 
         lastHitID = hitID;
-        ApplyDamage(hitInfo.damage);
+        if (ApplyDamage(hitInfo.damage))
+        {
+            if (DieEvent != null)
+            {
+                DieEvent(sender, new DieArgs());
+            }
+        }
     }
 
     #endregion
@@ -69,17 +75,15 @@ public class ShieldHealth : Health
     }
 
 
-    public void ApplyDamage(float amount)
+    public bool ApplyDamage(float amount)
     {
         float extraDamage = ChangeShield(amount);
         if (extraDamage < 0f)
         {
-            if (ChangeHealth(extraDamage))
-            {
-                // die
-            }
+            return ChangeHealth(extraDamage);
         }
 
+        return false;
     }
 
     #endregion

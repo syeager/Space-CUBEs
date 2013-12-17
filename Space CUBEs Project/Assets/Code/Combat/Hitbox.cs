@@ -16,6 +16,13 @@ public class Hitbox : MonoBase
 
     #endregion
 
+    #region Public Fields
+
+    public bool oneShot;
+    public int hitNumber = 1;
+
+    #endregion
+
     #region Private Fields
 
     private HitInfo hitInfo;
@@ -45,6 +52,7 @@ public class Hitbox : MonoBase
         if (oppHealth != null)
         {
             oppHealth.RecieveHit(sender, ID, hitInfo);
+            if (oneShot) GetComponent<PoolObject>().Disable();
         }
     }
 
@@ -66,6 +74,12 @@ public class Hitbox : MonoBase
     {
         Initialize(sender, hitInfo);
         myPoolObject.StartLifeTimer(time);
+
+        if (hitNumber > 1)
+        {
+            StopCoroutine("MultiHit");
+            StartCoroutine("MultiHit", time);
+        }
     }
 
 
@@ -92,6 +106,17 @@ public class Hitbox : MonoBase
         {
             myTransform.Translate(moveVec, Space.World);
             yield return null;
+        }
+    }
+
+
+    private IEnumerator MultiHit(float time)
+    {
+        float segTime = time / hitNumber;
+        for (int i = 1; i <= hitNumber; i++)
+        {
+            yield return new WaitForSeconds(segTime);
+            UpdateID();
         }
     }
 

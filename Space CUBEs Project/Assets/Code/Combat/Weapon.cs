@@ -4,7 +4,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class Weapon : MonoBehaviour
+public class Weapon : MonoBase
 {
     #region References
 

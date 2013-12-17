@@ -47,7 +47,7 @@ public class Debugger : Singleton<Debugger>
 
     #region Const Fields
 
-    private const string LOGPATH = "/Files/Debug/Log_";
+    private const string LOGPATH = "/Files/Debug Logs/Log_";
 
     #endregion
 

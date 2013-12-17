@@ -29,6 +29,9 @@ public class Ship : MonoBase
     private readonly Dictionary<string, Action<Dictionary<string, object>>> enterMethods = new Dictionary<string, Action<Dictionary<string, object>>>();
     private readonly Dictionary<string, Action<Dictionary<string, object>>> exitMethods = new Dictionary<string, Action<Dictionary<string, object>>>();
 
+    protected const string SpawningState = "Spawning";
+    protected const string DyingState = "Dying";
+
     #endregion
 
 
@@ -45,8 +48,11 @@ public class Ship : MonoBase
 
     protected virtual void Start()
     {
-        // weapons
+        // combat
         myWeapons.Initialize(this);
+
+        // register events
+        myHealth.DieEvent += OnDie;
     }
 
     #endregion
@@ -122,6 +128,15 @@ public class Ship : MonoBase
         boxCol.isTrigger = true;
         boxCol.size = new Vector3(bounds.size.y, 10f, bounds.size.x);
         boxCol.center = new Vector3(0f, 0, -0.5f); // z is wrong
+    }
+
+    #endregion
+
+    #region Event Handlers
+
+    private void OnDie(object sender, DieArgs args)
+    {
+        SetState(DyingState, new Dictionary<string, object> { { "sender", sender } });
     }
 
     #endregion
