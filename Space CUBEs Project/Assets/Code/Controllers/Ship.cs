@@ -22,12 +22,13 @@ public class Ship : MonoBase
 
     #endregion
 
-    #region State Fields
+    #region Protected Fields
 
-    protected string currentState;
-    protected string initialState;
-    private readonly Dictionary<string, Action<Dictionary<string, object>>> enterMethods = new Dictionary<string, Action<Dictionary<string, object>>>();
-    private readonly Dictionary<string, Action<Dictionary<string, object>>> exitMethods = new Dictionary<string, Action<Dictionary<string, object>>>();
+    protected StateMachine stateMachine;
+
+    #endregion
+
+    #region Const Fields
 
     protected const string SpawningState = "Spawning";
     protected const string DyingState = "Dying";
@@ -44,6 +45,8 @@ public class Ship : MonoBase
         myMotor = GetComponent<ShipMotor>() ?? gameObject.AddComponent<ShipMotor>();
         myWeapons = GetComponent<WeaponManager>() ?? gameObject.AddComponent<WeaponManager>();
         myHealth = GetComponent<ShieldHealth>() ?? gameObject.AddComponent<ShieldHealth>();
+
+        stateMachine = new StateMachine(this);
     }
 
     protected virtual void Start()
@@ -57,62 +60,11 @@ public class Ship : MonoBase
 
     #endregion
 
-    #region State Methods
-
-    /// <summary>
-    /// Create a new currentState.
-    /// </summary>
-    /// <param name="stateName">State.</param>
-    /// <param name="enterMethod">Enter method for currentState.</param>
-    /// <param name="exitMethod">Exit method for currentState.</param>
-    protected void CreateState(string stateName, Action<Dictionary<string, object>> enterMethod, Action<Dictionary<string, object>> exitMethod)
-    {
-        enterMethods.Add(stateName, enterMethod);
-        exitMethods.Add(stateName, exitMethod);
-    }
-
-
-    /// <summary>
-    /// Exit the current state and enter the new one.
-    /// </summary>
-    /// <param name="stateName">State to transition to.</param>
-    /// <param name="info">Info to pass to the exit and enter states.</param>
-    public void SetState(string stateName, Dictionary<string, object> info)
-    {
-        Log(name + ": " + currentState + "→" + stateName);
-
-        // save previous state
-        if (info == null)
-        {
-            info = new Dictionary<string, object>();
-        }
-        info.Add("previous state", currentState);
-
-        // exit state
-        exitMethods[currentState](info);
-
-        // enter state
-        currentState = stateName;
-        enterMethods[currentState](info);
-    }
-
-
-    /// <summary>
-    /// Start the initial state. Doesn't call any exit methods.
-    /// </summary>
-    /// <param name="info">Info to pass to state enter method.</param>
-    protected void StartInitialState(Dictionary<string, object> info)
-    {
-        Log(name + ": Initial State = " + initialState);
-
-        currentState = initialState;
-        enterMethods[initialState](info);
-    }
-
-    #endregion
-
     #region Public Methods
 
+    /// <summary>
+    /// Create a collider for the ship that encompasses all CUBEs.
+    /// </summary>
     public void GenerateCollider()
     {
         Bounds bounds = new Bounds();
@@ -136,9 +88,9 @@ public class Ship : MonoBase
 
     private void OnDie(object sender, DieArgs args)
     {
-        if (currentState != DyingState)
+        if (stateMachine.currentState != DyingState)
         {
-            SetState(DyingState, new Dictionary<string, object> { { "sender", sender } });
+            stateMachine.SetState(DyingState, new Dictionary<string, object> { { "sender", sender } });
         }
     }
 

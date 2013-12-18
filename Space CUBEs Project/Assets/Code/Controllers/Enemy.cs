@@ -26,11 +26,11 @@ public class Enemy : Ship
         poolObject = GetComponent<PoolObject>();
 
         // states
-        CreateState(SpawningState, info => { }, info => { });
-        CreateState(DyingState, DieEnter, info => { });
+        stateMachine.CreateState(SpawningState, info => { }, info => { });
+        stateMachine.CreateState(DyingState, DieEnter, info => { });
 
-        initialState = SpawningState;
-        StartInitialState(new Dictionary<string, object>());
+        stateMachine.initialState = SpawningState;
+        stateMachine.Start(new Dictionary<string, object>());
     }
 
     #endregion

@@ -321,7 +321,7 @@ public class ConstructionGrid : MonoBase
         PlayerPrefs.SetString(BUILDPATH + buildName, build);
         // add to list of all buildNames
 
-        Debugger.Log(build, true, Debugger.LogTypes.Data); // causes crash in mobile
+        Log(build, true, Debugger.LogTypes.Data); // causes crash in mobile
         return build;
     }
 

@@ -45,15 +45,15 @@ public class Player : Ship
         gameObject.layer = LayerMask.NameToLayer("Player");
 
         // create states
-        CreateState(MovingState, MovingEnter, MovingExit);
-        initialState = MovingState;
+        stateMachine.CreateState(MovingState, MovingEnter, MovingExit);
+        stateMachine.initialState = MovingState;
     }
 
 
     protected override void Start()
     {
         base.Start();
-        StartInitialState(null);
+        stateMachine.Start(null);
     }
 
     #endregion

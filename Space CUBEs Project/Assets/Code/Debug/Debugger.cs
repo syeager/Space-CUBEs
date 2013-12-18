@@ -84,23 +84,10 @@ public class Debugger : Singleton<Debugger>
 
     #region Log/Warning/Error Methods
 
-    [System.Diagnostics.Conditional("LOG")]
-    new public static void Log(object message, bool save = true, LogTypes logType = LogTypes.Default)
-    {
-        if (Main.logFlags[(int) logType]) Debug.Log(message);
-
-        if (save)
-        {
-            using (StreamWriter writer = new StreamWriter(Application.dataPath + LOGPATH + logType + ".txt", true))
-            {
-                writer.WriteLine("Time: " + Time.realtimeSinceStartup + "\r\n" + message);
-            }
-        }
-    }
 
 
     [System.Diagnostics.Conditional("LOG")]
-    public static void Log(object message, Object context, bool save = true, LogTypes logType = LogTypes.Default)
+    public static void Log(object message, Object context = null, bool save = true, LogTypes logType = LogTypes.Default)
     {
         if (Main.logFlags[(int)logType]) Debug.Log(message, context);
 
