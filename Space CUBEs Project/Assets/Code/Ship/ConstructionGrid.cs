@@ -38,7 +38,6 @@ public class ConstructionGrid : MonoBase
     private GameObject[][][] cells;
     private Vector3 cursorOffset;
     private Dictionary<CUBE, CUBEGridInfo> currentBuild = new Dictionary<CUBE, CUBEGridInfo>();
-    public List<Weapon> weapons = new List<Weapon>(6);
     private GameObject ship;
     private Quaternion rotation = new Quaternion(0, 0, 0, 1);
 
@@ -65,11 +64,13 @@ public class ConstructionGrid : MonoBase
             return cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].transform.position;
         }
     }
+    private Weapon[] _weapons = new Weapon[6];
+    public Weapon[] weapons { get { return _weapons; } private set { _weapons = value; } }
     private int weaponsIndex
     {
         get
         {
-            for (int i = 0; i < weapons.Count; i++)
+            for (int i = 0; i < weapons.Length; i++)
             {
                 if (weapons[i] == null)
                 {
@@ -150,6 +151,7 @@ public class ConstructionGrid : MonoBase
         }
         ship.transform.position = transform.position + Vector3.up * (size / 2f + 0.5f);
         GameObject.Instantiate(Center_Prefab, ship.transform.position, Quaternion.identity);
+        weapons = new Weapon[6];
     }
 
 
@@ -343,7 +345,7 @@ public class ConstructionGrid : MonoBase
     public void MoveWeaponMap(int index, int direction)
     {
         if (index == -1) return;
-        if (index + direction >= weapons.Count || index + direction < 0) return;
+        if (index + direction >= weapons.Length || index + direction < 0) return;
         if (weapons[index] == null) return;
 
         Weapon saved = weapons[index];
@@ -576,9 +578,9 @@ public class ConstructionGrid : MonoBase
             cells[(int)rotatedPiece.y][(int)rotatedPiece.z][(int)rotatedPiece.x].renderer.material = CellOpen_Mat;
         }
 
-        if (currentCUBE.CUBEType == CUBE.CUBETypes.Weapon && weapons.IndexOf(currentCUBE.GetComponent<Weapon>()) != -1)
+        if (currentCUBE.CUBEType == CUBE.CUBETypes.Weapon && weapons.Contains(currentCUBE.GetComponent<Weapon>()))
         {
-            weapons[weapons.IndexOf(currentCUBE.GetComponent<Weapon>())] = null;
+            weapons[Array.IndexOf(weapons, currentCUBE.GetComponent<Weapon>())] = null;
         }
         currentBuild.Remove(cube);
 
@@ -643,7 +645,7 @@ public class ConstructionGrid : MonoBase
     private BuildInfo LoadFromData(string buildName)
     {
         currentBuild.Clear();
-        weapons = weapons.Select(w => w = null).ToList();
+        weapons = new Weapon[6];
 
         this.buildName = buildName;
         string build = PlayerPrefs.GetString(BUILDPATH + buildName, "NA");

@@ -310,8 +310,8 @@ public class GarageManager : MonoBehaviour
         float h = LeftMenuRect.height;
 
         // weapons
-        float _h = h * 2f / 3f / Grid.weapons.Count;
-        for (int i = 0; i < Grid.weapons.Count; i++)
+        float _h = h * 2f / 3f / Grid.weapons.Length;
+        for (int i = 0; i < Grid.weapons.Length; i++)
         {
             if (Grid.weapons[i] == null)
             {
@@ -339,7 +339,7 @@ public class GarageManager : MonoBehaviour
                 Grid.MoveWeaponMap(weaponIndex, 1);
                 weaponIndex++;
             }
-            weaponIndex = Mathf.Clamp(weaponIndex, 0, Grid.weapons.Count-1);
+            weaponIndex = Mathf.Clamp(weaponIndex, 0, Grid.weapons.Length-1);
         }
     }
 
@@ -414,7 +414,7 @@ public class GarageManager : MonoBehaviour
                 CUBEFilter = (CUBE.CUBETypes)cursor;
             }
         }
-        GUI.Label(new Rect(w*0.25f, 0f, w*0.5f, h*0.15f), allCUBEs ? "All CUBEs" : CUBEFilter.ToString());
+        GUI.Label(new Rect(w*0.25f, 0f, w*0.5f, h*0.15f), allCUBEs ? "All CUBE_Prefabs" : CUBEFilter.ToString());
         if (GUI.Button(new Rect(w*0.75f, 0f, w*0.25f, h*0.15f), CUBEFilter == CUBE.CUBETypes.Wing ? "|" : "→") && CUBEFilter != CUBE.CUBETypes.Wing)
         {
             allCUBEs = false;
@@ -424,14 +424,15 @@ public class GarageManager : MonoBehaviour
         }
 
         // filter CUBEs
-        List<CUBE> availableCUBEs = new List<CUBE>();
+        List<CUBE> availableCUBEs;
         if (allCUBEs)
         {
-            availableCUBEs = GameResources.Main.CUBEs;
+            availableCUBEs = new List<CUBE>(GameResources.Main.CUBE_Prefabs);
         }
         else
         {
-            foreach (var cube in GameResources.Main.CUBEs)
+            availableCUBEs = new List<CUBE>();
+            foreach (var cube in GameResources.Main.CUBE_Prefabs)
             {
                 if (cube.CUBEType == CUBEFilter)
                 {

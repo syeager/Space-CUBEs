@@ -3,11 +3,12 @@
 
 using UnityEngine;
 
-public class LevelManager : MonoBehaviour
+public class LevelManager : MonoBase
 {
     #region References
 
-    public ConstructionGrid Grid;
+    private ConstructionGrid Grid;
+    public Enemy[] Enemies;
 
     #endregion
 
@@ -22,6 +23,7 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
+        Grid = ((GameObject)Instantiate(GameResources.Main.ConstructionGrid_Prefab, Vector3.zero, Quaternion.identity)).GetComponent<ConstructionGrid>();
         build = (string)GameData.Main.levelData;
         CreatePlayer(build);
     }
@@ -57,6 +59,12 @@ public class LevelManager : MonoBehaviour
         player.GetComponent<ShieldHealth>().Initialize(args.health, args.shield);
         player.GetComponent<ShipMotor>().speed = args.speed;
         player.GenerateCollider();
+    }
+
+
+    private void OnDie(object sender, DieArgs args)
+    {
+
     }
 
     #endregion

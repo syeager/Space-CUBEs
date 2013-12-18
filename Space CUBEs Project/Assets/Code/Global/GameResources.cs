@@ -15,7 +15,8 @@ public class GameResources : MonoBehaviour
 
     #region Public Fields
 
-    public List<CUBE> CUBEs;
+    public CUBE[] CUBE_Prefabs;
+    public GameObject ConstructionGrid_Prefab;
 
     #endregion
 
@@ -36,7 +37,7 @@ public class GameResources : MonoBehaviour
 
     public static CUBE GetCUBE(int ID)
     {
-        return Main.CUBEs.Find(c => c.ID == ID);
+        return Main.CUBE_Prefabs.First(c => c.ID == ID);
     }
 
     #endregion
