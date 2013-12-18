@@ -7,7 +7,7 @@ using System.Collections;
 /// <summary>
 /// Controls movement for any ship.
 /// </summary>
-public class ShipMotor : MonoBehaviour
+public class ShipMotor : MonoBase
 {
     #region References
 

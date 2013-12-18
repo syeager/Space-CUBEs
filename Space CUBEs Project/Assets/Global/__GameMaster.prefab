@@ -43,13 +43,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dab6b0c12c931b3479d1aee0989713d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CUBEs:
+  CUBE_Prefabs:
   - {fileID: 11400002, guid: 162b93d6f5123f3429791ffff288bb23, type: 2}
+  - {fileID: 11400000, guid: aa994873d8f99724daed1f7daa1a6467, type: 2}
   - {fileID: 11400000, guid: a56abfee5e5c96b4f87958bb2b4d97d9, type: 2}
+  - {fileID: 11400000, guid: 5587242fe97c6fe4abb67efae50313ec, type: 2}
   - {fileID: 11400000, guid: 9622fa8d2469027468623f9cdce011d9, type: 2}
   - {fileID: 11400000, guid: a74ea41d719f80541996489a6433aed8, type: 2}
-  - {fileID: 11400000, guid: aa994873d8f99724daed1f7daa1a6467, type: 2}
-  - {fileID: 11400000, guid: 5587242fe97c6fe4abb67efae50313ec, type: 2}
+  ConstructionGrid_Prefab: {fileID: 100000, guid: 4e5347b39b5684b419e7b119a1b0d0ff,
+    type: 2}
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
