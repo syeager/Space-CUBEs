@@ -84,8 +84,6 @@ public class Debugger : Singleton<Debugger>
 
     #region Log/Warning/Error Methods
 
-
-
     [System.Diagnostics.Conditional("LOG")]
     public static void Log(object message, Object context = null, bool save = true, LogTypes logType = LogTypes.Default)
     {
@@ -102,22 +100,7 @@ public class Debugger : Singleton<Debugger>
 
 
     [System.Diagnostics.Conditional("WARNING")]
-    new public static void LogWarning(object message, bool save = true, LogTypes logType = LogTypes.Default)
-    {
-        if (Main.logFlags[(int)logType]) Debug.LogWarning(message);
-
-        if (save)
-        {
-            using (StreamWriter writer = new StreamWriter(Application.dataPath + LOGPATH + logType + ".txt", true))
-            {
-                writer.WriteLine("Time: " + Time.realtimeSinceStartup + " Warning\r\n" + message);
-            }
-        }
-    }
-
-
-    [System.Diagnostics.Conditional("WARNING")]
-    public static void LogWarning(object message, Object context, bool save = true, LogTypes logType = LogTypes.Default)
+    public static void LogWarning(object message, Object context = null, bool save = true, LogTypes logType = LogTypes.Default)
     {
         if (Main.logFlags[(int)logType]) Debug.LogWarning(message, context);
 
@@ -132,22 +115,7 @@ public class Debugger : Singleton<Debugger>
 
 
     [System.Diagnostics.Conditional("ERROR")]
-    new public static void LogError(object message, bool save = true, LogTypes logType = LogTypes.Default)
-    {
-        if (Main.logFlags[(int)logType]) Debug.LogError(message);
-
-        if (save)
-        {
-            using (StreamWriter writer = new StreamWriter(Application.dataPath + LOGPATH + logType + ".txt", true))
-            {
-                writer.WriteLine("Time: " + Time.realtimeSinceStartup + "Error\r\n" + message);
-            }
-        }
-    }
-
-
-    [System.Diagnostics.Conditional("ERROR")]
-    public static void LogError(object message, Object context, bool save = true, LogTypes logType = LogTypes.Default)
+    public static void LogError(object message, Object context = null, bool save = true, LogTypes logType = LogTypes.Default)
     {
         if (Main.logFlags[(int)logType]) Debug.LogError(message, context);
 
