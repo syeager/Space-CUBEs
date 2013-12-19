@@ -89,11 +89,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f95440c9648c0645a1103f00a1a3194, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  log: 1
+  timeScale: 1
   cooldownSpeed: 0
   attackName: Laser Beam
   hitInfo:
-    damage: -1
+    damage: -10
   laserOffset: {x: 0, y: 0, z: 0}
+  recharge: 50
+  rechargeDelay: .5
+  discharge: 25
+  charge: 100
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

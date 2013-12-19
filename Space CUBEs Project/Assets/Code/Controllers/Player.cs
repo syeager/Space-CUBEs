@@ -175,4 +175,24 @@ public class Player : Ship
     }
 
     #endregion
+
+    #region Private Methods
+
+    private void CombineMesh()
+    {
+        var meshFilters = GetComponentsInChildren<MeshFilter>();
+        var meshes = new CombineInstance[meshFilters.Length]; 
+        for (int i = 0; i < meshFilters.Length; i++)
+        {
+            meshes[i].mesh = meshFilters[i].sharedMesh;
+            meshes[i].transform = meshFilters[i].transform.localToWorldMatrix;
+            meshFilters[i].gameObject.SetActive(false);
+        }
+        var meshFilter = gameObject.AddComponent<MeshFilter>();
+        gameObject.AddComponent<MeshRenderer>();
+        meshFilter.mesh = new Mesh();
+        meshFilter.mesh.CombineMeshes(meshes);
+    }
+
+    #endregion
 }

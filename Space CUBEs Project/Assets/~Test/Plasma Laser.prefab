@@ -15,7 +15,7 @@ GameObject:
   - 114: {fileID: 11400000}
   - 114: {fileID: 11400002}
   m_Layer: 0
-  m_Name: Test Laser
+  m_Name: Plasma Laser
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -88,7 +88,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 1
   timeScale: 1
-  oneShot: 1
+  continuous: 0
   hitNumber: 1
 --- !u!114 &11400002
 MonoBehaviour:
@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a811daa6c14fc348b0608b4c05762ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PrefabName: Test Laser
+  PrefabName: Plasma Laser
 --- !u!135 &13500000
 SphereCollider:
   m_ObjectHideFlags: 1

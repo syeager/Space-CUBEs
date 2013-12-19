@@ -39,6 +39,7 @@ public class Grunt : Enemy
 
         // states
         stateMachine.CreateState(MovingState, MovingEnter, info => { });
+        stateMachine.CreateState(DyingState, DieEnter, info => { });
         stateMachine.initialState = MovingState;
     }
 
@@ -71,6 +72,16 @@ public class Grunt : Enemy
             myMotor.Move(1f, Vector3.forward);
             yield return null;
         }
+    }
+
+
+    private void DieEnter(Dictionary<string, object> info)
+    {
+        // send hitinfo to player
+
+        attackCycle1.Kill();
+        attackCycle2.Kill();
+        poolObject.Disable();
     }
 
     #endregion

@@ -24,9 +24,6 @@ public class Enemy : Ship
 
         // references
         poolObject = GetComponent<PoolObject>();
-
-        // states
-        stateMachine.CreateState(DyingState, DieEnter, info => { });
     }
 
 
@@ -35,17 +32,6 @@ public class Enemy : Ship
         base.Start();
 
         stateMachine.Start(new Dictionary<string, object>());
-    }
-
-    #endregion
-
-    #region State Methods
-
-    private void DieEnter(Dictionary<string, object> info)
-    {
-        // send hitinfo to player
-
-        poolObject.Disable();
     }
 
     #endregion
