@@ -10,7 +10,21 @@ using System.Collections;
 /// </summary>
 public class Grunt : Enemy
 {
-    #region State Fields
+    #region Public Fields
+
+    public float minAttackDelay;
+    public float maxAttackDelay;
+
+    #endregion
+
+    #region Private Fields
+
+    private Job attackCycle1;
+    private Job attackCycle2;
+
+    #endregion
+
+    #region Const Fields
 
     private const string MovingState = "Moving";
 
@@ -40,10 +54,35 @@ public class Grunt : Enemy
 
     private IEnumerator MovingUpdate()
     {
+        if (attackCycle1 != null)
+        {
+            attackCycle1.Kill();
+        }
+        attackCycle1 = new Job(AttackCycle(0));
+        if (attackCycle2 != null)
+        {
+            attackCycle2.Kill();
+        }
+        attackCycle2 = new Job(AttackCycle(1));
+
         while (true)
         {
+            // move
             myMotor.Move(1f, Vector3.forward);
             yield return null;
+        }
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    private IEnumerator AttackCycle(int weapon)
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(Random.Range(minAttackDelay, maxAttackDelay));
+            myWeapons.TryActivate(weapon, true);
         }
     }
 
