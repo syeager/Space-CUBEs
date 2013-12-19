@@ -21,7 +21,7 @@ public class LevelManager : MonoBase
 
     #region Unity Overrides
 
-    private void Start()
+    protected virtual void Start()
     {
         Grid = ((GameObject)Instantiate(GameResources.Main.ConstructionGrid_Prefab, Vector3.zero, Quaternion.identity)).GetComponent<ConstructionGrid>();
         build = (string)GameData.Main.levelData;

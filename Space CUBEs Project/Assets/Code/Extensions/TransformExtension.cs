@@ -10,4 +10,18 @@ public static class TransformExtension
         transform.position = position;
         transform.rotation = rotation;
     }
+
+
+    public static void SetPosRot(this Transform transform, float x, float y, float z, Quaternion rotation)
+    {
+        transform.position = new Vector3(x, y, z);
+        transform.rotation = rotation;
+    }
+
+
+    public static void SetPosRot(this Transform transform, float x, float y, float z, float rotX, float rotY, float rotZ)
+    {
+        transform.position = new Vector3(x, y, z);
+        transform.rotation = Quaternion.Euler(rotX, rotY, rotZ);
+    }
 }

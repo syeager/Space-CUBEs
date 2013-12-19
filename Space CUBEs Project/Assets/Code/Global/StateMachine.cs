@@ -8,11 +8,13 @@ using UnityEngine;
 /// <summary>
 /// State Machine to be inherited from other base classes.
 /// </summary>
+[Serializable]
 public class StateMachine
 {
     #region Public Fields
 
     public string initialState;
+    public Job update;
 
     #endregion
 
@@ -31,11 +33,21 @@ public class StateMachine
     #endregion
 
 
-    #region Constructors
+    #region Constructors/Deconstructors
 
     public StateMachine(MonoBase owner)
     {
         this.owner = owner;
+    }
+
+
+    ~StateMachine()
+    {
+        if (update != null)
+        {
+            update.Kill();
+            update = null;
+        }
     }
 
     #endregion
@@ -79,6 +91,11 @@ public class StateMachine
 
         // exit state
         exitMethods[currentState](info);
+        if (update != null)
+        {
+            update.Kill();
+            update = null;
+        }
 
         // enter state
         currentState = stateName;
@@ -98,6 +115,12 @@ public class StateMachine
             Debugger.Log(owner.name + ": Initial State = " + initialState, owner);
         }
         #endif
+
+        if (update != null)
+        {
+            update.Kill();
+            update = null;
+        }
 
         currentState = initialState;
         enterMethods[initialState](info);

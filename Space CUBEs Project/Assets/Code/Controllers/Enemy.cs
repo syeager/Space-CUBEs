@@ -26,10 +26,14 @@ public class Enemy : Ship
         poolObject = GetComponent<PoolObject>();
 
         // states
-        stateMachine.CreateState(SpawningState, info => { }, info => { });
         stateMachine.CreateState(DyingState, DieEnter, info => { });
+    }
 
-        stateMachine.initialState = SpawningState;
+
+    protected override void Start()
+    {
+        base.Start();
+
         stateMachine.Start(new Dictionary<string, object>());
     }
 
@@ -42,6 +46,16 @@ public class Enemy : Ship
         // send hitinfo to player
 
         poolObject.Disable();
+    }
+
+    #endregion
+
+    #region Public Methods
+
+    public void Spawn()
+    {
+        myHealth.Initialize();
+        stateMachine.Start(new Dictionary<string, object>());
     }
 
     #endregion

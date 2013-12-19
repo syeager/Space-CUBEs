@@ -58,6 +58,12 @@ public class Ship : MonoBase
         myHealth.DieEvent += OnDie;
     }
 
+
+    private void OnDestroy()
+    {
+        stateMachine = null;
+    }
+
     #endregion
 
     #region Public Methods

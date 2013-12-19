@@ -329,6 +329,7 @@ public class ConstructionGrid : MonoBase
     public void Load(string build)
     {
         var buildInfo = LoadFromData(build);
+        if (buildInfo == null) return;
 
         var position = cursor;
         foreach (var piece in buildInfo.partList)

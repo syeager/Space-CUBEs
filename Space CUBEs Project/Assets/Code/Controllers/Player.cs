@@ -26,9 +26,9 @@ public class Player : Ship
         KeyCode.J,
         KeyCode.K,
         KeyCode.L,
-        KeyCode.M,
-        KeyCode.Comma,
-        KeyCode.Period
+        KeyCode.Semicolon,
+        KeyCode.U,
+        KeyCode.I
     };
 
     #endregion

@@ -25,6 +25,12 @@ public class Health : MonoBase
 
     #region Public Methods
 
+    public void Initialize()
+    {
+        health = maxHealth;
+    }
+
+
     public void Initialize(float maxHealth)
     {
         this.maxHealth = maxHealth;

@@ -35,6 +35,12 @@ public class PoolManager : Singleton<PoolManager>
         StartCoroutine(Cull());
     }
 
+
+    private void OnDestroy()
+    {
+        Clear();
+    }
+
     #endregion
 
     #region Private Methods
@@ -44,11 +50,26 @@ public class PoolManager : Singleton<PoolManager>
     /// </summary>
     private void Initialize()
     {
+        Clear();
         foreach (var pool in PoolList)
         {
             Pools.Add(pool.Prefab.name, pool);
             pool.Initialize();
         }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private void Clear()
+    {
+        foreach (var pool in PoolList)
+        {
+            pool.Clear();
+        }
+
+        Pools.Clear();
     }
 
     #endregion

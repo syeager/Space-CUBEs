@@ -34,9 +34,16 @@ public class ShipMotor : MonoBase
 
     #region Public Methods
 
+    public void Move(float input, Vector3 direction)
+    {
+        myTransform.Translate(input * speed * direction * deltaTime);
+    }
+
+    
+    [System.Obsolete("Use Move")]
     public void MoveHorizontal(float input)
     {
-        myTransform.Translate(input * speed * Vector3.right * Time.deltaTime);
+        myTransform.Translate(input * speed * Vector3.right * deltaTime);
     }
 
     #endregion
