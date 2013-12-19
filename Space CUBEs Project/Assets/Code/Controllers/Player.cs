@@ -43,9 +43,11 @@ public class Player : Ship
         // setup
         tag = "Player";
         gameObject.layer = LayerMask.NameToLayer("Player");
+        HUD.Initialize(this);
 
         // create states
         stateMachine.CreateState(MovingState, MovingEnter, MovingExit);
+        stateMachine.CreateState(DyingState, DyingEnter, info => { });
         stateMachine.initialState = MovingState;
     }
 
@@ -80,7 +82,7 @@ public class Player : Ship
             }
 
             // move
-            myMotor.MoveHorizontal(HorizontalInput());
+            myMotor.Move(HorizontalInput(), Vector3.right);
 
             yield return null;
         }
@@ -89,7 +91,13 @@ public class Player : Ship
 
     private void MovingExit(Dictionary<string, object> info)
     {
-        StopCoroutine("MovingUpdate");
+        stateMachine.update = new Job(MovingUpdate());
+    }
+
+
+    private void DyingEnter(Dictionary<string, object> info)
+    {
+        Destroy(gameObject);
     }
 
     #endregion

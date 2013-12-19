@@ -18,6 +18,7 @@ public class Health : MonoBase
 
     #region Events
 
+    public EventHandler<HealthUpdateArgs> HealthUpdateEvent;
     public EventHandler<DieArgs> DieEvent;
 
     #endregion
@@ -47,6 +48,10 @@ public class Health : MonoBase
     public bool ChangeHealth(float amount)
     {
         health = Mathf.Clamp(health + amount, 0f, maxHealth);
+        if (HealthUpdateEvent != null)
+        {
+            HealthUpdateEvent(this, new HealthUpdateArgs(maxHealth, amount, health));
+        }
         return health == 0f;
     }
 

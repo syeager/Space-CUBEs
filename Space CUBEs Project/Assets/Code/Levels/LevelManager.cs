@@ -44,7 +44,7 @@ public class LevelManager : MonoBase
     private void CreatePlayer(string build)
     {
         Grid.BuildFinishedEvent += OnBuildFinished;
-        StartCoroutine(Grid.Build(build, 10, new Vector3(-35f, 0, 0), new Vector3(0f, 90f, 270f), 2f));
+        StartCoroutine(Grid.Build(build, 10, new Vector3(-75f, 0, 0), new Vector3(0f, 90f, 270f), 2f));
     }
 
     #endregion

@@ -70,7 +70,7 @@ public class PointLevelManager : LevelManager
         {
             yield return new WaitForSeconds(Random.Range(minDelay, maxDelay));
 
-            var enemy = PoolManager.Pop("Grunt", 5f);
+            var enemy = PoolManager.Pop("Grunt", 10f);
             enemy.transform.SetPosRot(xStart, Random.Range(screenBottom, screenTop), 0f, 0f, 270f, 90f);
             enemy.GetComponent<Enemy>().Spawn();
         }

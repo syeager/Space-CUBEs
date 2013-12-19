@@ -1,6 +1,7 @@
 ﻿// Steve Yeager
 // 12.5.2013
 
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -26,6 +27,12 @@ public class ShieldHealth : Health
 
     public float maxShield;// { get; private set; }
     public float shield;// { get; private set; }
+
+    #endregion
+
+    #region Events
+
+    public EventHandler<ShieldUpdateArgs> ShieldUpdateEvent;
 
     #endregion
 
@@ -62,6 +69,11 @@ public class ShieldHealth : Health
         float extraDamage = shield + amount;
         shield = Mathf.Clamp(shield + amount, 0f, maxShield);
 
+        if (ShieldUpdateEvent != null)
+        {
+            ShieldUpdateEvent(this, new ShieldUpdateArgs(maxShield, amount, shield));
+        }
+
         if (amount < 0f)
         {
             if (rechargeJob != null) rechargeJob.Kill();
@@ -81,13 +93,14 @@ public class ShieldHealth : Health
 
     public bool ApplyDamage(float amount)
     {
+        bool dead = false;
         float extraDamage = ChangeShield(amount);
         if (extraDamage < 0f)
         {
-            return ChangeHealth(extraDamage);
+            dead = ChangeHealth(extraDamage);
         }
 
-        return false;
+        return dead;
     }
 
     #endregion
@@ -99,11 +112,9 @@ public class ShieldHealth : Health
         yield return new WaitForSeconds(rechargeDelay);
         while (shield < maxShield)
         {
-            shield += rechargeSpeed * Time.deltaTime;
+            ChangeShield(rechargeSpeed * Time.deltaTime);
             yield return null;
         }
-
-        shield = maxShield;
     }
 
     #endregion
