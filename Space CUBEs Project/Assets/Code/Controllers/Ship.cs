@@ -17,7 +17,7 @@ public class Ship : MonoBase
 
     protected Transform myTransform;
     protected ShipMotor myMotor;
-    protected WeaponManager myWeapons;
+    public WeaponManager myWeapons;
     protected ShieldHealth myHealth;
 
     #endregion

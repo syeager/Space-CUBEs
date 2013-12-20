@@ -1,6 +1,7 @@
 ﻿// Steve Yeager
 // 12.3.2013
 
+using System.Diagnostics;
 using UnityEngine;
 
 public class LevelManager : MonoBase
@@ -56,7 +57,10 @@ public class LevelManager : MonoBase
         Grid.BuildFinishedEvent -= OnBuildFinished;
 
         var buildShip = args.ship.AddComponent<BuildShip>();
-        buildShip.Build();
+        //Stopwatch watch = new Stopwatch();
+        //watch.Start();
+        buildShip.Build(typeof(Player));
+        //UnityEngine.Debug.Log("Build: " + watch.ElapsedMilliseconds);
 
         //var player = args.ship.AddComponent<Player>();
         //player.GetComponent<WeaponManager>().weapons = args.weapons;
