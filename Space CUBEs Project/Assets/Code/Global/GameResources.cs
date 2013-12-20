@@ -17,6 +17,7 @@ public class GameResources : MonoBehaviour
 
     public CUBE[] CUBE_Prefabs;
     public GameObject ConstructionGrid_Prefab;
+    public Material VertexColor_Mat;
 
     #endregion
 

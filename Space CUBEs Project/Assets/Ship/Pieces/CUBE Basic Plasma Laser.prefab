@@ -74,6 +74,9 @@ MonoBehaviour:
   pieces:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 1}
+  colors:
+  - {r: .0627451017, g: .43921569, b: .0274509806, a: 0}
+  - {r: .890196085, g: .996078432, b: .298039228, a: 0}
   CUBEType: 1
   health: 0
   shield: 0
@@ -92,6 +95,7 @@ MonoBehaviour:
   log: 1
   timeScale: 1
   cooldownSpeed: 3
+  index: 0
   attackName: Plasma Laser
   hitInfo:
     damage: -10

@@ -17,6 +17,9 @@ public class Weapon : MonoBase
 
     /// <summary>1 per second.</summary>
     public float cooldownSpeed;
+    //
+    [HideInInspector]
+    public int index;
 
     #endregion
 
@@ -49,6 +52,12 @@ public class Weapon : MonoBase
     public void Initialize(Ship sender)
     {
         myShip = sender;
+    }
+
+
+    public void Bake(GameObject parent)
+    {
+
     }
 
     #endregion

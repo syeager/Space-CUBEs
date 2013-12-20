@@ -25,7 +25,14 @@ public class WeaponManager : MonoBehaviour
             {
                 weapons[i].Initialize(sender);
             }
+        }
+    }
 
+
+    public void RegisterToHUD()
+    {
+        for (int i = 0; i < weapons.Length; i++)
+        {
             HUD.Main.WeaponButtons[i].ActivateEvent += OnActivate;
         }
     }

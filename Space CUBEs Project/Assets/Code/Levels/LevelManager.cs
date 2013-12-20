@@ -54,13 +54,17 @@ public class LevelManager : MonoBase
     private void OnBuildFinished(object sender, BuildFinishedArgs args)
     {
         Grid.BuildFinishedEvent -= OnBuildFinished;
-        var player = args.ship.AddComponent<Player>();
-        player.GetComponent<WeaponManager>().weapons = args.weapons;
-        player.GetComponent<ShieldHealth>().Initialize(args.health, args.shield);
-        player.GetComponent<ShieldHealth>().rechargeDelay = 1f;
-        player.GetComponent<ShieldHealth>().rechargeSpeed = args.shield / 3f;
-        player.GetComponent<ShipMotor>().speed = args.speed;
-        player.GenerateCollider();
+
+        var buildShip = args.ship.AddComponent<BuildShip>();
+        buildShip.Build();
+
+        //var player = args.ship.AddComponent<Player>();
+        //player.GetComponent<WeaponManager>().weapons = args.weapons;
+        //player.GetComponent<ShieldHealth>().Initialize(args.health, args.shield);
+        //player.GetComponent<ShieldHealth>().rechargeDelay = 1f;
+        //player.GetComponent<ShieldHealth>().rechargeSpeed = args.shield / 3f;
+        //player.GetComponent<ShipMotor>().speed = args.speed;
+        //player.GenerateCollider();
     }
 
 

@@ -390,12 +390,14 @@ public class ConstructionGrid : MonoBase
 
             cube.transform.localPosition = piece.Value.position*UnityEngine.Random.Range(minDist, maxDist);
             cube.transform.localPosition = Quaternion.Euler(UnityEngine.Random.Range(0, 360), UnityEngine.Random.Range(0, 360), UnityEngine.Random.Range(0, 360)) * cube.transform.localPosition;
-
             cube.transform.localEulerAngles = piece.Value.rotation;
+
             if (piece.Value.weaponMap != -1)
             {
-                weaponMaps[piece.Value.weaponMap] = cube.GetComponent<Weapon>();
+                cube.GetComponent<Weapon>().index = piece.Value.weaponMap;
             }
+
+            cube.ColorVertices();
 
             pieces.Add(new BuildCUBE(cube.transform, piece.Value.position-halfGrid, speed));
         }
@@ -414,6 +416,7 @@ public class ConstructionGrid : MonoBase
         
         if (BuildFinishedEvent != null)
         {
+            // get rid of weaponMaps
             BuildFinishedEvent(this, new BuildFinishedArgs(finishedShip, buildInfo.health, buildInfo.shield, buildInfo.speed, weaponMaps));
         }
     }

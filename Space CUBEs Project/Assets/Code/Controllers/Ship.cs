@@ -71,6 +71,7 @@ public class Ship : MonoBase
     /// <summary>
     /// Create a collider for the ship that encompasses all CUBEs.
     /// </summary>
+    [Obsolete("Will need to rewrite after combining meshes.")]
     public void GenerateCollider()
     {
         Bounds bounds = new Bounds();
@@ -86,6 +87,28 @@ public class Ship : MonoBase
         boxCol.isTrigger = true;
         boxCol.size = new Vector3(bounds.size.y, 10f, bounds.size.x);
         boxCol.center = new Vector3(0f, 0, -0.5f); // z is wrong
+    }
+
+
+    public void CombineMeshes()
+    {
+        MeshFilter[] meshFilters = GetComponentsInChildren<MeshFilter>();
+        CombineInstance[] combine = new CombineInstance[meshFilters.Length];
+        for (int i = 1; i < meshFilters.Length; i++)
+        {
+            combine[i].mesh = meshFilters[i].sharedMesh;
+            var child = meshFilters[i].transform;
+            combine[i].transform = Matrix4x4.TRS(child.localPosition, child.localRotation, child.localScale);
+
+            // get weapon
+
+
+            Destroy(meshFilters[i].gameObject);
+        }
+        transform.GetComponent<MeshFilter>().mesh = new Mesh();
+        transform.GetComponent<MeshFilter>().mesh.CombineMeshes(combine);
+        transform.GetComponent<MeshFilter>().mesh.Optimize();
+        transform.renderer.sharedMaterial = GameResources.Main.VertexColor_Mat;
     }
 
     #endregion

@@ -43,7 +43,6 @@ public class Player : Ship
         // setup
         tag = "Player";
         gameObject.layer = LayerMask.NameToLayer("Player");
-        HUD.Initialize(this);
 
         // create states
         stateMachine.CreateState(MovingState, MovingEnter, MovingExit);
@@ -55,6 +54,10 @@ public class Player : Ship
     protected override void Start()
     {
         base.Start();
+
+        HUD.Initialize(this);
+        myWeapons.RegisterToHUD();
+
         stateMachine.Start(null);
     }
 
