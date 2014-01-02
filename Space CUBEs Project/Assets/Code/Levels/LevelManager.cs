@@ -56,19 +56,16 @@ public class LevelManager : MonoBase
     {
         Grid.BuildFinishedEvent -= OnBuildFinished;
 
-        var buildShip = args.ship.AddComponent<BuildShip>();
+        var buildShip = args.ship.AddComponent<ShipCompactor>();
         //Stopwatch watch = new Stopwatch();
         //watch.Start();
-        buildShip.Build(typeof(Player));
+        var player = buildShip.Compact(typeof(Player));
         //UnityEngine.Debug.Log("Build: " + watch.ElapsedMilliseconds);
 
-        //var player = args.ship.AddComponent<Player>();
-        //player.GetComponent<WeaponManager>().weapons = args.weapons;
-        //player.GetComponent<ShieldHealth>().Initialize(args.health, args.shield);
-        //player.GetComponent<ShieldHealth>().rechargeDelay = 1f;
-        //player.GetComponent<ShieldHealth>().rechargeSpeed = args.shield / 3f;
-        //player.GetComponent<ShipMotor>().speed = args.speed;
-        //player.GenerateCollider();
+        player.GetComponent<ShieldHealth>().Initialize(args.health, args.shield);
+        player.GetComponent<ShieldHealth>().rechargeDelay = 1f;
+        player.GetComponent<ShieldHealth>().rechargeSpeed = args.shield / 3f;
+        player.GetComponent<ShipMotor>().speed = args.speed;
     }
 
 

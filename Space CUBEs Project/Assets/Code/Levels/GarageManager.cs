@@ -163,7 +163,7 @@ public class GarageManager : MonoBehaviour
         // load
         if (Input.GetKeyDown(KeyCode.L))
         {
-            Grid.Load("Test Build");
+            Grid.Load("Test Compact");
         }
     }
 

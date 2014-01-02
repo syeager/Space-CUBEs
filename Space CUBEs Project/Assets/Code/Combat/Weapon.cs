@@ -4,7 +4,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class Weapon : MonoBase
+public abstract class Weapon : MonoBase
 {
     #region References
 
@@ -17,9 +17,7 @@ public class Weapon : MonoBase
 
     /// <summary>1 per second.</summary>
     public float cooldownSpeed;
-    //
-    [HideInInspector]
-    public int index;
+    
 
     #endregion
 
@@ -33,6 +31,13 @@ public class Weapon : MonoBase
     #region Const Fields
 
     protected const float FULLPOWER = 100f;
+
+    #endregion
+
+    #region Properties
+
+    /// <summary></summary>
+    public int index { get; set; }
 
     #endregion
 
@@ -55,10 +60,15 @@ public class Weapon : MonoBase
     }
 
 
-    public void Bake(GameObject parent)
-    {
-
-    }
+    /// <summary>
+    /// attach new Weapon to parent
+    //  copy values to parent
+    //  delete self
+    /// </summary>
+    /// <param name="parent"></param>
+    /// <param name="index"></param>
+    /// <returns></returns>
+    public abstract Weapon Bake(GameObject parent);
 
     #endregion
 

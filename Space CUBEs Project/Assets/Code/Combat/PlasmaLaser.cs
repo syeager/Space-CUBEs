@@ -27,5 +27,19 @@ public class PlasmaLaser : Weapon
         laser.GetComponent<Hitbox>().Initialize(myShip, hitInfo, time, myTransform.forward*speed);
     }
 
+
+    public override Weapon Bake(GameObject parent)
+    {
+        var comp = parent.AddComponent<PlasmaLaser>();
+        comp.index = index;
+        comp.attackName = attackName;
+        comp.hitInfo = hitInfo;
+        comp.laserOffset = laserOffset + transform.localPosition;
+        comp.speed = speed;
+        comp.time = time;
+
+        return comp;
+    }
+
     #endregion
 }

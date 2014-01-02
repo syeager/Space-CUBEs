@@ -21,14 +21,12 @@ public class Player : Ship
     public float horizontalBounds = 0.05f;
     public float backBounds;
     public float frontBounds;
-    public readonly KeyCode[] WeaponKeys = new KeyCode[6]
+    public readonly KeyCode[] WeaponKeys = new KeyCode[]
     {
         KeyCode.J,
         KeyCode.K,
         KeyCode.L,
         KeyCode.Semicolon,
-        KeyCode.U,
-        KeyCode.I
     };
 
     #endregion

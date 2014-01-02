@@ -5,19 +5,29 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
-public class BuildShip : MonoBehaviour
+/// <summary>
+/// 
+/// </summary>
+public class ShipCompactor : MonoBehaviour
 {
-    public void Build(Type shipType)
+    public Ship Compact(Type shipType)
     {
+        List<Weapon> weapons = new List<Weapon>();
+
         gameObject.AddComponent<MeshFilter>();
         gameObject.AddComponent<MeshRenderer>();
-
-        List<Weapon> weapons = new List<Weapon>();
 
         MeshFilter[] meshFilters = GetComponentsInChildren<MeshFilter>();
         List<CombineInstance> combine = new List<CombineInstance>();
         for (int i = 1; i < meshFilters.Length; i++)
         {
+            // bake weapons. save refs for weapon manager
+            var weapon = meshFilters[i].GetComponent<Weapon>();
+            if (weapon != null)
+            {
+                weapons.Add(weapon.Bake(gameObject));
+            }
+
             for (int j = 0; j < meshFilters[i].sharedMesh.subMeshCount; j++)
             {
                 var child = meshFilters[i].transform;
@@ -33,16 +43,21 @@ public class BuildShip : MonoBehaviour
 
             Destroy(meshFilters[i].gameObject);
         }
+
         transform.GetComponent<MeshFilter>().mesh = new Mesh();
         transform.GetComponent<MeshFilter>().mesh.CombineMeshes(combine.ToArray());
         transform.GetComponent<MeshFilter>().mesh.Optimize();
         transform.renderer.sharedMaterial = GameResources.Main.VertexColor_Mat;
 
         Ship ship = gameObject.AddComponent(shipType.ToString()) as Ship;
-        int size = weapons.Max(w => w.index);
-        ship.myWeapons.weapons = new Weapon[size];
-        
+        ship.myWeapons.Bake(weapons);
+        var box = ship.gameObject.AddComponent<BoxCollider>();
+        box.size = new Vector3(box.size.x, 10f, box.size.z);
+        box.isTrigger = true;
+        var body = ship.gameObject.AddComponent<Rigidbody>();
+        body.useGravity = false;
 
         Destroy(this);
+        return ship;
     }
 }

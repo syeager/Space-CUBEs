@@ -45,7 +45,7 @@ public class ConstructionGrid : MonoBase
 
     #region Const Fields
 
-    private const string BUILDPATH = "Build: ";
+    private const string BUILDPATH = "Compact: ";
 
     #endregion
 
@@ -367,12 +367,11 @@ public class ConstructionGrid : MonoBase
         {
             if (BuildFinishedEvent != null)
             {
-                BuildFinishedEvent(this, new BuildFinishedArgs(null, 0f, 0f, 0f, null));
+                BuildFinishedEvent(this, new BuildFinishedArgs(null, 0f, 0f, 0f));
             }
             yield break;
         }
 
-        Weapon[] weaponMaps = new Weapon[6];
         List<BuildCUBE> pieces = new List<BuildCUBE>();
         GameObject finishedShip = new GameObject("Player");
 
@@ -416,8 +415,7 @@ public class ConstructionGrid : MonoBase
         
         if (BuildFinishedEvent != null)
         {
-            // get rid of weaponMaps
-            BuildFinishedEvent(this, new BuildFinishedArgs(finishedShip, buildInfo.health, buildInfo.shield, buildInfo.speed, weaponMaps));
+            BuildFinishedEvent(this, new BuildFinishedArgs(finishedShip, buildInfo.health, buildInfo.shield, buildInfo.speed));
         }
     }
 

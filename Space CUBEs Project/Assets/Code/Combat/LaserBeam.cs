@@ -55,6 +55,21 @@ public class LaserBeam : Weapon
         }
     }
 
+
+    public override Weapon Bake(GameObject parent)
+    {
+        var comp = parent.AddComponent<LaserBeam>();
+        comp.index = index;
+        comp.attackName = attackName;
+        comp.hitInfo = hitInfo;
+        comp.laserOffset = laserOffset+transform.localPosition;
+        comp.recharge = recharge;
+        comp.rechargeDelay = rechargeDelay;
+        comp.discharge = discharge;
+
+        return comp;
+    }
+
     #endregion
 
     #region Private Methods
