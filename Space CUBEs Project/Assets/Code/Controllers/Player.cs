@@ -29,6 +29,7 @@ public class Player : Ship
         KeyCode.L,
         KeyCode.Semicolon,
     };
+    public float swipeNeeded = 15f;
 
     #endregion
 
@@ -207,11 +208,24 @@ public class Player : Ship
 
         #else
 
-
+        for (int i = 0; i < Input.touchCount; i++)
+        {
+            float swipe = Input.GetTouch(i).deltaPosition.y;
+            if (swipe > swipeNeeded)
+            {
+                roll = -1;
+                break;
+            }
+            else if (swipe < -swipeNeeded)
+            {
+                roll = 1;
+                break;
+            }
+        }
 
         #endif
 
-        return roll;
+            return roll;
     }
 
     #endregion

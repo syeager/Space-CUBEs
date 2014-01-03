@@ -6,7 +6,7 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: HealthHit_Mat
+  m_Name: ShieldHit_Mat
   m_Shader: {fileID: 4800000, guid: 1d4fbba88bb548944ba5bab72af7b80d, type: 3}
   m_ShaderKeywords: []
   m_CustomRenderQueue: -1
@@ -29,7 +29,7 @@ Material:
       data:
         first:
           name: _Color
-        second: {r: 1, g: 0, b: 0, a: .490196079}
+        second: {r: 0, g: .503448009, b: 1, a: .490196079}
       data:
         first:
           name: _SpecColor
