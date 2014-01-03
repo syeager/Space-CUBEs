@@ -1,6 +1,7 @@
 ﻿// Steve Yeager
 // 11.26.2013
 
+using System;
 using UnityEngine;
 
 public class CUBE : MonoBehaviour
@@ -37,7 +38,7 @@ public class CUBE : MonoBehaviour
 
     #region Public Methods
 
-    // need to pass Color[] colors from CG.Build
+    [Obsolete("need to pass Color[] colors from CG.Build")]
     public void ColorVertices()
     {
         // new mesh

@@ -404,7 +404,6 @@ public class ConstructionGrid : MonoBase
         float time = maxTime;
         while (time > 0f)
         {
-            float deltaTime = Time.deltaTime;
             foreach (var piece in pieces)
             {
                 piece.Update(deltaTime);
