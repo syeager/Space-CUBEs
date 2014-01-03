@@ -588,6 +588,7 @@ MonoBehaviour:
   pieces:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 1}
+  colors: []
   CUBEType: 1
   health: 0
   shield: 0
@@ -647,6 +648,7 @@ MonoBehaviour:
   pieces:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 1}
+  colors: []
   CUBEType: 1
   health: 0
   shield: 0
@@ -666,6 +668,7 @@ MonoBehaviour:
   pieces:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: -1}
+  colors: []
   CUBEType: 3
   health: 0
   shield: 0
@@ -685,6 +688,7 @@ MonoBehaviour:
   pieces:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: -1}
+  colors: []
   CUBEType: 3
   health: 0
   shield: 0
@@ -710,6 +714,7 @@ MonoBehaviour:
   - {x: 1, y: 1, z: 0}
   - {x: 0, y: 1, z: 1}
   - {x: 1, y: 1, z: 1}
+  colors: []
   CUBEType: 2
   health: 10
   shield: 10
@@ -728,6 +733,7 @@ MonoBehaviour:
   ID: 0
   pieces:
   - {x: 0, y: 0, z: 0}
+  colors: []
   CUBEType: 0
   health: 2
   shield: 2
@@ -746,6 +752,7 @@ MonoBehaviour:
   ID: 0
   pieces:
   - {x: 0, y: 0, z: 0}
+  colors: []
   CUBEType: 0
   health: 2
   shield: 2
@@ -764,6 +771,7 @@ MonoBehaviour:
   ID: 0
   pieces:
   - {x: 0, y: 0, z: 0}
+  colors: []
   CUBEType: 0
   health: 2
   shield: 2
@@ -782,6 +790,7 @@ MonoBehaviour:
   ID: 0
   pieces:
   - {x: 0, y: 0, z: 0}
+  colors: []
   CUBEType: 0
   health: 2
   shield: 2
@@ -799,6 +808,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 0
   timeScale: 1
+  myWeapons: {fileID: 0}
   minAttackDelay: 3
   maxAttackDelay: 7
 --- !u!114 &11400024
@@ -815,6 +825,9 @@ MonoBehaviour:
   log: 1
   timeScale: 1
   speed: 15
+  barrelRollMoveSpeed: 0
+  barrelRollTime: 0
+  barrelRollBuffer: .5
 --- !u!114 &11400026
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -843,8 +856,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 1
   timeScale: 1
+  HealthHit_Mat: {fileID: 0}
+  healthHitMatTime: .5
+  invincible: 0
   maxHealth: 25
   health: 0
+  ShieldHit_Mat: {fileID: 0}
   rechargeSpeed: 0
   rechargeDelay: 0
   maxShield: 0

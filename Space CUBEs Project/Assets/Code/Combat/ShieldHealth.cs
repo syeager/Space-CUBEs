@@ -20,6 +20,7 @@ public class ShieldHealth : Health
     #region Private Fields
 
     private Job rechargeJob;
+    private Material ShieldHit_Mat;
 
     #endregion
 
@@ -36,6 +37,16 @@ public class ShieldHealth : Health
 
     #endregion
 
+
+    #region Monobehaviour Overrides
+
+    protected override void Awake()
+    {
+        ShieldHit_Mat = GameResources.Main.ShieldHit_Mat;
+        base.Awake();
+    }
+
+    #endregion
 
     #region Health Overrides
 
@@ -59,10 +70,10 @@ public class ShieldHealth : Health
 
     public void Initialize(float maxHealth, float maxShield)
     {
-        this.maxHealth = maxHealth;
-        health = maxHealth;
         this.maxShield = maxShield;
         shield = maxShield;
+
+        Initialize(maxHealth);
     }
 
 
@@ -100,6 +111,19 @@ public class ShieldHealth : Health
         if (extraDamage < 0f)
         {
             dead = ChangeHealth(extraDamage);
+            if (changeMat != null)
+            {
+                changeMat.Kill();
+            }
+            changeMat = new Job(ChangeMat(HealthHit_Mat));
+        }
+        else
+        {
+            if (changeMat != null)
+            {
+                changeMat.Kill();
+            }
+            changeMat = new Job(ChangeMat(ShieldHit_Mat));
         }
 
         return dead;

@@ -2,6 +2,7 @@
 // 12.5.2013
 
 using System;
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -9,9 +10,24 @@ using UnityEngine;
 /// </summary>
 public class Health : MonoBase
 {
+    #region References
+
+    protected Renderer myRenderer;
+
+    #endregion
+
     #region Public Fields
 
+    public float healthHitMatTime = 0.5f;
     public bool invincible;
+
+    #endregion
+
+    #region Protected Fields
+
+    protected Job changeMat;
+    protected Material HealthHit_Mat;
+    protected Material Normal_Mat;
 
     #endregion
 
@@ -30,18 +46,37 @@ public class Health : MonoBase
     #endregion
 
 
+    #region Monobehaviour Overrides
+
+    protected virtual void Awake()
+    {
+        HealthHit_Mat = GameResources.Main.HealthHit_Mat;
+    }
+
+
+    private void OnDestroy()
+    {
+        changeMat.Kill();
+    }
+
+    #endregion
+
     #region Public Methods
 
     public void Initialize()
     {
         health = maxHealth;
+
+        myRenderer = renderer;
+        if (myRenderer == null) return;
+        Normal_Mat = myRenderer.material;
     }
 
 
     public void Initialize(float maxHealth)
     {
         this.maxHealth = maxHealth;
-        health = maxHealth;
+        Initialize();
     }
 
 
@@ -50,6 +85,14 @@ public class Health : MonoBase
         if (invincible) return;
 
         ChangeHealth(hitInfo.damage);
+
+        if (myRenderer == null) return;
+
+        if (changeMat != null)
+        {
+            changeMat.Kill();
+        }
+        changeMat = new Job(ChangeMat(HealthHit_Mat));
     }
 
 
@@ -61,6 +104,17 @@ public class Health : MonoBase
             HealthUpdateEvent(this, new HealthUpdateArgs(maxHealth, amount, health));
         }
         return health == 0f;
+    }
+
+    #endregion
+
+    #region Protected Methods
+
+    protected IEnumerator ChangeMat(Material mat)
+    {
+        myRenderer.material = mat;
+        yield return new WaitForSeconds(healthHitMatTime);
+        myRenderer.material = Normal_Mat;
     }
 
     #endregion

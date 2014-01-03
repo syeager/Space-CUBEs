@@ -80,7 +80,6 @@ public class StateMachine
             Debugger.Log(owner.name + ": " + currentState + "→" + stateName, owner);
         }
         #endif
-        
 
         // save previous state
         if (info == null)
@@ -88,6 +87,8 @@ public class StateMachine
             info = new Dictionary<string, object>();
         }
         info.Add("previous state", currentState);
+
+        update.End();
 
         // exit state
         exitMethods[currentState](info);
