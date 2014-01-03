@@ -9,6 +9,12 @@ using UnityEngine;
 /// </summary>
 public class Health : MonoBase
 {
+    #region Public Fields
+
+    public bool invincible;
+
+    #endregion
+
     #region Properties
 
     public float maxHealth;// { get; protected set; }
@@ -41,6 +47,8 @@ public class Health : MonoBase
 
     public virtual void RecieveHit(Ship sender, HitInfo hitInfo)
     {
+        if (invincible) return;
+
         ChangeHealth(hitInfo.damage);
     }
 

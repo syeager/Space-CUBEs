@@ -41,6 +41,8 @@ public class ShieldHealth : Health
 
     public override void RecieveHit(Ship sender, HitInfo hitInfo)
     {
+        if (invincible) return;
+
         if (ApplyDamage(hitInfo.damage))
         {
             if (DieEvent != null)

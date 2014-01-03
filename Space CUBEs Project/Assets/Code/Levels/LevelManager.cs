@@ -66,6 +66,8 @@ public class LevelManager : MonoBase
         player.GetComponent<ShieldHealth>().rechargeDelay = 1f;
         player.GetComponent<ShieldHealth>().rechargeSpeed = args.shield / 3f;
         player.GetComponent<ShipMotor>().speed = args.speed;
+        player.GetComponent<ShipMotor>().barrelRollTime = 0.25f;
+        player.GetComponent<ShipMotor>().barrelRollMoveSpeed = 2f * args.speed;
     }
 
 

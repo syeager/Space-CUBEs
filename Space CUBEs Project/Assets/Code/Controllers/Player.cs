@@ -13,6 +13,7 @@ public class Player : Ship
     #region State Fields
 
     private const string MovingState = "Moving";
+    private const string BarrelRollingState = "BarrelRolling";
 
     #endregion
 
@@ -44,6 +45,7 @@ public class Player : Ship
 
         // create states
         stateMachine.CreateState(MovingState, MovingEnter, MovingExit);
+        stateMachine.CreateState(BarrelRollingState, BarrelRollingEnter, BarrelRollingExit);
         stateMachine.CreateState(DyingState, DyingEnter, info => { });
         stateMachine.initialState = MovingState;
     }
@@ -65,7 +67,7 @@ public class Player : Ship
 
     private void MovingEnter(Dictionary<string, object> info)
     {
-        StartCoroutine("MovingUpdate");
+        stateMachine.update = new Job(MovingUpdate());
     }
 
 
@@ -73,12 +75,18 @@ public class Player : Ship
     {
         while (true)
         {
+            // roll
+            int direction = BarrelRollInput();
+            if (direction != 0)
+            {
+                stateMachine.SetState(BarrelRollingState, new Dictionary<string, object> { { "direction", direction } });
+                yield break;
+            }
+
             // attack
             var weapons = AttackInput();
             if (weapons.Count > 0)
             {
-                //SetState(AttackingState, new Dictionary<string, object> { { "weapons", weapons } });
-                //yield break;
                 Attack(weapons);
             }
 
@@ -93,6 +101,28 @@ public class Player : Ship
     private void MovingExit(Dictionary<string, object> info)
     {
         stateMachine.update = new Job(MovingUpdate());
+    }
+
+
+    private void BarrelRollingEnter(Dictionary<string, object> info)
+    {
+        myHealth.invincible = true;
+        collider.enabled = false;
+        stateMachine.update = new Job(BarrelRollingUpdate((int)info["direction"]));
+    }
+
+
+    private IEnumerator BarrelRollingUpdate(int direction)
+    {
+        yield return StartCoroutine(myMotor.BarrelRoll(direction, horizontalBounds));
+        stateMachine.SetState(MovingState, new Dictionary<string, object>());
+    }
+
+
+    private void BarrelRollingExit(Dictionary<string, object> info)
+    {
+        myHealth.invincible = false;
+        collider.enabled = true;
     }
 
 
@@ -112,7 +142,7 @@ public class Player : Ship
 
         #if UNITY_STANDALONE
 
-        input = Input.GetAxis("Horizontal");
+        input = Input.GetAxisRaw("Horizontal");
 
         #else
 
@@ -163,36 +193,41 @@ public class Player : Ship
         return weapons;
     }
 
-    #endregion
 
-    #region Combat Methods
-
-    private void Attack(List<KeyValuePair<int, bool>> weapons)
+    private int BarrelRollInput()
     {
-        foreach (var weapon in weapons)
+        int roll = 0;
+
+        #if UNITY_STANDALONE
+
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            myWeapons.Activate(weapon.Key, weapon.Value);
+            roll = (int)Input.GetAxisRaw("Horizontal");
         }
+
+        #else
+
+
+
+        #endif
+
+        return roll;
     }
 
     #endregion
 
     #region Private Methods
 
-    private void CombineMesh()
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="weapons"></param>
+    private void Attack(List<KeyValuePair<int, bool>> weapons)
     {
-        var meshFilters = GetComponentsInChildren<MeshFilter>();
-        var meshes = new CombineInstance[meshFilters.Length]; 
-        for (int i = 0; i < meshFilters.Length; i++)
+        foreach (var weapon in weapons)
         {
-            meshes[i].mesh = meshFilters[i].sharedMesh;
-            meshes[i].transform = meshFilters[i].transform.localToWorldMatrix;
-            meshFilters[i].gameObject.SetActive(false);
+            myWeapons.Activate(weapon.Key, weapon.Value);
         }
-        var meshFilter = gameObject.AddComponent<MeshFilter>();
-        gameObject.AddComponent<MeshRenderer>();
-        meshFilter.mesh = new Mesh();
-        meshFilter.mesh.CombineMeshes(meshes);
     }
 
     #endregion
