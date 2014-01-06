@@ -41,7 +41,7 @@ public class PointLevelManager : LevelManager
     protected override void Start()
     {
         base.Start();
-
+        
         UpdateScreen();
         spawnCycle = new Job(SpawnCycle());
     }

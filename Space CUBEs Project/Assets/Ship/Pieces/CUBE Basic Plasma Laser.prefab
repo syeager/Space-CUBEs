@@ -12,6 +12,7 @@ GameObject:
   - 23: {fileID: 2300000}
   - 114: {fileID: 11400000}
   - 114: {fileID: 11400002}
+  - 114: {fileID: 11400004}
   m_Layer: 0
   m_Name: CUBE Basic Plasma Laser
   m_TagString: Untagged
@@ -74,9 +75,6 @@ MonoBehaviour:
   pieces:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 1}
-  colors:
-  - {r: .0627451017, g: .43921569, b: .0274509806, a: 0}
-  - {r: .890196085, g: .996078432, b: .298039228, a: 0}
   CUBEType: 1
   health: 0
   shield: 0
@@ -95,13 +93,26 @@ MonoBehaviour:
   log: 1
   timeScale: 1
   cooldownSpeed: 3
-  index: 0
   attackName: Plasma Laser
   hitInfo:
     damage: -10
   laserOffset: {x: 0, y: 0, z: 1}
   speed: 2
   time: 5
+--- !u!114 &11400004
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cddb31ad4dca1141a26c308b5d59954, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colors:
+  - {r: .0705882385, g: .498039216, b: .0313725509, a: 0}
+  - {r: .890196085, g: .996078432, b: .298039228, a: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

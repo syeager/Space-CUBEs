@@ -10,7 +10,7 @@ using System.Linq;
 /// </summary>
 public class ShipCompactor : MonoBehaviour
 {
-    public Ship Compact(Type shipType)
+    public Ship Compact(Type shipType, bool cleanUnused, params Type[] components)
     {
         List<Weapon> weapons = new List<Weapon>();
 
@@ -40,7 +40,6 @@ public class ShipCompactor : MonoBehaviour
                 combine.Add(combineInstance);
             }
 
-
             Destroy(meshFilters[i].gameObject);
         }
 
@@ -48,7 +47,13 @@ public class ShipCompactor : MonoBehaviour
         transform.GetComponent<MeshFilter>().mesh.CombineMeshes(combine.ToArray());
         transform.GetComponent<MeshFilter>().mesh.Optimize();
         transform.renderer.sharedMaterial = GameResources.Main.VertexColor_Mat;
+        
+        if (cleanUnused)
+        {
+            Resources.UnloadUnusedAssets();
+        }
 
+        // add ship essentials
         Ship ship = gameObject.AddComponent(shipType.ToString()) as Ship;
         ship.myWeapons.Bake(weapons);
         var box = ship.gameObject.AddComponent<BoxCollider>();
@@ -57,7 +62,20 @@ public class ShipCompactor : MonoBehaviour
         var body = ship.gameObject.AddComponent<Rigidbody>();
         body.useGravity = false;
 
+        // add extra components
+        foreach (var comp in components)
+        {
+            ship.gameObject.AddComponent(comp.ToString());
+        }
+
         Destroy(this);
         return ship;
+    }
+
+
+    //
+    public Ship Compact(params Type[] components)
+    {
+        return Compact(typeof(Ship), false, components);
     }
 }

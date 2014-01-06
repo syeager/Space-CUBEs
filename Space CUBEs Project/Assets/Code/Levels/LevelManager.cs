@@ -9,7 +9,6 @@ public class LevelManager : MonoBase
     #region References
 
     private ConstructionGrid Grid;
-    public Enemy[] Enemies;
 
     #endregion
 
@@ -59,7 +58,7 @@ public class LevelManager : MonoBase
         var buildShip = args.ship.AddComponent<ShipCompactor>();
         //Stopwatch watch = new Stopwatch();
         //watch.Start();
-        var player = buildShip.Compact(typeof(Player));
+        var player = buildShip.Compact(typeof(Player), true);
         //UnityEngine.Debug.Log("Build: " + watch.ElapsedMilliseconds);
 
         player.GetComponent<ShieldHealth>().Initialize(args.health, args.shield);

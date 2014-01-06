@@ -45,7 +45,10 @@ public class ConstructionGrid : MonoBase
 
     #region Const Fields
 
-    private const string BUILDPATH = "Compact: ";
+    private const string USERBUILDSPATH = "UserBuilds: ";
+    private const string DEVBUILDSPATH = "DevBuilds";
+    private const string MESHPATH = "Assets/Ship/Characters/";
+    private const string PREFABPATH = "Assets/Ship/Characters/";
 
     #endregion
 
@@ -318,8 +321,20 @@ public class ConstructionGrid : MonoBase
         }
 
         // save
-        PlayerPrefs.SetString(BUILDPATH + buildName, build);
+        string path;
+        #if DEVMODE
+        path = DEVBUILDSPATH;
+        #else  
+        path = USERBUILDSPATH;
+        #endif
+        PlayerPrefs.SetString(path + buildName, build);
         // add to list of all buildNames
+
+        // compact and prefab ship
+        #if DEVMODE
+        StartCoroutine(SavePrefab());
+        #endif
+
 
         Log(build, true, Debugger.LogTypes.Data); // causes crash in mobile
         return build;
@@ -396,7 +411,7 @@ public class ConstructionGrid : MonoBase
                 cube.GetComponent<Weapon>().index = piece.Value.weaponMap;
             }
 
-            cube.ColorVertices();
+            cube.GetComponent<ColorVertices>().Bake();
 
             pieces.Add(new BuildCUBE(cube.transform, piece.Value.position-halfGrid, speed));
         }
@@ -649,7 +664,13 @@ public class ConstructionGrid : MonoBase
         weapons = new Weapon[6];
 
         this.buildName = buildName;
-        string build = PlayerPrefs.GetString(BUILDPATH + buildName, "NA");
+        string path;
+        #if DEVMODE
+        path = DEVBUILDSPATH;
+        #else  
+        path = USERBUILDSPATH;
+        #endif
+        string build = PlayerPrefs.GetString(path + buildName, "NA");
         if (build == "NA")
         {
             return null;
@@ -713,6 +734,38 @@ public class ConstructionGrid : MonoBase
         }
 
         return buildInfo;
+    }
+
+
+    private IEnumerator SavePrefab()
+    {
+        // save weapons
+        for (int i = 0; i < weapons.Length; i++)
+        {
+            if (weapons[i] != null)
+            {
+                weapons[i].index = i;
+            }
+        }
+
+        // bake colors
+        var colorVertices = ship.GetComponentsInChildren<ColorVertices>();
+        foreach (var color in colorVertices)
+        {
+            color.Bake();
+        }
+        
+        // create one mesh
+        var compactor = ship.AddComponent<ShipCompactor>();
+        var compShip = compactor.Compact(typeof(PoolObject));
+
+        yield return new WaitForEndOfFrame();
+        #if UNITY_EDITOR
+        
+        UnityEditor.AssetDatabase.CreateAsset(compShip.GetComponent<MeshFilter>().mesh, MESHPATH + buildName + "_Mesh.asset");
+        UnityEditor.PrefabUtility.CreatePrefab(PREFABPATH + buildName + ".prefab", compShip.gameObject); // keeping children
+
+        #endif
     }
 
     #endregion

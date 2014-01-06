@@ -165,7 +165,7 @@ public class UILabelInspector : UIWidgetInspector
 
 			GUILayout.BeginHorizontal();
 			NGUIEditorTools.DrawProperty("Encoding", serializedObject, "mEncoding", GUILayout.Width(100f));
-			GUILayout.Label("use emoticons and colors");
+			GUILayout.Label("use emoticons and newColors");
 			GUILayout.EndHorizontal();
 
 			GUILayout.BeginHorizontal();

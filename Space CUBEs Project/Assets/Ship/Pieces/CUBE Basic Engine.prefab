@@ -11,6 +11,7 @@ GameObject:
   - 33: {fileID: 3300000}
   - 23: {fileID: 2300000}
   - 114: {fileID: 11400000}
+  - 114: {fileID: 11400002}
   m_Layer: 0
   m_Name: CUBE Basic Engine
   m_TagString: Untagged
@@ -73,13 +74,24 @@ MonoBehaviour:
   pieces:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: -1}
-  colors:
-  - {r: .514705896, g: 0, b: 0, a: 0}
-  - {r: .154411793, g: .154411793, b: .154411793, a: 0}
   CUBEType: 3
   health: 0
   shield: 0
   speed: 7
+--- !u!114 &11400002
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cddb31ad4dca1141a26c308b5d59954, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colors:
+  - {r: .509803951, g: 0, b: 0, a: 0}
+  - {r: .152941182, g: .152941182, b: .152941182, a: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

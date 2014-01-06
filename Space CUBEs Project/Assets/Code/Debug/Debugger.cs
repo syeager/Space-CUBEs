@@ -54,11 +54,10 @@ public class Debugger : Singleton<Debugger>
 
     #region MonoBehaviour Overrides
 
-    protected override void Awake()
+    [System.Diagnostics.Conditional("LOG")]
+    protected void Start()
     {
-        base.Awake();
-
-        string[] logTypes = Enum.GetNames(typeof (LogTypes));
+        string[] logTypes = Enum.GetNames(typeof(LogTypes));
         for (int i = 0; i < logFlags.Length; i++)
         {
             string path = Application.dataPath + LOGPATH + logTypes[i] + ".txt";

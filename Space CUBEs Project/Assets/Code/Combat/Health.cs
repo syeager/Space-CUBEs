@@ -56,7 +56,10 @@ public class Health : MonoBase
 
     private void OnDestroy()
     {
-        changeMat.Kill();
+        if (changeMat != null)
+        {
+            changeMat.Kill();
+        }
     }
 
     #endregion
@@ -110,6 +113,10 @@ public class Health : MonoBase
 
     #region Protected Methods
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="mat"></param>
     protected IEnumerator ChangeMat(Material mat)
     {
         myRenderer.material = mat;

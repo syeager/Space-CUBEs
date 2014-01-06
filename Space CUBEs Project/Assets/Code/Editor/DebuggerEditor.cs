@@ -7,7 +7,6 @@ public class DebuggerEditor : Editor
 {
     #region Private Fields
 
-    private SerializedObject sObject;
     private Debugger myDebugger;
     private string[] logTypes;
 
@@ -18,7 +17,6 @@ public class DebuggerEditor : Editor
 
     private void OnEnable()
     {
-        sObject = new SerializedObject(target);
         myDebugger = (Debugger)target;
         logTypes = Enum.GetNames(typeof(Debugger.LogTypes));
     }
@@ -26,48 +24,50 @@ public class DebuggerEditor : Editor
 
     public override void OnInspectorGUI()
     {
-        sObject.Update();
+        serializedObject.Update();
 
         // FPS
         if (GUILayout.Button((myDebugger.FPS == null ? "Show" : "Hide") + " FPS"))
         {
-            if (sObject.FindProperty("FPS").objectReferenceValue == null)
+            if (serializedObject.FindProperty("FPS").objectReferenceValue == null)
             {
-                sObject.FindProperty("FPS").objectReferenceValue = Instantiate(sObject.FindProperty("FPS_Prefab").objectReferenceValue, new Vector3(0.99f, 0.99f, 0f), Quaternion.identity);
+                serializedObject.FindProperty("FPS").objectReferenceValue = Instantiate(serializedObject.FindProperty("FPS_Prefab").objectReferenceValue, new Vector3(0.99f, 0.99f, 0f), Quaternion.identity);
             }
             else
             {
-                DestroyImmediate(sObject.FindProperty("FPS").objectReferenceValue);
-                sObject.FindProperty("FPS").objectReferenceValue = null;
+                DestroyImmediate(serializedObject.FindProperty("FPS").objectReferenceValue);
+                serializedObject.FindProperty("FPS").objectReferenceValue = null;
             }
         }
 
         // ConsoleLine
         if (GUILayout.Button((myDebugger.ConsoleLine == null ? "Show" : "Hide") + " ConsoleLine"))
         {
-            if (sObject.FindProperty("ConsoleLine").objectReferenceValue == null)
+            if (serializedObject.FindProperty("ConsoleLine").objectReferenceValue == null)
             {
-                sObject.FindProperty("ConsoleLine").objectReferenceValue = Instantiate(sObject.FindProperty("ConsoleLine_Prefab").objectReferenceValue, new Vector3(0.5f, 0.01f, 0f), Quaternion.identity);
+                serializedObject.FindProperty("ConsoleLine").objectReferenceValue = Instantiate(serializedObject.FindProperty("ConsoleLine_Prefab").objectReferenceValue, new Vector3(0.5f, 0.01f, 0f), Quaternion.identity);
             }
             else
             {
-                DestroyImmediate(sObject.FindProperty("ConsoleLine").objectReferenceValue);
-                sObject.FindProperty("ConsoleLine").objectReferenceValue = null;
+                DestroyImmediate(serializedObject.FindProperty("ConsoleLine").objectReferenceValue);
+                serializedObject.FindProperty("ConsoleLine").objectReferenceValue = null;
             }
         }
 
-        EditorGUILayout.PropertyField(sObject.FindProperty("overwrite"), new GUIContent("Overwrite Saved Logs"));
+        // overwrite logs
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("overwrite"), new GUIContent("Overwrite Saved Logs"));
 
+        // log types
         EditorGUILayout.LabelField("Toggle Log Types");
         EditorGUI.indentLevel++;
-        SerializedProperty logFlags = sObject.FindProperty("logFlags");
+        SerializedProperty logFlags = serializedObject.FindProperty("logFlags");
         for (int i = 0; i < myDebugger.logFlags.Length; i++)
         {
             EditorGUILayout.PropertyField(logFlags.GetArrayElementAtIndex(i), new GUIContent(logTypes[i]));
         }
         EditorGUI.indentLevel--;
 
-        sObject.ApplyModifiedProperties();
+        serializedObject.ApplyModifiedProperties();
     }
 
     #endregion
