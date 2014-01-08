@@ -16,6 +16,19 @@ public class Enemy : Ship
 
     #endregion
 
+    #region Public Fields
+
+    public enum Classes
+    {
+        Grunt,
+    }
+    public Classes enemyClass;
+    public int score;
+    public int money;
+
+    #endregion
+
+
     #region MonoBehaviour Overrides
 
     protected override void Awake()
@@ -31,6 +44,9 @@ public class Enemy : Ship
     {
         base.Start();
 
+        // register events
+        myHealth.DieEvent += OnDie;
+
         stateMachine.Start(new Dictionary<string, object>());
     }
 
@@ -42,6 +58,19 @@ public class Enemy : Ship
     {
         myHealth.Initialize();
         stateMachine.Start(new Dictionary<string, object>());
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    private void OnDie(object sender, DieArgs args)
+    {
+        Player player = sender as Player;
+        if (player != null)
+        {
+            player.RecieveKill(enemyClass, score, money);
+        }
     }
 
     #endregion

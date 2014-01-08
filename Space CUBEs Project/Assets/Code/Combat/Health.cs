@@ -18,29 +18,38 @@ public class Health : MonoBase
 
     #region Public Fields
 
+    /// <summary>Seconds for the hit material.</summary>
     public float healthHitMatTime = 0.5f;
+    /// <summary>Can recieve damage?</summary>
     public bool invincible;
 
     #endregion
 
     #region Protected Fields
 
+    /// <summary>Changes material from normal to hit and back.</summary>
     protected Job changeMat;
+    /// <summary>Material when health is taken away.</summary>
     protected Material HealthHit_Mat;
+    /// <summary>Material when gameobject is created.</summary>
     protected Material Normal_Mat;
 
     #endregion
 
     #region Properties
 
+    /// <summary>Max health allowed.</summary>
     public float maxHealth;// { get; protected set; }
+    /// <summary>Current health.</summary>
     public float health;// { get; protected set; }
 
     #endregion
 
     #region Events
 
+    /// <summary>Sent when health is changed.</summary>
     public EventHandler<HealthUpdateArgs> HealthUpdateEvent;
+    /// <summary>Sent when health reaches 0.</summary>
     public EventHandler<DieArgs> DieEvent;
 
     #endregion
@@ -50,6 +59,7 @@ public class Health : MonoBase
 
     protected virtual void Awake()
     {
+        myRenderer = renderer;
         HealthHit_Mat = GameResources.Main.HealthHit_Mat;
     }
 
@@ -66,16 +76,21 @@ public class Health : MonoBase
 
     #region Public Methods
 
+    /// <summary>
+    /// Set health to max health.
+    /// </summary>
     public void Initialize()
     {
         health = maxHealth;
 
-        myRenderer = renderer;
-        if (myRenderer == null) return;
         Normal_Mat = myRenderer.material;
     }
 
 
+    /// <summary>
+    /// Set health to max health.
+    /// </summary>
+    /// <param name="maxHealth">New max health.</param>
     public void Initialize(float maxHealth)
     {
         this.maxHealth = maxHealth;
@@ -83,6 +98,11 @@ public class Health : MonoBase
     }
 
 
+    /// <summary>
+    /// Recieve hit info from weapon.
+    /// </summary>
+    /// <param name="sender">Who shot the weapon.</param>
+    /// <param name="hitInfo">HitInfo from weapon.</param>
     public virtual void RecieveHit(Ship sender, HitInfo hitInfo)
     {
         if (invincible) return;
@@ -99,6 +119,11 @@ public class Health : MonoBase
     }
 
 
+    /// <summary>
+    /// Add to health. Clamped.
+    /// </summary>
+    /// <param name="amount">Amount of health added./param>
+    /// <returns>True, if health is 0.</returns>
     public bool ChangeHealth(float amount)
     {
         health = Mathf.Clamp(health + amount, 0f, maxHealth);
@@ -106,7 +131,19 @@ public class Health : MonoBase
         {
             HealthUpdateEvent(this, new HealthUpdateArgs(maxHealth, amount, health));
         }
-        return health == 0f;
+
+        if (health == 0f)
+        {
+            if (DieEvent != null)
+            {
+                DieEvent(this, new DieArgs());
+            }
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     #endregion
@@ -114,9 +151,9 @@ public class Health : MonoBase
     #region Protected Methods
 
     /// <summary>
-    /// 
+    /// Change to hit material for healthHitMatTime.
     /// </summary>
-    /// <param name="mat"></param>
+    /// <param name="mat">Material to switch to.</param>
     protected IEnumerator ChangeMat(Material mat)
     {
         myRenderer.material = mat;

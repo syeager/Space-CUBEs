@@ -3,6 +3,9 @@
 
 using System;
 
+/// <summary>
+/// Info to pass from Hitbox to Health.
+/// </summary>
 [Serializable]
 public class HitInfo
 {

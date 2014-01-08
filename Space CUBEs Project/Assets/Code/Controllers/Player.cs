@@ -10,6 +10,13 @@ using UnityEngine;
 /// </summary>
 public class Player : Ship
 {
+    #region Public Fields
+
+    public ScoreManager myScore;
+    public MoneyManager myMoney;
+
+    #endregion
+
     #region State Fields
 
     private const string MovingState = "Moving";
@@ -43,6 +50,8 @@ public class Player : Ship
         // setup
         tag = "Player";
         gameObject.layer = LayerMask.NameToLayer("Player");
+        myScore = new ScoreManager();
+        myMoney = new MoneyManager();
 
         // create states
         stateMachine.CreateState(MovingState, MovingEnter, MovingExit);
@@ -85,11 +94,15 @@ public class Player : Ship
             }
 
             // attack
+            #if UNITY_STANDALONE
+
             var weapons = AttackInput();
             if (weapons.Count > 0)
             {
                 Attack(weapons);
             }
+            
+            #endif
 
             // move
             myMotor.Move(HorizontalInput(), Vector3.right);
@@ -129,7 +142,7 @@ public class Player : Ship
 
     private void DyingEnter(Dictionary<string, object> info)
     {
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 
     #endregion
@@ -172,8 +185,6 @@ public class Player : Ship
     {
         var weapons = new List<KeyValuePair<int, bool>>();
 
-        #if UNITY_STANDALONE
-
         for (int i = 0; i < WeaponKeys.Length; i++)
         {
             if (myWeapons.CanActivate(i))
@@ -188,8 +199,6 @@ public class Player : Ship
                 }
             }
         }
-
-        #endif
 
         return weapons;
     }
@@ -226,6 +235,22 @@ public class Player : Ship
         #endif
 
             return roll;
+    }
+
+    #endregion
+
+    #region Public Methods
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="enemy"></param>
+    /// <param name="points"></param>
+    public void RecieveKill(Enemy.Classes enemy, int points, int money)
+    {
+        myScore.IncreaseMultiplier();
+        myScore.RecieveScore(points);
+        myMoney.Collect(money);
     }
 
     #endregion

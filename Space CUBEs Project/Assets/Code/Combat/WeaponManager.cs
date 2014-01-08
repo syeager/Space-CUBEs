@@ -4,9 +4,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System.Diagnostics;
 
 /// <summary>
-/// 
+/// Activates weapons on Ship.
 /// </summary>
 public class WeaponManager : MonoBehaviour
 {
@@ -20,9 +21,9 @@ public class WeaponManager : MonoBehaviour
     #region Public Methods
 
     /// <summary>
-    /// 
+    /// Adds weapons.
     /// </summary>
-    /// <param name="weaponList"></param>
+    /// <param name="weaponList">Weapons to add by their index.</param>
     public void Bake(List<Weapon> weaponList)
     {
         int max = weaponList.Max(w => w.index);
@@ -36,9 +37,9 @@ public class WeaponManager : MonoBehaviour
 
 
     /// <summary>
-    /// 
+    /// Initialize all weapons.
     /// </summary>
-    /// <param name="sender"></param>
+    /// <param name="sender">Ship weapons are attached to.</param>
     public void Initialize(Ship sender)
     {
         for (int i = 0; i < weapons.Length; i++)
@@ -52,8 +53,9 @@ public class WeaponManager : MonoBehaviour
 
 
     /// <summary>
-    /// 
+    /// Connect weapons to buttons in HUD.
     /// </summary>
+    [Conditional("UNITY_ANDROID")]
     public void RegisterToHUD()
     {
         for (int i = 0; i < weapons.Length; i++)
@@ -64,10 +66,10 @@ public class WeaponManager : MonoBehaviour
 
 
     /// <summary>
-    /// 
+    /// See if weapon can be activated.
     /// </summary>
-    /// <param name="weapon"></param>
-    /// <returns></returns>
+    /// <param name="weapon">Weapon index.</param>
+    /// <returns>True, can activate.</returns>
     public bool CanActivate(int weapon)
     {
         if (canActivate && weapons[weapon] != null)
@@ -82,10 +84,10 @@ public class WeaponManager : MonoBehaviour
 
 
     /// <summary>
-    /// 
+    /// Activate weapon regardless if it can be activated or not.
     /// </summary>
-    /// <param name="weapon"></param>
-    /// <param name="isPressed"></param>
+    /// <param name="weapon">Weapon index.</param>
+    /// <param name="isPressed">True, if weapon is pressed and not released.</param>
     public void Activate(int weapon, bool isPressed)
     {
         weapons[weapon].Activate(isPressed);
@@ -93,16 +95,20 @@ public class WeaponManager : MonoBehaviour
 
 
     /// <summary>
-    /// 
+    /// Activate weapon if it can be.
     /// </summary>
-    /// <param name="weapon"></param>
-    /// <param name="isPressed"></param>
-    public void TryActivate(int weapon, bool isPressed)
+    /// <param name="weapon">Weapon index.</param>
+    /// <param name="isPressed">True, if weapon is pressed and not released.</param>
+    /// <returns>True, if the weapon is successfully activated.</returns>
+    public bool TryActivate(int weapon, bool isPressed)
     {
-        if (CanActivate(weapon))
+        bool activated = CanActivate(weapon);
+        if (activated)
         {
             Activate(weapon, isPressed);
         }
+
+        return activated;
     }
 
     #endregion
@@ -110,10 +116,10 @@ public class WeaponManager : MonoBehaviour
     #region Event Handlers
 
     /// <summary>
-    /// 
+    /// TryActivate weapons registered to HUD button presses.
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="args"></param>
+    /// <param name="sender">Button pressed.</param>
+    /// <param name="args">Button args.</param>
     private void OnActivate(object sender, ActivateButtonArgs args)
     {
         TryActivate(int.Parse(args.value), args.isPressed);

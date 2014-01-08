@@ -222,7 +222,7 @@ public class GarageManager : MonoBehaviour
         }
         if (GUI.Button(new Rect(0f, LeftMenuRect.height * 0.4f, LeftMenuRect.width, LeftMenuRect.height * 0.2f), "Test"))
         {
-            GameData.Main.LoadScene("Test Room", false, Grid.buildName);
+            GameData.Main.LoadScene("Test Room", false, new Dictionary<string, object>{{"Build", Grid.buildName}});
         }
     }
 

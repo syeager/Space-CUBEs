@@ -3,6 +3,7 @@
 
 using System.Diagnostics;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class LevelManager : MonoBase
 {
@@ -12,9 +13,27 @@ public class LevelManager : MonoBase
 
     #endregion
 
+    #region Public Fields
+
+    public int[] rankLimits = new int[6];
+
+    #endregion
+
+    #region Protected Fields
+
+    protected Player player;
+
+    #endregion
+
     #region Private Fields
 
     private string build;
+
+    #endregion
+
+    #region Const Fields
+
+    private char[] ranks = { 'F', 'D', 'C', 'B', 'A', 'S' };
 
     #endregion
 
@@ -24,7 +43,7 @@ public class LevelManager : MonoBase
     protected virtual void Start()
     {
         Grid = ((GameObject)Instantiate(GameResources.Main.ConstructionGrid_Prefab, Vector3.zero, Quaternion.identity)).GetComponent<ConstructionGrid>();
-        build = (string)GameData.Main.levelData;
+        build = (string)GameData.Main.levelData["Build"];
         CreatePlayer(build);
     }
 
@@ -56,14 +75,12 @@ public class LevelManager : MonoBase
         Grid.BuildFinishedEvent -= OnBuildFinished;
 
         var buildShip = args.ship.AddComponent<ShipCompactor>();
-        //Stopwatch watch = new Stopwatch();
-        //watch.Start();
-        var player = buildShip.Compact(typeof(Player), true);
-        //UnityEngine.Debug.Log("Build: " + watch.ElapsedMilliseconds);
+        player = buildShip.Compact(typeof(Player), true) as Player;
 
         player.GetComponent<ShieldHealth>().Initialize(args.health, args.shield);
         player.GetComponent<ShieldHealth>().rechargeDelay = 1f;
         player.GetComponent<ShieldHealth>().rechargeSpeed = args.shield / 3f;
+        player.GetComponent<ShieldHealth>().DieEvent += OnDie;
         player.GetComponent<ShipMotor>().speed = args.speed;
         player.GetComponent<ShipMotor>().barrelRollTime = 0.25f;
         player.GetComponent<ShipMotor>().barrelRollMoveSpeed = 2f * args.speed;
@@ -72,7 +89,21 @@ public class LevelManager : MonoBase
 
     private void OnDie(object sender, DieArgs args)
     {
-
+        var data = new Dictionary<string, object>();
+        data.Add("Score", player.myScore.points);
+        data.Add("Money", player.myMoney.money);
+        char rank = ranks[ranks.Length-1];
+        
+        for (int i = 0; i < rankLimits.Length; i++)
+        {
+            if (player.myScore.points <= rankLimits[i])
+            {
+                rank = ranks[i-1];
+                break;
+            }
+        }
+        data.Add("Rank", rank);
+        InvokeAction(() => GameData.Main.LoadScene("Level Overview", true, data), 2f);
     }
 
     #endregion

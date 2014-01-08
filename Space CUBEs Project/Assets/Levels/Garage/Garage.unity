@@ -334,7 +334,6 @@ GameObject:
   - 4: {fileID: 768662255}
   - 114: {fileID: 768662254}
   - 114: {fileID: 768662256}
-  - 114: {fileID: 768662259}
   m_Layer: 0
   m_Name: __GameMaster
   m_TagString: Untagged
@@ -400,7 +399,6 @@ MonoBehaviour:
   FPS_Prefab: {fileID: 100000, guid: ede73768352859c47b0ceadd2ebf76fa, type: 2}
   ConsoleLine: {fileID: 0}
   ConsoleLine_Prefab: {fileID: 100000, guid: 1abf603ef50833b4ba9818e64b0f75db, type: 2}
-  devMode: 1
   overwrite: 1
   logFlags: 0101
 --- !u!114 &768662257
@@ -443,20 +441,6 @@ MonoBehaviour:
   VertexColor_Mat: {fileID: 2100000, guid: 6d9e17dd27ab6bc4ea90d40a327ec967, type: 2}
   ShieldHit_Mat: {fileID: 2100000, guid: 71367417f5c929240bcef731c61da6be, type: 2}
   HealthHit_Mat: {fileID: 2100000, guid: 714fd6fe39d4b7e4786c808fbccc8dd9, type: 2}
---- !u!114 &768662259
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400010, guid: aeed59aee1ea3714da2eb46ccb6175bd,
-    type: 2}
-  m_PrefabInternal: {fileID: 506932740}
-  m_GameObject: {fileID: 768662252}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3013c042127d5b745959eca1d43a2bc1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  log: 1
-  timeScale: 1
 --- !u!1 &821642093
 GameObject:
   m_ObjectHideFlags: 0

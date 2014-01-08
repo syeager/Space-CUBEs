@@ -27,7 +27,7 @@ public class GameData : Singleton<GameData>
 
     #region Level Fields
 
-    public object levelData { get; private set; }
+    public Dictionary<string, object> levelData { get; private set; }
 
     #endregion
 
@@ -55,11 +55,11 @@ public class GameData : Singleton<GameData>
     #region Loading Methods
 
     /// <summary>
-    /// LoadHighscore the next scene and cache data.
+    /// Load the next scene and cache data.
     /// </summary>
     /// <param name="levelData">Data to save for the next scene.</param>
     /// <param name="nextScene">Name of next scene.</param>
-    public void LoadScene(string nextScene, bool load = false, object levelData = null)
+    public void LoadScene(string nextScene, bool load = false, Dictionary<string, object> levelData = null)
     {
         this.levelData = levelData;
         previousScene = Application.loadedLevelName;
@@ -73,7 +73,7 @@ public class GameData : Singleton<GameData>
     /// Reloads the current scene without the Loading Screen.
     /// <param name="levelData">Data to save for the next scene.</param>
     /// </summary>
-    public void ReloadScene(object levelData = null)
+    public void ReloadScene(Dictionary<string, object> levelData = null)
     {
         this.levelData = levelData;
         Application.LoadLevel(Application.loadedLevel);
