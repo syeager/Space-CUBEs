@@ -26,7 +26,8 @@ public class HUD : Singleton<HUD>
 
     #region Private Fields
 
-    private float barPer;
+    private float healthBarPer;
+    private float shieldBarPer;
 
     #endregion
 
@@ -47,7 +48,8 @@ public class HUD : Singleton<HUD>
 
     private void Start()
     {
-        barPer = ShieldBar.rightAnchor.relative - ShieldBar.leftAnchor.relative;
+        healthBarPer = HealthBar.rightAnchor.relative - HealthBar.leftAnchor.relative;
+        shieldBarPer = ShieldBar.rightAnchor.relative - ShieldBar.leftAnchor.relative;
     }
 
     #endregion
@@ -72,13 +74,13 @@ public class HUD : Singleton<HUD>
 
     private void OnShieldUpdate(object sender, ShieldUpdateArgs args)
     {
-        ShieldBar.rightAnchor.relative = ShieldBar.leftAnchor.relative + barPer * (args.shield / args.max);
+        ShieldBar.rightAnchor.relative = ShieldBar.leftAnchor.relative + shieldBarPer * (args.shield / args.max);
     }
 
 
     private void OnHealthUpdate(object sender, HealthUpdateArgs args)
     {
-        HealthBar.rightAnchor.relative = HealthBar.leftAnchor.relative + barPer * (args.health / args.max);
+        HealthBar.rightAnchor.relative = HealthBar.leftAnchor.relative + healthBarPer * (args.health / args.max);
     }
 
 

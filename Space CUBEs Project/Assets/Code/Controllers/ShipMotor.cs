@@ -29,7 +29,10 @@ public class ShipMotor : MonoBase
     public float barrelRollBuffer = 0.5f;
     
     /// <summary>Screen percentage for screen top/bottom boundary.</summary>
-    public float verticalBounds = 0.05f;
+    public float verticalBounds = 0.05f; // should be set by initialize
+    public bool hasHorizontalBounds = true;
+    public float leftBound = 0.01f;
+    public float rightBound = 0.5f;
 
     #endregion
 
@@ -61,24 +64,7 @@ public class ShipMotor : MonoBase
 
     public void Move(Vector2 input)
     {
-        Vector3 screenPosition = LevelCamera.WorldToScreenPoint(myTransform.position);
-        // top
-        float H = Screen.height;
-        if (input.y > 0f)
-        {
-            if (screenPosition.y >= (H - H*verticalBounds))
-            {
-                input.y = 0f;
-            }
-        }
-        else if (input.y < 0f)
-        {
-            if (screenPosition.y <= (H * verticalBounds))
-            {
-                input.y = 0f;
-            }
-        }
-
+        TestBoundaries(ref input);
         myTransform.Translate(input * speed * deltaTime, Space.World);
     }
 
@@ -96,15 +82,13 @@ public class ShipMotor : MonoBase
         barrelRollStatus = BarrelRollStatuses.Rolling;
         float rollingSpeed = 360f / barrelRollTime;
         Vector3 eulerAngles = myTransform.eulerAngles;
-        //Vector3 moveDir = myTransform.right * direction;
 
         var timer = barrelRollTime;
         float ypos;
         while (timer > 0f)
         {
             // test bounds
-            ypos = Camera.main.WorldToViewportPoint(myTransform.position).y;
-            //if (!(direction > 0f && ypos <= bounds) && !(direction < 0f && ypos >= 1 - bounds))
+            TestBoundaries(ref direction);
             {
                 myTransform.Translate(direction * barrelRollMoveSpeed * deltaTime, Space.World);
             }
@@ -121,6 +105,51 @@ public class ShipMotor : MonoBase
 
         barrelRollStatus = BarrelRollStatuses.Waiting;
         InvokeAction(() => barrelRollStatus = BarrelRollStatuses.Ready, barrelRollBuffer);
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    public void TestBoundaries(ref Vector2 input)
+    {
+        Vector3 screenPosition = LevelCamera.WorldToViewportPoint(myTransform.position);
+
+        // top
+        if (input.y > 0f)
+        {
+            if (screenPosition.y >= (1 - verticalBounds))
+            {
+                input.y = 0f;
+            }
+        }
+        // bottom
+        else if (input.y < 0f)
+        {
+            if (screenPosition.y <= verticalBounds)
+            {
+                input.y = 0f;
+            }
+        }
+        if (hasHorizontalBounds)
+        {
+            // left
+            if (input.x < 0f)
+            {
+                if (screenPosition.x <= leftBound)
+                {
+                    input.x = 0f;
+                }
+            }
+            // right
+            else if (input.x > 0f)
+            {
+                if (screenPosition.x >= 1 - rightBound)
+                {
+                    input.x = 0f;
+                }
+            }
+        }
     }
 
     #endregion

@@ -8,7 +8,7 @@ public class Joystick : MonoBehaviour
 {
     #region References
 
-    public Camera camera;
+    new public Camera camera;
 
     #endregion
 
@@ -35,6 +35,12 @@ public class Joystick : MonoBehaviour
 
     #region MonoBehaviour Overrides
 
+    private void Awake()
+    {
+        center = camera.WorldToScreenPoint(transform.position);
+    }
+
+
     private void Update()
     {
         if (touchID == -1)
@@ -47,7 +53,6 @@ public class Joystick : MonoBehaviour
                     if (Physics.Raycast(camera.ScreenPointToRay(touch.position)))
                     {
                         touchID = touch.fingerId;
-                        center = touch.position;
                         return;
                     }
                 }
@@ -61,10 +66,7 @@ public class Joystick : MonoBehaviour
                 {
                     // apply deadzone
                     Vector2 input = Vector2.ClampMagnitude((Input.GetTouch(i).position - center) / maxDistance, 1);
-                    //Debugger.LogConsoleLine("Dist: " + (Input.GetTouch(i).position - center).magnitude + " Maxed: " + ((Input.GetTouch(i).position - center) / maxDistance).magnitude);
                     value = input.magnitude >= deadzone ? input : Vector2.zero;
-                    //value = ((Input.GetTouch(i).position - center) / maxDistance).normalized;
-                    //Debugger.LogConsoleLine("Joystick: " + (Input.GetTouch(i).position - center).magnitude);
                     return;
                 }
             }

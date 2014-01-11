@@ -17,6 +17,7 @@ public class PointLevelManager : LevelManager
     public float minDelay;
     public float maxDelay;
     public float screenBufferPer;
+    public float HUDHeight;
     public float xStart = 50f;
 
     #endregion
@@ -27,6 +28,7 @@ public class PointLevelManager : LevelManager
     private Job spawnCycle;
     private float screenTop;
     private float screenBottom;
+
     #endregion
 
     #region Properties
@@ -59,7 +61,8 @@ public class PointLevelManager : LevelManager
     private void UpdateScreen()
     {
         float bottom = Screen.height*screenBufferPer;
-        screenBottom = Camera.main.ScreenToWorldPoint(new Vector3(0f, bottom, 0f)).y;
+        float height = Screen.height * HUDHeight;
+        screenBottom = Camera.main.ScreenToWorldPoint(new Vector3(0f, bottom+height, 0f)).y;
         screenTop = Camera.main.ScreenToWorldPoint(new Vector3(0f, Screen.height - bottom, 0f)).y;
     }
 
