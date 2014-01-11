@@ -43,7 +43,23 @@ public class LevelManager : MonoBase
     protected virtual void Start()
     {
         Grid = ((GameObject)Instantiate(GameResources.Main.ConstructionGrid_Prefab, Vector3.zero, Quaternion.identity)).GetComponent<ConstructionGrid>();
+        #if UNITY_EDITOR
+
+        if (GameData.Main.levelData.ContainsKey("Build"))
+        {
+            build = (string)GameData.Main.levelData["Build"];
+        }
+        else
+        {
+            build = "Test Build";
+        }
+
+        #else
+
         build = (string)GameData.Main.levelData["Build"];
+
+        #endif
+
         CreatePlayer(build);
     }
 

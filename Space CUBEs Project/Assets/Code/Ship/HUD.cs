@@ -2,6 +2,8 @@
 // 12.8.2013
 
 using System;
+using System.Collections;
+using System.Diagnostics;
 using UnityEngine;
 
 /// <summary>
@@ -12,9 +14,9 @@ public class HUD : Singleton<HUD>
     #region References
 
     private ShieldHealth PlayerHealth;
-    public PressButton[] WeaponButtons = new PressButton[6];
-    public PressButton LeftButton;
-    public PressButton RightButton;
+    public PressButton[] WeaponButtons;
+    public Joystick joystick;
+    public PressButton barrelRoll;
     public UITexture ShieldBar;
     public UITexture HealthBar;
     public UILabel Points;
@@ -24,7 +26,7 @@ public class HUD : Singleton<HUD>
 
     #region Private Fields
 
-    public float barPer;
+    private float barPer;
 
     #endregion
 
@@ -34,14 +36,17 @@ public class HUD : Singleton<HUD>
 
     #endregion
 
+    #region Events
+
+    public EventHandler BarrelRollEvent;
+
+    #endregion
+
 
     #region MonoBehaviour Overrides
 
     private void Start()
     {
-        LeftButton.ActivateEvent += OnActivateNav;
-        RightButton.ActivateEvent += OnActivateNav;
-
         barPer = ShieldBar.rightAnchor.relative - ShieldBar.leftAnchor.relative;
     }
 
@@ -57,24 +62,13 @@ public class HUD : Singleton<HUD>
 
         player.myScore.PointsUpdateEvent += Main.OnPointsChanged;
         player.myScore.MultiplierUpdateEvent += Main.OnMultiplierChanged;
+
+        Main.barrelRoll.ActivateEvent += Main.OnBarrelRoll;
     }
 
     #endregion
 
     #region Event Handlers
-
-    private void OnActivateNav(object sender, ActivateButtonArgs args)
-    {
-        if (args.isPressed)
-        {
-            NavButton += float.Parse(args.value);
-        }
-        else
-        {
-            NavButton -= float.Parse(args.value);
-        }
-    }
-
 
     private void OnShieldUpdate(object sender, ShieldUpdateArgs args)
     {
@@ -97,6 +91,17 @@ public class HUD : Singleton<HUD>
     private void OnMultiplierChanged(object sender, MultiplierUpdateArgs args)
     {
         Multiplier.text = "M: " + args.multiplier.ToString();
+    }
+
+
+    private void OnBarrelRoll(object sender, ActivateButtonArgs args)
+    {
+        if (!args.isPressed) return;
+
+        if (BarrelRollEvent != null)
+        {
+            BarrelRollEvent(this, EventArgs.Empty);
+        }
     }
 
     #endregion

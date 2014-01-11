@@ -34,6 +34,14 @@ public class GameData : Singleton<GameData>
 
     #region MonoBehaviour Overrides
 
+    protected override void Awake()
+    {
+ 	     base.Awake();
+
+         levelData = new Dictionary<string, object>();
+    }
+
+
     private void Update()
     {
         #if UNITY_EDITOR

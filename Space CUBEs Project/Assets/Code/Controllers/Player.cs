@@ -1,8 +1,10 @@
 ﻿// Steve Yeager
 // 11.25.2013
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 /// <summary>
@@ -36,7 +38,8 @@ public class Player : Ship
         KeyCode.L,
         KeyCode.Semicolon,
     };
-    public float swipeNeeded = 15f;
+    public float swipeNeeded = 10f;
+    private bool barrelRoll;
 
     #endregion
 
@@ -65,8 +68,13 @@ public class Player : Ship
     {
         base.Start();
 
+        #if UNITY_ANDROID
+
         HUD.Initialize(this);
+        HUD.Main.BarrelRollEvent += OnBarrelRoll;
         myWeapons.RegisterToHUD();
+
+        #endif
 
         stateMachine.Start(null);
     }
@@ -86,26 +94,21 @@ public class Player : Ship
         while (true)
         {
             // roll
-            int direction = BarrelRollInput();
-            if (direction != 0)
+            if (BarrelRollInput())
             {
-                stateMachine.SetState(BarrelRollingState, new Dictionary<string, object> { { "direction", direction } });
-                yield break;
+                stateMachine.SetState(BarrelRollingState, new Dictionary<string, object>());
+                break;
             }
 
             // attack
-            #if UNITY_STANDALONE
-
             var weapons = AttackInput();
             if (weapons.Count > 0)
             {
                 Attack(weapons);
             }
-            
-            #endif
 
             // move
-            myMotor.Move(HorizontalInput(), Vector3.right);
+            myMotor.Move(MovementInput());
 
             yield return null;
         }
@@ -120,13 +123,14 @@ public class Player : Ship
 
     private void BarrelRollingEnter(Dictionary<string, object> info)
     {
+        barrelRoll = false;
         myHealth.invincible = true;
         collider.enabled = false;
-        stateMachine.update = new Job(BarrelRollingUpdate((int)info["direction"]));
+        stateMachine.update = new Job(BarrelRollingUpdate(MovementInput()));
     }
 
 
-    private IEnumerator BarrelRollingUpdate(int direction)
+    private IEnumerator BarrelRollingUpdate(Vector2 direction)
     {
         yield return StartCoroutine(myMotor.BarrelRoll(direction, horizontalBounds));
         stateMachine.SetState(MovingState, new Dictionary<string, object>());
@@ -149,6 +153,7 @@ public class Player : Ship
 
     #region Input Methods
 
+    [Obsolete("Use MovementInput")]
     private float HorizontalInput()
     {
         float input = 0f;
@@ -181,9 +186,29 @@ public class Player : Ship
     }
 
 
+    private Vector2 MovementInput()
+    {
+        Vector2 input;
+
+        #if UNITY_STANDALONE
+
+        input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+
+        #else
+
+        input = HUD.Main.joystick.value;
+
+        #endif
+
+        return input;
+    }
+
+
     private List<KeyValuePair<int, bool>> AttackInput()
     {
         var weapons = new List<KeyValuePair<int, bool>>();
+
+        #if UNITY_STANDALONE
 
         for (int i = 0; i < WeaponKeys.Length; i++)
         {
@@ -200,41 +225,27 @@ public class Player : Ship
             }
         }
 
+        #else
+
+
+
+        #endif
+
         return weapons;
     }
 
 
-    private int BarrelRollInput()
+    private bool BarrelRollInput()
     {
-        int roll = 0;
-
         #if UNITY_STANDALONE
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            roll = (int)Input.GetAxisRaw("Horizontal");
-        }
+        return Input.GetKeyDown(KeyCode.Space);
 
         #else
 
-        for (int i = 0; i < Input.touchCount; i++)
-        {
-            float swipe = Input.GetTouch(i).deltaPosition.y;
-            if (swipe > swipeNeeded)
-            {
-                roll = -1;
-                break;
-            }
-            else if (swipe < -swipeNeeded)
-            {
-                roll = 1;
-                break;
-            }
-        }
+        return barrelRoll;
 
         #endif
-
-            return roll;
     }
 
     #endregion
@@ -267,6 +278,15 @@ public class Player : Ship
         {
             myWeapons.Activate(weapon.Key, weapon.Value);
         }
+    }
+
+    #endregion
+
+    #region Event Handlers
+
+    private void OnBarrelRoll(object sender, EventArgs args)
+    {
+        barrelRoll = true;
     }
 
     #endregion

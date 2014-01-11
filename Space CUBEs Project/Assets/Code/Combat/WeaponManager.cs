@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System.Diagnostics;
+using System;
 
 /// <summary>
 /// Activates weapons on Ship.
@@ -72,6 +73,8 @@ public class WeaponManager : MonoBehaviour
     /// <returns>True, can activate.</returns>
     public bool CanActivate(int weapon)
     {
+        if (weapon >= weapons.Length) return false;
+
         if (canActivate && weapons[weapon] != null)
         {
             return weapons[weapon].CanActivate();
@@ -90,6 +93,8 @@ public class WeaponManager : MonoBehaviour
     /// <param name="isPressed">True, if weapon is pressed and not released.</param>
     public void Activate(int weapon, bool isPressed)
     {
+        if (weapon >= weapons.Length) return;
+
         weapons[weapon].Activate(isPressed);
     }
 
@@ -102,6 +107,8 @@ public class WeaponManager : MonoBehaviour
     /// <returns>True, if the weapon is successfully activated.</returns>
     public bool TryActivate(int weapon, bool isPressed)
     {
+        if (weapon >= weapons.Length) return false;
+
         bool activated = CanActivate(weapon);
         if (activated)
         {
@@ -120,6 +127,7 @@ public class WeaponManager : MonoBehaviour
     /// </summary>
     /// <param name="sender">Button pressed.</param>
     /// <param name="args">Button args.</param>
+    [Obsolete("Have player check button status.")]
     private void OnActivate(object sender, ActivateButtonArgs args)
     {
         TryActivate(int.Parse(args.value), args.isPressed);

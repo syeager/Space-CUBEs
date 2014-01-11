@@ -69,7 +69,7 @@ public class Grunt : Enemy
         while (true)
         {
             // move
-            myMotor.Move(1f, Vector3.forward);
+            myMotor.Move(-Vector2.right);
             yield return null;
         }
     }
