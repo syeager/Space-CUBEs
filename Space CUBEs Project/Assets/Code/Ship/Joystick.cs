@@ -9,6 +9,7 @@ public class Joystick : MonoBehaviour
     #region References
 
     new public Camera camera;
+    private Collider myCollider;
 
     #endregion
 
@@ -23,6 +24,7 @@ public class Joystick : MonoBehaviour
 
     private int touchID = -1;
     private Vector2 center;
+    RaycastHit rayInfo;
 
     #endregion
 
@@ -38,6 +40,7 @@ public class Joystick : MonoBehaviour
     private void Awake()
     {
         center = camera.WorldToScreenPoint(transform.position);
+        myCollider = collider;
     }
 
 
@@ -50,7 +53,8 @@ public class Joystick : MonoBehaviour
                 Touch touch = Input.GetTouch(i);
                 if (touch.phase == TouchPhase.Began)
                 {
-                    if (Physics.Raycast(camera.ScreenPointToRay(touch.position)))
+                    Physics.Raycast(camera.ScreenPointToRay(touch.position), out rayInfo);
+                    if (rayInfo.collider == myCollider)
                     {
                         touchID = touch.fingerId;
                         return;

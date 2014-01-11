@@ -108,6 +108,7 @@ public class WeaponManager : MonoBehaviour
     public bool TryActivate(int weapon, bool isPressed)
     {
         if (weapon >= weapons.Length) return false;
+        if (!canActivate) return false;
 
         bool activated = CanActivate(weapon);
         if (activated)

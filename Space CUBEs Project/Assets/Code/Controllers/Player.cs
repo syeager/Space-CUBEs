@@ -147,6 +147,7 @@ public class Player : Ship
     private void DyingEnter(Dictionary<string, object> info)
     {
         gameObject.SetActive(false);
+        myWeapons.canActivate = false;
     }
 
     #endregion
