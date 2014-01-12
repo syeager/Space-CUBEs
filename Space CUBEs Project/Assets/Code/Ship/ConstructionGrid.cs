@@ -645,19 +645,6 @@ public class ConstructionGrid : MonoBase
     }
 
 
-    private Vector3 ToVector3(string vectorString)
-    {
-        Vector3 vector;
-        vectorString = vectorString.Substring(1, vectorString.Length-2).Replace(" ", "");
-        string[] split = vectorString.Split(',');
-        vector.x = float.Parse(split[0]);
-        vector.y = float.Parse(split[1]);
-        vector.z = float.Parse(split[2]);
-
-        return vector;
-    }
-
-
     private BuildInfo LoadFromData(string buildName)
     {
         currentBuild.Clear();
@@ -715,10 +702,10 @@ public class ConstructionGrid : MonoBase
                             pieceID = int.Parse(xml.ReadString());
                             break;
                         case "Position":
-                            pieceP = ToVector3(xml.ReadString());
+                            pieceP = Utility.ParseV3(xml.ReadString());
                             break;
                         case "Rotation":
-                            pieceR = ToVector3(xml.ReadString());
+                            pieceR = Utility.ParseV3(xml.ReadString());
                             break;
                         case "WeaponMap":
                             weaponMap = int.Parse(xml.ReadString());

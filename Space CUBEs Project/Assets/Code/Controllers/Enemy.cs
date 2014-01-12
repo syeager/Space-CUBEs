@@ -8,7 +8,7 @@ using UnityEngine;
 /// Base class for all enemies.
 /// </summary>
 [RequireComponent(typeof(PoolObject))]
-public class Enemy : Ship
+public abstract class Enemy : Ship
 {
     #region References
 
@@ -72,6 +72,12 @@ public class Enemy : Ship
             player.RecieveKill(enemyClass, score, money);
         }
     }
+
+    #endregion
+
+    #region Abstract Methods
+
+    public abstract void Spawn(Vector3 stopPosition);
 
     #endregion
 }

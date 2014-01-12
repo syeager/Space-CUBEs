@@ -86,7 +86,7 @@ public class PoolManager : Singleton<PoolManager>
         Pool pool;
         if (Pools.TryGetValue(PrefabName, out pool))
         {
-            return Pools[PrefabName].Pop();
+            return pool.Pop();
         }
         else
         {
@@ -106,7 +106,7 @@ public class PoolManager : Singleton<PoolManager>
         Pool pool;
         if (Pools.TryGetValue(PrefabName, out pool))
         {
-            return Pools[PrefabName].Pop(life);
+            return pool.Pop(life);
         }
         else
         {

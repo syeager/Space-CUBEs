@@ -5,7 +5,7 @@ using System.Diagnostics;
 using UnityEngine;
 using System.Collections.Generic;
 
-public class LevelManager : MonoBase
+public class LevelManager : Singleton<LevelManager>
 {
     #region References
 
@@ -96,14 +96,14 @@ public class LevelManager : MonoBase
         player.GetComponent<ShieldHealth>().Initialize(args.health, args.shield);
         player.GetComponent<ShieldHealth>().rechargeDelay = 1f;
         player.GetComponent<ShieldHealth>().rechargeSpeed = args.shield / 3f;
-        player.GetComponent<ShieldHealth>().DieEvent += OnDie;
+        player.GetComponent<ShieldHealth>().DieEvent += OnPlayerDeath;
         player.GetComponent<ShipMotor>().speed = args.speed;
         player.GetComponent<ShipMotor>().barrelRollTime = 0.25f;
         player.GetComponent<ShipMotor>().barrelRollMoveSpeed = 2f * args.speed;
     }
 
 
-    private void OnDie(object sender, DieArgs args)
+    private void OnPlayerDeath(object sender, DieArgs args)
     {
         var data = new Dictionary<string, object>();
         data.Add("Score", player.myScore.points);

@@ -87,6 +87,25 @@ public class GarageManager : MonoBehaviour
     {
         UpdateScreen();
 
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            var enemies = WaveStream.Read("Test Room", 1);
+            foreach (var e in enemies)
+            {
+                Debug.Log(e.enemy + " " + e.position);
+            }
+            enemies = WaveStream.Read("Test Room", 2);
+            foreach (var e in enemies)
+            {
+                Debug.Log(e.enemy + " " + e.position);
+            }
+        }
+
         // move CUBE
         if (Input.GetKeyDown(KeyCode.A))
         {

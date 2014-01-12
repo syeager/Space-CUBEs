@@ -29,11 +29,13 @@ public class Debugger : Singleton<Debugger>
     {
         true,    // Default
         true,    // Data
+        true,    // LevelEvents
     };
     public enum LogTypes
     {
         Default = 0,
         Data = 1,
+        LevelEvents = 2,
     }
 
     #endregion
