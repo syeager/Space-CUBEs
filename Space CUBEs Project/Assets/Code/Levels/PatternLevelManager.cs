@@ -16,6 +16,7 @@ public class PatternLevelManager : LevelManager
 
     private int segmentCursor;
     private int enemiesLeft;
+    private bool lastSegment;
 
     #endregion
 
@@ -59,18 +60,24 @@ public class PatternLevelManager : LevelManager
             }
         }
 
+        // last segment
+        lastSegment = segmentCursor + 1 == segments.Length;
+        
+        // create enemies
+        enemiesLeft = 0;
         for (int i = 0; i < segments[segmentCursor].pattern.positions.Length; i++)
         {
             var enemy = PoolManager.Pop(segments[segmentCursor].enemies[i].ToString());
             enemy.transform.SetPosRot(segments[segmentCursor].pattern.positions[i] + SPAWNSTART, SPAWNROTATION);
             enemy.GetComponent<Enemy>().Spawn();
-            if (clear)
+            if (clear || lastSegment)
             {
                 enemiesLeft++;
                 enemy.GetComponent<ShieldHealth>().DieEvent += OnEnemyDeath;
             }
         }
 
+        // increase segmentCursor
         Log("Segment " + segmentCursor + " spawned.", true, Debugger.LogTypes.LevelEvents);
         segmentCursor++;
 
@@ -93,7 +100,14 @@ public class PatternLevelManager : LevelManager
         if (enemiesLeft == 0)
         {
             Log("Segment " + (segmentCursor - 1) + " cleared.", true, Debugger.LogTypes.LevelEvents);
-            InvokeAction(() => SpawnNextSegment(), 3f);
+            if (lastSegment)
+            {
+                LevelFinished();
+            }
+            else
+            {
+                InvokeAction(() => SpawnNextSegment(), 3f);
+            }
         }
     }
 

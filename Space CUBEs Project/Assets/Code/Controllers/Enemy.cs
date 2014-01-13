@@ -66,7 +66,7 @@ public abstract class Enemy : Ship
 
     private void OnDie(object sender, DieArgs args)
     {
-        Player player = sender as Player;
+        Player player = args.killer as Player;
         if (player != null)
         {
             player.RecieveKill(enemyClass, score, money);

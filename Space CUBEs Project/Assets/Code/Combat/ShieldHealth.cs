@@ -53,16 +53,13 @@ public class ShieldHealth : Health
     public override void RecieveHit(Ship sender, HitInfo hitInfo)
     {
         if (invincible) return;
-        if (hitInfo == null)
-        {
-            Debug.Log(sender, gameObject);
-        }
+
         if (ApplyDamage(hitInfo.damage))
         {
             if (DieEvent != null)
             {
                 rechargeJob.Kill();
-                DieEvent(sender, new DieArgs(false));
+                DieEvent(this, new DieArgs(sender));
             }
         }
     }
@@ -141,7 +138,7 @@ public class ShieldHealth : Health
             {
                 rechargeJob.Kill();
             }
-            DieEvent(null, new DieArgs(true));
+            DieEvent(this, new DieArgs(true));
         }
     }
 

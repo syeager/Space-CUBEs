@@ -57,32 +57,7 @@ public abstract class Weapon : MonoBase
     public void Initialize(Ship sender)
     {
         myShip = sender;
-    }
-
-
-    /// <summary>
-    /// attach new Weapon to parent
-    //  copy values to parent
-    //  delete self
-    /// </summary>
-    /// <param name="parent"></param>
-    /// <param name="index"></param>
-    /// <returns></returns>
-    public abstract Weapon Bake(GameObject parent);
-
-    #endregion
-
-    #region Virtual Methods
-
-    public virtual bool CanActivate()
-    {
-        return true;
-    }
-
-
-    public virtual void Activate(bool pressed)
-    {
-
+        power = FULLPOWER;
     }
 
     #endregion
@@ -94,7 +69,7 @@ public abstract class Weapon : MonoBase
         canActivate = false;
         while (power < FULLPOWER)
         {
-            power += cooldownSpeed*Time.deltaTime;
+            power += cooldownSpeed * deltaTime;
             yield return null;
         }
 
@@ -103,4 +78,31 @@ public abstract class Weapon : MonoBase
     }
 
     #endregion
+
+    #region Virtual Methods
+
+    public virtual bool CanActivate()
+    {
+        return canActivate;
+    }
+
+    #endregion
+
+    #region Abstract Methods
+
+    /// <summary>
+    /// attach new Weapon to parent
+    //  copy values to parent
+    //  delete self
+    /// </summary>
+    /// <param name="parent"></param>
+    /// <param name="index"></param>
+    /// <returns></returns>
+    public abstract Weapon Bake(GameObject parent);
+
+    public abstract void Activate(bool pressed);
+
+    #endregion
+
+    
 }

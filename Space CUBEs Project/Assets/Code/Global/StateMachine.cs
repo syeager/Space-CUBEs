@@ -113,7 +113,7 @@ public class StateMachine
         #if LOG
         if (owner.log)
         {
-            Debugger.Log(owner.name + ": Initial State = " + initialState, owner);
+            Debugger.Log(owner.name + ": Initial State = " + initialState, owner, false, Debugger.LogTypes.StateMachines);
         }
         #endif
 

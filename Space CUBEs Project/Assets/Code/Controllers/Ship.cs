@@ -33,6 +33,8 @@ public class Ship : MonoBase
     protected const string SpawningState = "Spawning";
     protected const string DyingState = "Dying";
 
+    private const float COLLISIONDAMAGE = -20f;
+
     #endregion
 
 
@@ -56,6 +58,16 @@ public class Ship : MonoBase
 
         // register events
         myHealth.DieEvent += OnDie;
+    }
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Health otherHealth = other.GetComponent<Health>();
+        if (otherHealth != null)
+        {
+            otherHealth.RecieveHit(this, new HitInfo { damage = COLLISIONDAMAGE });
+        }
     }
 
 

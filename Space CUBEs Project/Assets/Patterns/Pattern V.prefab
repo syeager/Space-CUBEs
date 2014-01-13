@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400000}
   m_Layer: 0
-  m_Name: Line_Pattern
+  m_Name: Pattern V
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -40,14 +40,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   positions:
   - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 10, z: 0}
-  - {x: 0, y: 20, z: 0}
-  - {x: 0, y: 30, z: 0}
-  - {x: 0, y: 40, z: 0}
-  - {x: 0, y: -10, z: 0}
-  - {x: 0, y: -20, z: 0}
-  - {x: 0, y: -30, z: 0}
-  - {x: 0, y: -40, z: 0}
+  - {x: 10, y: 10, z: 0}
+  - {x: 20, y: 20, z: 0}
+  - {x: 30, y: 30, z: 0}
+  - {x: 10, y: -10, z: 0}
+  - {x: 20, y: -20, z: 0}
+  - {x: 30, y: -30, z: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

@@ -7,7 +7,6 @@ using UnityEngine;
 /// <summary>
 /// Passes HitInfo from attack to reciever.
 /// </summary>
-[RequireComponent(typeof(PoolObject))]
 public class Hitbox : MonoBase
 {
     #region References

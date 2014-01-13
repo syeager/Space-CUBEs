@@ -121,8 +121,8 @@ MonoBehaviour:
   enemyClass: 0
   score: 100
   money: 50
-  minAttackDelay: 2
-  maxAttackDelay: 5
+  minAttackDelay: 4
+  maxAttackDelay: 9
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -199,7 +199,6 @@ MonoBehaviour:
     damage: -10
   laserOffset: {x: 1.5, y: -.5, z: 1.5}
   speed: 40
-  time: 5
 --- !u!114 &11400012
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -219,7 +218,6 @@ MonoBehaviour:
     damage: -10
   laserOffset: {x: 1.5, y: -.5, z: 1.5}
   speed: 40
-  time: 5
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

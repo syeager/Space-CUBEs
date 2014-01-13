@@ -145,7 +145,7 @@ public class PatternCreator : EditorWindow
         {
             savedPrefab.GetComponent<Pattern>().positions[i] = prefab.transform.GetChild(i).localPosition;
         }
-        PrefabUtility.CreatePrefab(PATTERNPATH + patternName + " Pattern.prefab", savedPrefab);
+        PrefabUtility.CreatePrefab(PATTERNPATH + "Pattern " + patternName + ".prefab", savedPrefab);
         DestroyImmediate(savedPrefab);
 
         LoadPatterns();

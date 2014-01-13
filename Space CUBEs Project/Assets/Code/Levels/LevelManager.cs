@@ -4,6 +4,7 @@
 using System.Diagnostics;
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public class LevelManager : Singleton<LevelManager>
 {
@@ -40,6 +41,12 @@ public class LevelManager : Singleton<LevelManager>
     #region Const Fields
 
     private char[] ranks = { 'F', 'D', 'C', 'B', 'A', 'S' };
+
+    #endregion
+
+    #region Events
+
+    public EventHandler LevelFinishedEvent;
 
     #endregion
 
@@ -80,6 +87,36 @@ public class LevelManager : Singleton<LevelManager>
 
     #endregion
 
+    #region Protected Methods
+
+    protected void LevelFinished()
+    {
+        Log("Level Finished.", true, Debugger.LogTypes.LevelEvents);
+
+        var data = new Dictionary<string, object>();
+        data.Add("Score", player.myScore.points);
+        data.Add("Money", player.myMoney.money);
+        char rank = ranks[ranks.Length - 1];
+
+        for (int i = 0; i < rankLimits.Length; i++)
+        {
+            if (player.myScore.points <= rankLimits[i])
+            {
+                rank = ranks[i - 1];
+                break;
+            }
+        }
+        data.Add("Rank", rank);
+        InvokeAction(() => GameData.Main.LoadScene("Level Overview", true, data), 2f);
+
+        if (LevelFinishedEvent != null)
+        {
+            LevelFinishedEvent(this, EventArgs.Empty);
+        }
+    }
+
+    #endregion
+
     #region Private Methods
 
     private void CreatePlayer(string build)
@@ -111,21 +148,7 @@ public class LevelManager : Singleton<LevelManager>
 
     private void OnPlayerDeath(object sender, DieArgs args)
     {
-        var data = new Dictionary<string, object>();
-        data.Add("Score", player.myScore.points);
-        data.Add("Money", player.myMoney.money);
-        char rank = ranks[ranks.Length-1];
-        
-        for (int i = 0; i < rankLimits.Length; i++)
-        {
-            if (player.myScore.points <= rankLimits[i])
-            {
-                rank = ranks[i-1];
-                break;
-            }
-        }
-        data.Add("Rank", rank);
-        InvokeAction(() => GameData.Main.LoadScene("Level Overview", true, data), 2f);
+        LevelFinished();
     }
 
     #endregion
