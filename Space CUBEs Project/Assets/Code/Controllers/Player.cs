@@ -261,8 +261,8 @@ public class Player : Ship
     /// <param name="points"></param>
     public void RecieveKill(Enemy.Classes enemy, int points, int money)
     {
-        myScore.IncreaseMultiplier();
         myScore.RecieveScore(points);
+        myScore.IncreaseMultiplier();
         myMoney.Collect(money);
     }
 

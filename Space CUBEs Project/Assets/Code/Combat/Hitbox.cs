@@ -87,6 +87,13 @@ public class Hitbox : MonoBase
     }
 
 
+    public void Initialize(Ship sender, HitInfo hitInfo, Vector3 moveVec)
+    {
+        Initialize(sender, hitInfo);
+        StartCoroutine(Move(moveVec));
+    }
+
+
     public void Initialize(Ship sender, HitInfo hitInfo, float time)
     {
         Initialize(sender, hitInfo);
@@ -96,8 +103,8 @@ public class Hitbox : MonoBase
 
     public void Initialize(Ship sender, HitInfo hitInfo, float time, Vector3 moveVec)
     {
-        StartCoroutine(Move(moveVec));
         Initialize(sender, hitInfo, time);
+        StartCoroutine(Move(moveVec));
     }
 
     #endregion
@@ -108,7 +115,7 @@ public class Hitbox : MonoBase
     {
         while (true)
         {
-            myTransform.Translate(moveVec, Space.World);
+            myTransform.Translate(moveVec*deltaTime, Space.World);
             yield return null;
         }
     }

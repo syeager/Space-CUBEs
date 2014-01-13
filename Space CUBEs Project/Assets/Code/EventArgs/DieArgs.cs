@@ -7,4 +7,11 @@ using System.Collections.Generic;
 
 public class DieArgs : EventArgs
 {
+    public readonly bool trashed;
+
+
+    public DieArgs(bool trashed)
+    {
+        this.trashed = trashed;
+    }
 }

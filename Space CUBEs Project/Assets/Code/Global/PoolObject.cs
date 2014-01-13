@@ -17,6 +17,7 @@ public class PoolObject : MonoBehaviour
 
     public void Disable()
     {
+        if (!gameObject.active) return;
         gameObject.SetActive(false);
         PoolManager.Push(this);
     }

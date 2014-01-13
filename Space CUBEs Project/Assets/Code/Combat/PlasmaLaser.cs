@@ -11,7 +11,6 @@ public class PlasmaLaser : Weapon
     public HitInfo hitInfo;
     public Vector3 laserOffset;
     public float speed;
-    public float time;
 
     #endregion
 
@@ -24,7 +23,7 @@ public class PlasmaLaser : Weapon
 
         var laser = PoolManager.Pop(attackName);
         laser.transform.SetPosRot(myTransform.position + myTransform.TransformDirection(laserOffset), myTransform.rotation);
-        laser.GetComponent<Hitbox>().Initialize(myShip, hitInfo, time, myTransform.forward*speed);
+        laser.GetComponent<Hitbox>().Initialize(myShip, hitInfo, myTransform.forward*speed);
     }
 
 
@@ -36,7 +35,6 @@ public class PlasmaLaser : Weapon
         comp.hitInfo = hitInfo;
         comp.laserOffset = laserOffset + transform.localPosition;
         comp.speed = speed;
-        comp.time = time;
 
         return comp;
     }

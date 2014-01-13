@@ -71,6 +71,7 @@ public class PatternLevelManager : LevelManager
             }
         }
 
+        Log("Segment " + segmentCursor + " spawned.", true, Debugger.LogTypes.LevelEvents);
         segmentCursor++;
 
         // get next segment ready if time

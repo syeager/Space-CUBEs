@@ -136,7 +136,7 @@ public class Health : MonoBase
         {
             if (DieEvent != null)
             {
-                DieEvent(this, new DieArgs());
+                DieEvent(this, new DieArgs(false));
             }
             return true;
         }

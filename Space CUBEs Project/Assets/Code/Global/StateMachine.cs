@@ -77,7 +77,7 @@ public class StateMachine
         #if LOG
         if (owner.log)
         {
-            Debugger.Log(owner.name + ": " + currentState + "→" + stateName, owner);
+            Debugger.Log(owner.name + ": " + currentState + "→" + stateName, owner, false, Debugger.LogTypes.StateMachines);
         }
         #endif
 
