@@ -31,6 +31,12 @@ public class LevelManager : Singleton<LevelManager>
 
     #endregion
 
+    #region Readonly Fields
+
+    protected readonly Quaternion SPAWNROTATION = Quaternion.Euler(0f, 270f, 90f);
+
+    #endregion
+
     #region Const Fields
 
     private char[] ranks = { 'F', 'D', 'C', 'B', 'A', 'S' };

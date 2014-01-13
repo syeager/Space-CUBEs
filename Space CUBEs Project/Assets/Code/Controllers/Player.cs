@@ -68,9 +68,10 @@ public class Player : Ship
     {
         base.Start();
 
+        HUD.Initialize(this);
+
         #if UNITY_ANDROID
 
-        HUD.Initialize(this);
         HUD.Main.BarrelRollEvent += OnBarrelRoll;
         myWeapons.RegisterToHUD();
 

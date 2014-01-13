@@ -94,12 +94,12 @@ public class GarageManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            var enemies = WaveStream.Read("Test Room", 1);
+            var enemies = WaveStream.Read("Deep Space", 1);
             foreach (var e in enemies)
             {
                 Debug.Log(e.enemy + " " + e.position);
             }
-            enemies = WaveStream.Read("Test Room", 2);
+            enemies = WaveStream.Read("Deep Space", 2);
             foreach (var e in enemies)
             {
                 Debug.Log(e.enemy + " " + e.position);
@@ -241,7 +241,7 @@ public class GarageManager : MonoBehaviour
         }
         if (GUI.Button(new Rect(0f, LeftMenuRect.height * 0.4f, LeftMenuRect.width, LeftMenuRect.height * 0.2f), "Test"))
         {
-            GameData.Main.LoadScene("Test Room", false, new Dictionary<string, object>{{"Build", Grid.buildName}});
+            GameData.Main.LoadScene("Deep Space", false, new Dictionary<string, object>{{"Build", Grid.buildName}});
         }
     }
 

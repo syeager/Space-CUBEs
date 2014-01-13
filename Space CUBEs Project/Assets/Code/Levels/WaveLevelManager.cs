@@ -37,7 +37,6 @@ public class WaveLevelManager : LevelManager
     #region Readonly Fields
 
     private readonly Vector3 SPAWNDISTANCE = new Vector3(50f, 0f, 0f);
-    private readonly Quaternion SPAWNROTATION = Quaternion.Euler(0f, 270f, 90f);
 
     #endregion
 

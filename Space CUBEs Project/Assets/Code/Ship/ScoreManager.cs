@@ -77,7 +77,7 @@ public class ScoreManager
 
     private IEnumerator MultiplierLife()
     {
-        while (multiplier > 2)
+        while (multiplier > 1)
         {
             yield return new WaitForSeconds(multiplierLife);
             multiplier--;

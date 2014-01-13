@@ -53,7 +53,10 @@ public class HUD : Singleton<HUD>
         shieldBarPer = ShieldBar.rightAnchor.relative - ShieldBar.leftAnchor.relative;
 
         // register events
-        ((WaveLevelManager)LevelManager.Main).WaveIncreasedEvent += OnWaveIncreased;
+        if (LevelManager.Main is WaveLevelManager)
+        {
+            ((WaveLevelManager)LevelManager.Main).WaveIncreasedEvent += OnWaveIncreased;
+        }
     }
 
     #endregion
