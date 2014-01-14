@@ -8,50 +8,40 @@ public class LaserBeam : Weapon
 {
     #region Public Fields
 
+    public GameObject Laser_Prefab;
+    public GameObject Charge_Prefab;
     public string attackName;
+    public Vector3 attackOffset;
     public HitInfo hitInfo;
-    public Vector3 laserOffset;
-    public float recharge;
-    public float rechargeDelay;
-    public float discharge;
+    public float chargeSpeed;
+    public float chargeTime;
+    public float maxSize;
+    public float attackTime;
+    public float maxRange;
 
     #endregion
 
     #region Private Fields
 
-    private GameObject laser;
-    public float charge = MAXCHARGE;
-
-    #endregion
-
-    #region Const Fields
-
-    private const float MAXCHARGE = 100f;
+    private Transform laser;
+    private Transform charge;
+    private RaycastHit rayInfo;
 
     #endregion
 
 
     #region Weapon Overrides
 
-    public override bool CanActivate()
-    {
-        return base.CanActivate() && charge > 0f;
-    }
-
-
     public override void Activate(bool pressed)
     {
         if (pressed)
         {
-            laser = PoolManager.Pop(attackName);
-            laser.transform.SetPosRot(myTransform.position + myTransform.TransformDirection(laserOffset), myTransform.rotation);
-            laser.transform.parent = myTransform;
-            laser.GetComponent<Hitbox>().Initialize(myShip, hitInfo, MAXCHARGE/discharge);
-            StartCoroutine("Discharge");
+            StartCoroutine("Fire");
         }
         else
         {
-            Disable();
+            StopCoroutine("Fire");
+            EndAttack();
         }
     }
 
@@ -60,12 +50,17 @@ public class LaserBeam : Weapon
     {
         var comp = parent.AddComponent<LaserBeam>();
         comp.index = index;
+        comp.cooldownSpeed = cooldownSpeed;
+        comp.Laser_Prefab = Laser_Prefab;
+        comp.Charge_Prefab = Charge_Prefab;
         comp.attackName = attackName;
         comp.hitInfo = hitInfo;
-        comp.laserOffset = laserOffset+transform.localPosition;
-        comp.recharge = recharge;
-        comp.rechargeDelay = rechargeDelay;
-        comp.discharge = discharge;
+        comp.attackOffset = attackOffset+transform.localPosition;
+        comp.chargeSpeed = chargeSpeed;
+        comp.chargeTime = chargeTime;
+        comp.maxSize = maxSize;
+        comp.attackTime = attackTime;
+        comp.maxRange = maxRange;
 
         return comp;
     }
@@ -74,35 +69,52 @@ public class LaserBeam : Weapon
 
     #region Private Methods
 
-    private void Disable()
+    private IEnumerator Fire()
     {
-        laser.GetComponent<PoolObject>().Disable();
-        StopCoroutine("Discharge");
-        StartCoroutine("Recharge");
+        // create charge
+        charge = ((GameObject)Instantiate(Charge_Prefab)).transform;
+        charge.parent = myTransform;
+        charge.SetPosRot(myTransform.position + myTransform.TransformDirection(attackOffset), myTransform.rotation);
+        
+        // increase charge
+        float timer = chargeTime;
+        while (timer > 0f)
+        {
+            timer -= deltaTime;
+            charge.localScale += Vector3.one*chargeSpeed*deltaTime;
+            yield return null;
+        }
+        Destroy(charge.gameObject);
+
+        // fire
+        laser = ((GameObject)Instantiate(Laser_Prefab)).transform;
+        laser.parent = myTransform;
+        laser.SetPosRot(myTransform.position + myTransform.TransformDirection(attackOffset), myTransform.rotation);
+        laser.GetComponent<Hitbox>().Initialize(myShip, hitInfo);
+        while (power > 0f)
+        {
+            power -= FULLPOWER/attackTime*deltaTime;
+            Debug.DrawRay(laser.position, myTransform.forward * maxRange, Color.yellow);
+            if (Physics.Raycast(laser.position, myTransform.forward, out rayInfo, maxRange) && rayInfo.collider.GetComponent<Ship>() != null)
+            {
+                laser.localScale = new Vector3(laser.localScale.x, laser.localScale.y, rayInfo.distance); // change width
+            }
+            else
+            {
+                laser.localScale = new Vector3(laser.localScale.x, laser.localScale.y, maxRange); // change width
+            }
+            yield return null;
+        }
+        power = 0f;
+        EndAttack();
     }
 
 
-    private IEnumerator Discharge()
+    private void EndAttack()
     {
-        while (charge > 0f)
-        {
-            charge -= discharge * deltaTime;
-            yield return null;
-        }
-        charge = 0f;
-        Disable();
-    }
-
-
-    private IEnumerator Recharge()
-    {
-        yield return new WaitForSeconds(rechargeDelay);
-        while (charge < MAXCHARGE)
-        {
-            charge += recharge * deltaTime;
-            yield return null;
-        }
-        charge = MAXCHARGE;
+        StartCoroutine(Cooldown());
+        if (charge != null) Destroy(charge.gameObject);
+        else if (laser != null) Destroy(laser.gameObject);
     }
 
     #endregion

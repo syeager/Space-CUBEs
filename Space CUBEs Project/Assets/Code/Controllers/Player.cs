@@ -127,6 +127,13 @@ public class Player : Ship
         barrelRoll = false;
         myHealth.invincible = true;
         collider.enabled = false;
+
+        // release all attacks
+        foreach (var weapon in myWeapons.weapons)
+        {
+            weapon.Activate(false);
+        }
+
         stateMachine.update = new Job(BarrelRollingUpdate(MovementInput()));
     }
 
@@ -142,6 +149,7 @@ public class Player : Ship
     {
         myHealth.invincible = false;
         collider.enabled = true;
+        barrelRoll = false;
     }
 
 
@@ -154,39 +162,6 @@ public class Player : Ship
     #endregion
 
     #region Input Methods
-
-    [Obsolete("Use MovementInput")]
-    private float HorizontalInput()
-    {
-        float input = 0f;
-        float ypos = Camera.main.WorldToViewportPoint(myTransform.position).y;
-
-        #if UNITY_STANDALONE
-
-        input = Input.GetAxisRaw("Horizontal");
-
-        #else
-
-        input = HUD.NavButton;
-
-        #endif
-
-        // down
-        if (input > 0f && ypos <= horizontalBounds)
-        {
-            return 0f;
-        }
-        // up
-        else if (input < 0f && ypos >= 1 - horizontalBounds)
-        {
-            return 0f;
-        }
-        else
-        {
-            return input;
-        }
-    }
-
 
     private Vector2 MovementInput()
     {
@@ -245,7 +220,25 @@ public class Player : Ship
 
         #else
 
-        return barrelRoll;
+        if (barrelRoll)
+        {
+            return true;
+        }
+        else
+        {
+            // get swipe input
+            foreach (var touch in Input.touches)
+            {
+                if (touch.position.x > Screen.width / 2f)
+                {
+                    if (touch.deltaPosition.y >= 15f)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
 
         #endif
     }
@@ -286,6 +279,7 @@ public class Player : Ship
 
     #region Event Handlers
 
+    [Conditional("UNITY_ANDROID")]
     private void OnBarrelRoll(object sender, EventArgs args)
     {
         barrelRoll = true;

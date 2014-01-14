@@ -38,6 +38,8 @@ public class Nuke : Weapon
         // explode
         else
         {
+            if (nuke == null) return;
+
             StopCoroutine("MoveNuke");
             explosion = (GameObject)Instantiate(Explosion_Prefab, nuke.position, nuke.rotation);
             explosion.GetComponent<Hitbox>().Initialize(myShip, hitInfo);
