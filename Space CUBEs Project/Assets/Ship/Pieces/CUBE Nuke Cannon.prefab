@@ -14,7 +14,7 @@ GameObject:
   - 114: {fileID: 11400004}
   - 114: {fileID: 11400002}
   m_Layer: 0
-  m_Name: CUBE Nuke Cannon
+  m_Name: CUBE Nuke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -75,10 +75,12 @@ MonoBehaviour:
   pieces:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 1}
-  CUBEType: 1
+  type: 1
   health: 0
   shield: 0
   speed: 0
+  rarity: 100
+  price: 100
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1

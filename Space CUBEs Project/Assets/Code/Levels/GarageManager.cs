@@ -1,8 +1,8 @@
 ﻿// Steve Yeager
 // 11.26.2013
 
-using System;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class GarageManager : MonoBehaviour
@@ -28,7 +28,7 @@ public class GarageManager : MonoBehaviour
 
     private bool menuOpen;
     private bool allCUBEs = true;
-    private CUBE.CUBETypes CUBEFilter;
+    private CUBE.Types CUBEFilter;
     public Vector2 CUBEScroll = Vector2.zero;
     private Rect LeftMenuRect;
     private Rect RightMenuRect;
@@ -46,6 +46,8 @@ public class GarageManager : MonoBehaviour
         Weapons = 3,
     }
     public Menus menu;
+
+    private int[] inventory;
 
     #endregion
 
@@ -83,6 +85,7 @@ public class GarageManager : MonoBehaviour
     }
 
 
+    [System.Diagnostics.Conditional("UNITY_STANDALONE")]
     private void Update()
     {
         UpdateScreen();
@@ -167,9 +170,9 @@ public class GarageManager : MonoBehaviour
         // delete
         if (Input.GetKeyUp(KeyCode.Delete))
         {
-            if (!Grid.DeleteCUBE())
+            if (Grid.DeleteCUBE() == -1)
             {
-                Debug.LogWarning("Can't delete CUBE.");
+                Debugger.LogWarning("Can't delete CUBE.");
             }
         }
 
@@ -430,16 +433,16 @@ public class GarageManager : MonoBehaviour
             else
             {
                 cursor--;
-                CUBEFilter = (CUBE.CUBETypes)cursor;
+                CUBEFilter = (CUBE.Types)cursor;
             }
         }
         GUI.Label(new Rect(w*0.25f, 0f, w*0.5f, h*0.15f), allCUBEs ? "All CUBE_Prefabs" : CUBEFilter.ToString());
-        if (GUI.Button(new Rect(w*0.75f, 0f, w*0.25f, h*0.15f), CUBEFilter == CUBE.CUBETypes.Wing ? "|" : "→") && CUBEFilter != CUBE.CUBETypes.Wing)
+        if (GUI.Button(new Rect(w*0.75f, 0f, w*0.25f, h*0.15f), CUBEFilter == CUBE.Types.Wing ? "|" : "→") && CUBEFilter != CUBE.Types.Wing)
         {
             allCUBEs = false;
             int cursor = (int)CUBEFilter;
             cursor++;
-            CUBEFilter = (CUBE.CUBETypes)cursor;
+            CUBEFilter = (CUBE.Types)cursor;
         }
 
         // filter CUBEs
@@ -453,7 +456,7 @@ public class GarageManager : MonoBehaviour
             availableCUBEs = new List<CUBE>();
             foreach (var cube in GameResources.Main.CUBE_Prefabs)
             {
-                if (cube.CUBEType == CUBEFilter)
+                if (cube.type == CUBEFilter)
                 {
                     availableCUBEs.Add(cube);
                 }
@@ -465,7 +468,7 @@ public class GarageManager : MonoBehaviour
         {
             for (int i = 0; i < availableCUBEs.Count; i++)
             {
-                if (GUI.Button(new Rect(0, i * CUBESize, w - 16f, CUBESize), availableCUBEs[i].name.Substring(5) + " x ∞"))
+                if (GUI.Button(new Rect(0, i * CUBESize, w - 16f, CUBESize), availableCUBEs[i].name.Substring(5) + " x " + Grid.inventory[availableCUBEs[i].ID]))
                 {
                     Grid.CreateCUBE(availableCUBEs[i].ID);
                 }

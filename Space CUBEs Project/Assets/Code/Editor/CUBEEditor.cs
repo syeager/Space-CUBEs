@@ -9,7 +9,20 @@ public class CUBEEditor : Editor
 {
     #region Serialized Fields
 
-    private SerializedObject sObject;
+    private SerializedProperty ID;
+
+    #endregion
+
+    #region Private Fields
+
+    private CUBEInfo[] CUBEInfos;
+    private CUBEInfo info;
+
+    #endregion
+
+    #region Const Fields
+
+    private const string PREFIX = "CUBE ";
 
     #endregion
 
@@ -18,19 +31,65 @@ public class CUBEEditor : Editor
 
     private void OnEnable()
     {
-        sObject = new SerializedObject(target);
+        CUBEInfos = CUBE.LoadAllCUBEInfo();
+
+        ID = serializedObject.FindProperty("ID");
+
+        if (ID.intValue > -1)
+        {
+            LoadInfo(ID.intValue);
+        }
     }
 
 
     public override void OnInspectorGUI()
     {
-        DrawDefaultInspector();
-        sObject.Update();
+        serializedObject.Update();
 
-        EditorGUILayout.Space();
+        // id not set
+        if (ID.intValue == -1)
+        {
+            EditorGUILayout.LabelField("ID not set.");
+        }
+        // show info
+        else
+        {
+            // ID
+            EditorGUI.BeginChangeCheck();
+            {
+                EditorGUILayout.PropertyField(ID);
+                ID.intValue = Mathf.Clamp(ID.intValue, 0, CUBEInfos.Length-1);
+            }
+            if (EditorGUI.EndChangeCheck())
+            {
+                LoadInfo(ID.intValue);
+            }
 
+            EditorGUILayout.LabelField("Type", info.type.ToString());
+            EditorGUILayout.LabelField("Health", info.health.ToString());
+            EditorGUILayout.LabelField("Shield", info.shield.ToString());
+            EditorGUILayout.LabelField("Speed", info.speed.ToString());
+            EditorGUILayout.LabelField("Rarity", info.rarity.ToString());
+            EditorGUILayout.LabelField("Price", info.price.ToString());
+        }
 
-        sObject.ApplyModifiedProperties();
+        serializedObject.ApplyModifiedProperties();
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    private void LoadInfo(int ID)
+    {
+        info = CUBEInfos[ID];
+        (target as CUBE).name = PREFIX + info.name;
+        serializedObject.FindProperty("type").enumValueIndex = (int)info.type;
+        serializedObject.FindProperty("health").floatValue = info.health;
+        serializedObject.FindProperty("shield").floatValue = info.shield;
+        serializedObject.FindProperty("speed").floatValue = info.speed;
+        serializedObject.FindProperty("rarity").intValue = info.rarity;
+        serializedObject.FindProperty("price").intValue = info.price;
     }
 
     #endregion

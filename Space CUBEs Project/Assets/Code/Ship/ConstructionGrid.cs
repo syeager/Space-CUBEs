@@ -89,6 +89,8 @@ public class ConstructionGrid : MonoBase
     public float shipSpeed { get; private set; }
     public int shipWeapons { get; private set; }
 
+    public int[] inventory { get; private set; }
+
     #endregion
 
     #region Events
@@ -108,6 +110,7 @@ public class ConstructionGrid : MonoBase
 
     public void CreateGrid(int size)
     {
+        inventory = CUBE.GetInventory();
         ClearCells();
         this.size = size;
         grid = new CUBE[size][][];
@@ -258,6 +261,10 @@ public class ConstructionGrid : MonoBase
     }
 
 
+    /// <summary>
+    /// If cursor is empty, pick up CUBE if hovering. If cursor is not empty, place CUBE.
+    /// </summary>
+    /// <param name="loadAnother">Should another CUBE be loaded of the same type that was placed?</param>
     public void CursorAction(bool loadAnother)
     {
         if (currentCUBE != null)
@@ -271,16 +278,17 @@ public class ConstructionGrid : MonoBase
     }
 
 
-    public bool DeleteCUBE()
+    public int DeleteCUBE()
     {
-        if (currentCUBE == null) return false;
+        if (currentCUBE == null) return -1;
 
+        int ID = currentCUBE.ID;
         RemoveCUBE(currentCUBE);
         Destroy(currentCUBE.gameObject);
         currentCUBE = null;
         cursorStatus = CursorStatuses.None;
 
-        return true;
+        return ID;
     }
 
 
@@ -509,6 +517,7 @@ public class ConstructionGrid : MonoBase
     private void PickupCUBE(CUBE cube)
     {
         currentCUBE = cube;
+        inventory[currentCUBE.ID]++;
         cursorRotation = currentBuild[currentCUBE].rotation;
         rotation = Quaternion.Euler(cursorRotation);
         cursorOffset = cursorPosition - currentCUBE.transform.position;
@@ -522,7 +531,16 @@ public class ConstructionGrid : MonoBase
         if (currentCUBE == null) return false;
         if (!Fits()) return false;
 
-        if (currentCUBE.CUBEType == CUBE.CUBETypes.Weapon)
+        if (inventory[currentCUBE.ID] > 0)
+        {
+            inventory[currentCUBE.ID]--;
+        }
+        else
+        {
+            return false;
+        }
+
+        if (currentCUBE.type == CUBE.Types.Weapon)
         {
             if (weaponIndex == -1)
             {
@@ -553,6 +571,7 @@ public class ConstructionGrid : MonoBase
         currentCUBE = null;
         cursorOffset = Vector3.zero;
         cursorStatus = CursorStatuses.Hover;
+
         return true;
     }
 
@@ -594,7 +613,7 @@ public class ConstructionGrid : MonoBase
             cells[(int)rotatedPiece.y][(int)rotatedPiece.z][(int)rotatedPiece.x].renderer.material = CellOpen_Mat;
         }
 
-        if (currentCUBE.CUBEType == CUBE.CUBETypes.Weapon && weapons.Contains(currentCUBE.GetComponent<Weapon>()))
+        if (currentCUBE.type == CUBE.Types.Weapon && weapons.Contains(currentCUBE.GetComponent<Weapon>()))
         {
             weapons[Array.IndexOf(weapons, currentCUBE.GetComponent<Weapon>())] = null;
         }

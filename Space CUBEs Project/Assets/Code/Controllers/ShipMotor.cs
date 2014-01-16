@@ -84,7 +84,6 @@ public class ShipMotor : MonoBase
         Vector3 eulerAngles = myTransform.eulerAngles;
 
         var timer = barrelRollTime;
-        float ypos;
         while (timer > 0f)
         {
             // test bounds

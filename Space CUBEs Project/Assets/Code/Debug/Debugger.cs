@@ -131,6 +131,18 @@ public class Debugger : Singleton<Debugger>
         }
     }
 
+
+    [System.Diagnostics.Conditional("LOG")]
+    public static void LogList(IEnumerable list)
+    {
+        int count = 0;
+        foreach (var item in list)
+        {
+            Debug.Log(count + ": " + item);
+            count++;
+        }
+    }
+
     #endregion
 
     #region ConsoleLine Messages
