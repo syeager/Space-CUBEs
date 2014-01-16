@@ -1,4 +1,4 @@
 Space-CUBEs
 ===========
 
-Customizable Universe Bound Explorer
+Custom Universal Block Extensions
