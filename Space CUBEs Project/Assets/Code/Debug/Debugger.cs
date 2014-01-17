@@ -80,7 +80,7 @@ public class Debugger : Singleton<Debugger>
         }
 
         // clear ConsoleLine
-        if (ConsoleLine != null) ConsoleLine.guiText.text = "";
+        //if (ConsoleLine != null) ConsoleLine.guiText.text = "";
     }
 
     #endregion

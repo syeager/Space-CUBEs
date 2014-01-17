@@ -17,6 +17,7 @@ public class CUBEListBinaryConverter : EditorWindow
 
     private static readonly Vector2 SIZE = new Vector2(300f, 50f);
     private static readonly string CUBEXMLPATH = Directory.GetParent(Directory.GetCurrentDirectory()) + @"\Data\CUBE List.xml";
+    public static readonly string CUBELISTPATHEDITOR = Application.dataPath + "/Files/CUBE Files/CUBE List.txt";
 
     #endregion
 
@@ -33,6 +34,7 @@ public class CUBEListBinaryConverter : EditorWindow
 
     private void OnGUI()
     {
+        GUILayout.FlexibleSpace();
         if (GUILayout.Button("Convert"))
         {
             ToBinary(ToCUBEInfo());
@@ -99,7 +101,7 @@ public class CUBEListBinaryConverter : EditorWindow
 
     private void ToBinary(CUBEInfo[] info)
     {
-        using (BinaryWriter writer = new BinaryWriter(File.Open(CUBE.CUBEDATPATH, FileMode.Create)))
+        using (BinaryWriter writer = new BinaryWriter(File.Open(CUBELISTPATHEDITOR, FileMode.Create)))
         {
             foreach (var cube in info)
             {

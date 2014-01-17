@@ -17,6 +17,7 @@ public static class Utility
     /// <returns>Vector3 representation of the string.</returns>
     public static Vector3 ParseV3(string vectorString)
     {
+        Debug.Log(vectorString);
         Vector3 vector;
         vectorString = vectorString.Substring(1, vectorString.Length-2).Replace(" ", "");
         string[] split = vectorString.Split(',');

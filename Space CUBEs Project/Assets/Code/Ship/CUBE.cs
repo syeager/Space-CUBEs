@@ -35,7 +35,7 @@ public class CUBE : MonoBehaviour
     #region Static Fields
 
     public static CUBEInfo[] AllCUBES { get; private set; }
-    public static readonly string CUBEDATPATH = Application.dataPath + "/Files/CUBE Files/CUBE List.dat";
+    public const string CUBELIST = "CUBE List";
     private const string INVENTORYPATH = "Inventory";
     private const char CUBESEPARATER = '|';
 
@@ -46,8 +46,10 @@ public class CUBE : MonoBehaviour
 
     public static CUBEInfo[] LoadAllCUBEInfo()
     {
+        TextAsset binaryFile = (TextAsset)Resources.Load(CUBELIST);
+        Stream binaryStream = new MemoryStream(binaryFile.bytes);
         List<CUBEInfo> infoList = new List<CUBEInfo>();
-        using (BinaryReader reader = new BinaryReader(File.Open(CUBEDATPATH, FileMode.Open)))
+        using (BinaryReader reader = new BinaryReader(binaryStream))
         {
             while (reader.BaseStream.Position != reader.BaseStream.Length)
             {

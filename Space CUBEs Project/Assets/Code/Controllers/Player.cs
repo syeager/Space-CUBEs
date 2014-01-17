@@ -43,6 +43,12 @@ public class Player : Ship
 
     #endregion
 
+    #region Const Fields
+
+    public const int WEAPONLIMIT = 4;
+
+    #endregion
+
 
     #region Unity Overrides
 

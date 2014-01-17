@@ -84,6 +84,7 @@ public class CUBEEditor : Editor
     {
         info = CUBEInfos[ID];
         (target as CUBE).name = PREFIX + info.name;
+        PrefabUtility.GetPrefabObject((target as CUBE).gameObject).name = PREFIX + info.name;
         serializedObject.FindProperty("type").enumValueIndex = (int)info.type;
         serializedObject.FindProperty("health").floatValue = info.health;
         serializedObject.FindProperty("shield").floatValue = info.shield;

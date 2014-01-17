@@ -81,7 +81,7 @@ public class LevelManager : Singleton<LevelManager>
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            GameData.Main.LoadScene("Garage");
+            GameData.LoadLevel("Main Menu", true);
         }
     }
 
@@ -107,7 +107,7 @@ public class LevelManager : Singleton<LevelManager>
             }
         }
         data.Add("Rank", rank);
-        InvokeAction(() => GameData.Main.LoadScene("Level Overview", true, data), 2f);
+        InvokeAction(() => GameData.LoadLevel("Level Overview", true, data), 2f);
 
         if (LevelFinishedEvent != null)
         {

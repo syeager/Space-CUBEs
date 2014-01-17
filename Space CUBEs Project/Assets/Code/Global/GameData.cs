@@ -67,11 +67,18 @@ public class GameData : Singleton<GameData>
     /// </summary>
     /// <param name="levelData">Data to save for the next scene.</param>
     /// <param name="nextScene">Name of next scene.</param>
-    public void LoadScene(string nextScene, bool load = false, Dictionary<string, object> levelData = null)
+    public static void LoadLevel(string nextScene, bool load = false, Dictionary<string, object> levelData = null)
     {
-        this.levelData = levelData;
-        previousScene = Application.loadedLevelName;
-        this.nextScene = nextScene;
+        if (levelData == null)
+        {
+            Main.levelData = new Dictionary<string, object>();
+        }
+        else
+        {
+            Main.levelData = levelData;
+        }
+        Main.previousScene = Application.loadedLevelName;
+        Main.nextScene = nextScene;
 
         Application.LoadLevel(load ? "Loading Screen" : nextScene);
     }
@@ -81,9 +88,9 @@ public class GameData : Singleton<GameData>
     /// Reloads the current scene without the Loading Screen.
     /// <param name="levelData">Data to save for the next scene.</param>
     /// </summary>
-    public void ReloadScene(Dictionary<string, object> levelData = null)
+    public static void ReloadLevel(Dictionary<string, object> levelData = null)
     {
-        this.levelData = levelData;
+        Main.levelData = levelData;
         Application.LoadLevel(Application.loadedLevel);
     }
 

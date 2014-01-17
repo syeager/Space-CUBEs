@@ -4,10 +4,10 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
-using System.Xml;
 using System.IO;
 using System.Linq;
 using System.Collections;
+using System.Text;
 
 public class ConstructionGrid : MonoBase
 {
@@ -46,9 +46,10 @@ public class ConstructionGrid : MonoBase
     #region Const Fields
 
     private const string USERBUILDSPATH = "UserBuilds: ";
-    private const string DEVBUILDSPATH = "DevBuilds";
+    private const string DEVBUILDSPATH = "DevBuilds: ";
     private const string MESHPATH = "Assets/Ship/Characters/";
     private const string PREFABPATH = "Assets/Ship/Characters/";
+    private const char DATASEP = '|';
 
     #endregion
 
@@ -111,6 +112,7 @@ public class ConstructionGrid : MonoBase
     public void CreateGrid(int size)
     {
         inventory = CUBE.GetInventory();
+
         ClearCells();
         this.size = size;
         grid = new CUBE[size][][];
@@ -157,7 +159,7 @@ public class ConstructionGrid : MonoBase
         }
         ship.transform.position = transform.position + Vector3.up * (size / 2f + 0.5f);
         GameObject.Instantiate(Center_Prefab, ship.transform.position, Quaternion.identity);
-        weapons = new Weapon[6];
+        weapons = new Weapon[Player.WEAPONLIMIT];
     }
 
 
@@ -294,39 +296,34 @@ public class ConstructionGrid : MonoBase
 
     public string SaveToData()
     {
-        string build;
-        using (StringWriter str = new StringWriter())
-        using (XmlTextWriter xml = new XmlTextWriter(str))
+        StringBuilder build = new StringBuilder();
+
+        // health
+        build.Append(shipHealth);
+        build.Append(DATASEP);
+        // shield
+        build.Append(shipShield);
+        build.Append(DATASEP);
+        // speed
+        build.Append(shipSpeed);
+        build.Append(DATASEP);
+        // pieces
+        foreach (var piece in currentBuild)
         {
-            // root
-            xml.WriteStartDocument();
-            xml.WriteStartElement("Ship");
-
-            // main
-            xml.WriteElementString("Info", buildName);
-            xml.WriteElementString("Health", shipHealth.ToString());
-            xml.WriteElementString("Shield", shipShield.ToString());
-            xml.WriteElementString("Speed", shipSpeed.ToString());
-
-            // pieces
-            foreach (var piece in currentBuild)
-            {
-                xml.WriteStartElement("Piece");
-                {
-                    xml.WriteElementString("ID", piece.Key.ID.ToString());
-                    xml.WriteElementString("Position", piece.Value.position.ToString());
-                    xml.WriteElementString("Rotation", piece.Value.rotation.ToString());
-                    xml.WriteElementString("WeaponMap", piece.Value.weaponMap.ToString());
-                }
-                xml.WriteEndElement();
-            }
-
-            // end
-            xml.WriteEndElement();
-            xml.WriteEndDocument();
-            
-            build = str.ToString();
+            // ID
+            build.Append(piece.Key.ID);
+            build.Append(DATASEP);
+            // positon
+            build.Append(piece.Value.position);
+            build.Append(DATASEP);
+            // rotation
+            build.Append(piece.Value.rotation);
+            build.Append(DATASEP);
+            // weapon map
+            build.Append(piece.Value.weaponMap);
+            build.Append(DATASEP);
         }
+        string buildString = build.ToString();
 
         // save
         string path;
@@ -335,17 +332,16 @@ public class ConstructionGrid : MonoBase
         #else  
         path = USERBUILDSPATH;
         #endif
-        PlayerPrefs.SetString(path + buildName, build);
+        PlayerPrefs.SetString(path + buildName, buildString);
         // add to list of all buildNames
 
         // compact and prefab ship
         #if DEVMODE
         StartCoroutine(SavePrefab());
         #endif
-
-
-        Log(build, true, Debugger.LogTypes.Data); // causes crash in mobile
-        return build;
+        
+        //Log(build, true, Debugger.LogTypes.Data); // causes crash in mobile
+        return buildString;
     }
 
 
@@ -448,6 +444,8 @@ public class ConstructionGrid : MonoBase
     private void ClearCells()
     {
         if (cells == null) return;
+        currentBuild.Clear();
+        weapons = new Weapon[Player.WEAPONLIMIT];
 
         for (int i = 0; i < cells.Length; i++)
         {
@@ -640,18 +638,6 @@ public class ConstructionGrid : MonoBase
     }
 
 
-    private Matrix4x4 RotationMatrixX(float angle)
-    {
-        return new Matrix4x4
-        {
-            m00 = 1, m01 = 0, m02 = 0, m03 = 0,
-            m10 = 0, m11 = Cos(angle), m12 = -Sin(angle), m13 = 0,
-            m20 = 0, m21 = Sin(angle), m22 = Cos(angle), m23 = 0,
-            m30 = 0, m31 = 0, m32 = 0, m33 = 1
-        };
-    }
-
-
     private Matrix4x4 RotationMatrixY(float angle)
     {
         return new Matrix4x4
@@ -666,8 +652,7 @@ public class ConstructionGrid : MonoBase
 
     private BuildInfo LoadFromData(string buildName)
     {
-        currentBuild.Clear();
-        weapons = new Weapon[6];
+        ClearCells();
 
         this.buildName = buildName;
         string path;
@@ -685,58 +670,23 @@ public class ConstructionGrid : MonoBase
         buildInfo.partList = new List<KeyValuePair<int, CUBEGridInfo>>();
 
         Log(build, true, Debugger.LogTypes.Data);
+        string[] info = build.Split(DATASEP);
 
-        using (StringReader str = new StringReader(build))
-        using (XmlTextReader xml = new XmlTextReader(str))
+        // health
+        buildInfo.health = float.Parse(info[0]);
+        // shield
+        buildInfo.shield = float.Parse(info[1]);
+        // speed
+        buildInfo.speed = float.Parse(info[2]);
+        // pieces
+        int i = 2;
+        while (i+4 < info.Length)
         {
-            int pieceID = -1;
-            Vector3 pieceP = Vector3.zero;
-            Vector3 pieceR = Vector3.zero;
-            int weaponMap = -1;
-            while (xml.Read())
-            {
-                if (xml.IsStartElement())
-                {
-                    switch (xml.Name)
-                    {
-                        case "Name":
-                        case "Ship":
-                        case "Info":
-                            break;
-
-                        case "Health":
-                            buildInfo.health = float.Parse(xml.ReadString());
-                            break;
-                        case "Shield":
-                            buildInfo.shield = float.Parse(xml.ReadString());
-                            break;
-                        case "Speed":
-                            buildInfo.speed = float.Parse(xml.ReadString());
-                            break;
-
-                        case "Piece":
-                            break;
-
-                        case "ID":
-                            pieceID = int.Parse(xml.ReadString());
-                            break;
-                        case "Position":
-                            pieceP = Utility.ParseV3(xml.ReadString());
-                            break;
-                        case "Rotation":
-                            pieceR = Utility.ParseV3(xml.ReadString());
-                            break;
-                        case "WeaponMap":
-                            weaponMap = int.Parse(xml.ReadString());
-                            buildInfo.partList.Add(new KeyValuePair<int, CUBEGridInfo>(pieceID, new CUBEGridInfo(pieceP, pieceR, weaponMap)));
-                            break;
-
-                        default:
-                            Debugger.LogWarning("Incorrect XML Element in build: " + xml.Name);
-                            break;
-                    }
-                }
-            }
+            buildInfo.partList.Add(new KeyValuePair<int, CUBEGridInfo>(int.Parse(info[++i]), 
+                                                                       new CUBEGridInfo(
+                                                                           Utility.ParseV3(info[++i]),
+                                                                           Utility.ParseV3(info[++i]),
+                                                                           int.Parse(info[++i]))));
         }
 
         return buildInfo;

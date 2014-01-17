@@ -9,7 +9,6 @@ public class GarageManager : MonoBehaviour
 {
     #region References
 
-    public static GarageManager Main;
     public ConstructionGrid Grid;
     public GameObject mainCamera;
 
@@ -67,8 +66,6 @@ public class GarageManager : MonoBehaviour
 
     private void Awake()
     {
-        Main = this;
-
         UpdateScreen();
 
         Grid.CreateGrid(gridSize);
@@ -89,25 +86,6 @@ public class GarageManager : MonoBehaviour
     private void Update()
     {
         UpdateScreen();
-
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-
-        }
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            var enemies = WaveStream.Read("Deep Space", 1);
-            foreach (var e in enemies)
-            {
-                Debug.Log(e.enemy + " " + e.position);
-            }
-            enemies = WaveStream.Read("Deep Space", 2);
-            foreach (var e in enemies)
-            {
-                Debug.Log(e.enemy + " " + e.position);
-            }
-        }
 
         // move CUBE
         if (Input.GetKeyDown(KeyCode.A))
@@ -244,7 +222,7 @@ public class GarageManager : MonoBehaviour
         }
         if (GUI.Button(new Rect(0f, LeftMenuRect.height * 0.4f, LeftMenuRect.width, LeftMenuRect.height * 0.2f), "Test"))
         {
-            GameData.Main.LoadScene("Deep Space", false, new Dictionary<string, object>{{"Build", Grid.buildName}});
+            GameData.LoadLevel("Deep Space", false, new Dictionary<string, object>{{"Build", Grid.buildName}});
         }
     }
 

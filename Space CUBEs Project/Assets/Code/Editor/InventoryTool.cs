@@ -10,10 +10,11 @@ using UnityEditor;
 /// </summary>
 public class InventoryTool : EditorWindow
 {
-    #region Static Fields
+    #region Fields
 
     private static CUBEInfo[] info;
     private static int[] inventory;
+    private int setAll;
 
     #endregion
 
@@ -35,6 +36,19 @@ public class InventoryTool : EditorWindow
         {
             inventory = CUBE.GetInventory();
         }
+
+        EditorGUILayout.BeginHorizontal();
+        {
+            setAll = EditorGUILayout.IntField("All", setAll);
+            if (GUILayout.Button("Set"))
+            {
+                for (int i = 0; i < inventory.Length; i++)
+                {
+                    inventory[i] = setAll;
+                }
+            }
+        }
+        EditorGUILayout.EndHorizontal();
 
         for (int i = 0; i < inventory.Length; i++)
         {

@@ -51,12 +51,6 @@ public class HUD : Singleton<HUD>
     {
         healthBarPer = HealthBar.rightAnchor.relative - HealthBar.leftAnchor.relative;
         shieldBarPer = ShieldBar.rightAnchor.relative - ShieldBar.leftAnchor.relative;
-
-        // register events
-        if (LevelManager.Main is WaveLevelManager)
-        {
-            ((WaveLevelManager)LevelManager.Main).WaveIncreasedEvent += OnWaveIncreased;
-        }
     }
 
     #endregion
@@ -111,12 +105,6 @@ public class HUD : Singleton<HUD>
         {
             BarrelRollEvent(this, EventArgs.Empty);
         }
-    }
-
-
-    private void OnWaveIncreased(object sender, WaveUpdateArgs args)
-    {
-        Wave.text = "Wave: " + args.wave.ToString();
     }
 
     #endregion

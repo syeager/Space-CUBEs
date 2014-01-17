@@ -43,7 +43,7 @@ public class LevelOverviewManager : MonoBehaviour
 
     public void LoadGarage()
     {
-        GameData.Main.LoadScene("Garage");
+        GameData.LoadLevel("Garage");
     }
 
     #endregion
