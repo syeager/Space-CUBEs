@@ -113,7 +113,7 @@ public class ConstructionGrid : MonoBase
     {
         inventory = CUBE.GetInventory();
 
-        ClearCells();
+        Clear();
         this.size = size;
         grid = new CUBE[size][][];
         cells = new GameObject[size][][];
@@ -347,6 +347,7 @@ public class ConstructionGrid : MonoBase
 
     public void Load(string build)
     {
+        Clear();
         var buildInfo = LoadFromData(build);
         if (buildInfo == null) return;
 
@@ -441,22 +442,28 @@ public class ConstructionGrid : MonoBase
 
     #region Private Methods
 
-    private void ClearCells()
+    private void Clear()
     {
-        if (cells == null) return;
-        currentBuild.Clear();
+        if (grid == null) return;
+
         weapons = new Weapon[Player.WEAPONLIMIT];
 
-        for (int i = 0; i < cells.Length; i++)
+        for (int i = 0; i < grid.Length; i++)
         {
-            for (int j = 0; j < cells[i].Length; j++)
+            for (int j = 0; j < grid[i].Length; j++)
             {
-                for (int k = 0; k < cells[i][j].Length; k++)
+                for (int k = 0; k < grid[i][j].Length; k++)
                 {
-                    Destroy(cells[i][j][k]);
+                    grid[i][j][k] = null;
                 }
             }
         }
+
+        foreach (var cube in currentBuild)
+        {
+            Destroy(cube.Key.gameObject);
+        }
+        currentBuild.Clear();
     }
 
 
@@ -652,8 +659,6 @@ public class ConstructionGrid : MonoBase
 
     private BuildInfo LoadFromData(string buildName)
     {
-        ClearCells();
-
         this.buildName = buildName;
         string path;
         #if DEVMODE
