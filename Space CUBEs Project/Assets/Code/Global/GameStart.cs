@@ -25,7 +25,7 @@ public class GameStart : MonoBehaviour
 
     #region MonoBehaviour Overrides
 
-    private void Awake()
+    private void Start()
     {
         LoadGame();
         UpdateVersions();

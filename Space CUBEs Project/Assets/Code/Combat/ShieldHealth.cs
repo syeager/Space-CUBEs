@@ -56,11 +56,19 @@ public class ShieldHealth : Health
 
         if (ApplyDamage(hitInfo.damage))
         {
-            if (DieEvent != null)
-            {
-                DieEvent(this, new DieArgs(sender));
-            }
+            Killed(sender);
+            return;
         }
+    }
+
+
+    protected override void Killed(Ship sender)
+    {
+        if (rechargeJob != null)
+        {
+            rechargeJob.Kill();
+        }
+        base.Killed(sender);
     }
 
     #endregion
@@ -110,19 +118,11 @@ public class ShieldHealth : Health
         if (extraDamage < 0f)
         {
             dead = ChangeHealth(extraDamage);
-            if (changeMat != null)
-            {
-                changeMat.Kill();
-            }
-            changeMat = new Job(ChangeMat(HealthHit_Mat));
+            HitMat(HealthHit_Mat);
         }
         else
         {
-            if (changeMat != null)
-            {
-                changeMat.Kill();
-            }
-            changeMat = new Job(ChangeMat(ShieldHit_Mat));
+            HitMat(ShieldHit_Mat);
         }
 
         return dead;
@@ -131,14 +131,7 @@ public class ShieldHealth : Health
 
     public void Trash()
     {
-        if (DieEvent != null)
-        {
-            if (rechargeJob != null)
-            {
-                rechargeJob.Kill();
-            }
-            DieEvent(this, new DieArgs(null));
-        }
+        Killed(null);
     }
 
     #endregion

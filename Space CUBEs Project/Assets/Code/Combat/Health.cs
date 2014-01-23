@@ -109,19 +109,11 @@ public class Health : MonoBase
 
         if (ChangeHealth(hitInfo.damage))
         {
-            if (DieEvent != null)
-            {
-                DieEvent(this, new DieArgs(sender));
-            }
+            Killed(sender);
+            return;
         }
 
-        if (myRenderer == null) return;
-
-        if (changeMat != null)
-        {
-            changeMat.Kill();
-        }
-        changeMat = new Job(ChangeMat(HealthHit_Mat));
+        ChangeMat(HealthHit_Mat);
     }
 
 
@@ -146,6 +138,20 @@ public class Health : MonoBase
     #region Protected Methods
 
     /// <summary>
+    /// Change the material and restart Job.
+    /// </summary>
+    /// <param name="mat">Material to change to.</param>
+    protected void HitMat(Material mat)
+    {
+        if (changeMat != null)
+        {
+            changeMat.Kill();
+        }
+        changeMat = new Job(ChangeMat(mat));
+    }
+
+
+    /// <summary>
     /// Change to hit material for healthHitMatTime.
     /// </summary>
     /// <param name="mat">Material to switch to.</param>
@@ -153,6 +159,20 @@ public class Health : MonoBase
     {
         myRenderer.material = mat;
         yield return new WaitForSeconds(healthHitMatTime);
+        myRenderer.material = Normal_Mat;
+    }
+
+
+    /// <summary>
+    /// Call the DieEvent.
+    /// </summary>
+    /// <param name="sender">Ship that killed this ship. Null if trashed.</param>
+    protected virtual void Killed(Ship sender)
+    {
+        if (DieEvent != null)
+        {
+            DieEvent(this, new DieArgs(sender));
+        }
         myRenderer.material = Normal_Mat;
     }
 

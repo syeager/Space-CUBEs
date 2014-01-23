@@ -97,13 +97,23 @@ public class LevelManager : Singleton<LevelManager>
     {
         Log("Level Finished.", true, Debugger.LogTypes.LevelEvents);
 
+        var data = new Dictionary<string, object>();
+        // score
+        data.Add("Score", player.myScore.points);
+        // save score
+        // money
+        data.Add("Money", player.myMoney.money);
+        MoneyManager.Transaction(player.myMoney.money);
         // awards
         int[] awards = AwardCUBEs();
-
-        var data = new Dictionary<string, object>();
-        data.Add("Score", player.myScore.points);
-        data.Add("Money", player.myMoney.money);
         data.Add("Awards", awards);
+        int[] inventory = CUBE.GetInventory();
+        foreach (var award in awards)
+        {
+            inventory[award]++;
+        }
+        CUBE.SetInventory(inventory);
+        // level rank
         char rank = ranks[ranks.Length - 1];
 
         for (int i = 0; i < rankLimits.Length; i++)
@@ -157,14 +167,6 @@ public class LevelManager : Singleton<LevelManager>
         {
             awards[i] = CUBE.gradedCUBEs[grades[i]][Random.Range(0, CUBE.gradedCUBEs[grades[i]].Length-1)];
         }
-
-        // add to inventory
-        int[] inventory = CUBE.GetInventory();
-        for (int i = 0; i < 5; i++)
-        {
-            inventory[awards[i]]++;
-        }
-        CUBE.SetInventory(inventory);
 
         return awards;
     }
