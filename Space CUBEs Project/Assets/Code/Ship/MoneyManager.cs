@@ -23,12 +23,22 @@ public class MoneyManager
 
     #endregion
 
+    #region Events
+
+    public EventHandler<CashUpdateArgs> CashUpdateEvent;
+
+    #endregion
+
 
     #region Public Methods
 
     public void Collect(int amount)
     {
         money += amount;
+        if (CashUpdateEvent != null)
+        {
+            CashUpdateEvent(this, new CashUpdateArgs(money));
+        }
     }
 
 
@@ -43,22 +53,38 @@ public class MoneyManager
 
     #region Static Methods
 
+    /// <summary>
+    /// Get current balance.
+    /// </summary>
+    /// <returns>Current balance.</returns>
     public static int Balance()
     {
         return PlayerPrefs.GetInt(MONEYPATH);
     }
 
 
-    public static bool Transaction(int amount)
+    /// <summary>
+    /// Sets balance.
+    /// </summary>
+    /// <remarks>Only use in Editor.</remarks>
+    /// <param name="balance">Balance to set.</param>
+    public static void SetBalance(int balance)
+    {
+        PlayerPrefs.SetInt(MONEYPATH, balance);
+    }
+
+
+    /// <summary>
+    /// Add amount to current savings.
+    /// </summary>
+    /// <param name="amount">Amount to add.</param>
+    /// <returns>New balance.</returns>
+    public static int Transaction(int amount)
     {
         int balance = Balance();
-        if (balance < amount)
-        {
-            return false;
-        }
-        balance -= amount;
+        balance += amount;
         PlayerPrefs.SetInt(MONEYPATH, balance);
-        return true;
+        return balance;
     }
 
     #endregion

@@ -34,7 +34,13 @@ public class CUBE : MonoBehaviour
 
     #region Static Fields
 
-    public static CUBEInfo[] AllCUBES { get; private set; }
+    public static CUBEInfo[] allCUBES { get; private set; }
+    public static int[][] gradedCUBEs { get; private set; }
+
+    #endregion
+
+    #region Const Fields
+
     public const string CUBELIST = "CUBE List";
     private const string INVENTORYPATH = "Inventory";
     private const char CUBESEPARATER = '|';
@@ -46,6 +52,7 @@ public class CUBE : MonoBehaviour
 
     public static CUBEInfo[] LoadAllCUBEInfo()
     {
+        // load all CUBEs
         TextAsset binaryFile = (TextAsset)Resources.Load(CUBELIST);
         Stream binaryStream = new MemoryStream(binaryFile.bytes);
         List<CUBEInfo> infoList = new List<CUBEInfo>();
@@ -66,21 +73,28 @@ public class CUBE : MonoBehaviour
                         ));
             }
         }
-        AllCUBES = infoList.ToArray();
+        allCUBES = infoList.ToArray();
 
         if (Application.isPlaying)
         {
             Debugger.Log("CUBE info loaded from binary.", null, true, Debugger.LogTypes.Data);
         }
 
-        return AllCUBES;
+        // filter into graded
+        gradedCUBEs = new int[5][];
+        for (int i = 0; i < 5; i++)
+        {
+            gradedCUBEs[i] = allCUBES.Where(c => c.rarity == i + 1).Select(c => c.id).ToArray();
+        }
+
+        return allCUBES;
     }
 
 
     public static int[] GetInventory()
     {
         string[] data = PlayerPrefs.GetString(INVENTORYPATH, "").Replace(" ", "").Split(CUBESEPARATER);
-        int[] inventory = new int[CUBE.AllCUBES.Length];
+        int[] inventory = new int[CUBE.allCUBES.Length];
 
         if (data.Length != 1)
         {

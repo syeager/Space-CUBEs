@@ -4,7 +4,9 @@
 using System.Diagnostics;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 using System;
+using Random = UnityEngine.Random;
 
 public class LevelManager : Singleton<LevelManager>
 {
@@ -38,11 +40,13 @@ public class LevelManager : Singleton<LevelManager>
 
     #endregion
 
-    #region Const Fields
+    #region Readonly Fields
 
-    private char[] ranks = { 'F', 'D', 'C', 'B', 'A', 'S' };
+    private static readonly char[] ranks = { 'F', 'D', 'C', 'B', 'A', 'S' };
+    private static readonly int[] gradeChances = { 50000, 25000, 12500, 6250, 3125 };
 
     #endregion
+
 
     #region Events
 
@@ -93,9 +97,13 @@ public class LevelManager : Singleton<LevelManager>
     {
         Log("Level Finished.", true, Debugger.LogTypes.LevelEvents);
 
+        // awards
+        int[] awards = AwardCUBEs();
+
         var data = new Dictionary<string, object>();
         data.Add("Score", player.myScore.points);
         data.Add("Money", player.myMoney.money);
+        data.Add("Awards", awards);
         char rank = ranks[ranks.Length - 1];
 
         for (int i = 0; i < rankLimits.Length; i++)
@@ -123,6 +131,42 @@ public class LevelManager : Singleton<LevelManager>
     {
         Grid.BuildFinishedEvent += OnBuildFinished;
         StartCoroutine(Grid.Build(build, 10, new Vector3(-75f, 0, 0), new Vector3(0f, 90f, 270f), 2f));
+    }
+
+
+    private int[] AwardCUBEs()
+    {
+        // get grades
+        int[] grades = new int[5];
+        for (int i = 0; i < 5; i++)
+        {
+            int rand = Random.Range(0, gradeChances[0]);
+            for (int j = 0; j < 5; j++)
+            {
+                if (gradeChances[j] <= rand)
+                {
+                    grades[i] = j-1;
+                    break;
+                }
+            }
+        }
+
+        // get award IDs
+        int[] awards = new int[5];
+        for (int i = 0; i < 5; i++)
+        {
+            awards[i] = CUBE.gradedCUBEs[grades[i]][Random.Range(0, CUBE.gradedCUBEs[grades[i]].Length-1)];
+        }
+
+        // add to inventory
+        int[] inventory = CUBE.GetInventory();
+        for (int i = 0; i < 5; i++)
+        {
+            inventory[awards[i]]++;
+        }
+        CUBE.SetInventory(inventory);
+
+        return awards;
     }
 
     #endregion

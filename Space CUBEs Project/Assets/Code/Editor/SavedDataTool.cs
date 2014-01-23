@@ -6,12 +6,13 @@ using System.Collections;
 using UnityEditor;
 
 /// <summary>
-/// Edit inventory in data.
+/// Edit saved data.
 /// </summary>
-public class InventoryTool : EditorWindow
+public class SavedDataTool : EditorWindow
 {
     #region Fields
 
+    private static int bank;
     private static CUBEInfo[] info;
     private static int[] inventory;
     private int setAll;
@@ -21,16 +22,46 @@ public class InventoryTool : EditorWindow
 
     #region EditorWindow
 
-    [MenuItem("Tools/Inventory Tool")]
+    [MenuItem("Tools/Saved Data Tool")]
     private static void Init()
     {
-        InventoryTool window = EditorWindow.GetWindow<InventoryTool>(false, "Inventory Tool");
+        SavedDataTool window = EditorWindow.GetWindow<SavedDataTool>(false, "Saved Data Tool");
+        bank = MoneyManager.Balance();
         info = CUBE.LoadAllCUBEInfo();
         inventory = CUBE.GetInventory();
     }
 
 
     private void OnGUI()
+    {
+        Money();
+        Inventory();
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    private void Money()
+    {
+        EditorGUILayout.BeginHorizontal();
+        {
+            EditorGUILayout.LabelField("Bank");
+            if (GUILayout.Button("Load"))
+            {
+                bank = MoneyManager.Balance();
+            }
+            bank = EditorGUILayout.IntField(bank);
+            if (GUILayout.Button("Save"))
+            {
+                MoneyManager.SetBalance(bank);
+            }
+        }
+        EditorGUILayout.EndHorizontal();
+    }
+
+
+    private void Inventory()
     {
         if (GUILayout.Button("Load Inventory"))
         {

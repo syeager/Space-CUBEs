@@ -58,7 +58,6 @@ public class ShieldHealth : Health
         {
             if (DieEvent != null)
             {
-                rechargeJob.Kill();
                 DieEvent(this, new DieArgs(sender));
             }
         }
@@ -138,7 +137,7 @@ public class ShieldHealth : Health
             {
                 rechargeJob.Kill();
             }
-            DieEvent(this, new DieArgs(true));
+            DieEvent(this, new DieArgs(null));
         }
     }
 

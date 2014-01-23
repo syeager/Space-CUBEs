@@ -17,7 +17,7 @@ public class CUBEListBinaryConverter : EditorWindow
 
     private static readonly Vector2 SIZE = new Vector2(300f, 50f);
     private static readonly string CUBEXMLPATH = Directory.GetParent(Directory.GetCurrentDirectory()) + @"\Data\CUBE List.xml";
-    public static readonly string CUBELISTPATHEDITOR = Application.dataPath + "/Files/CUBE Files/CUBE List.txt";
+    public static readonly string CUBELISTPATHEDITOR = Application.dataPath + "/Resources/CUBE List.bytes";
 
     #endregion
 

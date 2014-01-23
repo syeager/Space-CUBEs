@@ -62,7 +62,7 @@ public class UIGrid : UIWidgetContainer
 	/// Whether to ignore the disabled children or to treat them as being present.
 	/// </summary>
 
-	public bool hideInactive = true;
+	bool hideInactive = true;
 
 	/// <summary>
 	/// Reposition the children on the next Update().

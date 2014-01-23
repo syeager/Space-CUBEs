@@ -183,6 +183,10 @@ Prefab:
       propertyPath: FPS
       value: 
       objectReference: {fileID: 1642473379}
+    - target: {fileID: 11400004, guid: aeed59aee1ea3714da2eb46ccb6175bd, type: 2}
+      propertyPath: logFlags.Array.data[0]
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: aeed59aee1ea3714da2eb46ccb6175bd, type: 2}
   m_RootGameObject: {fileID: 768662252}
@@ -405,7 +409,7 @@ MonoBehaviour:
   ConsoleLine: {fileID: 0}
   ConsoleLine_Prefab: {fileID: 100000, guid: 1abf603ef50833b4ba9818e64b0f75db, type: 2}
   overwrite: 1
-  logFlags: 00010000
+  logFlags: 01010000
 --- !u!114 &768662257
 MonoBehaviour:
   m_ObjectHideFlags: 0

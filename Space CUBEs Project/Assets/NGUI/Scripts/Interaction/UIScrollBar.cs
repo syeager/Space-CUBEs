@@ -107,36 +107,40 @@ public class UIScrollBar : UISlider
 	/// Move the scroll bar to be centered on the specified position.
 	/// </summary>
 
-	protected override float LocalToValue (Vector2 localPos)
-	{
-		if (mFG != null)
-		{
-			float halfSize = Mathf.Clamp01(mSize) * 0.5f;
-			float val0 = halfSize;
-			float val1 = 1f - halfSize;
-			Vector3[] corners = mFG.localCorners;
+    protected override float LocalToValue(Vector2 localPos)
+    {
+        if (mFG != null)
+        {
+            float halfSize = Mathf.Clamp01(mSize) * 0.5f;
+            float val0 = halfSize;
+            float val1 = 1f - halfSize;
+            Vector3[] corners = mFG.localCorners;
 
-			if (isHorizontal)
-			{
-				val0 = Mathf.Lerp(corners[0].x, corners[2].x, val0);
-				val1 = Mathf.Lerp(corners[0].x, corners[2].x, val1);
+            if (isHorizontal)
+            {
+                val0 = Mathf.Lerp(corners[0].x, corners[2].x, val0);
+                val1 = Mathf.Lerp(corners[0].x, corners[2].x, val1);
+                float diff = (val1 - val0);
+                if (diff == 0f) return value;
 
-				return isInverted ?
-					(val1 - localPos.x) / (val1 - val0) :
-					(localPos.x - val0) / (val1 - val0);
-			}
-			else
-			{
-				val0 = Mathf.Lerp(corners[0].y, corners[1].y, val0);
-				val1 = Mathf.Lerp(corners[3].y, corners[2].y, val1);
+                return isInverted ?
+                    (val1 - localPos.x) / diff :
+                    (localPos.x - val0) / diff;
+            }
+            else
+            {
+                val0 = Mathf.Lerp(corners[0].y, corners[1].y, val0);
+                val1 = Mathf.Lerp(corners[3].y, corners[2].y, val1);
+                float diff = (val1 - val0);
+                if (diff == 0f) return value;
 
-				return isInverted ?
-					(val1 - localPos.y) / (val1 - val0) :
-					(localPos.y - val0) / (val1 - val0);
-			}
-		}
-		return base.LocalToValue(localPos);
-	}
+                return isInverted ?
+                    (val1 - localPos.y) / diff :
+                    (localPos.y - val0) / diff;
+            }
+        }
+        return base.LocalToValue(localPos);
+    }
 
 	/// <summary>
 	/// Update the value of the scroll bar.

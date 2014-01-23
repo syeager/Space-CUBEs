@@ -1,10 +1,10 @@
 ﻿// Steve Yeager
-// 
+// 12.18.2014
 
 using System;
 using UnityEngine;
 
-public class PressButton : UIButton
+public class ActivateButton : UIButton
 {
     public string value;
     public EventHandler<ActivateButtonArgs> ActivateEvent;

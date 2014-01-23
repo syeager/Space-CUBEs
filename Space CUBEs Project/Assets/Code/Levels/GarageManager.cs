@@ -222,7 +222,11 @@ public class GarageManager : MonoBehaviour
         }
         if (GUI.Button(new Rect(0f, LeftMenuRect.height * 0.4f, LeftMenuRect.width, LeftMenuRect.height * 0.2f), "Test"))
         {
-            GameData.LoadLevel("Deep Space", false, new Dictionary<string, object>{{"Build", Grid.buildName}});
+            GameData.LoadLevel("Deep Space", false, new Dictionary<string, object> { { "Build", Grid.buildName } });
+        }
+        if (GUI.Button(new Rect(0f, LeftMenuRect.height * 0.6f, LeftMenuRect.width, LeftMenuRect.height * 0.2f), "Main Menu"))
+        {
+            GameData.LoadLevel("Main Menu", false, new Dictionary<string, object>());
         }
     }
 

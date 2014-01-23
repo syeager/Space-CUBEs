@@ -107,7 +107,13 @@ public class Health : MonoBase
     {
         if (invincible) return;
 
-        ChangeHealth(hitInfo.damage);
+        if (ChangeHealth(hitInfo.damage))
+        {
+            if (DieEvent != null)
+            {
+                DieEvent(this, new DieArgs(sender));
+            }
+        }
 
         if (myRenderer == null) return;
 
@@ -132,18 +138,7 @@ public class Health : MonoBase
             HealthUpdateEvent(this, new HealthUpdateArgs(maxHealth, amount, health));
         }
 
-        if (health == 0f)
-        {
-            if (DieEvent != null)
-            {
-                DieEvent(this, new DieArgs(false));
-            }
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return health == 0f;
     }
 
     #endregion

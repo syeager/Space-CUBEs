@@ -12,6 +12,7 @@ public class LevelOverviewManager : MonoBehaviour
     public UILabel Score;
     public UILabel Money;
     public UILabel Rank;
+    public UILabel[] Awards;
 
     #endregion
 
@@ -54,7 +55,8 @@ public class LevelOverviewManager : MonoBehaviour
     {
         yield return StartCoroutine(RoundupScore((int)GameData.Main.levelData["Score"]));
         yield return StartCoroutine(RoundupMoney((int)GameData.Main.levelData["Money"]));
-        StartCoroutine(RoundupRank('A'));
+        yield return StartCoroutine(RoundupRank((char)GameData.Main.levelData["Rank"]));
+        yield return StartCoroutine(RoundupAwards((int[])GameData.Main.levelData["Awards"]));
     }
 
 
@@ -89,7 +91,22 @@ public class LevelOverviewManager : MonoBehaviour
     private IEnumerator RoundupRank(char grade)
     {
         yield return new WaitForSeconds(1f);
-        Rank.text = "Rank: " + GameData.Main.levelData["Rank"].ToString();
+        Rank.text = "Rank: " + grade.ToString();
+    }
+
+
+    private IEnumerator RoundupAwards(int[] IDs)
+    {
+        for (int i = 0; i < IDs.Length; i++)
+        {
+            yield return new WaitForSeconds(0.25f);
+            string grade = " ";
+            for (int j = 0; j < CUBE.allCUBES[IDs[i]].rarity; j++)
+            {
+                grade += "★";
+            }
+            Awards[i].text = CUBE.allCUBES[IDs[i]].name + grade;
+        }
     }
 
     #endregion

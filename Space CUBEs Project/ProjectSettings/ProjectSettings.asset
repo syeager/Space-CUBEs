@@ -36,7 +36,7 @@ PlayerSettings:
   use24BitDepthBuffer: 1
   defaultIsFullScreen: 1
   defaultIsNativeResolution: 1
-  runInBackground: 0
+  runInBackground: 1
   captureSingleScreen: 0
   Override IPod Music: 0
   Prepare IOS For Recording: 0
@@ -130,6 +130,9 @@ PlayerSettings:
   - m_BuildTarget: Android
     m_StaticBatching: 1
     m_DynamicBatching: 1
+  - m_BuildTarget: Standalone
+    m_StaticBatching: 1
+    m_DynamicBatching: 1
   webPlayerTemplate: APPLICATION:Default
   m_TemplateCustomTags: {}
   wiiRegion: 1
@@ -169,7 +172,7 @@ PlayerSettings:
   spritePackerPolicy: 
   scriptingDefineSymbols:
     1: LOG;WARNING;ERROR
-    7: XDEVMODE;XLOG;XWARNING;XERROR;CONSOLELINE
+    7: XDEVMODE;LOG;XWARNING;XERROR;CONSOLELINE
   metroPackageName: Space CUBEs Project
   metroPackageLogo: 
   metroPackageVersion: 

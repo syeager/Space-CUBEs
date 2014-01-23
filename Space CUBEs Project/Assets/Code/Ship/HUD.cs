@@ -14,13 +14,14 @@ public class HUD : Singleton<HUD>
     #region References
 
     private ShieldHealth PlayerHealth;
-    public PressButton[] WeaponButtons;
+    public ActivateButton[] WeaponButtons;
     public Joystick joystick;
-    public PressButton barrelRoll;
+    public ActivateButton barrelRoll;
     public UITexture ShieldBar;
     public UITexture HealthBar;
     public UILabel Points;
     public UILabel Multiplier;
+    public UILabel Cash;
     public UILabel Wave;
 
     #endregion
@@ -65,6 +66,7 @@ public class HUD : Singleton<HUD>
 
         player.myScore.PointsUpdateEvent += Main.OnPointsChanged;
         player.myScore.MultiplierUpdateEvent += Main.OnMultiplierChanged;
+        player.myMoney.CashUpdateEvent += Main.OnCashChanged;
 
         Main.barrelRoll.ActivateEvent += Main.OnBarrelRoll;
     }
@@ -94,6 +96,12 @@ public class HUD : Singleton<HUD>
     private void OnMultiplierChanged(object sender, MultiplierUpdateArgs args)
     {
         Multiplier.text = "M: " + args.multiplier.ToString();
+    }
+
+
+    private void OnCashChanged(object sender, CashUpdateArgs args)
+    {
+        Cash.text = String.Format("C: ${0:#,###0}", args.cash);
     }
 
 

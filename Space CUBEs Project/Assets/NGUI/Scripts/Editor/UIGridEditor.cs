@@ -10,7 +10,12 @@ using UnityEditor;
 [CustomEditor(typeof(UIGrid))]
 public class UIGridEditor : UIWidgetContainerEditor
 {
-	//public override void OnInspectorGUI ()
-	//{
-	//}
+    public override void OnInspectorGUI()
+    {
+        base.DrawDefaultInspector();
+        if (GUILayout.Button("Reposition"))
+        {
+            (target as UIGrid).Reposition();
+        }
+    }
 }
