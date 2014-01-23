@@ -6,7 +6,7 @@ using UnityEditor;
 using System.Collections.Generic;
 
 //[CustomEditor(typeof(PatternLevelManager))]
-public class PatternLevelManagerEditor : Editor
+public class FormationLevelManagerEditor : Editor
 {
     #region Private Fields
 
@@ -14,7 +14,7 @@ public class PatternLevelManagerEditor : Editor
     private int openPattern = -1;
     private bool patternsToggle;
     private Dictionary<Enemy.Classes, GameObject> EnemyPrefabs;
-    private Pattern[] patternRefs;
+    private Formation[] patternRefs;
 
     #endregion
 

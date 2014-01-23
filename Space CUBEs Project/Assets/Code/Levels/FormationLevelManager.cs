@@ -4,11 +4,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PatternLevelManager : LevelManager
+public class FormationLevelManager : LevelManager
 {
     #region Public Fields
 
-    public LevelPatternSegment[] segments;
+    public LevelFormationSegment[] formations;
 
     #endregion
 
@@ -43,7 +43,7 @@ public class PatternLevelManager : LevelManager
     private void SpawnNextSegment()
     {
         // completed
-        if (segmentCursor >= segments.Length)
+        if (segmentCursor >= formations.Length)
         {
             Log("Level Complete", true, Debugger.LogTypes.LevelEvents);
             return;
@@ -51,9 +51,9 @@ public class PatternLevelManager : LevelManager
 
         // does the next segment require clearing?
         bool clear = false;
-        if (segmentCursor + 1 < segments.Length)
+        if (segmentCursor + 1 < formations.Length)
         {
-            if (segments[segmentCursor + 1].cleared)
+            if (formations[segmentCursor + 1].cleared)
             {
                 clear = true;
                 Log("Segment " + (segmentCursor + 1) + " requires clearing.", true, Debugger.LogTypes.LevelEvents);
@@ -61,14 +61,14 @@ public class PatternLevelManager : LevelManager
         }
 
         // last segment
-        lastSegment = segmentCursor + 1 == segments.Length;
+        lastSegment = segmentCursor + 1 == formations.Length;
         
         // create enemies
         enemiesLeft = 0;
-        for (int i = 0; i < segments[segmentCursor].pattern.positions.Length; i++)
+        for (int i = 0; i < formations[segmentCursor].formation.positions.Length; i++)
         {
-            var enemy = PoolManager.Pop(segments[segmentCursor].enemies[i].ToString());
-            enemy.transform.SetPosRot(segments[segmentCursor].pattern.positions[i] + SPAWNSTART, SPAWNROTATION);
+            var enemy = PoolManager.Pop(formations[segmentCursor].enemies[i].ToString());
+            enemy.transform.SetPosRot(formations[segmentCursor].formation.positions[i] + SPAWNSTART, SPAWNROTATION);
             enemy.GetComponent<Enemy>().Spawn();
             if (clear || lastSegment)
             {
@@ -82,10 +82,10 @@ public class PatternLevelManager : LevelManager
         segmentCursor++;
 
         // get next segment ready if time
-        if (segmentCursor < segments.Length && !clear)
+        if (segmentCursor < formations.Length && !clear)
         {
-            Log("Spawn segment " + segmentCursor + " in " + segments[segmentCursor].spawnTime + " seconds.", true, Debugger.LogTypes.LevelEvents);
-            InvokeAction(() => SpawnNextSegment(), segments[segmentCursor].spawnTime);
+            Log("Spawn segment " + segmentCursor + " in " + formations[segmentCursor].spawnTime + " seconds.", true, Debugger.LogTypes.LevelEvents);
+            InvokeAction(() => SpawnNextSegment(), formations[segmentCursor].spawnTime);
         }
     }
 

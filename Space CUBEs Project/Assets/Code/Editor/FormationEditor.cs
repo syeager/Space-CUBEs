@@ -6,7 +6,7 @@ using UnityEditor;
 using System.Collections.Generic;
 
 //[CustomEditor(typeof(Pattern))]
-public class PatternEditor : Editor
+public class FormationEditor : Editor
 {
     #region Private Fields
 

@@ -7,14 +7,14 @@ using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
 
-public class PatternCreator : EditorWindow
+public class FormationCreator : EditorWindow
 {
     #region Private Fields
 
-    private string patternName;
+    private string formationName;
     private bool confirmOverwrite;
-    private List<GameObject> patterns = new List<GameObject>();
-    private GameObject oldPattern;
+    private List<GameObject> formations = new List<GameObject>();
+    private GameObject oldFormation;
     private GameObject prefab;
 
     #endregion
@@ -27,25 +27,23 @@ public class PatternCreator : EditorWindow
 
     #region Const Fields
 
-    private const string PATTERNPATH = "Assets/Patterns/";
+    private const string FORMATIONPATH = "Assets/Formations/";
     
     #endregion
     
 
     #region EditorWindow Overrides
 
-    [MenuItem("Tools/Pattern Creator")]
+    [MenuItem("Tools/Formation Creator")]
     private static void Init()
     {
-        PatternCreator window = (PatternCreator)EditorWindow.GetWindow(typeof(PatternCreator), true, "Pattern Creator");
-        //window.minSize = SIZE;
-        //window.maxSize = SIZE;
+        FormationCreator window = (FormationCreator)EditorWindow.GetWindow(typeof(FormationCreator), true, "Formation Creator");
     }
 
 
     private void OnEnable()
     {
-        LoadPatterns();
+        LoadFormations();
     }
 
 
@@ -60,20 +58,20 @@ public class PatternCreator : EditorWindow
         // load or create
         if (prefab == null)
         {
-            if (GUILayout.Button("New Pattern"))
+            if (GUILayout.Button("New Formation"))
             {
-                prefab = new GameObject("___Pattern", typeof(Pattern));
+                prefab = new GameObject("___Formation", typeof(Formation));
                 var placeholder = (GameObject)GameObject.CreatePrimitive(PrimitiveType.Sphere);
                 placeholder.transform.parent = prefab.transform;
                 placeholder.transform.localPosition = Vector3.zero;
             }
-            foreach (var p in patterns)
+            foreach (var p in formations)
             {
                 if (GUILayout.Button(p.name))
                 {
-                    prefab = new GameObject("___Pattern", typeof(Pattern));
-                    patternName = p.name;
-                    foreach (var position in p.GetComponent<Pattern>().positions)
+                    prefab = new GameObject("___Formation", typeof(Formation));
+                    formationName = p.name;
+                    foreach (var position in p.GetComponent<Formation>().positions)
                     {
                         var placeholder = (GameObject)GameObject.CreatePrimitive(PrimitiveType.Sphere);
                         placeholder.transform.parent = prefab.transform;
@@ -85,7 +83,7 @@ public class PatternCreator : EditorWindow
         }
 
         // pattern name
-        patternName = EditorGUILayout.TextField(patternName);
+        formationName = EditorGUILayout.TextField(formationName);
 
         GUILayout.FlexibleSpace();
 
@@ -99,7 +97,7 @@ public class PatternCreator : EditorWindow
                     confirmOverwrite = false;
                 }
                 GUILayout.FlexibleSpace();
-                if (GUILayout.Button("Overwrite " + patternName))
+                if (GUILayout.Button("Overwrite " + formationName))
                 {
                     Save(true);
                     confirmOverwrite = false;
@@ -112,8 +110,8 @@ public class PatternCreator : EditorWindow
             if (GUILayout.Button("Save"))
             {
                 // test for alreay there
-                oldPattern = patterns.FirstOrDefault(p => p.name == patternName);
-                if (oldPattern == null)
+                oldFormation = formations.FirstOrDefault(p => p.name == formationName);
+                if (oldFormation == null)
                 {
                     Save(false);
                 }
@@ -134,35 +132,35 @@ public class PatternCreator : EditorWindow
         // delete old
         if (overwrite)
         {
-            Debug.Log("Deleting: " + PATTERNPATH + oldPattern.name);
-            AssetDatabase.DeleteAsset(PATTERNPATH + oldPattern.name + ".prefab");
+            Debug.Log("Deleting: " + FORMATIONPATH + oldFormation.name);
+            AssetDatabase.DeleteAsset(FORMATIONPATH + oldFormation.name + ".prefab");
         }
 
-        GameObject savedPrefab = new GameObject(patternName, typeof(Pattern));
-        var patternComp = savedPrefab.GetComponent<Pattern>();
-        patternComp.positions = new Vector3[prefab.transform.childCount];
-        for (int i = 0; i < patternComp.positions.Length; i++)
+        GameObject savedPrefab = new GameObject(formationName, typeof(Formation));
+        var formationComp = savedPrefab.GetComponent<Formation>();
+        formationComp.positions = new Vector3[prefab.transform.childCount];
+        for (int i = 0; i < formationComp.positions.Length; i++)
         {
-            savedPrefab.GetComponent<Pattern>().positions[i] = prefab.transform.GetChild(i).localPosition;
+            savedPrefab.GetComponent<Formation>().positions[i] = prefab.transform.GetChild(i).localPosition;
         }
-        PrefabUtility.CreatePrefab(PATTERNPATH + "Pattern " + patternName + ".prefab", savedPrefab);
+        PrefabUtility.CreatePrefab(FORMATIONPATH + "Formation " + formationName + ".prefab", savedPrefab);
         DestroyImmediate(savedPrefab);
 
-        LoadPatterns();
+        LoadFormations();
     }
 
 
-    private void LoadPatterns()
+    private void LoadFormations()
     {
-        string[] patternFiles = Directory.GetFiles(PATTERNPATH);
-        patterns.Clear();
+        string[] formationFiles = Directory.GetFiles(FORMATIONPATH);
+        formations.Clear();
 
-        for (int i = 0; i < patternFiles.Length; i++)
+        for (int i = 0; i < formationFiles.Length; i++)
         {
-            Object pattern = AssetDatabase.LoadAssetAtPath(patternFiles[i], typeof(GameObject));
-            if (pattern != null && PrefabUtility.GetPrefabType(pattern) == PrefabType.Prefab)
+            Object formation = AssetDatabase.LoadAssetAtPath(formationFiles[i], typeof(GameObject));
+            if (formation != null && PrefabUtility.GetPrefabType(formation) == PrefabType.Prefab)
             {
-                patterns.Add(pattern as GameObject);
+                formations.Add(formation as GameObject);
             }
         }
     }

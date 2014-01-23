@@ -4,7 +4,7 @@
 using UnityEngine;
 using System;
 
-public class Pattern : MonoBehaviour
+public class Formation : MonoBehaviour
 {
     public Vector3[] positions;
 }

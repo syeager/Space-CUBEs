@@ -5,9 +5,9 @@ using UnityEngine;
 using System;
 
 [Serializable]
-public class LevelPatternSegment
+public class LevelFormationSegment
 {
-    public Pattern pattern;
+    public Formation formation;
     public Enemy.Classes[] enemies;
     public bool cleared;
     public float spawnTime;
