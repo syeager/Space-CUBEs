@@ -1,6 +1,7 @@
 ﻿// Steve Yeager
 // 1.14.2014
 
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -19,7 +20,7 @@ public class Nuke : Weapon
 
     #region Private Fields
 
-    private Transform nuke;
+    private Transform nuke = null;
     private GameObject explosion;
 
     #endregion
@@ -40,6 +41,10 @@ public class Nuke : Weapon
         {
             if (nuke == null) return;
 
+            if (ActivatedEvent != null)
+            {
+                ActivatedEvent(this, EventArgs.Empty);
+            }
             StopCoroutine("MoveNuke");
             explosion = (GameObject)Instantiate(Explosion_Prefab, nuke.position, nuke.rotation);
             explosion.GetComponent<Hitbox>().Initialize(myShip, hitInfo);

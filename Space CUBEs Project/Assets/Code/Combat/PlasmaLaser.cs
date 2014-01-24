@@ -1,6 +1,7 @@
 ﻿// Steve Yeager
 // 12.01.2013
 
+using System;
 using UnityEngine;
 
 public class PlasmaLaser : Weapon
@@ -24,6 +25,12 @@ public class PlasmaLaser : Weapon
         var laser = PoolManager.Pop(attackName);
         laser.transform.SetPosRot(myTransform.position + myTransform.TransformDirection(laserOffset), myTransform.rotation);
         laser.GetComponent<Hitbox>().Initialize(myShip, hitInfo, myTransform.forward*speed);
+        power = 0f;
+        if (ActivatedEvent != null)
+        {
+            ActivatedEvent(this, EventArgs.Empty);
+        }
+        StartCoroutine(Cooldown());
     }
 
 
@@ -32,6 +39,7 @@ public class PlasmaLaser : Weapon
         var comp = parent.AddComponent<PlasmaLaser>();
         comp.index = index;
         comp.attackName = attackName;
+        comp.cooldownSpeed = cooldownSpeed;
         comp.hitInfo = hitInfo;
         comp.laserOffset = laserOffset + transform.localPosition;
         comp.speed = speed;

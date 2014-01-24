@@ -1,6 +1,7 @@
 ﻿// Steve Yeager
 // 12.01.2013
 
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -23,21 +24,27 @@ public abstract class Weapon : MonoBase
 
     #region Protected Fields
 
-    protected float power;
     protected bool canActivate = true;
 
     #endregion
 
     #region Const Fields
 
-    protected const float FULLPOWER = 100f;
+    public const float FULLPOWER = 100f;
 
     #endregion
 
     #region Properties
 
-    /// <summary></summary>
+    public float power { get; protected set; }
     public int index { get; set; }
+
+    #endregion
+
+    #region Events
+
+    public EventHandler<ValueArgs> PowerUpdateEvent;
+    public EventHandler ActivatedEvent;
 
     #endregion
 
@@ -70,6 +77,10 @@ public abstract class Weapon : MonoBase
         while (power < FULLPOWER)
         {
             power += cooldownSpeed * deltaTime;
+            if (PowerUpdateEvent != null)
+            {
+                PowerUpdateEvent(this, new ValueArgs(power));
+            }
             yield return null;
         }
 

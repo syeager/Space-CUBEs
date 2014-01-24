@@ -1,6 +1,7 @@
 ﻿// Steve Yeager
 // 12.13.2013
 
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -112,9 +113,15 @@ public class LaserBeam : Weapon
 
     private void EndAttack()
     {
-        StartCoroutine(Cooldown());
         if (charge != null) Destroy(charge.gameObject);
         else if (laser != null) Destroy(laser.gameObject);
+        else return;
+
+        if (ActivatedEvent != null)
+        {
+            ActivatedEvent(this, EventArgs.Empty);
+        }
+        StartCoroutine(Cooldown());
     }
 
     #endregion

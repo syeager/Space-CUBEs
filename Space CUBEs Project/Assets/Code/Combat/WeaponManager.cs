@@ -54,19 +54,6 @@ public class WeaponManager : MonoBehaviour
 
 
     /// <summary>
-    /// Connect weapons to buttons in HUD.
-    /// </summary>
-    [Conditional("UNITY_ANDROID")]
-    public void RegisterToHUD()
-    {
-        for (int i = 0; i < weapons.Length; i++)
-        {
-            HUD.Main.WeaponButtons[i].ActivateEvent += OnActivate;
-        }
-    }
-
-
-    /// <summary>
     /// See if weapon can be activated.
     /// </summary>
     /// <param name="weapon">Weapon index.</param>
@@ -128,8 +115,7 @@ public class WeaponManager : MonoBehaviour
     /// </summary>
     /// <param name="sender">Button pressed.</param>
     /// <param name="args">Button args.</param>
-    [Obsolete("Have player check button status.")]
-    private void OnActivate(object sender, ActivateButtonArgs args)
+    public void OnActivate(object sender, ActivateButtonArgs args)
     {
         TryActivate(int.Parse(args.value), args.isPressed);
     }

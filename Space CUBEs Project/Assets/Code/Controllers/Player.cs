@@ -75,13 +75,7 @@ public class Player : Ship
         base.Start();
 
         HUD.Initialize(this);
-
-        #if UNITY_ANDROID
-
         HUD.Main.BarrelRollEvent += OnBarrelRoll;
-        myWeapons.RegisterToHUD();
-
-        #endif
 
         stateMachine.Start(null);
     }
@@ -285,7 +279,7 @@ public class Player : Ship
 
     #region Event Handlers
 
-    [Conditional("UNITY_ANDROID")]
+    [Obsolete("Find a better way. Check button status?")]
     private void OnBarrelRoll(object sender, EventArgs args)
     {
         barrelRoll = true;

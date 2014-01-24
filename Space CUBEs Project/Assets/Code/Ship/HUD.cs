@@ -14,7 +14,7 @@ public class HUD : Singleton<HUD>
     #region References
 
     private ShieldHealth PlayerHealth;
-    public ActivateButton[] WeaponButtons;
+    public ActivateButton[] weaponButtons;
     public Joystick joystick;
     public ActivateButton barrelRoll;
     public UITexture ShieldBar;
@@ -68,7 +68,22 @@ public class HUD : Singleton<HUD>
         player.myScore.MultiplierUpdateEvent += Main.OnMultiplierChanged;
         player.myMoney.CashUpdateEvent += Main.OnCashChanged;
 
+        // barrel roll
         Main.barrelRoll.ActivateEvent += Main.OnBarrelRoll;
+
+        // initialize weapon icons
+        for (int i = 0; i < Player.WEAPONLIMIT; i++)
+        {
+            if (player.myWeapons.weapons[i] != null)
+            {
+                HUD.Main.weaponButtons[i].ActivateEvent += player.myWeapons.OnActivate;
+                Main.weaponButtons[i].GetComponent<WeaponButton>().Initialize(player.myWeapons.weapons[i]);
+            }
+            else
+            {
+                Main.weaponButtons[i].GetComponent<WeaponButton>().Disable();
+            }
+        }
     }
 
     #endregion
