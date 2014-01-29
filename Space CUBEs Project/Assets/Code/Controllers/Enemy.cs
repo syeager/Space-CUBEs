@@ -78,6 +78,8 @@ public class Enemy : Ship
         {
             player.RecieveKill(enemyClass, score, money);
         }
+
+        Destroy(path);
     }
 
     #endregion

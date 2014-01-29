@@ -6,7 +6,6 @@ using System;
 
 namespace Paths
 {
-    [Serializable]
     public class SinePath : Path
     {
         public float amplitude = 0.5f;

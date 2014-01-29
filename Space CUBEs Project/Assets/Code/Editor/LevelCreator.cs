@@ -31,18 +31,17 @@ public class LevelCreator : EditorWindow
     private float formationHeight = 50f;
     private float formationWidth = 250f;
     private Vector2 formationScroll;
-    private float enemyHeight = 20f;
+    private float enemyHeight = 40f;
 
     #endregion
 
     #region Editor Fields
 
-    private List<bool> formationToggles;
     SerializedObject sLevelManager;
     SerializedProperty sFormationGroups;
+    private List<bool> formationToggles;
     private List<bool[]> enemyToggles;
     private static Formation[] formationPrefabs;
-    private const string FORMATIONPATH = "/Formations";
     private static string[] formationNames;
 
     #endregion
@@ -171,7 +170,7 @@ public class LevelCreator : EditorWindow
 
     private void Formations()
     {
-        formationScroll = GUI.BeginScrollView(new Rect(0f, infoHeight, W, H - infoHeight), formationScroll, new Rect(0f, 0f, W, formationTotalHeight)); // bottom cutting off
+        formationScroll = GUI.BeginScrollView(new Rect(0f, infoHeight, W, H - infoHeight), formationScroll, new Rect(0f, 0f, W, formationTotalHeight + 10f));
         {
             formationTotalHeight = 0f;
             for (int i = 0; i < levelManager.formationGroups.Length; i++)
@@ -209,19 +208,26 @@ public class LevelCreator : EditorWindow
                 formationToggles[formationIndex] = !formationToggles[formationIndex];
             }
             // move down
+            if (formationIndex == sFormationGroups.arraySize-1) GUI.enabled = false;
             if (GUI.Button(new Rect(56f, formationHeight / 2f, 46f, 20f), "↓", EditorStyles.miniButtonMid))
             {
-
+                MoveFormation(formationIndex, formationIndex + 1);
+                return height;
             }
+            GUI.enabled = true;
             // move up
+            if (formationIndex == 0) GUI.enabled = false;
             if (GUI.Button(new Rect(102f, formationHeight / 2f, 46f, 20f), "↑", EditorStyles.miniButtonMid))
             {
-
+                MoveFormation(formationIndex, formationIndex - 1);
+                return height;
             }
+            GUI.enabled = true;
             // duplicate
             if (GUI.Button(new Rect(148f, formationHeight / 2f, 46f, 20f), "+", EditorStyles.miniButtonMid))
             {
-
+                DuplicateFormation(formationIndex);
+                return height;
             }
             // delete
             if (GUI.Button(new Rect(194f, formationHeight / 2f, 46f, 20f), "-", EditorStyles.miniButtonRight))
@@ -286,6 +292,7 @@ public class LevelCreator : EditorWindow
         {
             path.objectReferenceValue = ScriptableObject.CreateInstance(pathTypes[pathIndex]);
             sLevelManager.ApplyModifiedProperties();
+            EditorUtility.UnloadUnusedAssets();
         }
 
         // params
@@ -311,23 +318,27 @@ public class LevelCreator : EditorWindow
     }
 
 
-    private void AddFormation(int formationIndex = -1)
+    private void AddFormation()
     {
-        sLevelManager.Update();
-
-        // create at end
-        if (formationIndex == -1)
-        {
-            formationIndex = levelManager.formationGroups.Length;
-        }
+        int formationIndex = levelManager.formationGroups.Length;
 
         sFormationGroups.InsertArrayElementAtIndex(formationIndex);
-        formationToggles.Insert(formationIndex, false);
+        formationToggles.Insert(formationIndex, true);
         enemyToggles.Insert(formationIndex, null);
-        // enemy toggles
+
         sLevelManager.ApplyModifiedProperties();
 
         UpdateFormation(formationIndex, 0);
+    }
+
+
+    private void DuplicateFormation(int formationIndex)
+    {
+        sFormationGroups.InsertArrayElementAtIndex(formationIndex);
+        formationToggles.Insert(formationIndex+1, true);
+        enemyToggles.Insert(formationIndex+1, (bool[])enemyToggles[formationIndex].Clone());
+
+        sLevelManager.ApplyModifiedProperties();
     }
 
 
@@ -369,12 +380,29 @@ public class LevelCreator : EditorWindow
         for (int i = 0; i < enemyCount; i++)
         {
             paths.InsertArrayElementAtIndex(i);
-            // set to StraightPath
+            // hardcode to StraightPath
             paths.GetArrayElementAtIndex(i).objectReferenceValue = ScriptableObject.CreateInstance(pathTypes[1]);
         }
 
         sLevelManager.ApplyModifiedProperties();
         EditorUtility.UnloadUnusedAssets();
+    }
+
+
+    private void MoveFormation(int formationIndex, int dest)
+    {
+        // formation
+        sFormationGroups.MoveArrayElement(formationIndex, dest);
+        // formation toggles
+        bool destToggle = formationToggles[formationIndex];
+        formationToggles[formationIndex] = formationToggles[dest];
+        formationToggles[dest] = destToggle;
+        // enemy toggles
+        bool[] destToggles = enemyToggles[formationIndex];
+        enemyToggles[formationIndex] = enemyToggles[dest];
+        enemyToggles[dest] = destToggles;
+
+        sLevelManager.ApplyModifiedProperties();
     }
 
     #endregion
