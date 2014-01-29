@@ -4,8 +4,10 @@
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
+using System;
 
 //[CustomEditor(typeof(Pattern))]
+[Obsolete()]
 public class FormationEditor : Editor
 {
     #region Private Fields

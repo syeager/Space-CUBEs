@@ -45,15 +45,6 @@ public class Grunt : Enemy
 
     #endregion
 
-    #region Enemy Overrides
-
-    public override void Spawn(Vector3 stopPosition)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    #endregion
-
     #region State Methods
 
     private void MovingEnter(Dictionary<string, object> info)
@@ -78,7 +69,7 @@ public class Grunt : Enemy
         while (true)
         {
             // move
-            myMotor.Move(-Vector2.right);
+            myMotor.Move(path.Direction(deltaTime));
             yield return null;
         }
     }

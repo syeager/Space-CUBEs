@@ -6,7 +6,9 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 
-// Runs all methods needed at game start.
+/// <summary>
+/// Runs all methods needed at game start.
+/// </summary>
 public class GameStart : MonoBehaviour
 {
     #region Public Fields

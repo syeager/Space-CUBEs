@@ -13,8 +13,8 @@ public class FormationCreator : EditorWindow
 
     private string formationName;
     private bool confirmOverwrite;
-    private List<GameObject> formations = new List<GameObject>();
-    private GameObject oldFormation;
+    private Formation[] formations = new Formation[0];
+    private Formation oldFormation;
     private GameObject prefab;
 
     #endregion
@@ -23,12 +23,6 @@ public class FormationCreator : EditorWindow
 
     private static readonly Vector2 SIZE = new Vector2(300f, 50f);
 
-    #endregion
-
-    #region Const Fields
-
-    private const string FORMATIONPATH = "Assets/Formations/";
-    
     #endregion
     
 
@@ -43,7 +37,7 @@ public class FormationCreator : EditorWindow
 
     private void OnEnable()
     {
-        LoadFormations();
+        formations = Formation.AllFormations();
     }
 
 
@@ -58,6 +52,7 @@ public class FormationCreator : EditorWindow
         // load or create
         if (prefab == null)
         {
+            // create
             if (GUILayout.Button("New Formation"))
             {
                 prefab = new GameObject("___Formation", typeof(Formation));
@@ -65,13 +60,14 @@ public class FormationCreator : EditorWindow
                 placeholder.transform.parent = prefab.transform;
                 placeholder.transform.localPosition = Vector3.zero;
             }
-            foreach (var p in formations)
+            // load
+            foreach (var formation in formations)
             {
-                if (GUILayout.Button(p.name))
+                if (GUILayout.Button(formation.name))
                 {
                     prefab = new GameObject("___Formation", typeof(Formation));
-                    formationName = p.name;
-                    foreach (var position in p.GetComponent<Formation>().positions)
+                    formationName = formation.name;
+                    foreach (var position in formation.positions)
                     {
                         var placeholder = (GameObject)GameObject.CreatePrimitive(PrimitiveType.Sphere);
                         placeholder.transform.parent = prefab.transform;
@@ -132,8 +128,8 @@ public class FormationCreator : EditorWindow
         // delete old
         if (overwrite)
         {
-            Debug.Log("Deleting: " + FORMATIONPATH + oldFormation.name);
-            AssetDatabase.DeleteAsset(FORMATIONPATH + oldFormation.name + ".prefab");
+            Debug.Log("Deleting: " + Formation.FORMATIONPATH + oldFormation.name);
+            AssetDatabase.DeleteAsset(Formation.FORMATIONPATH + oldFormation.name + ".prefab");
         }
 
         GameObject savedPrefab = new GameObject(formationName, typeof(Formation));
@@ -143,26 +139,10 @@ public class FormationCreator : EditorWindow
         {
             savedPrefab.GetComponent<Formation>().positions[i] = prefab.transform.GetChild(i).localPosition;
         }
-        PrefabUtility.CreatePrefab(FORMATIONPATH + "Formation " + formationName + ".prefab", savedPrefab);
+        PrefabUtility.CreatePrefab(Formation.FORMATIONPATH + formationName + ".prefab", savedPrefab);
         DestroyImmediate(savedPrefab);
 
-        LoadFormations();
-    }
-
-
-    private void LoadFormations()
-    {
-        string[] formationFiles = Directory.GetFiles(FORMATIONPATH);
-        formations.Clear();
-
-        for (int i = 0; i < formationFiles.Length; i++)
-        {
-            Object formation = AssetDatabase.LoadAssetAtPath(formationFiles[i], typeof(GameObject));
-            if (formation != null && PrefabUtility.GetPrefabType(formation) == PrefabType.Prefab)
-            {
-                formations.Add(formation as GameObject);
-            }
-        }
+        formations = Formation.AllFormations();
     }
 
     #endregion

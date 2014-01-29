@@ -141,6 +141,11 @@ public class Debugger : Singleton<Debugger>
             Debug.Log(count + ": " + item);
             count++;
         }
+
+        if (count == 0)
+        {
+            Debug.Log("Empty");
+        }
     }
 
     #endregion

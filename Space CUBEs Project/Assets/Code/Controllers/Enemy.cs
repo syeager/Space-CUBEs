@@ -8,7 +8,7 @@ using UnityEngine;
 /// Base class for all enemies.
 /// </summary>
 [RequireComponent(typeof(PoolObject))]
-public abstract class Enemy : Ship
+public class Enemy : Ship
 {
     #region References
 
@@ -25,6 +25,12 @@ public abstract class Enemy : Ship
     public Classes enemyClass;
     public int score;
     public int money;
+
+    #endregion
+
+    #region Protected Fields
+
+    protected Path path;
 
     #endregion
 
@@ -54,8 +60,9 @@ public abstract class Enemy : Ship
 
     #region Public Methods
 
-    public void Spawn()
+    public void Spawn(Path path)
     {
+        this.path = path;
         myHealth.Initialize();
         stateMachine.Start(new Dictionary<string, object>());
     }
@@ -72,12 +79,6 @@ public abstract class Enemy : Ship
             player.RecieveKill(enemyClass, score, money);
         }
     }
-
-    #endregion
-
-    #region Abstract Methods
-
-    public abstract void Spawn(Vector3 stopPosition);
 
     #endregion
 }
