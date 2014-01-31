@@ -13,12 +13,16 @@ public class ConstructionGrid : MonoBase
 {
     #region Public Fields
 
+    /// <summary>Used to show center of the grid.</summary>
     public GameObject Center_Prefab;
+    /// <summary>GameObject representations of the grid's cells.</summary>
     public GameObject Cell_Prefab;
+    /// <summary>Cell color when cursor is in cell.</summary>
     public Material CellCursor_Mat;
+    /// <summary>Cell color when nothing is in cell.</summary>
     public Material CellOpen_Mat;
-    public Material CellClosed_Mat;
-    public Material CellHover_Mat;
+
+    /// <summary>Different statuses of the cursor.</summary>
     public enum CursorStatuses
     {
         None,
@@ -26,51 +30,68 @@ public class ConstructionGrid : MonoBase
         Holding,
     }
 
-    public bool showWholeGrid = true;
-
+    /// <summary>Name of the build. Set in a textfield by player.</summary>
     public string buildName;
 
     #endregion
 
     #region Private Fields
 
+    /// <summary>Matrix with cells that hold references to the CUBE that currently occupies them.</summary>
     private CUBE[][][] grid;
+    /// <summary>Matrix that holds references to all of the cell gameObjects.</summary>
     private GameObject[][][] cells;
-    private Vector3 cursorOffset;
+
+    /// <summary>All of the CUBEs currently placed.</summary>
     private Dictionary<CUBE, CUBEGridInfo> currentBuild = new Dictionary<CUBE, CUBEGridInfo>();
+    /// <summary>Parent of all of the CUBEs.</summary>
     private GameObject ship;
-    private Quaternion rotation = new Quaternion(0, 0, 0, 1);
+
+    public Vector3 cursorOffset;
 
     #endregion
 
     #region Const Fields
 
-    private const string USERBUILDSPATH = "UserBuilds: ";
+    /// <summary>Prefix for path to user created ships in PlayerPrefs.</summary>
+    private const string USERBUILDSPATH = "UserBuilds: "; // UserBuild: 
+    /// <summary>Prefix for path to dev created ships in PlayerPrefs.</summary>
     private const string DEVBUILDSPATH = "DevBuilds: ";
-    private const string MESHPATH = "Assets/Ship/Characters/";
-    private const string PREFABPATH = "Assets/Ship/Characters/";
+    /// <summary>Path to the folder with the enemy combined meshes.</summary>
+    private const string ENEMYMESHPATH = "Assets/Ship/Characters/";
+    /// <summary>Path to the folder with the enemy prefabs.</summary>
+    private const string ENEMYPREFABPATH = "Assets/Ship/Characters/";
+    /// <summary>Character used to separate data when joined into a string.</summary>
     private const char DATASEP = '|';
 
     #endregion
 
     #region Properties
 
+    /// <summary>Size of each dimension of the grid.</summary>
     public int size { get; private set; }
+
+    /// <summary>Position of the cursor in the grid.</summary>
     public Vector3 cursor { get; private set; }
-    public Vector3 cursorRotation { get; private set; }
-    public int currentLayer { get; private set; }
-    public CursorStatuses cursorStatus { get; private set; }
-    public CUBE currentCUBE { get; private set; }
-    private Vector3 cursorPosition
+    /// <summary>Rotation of the cursor.</summary>
+    public Quaternion cursorRotation { get; private set; }
+    public int currentLayer { get; private set; } // replace with cursorPosition.y? or is currentLayer center-zeroed?
+    /// <summary>World position of the cell that is occupied by the cursor</summary>
+    private Vector3 cursorWorldPosition
     {
         get
         {
             return cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].transform.position;
         }
     }
-    private Weapon[] _weapons = new Weapon[6];
-    public Weapon[] weapons { get { return _weapons; } private set { _weapons = value; } }
-    private int weaponsIndex
+    /// <summary>Current status of the cursor.</summary>
+    public CursorStatuses cursorStatus { get; private set; }
+    /// <summary>Current CUBE being held.</summary>
+    public CUBE heldCUBE { get; private set; }
+    /// <summary>Weapon slots for the ship.</summary>
+    public Weapon[] weapons { get; private set; }
+    /// <summary>Returns the next free weapon slot. -1 if all are taken.</summary>
+    private int nextWeaponSlot
     {
         get
         {
@@ -85,11 +106,16 @@ public class ConstructionGrid : MonoBase
         }
     }
 
+    /// <summary>Current health of the ship.</summary>
     public float shipHealth { get; private set; }
+    /// <summary>Current shield of the ship.</summary>
     public float shipShield { get; private set; }
+    /// <summary>Current speed of the ship.</summary>
     public float shipSpeed { get; private set; }
+    /// <summary>Current weapon count of the ship.</summary>
     public int shipWeapons { get; private set; }
 
+    /// <summary>Player's CUBE inverntory.</summary>
     public int[] inventory { get; private set; }
 
     #endregion
@@ -103,22 +129,28 @@ public class ConstructionGrid : MonoBase
 
     #region Public Methods
 
-    public void CreateGrid()
-    {
-        CreateGrid(size);
-    }
-
-
+    /// <summary>
+    /// Create and initialize grid, cells, ship, and cursor.
+    /// </summary>
+    /// <param name="size">Size of the grid's dimensions.</param>
     public void CreateGrid(int size)
     {
+        // get player inventory
         inventory = CUBE.GetInventory();
 
+        // set start cursor rotation
+        cursorRotation = new Quaternion(0, 0, 0, 1);
+
+        // clear previous values
         Clear();
+
+        // initialize
         this.size = size;
         grid = new CUBE[size][][];
         cells = new GameObject[size][][];
-        Vector3 cursor = new Vector3(-size / 2f +  0.5f, 0f, -size / 2f + 0.5f);
-        
+        Vector3 cursor = new Vector3(-size / 2f + 0.5f, 0f, -size / 2f + 0.5f);
+
+        // create grid and cells
         for (int i = 0; i < size; i++)
         {
             grid[i] = new CUBE[size][];
@@ -136,12 +168,9 @@ public class ConstructionGrid : MonoBase
                     cells[i][j][k] = (GameObject)GameObject.Instantiate(Cell_Prefab);
                     cells[i][j][k].transform.parent = transform;
                     cells[i][j][k].transform.localPosition = cursor;
-                    if (!showWholeGrid)
+                    if (i != 0)
                     {
-                        if (i != 0)
-                        {
-                            cells[i][j][k].SetActive(false);
-                        }
+                        cells[i][j][k].SetActive(false);
                     }
                     cursor.x++;
                 }
@@ -150,62 +179,72 @@ public class ConstructionGrid : MonoBase
             cursor.y++;
         }
 
+        // set current layer and cursor
         currentLayer = 0;
         ChangeLayer(Mathf.FloorToInt(size / 2f));
-        cursor = Vector3.one*Mathf.FloorToInt(size/2f);
+        cursor = Vector3.one * Mathf.FloorToInt(size / 2f);
+
+        // create ship
         if (ship == null)
         {
             ship = new GameObject("Ship");
         }
         ship.transform.position = transform.position + Vector3.up * (size / 2f + 0.5f);
+
+        // create grid center
         GameObject.Instantiate(Center_Prefab, ship.transform.position, Quaternion.identity);
-        weapons = new Weapon[Player.WEAPONLIMIT];
     }
 
 
+    /// <summary>
+    /// Rotate the cursor around an axis.
+    /// </summary>
+    /// <remarks>Only use unit vectors. Usually Y and Z.</remarks>
+    /// <param name="axis">Unit vector to rotate around.</param>
     public void RotateCursor(Vector3 axis)
     {
-        rotation = Quaternion.Euler(axis * 90f) * rotation;
-        cursorRotation = rotation.eulerAngles;
+        // quaternion math to get new angle
+        cursorRotation = Quaternion.Euler(axis * 90f) * cursorRotation;
 
-        if (currentCUBE != null)
+        // rotate currently held CUBE
+        if (heldCUBE != null)
         {
-            currentCUBE.transform.rotation = rotation;
+            heldCUBE.transform.rotation = cursorRotation;
         }
     }
 
 
+    /// <summary>
+    /// Move the cursor to another cell.
+    /// </summary>
+    /// <param name="vector">Vector to move cursor.</param>
     public void MoveCursor(Vector3 vector)
     {
-        //if (grid[(int)cursor.y][(int)cursor.z][(int)cursor.x])
-        //{
-        //    cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].renderer.material = CellClosed_Mat;
-        //}
-        //else
-        {
-            cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].renderer.material = CellOpen_Mat;
-        }
+        // reset last cell to open color
+        cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].renderer.material = CellOpen_Mat;
 
+        // contain new position within grid
         if (cursor.x + vector.x < 0 || cursor.x + vector.x > size - 1) vector.x = 0f;
         if (cursor.y + vector.y < 0 || cursor.y + vector.y > size - 1) vector.y = 0f;
         if (cursor.z + vector.z < 0 || cursor.z + vector.z > size - 1) vector.z = 0f;
+        // move cursor
         cursor += vector;
 
+        // set new cursor cell to cursor color
         cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].renderer.material = CellCursor_Mat;
 
-        if (currentCUBE != null)
+        // move currently held CUBE
+        if (heldCUBE != null)
         {
-            currentCUBE.transform.position += vector;
-        }
-
-        if (currentCUBE != null)
-        {
+            heldCUBE.transform.position += vector;
             cursorStatus = CursorStatuses.Holding;
         }
+        // set status to hover
         else if (grid[(int)cursor.y][(int)cursor.z][(int)cursor.x] != null)
         {
             cursorStatus = CursorStatuses.Hover;
         }
+        // set status to none
         else
         {
             cursorStatus = CursorStatuses.None;
@@ -213,52 +252,60 @@ public class ConstructionGrid : MonoBase
     }
 
 
+    /// <summary>
+    /// Move the cursor up or down.
+    /// </summary>
+    /// <param name="amount">Direction and distance to move.</param>
     public void ChangeLayer(int amount)
     {
-        int newLayer = Mathf.Clamp(currentLayer + amount, 0, size-1);
+        // clamp new layer to inside grid and return if didn't move
+        int newLayer = Mathf.Clamp(currentLayer + amount, 0, size - 1);
         if (newLayer == currentLayer) return;
 
-        if (!showWholeGrid)
-        // toggle cells
+        // toggle cell colors in the previous and new layers
+        for (int i = 0; i < size; i++)
         {
-            for (int i = 0; i < size; i++)
+            for (int j = 0; j < size; j++)
             {
-                for (int j = 0; j < size; j++)
-                {
-                    cells[currentLayer][i][j].SetActive(false);
-                    cells[newLayer][i][j].SetActive(true);
-                }
-            }
-
-            // toggle CUBEs
-            foreach (var cube in currentBuild)
-            {
-                if (cube.Value.position.y > newLayer) foreach (var mat in cube.Key.renderer.materials) mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, 0.25f);
-                if (cube.Value.position.y == newLayer) foreach (var mat in cube.Key.renderer.materials) mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, 1f);
+                cells[currentLayer][i][j].SetActive(false);
+                cells[newLayer][i][j].SetActive(true);
             }
         }
 
-        // move camera
-        Camera.main.transform.position += Vector3.up * amount;
+        // toggle CUBE colors; alpha for CUBEs in a higher layer than the new layer; full opacity for CUBEs on the same layer
+        foreach (var cube in currentBuild)
+        {
+            if (cube.Value.position.y > newLayer) foreach (var mat in cube.Key.renderer.materials) mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, 0.25f);
+            if (cube.Value.position.y == newLayer) foreach (var mat in cube.Key.renderer.materials) mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, 1f);
+        }
 
+        // set new layer
         currentLayer = newLayer;
+        // move the cursor
         MoveCursor(Vector3.up * amount);
     }
 
 
+    /// <summary>
+    /// Creates CUBE and added to cursor.
+    /// </summary>
+    /// <param name="CUBEID">ID of the CUBE to create.</param>
     public void CreateCUBE(int CUBEID)
     {
-        if (currentCUBE != null)
+        // destroy currently held CUBE
+        if (heldCUBE != null)
         {
-            Destroy(currentCUBE.gameObject);
+            Destroy(heldCUBE.gameObject);
         }
 
+        // reset offset
         cursorOffset = Vector3.zero;
-
-        currentCUBE = (CUBE)GameObject.Instantiate(GameResources.GetCUBE(CUBEID));
-        currentCUBE.transform.position = cursorPosition;
-        currentCUBE.transform.eulerAngles = cursorRotation;
-
+        // create new CUBE
+        heldCUBE = (CUBE)GameObject.Instantiate(GameResources.GetCUBE(CUBEID));
+        // set to cursor position and rotation
+        heldCUBE.transform.position = cursorWorldPosition;
+        heldCUBE.transform.rotation = cursorRotation;
+        // update status
         cursorStatus = CursorStatuses.Holding;
     }
 
@@ -269,10 +316,12 @@ public class ConstructionGrid : MonoBase
     /// <param name="loadAnother">Should another CUBE be loaded of the same type that was placed?</param>
     public void CursorAction(bool loadAnother)
     {
-        if (currentCUBE != null)
+        // place currenlty held CUBE
+        if (heldCUBE != null)
         {
             PlaceCUBE(loadAnother);
         }
+        // pick up CUBE if possible
         else if (grid[(int)cursor.y][(int)cursor.z][(int)cursor.x] != null)
         {
             PickupCUBE(grid[(int)cursor.y][(int)cursor.z][(int)cursor.x]);
@@ -280,21 +329,25 @@ public class ConstructionGrid : MonoBase
     }
 
 
-    public int DeleteCUBE()
+    /// <summary>
+    /// If there is a CUBE being held, delete it.
+    /// </summary>
+    public void DeleteCUBE()
     {
-        if (currentCUBE == null) return -1;
+        if (heldCUBE == null) return;
 
-        int ID = currentCUBE.ID;
-        RemoveCUBE(currentCUBE);
-        Destroy(currentCUBE.gameObject);
-        currentCUBE = null;
+        RemoveCUBE(heldCUBE);
+        Destroy(heldCUBE.gameObject);
+        heldCUBE = null;
         cursorStatus = CursorStatuses.None;
-
-        return ID;
     }
 
 
-    public string SaveToData()
+    /// <summary>
+    /// Save build to data.
+    /// </summary>
+    /// <returns>String representation of build's BuildInfo.</returns>
+    public string SaveBuild()
     {
         StringBuilder build = new StringBuilder();
 
@@ -327,35 +380,43 @@ public class ConstructionGrid : MonoBase
 
         // save
         string path;
-        #if DEVMODE
+#if DEVMODE
         path = DEVBUILDSPATH;
-        #else  
+#else
         path = USERBUILDSPATH;
-        #endif
+#endif
         PlayerPrefs.SetString(path + buildName, buildString);
         // add to list of all buildNames
 
+#if DEVMODE
         // compact and prefab ship
-        #if DEVMODE
         StartCoroutine(SavePrefab());
-        #endif
-        
-        //Log(build, true, Debugger.LogTypes.Data); // causes crash in mobile
+#endif
+
+        Log(build, true, Debugger.LogTypes.Data); // might cause crash on mobile
         return buildString;
     }
 
 
-    public void Load(string build)
+    /// <summary>
+    /// Loads build from data and creates it in grid.
+    /// </summary>
+    /// <param name="build">Name of the build.</param>
+    public void CreateBuild(string build)
     {
-        Clear();
-        var buildInfo = LoadFromData(build);
+        // load build's info
+        BuildInfo buildInfo = LoadBuild(build);
         if (buildInfo == null) return;
 
-        var position = cursor;
+        // clear current values
+        Clear();
+
+        // run through build list and create build (this adds stats)
+        Vector3 position = cursor;
         foreach (var piece in buildInfo.partList)
         {
             cursor = piece.Value.position;
-            cursorRotation = piece.Value.rotation;
+            cursorRotation = Quaternion.Euler(piece.Value.rotation);
             CreateCUBE(piece.Key);
             PlaceCUBE(piece.Value.weaponMap);
         }
@@ -363,26 +424,37 @@ public class ConstructionGrid : MonoBase
     }
 
 
+    /// <summary>
+    /// Swap weapon slots.
+    /// </summary>
+    /// <param name="index">Weapon slot to move.</param>
+    /// <param name="direction">Direction and distance to move.</param>
     public void MoveWeaponMap(int index, int direction)
     {
-        if (index == -1) return;
-        if (index + direction >= weapons.Length || index + direction < 0) return;
         if (weapons[index] == null) return;
 
+        // get new slot index and return if out of bounds
+        int newSlot = index + direction;
+        if (newSlot >= weapons.Length || newSlot < 0) return;
+        
+        // cache weapon
         Weapon saved = weapons[index];
+        // update weapon's weaponmap
         currentBuild[saved.GetComponent<CUBE>()].weaponMap += direction;
-        weapons[index] = weapons[index + direction];
+        // swap
+        weapons[index] = weapons[newSlot];
         if (weapons[index] != null)
         {
             currentBuild[weapons[index].GetComponent<CUBE>()].weaponMap -= direction;
         }
-        weapons[index + direction] = saved;
+        weapons[newSlot] = saved;
     }
+    
 
-
+    [Obsolete("Move to a new class.")]
     public IEnumerator Build(string build, int buildSize, Vector3 startPosition, Vector3 startRotation, float maxTime)
     {
-        var buildInfo = LoadFromData(build);
+        var buildInfo = LoadBuild(build);
         if (buildInfo == null)
         {
             if (BuildFinishedEvent != null)
@@ -397,7 +469,7 @@ public class ConstructionGrid : MonoBase
 
         const float minDist = 10f;
         const float maxDist = 25f;
-        Vector3 halfGrid = Vector3.one * (buildSize/2f - 0.5f);
+        Vector3 halfGrid = Vector3.one * (buildSize / 2f - 0.5f);
         finishedShip.transform.position = startPosition;
         finishedShip.transform.eulerAngles = startRotation;
         float speed = (finishedShip.transform.position * maxDist).magnitude / maxTime;
@@ -407,7 +479,7 @@ public class ConstructionGrid : MonoBase
             var cube = (CUBE)GameObject.Instantiate(GameResources.GetCUBE(piece.Key));
             cube.transform.parent = finishedShip.transform;
 
-            cube.transform.localPosition = piece.Value.position*UnityEngine.Random.Range(minDist, maxDist);
+            cube.transform.localPosition = piece.Value.position * UnityEngine.Random.Range(minDist, maxDist);
             cube.transform.localPosition = Quaternion.Euler(UnityEngine.Random.Range(0, 360), UnityEngine.Random.Range(0, 360), UnityEngine.Random.Range(0, 360)) * cube.transform.localPosition;
             cube.transform.localEulerAngles = piece.Value.rotation;
 
@@ -418,7 +490,7 @@ public class ConstructionGrid : MonoBase
 
             cube.GetComponent<ColorVertices>().Bake();
 
-            pieces.Add(new BuildCUBE(cube.transform, piece.Value.position-halfGrid, speed));
+            pieces.Add(new BuildCUBE(cube.transform, piece.Value.position - halfGrid, speed));
         }
 
         float time = maxTime;
@@ -431,7 +503,7 @@ public class ConstructionGrid : MonoBase
             time -= deltaTime;
             yield return null;
         }
-        
+
         if (BuildFinishedEvent != null)
         {
             BuildFinishedEvent(this, new BuildFinishedArgs(finishedShip, buildInfo.health, buildInfo.shield, buildInfo.speed));
@@ -442,12 +514,14 @@ public class ConstructionGrid : MonoBase
 
     #region Private Methods
 
+    /// <summary>
+    /// Clear all data.
+    /// </summary>
     private void Clear()
     {
         if (grid == null) return;
 
-        weapons = new Weapon[Player.WEAPONLIMIT];
-
+        // create grid and set all cells to null
         for (int i = 0; i < grid.Length; i++)
         {
             for (int j = 0; j < grid[i].Length; j++)
@@ -459,29 +533,37 @@ public class ConstructionGrid : MonoBase
             }
         }
 
+        // destroy any placed CUBEs
         foreach (var cube in currentBuild)
         {
             Destroy(cube.Key.gameObject);
         }
         currentBuild.Clear();
+
+        // new weapons array according to player.WEAPONLIMIT
+        weapons = new Weapon[Player.WEAPONLIMIT];
     }
 
 
+    /// <summary>
+    /// Checks to see if the currently held CUBE fits in the grid and is not in other CUBEs.
+    /// </summary>
+    /// <returns></returns>
     private bool Fits()
     {
-        if (currentCUBE == null) return false;
+        if (heldCUBE == null) return false;
 
-        // pivot
+        // test pivot against grid bounds and other placed CUBEs
         Vector3 pivot = cursor;
         if (pivot.x < 0 || pivot.x > size - 1) return false;
         if (pivot.y < 0 || pivot.y > size - 1) return false;
         if (pivot.z < 0 || pivot.z > size - 1) return false;
         if (grid[(int)pivot.y][(int)pivot.z][(int)pivot.x]) return false;
 
-        // empty for pieces
-        foreach (var piece in currentCUBE.pieces)
+        // test all pieces against grid bounds and other placed CUBEs
+        foreach (var piece in heldCUBE.pieces)
         {
-            Vector3 position = pivot - cursorOffset + Rotate(piece);
+            Vector3 position = pivot - cursorOffset + RotatePiece(piece);
             if (position.x < 0 || position.x > size - 1) return false;
             if (position.y < 0 || position.y > size - 1) return false;
             if (position.z < 0 || position.z > size - 1) return false;
@@ -491,89 +573,90 @@ public class ConstructionGrid : MonoBase
         return true;
     }
 
-
-    private Vector3 Rotate(Vector3 piece)
+    
+    /// <summary>
+    /// Rotates a CUBE piece by the cursorRotation.
+    /// </summary>
+    /// <param name="localPostion">Piece.</param>
+    /// <returns>New piece position.</returns>
+    private Vector3 RotatePiece(Vector3 localPostion)
     {
-        var z = RotationMatrixZ(cursorRotation.z);
-        var y = RotationMatrixY(cursorRotation.y);
+        Matrix4x4 z = Utility.RotationMatrixZ(cursorRotation.eulerAngles.z);
+        Matrix4x4 y = Utility.RotationMatrixY(cursorRotation.eulerAngles.y);
 
-        return y.MultiplyVector(z.MultiplyVector(piece));
+        return y.MultiplyVector(z.MultiplyVector(localPostion));
     }
 
 
-    private float Sin(float angle)
-    {
-        if (angle == 90) return 1f;
-        else if (angle == 270) return -1f;
-
-        return 0f;
-    }
-
-
-    private float Cos(float angle)
-    {
-        if (angle == 0) return 1f;
-        else if (angle == 180) return -1f;
-
-        return 0f;
-    }
-
-
+    /// <summary>
+    /// Pick up a CUBE from the grid.
+    /// </summary>
+    /// <param name="cube">CUBE to pick up.</param>
     private void PickupCUBE(CUBE cube)
     {
-        currentCUBE = cube;
-        inventory[currentCUBE.ID]++;
-        cursorRotation = currentBuild[currentCUBE].rotation;
-        rotation = Quaternion.Euler(cursorRotation);
-        cursorOffset = cursorPosition - currentCUBE.transform.position;
+        // grab CUBE
+        heldCUBE = cube;
+        // stock inventory
+        inventory[heldCUBE.ID]++;
+        // set cursorRotation to CUBE's rotation
+        cursorRotation = Quaternion.Euler(currentBuild[heldCUBE].rotation);
+        // get difference between pivot and cursor
+        cursorOffset = cursorWorldPosition - heldCUBE.transform.position;
+        // remove CUBE from build
         RemoveCUBE(cube);
+        // set status
         cursorStatus = CursorStatuses.Holding;
     }
 
 
+    /// <summary>
+    /// Place held CUBE into the build.
+    /// </summary>
+    /// <param name="weaponIndex">Index of the weapon.</param>
+    /// <returns>True, if the CUBE was successfully placed.</returns>
     private bool PlaceCUBE(int weaponIndex = -1)
     {
-        if (currentCUBE == null) return false;
+        if (heldCUBE == null) return false;
         if (!Fits()) return false;
 
-        if (inventory[currentCUBE.ID] > 0)
+        // update inventory
+        if (inventory[heldCUBE.ID] > 0)
         {
-            inventory[currentCUBE.ID]--;
+            inventory[heldCUBE.ID]--;
         }
         else
         {
             return false;
         }
 
-        if (currentCUBE.type == CUBE.Types.Weapon)
+        // add to weapons if applicable
+        if (weaponIndex != -1)
         {
-            if (weaponIndex == -1)
-            {
-                weaponIndex = weaponsIndex;
-            }
-            weapons[weaponIndex] = currentCUBE.GetComponent<Weapon>();
-            currentBuild.Add(currentCUBE, new CUBEGridInfo(cursor - cursorOffset, cursorRotation, weaponIndex));
+            weapons[weaponIndex] = heldCUBE.GetComponent<Weapon>();
+            currentBuild.Add(heldCUBE, new CUBEGridInfo(cursor - cursorOffset, cursorRotation.eulerAngles, weaponIndex));
         }
         else
         {
-            currentBuild.Add(currentCUBE, new CUBEGridInfo(cursor - cursorOffset, cursorRotation, -1));
+            currentBuild.Add(heldCUBE, new CUBEGridInfo(cursor - cursorOffset, cursorRotation.eulerAngles, -1));
         }
 
-        // add all pieces
-        foreach (var piece in currentCUBE.pieces)
+        // add all of the CUBE's pieces to the grid
+        foreach (var piece in heldCUBE.pieces)
         {
-            Vector3 rotatedPiece = cursor - cursorOffset + Rotate(piece);
-            grid[(int)rotatedPiece.y][(int)rotatedPiece.z][(int)rotatedPiece.x] = currentCUBE;
-            //cells[(int)rotatedPiece.y][(int)rotatedPiece.z][(int)rotatedPiece.x].renderer.material = CellClosed_Mat;
+            Vector3 rotatedPiece = cursor - cursorOffset + RotatePiece(piece);
+            grid[(int)rotatedPiece.y][(int)rotatedPiece.z][(int)rotatedPiece.x] = heldCUBE;
         }
 
-        // stats
-        shipHealth += currentCUBE.health;
-        shipShield += currentCUBE.shield;
-        shipSpeed += currentCUBE.speed;
+        // add CUBE's stats
+        shipHealth += heldCUBE.health;
+        shipShield += heldCUBE.shield;
+        shipSpeed += heldCUBE.speed;
 
-        currentCUBE.transform.parent = ship.transform;
-        currentCUBE = null;
+        // set parent to ship
+        heldCUBE.transform.parent = ship.transform;
+        // empty cursor
+        heldCUBE = null;
+        // reset
         cursorOffset = Vector3.zero;
         cursorStatus = CursorStatuses.Hover;
 
@@ -581,50 +664,61 @@ public class ConstructionGrid : MonoBase
     }
 
 
+    /// <summary>
+    /// Place held CUBE into the build and create another if applicable.
+    /// </summary>
+    /// <param name="loadAnother">Should another of the same CUBE be created after the current one is placed?</param>
+    /// <param name="weaponIndex">Index of the weapon.</param>
+    /// <returns>True, if the CUBE was successfully placed.</returns>
     private bool PlaceCUBE(bool loadAnother, int weaponIndex = -1)
     {
-        if (currentCUBE == null) return false;
-        int id = currentCUBE.ID;
-        if (PlaceCUBE(weaponIndex))
+        if (heldCUBE == null) return false;
+
+        int id = heldCUBE.ID;
+        if (PlaceCUBE(weaponIndex) && loadAnother)
         {
-            if (loadAnother)
-            {
-                CreateCUBE(id);
-            }
+            CreateCUBE(id);
             return true;
         }
         return false;
     }
 
 
+    /// <summary>
+    /// Remove CUBE from grid and all stats.
+    /// </summary>
+    /// <param name="cube"></param>
     private void RemoveCUBE(CUBE cube)
     {
-        // pivot 
-        Vector3 pivot = cursor;
+        // get pivot and rotation 
+        Vector3 pivot = cursor+cursorOffset; // needs offset?
         var rotationZ = Matrix4x4.identity;
         var rotationY = Matrix4x4.identity;
         if (currentBuild.ContainsKey(cube))
         {
             pivot = currentBuild[cube].position;
-            rotationZ = RotationMatrixZ(currentBuild[cube].rotation.z);
-            rotationY = RotationMatrixY(currentBuild[cube].rotation.y);
+            rotationZ = Utility.RotationMatrixZ(currentBuild[cube].rotation.z);
+            rotationY = Utility.RotationMatrixY(currentBuild[cube].rotation.y);
         }
 
-        // pieces
+        // remove all of CUBE's pieces
         foreach (var piece in cube.pieces)
         {
-            Vector3 rotatedPiece = pivot + rotationZ.MultiplyVector(rotationY.MultiplyVector(piece));
+            Vector3 rotatedPiece = pivot + rotationZ.MultiplyVector(rotationY.MultiplyVector(piece)); // needs offset?
             grid[(int)rotatedPiece.y][(int)rotatedPiece.z][(int)rotatedPiece.x] = null;
             cells[(int)rotatedPiece.y][(int)rotatedPiece.z][(int)rotatedPiece.x].renderer.material = CellOpen_Mat;
         }
 
-        if (currentCUBE.type == CUBE.Types.Weapon && weapons.Contains(currentCUBE.GetComponent<Weapon>()))
+        // remove weapon if applicable
+        if (heldCUBE.type == CUBE.Types.Weapon && weapons.Contains(heldCUBE.GetComponent<Weapon>()))
         {
-            weapons[Array.IndexOf(weapons, currentCUBE.GetComponent<Weapon>())] = null;
+            weapons[Array.IndexOf(weapons, heldCUBE.GetComponent<Weapon>())] = null;
         }
+
+        // remove CUBE from current build
         currentBuild.Remove(cube);
 
-        // stats
+        // remove stats
         shipHealth -= cube.health;
         shipShield -= cube.shield;
         shipSpeed -= cube.speed;
@@ -633,39 +727,21 @@ public class ConstructionGrid : MonoBase
     }
 
 
-    private Matrix4x4 RotationMatrixZ(float angle)
-    {
-        return new Matrix4x4
-        {
-            m00 = Cos(angle), m01 = -Sin(angle), m02 = 0, m03 = 0,
-            m10 = Sin(angle), m11 = Cos(angle), m12 = 0, m13 = 0,
-            m20 = 0, m21 = 0, m22 = 1, m23 = 0,
-            m30 = 0, m31 = 0, m32 = 0, m33 = 1
-        };
-    }
-
-
-    private Matrix4x4 RotationMatrixY(float angle)
-    {
-        return new Matrix4x4
-        {
-            m00 = Cos(angle), m01 = 0, m02 = Sin(angle), m03 = 0,
-            m10 = 0, m11 = 1, m12 = 0, m13 = 0, 
-            m20 = -Sin(angle), m21 = 0, m22 = Cos(angle), m23 = 0,
-            m30 = 0, m31 = 0, m32 = 0, m33 = 1
-        };
-    }
-
-
-    private BuildInfo LoadFromData(string buildName)
+    /// <summary>
+    /// Get build info from data.
+    /// </summary>
+    /// <param name="buildName">Name of the ship.</param>
+    /// <returns>BuildInfo for the ship.</returns>
+    private BuildInfo LoadBuild(string buildName)
     {
         this.buildName = buildName;
         string path;
-        #if DEVMODE
+#if DEVMODE
         path = DEVBUILDSPATH;
-        #else  
+#else
         path = USERBUILDSPATH;
-        #endif
+#endif
+        // get buildInfo string from data
         string build = PlayerPrefs.GetString(path + buildName, "NA");
         if (build == "NA")
         {
@@ -685,9 +761,9 @@ public class ConstructionGrid : MonoBase
         buildInfo.speed = float.Parse(info[2]);
         // pieces
         int i = 2;
-        while (i+4 < info.Length)
+        while (i + 4 < info.Length)
         {
-            buildInfo.partList.Add(new KeyValuePair<int, CUBEGridInfo>(int.Parse(info[++i]), 
+            buildInfo.partList.Add(new KeyValuePair<int, CUBEGridInfo>(int.Parse(info[++i]),
                                                                        new CUBEGridInfo(
                                                                            Utility.ParseV3(info[++i]),
                                                                            Utility.ParseV3(info[++i]),
@@ -698,6 +774,9 @@ public class ConstructionGrid : MonoBase
     }
 
 
+    /// <summary>
+    /// Compress the ship and save it to a prefab.
+    /// </summary>
     private IEnumerator SavePrefab()
     {
         // save weapons
@@ -715,18 +794,17 @@ public class ConstructionGrid : MonoBase
         {
             color.Bake();
         }
-        
+
         // create one mesh
         var compactor = ship.AddComponent<ShipCompactor>();
         var compShip = compactor.Compact(typeof(PoolObject));
 
         yield return new WaitForEndOfFrame();
-        #if UNITY_EDITOR
-        
-        UnityEditor.AssetDatabase.CreateAsset(compShip.GetComponent<MeshFilter>().mesh, MESHPATH + buildName + "_Mesh.asset");
-        UnityEditor.PrefabUtility.CreatePrefab(PREFABPATH + buildName + ".prefab", compShip.gameObject); // keeping children
+#if UNITY_EDITOR
 
-        #endif
+        UnityEditor.AssetDatabase.CreateAsset(compShip.GetComponent<MeshFilter>().mesh, ENEMYMESHPATH + buildName + "_Mesh.asset");
+        UnityEditor.PrefabUtility.CreatePrefab(ENEMYPREFABPATH + buildName + ".prefab", compShip.gameObject); // keeping children
+#endif
     }
 
     #endregion

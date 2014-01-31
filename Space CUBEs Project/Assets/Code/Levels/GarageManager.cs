@@ -148,22 +148,19 @@ public class GarageManager : MonoBehaviour
         // delete
         if (Input.GetKeyUp(KeyCode.Delete))
         {
-            if (Grid.DeleteCUBE() == -1)
-            {
-                Debugger.LogWarning("Can't delete CUBE.");
-            }
+            Grid.DeleteCUBE();
         }
 
         // build
         if (Input.GetKeyUp(KeyCode.Return))
         {
-            Grid.SaveToData();
+            Grid.SaveBuild();
         }
 
         // load
         if (Input.GetKeyDown(KeyCode.L))
         {
-            Grid.Load("Test Compact");
+            Grid.CreateBuild("Test Compact");
         }
     }
 
@@ -214,11 +211,11 @@ public class GarageManager : MonoBehaviour
     {
         if (GUI.Button(new Rect(0f, 0f, LeftMenuRect.width, LeftMenuRect.height * 0.2f), "Save"))
         {
-            Grid.SaveToData();
+            Grid.SaveBuild();
         }
         if (GUI.Button(new Rect(0f, LeftMenuRect.height * 0.2f, LeftMenuRect.width, LeftMenuRect.height * 0.2f), "Load"))
         {
-            Grid.Load(Grid.buildName);
+            Grid.CreateBuild(Grid.buildName);
         }
         if (GUI.Button(new Rect(0f, LeftMenuRect.height * 0.4f, LeftMenuRect.width, LeftMenuRect.height * 0.2f), "Test"))
         {
@@ -260,7 +257,7 @@ public class GarageManager : MonoBehaviour
 
         // cursor info
         GUI.Label(new Rect(0, h - w * 0.8f - h * 0.1f, w, h * 0.05f), "Position: " + Grid.cursor);
-        GUI.Label(new Rect(0, h - w * 0.8f - h * 0.05f, w, h * 0.05f), "Rotation: " + Grid.cursorRotation);
+        GUI.Label(new Rect(0, h - w * 0.8f - h * 0.05f, w, h * 0.05f), "Rotation: " + Grid.cursorRotation.eulerAngles);
 
         // move X/Z
         Rect moveXZ = new Rect(0, h-w*0.8f, w*0.8f, w*0.8f);
@@ -464,12 +461,12 @@ public class GarageManager : MonoBehaviour
         {
             GUI.Box(new Rect(0, 0, infoRect.width, infoRect.height), "");
 
-            if (Grid.currentCUBE != null)
+            if (Grid.heldCUBE != null)
             {
-                GUI.Label(new Rect(0, 0, infoRect.width, infoRect.height * 0.3f), Grid.currentCUBE.name.Substring(5, Grid.currentCUBE.name.Length-12));
-                GUI.Label(new Rect(0, infoRect.height * 0.3f, w, infoRect.height * 0.2f), "Health: " + Grid.currentCUBE.health);
-                GUI.Label(new Rect(0, infoRect.height * 0.5f, w, infoRect.height * 0.2f), "Shield: " + Grid.currentCUBE.shield);
-                GUI.Label(new Rect(0, infoRect.height * 0.7f, w, infoRect.height * 0.2f), "Speed: " + Grid.currentCUBE.speed);
+                GUI.Label(new Rect(0, 0, infoRect.width, infoRect.height * 0.3f), Grid.heldCUBE.name.Substring(5, Grid.heldCUBE.name.Length-12));
+                GUI.Label(new Rect(0, infoRect.height * 0.3f, w, infoRect.height * 0.2f), "Health: " + Grid.heldCUBE.health);
+                GUI.Label(new Rect(0, infoRect.height * 0.5f, w, infoRect.height * 0.2f), "Shield: " + Grid.heldCUBE.shield);
+                GUI.Label(new Rect(0, infoRect.height * 0.7f, w, infoRect.height * 0.2f), "Speed: " + Grid.heldCUBE.speed);
             }
         }
         GUI.EndGroup();

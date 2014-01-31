@@ -3,6 +3,9 @@
 
 using UnityEngine;
 
+/// <summary>
+/// Holds position, rotation, and weapon mapping for a CUBE in a construction grid build.
+/// </summary>
 public class CUBEGridInfo
 {
     public Vector3 position;

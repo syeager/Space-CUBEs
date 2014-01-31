@@ -1,6 +1,7 @@
 ﻿// Steve Yeager
 // 1.11.2014
 
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -8,7 +9,7 @@ using UnityEngine;
 /// </summary>
 public static class Utility
 {
-    #region Public Methods
+    #region Vector Methods
 
     /// <summary>
     /// Converts string to Vector3.
@@ -25,6 +26,103 @@ public static class Utility
         vector.z = float.Parse(split[2]);
 
         return vector;
+    }
+
+    #endregion
+
+    #region Math Methods
+
+    public static float SinZero(float angle)
+    {
+        float value = Mathf.Sin(angle * Mathf.PI / 180f);
+        if (Mathf.Abs(value) <= 0.000001f)
+        {
+            value = 0f;
+        }
+        return value;
+    }
+
+
+    public static float CosZero(float angle)
+    {
+        float value = Mathf.Cos(angle * Mathf.PI / 180f);
+        if (Mathf.Abs(value) <= 0.000001f)
+        {
+            value = 0f;
+        }
+        return value;
+    }
+
+
+    public static Matrix4x4 RotationMatrixX(float angle)
+    {
+        return new Matrix4x4
+        {
+            m00 = 1,
+            m01 = 0,
+            m02 = 0,
+            m03 = 0,
+            m10 = 0,
+            m11 = CosZero(angle),
+            m12 = -SinZero(angle),
+            m13 = 0,
+            m20 = 0,
+            m21 = SinZero(angle),
+            m22 = CosZero(angle),
+            m23 = 0,
+            m30 = 0,
+            m31 = 0,
+            m32 = 0,
+            m33 = 1
+        };
+    }
+
+
+    public static Matrix4x4 RotationMatrixY(float angle)
+    {
+        return new Matrix4x4
+        {
+            m00 = CosZero(angle),
+            m01 = 0,
+            m02 = SinZero(angle),
+            m03 = 0,
+            m10 = 0,
+            m11 = 1,
+            m12 = 0,
+            m13 = 0,
+            m20 = -SinZero(angle),
+            m21 = 0,
+            m22 = CosZero(angle),
+            m23 = 0,
+            m30 = 0,
+            m31 = 0,
+            m32 = 0,
+            m33 = 1
+        };
+    }
+
+
+    public static Matrix4x4 RotationMatrixZ(float angle)
+    {
+        return new Matrix4x4
+        {
+            m00 = CosZero(angle),
+            m01 = -SinZero(angle),
+            m02 = 0,
+            m03 = 0,
+            m10 = SinZero(angle),
+            m11 = CosZero(angle),
+            m12 = 0,
+            m13 = 0,
+            m20 = 0,
+            m21 = 0,
+            m22 = 1,
+            m23 = 0,
+            m30 = 0,
+            m31 = 0,
+            m32 = 0,
+            m33 = 1
+        };
     }
 
     #endregion
