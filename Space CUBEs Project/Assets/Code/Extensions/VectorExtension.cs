@@ -21,4 +21,11 @@ public static class VectorExtension
     {
         v = new Vector3(v.x, v.y, value);
     }
+
+
+    public static Vector3 Round(this Vector3 v)
+    {
+        return new Vector3(Mathf.RoundToInt(v.x), Mathf.RoundToInt(v.y), Mathf.RoundToInt(v.z));
+    }
+   
 }

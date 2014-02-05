@@ -9,11 +9,16 @@ public struct CUBEInfo
     public readonly int id;
     public readonly string name;
     public readonly CUBE.Types type;
+    // Combat Stats
     public readonly float health;
     public readonly float shield;
     public readonly float speed;
+    // Part Stats
     public readonly int rarity;
     public readonly int price;
+    // System Stats
+
+    // Agmentation Stats
 
 
     public CUBEInfo(int id, string name, CUBE.Types type, float health, float shield, float speed, int rarity, int price)

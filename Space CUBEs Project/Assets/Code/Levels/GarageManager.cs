@@ -4,13 +4,14 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using System.Collections;
 
 public class GarageManager : MonoBehaviour
 {
     #region References
 
     public ConstructionGrid Grid;
-    public GameObject mainCamera;
+    public Transform mainCamera;
 
     #endregion
 
@@ -18,10 +19,21 @@ public class GarageManager : MonoBehaviour
 
     public int gridSize;
 
+    public float cameraSpeed;
+    public float zoomSpeed;
+    public float zoomMin;
+    public float zoomMax;
+
+    public float swipeDist;
+    public float swipeTime;
+    public float pinchModifier;
+    public float pinchMin;
+
     #endregion
 
     #region Private Fields
 
+    private Transform cameraTarget;
     private float W;
     private float H;
 
@@ -37,16 +49,42 @@ public class GarageManager : MonoBehaviour
     private float CUBESize;
     private int weaponIndex = -1;
 
-    public enum Menus
+    private enum Menus
     {
         Menu = 0,
         CUBEs = 1,
         Nav = 2,
         Weapons = 3,
     }
-    public Menus menu;
+    private Menus menu;
 
     private int[] inventory;
+
+    private Vector3 cameraDirection = Vector3.up;
+    private float zoom = 15f;
+
+    #endregion
+
+    #region Readonly Fields
+
+    private readonly Vector3[] cameraPositions = new Vector3[6]
+    {
+        new Vector3(0, 1, 0),
+        new Vector3(0, -1, 0),
+        new Vector3(1, 0, 0),
+        new Vector3(-1, 0, 0),
+        new Vector3(0, 0, 1),
+        new Vector3(0, 0, -1),
+    };
+    private readonly Vector3[] cameraRotations = new Vector3[6]
+    {
+        new Vector3(90, 0, 0),
+        new Vector3(270, 180, 0),
+        new Vector3(0, 270, 0),
+        new Vector3(0, 90, 0),
+        new Vector3(0, 180, 0),
+        new Vector3(0, 0, 0),
+    };
 
     #endregion
 
@@ -58,6 +96,7 @@ public class GarageManager : MonoBehaviour
     public Rect ActionPer = new Rect(0.5f, 0.9f, 0.5f, 0.1f);
     public Rect InfoPer = new Rect(0.5f, 0.9f, 0.5f, 0.1f);
     public float CUBEPer = 0.1f;
+    private readonly Rect VIEWRECT = new Rect(0f, 0f, 1f, 1f);
 
     #endregion
 
@@ -69,6 +108,16 @@ public class GarageManager : MonoBehaviour
         UpdateScreen();
 
         Grid.CreateGrid(gridSize);
+        cameraTarget = new GameObject("Camera Target").transform;
+    }
+
+
+    private void Start()
+    {
+        Grid.RotateGrid(Vector3.up);
+        cameraTarget.position = CalculateTargetPostion(Vector3.up);
+        cameraTarget.rotation = Quaternion.Euler(cameraRotations[0]);
+        //Grid.RotateGrid(Vector3.up);
     }
 
 
@@ -82,27 +131,28 @@ public class GarageManager : MonoBehaviour
     }
 
 
-    [System.Diagnostics.Conditional("UNITY_STANDALONE")]
     private void Update()
     {
-        UpdateScreen();
+        UpdateCamera();
+
+#if UNITY_STANDALONE
 
         // move CUBE
         if (Input.GetKeyDown(KeyCode.A))
         {
-            Grid.MoveCursor(Vector3.left);
+            Grid.MoveCursor(-cameraTarget.right);
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
-            Grid.MoveCursor(Vector3.right);
+            Grid.MoveCursor(cameraTarget.right);
         }
         if (Input.GetKeyDown(KeyCode.W))
         {
-            Grid.MoveCursor(Vector3.forward);
+            Grid.MoveCursor(cameraTarget.up);
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
-            Grid.MoveCursor(Vector3.back);
+            Grid.MoveCursor(-cameraTarget.up);
         }
 
         // rotate CUBE
@@ -110,32 +160,66 @@ public class GarageManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
-                Grid.RotateCursor(Vector3.up);
+                Grid.RotateCursor(cameraTarget.forward);
             }
             if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
-                Grid.RotateCursor(Vector3.down);
+                Grid.RotateCursor(-cameraTarget.forward);
             }
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-                Grid.RotateCursor(Vector3.forward);
+                Grid.RotateCursor(cameraTarget.up);
             }
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
-                Grid.RotateCursor(Vector3.back);
+                Grid.RotateCursor(-cameraTarget.up);
             }
-            
+
         }
+        // rotate camera
+        else if (Input.GetKey(KeyCode.LeftControl))
+        {
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                RotateCamera(Vector3.right);
+            }
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                RotateCamera(Vector3.left);
+            }
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                RotateCamera(Vector3.up);
+            }
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                RotateCamera(Vector3.down);
+            }
+        }
+        // zoom
+        else if (Input.GetKey(KeyCode.LeftAlt))
+        {
+            if (Input.GetKey(KeyCode.UpArrow))
+            {
+                CameraZoom(-1f);
+            }
+            if (Input.GetKey(KeyCode.DownArrow))
+            {
+                CameraZoom(1f);
+            }
+        }
+        // change layer
         else
         {
-            // change layer
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-                Grid.ChangeLayer(1);
+                Grid.ChangeLayer(-1);
+                CameraZoom(0f);
             }
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
-                Grid.ChangeLayer(-1);
+                Grid.ChangeLayer(1);
+                CameraZoom(0f);
             }
         }
 
@@ -162,6 +246,38 @@ public class GarageManager : MonoBehaviour
         {
             Grid.CreateBuild("Test Compact");
         }
+
+#else
+
+        int touchCount = Input.touchCount;
+        // rotate camera
+        if (touchCount == 1)
+        {
+            Touch touch = Input.GetTouch(0);
+            if (touch.phase == TouchPhase.Began)
+            {
+                if (VIEWRECT.Contains(mainCamera.camera.ScreenToViewportPoint(touch.position)))
+                {
+                    StartCoroutine(Swipe(touch));
+                }
+            }
+        }
+        // zoom camera
+        else if (touchCount == 2)
+        {
+            Touch touchA = Input.GetTouch(0);
+            Touch touchB = Input.GetTouch(1);
+            if (touchA.phase == TouchPhase.Began || touchB.phase == TouchPhase.Began)
+            {
+                if (VIEWRECT.Contains(mainCamera.camera.ScreenToViewportPoint(touchA.position)) && VIEWRECT.Contains(mainCamera.camera.ScreenToViewportPoint(touchB.position)))
+                {
+                    StartCoroutine(Pinch());
+                }
+            }
+        }
+
+#endif
+
     }
 
     #endregion
@@ -245,7 +361,7 @@ public class GarageManager : MonoBehaviour
         }
 
         // rotate X
-        GUI.Label(new Rect(0, h*0.16f, w, h * 0.05f), "Rotate Z");
+        GUI.Label(new Rect(0, h * 0.16f, w, h * 0.05f), "Rotate Z");
         if (GUI.Button(new Rect(0, h * 0.21f, w * 0.5f, h * 0.1f), "←"))
         {
             Grid.RotateCursor(Vector3.forward);
@@ -256,32 +372,32 @@ public class GarageManager : MonoBehaviour
         }
 
         // cursor info
-        GUI.Label(new Rect(0, h - w * 0.8f - h * 0.1f, w, h * 0.05f), "Position: " + Grid.cursor);
+        GUI.Label(new Rect(0, h - w * 0.8f - h * 0.1f, w, h * 0.05f), "Position: " + (Grid.cursor + Vector3.one));
         GUI.Label(new Rect(0, h - w * 0.8f - h * 0.05f, w, h * 0.05f), "Rotation: " + Grid.cursorRotation.eulerAngles);
 
         // move X/Z
-        Rect moveXZ = new Rect(0, h-w*0.8f, w*0.8f, w*0.8f);
+        Rect moveXZ = new Rect(0, h - w * 0.8f, w * 0.8f, w * 0.8f);
         GUI.BeginGroup(moveXZ);
         {
             GUI.Box(new Rect(0, 0, moveXZ.width, moveXZ.height), "");
             float _w = moveXZ.width * 0.25f;
-            float _h = moveXZ.height * 0.5f -_w / 2f;
+            float _h = moveXZ.height * 0.5f - _w / 2f;
 
-            if (GUI.Button(new Rect(moveXZ.width/2f - _w/2f, 0f, _w, _h), "↑"))
+            if (GUI.Button(new Rect(moveXZ.width / 2f - _w / 2f, 0f, _w, _h), "↑"))
             {
-                Grid.MoveCursor(Vector3.forward);
+                Grid.MoveCursor(cameraTarget.up);
             }
-            if (GUI.Button(new Rect(moveXZ.width/2f - _w/2f, _h+_w, _w, _h), "↓"))
+            if (GUI.Button(new Rect(moveXZ.width / 2f - _w / 2f, _h + _w, _w, _h), "↓"))
             {
-                Grid.MoveCursor(Vector3.back);
+                Grid.MoveCursor(-cameraTarget.up);
             }
             if (GUI.Button(new Rect(0f, _h, _h, _w), "←"))
             {
-                Grid.MoveCursor(Vector3.left);
+                Grid.MoveCursor(-cameraTarget.right);
             }
-            if (GUI.Button(new Rect(_h+_w, _h, _h, _w), "→"))
+            if (GUI.Button(new Rect(_h + _w, _h, _h, _w), "→"))
             {
-                Grid.MoveCursor(Vector3.right);
+                Grid.MoveCursor(cameraTarget.right);
             }
         }
         GUI.EndGroup();
@@ -292,13 +408,15 @@ public class GarageManager : MonoBehaviour
         {
             GUI.Box(new Rect(0, 0, moveY.width, moveY.height), "");
 
-            if (GUI.Button(new Rect(0, 0, moveY.width, moveY.height*0.5f), "↑"))
+            if (GUI.Button(new Rect(0, 0, moveY.width, moveY.height * 0.5f), "↑"))
             {
                 Grid.ChangeLayer(1);
+                CameraZoom(0f);
             }
             if (GUI.Button(new Rect(0, moveY.height * 0.5f, moveY.width, moveY.height * 0.5f), "↓"))
             {
                 Grid.ChangeLayer(-1);
+                CameraZoom(0f);
             }
         }
         GUI.EndGroup();
@@ -316,7 +434,7 @@ public class GarageManager : MonoBehaviour
         {
             if (Grid.weapons[i] == null)
             {
-                GUI.Label(new Rect(0f, _h*i, w, _h), (i + 1) + ") ");
+                GUI.Label(new Rect(0f, _h * i, w, _h), (i + 1) + ") ");
             }
             else
             {
@@ -330,7 +448,7 @@ public class GarageManager : MonoBehaviour
         // move
         if (weaponIndex != -1 && Grid.weapons[weaponIndex] != null)
         {
-            if (GUI.Button(new Rect(0f, h-h/3f, w, h/6f), "↑"))
+            if (GUI.Button(new Rect(0f, h - h / 3f, w, h / 6f), "↑"))
             {
                 Grid.MoveWeaponMap(weaponIndex, -1);
                 weaponIndex--;
@@ -340,7 +458,7 @@ public class GarageManager : MonoBehaviour
                 Grid.MoveWeaponMap(weaponIndex, 1);
                 weaponIndex++;
             }
-            weaponIndex = Mathf.Clamp(weaponIndex, 0, Grid.weapons.Length-1);
+            weaponIndex = Mathf.Clamp(weaponIndex, 0, Grid.weapons.Length - 1);
         }
     }
 
@@ -402,7 +520,7 @@ public class GarageManager : MonoBehaviour
         float h = LeftMenuRect.height;
 
         // top
-        if (GUI.Button(new Rect(0f, 0f, w*0.25f, h*0.15f), allCUBEs ? "|" : "←") && !allCUBEs)
+        if (GUI.Button(new Rect(0f, 0f, w * 0.25f, h * 0.15f), allCUBEs ? "|" : "←") && !allCUBEs)
         {
             int cursor = (int)CUBEFilter;
             if (cursor == 0)
@@ -415,8 +533,8 @@ public class GarageManager : MonoBehaviour
                 CUBEFilter = (CUBE.Types)cursor;
             }
         }
-        GUI.Label(new Rect(w*0.25f, 0f, w*0.5f, h*0.15f), allCUBEs ? "All CUBE_Prefabs" : CUBEFilter.ToString());
-        if (GUI.Button(new Rect(w*0.75f, 0f, w*0.25f, h*0.15f), CUBEFilter == CUBE.Types.Wing ? "|" : "→") && CUBEFilter != CUBE.Types.Wing)
+        GUI.Label(new Rect(w * 0.25f, 0f, w * 0.5f, h * 0.15f), allCUBEs ? "All CUBE_Prefabs" : CUBEFilter.ToString());
+        if (GUI.Button(new Rect(w * 0.75f, 0f, w * 0.25f, h * 0.15f), CUBEFilter == CUBE.Types.Wing ? "|" : "→") && CUBEFilter != CUBE.Types.Wing)
         {
             allCUBEs = false;
             int cursor = (int)CUBEFilter;
@@ -463,7 +581,7 @@ public class GarageManager : MonoBehaviour
 
             if (Grid.heldCUBE != null)
             {
-                GUI.Label(new Rect(0, 0, infoRect.width, infoRect.height * 0.3f), Grid.heldCUBE.name.Substring(5, Grid.heldCUBE.name.Length-12));
+                GUI.Label(new Rect(0, 0, infoRect.width, infoRect.height * 0.3f), Grid.heldCUBE.name.Substring(5, Grid.heldCUBE.name.Length - 12));
                 GUI.Label(new Rect(0, infoRect.height * 0.3f, w, infoRect.height * 0.2f), "Health: " + Grid.heldCUBE.health);
                 GUI.Label(new Rect(0, infoRect.height * 0.5f, w, infoRect.height * 0.2f), "Shield: " + Grid.heldCUBE.shield);
                 GUI.Label(new Rect(0, infoRect.height * 0.7f, w, infoRect.height * 0.2f), "Speed: " + Grid.heldCUBE.speed);
@@ -478,7 +596,7 @@ public class GarageManager : MonoBehaviour
         GUI.BeginGroup(InfoRect);
         {
             // name
-            Grid.buildName = GUI.TextField(new Rect(0f, 0f, InfoRect.width, InfoRect.height*0.4f), Grid.buildName);
+            Grid.buildName = GUI.TextField(new Rect(0f, 0f, InfoRect.width, InfoRect.height * 0.4f), Grid.buildName);
 
             // health
             GUI.Label(new Rect(0f, InfoRect.height * 0.45f, InfoRect.width * 0.25f, InfoRect.height * 0.5f), "Health: " + Grid.shipHealth);
@@ -491,6 +609,136 @@ public class GarageManager : MonoBehaviour
         }
         GUI.EndGroup();
 
+    }
+
+
+    private IEnumerator Swipe(Touch startTouch)
+    {
+        float timer = swipeTime;
+        while (timer > 0f)
+        {
+            timer -= Time.deltaTime;
+
+            // retrieve touch
+            if (Input.touchCount != 1) yield break;
+            Touch touch = Input.GetTouch(0);
+
+            // determine if swipe
+            Vector2 vector = touch.position - startTouch.position;
+            if (vector.magnitude >= swipeDist)
+            {
+                // right
+                if (vector.x <= -swipeDist)
+                {
+                    RotateCamera(Vector3.right);
+                    yield break;
+                }
+                // left
+                else if (vector.x >= swipeDist)
+                {
+                    RotateCamera(Vector3.left);
+                    yield break;
+                }
+                // up
+                else if (vector.y <= -swipeDist)
+                {
+                    RotateCamera(Vector3.up);
+                    yield break;
+                }
+                // down
+                else if (vector.y >= swipeDist)
+                {
+                    RotateCamera(Vector3.down);
+                    yield break;
+                }
+            }
+
+            yield return null;
+        }
+    }
+
+
+    private IEnumerator Pinch()
+    {
+        Touch touchA = Input.GetTouch(0);
+        Touch touchB = Input.GetTouch(1);
+        float prevDist = Vector3.Distance(touchA.position, touchB.position);
+        while (Input.touchCount == 2)
+        {
+            touchA = Input.GetTouch(0);
+            touchB = Input.GetTouch(1);
+            float newDist = Vector3.Distance(touchA.position, touchB.position);
+            float deltaDist = newDist - prevDist;
+
+            if (Mathf.Abs(deltaDist) >= pinchMin)
+            {
+                CameraZoom(-deltaDist / pinchModifier);
+            }
+
+            prevDist = newDist;
+            yield return null;
+        }
+    }
+
+
+    /// <summary>
+    /// Sets position and rotation target of camera. Starts movement.
+    /// </summary>
+    /// <param name="direction"></param>
+    private void RotateCamera(Vector3 direction)
+    {
+        // convert camera position
+        cameraDirection = cameraTarget.TransformDirection(direction).Round();
+
+        int index = -1;
+        for (int i = 0; i < cameraPositions.Length; i++)
+        {
+            if (cameraDirection == cameraPositions[i])
+            {
+                index = i;
+                break;
+            }
+        }
+
+        // rotate grid
+        Grid.RotateGrid(cameraPositions[index]);
+
+        // set target position
+        cameraTarget.position = CalculateTargetPostion(cameraDirection);
+        // get target rotation
+        cameraTarget.rotation = Quaternion.Euler(cameraRotations[index]);
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="strength"></param>
+    private void CameraZoom(float strength)
+    {
+        zoom = Mathf.Clamp(zoom + (strength * zoomSpeed * Time.deltaTime), zoomMin, zoomMax);
+        cameraTarget.position = CalculateTargetPostion(cameraDirection);
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private void UpdateCamera()
+    {
+        mainCamera.position = Vector3.Lerp(mainCamera.position, cameraTarget.position, Time.deltaTime * cameraSpeed);
+        mainCamera.rotation = Quaternion.Slerp(mainCamera.rotation, cameraTarget.rotation, Time.deltaTime * cameraSpeed);
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="direction"></param>
+    /// <returns></returns>
+    private Vector3 CalculateTargetPostion(Vector3 direction)
+    {
+        return (Grid.layer + direction * zoom).Round();
     }
 
     #endregion

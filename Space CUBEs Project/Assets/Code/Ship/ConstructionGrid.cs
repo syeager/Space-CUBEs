@@ -41,6 +41,8 @@ public class ConstructionGrid : MonoBase
     private CUBE[][][] grid;
     /// <summary>Matrix that holds references to all of the cell gameObjects.</summary>
     private GameObject[][][] cells;
+    /// <summary>Center of the grid.</summary>
+    private Transform Center;
 
     /// <summary>All of the CUBEs currently placed.</summary>
     private Dictionary<CUBE, CUBEGridInfo> currentBuild = new Dictionary<CUBE, CUBEGridInfo>();
@@ -48,10 +50,13 @@ public class ConstructionGrid : MonoBase
     private GameObject ship;
 
     public Vector3 cursorOffset;
+    public Vector3 plane;
 
     #endregion
 
     #region Const Fields
+
+    private const float NEARALPHA = 0.5f;
 
     /// <summary>Prefix for path to user created ships in PlayerPrefs.</summary>
     private const string USERBUILDSPATH = "UserBuilds: "; // UserBuild: 
@@ -70,12 +75,33 @@ public class ConstructionGrid : MonoBase
 
     /// <summary>Size of each dimension of the grid.</summary>
     public int size { get; private set; }
+    /// <summary>Position of the center of the grid.</summary>
+    public Vector3 center { get { return Center.position; } }
+    //
+    public Vector3 layer
+    {
+        get
+        {
+            if (plane == Vector3.right || plane == Vector3.left)
+            {
+                return new Vector3(cursorWorldPosition.x, center.y, center.z);
+            }
+            else if (plane == Vector3.up || plane == Vector3.down)
+            {
+                return new Vector3(center.x, cursorWorldPosition.y, center.z);
+            }
+            else if (plane == Vector3.forward || plane == Vector3.back)
+            {
+                return new Vector3(center.x, center.y, cursorWorldPosition.z);
+            }
+            return Vector3.zero;
+        }
+    }
 
     /// <summary>Position of the cursor in the grid.</summary>
-    public Vector3 cursor { get; private set; }
+    public Vector3 cursor { get; private set;}
     /// <summary>Rotation of the cursor.</summary>
     public Quaternion cursorRotation { get; private set; }
-    public int currentLayer { get; private set; } // replace with cursorPosition.y? or is currentLayer center-zeroed?
     /// <summary>World position of the cell that is occupied by the cursor</summary>
     private Vector3 cursorWorldPosition
     {
@@ -141,9 +167,6 @@ public class ConstructionGrid : MonoBase
         // set start cursor rotation
         cursorRotation = new Quaternion(0, 0, 0, 1);
 
-        // clear previous values
-        Clear();
-
         // initialize
         this.size = size;
         grid = new CUBE[size][][];
@@ -180,19 +203,32 @@ public class ConstructionGrid : MonoBase
         }
 
         // set current layer and cursor
-        currentLayer = 0;
-        ChangeLayer(Mathf.FloorToInt(size / 2f));
-        cursor = Vector3.one * Mathf.FloorToInt(size / 2f);
+        this.cursor = new Vector3(4, 5, 4);
+        ChangeLayer(0);
 
         // create ship
         if (ship == null)
         {
             ship = new GameObject("Ship");
         }
-        ship.transform.position = transform.position + Vector3.up * (size / 2f + 0.5f);
+        ship.transform.position = transform.position + Vector3.up * (size / 2f - 0.5f);
+
+        // set up weapons
+        weapons = new Weapon[Player.WEAPONLIMIT];
 
         // create grid center
-        GameObject.Instantiate(Center_Prefab, ship.transform.position, Quaternion.identity);
+        Center = (Instantiate(Center_Prefab, ship.transform.position, Quaternion.identity) as GameObject).transform;
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="plane"></param>
+    public void RotateGrid(Vector3 plane)
+    {
+        this.plane = plane.Round();
+        ChangeLayer(0);
     }
 
 
@@ -220,13 +256,16 @@ public class ConstructionGrid : MonoBase
     /// <param name="vector">Vector to move cursor.</param>
     public void MoveCursor(Vector3 vector)
     {
+        // get rid of floating points
+        vector = vector.Round();
+
         // reset last cell to open color
         cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].renderer.material = CellOpen_Mat;
 
         // contain new position within grid
-        if (cursor.x + vector.x < 0 || cursor.x + vector.x > size - 1) vector.x = 0f;
-        if (cursor.y + vector.y < 0 || cursor.y + vector.y > size - 1) vector.y = 0f;
-        if (cursor.z + vector.z < 0 || cursor.z + vector.z > size - 1) vector.z = 0f;
+        if (cursor.x + vector.x < 0 || cursor.x + vector.x > size - 1) vector.x = 0;
+        if (cursor.y + vector.y < 0 || cursor.y + vector.y > size - 1) vector.y = 0;
+        if (cursor.z + vector.z < 0 || cursor.z + vector.z > size - 1) vector.z = 0;
         // move cursor
         cursor += vector;
 
@@ -258,31 +297,120 @@ public class ConstructionGrid : MonoBase
     /// <param name="amount">Direction and distance to move.</param>
     public void ChangeLayer(int amount)
     {
-        // clamp new layer to inside grid and return if didn't move
-        int newLayer = Mathf.Clamp(currentLayer + amount, 0, size - 1);
-        if (newLayer == currentLayer) return;
-
-        // toggle cell colors in the previous and new layers
+        // turn all cells off
         for (int i = 0; i < size; i++)
         {
             for (int j = 0; j < size; j++)
             {
-                cells[currentLayer][i][j].SetActive(false);
-                cells[newLayer][i][j].SetActive(true);
+                for (int k = 0; k < size; k++)
+                {
+                    cells[i][j][k].SetActive(false);
+                }
             }
         }
 
-        // toggle CUBE colors; alpha for CUBEs in a higher layer than the new layer; full opacity for CUBEs on the same layer
-        foreach (var cube in currentBuild)
+        // up
+        if (plane == Vector3.up || plane == Vector3.down)
         {
-            if (cube.Value.position.y > newLayer) foreach (var mat in cube.Key.renderer.materials) mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, 0.25f);
-            if (cube.Value.position.y == newLayer) foreach (var mat in cube.Key.renderer.materials) mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, 1f);
+            int y = (int)(cursor + plane * amount).y;
+            int newLayer = Mathf.Clamp(y, 0, size - 1);
+
+            // toggle cell colors in the previous and new layers
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    cells[newLayer][i][j].SetActive(true);
+                }
+            }
+
+            // toggle CUBE colors; alpha for CUBEs in a higher layer than the new layer; full opacity for CUBEs on the same layer
+            if (plane == Vector3.up)
+            {
+                foreach (var cube in currentBuild)
+                {
+                    if (cube.Value.position.y > newLayer) foreach (var mat in cube.Key.renderer.materials) mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, NEARALPHA);
+                    else foreach (var mat in cube.Key.renderer.materials) mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, 1f);
+                }
+            }
+            else
+            {
+                foreach (var cube in currentBuild)
+                {
+                    if (cube.Value.position.y < newLayer) foreach (var mat in cube.Key.renderer.materials) mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, NEARALPHA);
+                    else foreach (var mat in cube.Key.renderer.materials) mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, 1f);
+                }
+            }
+        }
+        // right
+        else if (plane == Vector3.right || plane == Vector3.left)
+        {
+            int x = (int)(cursor + plane * amount).x;
+            int newLayer = Mathf.Clamp(x, 0, size - 1);
+
+            // toggle cell colors in the previous and new layers
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    cells[i][j][newLayer].SetActive(true);
+                }
+            }
+
+            // toggle CUBE colors; alpha for CUBEs in a higher layer than the new layer; full opacity for CUBEs on the same layer
+            if (plane == Vector3.right)
+            {
+                foreach (var cube in currentBuild)
+                {
+                    if (cube.Value.position.x > newLayer) foreach (var mat in cube.Key.renderer.materials) mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, NEARALPHA);
+                    else foreach (var mat in cube.Key.renderer.materials) mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, 1f);
+                }
+            }
+            else
+            {
+                foreach (var cube in currentBuild)
+                {
+                    if (cube.Value.position.x < newLayer) foreach (var mat in cube.Key.renderer.materials) mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, NEARALPHA);
+                    else foreach (var mat in cube.Key.renderer.materials) mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, 1f);
+                }
+            }
+        }
+        // forward
+        else if (plane == Vector3.forward || plane == Vector3.back)
+        {
+            int z = (int)(cursor + plane * amount).z;
+            int newLayer = Mathf.Clamp(z, 0, size - 1);
+
+            // toggle cell colors in the previous and new layers
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    cells[i][newLayer][j].SetActive(true);
+                }
+            }
+
+            // toggle CUBE colors; alpha for CUBEs in a higher layer than the new layer; full opacity for CUBEs on the same layer
+            if (plane == Vector3.forward)
+            {
+                foreach (var cube in currentBuild)
+                {
+                    if (cube.Value.position.z > newLayer) foreach (var mat in cube.Key.renderer.materials) mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, NEARALPHA);
+                    else foreach (var mat in cube.Key.renderer.materials) mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, 1f);
+                }
+            }
+            else
+            {
+                foreach (var cube in currentBuild)
+                {
+                    if (cube.Value.position.z < newLayer) foreach (var mat in cube.Key.renderer.materials) mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, NEARALPHA);
+                    else foreach (var mat in cube.Key.renderer.materials) mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, 1f);
+                }
+            }
         }
 
-        // set new layer
-        currentLayer = newLayer;
         // move the cursor
-        MoveCursor(Vector3.up * amount);
+        MoveCursor(plane * amount);
     }
 
 
@@ -393,7 +521,7 @@ public class ConstructionGrid : MonoBase
         StartCoroutine(SavePrefab());
 #endif
 
-        Log(build, true, Debugger.LogTypes.Data); // might cause crash on mobile
+        Log(build, true, Debugger.LogTypes.Data);
         return buildString;
     }
 
@@ -630,15 +758,23 @@ public class ConstructionGrid : MonoBase
         }
 
         // add to weapons if applicable
+        if (weaponIndex == -1 && heldCUBE.type == CUBE.Types.Weapon)
+        {
+            // find next open weapon slot if there is one
+            for (int i = 0; i < weapons.Length; i++)
+            {
+                if (weapons[i] == null)
+                {
+                    weaponIndex = i;
+                    break;
+                }
+            }
+        }
         if (weaponIndex != -1)
         {
             weapons[weaponIndex] = heldCUBE.GetComponent<Weapon>();
-            currentBuild.Add(heldCUBE, new CUBEGridInfo(cursor - cursorOffset, cursorRotation.eulerAngles, weaponIndex));
         }
-        else
-        {
-            currentBuild.Add(heldCUBE, new CUBEGridInfo(cursor - cursorOffset, cursorRotation.eulerAngles, -1));
-        }
+        currentBuild.Add(heldCUBE, new CUBEGridInfo(cursor - cursorOffset, cursorRotation.eulerAngles, weaponIndex));
 
         // add all of the CUBE's pieces to the grid
         foreach (var piece in heldCUBE.pieces)
@@ -691,7 +827,7 @@ public class ConstructionGrid : MonoBase
     private void RemoveCUBE(CUBE cube)
     {
         // get pivot and rotation 
-        Vector3 pivot = cursor+cursorOffset; // needs offset?
+        Vector3 pivot = cursor+cursorOffset;
         var rotationZ = Matrix4x4.identity;
         var rotationY = Matrix4x4.identity;
         if (currentBuild.ContainsKey(cube))
@@ -704,7 +840,7 @@ public class ConstructionGrid : MonoBase
         // remove all of CUBE's pieces
         foreach (var piece in cube.pieces)
         {
-            Vector3 rotatedPiece = pivot + rotationZ.MultiplyVector(rotationY.MultiplyVector(piece)); // needs offset?
+            Vector3 rotatedPiece = pivot + rotationZ.MultiplyVector(rotationY.MultiplyVector(piece));
             grid[(int)rotatedPiece.y][(int)rotatedPiece.z][(int)rotatedPiece.x] = null;
             cells[(int)rotatedPiece.y][(int)rotatedPiece.z][(int)rotatedPiece.x].renderer.material = CellOpen_Mat;
         }
@@ -801,7 +937,6 @@ public class ConstructionGrid : MonoBase
 
         yield return new WaitForEndOfFrame();
 #if UNITY_EDITOR
-
         UnityEditor.AssetDatabase.CreateAsset(compShip.GetComponent<MeshFilter>().mesh, ENEMYMESHPATH + buildName + "_Mesh.asset");
         UnityEditor.PrefabUtility.CreatePrefab(ENEMYPREFABPATH + buildName + ".prefab", compShip.gameObject); // keeping children
 #endif

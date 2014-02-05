@@ -92,6 +92,7 @@ public class Debugger : Singleton<Debugger>
     {
         if (Main.logFlags[(int)logType]) Debug.Log(message, context);
 
+#if UNITY_EDITOR
         if (save)
         {
             using (StreamWriter writer = new StreamWriter(Application.dataPath + LOGPATH + logType + ".txt", true))
@@ -99,6 +100,7 @@ public class Debugger : Singleton<Debugger>
                 writer.WriteLine("Time: " + Time.realtimeSinceStartup + "\r\n" + message);
             }
         }
+#endif
     }
 
 
@@ -107,6 +109,7 @@ public class Debugger : Singleton<Debugger>
     {
         if (Main.logFlags[(int)logType]) Debug.LogWarning(message, context);
 
+#if UNITY_EDITOR
         if (save)
         {
             using (StreamWriter writer = new StreamWriter(Application.dataPath + LOGPATH + logType + ".txt", true))
@@ -114,6 +117,7 @@ public class Debugger : Singleton<Debugger>
                 writer.WriteLine("Time: " + Time.realtimeSinceStartup + "Warning\r\n" + message);
             }
         }
+#endif
     }
 
 
@@ -122,6 +126,7 @@ public class Debugger : Singleton<Debugger>
     {
         if (Main.logFlags[(int)logType]) Debug.LogError(message, context);
 
+#if UNITY_EDITOR
         if (save)
         {
             using (StreamWriter writer = new StreamWriter(Application.dataPath + LOGPATH + logType + ".txt", true))
@@ -129,6 +134,7 @@ public class Debugger : Singleton<Debugger>
                 writer.WriteLine("Time: " + Time.realtimeSinceStartup + "Error\r\n" + message);
             }
         }
+#endif
     }
 
 

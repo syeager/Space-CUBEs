@@ -93,5 +93,29 @@ public class CUBEEditor : Editor
         serializedObject.FindProperty("price").intValue = info.price;
     }
 
+
+    private void CombatStats()
+    {
+
+    }
+
+
+    private void PartStats()
+    {
+
+    }
+
+
+    private void SystemStats()
+    {
+
+    }
+
+
+    private void AugmentationStats()
+    {
+
+    }
+
     #endregion
 }

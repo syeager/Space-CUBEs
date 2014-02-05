@@ -72,16 +72,16 @@ public class HUD : Singleton<HUD>
         Main.barrelRoll.ActivateEvent += Main.OnBarrelRoll;
 
         // initialize weapon icons
-        for (int i = 0; i < Player.WEAPONLIMIT; i++)
+        for (int i = 0; i < 4; i++)
+        {
+            Main.weaponButtons[i].GetComponent<WeaponButton>().Disable();
+        }
+        for (int i = 0; i < player.myWeapons.weapons.Length; i++)
         {
             if (player.myWeapons.weapons[i] != null)
             {
                 HUD.Main.weaponButtons[i].ActivateEvent += player.myWeapons.OnActivate;
                 Main.weaponButtons[i].GetComponent<WeaponButton>().Initialize(player.myWeapons.weapons[i]);
-            }
-            else
-            {
-                Main.weaponButtons[i].GetComponent<WeaponButton>().Disable();
             }
         }
     }

@@ -131,7 +131,10 @@ public class Player : Ship
         // release all attacks
         foreach (var weapon in myWeapons.weapons)
         {
-            weapon.Activate(false);
+            if (weapon != null)
+            {
+                weapon.Activate(false);
+            }
         }
 
         stateMachine.update = new Job(BarrelRollingUpdate(MovementInput()));

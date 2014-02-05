@@ -27,8 +27,15 @@ public class WeaponManager : MonoBehaviour
     /// <param name="weaponList">Weapons to add by their index.</param>
     public void Bake(List<Weapon> weaponList)
     {
-        int max = weaponList.Max(w => w.index);
-        weapons = new Weapon[max+1];
+        if (weaponList == null || weaponList.Count == 0)
+        {
+            weapons = new Weapon[0];
+        }
+        else
+        {
+            int max = weaponList.Max(w => w.index);
+            weapons = new Weapon[max+1];
+        }
 
         foreach (var weapon in weaponList)
         {
