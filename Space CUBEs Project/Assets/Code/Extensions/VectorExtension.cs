@@ -27,5 +27,10 @@ public static class VectorExtension
     {
         return new Vector3(Mathf.RoundToInt(v.x), Mathf.RoundToInt(v.y), Mathf.RoundToInt(v.z));
     }
-   
+
+
+    public static float Area(this Vector3 v)
+    {
+        return v.x*v.y*v.z;
+    }
 }

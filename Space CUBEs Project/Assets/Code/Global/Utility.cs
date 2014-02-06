@@ -15,12 +15,13 @@ public static class Utility
     /// Converts string to Vector3.
     /// </summary>
     /// <param name="vectorString">String to convert. Must be in format (#, #, #)</param>
+    /// <param name="sep">Char used to separate values. Default is comma.</param>
     /// <returns>Vector3 representation of the string.</returns>
-    public static Vector3 ParseV3(string vectorString)
+    public static Vector3 ParseV3(string vectorString, char sep = ',')
     {
         Vector3 vector;
         vectorString = vectorString.Substring(1, vectorString.Length-2).Replace(" ", "");
-        string[] split = vectorString.Split(',');
+        string[] split = vectorString.Split(sep);
         vector.x = float.Parse(split[0]);
         vector.y = float.Parse(split[1]);
         vector.z = float.Parse(split[2]);

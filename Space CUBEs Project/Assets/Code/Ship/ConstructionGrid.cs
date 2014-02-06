@@ -114,6 +114,8 @@ public class ConstructionGrid : MonoBase
     public CursorStatuses cursorStatus { get; private set; }
     /// <summary>Current CUBE being held.</summary>
     public CUBE heldCUBE { get; private set; }
+    /// <summary>CUBEInfo of currently held CUBE.</summary>
+    public CUBEInfo heldInfo { get; private set; }
     /// <summary>Weapon slots for the ship.</summary>
     public Weapon[] weapons { get; private set; }
     /// <summary>Returns the next free weapon slot. -1 if all are taken.</summary>
@@ -430,6 +432,7 @@ public class ConstructionGrid : MonoBase
         cursorOffset = Vector3.zero;
         // create new CUBE
         heldCUBE = (CUBE)GameObject.Instantiate(GameResources.GetCUBE(CUBEID));
+        heldInfo = CUBE.allCUBES[heldCUBE.ID];
         // set to cursor position and rotation
         heldCUBE.transform.position = cursorWorldPosition;
         heldCUBE.transform.rotation = cursorRotation;
@@ -758,7 +761,7 @@ public class ConstructionGrid : MonoBase
         }
 
         // add to weapons if applicable
-        if (weaponIndex == -1 && heldCUBE.type == CUBE.Types.Weapon)
+        if (weaponIndex == -1 && heldInfo.type == CUBE.Types.Weapon)
         {
             // find next open weapon slot if there is one
             for (int i = 0; i < weapons.Length; i++)
@@ -784,9 +787,9 @@ public class ConstructionGrid : MonoBase
         }
 
         // add CUBE's stats
-        shipHealth += heldCUBE.health;
-        shipShield += heldCUBE.shield;
-        shipSpeed += heldCUBE.speed;
+        shipHealth += heldInfo.health;
+        shipShield += heldInfo.shield;
+        shipSpeed += heldInfo.speed;
 
         // set parent to ship
         heldCUBE.transform.parent = ship.transform;
@@ -846,7 +849,7 @@ public class ConstructionGrid : MonoBase
         }
 
         // remove weapon if applicable
-        if (heldCUBE.type == CUBE.Types.Weapon && weapons.Contains(heldCUBE.GetComponent<Weapon>()))
+        if (heldInfo.type == CUBE.Types.Weapon && weapons.Contains(heldCUBE.GetComponent<Weapon>()))
         {
             weapons[Array.IndexOf(weapons, heldCUBE.GetComponent<Weapon>())] = null;
         }
@@ -855,9 +858,10 @@ public class ConstructionGrid : MonoBase
         currentBuild.Remove(cube);
 
         // remove stats
-        shipHealth -= cube.health;
-        shipShield -= cube.shield;
-        shipSpeed -= cube.speed;
+        CUBEInfo cubeInfo = CUBE.allCUBES[cube.ID];
+        shipHealth -= cubeInfo.health;
+        shipShield -= cubeInfo.shield;
+        shipSpeed -= cubeInfo.speed;
 
         cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].renderer.material = CellCursor_Mat;
     }

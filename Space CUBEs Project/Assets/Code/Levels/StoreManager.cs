@@ -174,10 +174,10 @@ public class StoreManager : MonoBehaviour
         button.transform.parent = Grid;
         button.transform.localScale = Vector3.one;
         button.name = info.name;
-        button.GetComponent<CUBEButton>().label.text = button.name + " x " + inventory[info.id];
-        button.value = info.id.ToString();
+        button.GetComponent<CUBEButton>().label.text = button.name + " x " + inventory[info.ID];
+        button.value = info.ID.ToString();
         button.ActivateEvent += OnIndexChanged;
-        activeButtons[info.id] = button;
+        activeButtons[info.ID] = button;
     }
 
 

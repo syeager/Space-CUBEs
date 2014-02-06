@@ -59,6 +59,7 @@ public class GarageManager : MonoBehaviour
     private Menus menu;
 
     private int[] inventory;
+    private List<CUBEInfo> filteredCUBEs;
 
     private Vector3 cameraDirection = Vector3.up;
     private float zoom = 15f;
@@ -519,7 +520,7 @@ public class GarageManager : MonoBehaviour
         float w = LeftMenuRect.width;
         float h = LeftMenuRect.height;
 
-        // top
+        // filter left
         if (GUI.Button(new Rect(0f, 0f, w * 0.25f, h * 0.15f), allCUBEs ? "|" : "←") && !allCUBEs)
         {
             int cursor = (int)CUBEFilter;
@@ -532,42 +533,28 @@ public class GarageManager : MonoBehaviour
                 cursor--;
                 CUBEFilter = (CUBE.Types)cursor;
             }
+            FilterCUBEs(CUBEFilter);
         }
+        // filter
         GUI.Label(new Rect(w * 0.25f, 0f, w * 0.5f, h * 0.15f), allCUBEs ? "All CUBE_Prefabs" : CUBEFilter.ToString());
-        if (GUI.Button(new Rect(w * 0.75f, 0f, w * 0.25f, h * 0.15f), CUBEFilter == CUBE.Types.Wing ? "|" : "→") && CUBEFilter != CUBE.Types.Wing)
+        // filter right
+        if (GUI.Button(new Rect(w * 0.75f, 0f, w * 0.25f, h * 0.15f), CUBEFilter == CUBE.Types.Weapon ? "|" : "→") && CUBEFilter != CUBE.Types.Weapon)
         {
             allCUBEs = false;
             int cursor = (int)CUBEFilter;
             cursor++;
             CUBEFilter = (CUBE.Types)cursor;
-        }
-
-        // filter CUBEs
-        List<CUBE> availableCUBEs;
-        if (allCUBEs)
-        {
-            availableCUBEs = new List<CUBE>(GameResources.Main.CUBE_Prefabs);
-        }
-        else
-        {
-            availableCUBEs = new List<CUBE>();
-            foreach (var cube in GameResources.Main.CUBE_Prefabs)
-            {
-                if (cube.type == CUBEFilter)
-                {
-                    availableCUBEs.Add(cube);
-                }
-            }
+            FilterCUBEs(CUBEFilter);
         }
 
         // CUBEs
-        CUBEScroll = GUI.BeginScrollView(new Rect(0, h * 0.15f, w, h * 0.8f), CUBEScroll, new Rect(0, 0, w - 16, CUBESize * availableCUBEs.Count));
+        CUBEScroll = GUI.BeginScrollView(new Rect(0, h * 0.15f, w, h * 0.8f), CUBEScroll, new Rect(0, 0, w - 16, CUBESize * filteredCUBEs.Count));
         {
-            for (int i = 0; i < availableCUBEs.Count; i++)
+            for (int i = 0; i < filteredCUBEs.Count; i++)
             {
-                if (GUI.Button(new Rect(0, i * CUBESize, w - 16f, CUBESize), availableCUBEs[i].name.Substring(5) + " x " + Grid.inventory[availableCUBEs[i].ID]))
+                if (GUI.Button(new Rect(0, i * CUBESize, w - 16f, CUBESize), filteredCUBEs[i].name + " x " + Grid.inventory[filteredCUBEs[i].ID]))
                 {
-                    Grid.CreateCUBE(availableCUBEs[i].ID);
+                    Grid.CreateCUBE(filteredCUBEs[i].ID);
                 }
             }
         }
@@ -582,12 +569,34 @@ public class GarageManager : MonoBehaviour
             if (Grid.heldCUBE != null)
             {
                 GUI.Label(new Rect(0, 0, infoRect.width, infoRect.height * 0.3f), Grid.heldCUBE.name.Substring(5, Grid.heldCUBE.name.Length - 12));
-                GUI.Label(new Rect(0, infoRect.height * 0.3f, w, infoRect.height * 0.2f), "Health: " + Grid.heldCUBE.health);
-                GUI.Label(new Rect(0, infoRect.height * 0.5f, w, infoRect.height * 0.2f), "Shield: " + Grid.heldCUBE.shield);
-                GUI.Label(new Rect(0, infoRect.height * 0.7f, w, infoRect.height * 0.2f), "Speed: " + Grid.heldCUBE.speed);
+                GUI.Label(new Rect(0, infoRect.height * 0.3f, w, infoRect.height * 0.2f), "Health: " + Grid.heldInfo.health);
+                GUI.Label(new Rect(0, infoRect.height * 0.5f, w, infoRect.height * 0.2f), "Shield: " + Grid.heldInfo.shield);
+                GUI.Label(new Rect(0, infoRect.height * 0.7f, w, infoRect.height * 0.2f), "Speed: " + Grid.heldInfo.speed);
             }
         }
         GUI.EndGroup();
+    }
+
+
+    private void FilterCUBEs(CUBE.Types CUBEFilter)
+    {
+        filteredCUBEs.Clear();
+        
+        // filter CUBEs
+        if (allCUBEs)
+        {
+            filteredCUBEs = new List<CUBEInfo>(CUBE.allCUBES);
+        }
+        else
+        {
+            foreach (var cube in CUBE.allCUBES)
+            {
+                if (cube.type == CUBEFilter)
+                {
+                    filteredCUBEs.Add(cube);
+                }
+            }
+        }
     }
 
 

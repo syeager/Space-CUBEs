@@ -16,19 +16,28 @@ public class CUBE : MonoBehaviour
 
     public enum Types
     {
-        Armor = 0,
-        Weapon = 1,
-        Cockpit = 2,
-        Engine = 3,
-        Wing = 4,
+        Augmentation,
+        Hull,
+        System,
+        Weapon,
     }
-    public Types type;
-
-    public float health;
-    public float shield;
-    public float speed;
-    public int rarity;
-    public int price;
+    public enum Subsystems
+    {
+        None,
+        Cockpit,
+        Engine,
+        PowerCore,
+        Wing,
+    }
+    public enum Brands
+    {
+        None,
+        Omni,
+        Vita,
+        Aegis,
+        Drift,
+        Titan,
+    }
 
     #endregion
 
@@ -62,14 +71,21 @@ public class CUBE : MonoBehaviour
             {
                 infoList.Add(new CUBEInfo
                         (
-                            reader.ReadInt32(),
-                            reader.ReadString(),
-                            (Types)reader.ReadInt32(),
-                            reader.ReadSingle(),
-                            reader.ReadSingle(),
-                            reader.ReadSingle(),
-                            reader.ReadInt32(),
-                            reader.ReadInt32()
+                            reader.ReadString(),                        // name
+                            reader.ReadInt32(),                         // ID
+                            (Types)reader.ReadInt32(),                  // type
+                            (Subsystems)reader.ReadInt32(),             // subsystem
+                            (Brands)reader.ReadInt32(),                 // brand
+                            reader.ReadInt32(),                         // grade
+                            reader.ReadInt32(),                         // limit
+                            reader.ReadSingle(),                        // health
+                            reader.ReadSingle(),                        // shield
+                            reader.ReadSingle(),                        // speed
+                            reader.ReadSingle(),                        // damage
+                            Utility.ParseV3(reader.ReadString()),  // size
+                            reader.ReadInt32(),                         // cost
+                            reader.ReadInt32(),                         // rarity
+                            reader.ReadInt32()                          // price
                         ));
             }
         }
@@ -84,7 +100,7 @@ public class CUBE : MonoBehaviour
         gradedCUBEs = new int[5][];
         for (int i = 0; i < 5; i++)
         {
-            gradedCUBEs[i] = allCUBES.Where(c => c.rarity == i + 1).Select(c => c.id).ToArray();
+            gradedCUBEs[i] = allCUBES.Where(c => c.rarity == i + 1).Select(c => c.ID).ToArray();
         }
 
         return allCUBES;
