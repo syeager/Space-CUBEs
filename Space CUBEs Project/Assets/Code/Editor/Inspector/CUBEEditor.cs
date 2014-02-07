@@ -51,7 +51,7 @@ public class CUBEEditor : Editor
 
     private void General()
     {
-        EditorGUILayout.LabelField("ID", info.ID.ToString());
+        EditorGUILayout.LabelField("ID", serializedObject.FindProperty("ID").intValue.ToString());
         EditorGUILayout.LabelField("Type", info.type.ToString());
     }
 

@@ -7,31 +7,40 @@ using System.Xml;
 using System.IO;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 using Types = CUBE.Types;
 using Subsystems = CUBE.Subsystems;
 using Brands = CUBE.Brands;
+using Object = UnityEngine.Object;
 
 /// <summary>
 /// Converts CUBE List XML to a binary file.
 /// </summary>
 public class CUBEListBinaryConverter : EditorWindow
 {
+    #region Private Fields
+
+    private DateTime startTime;
+
+    #endregion
+
     #region Readonly Fields
 
     private static readonly Vector2 SIZE = new Vector2(300f, 50f);
     private static readonly string CUBECSVPATH = Directory.GetParent(Directory.GetCurrentDirectory()) + @"\Data\CUBE List.csv";
-    public static readonly string CUBELISTPATHEDITOR = Application.dataPath + "/Resources/CUBE List.bytes";
+    private static readonly string CUBELISTPATHEDITOR = Application.dataPath + "/Resources/CUBE List.bytes";
+    private static readonly string PREFABPATH = "Assets/Ship/CUBEs/";
 
     #endregion
 
 
     #region EditorWindow Overrides
 
-    [MenuItem("Tools/CUBE List Binary Converter")]
+    [MenuItem("Tools/CUBE List Updater")]
     private static void Init()
     {
-        CUBEListBinaryConverter window = (CUBEListBinaryConverter)EditorWindow.GetWindow<CUBEListBinaryConverter>(true, "CUBE List Binary Converter");
+        CUBEListBinaryConverter window = (CUBEListBinaryConverter)EditorWindow.GetWindow<CUBEListBinaryConverter>(true, "CUBE List Updater");
         window.minSize = window.maxSize = SIZE;
     }
 
@@ -39,9 +48,13 @@ public class CUBEListBinaryConverter : EditorWindow
     private void OnGUI()
     {
         GUILayout.FlexibleSpace();
-        if (GUILayout.Button("Convert"))
+        if (GUILayout.Button("Update"))
         {
+            startTime = DateTime.Now;
             ToBinary(CSVToCUBEInfo());
+            UpdatePrefabs();
+            Debug.Log("CUBE list updated successfully at " + DateTime.Now.ToShortTimeString());
+            Debug.Log("Time: " + (DateTime.Now - startTime).TotalSeconds);
         }
     }
 
@@ -90,25 +103,42 @@ public class CUBEListBinaryConverter : EditorWindow
         {
             foreach (var cube in info)
             {
-                writer.Write(cube.name);                    // name
-                writer.Write(cube.ID);                      // ID
-                writer.Write((int)cube.type);         // type
-                writer.Write((int)cube.subsystem);    // subsystem
-                writer.Write((int)cube.brand);        // brand
-                writer.Write(cube.grade);                   // grade
-                writer.Write(cube.limit);                   // limit
-                writer.Write(cube.health);                  // health
-                writer.Write(cube.shield);                  // shield
-                writer.Write(cube.speed);                   // speed
-                writer.Write(cube.damage);                  // damage
-                writer.Write(cube.size.ToString());         // size
-                writer.Write(cube.cost);                    // cost
-                writer.Write(cube.rarity);                  // rarity
-                writer.Write(cube.price);                   // price
+                writer.Write(cube.name);            // name
+                writer.Write(cube.ID);              // ID
+                writer.Write((int)cube.type);       // type
+                writer.Write((int)cube.subsystem);  // subsystem
+                writer.Write((int)cube.brand);      // brand
+                writer.Write(cube.grade);           // grade
+                writer.Write(cube.limit);           // limit
+                writer.Write(cube.health);          // health
+                writer.Write(cube.shield);          // shield
+                writer.Write(cube.speed);           // speed
+                writer.Write(cube.damage);          // damage
+                writer.Write(cube.size.ToString()); // size
+                writer.Write(cube.cost);            // cost
+                writer.Write(cube.rarity);          // rarity
+                writer.Write(cube.price);           // price
             }
         }
+    }
 
-        Debug.Log("File updated successfully.");
+
+    private void UpdatePrefabs()
+    {
+        var prefabs = Utility.LoadObjects<CUBE>(PREFABPATH);
+        Debugger.LogList(prefabs);
+
+        CUBEInfo[] info = CUBE.LoadAllCUBEInfo();
+
+        SerializedObject so;
+        Debugger.LogList(prefabs);
+        foreach (var cube in prefabs)
+        {
+            so = new SerializedObject(cube);
+            Debug.Log(cube.name);
+            so.FindProperty("ID").intValue = info.First(i => i.name == cube.name).ID;
+            so.ApplyModifiedProperties();
+        }
     }
 
     #endregion

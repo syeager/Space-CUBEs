@@ -59,7 +59,7 @@ public class GarageManager : MonoBehaviour
     private Menus menu;
 
     private int[] inventory;
-    private List<CUBEInfo> filteredCUBEs;
+    private List<CUBEInfo> filteredCUBEs = new List<CUBEInfo>();
 
     private Vector3 cameraDirection = Vector3.up;
     private float zoom = 15f;
@@ -115,10 +115,13 @@ public class GarageManager : MonoBehaviour
 
     private void Start()
     {
+        // position camera
         Grid.RotateGrid(Vector3.up);
         cameraTarget.position = CalculateTargetPostion(Vector3.up);
         cameraTarget.rotation = Quaternion.Euler(cameraRotations[0]);
-        //Grid.RotateGrid(Vector3.up);
+
+        allCUBEs = true;
+        FilterCUBEs();
     }
 
 
@@ -533,7 +536,7 @@ public class GarageManager : MonoBehaviour
                 cursor--;
                 CUBEFilter = (CUBE.Types)cursor;
             }
-            FilterCUBEs(CUBEFilter);
+            FilterCUBEs();
         }
         // filter
         GUI.Label(new Rect(w * 0.25f, 0f, w * 0.5f, h * 0.15f), allCUBEs ? "All CUBE_Prefabs" : CUBEFilter.ToString());
@@ -544,7 +547,7 @@ public class GarageManager : MonoBehaviour
             int cursor = (int)CUBEFilter;
             cursor++;
             CUBEFilter = (CUBE.Types)cursor;
-            FilterCUBEs(CUBEFilter);
+            FilterCUBEs();
         }
 
         // CUBEs
@@ -578,10 +581,10 @@ public class GarageManager : MonoBehaviour
     }
 
 
-    private void FilterCUBEs(CUBE.Types CUBEFilter)
+    private void FilterCUBEs()
     {
         filteredCUBEs.Clear();
-        
+
         // filter CUBEs
         if (allCUBEs)
         {
