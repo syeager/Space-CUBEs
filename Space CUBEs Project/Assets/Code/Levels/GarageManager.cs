@@ -571,7 +571,7 @@ public class GarageManager : MonoBehaviour
 
             if (Grid.heldCUBE != null)
             {
-                GUI.Label(new Rect(0, 0, infoRect.width, infoRect.height * 0.3f), Grid.heldCUBE.name.Substring(5, Grid.heldCUBE.name.Length - 12));
+                GUI.Label(new Rect(0, 0, infoRect.width, infoRect.height * 0.3f), Grid.heldInfo.name);
                 GUI.Label(new Rect(0, infoRect.height * 0.3f, w, infoRect.height * 0.2f), "Health: " + Grid.heldInfo.health);
                 GUI.Label(new Rect(0, infoRect.height * 0.5f, w, infoRect.height * 0.2f), "Shield: " + Grid.heldInfo.shield);
                 GUI.Label(new Rect(0, infoRect.height * 0.7f, w, infoRect.height * 0.2f), "Speed: " + Grid.heldInfo.speed);

@@ -78,9 +78,6 @@ public class Debugger : Singleton<Debugger>
 
             File.AppendAllText(path, "*** " + DateTime.Now + " ***\r\n");
         }
-
-        // clear ConsoleLine
-        //if (ConsoleLine != null) ConsoleLine.guiText.text = "";
     }
 
     #endregion

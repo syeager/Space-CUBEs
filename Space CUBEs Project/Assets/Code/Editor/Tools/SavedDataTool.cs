@@ -16,6 +16,7 @@ public class SavedDataTool : EditorWindow
     private static CUBEInfo[] info;
     private static int[] inventory;
     private int setAll;
+    private Vector2 scroll;
 
     #endregion
 
@@ -80,16 +81,19 @@ public class SavedDataTool : EditorWindow
             }
         }
         EditorGUILayout.EndHorizontal();
-
-        for (int i = 0; i < inventory.Length; i++)
+        scroll = EditorGUILayout.BeginScrollView(scroll);
         {
-            EditorGUILayout.BeginHorizontal();
+            for (int i = 0; i < inventory.Length; i++)
             {
-                EditorGUILayout.LabelField(i + " " + info[i].name);
-                inventory[i] = EditorGUILayout.IntField(inventory[i]);
+                EditorGUILayout.BeginHorizontal();
+                {
+                    EditorGUILayout.LabelField(i + " " + info[i].name);
+                    inventory[i] = EditorGUILayout.IntField(inventory[i]);
+                }
+                EditorGUILayout.EndHorizontal();
             }
-            EditorGUILayout.EndHorizontal();
         }
+        EditorGUILayout.EndScrollView();
 
         if (GUILayout.Button("Save Inventory"))
         {

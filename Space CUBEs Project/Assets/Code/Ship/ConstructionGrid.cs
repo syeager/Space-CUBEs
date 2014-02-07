@@ -467,7 +467,6 @@ public class ConstructionGrid : MonoBase
     {
         if (heldCUBE == null) return;
 
-        RemoveCUBE(heldCUBE);
         Destroy(heldCUBE.gameObject);
         heldCUBE = null;
         cursorStatus = CursorStatuses.None;
@@ -653,11 +652,11 @@ public class ConstructionGrid : MonoBase
         if (grid == null) return;
 
         // create grid and set all cells to null
-        for (int i = 0; i < grid.Length; i++)
+        for (int i = 0; i < size; i++)
         {
-            for (int j = 0; j < grid[i].Length; j++)
+            for (int j = 0; j < size; j++)
             {
-                for (int k = 0; k < grid[i][j].Length; k++)
+                for (int k = 0; k < size; k++)
                 {
                     grid[i][j][k] = null;
                 }
@@ -685,20 +684,24 @@ public class ConstructionGrid : MonoBase
         if (heldCUBE == null) return false;
 
         // test pivot against grid bounds and other placed CUBEs
-        Vector3 pivot = cursor;
-        if (pivot.x < 0 || pivot.x > size - 1) return false;
-        if (pivot.y < 0 || pivot.y > size - 1) return false;
-        if (pivot.z < 0 || pivot.z > size - 1) return false;
-        if (grid[(int)pivot.y][(int)pivot.z][(int)pivot.x]) return false;
+        Vector3 pivot = cursor - RotateVector(cursorOffset);
 
-        // test all pieces against grid bounds and other placed CUBEs
-        foreach (var piece in heldCUBE.pieces)
+        // test CUBE bounds against grid bounds
+        Vector3 bounds = heldInfo.size;
+        for (int x = 0; x < bounds.x; x++)
         {
-            Vector3 position = pivot - cursorOffset + RotatePiece(piece);
-            if (position.x < 0 || position.x > size - 1) return false;
-            if (position.y < 0 || position.y > size - 1) return false;
-            if (position.z < 0 || position.z > size - 1) return false;
-            if (grid[(int)position.y][(int)position.z][(int)position.x]) return false;
+            for (int y = 0; y < bounds.y; y++)
+            {
+                for (int z = 0; z < bounds.z; z++)
+                {
+                    Vector3 point = pivot + RotateVector(new Vector3(x, y, z));
+
+                    if (point.x < 0 || point.x > size - 1) return false;
+                    if (point.y < 0 || point.y > size - 1) return false;
+                    if (point.z < 0 || point.z > size - 1) return false;
+                    if (grid[(int)point.y][(int)point.z][(int)point.x]) return false;
+                }
+            }
         }
 
         return true;
@@ -710,7 +713,7 @@ public class ConstructionGrid : MonoBase
     /// </summary>
     /// <param name="localPostion">Piece.</param>
     /// <returns>New piece position.</returns>
-    private Vector3 RotatePiece(Vector3 localPostion)
+    private Vector3 RotateVector(Vector3 localPostion)
     {
         Matrix4x4 z = Utility.RotationMatrixZ(cursorRotation.eulerAngles.z);
         Matrix4x4 y = Utility.RotationMatrixY(cursorRotation.eulerAngles.y);
@@ -732,7 +735,7 @@ public class ConstructionGrid : MonoBase
         // set cursorRotation to CUBE's rotation
         cursorRotation = Quaternion.Euler(currentBuild[heldCUBE].rotation);
         // get difference between pivot and cursor
-        cursorOffset = cursorWorldPosition - heldCUBE.transform.position;
+        cursorOffset = RotateVector((cursor - currentBuild[heldCUBE].position).Round());
         // remove CUBE from build
         RemoveCUBE(cube);
         // set status
@@ -777,13 +780,21 @@ public class ConstructionGrid : MonoBase
         {
             weapons[weaponIndex] = heldCUBE.GetComponent<Weapon>();
         }
-        currentBuild.Add(heldCUBE, new CUBEGridInfo(cursor - cursorOffset, cursorRotation.eulerAngles, weaponIndex));
+        currentBuild.Add(heldCUBE, new CUBEGridInfo(cursor - RotateVector(cursorOffset), cursorRotation.eulerAngles, weaponIndex));
 
         // add all of the CUBE's pieces to the grid
-        foreach (var piece in heldCUBE.pieces)
+        Vector3 bounds = heldInfo.size;
+        Vector3 pivot = cursor - RotateVector(cursorOffset);
+        for (int x = 0; x < bounds.x; x++)
         {
-            Vector3 rotatedPiece = cursor - cursorOffset + RotatePiece(piece);
-            grid[(int)rotatedPiece.y][(int)rotatedPiece.z][(int)rotatedPiece.x] = heldCUBE;
+            for (int y = 0; y < bounds.y; y++)
+            {
+                for (int z = 0; z < bounds.z; z++)
+                {
+                    Vector3 point = pivot + RotateVector(new Vector3(x, y, z));
+                    grid[(int)point.y][(int)point.z][(int)point.x] = heldCUBE;
+                }
+            }
         }
 
         // add CUBE's stats
@@ -830,22 +841,22 @@ public class ConstructionGrid : MonoBase
     private void RemoveCUBE(CUBE cube)
     {
         // get pivot and rotation 
-        Vector3 pivot = cursor+cursorOffset;
-        var rotationZ = Matrix4x4.identity;
-        var rotationY = Matrix4x4.identity;
-        if (currentBuild.ContainsKey(cube))
-        {
-            pivot = currentBuild[cube].position;
-            rotationZ = Utility.RotationMatrixZ(currentBuild[cube].rotation.z);
-            rotationY = Utility.RotationMatrixY(currentBuild[cube].rotation.y);
-        }
+        Vector3 pivot = cursor-RotateVector(cursorOffset);
+        cursorRotation = Quaternion.Euler(currentBuild[cube].rotation);
 
         // remove all of CUBE's pieces
-        foreach (var piece in cube.pieces)
+        Vector3 bounds = heldInfo.size;
+        for (int x = 0; x <= bounds.x; x++)
         {
-            Vector3 rotatedPiece = pivot + rotationZ.MultiplyVector(rotationY.MultiplyVector(piece));
-            grid[(int)rotatedPiece.y][(int)rotatedPiece.z][(int)rotatedPiece.x] = null;
-            cells[(int)rotatedPiece.y][(int)rotatedPiece.z][(int)rotatedPiece.x].renderer.material = CellOpen_Mat;
+            for (int y = 0; y <= bounds.y; y++)
+            {
+                for (int z = 0; z <= bounds.z; z++)
+                {
+                    Vector3 point = pivot + RotateVector(new Vector3(x, y, z));
+                    grid[(int)point.y][(int)point.z][(int)point.x] = null;
+                    cells[(int)point.y][(int)point.z][(int)point.x].renderer.material = CellOpen_Mat;
+                }
+            }
         }
 
         // remove weapon if applicable
@@ -861,7 +872,7 @@ public class ConstructionGrid : MonoBase
         CUBEInfo cubeInfo = CUBE.allCUBES[cube.ID];
         shipHealth -= cubeInfo.health;
         shipShield -= cubeInfo.shield;
-        shipSpeed -= cubeInfo.speed;
+        shipSpeed -= cubeInfo.speed;        
 
         cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].renderer.material = CellCursor_Mat;
     }

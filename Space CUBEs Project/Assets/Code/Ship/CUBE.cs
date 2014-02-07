@@ -12,7 +12,6 @@ public class CUBE : MonoBehaviour
     #region Public Fields
 
     public int ID = -1;
-    public Vector3[] pieces = new Vector3[0];
 
     public enum Types
     {
