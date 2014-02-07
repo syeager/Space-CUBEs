@@ -99,7 +99,7 @@ public class ConstructionGrid : MonoBase
     }
 
     /// <summary>Position of the cursor in the grid.</summary>
-    public Vector3 cursor { get; private set;}
+    public Vector3 cursor { get; private set; }
     /// <summary>Rotation of the cursor.</summary>
     public Quaternion cursorRotation { get; private set; }
     /// <summary>World position of the cell that is occupied by the cursor</summary>
@@ -566,7 +566,7 @@ public class ConstructionGrid : MonoBase
         // get new slot index and return if out of bounds
         int newSlot = index + direction;
         if (newSlot >= weapons.Length || newSlot < 0) return;
-        
+
         // cache weapon
         Weapon saved = weapons[index];
         // update weapon's weaponmap
@@ -579,7 +579,7 @@ public class ConstructionGrid : MonoBase
         }
         weapons[newSlot] = saved;
     }
-    
+
 
     [Obsolete("Move to a new class.")]
     public IEnumerator Build(string build, int buildSize, Vector3 startPosition, Vector3 startRotation, float maxTime)
@@ -684,7 +684,7 @@ public class ConstructionGrid : MonoBase
         if (heldCUBE == null) return false;
 
         // test pivot against grid bounds and other placed CUBEs
-        Vector3 pivot = cursor - RotateVector(cursorOffset);
+        Vector3 pivot = cursor + cursorOffset;
 
         // test CUBE bounds against grid bounds
         Vector3 bounds = heldInfo.size;
@@ -695,7 +695,7 @@ public class ConstructionGrid : MonoBase
                 for (int z = 0; z < bounds.z; z++)
                 {
                     Vector3 point = pivot + RotateVector(new Vector3(x, y, z));
-
+                    Log("Fits: " + point);
                     if (point.x < 0 || point.x > size - 1) return false;
                     if (point.y < 0 || point.y > size - 1) return false;
                     if (point.z < 0 || point.z > size - 1) return false;
@@ -707,7 +707,7 @@ public class ConstructionGrid : MonoBase
         return true;
     }
 
-    
+
     /// <summary>
     /// Rotates a CUBE piece by the cursorRotation.
     /// </summary>
@@ -733,9 +733,9 @@ public class ConstructionGrid : MonoBase
         // stock inventory
         inventory[heldCUBE.ID]++;
         // set cursorRotation to CUBE's rotation
-        cursorRotation = Quaternion.Euler(currentBuild[heldCUBE].rotation);
+        //cursorRotation = Quaternion.Euler(currentBuild[heldCUBE].rotation);
         // get difference between pivot and cursor
-        cursorOffset = RotateVector((cursor - currentBuild[heldCUBE].position).Round());
+        //cursorOffset = ((cursor - currentBuild[heldCUBE].position).Round());
         // remove CUBE from build
         RemoveCUBE(cube);
         // set status
@@ -780,11 +780,12 @@ public class ConstructionGrid : MonoBase
         {
             weapons[weaponIndex] = heldCUBE.GetComponent<Weapon>();
         }
-        currentBuild.Add(heldCUBE, new CUBEGridInfo(cursor - RotateVector(cursorOffset), cursorRotation.eulerAngles, weaponIndex));
 
-        // add all of the CUBE's pieces to the grid
+        Vector3 pivot = cursor + cursorOffset;
+        currentBuild.Add(heldCUBE, new CUBEGridInfo(pivot, cursorRotation.eulerAngles, weaponIndex));
+
+        // add all of the CUBE's bounds to the grid
         Vector3 bounds = heldInfo.size;
-        Vector3 pivot = cursor - RotateVector(cursorOffset);
         for (int x = 0; x < bounds.x; x++)
         {
             for (int y = 0; y < bounds.y; y++)
@@ -792,6 +793,7 @@ public class ConstructionGrid : MonoBase
                 for (int z = 0; z < bounds.z; z++)
                 {
                     Vector3 point = pivot + RotateVector(new Vector3(x, y, z));
+                    Log("Placed: " + point);
                     grid[(int)point.y][(int)point.z][(int)point.x] = heldCUBE;
                 }
             }
@@ -841,18 +843,20 @@ public class ConstructionGrid : MonoBase
     private void RemoveCUBE(CUBE cube)
     {
         // get pivot and rotation 
-        Vector3 pivot = cursor-RotateVector(cursorOffset);
         cursorRotation = Quaternion.Euler(currentBuild[cube].rotation);
+        cursorOffset = currentBuild[cube].position - cursor;
+        Vector3 pivot = cursor + cursorOffset;
 
         // remove all of CUBE's pieces
         Vector3 bounds = heldInfo.size;
-        for (int x = 0; x <= bounds.x; x++)
+        for (int x = 0; x < bounds.x; x++)
         {
-            for (int y = 0; y <= bounds.y; y++)
+            for (int y = 0; y < bounds.y; y++)
             {
-                for (int z = 0; z <= bounds.z; z++)
+                for (int z = 0; z < bounds.z; z++)
                 {
                     Vector3 point = pivot + RotateVector(new Vector3(x, y, z));
+                    Log("Removed: " + point);
                     grid[(int)point.y][(int)point.z][(int)point.x] = null;
                     cells[(int)point.y][(int)point.z][(int)point.x].renderer.material = CellOpen_Mat;
                 }
@@ -872,7 +876,7 @@ public class ConstructionGrid : MonoBase
         CUBEInfo cubeInfo = CUBE.allCUBES[cube.ID];
         shipHealth -= cubeInfo.health;
         shipShield -= cubeInfo.shield;
-        shipSpeed -= cubeInfo.speed;        
+        shipSpeed -= cubeInfo.speed;
 
         cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].renderer.material = CellCursor_Mat;
     }
