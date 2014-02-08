@@ -49,13 +49,16 @@ public class ConstructionGrid : MonoBase
     /// <summary>Parent of all of the CUBEs.</summary>
     private GameObject ship;
 
-    public Vector3 cursorOffset;
-    public Vector3 plane;
+    /// <summary>Offset from cursor to held CUBE's pivot.</summary>
+    private Vector3 cursorOffset;
+    /// <summary>Current plane being looked through. Affects grid rotation.</summary>
+    private Vector3 plane;
 
     #endregion
 
     #region Const Fields
 
+    /// <summary>Level of alpha to set CUBE materials if above current layer.</summary>
     private const float NEARALPHA = 0.5f;
 
     /// <summary>Prefix for path to user created ships in PlayerPrefs.</summary>
@@ -77,7 +80,7 @@ public class ConstructionGrid : MonoBase
     public int size { get; private set; }
     /// <summary>Position of the center of the grid.</summary>
     public Vector3 center { get { return Center.position; } }
-    //
+    /// <summary>Cursor's worldposition based on current plane.</summary>
     public Vector3 layer
     {
         get
@@ -224,7 +227,7 @@ public class ConstructionGrid : MonoBase
 
 
     /// <summary>
-    /// 
+    /// Rotate the grid.
     /// </summary>
     /// <param name="plane"></param>
     public void RotateGrid(Vector3 plane)
