@@ -4,19 +4,44 @@
 using UnityEngine;
 using System.Collections;
 using UnityEditor;
+using System;
+using System.Collections.Generic;
 
 /// <summary>
 /// Edit saved data.
 /// </summary>
 public class SavedDataTool : EditorWindow
 {
-    #region Fields
+    #region GUI Fields
+
+    private enum Menus
+    {
+        Money,
+        Inventory,
+        Builds,
+    }
+    private static Menus menu;
+
+    #endregion
+
+    #region Money Fields
 
     private static int bank;
-    private static CUBEInfo[] info;
+
+    #endregion
+
+    #region Inventory Fields
+
     private static int[] inventory;
+    private static CUBEInfo[] info;
     private int setAll;
-    private Vector2 scroll;
+    private Vector2 inventoryScroll;
+
+    #endregion
+
+    #region Build Fields
+
+    private static List<string> builds; 
 
     #endregion
 
@@ -26,17 +51,40 @@ public class SavedDataTool : EditorWindow
     [MenuItem("Tools/Saved Data Tool")]
     private static void Init()
     {
-        SavedDataTool window = EditorWindow.GetWindow<SavedDataTool>(false, "Saved Data Tool");
+        EditorWindow.GetWindow<SavedDataTool>(false, "Saved Data Tool");
         bank = MoneyManager.Balance();
         info = CUBE.LoadAllCUBEInfo();
         inventory = CUBE.GetInventory();
+        builds = ConstructionGrid.BuildNames();
+        menu = (Menus)EditorPrefs.GetInt("Menu");
+    }
+
+
+    private void OnDestroy()
+    {
+        // save open menu
+        EditorPrefs.SetInt("Menu", (int)menu);
     }
 
 
     private void OnGUI()
     {
-        Money();
-        Inventory();
+        string[] menus = Enum.GetNames(typeof(Menus));
+        menu = (Menus)GUILayout.SelectionGrid((int)menu, menus, menus.Length);
+        EditorGUILayout.Space();
+
+        switch (menu)
+        {
+            case Menus.Money:
+                Money();
+                break;
+            case Menus.Inventory:
+                Inventory();
+                break;
+            case Menus.Builds:
+                Builds();
+                break;
+        }
     }
 
     #endregion
@@ -81,7 +129,7 @@ public class SavedDataTool : EditorWindow
             }
         }
         EditorGUILayout.EndHorizontal();
-        scroll = EditorGUILayout.BeginScrollView(scroll);
+        inventoryScroll = EditorGUILayout.BeginScrollView(inventoryScroll);
         {
             for (int i = 0; i < inventory.Length; i++)
             {
@@ -98,6 +146,50 @@ public class SavedDataTool : EditorWindow
         if (GUILayout.Button("Save Inventory"))
         {
             CUBE.SetInventory(inventory);
+        }
+    }
+
+
+    private void Builds()
+    {
+#if DEVMODE
+        EditorGUILayout.LabelField("Dev Builds");
+#else
+        EditorGUILayout.LabelField("User Builds");
+#endif
+
+        for (int i = 0; i < builds.Count; i++)
+        {
+            EditorGUILayout.BeginHorizontal();
+            {
+                // number
+                EditorGUILayout.LabelField(i + ")", GUILayout.Width(25f));
+                // build name
+                string oldName = builds[i];
+                EditorGUI.BeginChangeCheck();
+                {
+                    builds[i] = EditorGUILayout.TextField(builds[i]);
+                }
+                // rename
+                if (EditorGUI.EndChangeCheck())
+                {
+                    ConstructionGrid.RenameBuild(oldName, builds[i]);
+                }
+                // delete
+                if (GUILayout.Button("-", EditorStyles.miniButtonRight))
+                {
+                    ConstructionGrid.DeleteBuild(builds[i]);
+                    builds.RemoveAt(i);
+                    return;
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+        }
+
+        if (GUILayout.Button("New Build"))
+        {
+            ConstructionGrid.SaveBuild("", BuildInfo.Empty);
+            builds.Add("");
         }
     }
 
