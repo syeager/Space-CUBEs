@@ -251,15 +251,23 @@ public class Player : Ship
     #region Public Methods
 
     /// <summary>
-    /// 
+    /// Recieve kill information from killed enemy.
     /// </summary>
-    /// <param name="enemy"></param>
-    /// <param name="points"></param>
+    /// <param name="enemy">Enemy type killed.</param>
+    /// <param name="points">How many base points the enemy is worth.</param>
     public void RecieveKill(Enemy.Classes enemy, int points, int money)
     {
         myScore.RecieveScore(points);
         myScore.IncreaseMultiplier();
         myMoney.Collect(money);
+    }
+
+
+    //
+    public void Initialize(float maxHealth, float maxShield, float speed)
+    {
+        myHealth.Initialize(maxHealth, maxShield);
+        myMotor.Initialize(speed);
     }
 
     #endregion

@@ -12,8 +12,8 @@ public class ShieldHealth : Health
 {
     #region Public Fields
 
-    public float rechargeSpeed;
-    public float rechargeDelay;
+    public float rechargeSpeed = 25f;
+    public float rechargeDelay = 1f;
 
     #endregion
 
@@ -26,8 +26,8 @@ public class ShieldHealth : Health
 
     #region Properties
 
-    public float maxShield;// { get; private set; }
-    public float shield;// { get; private set; }
+    public float maxShield;
+    public float shield;
 
     #endregion
 

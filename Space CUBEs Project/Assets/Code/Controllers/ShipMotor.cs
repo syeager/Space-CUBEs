@@ -24,7 +24,7 @@ public class ShipMotor : MonoBase
     /// <summary>Movement speed during barrel roll.</summary>
     public float barrelRollMoveSpeed;
     /// <summary>How long the barrel roll lasts.</summary>
-    public float barrelRollTime;
+    public float barrelRollTime = 0.2f;
     /// <summary>Time between allowed barrel rolls.</summary>
     public float barrelRollBuffer = 0.5f;
     
@@ -61,6 +61,13 @@ public class ShipMotor : MonoBase
     #endregion
 
     #region Public Methods
+    
+    public void Initialize(float speed)
+    {
+        this.speed = speed;
+        barrelRollMoveSpeed = 2*speed;
+    }
+
 
     public void Move(Vector2 input)
     {

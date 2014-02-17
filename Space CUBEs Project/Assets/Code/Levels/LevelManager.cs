@@ -181,14 +181,9 @@ public class LevelManager : Singleton<LevelManager>
 
         var buildShip = args.ship.AddComponent<ShipCompactor>();
         player = buildShip.Compact(typeof(Player), true) as Player;
+        player.Initialize(args.health, args.shield, args.speed);
 
-        player.GetComponent<ShieldHealth>().Initialize(args.health, args.shield);
-        player.GetComponent<ShieldHealth>().rechargeDelay = 1f;
-        player.GetComponent<ShieldHealth>().rechargeSpeed = args.shield / 3f;
         player.GetComponent<ShieldHealth>().DieEvent += OnPlayerDeath;
-        player.GetComponent<ShipMotor>().speed = args.speed;
-        player.GetComponent<ShipMotor>().barrelRollTime = 0.25f;
-        player.GetComponent<ShipMotor>().barrelRollMoveSpeed = 2f * args.speed;
     }
 
 
