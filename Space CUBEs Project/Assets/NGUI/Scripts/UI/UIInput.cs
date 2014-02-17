@@ -31,6 +31,7 @@ public class UIInput : MonoBehaviour
 		Float,
 		Alphanumeric,
 		Username,
+        ShipName,
 		Name,
 	}
 
@@ -813,6 +814,13 @@ public class UIInput : MonoBehaviour
 			if (ch >= 'a' && ch <= 'z') return ch;
 			if (ch >= '0' && ch <= '9') return ch;
 		}
+        else if (validation == Validation.ShipName)
+        {
+            if (ch >= 'A' && ch <= 'Z') return ch;
+            if (ch >= 'a' && ch <= 'z') return ch;
+            if (ch >= '0' && ch <= '9') return ch;
+            if (ch == ' ') return ch;
+        }
 		else if (validation == Validation.Name)
 		{
 			char lastChar = (text.Length > 0) ? text[Mathf.Clamp(pos, 0, text.Length - 1)] : ' ';
