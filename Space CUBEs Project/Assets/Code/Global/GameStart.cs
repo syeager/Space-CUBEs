@@ -24,6 +24,13 @@ public class GameStart : MonoBehaviour
 
     #endregion
 
+    #region Const Fields
+
+    private const string DEFAULTBUILDNAME = "Alphie";
+    private const string DEFAULTBUILD = "";
+
+    #endregion
+
 
     #region MonoBehaviour Overrides
 
@@ -72,6 +79,10 @@ public class GameStart : MonoBehaviour
 
         // initial bank
         MoneyManager.SetBalance(10000);
+
+        // default ship build
+        for (int i = 0; i < 10; i++)
+        ConstructionGrid.SaveBuild(DEFAULTBUILDNAME + i, DEFAULTBUILD);
     }
 
     #endregion

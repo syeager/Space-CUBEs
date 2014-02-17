@@ -2,6 +2,7 @@
 // 1.11.2014
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -129,8 +130,9 @@ public static class Utility
 
     #endregion
 
-    #region Object Methods
+    #region Editor Methods
 
+#if UNITY_EDITOR
     public static IEnumerable<T> LoadObjects<T>(string path) where T : Component
     {
         string[] files = System.IO.Directory.GetFiles(path);
@@ -146,6 +148,27 @@ public static class Utility
         }
 
         return objects;
+    }
+#endif
+
+    #endregion
+
+    #region NGUI Methods
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="grid"></param>
+    /// <param name="scrollBar"></param>
+    public static IEnumerator UpdateScrollView(UIGrid grid, UIScrollBar scrollBar, bool setToZero = true)
+    {
+        yield return new WaitForEndOfFrame();
+        grid.Reposition();
+        if (setToZero)
+        {
+            scrollBar.value = 0f;
+            scrollBar.ForceUpdate();
+        }
     }
 
     #endregion

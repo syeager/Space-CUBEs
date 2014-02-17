@@ -62,15 +62,19 @@ public class ConstructionGrid : MonoBase
     private const float NEARALPHA = 0.5f;
 
     /// <summary>Prefix for path to user created ships in PlayerPrefs.</summary>
-    private const string USERBUILDSPATH = "UserBuilds: "; // UserBuild: 
+    private const string USERBUILDSPATH = "UserBuild: ";
+    /// <summary>Path to all user build names.</summary>
+    private const string ALLUSERBUILDSPATH = "AllUserBuilds";
     /// <summary>Prefix for path to dev created ships in PlayerPrefs.</summary>
-    private const string DEVBUILDSPATH = "DevBuilds: ";
+    private const string DEVBUILDSPATH = "DevBuild: ";
+    /// <summary>Path to all dev build names.</summary>
+    private const string ALLDEVBUILDSPATH = "AllDevBuilds";
     /// <summary>Path to the folder with the enemy combined meshes.</summary>
     private const string ENEMYMESHPATH = "Assets/Ship/Characters/";
     /// <summary>Path to the folder with the enemy prefabs.</summary>
     private const string ENEMYPREFABPATH = "Assets/Ship/Characters/";
     /// <summary>Character used to separate data when joined into a string.</summary>
-    private const char DATASEP = '|';
+    //private const char DATASEP = '|'; // replace with BuildInfo.DataSEP
 
     #endregion
 
@@ -143,6 +147,8 @@ public class ConstructionGrid : MonoBase
     public float shipShield { get; private set; }
     /// <summary>Current speed of the ship.</summary>
     public float shipSpeed { get; private set; }
+    /// <summary>Current damage of the ship.</summary>
+    public float shipDamage { get; private set; }
     /// <summary>Current weapon count of the ship.</summary>
     public int shipWeapons { get; private set; }
 
@@ -477,61 +483,6 @@ public class ConstructionGrid : MonoBase
 
 
     /// <summary>
-    /// Save build to data.
-    /// </summary>
-    /// <returns>String representation of build's BuildInfo.</returns>
-    public string SaveBuild()
-    {
-        StringBuilder build = new StringBuilder();
-
-        // health
-        build.Append(shipHealth);
-        build.Append(DATASEP);
-        // shield
-        build.Append(shipShield);
-        build.Append(DATASEP);
-        // speed
-        build.Append(shipSpeed);
-        build.Append(DATASEP);
-        // pieces
-        foreach (var piece in currentBuild)
-        {
-            // ID
-            build.Append(piece.Key.ID);
-            build.Append(DATASEP);
-            // positon
-            build.Append(piece.Value.position);
-            build.Append(DATASEP);
-            // rotation
-            build.Append(piece.Value.rotation);
-            build.Append(DATASEP);
-            // weapon map
-            build.Append(piece.Value.weaponMap);
-            build.Append(DATASEP);
-        }
-        string buildString = build.ToString();
-
-        // save
-        string path;
-#if DEVMODE
-        path = DEVBUILDSPATH;
-#else
-        path = USERBUILDSPATH;
-#endif
-        PlayerPrefs.SetString(path + buildName, buildString);
-        // add to list of all buildNames
-
-#if DEVMODE
-        // compact and prefab ship
-        StartCoroutine(SavePrefab());
-#endif
-
-        Log(build, true, Debugger.LogTypes.Data);
-        return buildString;
-    }
-
-
-    /// <summary>
     /// Loads build from data and creates it in grid.
     /// </summary>
     /// <param name="build">Name of the build.</param>
@@ -562,13 +513,13 @@ public class ConstructionGrid : MonoBase
     /// </summary>
     /// <param name="index">Weapon slot to move.</param>
     /// <param name="direction">Direction and distance to move.</param>
-    public void MoveWeaponMap(int index, int direction)
+    public int MoveWeaponMap(int index, int direction)
     {
-        if (weapons[index] == null) return;
+        if (weapons[index] == null) return index;
 
         // get new slot index and return if out of bounds
         int newSlot = index + direction;
-        if (newSlot >= weapons.Length || newSlot < 0) return;
+        if (newSlot >= weapons.Length || newSlot < 0) return index;
 
         // cache weapon
         Weapon saved = weapons[index];
@@ -581,6 +532,8 @@ public class ConstructionGrid : MonoBase
             currentBuild[weapons[index].GetComponent<CUBE>()].weaponMap -= direction;
         }
         weapons[newSlot] = saved;
+
+        return newSlot;
     }
 
 
@@ -592,7 +545,7 @@ public class ConstructionGrid : MonoBase
         {
             if (BuildFinishedEvent != null)
             {
-                BuildFinishedEvent(this, new BuildFinishedArgs(null, 0f, 0f, 0f));
+                BuildFinishedEvent(this, new BuildFinishedArgs(null, 0f, 0f, 0f, 0f));
             }
             yield break;
         }
@@ -639,7 +592,7 @@ public class ConstructionGrid : MonoBase
 
         if (BuildFinishedEvent != null)
         {
-            BuildFinishedEvent(this, new BuildFinishedArgs(finishedShip, buildInfo.health, buildInfo.shield, buildInfo.speed));
+            BuildFinishedEvent(this, new BuildFinishedArgs(finishedShip, buildInfo.health, buildInfo.shield, buildInfo.speed, buildInfo.damage));
         }
     }
 
@@ -698,7 +651,6 @@ public class ConstructionGrid : MonoBase
                 for (int z = 0; z < bounds.z; z++)
                 {
                     Vector3 point = pivot + RotateVector(new Vector3(x, y, z));
-                    Log("Fits: " + point);
                     if (point.x < 0 || point.x > size - 1) return false;
                     if (point.y < 0 || point.y > size - 1) return false;
                     if (point.z < 0 || point.z > size - 1) return false;
@@ -796,7 +748,6 @@ public class ConstructionGrid : MonoBase
                 for (int z = 0; z < bounds.z; z++)
                 {
                     Vector3 point = pivot + RotateVector(new Vector3(x, y, z));
-                    Log("Placed: " + point);
                     grid[(int)point.y][(int)point.z][(int)point.x] = heldCUBE;
                 }
             }
@@ -806,6 +757,7 @@ public class ConstructionGrid : MonoBase
         shipHealth += heldInfo.health;
         shipShield += heldInfo.shield;
         shipSpeed += heldInfo.speed;
+        shipDamage += heldInfo.damage;
 
         // set parent to ship
         heldCUBE.transform.parent = ship.transform;
@@ -859,7 +811,6 @@ public class ConstructionGrid : MonoBase
                 for (int z = 0; z < bounds.z; z++)
                 {
                     Vector3 point = pivot + RotateVector(new Vector3(x, y, z));
-                    Log("Removed: " + point);
                     grid[(int)point.y][(int)point.z][(int)point.x] = null;
                     cells[(int)point.y][(int)point.z][(int)point.x].renderer.material = CellOpen_Mat;
                 }
@@ -880,6 +831,7 @@ public class ConstructionGrid : MonoBase
         shipHealth -= cubeInfo.health;
         shipShield -= cubeInfo.shield;
         shipSpeed -= cubeInfo.speed;
+        shipDamage -= cubeInfo.damage;
 
         cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].renderer.material = CellCursor_Mat;
     }
@@ -903,29 +855,30 @@ public class ConstructionGrid : MonoBase
         string build = PlayerPrefs.GetString(path + buildName, "NA");
         if (build == "NA")
         {
+            Log(buildName + " is not in data.", false, Debugger.LogTypes.Data);
             return null;
         }
         BuildInfo buildInfo = new BuildInfo();
         buildInfo.partList = new List<KeyValuePair<int, CUBEGridInfo>>();
 
-        Log(build, true, Debugger.LogTypes.Data);
-        string[] info = build.Split(DATASEP);
+        string[] info = build.Split(BuildInfo.DATASEP[0]);
 
-        // health
-        buildInfo.health = float.Parse(info[0]);
-        // shield
-        buildInfo.shield = float.Parse(info[1]);
-        // speed
-        buildInfo.speed = float.Parse(info[2]);
+        // stats
+        buildInfo.name = info[0];
+        buildInfo.health = float.Parse(info[1]);
+        buildInfo.shield = float.Parse(info[2]);
+        buildInfo.speed = float.Parse(info[3]);
+        buildInfo.damage = float.Parse(info[4]);
+
         // pieces
-        int i = 2;
-        while (i + 4 < info.Length)
+        int i = 5;
+        while (i < info.Length-1)
         {
-            buildInfo.partList.Add(new KeyValuePair<int, CUBEGridInfo>(int.Parse(info[++i]),
+            buildInfo.partList.Add(new KeyValuePair<int, CUBEGridInfo>(int.Parse(info[i++]),
                                                                        new CUBEGridInfo(
-                                                                           Utility.ParseV3(info[++i]),
-                                                                           Utility.ParseV3(info[++i]),
-                                                                           int.Parse(info[++i]))));
+                                                                           Utility.ParseV3(info[i++]),
+                                                                           Utility.ParseV3(info[i++]),
+                                                                           int.Parse(info[i++]))));
         }
 
         return buildInfo;
@@ -962,6 +915,171 @@ public class ConstructionGrid : MonoBase
         UnityEditor.AssetDatabase.CreateAsset(compShip.GetComponent<MeshFilter>().mesh, ENEMYMESHPATH + buildName + "_Mesh.asset");
         UnityEditor.PrefabUtility.CreatePrefab(ENEMYPREFABPATH + buildName + ".prefab", compShip.gameObject); // keeping children
 #endif
+    }
+
+    #endregion
+
+    #region Static
+
+    /// <summary>
+    /// Get all build names. User vs Dev.
+    /// </summary>
+    /// <returns>All build names.</returns>
+    public static List<string> BuildNames()
+    {
+        string namePath;
+#if DEVMODE
+        namePath = ALLDEVBUILDSPATH;
+#else
+        namePath = ALLUSERBUILDSPATH;
+#endif
+        return PlayerPrefs.GetString(namePath).Split(BuildInfo.DATASEP[0]).ToList();
+    }
+
+
+    /// <summary>
+    /// Save build to data.
+    /// </summary>
+    private string CreateBuildInfoString()
+    {
+        StringBuilder build = new StringBuilder();
+
+        // stats
+        build.Append(buildName);
+        build.Append(BuildInfo.DATASEP);
+        build.Append(shipHealth);
+        build.Append(BuildInfo.DATASEP);
+        build.Append(shipShield);
+        build.Append(BuildInfo.DATASEP);
+        build.Append(shipSpeed);
+        build.Append(BuildInfo.DATASEP);
+        build.Append(shipDamage);
+        build.Append(BuildInfo.DATASEP);
+
+        // pieces
+        foreach (var piece in currentBuild)
+        {
+            // ID
+            build.Append(piece.Key.ID);
+            build.Append(BuildInfo.DATASEP);
+            // positon
+            build.Append(piece.Value.position);
+            build.Append(BuildInfo.DATASEP);
+            // rotation
+            build.Append(piece.Value.rotation);
+            build.Append(BuildInfo.DATASEP);
+            // weapon map
+            build.Append(piece.Value.weaponMap);
+            build.Append(BuildInfo.DATASEP);
+        }
+
+        return build.ToString();
+    }
+
+
+    /// <summary>
+    /// Save current build to data.
+    /// </summary>
+    public void SaveBuild()
+    {
+        SaveBuild(buildName, CreateBuildInfoString());
+
+#if DEVMODE
+        // compact and prefab ship
+        StartCoroutine(SavePrefab());
+#endif
+    }
+
+    #endregion
+
+
+    #region Static Methods
+
+    /// <summary>
+    /// Save build to data.
+    /// </summary>
+    /// <param name="buildName">Name of ship to save.</param>
+    /// <param name="build">BuildInfo string to save.</param>
+    public static void SaveBuild(string buildName, string build)
+    {
+        //Debugger.Log("Saving " + buildName + ": " + build, null, false, Debugger.LogTypes.Data);
+
+        // get paths
+        string dataPath;
+        string namePath;
+#if DEVMODE
+        dataPath = DEVBUILDSPATH;
+        namePath = ALLDEVBUILDSPATH;
+#else
+        dataPath = USERBUILDSPATH;
+        namePath = ALLUSERBUILDSPATH;
+#endif
+        // save data
+        PlayerPrefs.SetString(dataPath + buildName, build);
+        // save build name
+        List<string> buildNames = BuildNames();
+        if (!buildNames.Contains(buildName))
+        {
+            buildNames.Add(buildName);
+            PlayerPrefs.SetString(namePath, string.Join(BuildInfo.DATASEP, buildNames.ToArray()));
+        }
+    }
+
+
+    /// <summary>
+    /// Delete build from data.
+    /// </summary>
+    /// <param name="buildName">Name of build.</param>
+    public static void DeleteBuild(string buildName)
+    {
+        // get path
+        string dataPath;
+        string namePath;
+#if DEVMODE
+        dataPath = DEVBUILDSPATH + buildName;
+        namePath = ALLDEVBUILDSPATH;
+#else
+        dataPath = USERBUILDSPATH + buildName;
+        namePath = ALLUSERBUILDSPATH;
+#endif
+
+        // remove from list of all builds
+        string[] builds = PlayerPrefs.GetString(namePath).Split(BuildInfo.DATASEP[0]).Where(b => b != buildName && !string.IsNullOrEmpty(b)).ToArray();
+        PlayerPrefs.SetString(namePath, string.Join(BuildInfo.DATASEP, builds));
+
+        // remove build info
+        PlayerPrefs.DeleteKey(dataPath);
+    }
+
+
+    /// <summary>
+    /// Rename a build in data.
+    /// </summary>
+    /// <param name="oldName">Current name of the build.</param>
+    /// <param name="newName">New name of the build.</param>
+    public static void RenameBuild(string oldName, string newName)
+    {
+        // get path
+        string dataPath;
+        string namePath;
+#if DEVMODE
+        dataPath = DEVBUILDSPATH;
+        namePath = ALLDEVBUILDSPATH;
+#else
+        dataPath = USERBUILDSPATH;
+        namePath = ALLUSERBUILDSPATH;
+#endif
+
+        // update list of all builds
+        string[] builds = PlayerPrefs.GetString(namePath).Split(BuildInfo.DATASEP[0]);
+        int index = Array.IndexOf(builds, oldName);
+        builds[index] = newName;
+        PlayerPrefs.SetString(namePath, string.Join(BuildInfo.DATASEP, builds));
+
+        // update build info
+        string buildInfo = PlayerPrefs.GetString(dataPath + oldName);
+        PlayerPrefs.DeleteKey(oldName);
+        PlayerPrefs.SetString(dataPath + newName, buildInfo);
     }
 
     #endregion

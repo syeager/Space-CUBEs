@@ -5,8 +5,12 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using System.Collections;
+using System.Linq;
 
-public class GarageManager : MonoBehaviour
+using Types = CUBE.Types;
+using CursorStatuses = ConstructionGrid.CursorStatuses;
+
+public class GarageManager : MonoBase
 {
     #region References
 
@@ -17,7 +21,7 @@ public class GarageManager : MonoBehaviour
 
     #region Public Fields
 
-    public int gridSize;
+    private const int gridSize = 10;
 
     public float cameraSpeed;
     public float zoomSpeed;
@@ -28,41 +32,79 @@ public class GarageManager : MonoBehaviour
     public float swipeTime;
     public float pinchModifier;
     public float pinchMin;
+    public float menuSwipeDist;
+
+    public GameObject[] menuPanels;
+    public GameObject infoPanel;
+
+    public UIScrollView loadScrollView;
+    public UIScrollBar loadScrollBar;
+    public UIGrid loadGrid;
+    public GameObject BuildButton_Prefab;
+
+    public UIScrollView selectionScrollView;
+    public UIScrollBar selectionScrollBar;
+    public UIGrid selectionGrid;
+    public GameObject CUBESelectionButton_Prefab;
+    
+    public ActivateButton leftFilter;
+    public UILabel filterLabel;
+    public ActivateButton rightFilter;
+    
+    public UILabel CUBEName;
+    public UILabel CUBEHealth;
+    public UILabel CUBEShield;
+    public UILabel CUBESpeed;
+    public UILabel CUBEDamage;
+
+    public UIInput shipName;
+    public UILabel shipHealth;
+    public UILabel shipShield;
+    public UILabel shipSpeed;
+    public UILabel shipDamage;
+    public ActivateButton actionButton1;
+    public ActivateButton actionButton2;
 
     #endregion
 
     #region Private Fields
 
     private Transform cameraTarget;
-    private float W;
-    private float H;
 
     private bool menuOpen;
-    private bool allCUBEs = true;
     private CUBE.Types CUBEFilter;
-    public Vector2 CUBEScroll = Vector2.zero;
-    private Rect LeftMenuRect;
-    private Rect RightMenuRect;
-    private Rect DeleteRect;
-    private Rect ActionRect;
-    private Rect InfoRect;
-    private float CUBESize;
+   
     private int weaponIndex = -1;
 
-    private enum Menus
-    {
-        Menu = 0,
-        CUBEs = 1,
-        Nav = 2,
-        Weapons = 3,
-    }
-    private Menus menu;
-
     private int[] inventory;
-    private List<CUBEInfo> filteredCUBEs = new List<CUBEInfo>();
 
     private Vector3 cameraDirection = Vector3.up;
     private float zoom = 15f;
+
+    private bool selectedBuild;
+    private string currentBuild = "";
+
+    private ActivateButton[] filteredCUBEButtons;
+    private CUBEInfo currentCUBE;
+
+    #endregion
+
+    #region Mobile Fields
+
+    private bool canMenuSwipe = true;
+    private Rect touchRect;
+
+    #endregion
+
+    #region State Fields
+
+    private StateMachine stateMachine;
+    private const string LOADSTATE = "Load";
+    private const string SELECTSTATE = "Select";
+    private const string NAVSTATE = "Nav";
+    private const string WEAPONSTATE = "Weapon";
+    private const string PAINTSTATE = "Paint";
+    private const string OBSERVESTATE = "Observe";
 
     #endregion
 
@@ -89,15 +131,34 @@ public class GarageManager : MonoBehaviour
 
     #endregion
 
-    #region Const Fields
+    #region Load Menu Fields
 
-    public Rect LeftMenuPer = new Rect(0f, 0.1f, 0.3f, 0.9f);
-    public Rect RightMenuPer = new Rect(0.9f, 0f, 0.1f, 0.9f);
-    public Rect DeletePer = new Rect(0.5f, 0.9f, 0.5f, 0.1f);
-    public Rect ActionPer = new Rect(0.5f, 0.9f, 0.5f, 0.1f);
-    public Rect InfoPer = new Rect(0.5f, 0.9f, 0.5f, 0.1f);
-    public float CUBEPer = 0.1f;
-    private readonly Rect VIEWRECT = new Rect(0f, 0f, 1f, 1f);
+    public GameObject renamePanel;
+    public UIInput renameInput;
+
+    #endregion
+
+    #region Nav Menu Fields
+
+    public ActivateButton[] positionButtons;
+    public UILabel postionLabel;
+    public ActivateButton[] rotationButtons;
+    public UILabel rotationLabel;
+
+    #endregion
+
+    #region Save Fields
+
+    public float saveConfirmationTime = 2f;
+    public GameObject saveConfirmation;
+    public UILabel saveShipName;
+
+    #endregion
+
+    #region Weapon Menu Fields
+
+    public ActivateButton[] weaponButtons;
+    public ActivateButton[] weaponNavButtons;
 
     #endregion
 
@@ -106,39 +167,118 @@ public class GarageManager : MonoBehaviour
 
     private void Awake()
     {
-        UpdateScreen();
+        // create states
+        stateMachine = new StateMachine(this);
+        stateMachine.CreateState(LOADSTATE, LoadEnter, LoadExit);
+        stateMachine.CreateState(SELECTSTATE, SelectEnter, SelectExit);
+        stateMachine.CreateState(NAVSTATE, NavEnter, NavExit);
+        stateMachine.CreateState(WEAPONSTATE, WeaponEnter, WeaponExit);
+        stateMachine.initialState = LOADSTATE;
 
-        Grid.CreateGrid(gridSize);
         cameraTarget = new GameObject("Camera Target").transform;
+
+        // set to load menu
+        menuPanels[0].SetActive(true);
+        menuPanels[1].SetActive(false);
+        menuPanels[2].SetActive(false);
+        menuPanels[3].SetActive(false);
+        menuPanels[4].SetActive(false);
+        infoPanel.SetActive(false);
+        mainCamera.camera.rect = new Rect(0f, 0f, 1f, 1f);
+
+        // load menu
+        CreateBuildButtons();
+
+        // selection menu
+        inventory = CUBE.GetInventory();
+        filteredCUBEButtons = new ActivateButton[inventory.Length];
+        leftFilter.ActivateEvent += OnFilterChanged;
+        rightFilter.ActivateEvent += OnFilterChanged;
+
+        // nav menu
+        foreach (var button in positionButtons)
+        {
+            button.ActivateEvent += OnPositionButtonPressed;
+        }
+        foreach (var button in rotationButtons)
+        {
+            button.ActivateEvent += OnRotationButtonPressed;
+        }
     }
 
 
     private void Start()
     {
-        // position camera
-        Grid.RotateGrid(Vector3.up);
-        cameraTarget.position = CalculateTargetPostion(Vector3.up);
-        cameraTarget.rotation = Quaternion.Euler(cameraRotations[0]);
+        stateMachine.Start(new Dictionary<string, object>());
+    }
 
-        allCUBEs = true;
-        FilterCUBEs();
+    #endregion
+
+    #region Camera Methods
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private int MenuSwipe()
+    {
+        int direction = 0;
+#if UNITY_STANDALONE
+        if (Input.GetKey(KeyCode.LeftAlt))
+        {
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                direction = -1;
+            }
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                direction = 1;
+            }
+        }
+#else
+        if (canMenuSwipe)
+        {
+            if (Input.touchCount == 2)
+            {
+                float delta = (Input.GetTouch(0).deltaPosition + Input.GetTouch(1).deltaPosition).x;
+                if (Mathf.Abs(delta) >= menuSwipeDist)
+                {
+                    direction = (int)Mathf.Sign(delta);
+                }
+            }
+        }
+
+#endif
+
+        return direction;
     }
 
 
-    private void OnGUI()
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="direction"></param>
+    /// <returns></returns>
+    private Vector3 CalculateTargetPostion(Vector3 direction)
     {
-        Info();
-        LeftMenu();
-        RightMenu();
-        DeleteButton();
-        ActionButton();
+        return (Grid.layer + direction * zoom).Round();
     }
 
 
-    private void Update()
+    /// <summary>
+    /// 
+    /// </summary>
+    private void UpdateCamera()
     {
-        UpdateCamera();
+        mainCamera.position = Vector3.Lerp(mainCamera.position, cameraTarget.position, Time.deltaTime * cameraSpeed);
+        mainCamera.rotation = Quaternion.Slerp(mainCamera.rotation, cameraTarget.rotation, Time.deltaTime * cameraSpeed);
+    }
 
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private void CameraMovementEdit()
+    {
 #if UNITY_STANDALONE
 
         // move CUBE
@@ -200,18 +340,6 @@ public class GarageManager : MonoBehaviour
                 RotateCamera(Vector3.down);
             }
         }
-        // zoom
-        else if (Input.GetKey(KeyCode.LeftAlt))
-        {
-            if (Input.GetKey(KeyCode.UpArrow))
-            {
-                CameraZoom(-1f);
-            }
-            if (Input.GetKey(KeyCode.DownArrow))
-            {
-                CameraZoom(1f);
-            }
-        }
         // change layer
         else
         {
@@ -225,6 +353,16 @@ public class GarageManager : MonoBehaviour
                 Grid.ChangeLayer(1);
                 CameraZoom(0f);
             }
+        }
+
+        // zoom
+        if (Input.GetKey(KeyCode.R))
+        {
+            CameraZoom(-1f);
+        }
+        if (Input.GetKey(KeyCode.F))
+        {
+            CameraZoom(1f);
         }
 
         // place/pickup
@@ -260,7 +398,7 @@ public class GarageManager : MonoBehaviour
             Touch touch = Input.GetTouch(0);
             if (touch.phase == TouchPhase.Began)
             {
-                if (VIEWRECT.Contains(mainCamera.camera.ScreenToViewportPoint(touch.position)))
+                if (touchRect.Contains(mainCamera.camera.ScreenToViewportPoint(touch.position)))
                 {
                     StartCoroutine(Swipe(touch));
                 }
@@ -273,7 +411,7 @@ public class GarageManager : MonoBehaviour
             Touch touchB = Input.GetTouch(1);
             if (touchA.phase == TouchPhase.Began || touchB.phase == TouchPhase.Began)
             {
-                if (VIEWRECT.Contains(mainCamera.camera.ScreenToViewportPoint(touchA.position)) && VIEWRECT.Contains(mainCamera.camera.ScreenToViewportPoint(touchB.position)))
+                if (touchRect.Contains(mainCamera.camera.ScreenToViewportPoint(touchA.position)) && touchRect.Contains(mainCamera.camera.ScreenToViewportPoint(touchB.position)))
                 {
                     StartCoroutine(Pinch());
                 }
@@ -281,348 +419,51 @@ public class GarageManager : MonoBehaviour
         }
 
 #endif
+    }
 
+
+    /// <summary>
+    /// Sets position and rotation target of camera. Starts movement.
+    /// </summary>
+    /// <param name="direction"></param>
+    private void RotateCamera(Vector3 direction)
+    {
+        // convert camera position
+        cameraDirection = cameraTarget.TransformDirection(direction).Round();
+
+        int index = -1;
+        for (int i = 0; i < cameraPositions.Length; i++)
+        {
+            if (cameraDirection == cameraPositions[i])
+            {
+                index = i;
+                break;
+            }
+        }
+
+        // rotate grid
+        Grid.RotateGrid(cameraPositions[index]);
+
+        // set target position
+        cameraTarget.position = CalculateTargetPostion(cameraDirection);
+        // get target rotation
+        cameraTarget.rotation = Quaternion.Euler(cameraRotations[index]);
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="strength"></param>
+    private void CameraZoom(float strength)
+    {
+        zoom = Mathf.Clamp(zoom + (strength * zoomSpeed * Time.deltaTime), zoomMin, zoomMax);
+        cameraTarget.position = CalculateTargetPostion(cameraDirection);
     }
 
     #endregion
 
-    #region Private Methods
-
-    private void UpdateScreen()
-    {
-        W = Screen.width;
-        H = Screen.height;
-
-        LeftMenuRect = new Rect(W * LeftMenuPer.x, H * LeftMenuPer.y, W * LeftMenuPer.width, H * LeftMenuPer.height);
-        RightMenuRect = new Rect(W * RightMenuPer.x, H * RightMenuPer.y, W * RightMenuPer.width, H * RightMenuPer.height);
-        DeleteRect = new Rect(W * DeletePer.x, H * DeletePer.y, W * DeletePer.width, H * DeletePer.height);
-        ActionRect = new Rect(W * ActionPer.x, H * ActionPer.y, W * ActionPer.width, H * ActionPer.height);
-        InfoRect = new Rect(W * InfoPer.x, H * InfoPer.y, W * InfoPer.width, H * InfoPer.height);
-        CUBESize = H * CUBEPer;
-    }
-
-
-    private void LeftMenu()
-    {
-        GUI.BeginGroup(LeftMenuRect);
-        {
-            GUI.Box(new Rect(0, 0, LeftMenuRect.width, LeftMenuRect.height), "");
-            switch (menu)
-            {
-                case Menus.Menu:
-                    Menu();
-                    break;
-                case Menus.CUBEs:
-                    CUBEs();
-                    break;
-                case Menus.Nav:
-                    Navigation();
-                    break;
-                case Menus.Weapons:
-                    Weapons();
-                    break;
-            }
-        }
-        GUI.EndGroup();
-    }
-
-
-    private void Menu()
-    {
-        if (GUI.Button(new Rect(0f, 0f, LeftMenuRect.width, LeftMenuRect.height * 0.2f), "Save"))
-        {
-            Grid.SaveBuild();
-        }
-        if (GUI.Button(new Rect(0f, LeftMenuRect.height * 0.2f, LeftMenuRect.width, LeftMenuRect.height * 0.2f), "Load"))
-        {
-            Grid.CreateBuild(Grid.buildName);
-        }
-        if (GUI.Button(new Rect(0f, LeftMenuRect.height * 0.4f, LeftMenuRect.width, LeftMenuRect.height * 0.2f), "Test"))
-        {
-            GameData.LoadLevel("Deep Space", false, new Dictionary<string, object> { { "Build", Grid.buildName } });
-        }
-        if (GUI.Button(new Rect(0f, LeftMenuRect.height * 0.6f, LeftMenuRect.width, LeftMenuRect.height * 0.2f), "Main Menu"))
-        {
-            GameData.LoadLevel("Main Menu", false, new Dictionary<string, object>());
-        }
-    }
-
-
-    private void Navigation()
-    {
-        float w = LeftMenuRect.width;
-        float h = LeftMenuRect.height;
-
-        // rotate Y
-        GUI.Label(new Rect(0, 0, w, h * 0.05f), "Rotate Y");
-        if (GUI.Button(new Rect(0, h * 0.05f, w * 0.5f, h * 0.1f), "←"))
-        {
-            Grid.RotateCursor(Vector3.up);
-        }
-        if (GUI.Button(new Rect(w * 0.5f, h * 0.05f, w / 2f, h * 0.1f), "→"))
-        {
-            Grid.RotateCursor(Vector3.down);
-        }
-
-        // rotate X
-        GUI.Label(new Rect(0, h * 0.16f, w, h * 0.05f), "Rotate Z");
-        if (GUI.Button(new Rect(0, h * 0.21f, w * 0.5f, h * 0.1f), "←"))
-        {
-            Grid.RotateCursor(Vector3.forward);
-        }
-        if (GUI.Button(new Rect(w * 0.5f, h * 0.21f, w / 2f, h * 0.1f), "→"))
-        {
-            Grid.RotateCursor(Vector3.back);
-        }
-
-        // cursor info
-        GUI.Label(new Rect(0, h - w * 0.8f - h * 0.1f, w, h * 0.05f), "Position: " + (Grid.cursor + Vector3.one));
-        GUI.Label(new Rect(0, h - w * 0.8f - h * 0.05f, w, h * 0.05f), "Rotation: " + Grid.cursorRotation.eulerAngles);
-
-        // move X/Z
-        Rect moveXZ = new Rect(0, h - w * 0.8f, w * 0.8f, w * 0.8f);
-        GUI.BeginGroup(moveXZ);
-        {
-            GUI.Box(new Rect(0, 0, moveXZ.width, moveXZ.height), "");
-            float _w = moveXZ.width * 0.25f;
-            float _h = moveXZ.height * 0.5f - _w / 2f;
-
-            if (GUI.Button(new Rect(moveXZ.width / 2f - _w / 2f, 0f, _w, _h), "↑"))
-            {
-                Grid.MoveCursor(cameraTarget.up);
-            }
-            if (GUI.Button(new Rect(moveXZ.width / 2f - _w / 2f, _h + _w, _w, _h), "↓"))
-            {
-                Grid.MoveCursor(-cameraTarget.up);
-            }
-            if (GUI.Button(new Rect(0f, _h, _h, _w), "←"))
-            {
-                Grid.MoveCursor(-cameraTarget.right);
-            }
-            if (GUI.Button(new Rect(_h + _w, _h, _h, _w), "→"))
-            {
-                Grid.MoveCursor(cameraTarget.right);
-            }
-        }
-        GUI.EndGroup();
-
-        // move Y
-        Rect moveY = new Rect(w * 0.8f, h - w * 0.8f, w * 0.2f, w * 0.8f);
-        GUI.BeginGroup(moveY);
-        {
-            GUI.Box(new Rect(0, 0, moveY.width, moveY.height), "");
-
-            if (GUI.Button(new Rect(0, 0, moveY.width, moveY.height * 0.5f), "↑"))
-            {
-                Grid.ChangeLayer(1);
-                CameraZoom(0f);
-            }
-            if (GUI.Button(new Rect(0, moveY.height * 0.5f, moveY.width, moveY.height * 0.5f), "↓"))
-            {
-                Grid.ChangeLayer(-1);
-                CameraZoom(0f);
-            }
-        }
-        GUI.EndGroup();
-    }
-
-
-    private void Weapons()
-    {
-        float w = LeftMenuRect.width;
-        float h = LeftMenuRect.height;
-
-        // weapons
-        float _h = h * 2f / 3f / Grid.weapons.Length;
-        for (int i = 0; i < Grid.weapons.Length; i++)
-        {
-            if (Grid.weapons[i] == null)
-            {
-                GUI.Label(new Rect(0f, _h * i, w, _h), (i + 1) + ") ");
-            }
-            else
-            {
-                if (GUI.Button(new Rect(0f, _h * i, w, _h), (i + 1) + ") " + Grid.weapons[i].GetType().Name + (weaponIndex == i ? "*" : "")))
-                {
-                    weaponIndex = (weaponIndex == i) ? -1 : i;
-                }
-            }
-        }
-
-        // move
-        if (weaponIndex != -1 && Grid.weapons[weaponIndex] != null)
-        {
-            if (GUI.Button(new Rect(0f, h - h / 3f, w, h / 6f), "↑"))
-            {
-                Grid.MoveWeaponMap(weaponIndex, -1);
-                weaponIndex--;
-            }
-            if (GUI.Button(new Rect(0f, h - h / 6f, w, h / 6f), "↓"))
-            {
-                Grid.MoveWeaponMap(weaponIndex, 1);
-                weaponIndex++;
-            }
-            weaponIndex = Mathf.Clamp(weaponIndex, 0, Grid.weapons.Length - 1);
-        }
-    }
-
-
-    private void RightMenu()
-    {
-        GUI.BeginGroup(RightMenuRect);
-        {
-            GUI.Box(new Rect(0f, 0f, RightMenuRect.width, RightMenuRect.height), "");
-
-            // menus
-            string[] menus = Enum.GetNames(typeof(Menus));
-            for (int i = 0; i < menus.Length; i++)
-            {
-                if (GUI.Button(new Rect(0f, i * RightMenuRect.height / menus.Length, RightMenuRect.width, RightMenuRect.height / menus.Length), menus[i]))
-                {
-                    menu = (Menus)Enum.Parse(typeof(Menus), menus[i]);
-                }
-            }
-        }
-        GUI.EndGroup();
-    }
-
-
-    private void DeleteButton()
-    {
-        if (GUI.Button(DeleteRect, Grid.cursorStatus == ConstructionGrid.CursorStatuses.Holding ? "Delete" : "delete"))
-        {
-            Grid.DeleteCUBE();
-        }
-    }
-
-
-    private void ActionButton()
-    {
-        string cursorAction = "";
-        switch (Grid.cursorStatus)
-        {
-            case ConstructionGrid.CursorStatuses.None:
-                cursorAction = "action";
-                break;
-            case ConstructionGrid.CursorStatuses.Holding:
-                cursorAction = "Place";
-                break;
-            case ConstructionGrid.CursorStatuses.Hover:
-                cursorAction = "Grab";
-                break;
-        }
-        if (GUI.Button(ActionRect, cursorAction))
-        {
-            Grid.CursorAction(true);
-        }
-    }
-
-
-    private void CUBEs()
-    {
-        float w = LeftMenuRect.width;
-        float h = LeftMenuRect.height;
-
-        // filter left
-        if (GUI.Button(new Rect(0f, 0f, w * 0.25f, h * 0.15f), allCUBEs ? "|" : "←") && !allCUBEs)
-        {
-            int cursor = (int)CUBEFilter;
-            if (cursor == 0)
-            {
-                allCUBEs = true;
-            }
-            else
-            {
-                cursor--;
-                CUBEFilter = (CUBE.Types)cursor;
-            }
-            FilterCUBEs();
-        }
-        // filter
-        GUI.Label(new Rect(w * 0.25f, 0f, w * 0.5f, h * 0.15f), allCUBEs ? "All CUBE_Prefabs" : CUBEFilter.ToString());
-        // filter right
-        if (GUI.Button(new Rect(w * 0.75f, 0f, w * 0.25f, h * 0.15f), CUBEFilter == CUBE.Types.Weapon ? "|" : "→") && CUBEFilter != CUBE.Types.Weapon)
-        {
-            allCUBEs = false;
-            int cursor = (int)CUBEFilter;
-            cursor++;
-            CUBEFilter = (CUBE.Types)cursor;
-            FilterCUBEs();
-        }
-
-        // CUBEs
-        CUBEScroll = GUI.BeginScrollView(new Rect(0, h * 0.15f, w, h * 0.8f), CUBEScroll, new Rect(0, 0, w - 16, CUBESize * filteredCUBEs.Count));
-        {
-            for (int i = 0; i < filteredCUBEs.Count; i++)
-            {
-                if (GUI.Button(new Rect(0, i * CUBESize, w - 16f, CUBESize), filteredCUBEs[i].name + " x " + Grid.inventory[filteredCUBEs[i].ID]))
-                {
-                    Grid.CreateCUBE(filteredCUBEs[i].ID);
-                }
-            }
-        }
-        GUI.EndScrollView();
-
-        // CUBE info
-        Rect infoRect = new Rect(0, h * 0.8f, w, h * 0.25f);
-        GUI.BeginGroup(infoRect);
-        {
-            GUI.Box(new Rect(0, 0, infoRect.width, infoRect.height), "");
-
-            if (Grid.heldCUBE != null)
-            {
-                GUI.Label(new Rect(0, 0, infoRect.width, infoRect.height * 0.3f), Grid.heldInfo.name);
-                GUI.Label(new Rect(0, infoRect.height * 0.3f, w, infoRect.height * 0.2f), "Health: " + Grid.heldInfo.health);
-                GUI.Label(new Rect(0, infoRect.height * 0.5f, w, infoRect.height * 0.2f), "Shield: " + Grid.heldInfo.shield);
-                GUI.Label(new Rect(0, infoRect.height * 0.7f, w, infoRect.height * 0.2f), "Speed: " + Grid.heldInfo.speed);
-            }
-        }
-        GUI.EndGroup();
-    }
-
-
-    private void FilterCUBEs()
-    {
-        filteredCUBEs.Clear();
-
-        // filter CUBEs
-        if (allCUBEs)
-        {
-            filteredCUBEs = new List<CUBEInfo>(CUBE.allCUBES);
-        }
-        else
-        {
-            foreach (var cube in CUBE.allCUBES)
-            {
-                if (cube.type == CUBEFilter)
-                {
-                    filteredCUBEs.Add(cube);
-                }
-            }
-        }
-    }
-
-
-    private void Info()
-    {
-        GUI.BeginGroup(InfoRect);
-        {
-            // name
-            Grid.buildName = GUI.TextField(new Rect(0f, 0f, InfoRect.width, InfoRect.height * 0.4f), Grid.buildName);
-
-            // health
-            GUI.Label(new Rect(0f, InfoRect.height * 0.45f, InfoRect.width * 0.25f, InfoRect.height * 0.5f), "Health: " + Grid.shipHealth);
-            // shield
-            GUI.Label(new Rect(InfoRect.width * 0.25f, InfoRect.height * 0.45f, InfoRect.width * 0.25f, InfoRect.height * 0.5f), "Shield: " + Grid.shipShield);
-            // speed
-            GUI.Label(new Rect(InfoRect.width * 0.50f, InfoRect.height * 0.45f, InfoRect.width * 0.25f, InfoRect.height * 0.5f), "Speed: " + Grid.shipSpeed);
-            // weapons
-            GUI.Label(new Rect(InfoRect.width * 0.75f, InfoRect.height * 0.45f, InfoRect.width * 0.25f, InfoRect.height * 0.5f), "Weapons: " + Grid.shipWeapons);
-        }
-        GUI.EndGroup();
-
-    }
-
+    #region Mobile Methods
 
     private IEnumerator Swipe(Touch startTouch)
     {
@@ -692,65 +533,740 @@ public class GarageManager : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region Load Menu Methods
+
+    private void LoadEnter(Dictionary<string, object> info)
+    {
+        canMenuSwipe = false;
+        InvokeAction(() => canMenuSwipe = true, 1f);
+
+#if UNITY_ANDROID
+        touchRect = new Rect(0f, 0f, 1f, 1f);
+#endif
+
+        mainCamera.camera.rect = new Rect(0f, 0f, 1f, 1f);
+        menuPanels[0].SetActive(true);
+        stateMachine.SetUpdate(LoadUpdate());
+    }
+
+
+    private IEnumerator LoadUpdate()
+    {
+        while (true)
+        {
+            if (selectedBuild)
+            {
+                if (MenuSwipe() == 1)
+                {
+                    stateMachine.SetState(SELECTSTATE, new Dictionary<string, object>());
+                }
+            }
+            yield return null;
+        }
+    }
+
+
+    private void LoadExit(Dictionary<string, object> info)
+    {
+        menuPanels[0].SetActive(false);
+    }
+
 
     /// <summary>
-    /// Sets position and rotation target of camera. Starts movement.
+    /// Create Construction Grid and position camera.
     /// </summary>
-    /// <param name="direction"></param>
-    private void RotateCamera(Vector3 direction)
+    private void CreateGrid()
     {
-        // convert camera position
-        cameraDirection = cameraTarget.TransformDirection(direction).Round();
+        Grid.CreateGrid(gridSize);
 
-        int index = -1;
-        for (int i = 0; i < cameraPositions.Length; i++)
+        // position camera
+        Grid.RotateGrid(Vector3.up);
+        cameraTarget.position = CalculateTargetPostion(Vector3.up);
+        cameraTarget.rotation = Quaternion.Euler(cameraRotations[0]);
+    }
+
+
+    /// <summary>
+    /// Create all of the buttons for the builds in the load menu.
+    /// </summary>
+    private void CreateBuildButtons()
+    {
+        string[] buildNames = ConstructionGrid.BuildNames().ToArray();
+        if (buildNames.Length > 0) currentBuild = buildNames[0];
+        for (int i = 0; i < buildNames.Length; i++)
         {
-            if (cameraDirection == cameraPositions[i])
+            ScrollviewButton button = (Instantiate(BuildButton_Prefab) as GameObject).GetComponent<ScrollviewButton>();
+            button.Initialize(i.ToString(), buildNames[i], buildNames[i], loadGrid.transform, loadScrollView);
+            button.ActivateEvent += OnBuildChosen;
+        }
+
+        StartCoroutine(Utility.UpdateScrollView(loadGrid, loadScrollBar));
+    }
+
+
+    public void LoadMainMenu()
+    {
+        GameData.LoadLevel("Main Menu");
+    }
+
+
+    public void LoadStore()
+    {
+        GameData.LoadLevel("Store");
+    }
+
+
+    private void OnBuildChosen(object sender, ActivateButtonArgs args)
+    {
+        if (args.isPressed) return;
+
+        currentBuild = args.value;
+    }
+
+
+    /// <summary>
+    /// Delete selected build from data.
+    /// </summary>
+    public void DeleteBuild()
+    {
+        if (string.IsNullOrEmpty(currentBuild)) return;
+
+        // delete build
+        ConstructionGrid.DeleteBuild(currentBuild);
+
+        // remove build button
+        ScrollviewButton button = loadGrid.GetComponentsInChildren<ScrollviewButton>().First(b => b.value == currentBuild);
+        button.ActivateEvent -= OnBuildChosen;
+        Destroy(button.gameObject);
+
+        // reload grid
+        StartCoroutine(Utility.UpdateScrollView(loadGrid, loadScrollBar, false));
+
+        currentBuild = "";
+    }
+
+
+    public void ConfirmRename()
+    {
+        renamePanel.SetActive(true);
+        renameInput.value = currentBuild;
+    }
+
+
+    public void RenameBuild()
+    {
+        ConstructionGrid.RenameBuild(currentBuild, renameInput.value);
+        renamePanel.SetActive(false);
+
+        ScrollviewButton button = loadGrid.GetComponentsInChildren<ScrollviewButton>().First(b => b.value == currentBuild);
+        currentBuild = renameInput.value;
+        button.value = currentBuild;
+        button.label.text = currentBuild;
+    }
+
+
+    public void CancelRename()
+    {
+        renamePanel.SetActive(false);
+    }
+
+
+    public void LoadBuild()
+    {
+        if (!selectedBuild)
+        {
+            CreateGrid();
+        }
+        Grid.CreateBuild(currentBuild);
+        shipName.text = Grid.buildName;
+        stateMachine.SetState(SELECTSTATE, new Dictionary<string,object>());
+        selectedBuild = true;
+    }
+
+
+    public void NewBuild()
+    {
+        CreateGrid();
+        stateMachine.SetState(SELECTSTATE, new Dictionary<string, object>());
+        selectedBuild = true;
+    }
+
+
+    public void Play()
+    {
+        GameData.LoadLevel("Deep Space", true, new Dictionary<string, object> { { "Build", currentBuild } });
+    }
+
+    #endregion
+
+    #region Selection Menu Methods
+
+    private void SelectEnter(Dictionary<string, object> info)
+    {
+        canMenuSwipe = false;
+        InvokeAction(() => canMenuSwipe = true, 1f);
+
+#if UNITY_ANDROID
+        touchRect = new Rect(0.25f, 0f, 1f, 1f);
+#endif
+
+        mainCamera.camera.rect = new Rect(0.25f, 0f, 1f, 1f);
+        menuPanels[1].SetActive(true);
+        infoPanel.SetActive(true);
+        FilterCUBEs(CUBEFilter, true);
+        actionButton1.label.text = "---";
+        actionButton1.isEnabled = false;
+        actionButton2.label.text = "Nav";
+        actionButton2.isEnabled = true;
+        actionButton2.ActivateEvent += OnNavMenuPressed;
+        stateMachine.SetUpdate(SelectUpdate());
+        StartCoroutine("SaveConfirmation");
+    }
+
+
+    private IEnumerator SelectUpdate()
+    {
+        while (true)
+        {
+            // update camera
+            UpdateCamera();
+            CameraMovementEdit();
+
+            // change menu
+            int dir = MenuSwipe();
+            if (dir == -1)
             {
-                index = i;
+                stateMachine.SetState(LOADSTATE, new Dictionary<string, object>());
+            }
+            else if (dir == 1)
+            {
+                stateMachine.SetState(NAVSTATE, new Dictionary<string, object>());
+            }
+
+            // update ship stats
+            UpdateInfoPanel();
+            yield return null;
+        }
+    }
+
+
+    private void SelectExit(Dictionary<string, object> info)
+    {
+        menuPanels[1].SetActive(false);
+        infoPanel.SetActive(false);
+        actionButton2.ActivateEvent -= OnNavMenuPressed;
+        StopCoroutine("SaveConfirmation");
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private void FilterCUBEs(Types cubeType, bool force = false)
+    {
+        if (CUBEFilter == cubeType && !force) return;
+
+        // cache
+        CUBEFilter = cubeType;
+
+        // delete current buttons
+        foreach (var button in filteredCUBEButtons)
+        {
+            if (button == null) continue;
+            button.ActivateEvent -= OnCUBESelected;
+            Destroy(button.gameObject);
+        }
+
+        // create buttons
+        foreach (var cube in CUBE.allCUBES)
+        {
+            if (cube.type == CUBEFilter)
+            {
+                CreateCUBEButton(cube.ID);
+            }
+        }
+        StartCoroutine(Utility.UpdateScrollView(selectionGrid, selectionScrollBar));
+
+        // set filters
+        leftFilter.isEnabled = (int)CUBEFilter > 0;
+        rightFilter.isEnabled = (int)CUBEFilter < Enum.GetNames(typeof(Types)).Length - 1;
+        filterLabel.text = CUBEFilter.ToString();
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="ID"></param>
+    private void CreateCUBEButton(int ID)
+    {
+        CUBEInfo info = CUBE.allCUBES[ID];
+        ScrollviewButton button = (Instantiate(CUBESelectionButton_Prefab) as GameObject).GetComponent<ScrollviewButton>();
+        button.Initialize(ID.ToString(), info.name + "\n" + inventory[ID], ID.ToString(), selectionGrid.transform);
+        button.ActivateEvent += OnCUBESelected;
+        filteredCUBEButtons[info.ID] = button;
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="args"></param>
+    private void OnCUBESelected(object sender, ActivateButtonArgs args)
+    {
+        if (!args.isPressed) return;
+
+        SetCurrentCUBE(int.Parse(args.value));
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="args"></param>
+    private void OnFilterChanged(object sender, ActivateButtonArgs args)
+    {
+        if (!args.isPressed) return;
+
+        int direction = int.Parse(args.value);
+        int filter = Mathf.Clamp((int)CUBEFilter+direction, 0, Enum.GetNames(typeof(CUBE.Types)).Length);
+        FilterCUBEs((Types)filter);
+    }
+
+
+    private void OnNavMenuPressed(object sender, ActivateButtonArgs args)
+    {
+        if (args.isPressed) return;
+
+        stateMachine.SetState(NAVSTATE, new Dictionary<string,object>());
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="ID"></param>
+    private void SetCurrentCUBE(int ID)
+    {
+        currentCUBE = CUBE.allCUBES[ID];
+        CUBEName.text = currentCUBE.name;
+        CUBEHealth.text = "♥ " + currentCUBE.health;
+        CUBEShield.text = "Θ " + currentCUBE.shield;
+        CUBESpeed.text = "► " + currentCUBE.speed;
+        CUBEDamage.text = "☼ " + currentCUBE.damage;
+
+        Grid.CreateCUBE(ID);
+    }
+
+    #endregion
+
+    #region Nav Menu Methods
+
+    private void NavEnter(Dictionary<string, object> info)
+    {
+        canMenuSwipe = false;
+        InvokeAction(() => canMenuSwipe = true, 1f);
+
+#if UNITY_ANDROID
+        touchRect = new Rect(0.25f, 0f, 1f, 1f);
+#endif
+
+        mainCamera.camera.rect = new Rect(0.25f, 0f, 1f, 1f);
+        menuPanels[2].SetActive(true);
+        infoPanel.SetActive(true);
+        actionButton1.label.text = "Delete";
+        actionButton1.ActivateEvent += OnDeleteButtonPressed;
+        actionButton2.label.text = "Place";
+        actionButton2.ActivateEvent += OnActionButtonPressed;
+        stateMachine.SetUpdate(NavUpdate());
+        StartCoroutine("SaveConfirmation");
+    }
+
+
+    private IEnumerator NavUpdate()
+    {
+        while (true)
+        {
+            // update camera
+            UpdateCamera();
+            CameraMovementEdit();
+
+            // detect swipe
+            int dir = MenuSwipe();
+            if (dir == -1)
+            {
+                stateMachine.SetState(SELECTSTATE, new Dictionary<string, object>());
+            }
+            else if (dir == 1)
+            {
+                stateMachine.SetState(WEAPONSTATE, new Dictionary<string, object>());
+            }
+
+            // update position and rotation
+            postionLabel.text = "Position " + (Grid.cursor + Vector3.one).ToString("0");
+            rotationLabel.text = "Rotation " + Grid.cursorRotation.eulerAngles.ToString("0");
+
+            // update delete button
+            if (Grid.cursorStatus == CursorStatuses.Holding && !actionButton1.isEnabled)
+            {
+                actionButton1.isEnabled = true;
+            }
+            else if (Grid.cursorStatus != CursorStatuses.Holding && actionButton1.isEnabled)
+            {
+                actionButton1.isEnabled = false;
+            }
+
+            // update action button
+            switch (Grid.cursorStatus)
+            {
+                case CursorStatuses.Holding:
+                    actionButton2.label.text = "Place";
+                    actionButton2.isEnabled = true;
+                    break;
+                case CursorStatuses.Hover:
+                    actionButton2.label.text = "Pickup";
+                    actionButton2.isEnabled = true;
+                    break;
+                case CursorStatuses.None:
+                    actionButton2.label.text = "";
+                    actionButton2.isEnabled = false;
+                    break;
+            }
+
+            // update ship stats
+            UpdateInfoPanel();
+
+            yield return null;
+        }
+    }
+
+
+    private void NavExit(Dictionary<string, object> info)
+    {
+        menuPanels[2].SetActive(false);
+        infoPanel.SetActive(false);
+        actionButton1.ActivateEvent -= OnDeleteButtonPressed;
+        actionButton2.ActivateEvent -= OnActionButtonPressed;
+        StopCoroutine("SaveConfirmation");
+    }
+
+
+    public void SetSelectMenu()
+    {
+        stateMachine.SetState(SELECTSTATE, new Dictionary<string,object>());
+    }
+
+
+    private void OnPositionButtonPressed(object sender, ActivateButtonArgs args)
+    {
+        if (!args.isPressed) return;
+
+        switch (args.value)
+        {
+            case "back":
+                Grid.ChangeLayer(-1);
+                CameraZoom(0f);
                 break;
+            case "forward":
+                Grid.ChangeLayer(1);
+                CameraZoom(0f);
+                break;
+            case "left":
+                Grid.MoveCursor(-cameraTarget.right);
+                break;
+            case "right":
+                Grid.MoveCursor(cameraTarget.right);
+                break;
+            case "down":
+                Grid.MoveCursor(-cameraTarget.up);
+                break;
+            case "up":
+                Grid.MoveCursor(cameraTarget.up);
+                break;
+        }
+    }
+
+
+    private void OnRotationButtonPressed(object sender, ActivateButtonArgs args)
+    {
+        if (!args.isPressed) return;
+
+        switch (args.value)
+        {
+            case "y left":
+                Grid.RotateCursor(Vector3.up);
+                break;
+            case "y right":
+                Grid.RotateCursor(Vector3.down);
+                break;
+            case "z left":
+                Grid.RotateCursor(Vector3.forward);
+                break;
+            case "z right":
+                Grid.RotateCursor(Vector3.back);
+                break;
+        }
+    }
+
+
+    private void OnDeleteButtonPressed(object sender, ActivateButtonArgs args)
+    {
+        if (!args.isPressed) return;
+        Grid.DeleteCUBE();
+    }
+
+
+    private void OnActionButtonPressed(object sender, ActivateButtonArgs args)
+    {
+        if (!args.isPressed) return;
+        Grid.CursorAction(true);
+    }
+
+    #endregion
+
+    #region Weapon Menu Methods
+
+    public void WeaponEnter(Dictionary<string, object> info)
+    {
+        canMenuSwipe = false;
+        InvokeAction(() => canMenuSwipe = true, 1f);
+
+#if UNITY_ANDROID
+        touchRect = new Rect(0.25f, 0f, 1f, 1f);
+#endif
+
+        // gui
+        mainCamera.camera.rect = new Rect(0.25f, 0f, 1f, 1f);
+        menuPanels[3].SetActive(true);
+        infoPanel.SetActive(true);
+
+        // weapon buttons
+        for (int i = 0; i < 4; i++)
+        {
+            if (Grid.weapons[i] == null)
+            {
+                weaponButtons[i].isEnabled = false;
+            }
+            else
+            {
+                weaponButtons[i].isEnabled = true;
+                weaponButtons[i].ActivateEvent += OnWeaponButtonPressed;
             }
         }
 
-        // rotate grid
-        Grid.RotateGrid(cameraPositions[index]);
+        // nav buttons
+        foreach (var button in weaponNavButtons)
+        {
+            button.isEnabled = false;
+            button.ActivateEvent += OnWeaponNavButton;
+        }
 
-        // set target position
-        cameraTarget.position = CalculateTargetPostion(cameraDirection);
-        // get target rotation
-        cameraTarget.rotation = Quaternion.Euler(cameraRotations[index]);
+        // action buttons
+        actionButton1.label.text = "---";
+        actionButton1.isEnabled = false;
+        actionButton2.label.text = "---";
+        actionButton2.isEnabled = false;
+
+        stateMachine.SetUpdate(WeaponUpdate());
+        StartCoroutine("SaveConfirmation");
     }
 
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="strength"></param>
-    private void CameraZoom(float strength)
+    public IEnumerator WeaponUpdate()
     {
-        zoom = Mathf.Clamp(zoom + (strength * zoomSpeed * Time.deltaTime), zoomMin, zoomMax);
-        cameraTarget.position = CalculateTargetPostion(cameraDirection);
+        while (true)
+        {
+            // update camera
+            UpdateCamera();
+            CameraMovementEdit();
+
+            // change menu
+            int dir = MenuSwipe();
+            if (dir == -1)
+            {
+                stateMachine.SetState(NAVSTATE, new Dictionary<string, object>());
+            }
+            else if (dir == 1)
+            {
+                //stateMachine.SetState(PAINTSTATE, new Dictionary<string, object>());
+            }
+
+            // update ship stats
+            UpdateInfoPanel();
+            
+            // update weapon buttons
+            for (int i = 0; i < 4; i++)
+            {
+                if (Grid.weapons[i] == null)
+                {
+                    weaponButtons[i].isEnabled = false;
+                    weaponButtons[i].label.text = "Weapon " + i;
+                }
+                else
+                {
+                    weaponButtons[i].isEnabled = true;
+                    if (i == weaponIndex)
+                    {
+                        weaponButtons[i].label.text = "★ " + Grid.weapons[i].GetType().Name;
+                    }
+                    else
+                    {
+                        weaponButtons[i].label.text = Grid.weapons[i].GetType().Name;
+                    }
+                }
+            }
+
+            yield return null;
+        }
     }
 
 
-    /// <summary>
-    /// 
-    /// </summary>
-    private void UpdateCamera()
+    public void WeaponExit(Dictionary<string, object> info)
     {
-        mainCamera.position = Vector3.Lerp(mainCamera.position, cameraTarget.position, Time.deltaTime * cameraSpeed);
-        mainCamera.rotation = Quaternion.Slerp(mainCamera.rotation, cameraTarget.rotation, Time.deltaTime * cameraSpeed);
+        menuPanels[3].SetActive(false);
+        infoPanel.SetActive(false);
+        weaponIndex = -1;
+
+        // weapon buttons
+        for (int i = 0; i < 4; i++)
+        {
+            weaponButtons[i].ActivateEvent -= OnWeaponButtonPressed;
+        }
+
+        // nav buttons
+        foreach (var button in weaponNavButtons)
+        {
+            button.ActivateEvent -= OnWeaponNavButton;
+        }
+
+        StopCoroutine("SaveConfirmation");
     }
 
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="direction"></param>
-    /// <returns></returns>
-    private Vector3 CalculateTargetPostion(Vector3 direction)
+    private void OnWeaponButtonPressed(object sender, ActivateButtonArgs args)
     {
-        return (Grid.layer + direction * zoom).Round();
+        if (args.isPressed) return;
+
+        int index = int.Parse(args.value);
+        if (weaponIndex == index)
+        {
+            weaponButtons[index].Activate(false);
+            foreach (var button in weaponNavButtons)
+            {
+                button.isEnabled = false;
+            }
+
+            weaponIndex = -1;
+        }
+        else
+        {
+            weaponButtons[index].Activate(true);
+            if (weaponIndex != -1)
+            {
+                weaponButtons[weaponIndex].Activate(false);
+            }
+            foreach (var button in weaponNavButtons)
+            {
+                button.isEnabled = true;
+            }
+
+            weaponIndex = index;
+        }
+    }
+
+
+    private void OnWeaponNavButton(object sender, ActivateButtonArgs args)
+    {
+        if (!args.isPressed) return;
+
+        int dir = int.Parse(args.value);
+
+        weaponIndex = Grid.MoveWeaponMap(weaponIndex, dir);
+    }
+
+    #endregion
+
+    #region Info Panel Methods
+
+    private void UpdateInfoPanel()
+    {
+        // name
+        Grid.buildName = shipName.value;
+
+        // stats
+        shipHealth.text = "♥ " + Grid.shipHealth;
+        shipShield.text = "Θ " + Grid.shipShield;
+        shipSpeed.text = "► " + Grid.shipSpeed;
+        shipDamage.text = "☼ " + Grid.shipDamage;
+    }
+
+    #endregion
+
+    #region Save Methods
+
+    private IEnumerator SaveConfirmation()
+    {
+#if UNITY_STANDALONE
+        while (true)
+        {
+            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.S))
+            {
+                ConfirmSave();
+            }
+
+            yield return null;
+        }
+#else
+        while (true)
+        {
+            // one finger
+            if (Input.touchCount == 1)
+            {
+                float heldTime = 0f;
+                while (Input.touchCount == 1)
+                {
+                    Touch touch = Input.GetTouch(0);
+                    heldTime += touch.deltaTime;
+                    if (heldTime >= saveConfirmationTime)
+                    {
+                        ConfirmSave();
+                        yield break;
+                    }
+
+                    yield return null;
+                }
+            }
+
+            yield return null;
+        }
+#endif
+    }
+
+
+    private void ConfirmSave()
+    {
+        saveConfirmation.SetActive(true);
+        saveShipName.text = Grid.buildName;
+        StopCoroutine("SaveConfirmation");
+    }
+
+
+    public void Save()
+    {
+        Grid.SaveBuild();
+        saveConfirmation.SetActive(false);
+        StartCoroutine("SaveConfirmation");
+    }
+
+
+    public void CancelSave()
+    {
+        saveConfirmation.SetActive(false);
+        StartCoroutine("SaveConfirmation");
     }
 
     #endregion

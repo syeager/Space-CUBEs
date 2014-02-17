@@ -6,8 +6,29 @@ using UnityEngine;
 
 public class BuildInfo
 {
-    public List<KeyValuePair<int, CUBEGridInfo>> partList;
+    #region Public Fields
+
+    public string name;
     public float health;
     public float shield;
     public float speed;
+    public float damage;
+    public List<KeyValuePair<int, CUBEGridInfo>> partList;
+
+    #endregion
+    
+    #region Static Fields
+
+    public const string DATASEP = "|";
+
+    #endregion
+
+    #region Properties
+
+    public static string Empty
+    {
+        get { return "" + DATASEP + "0" + DATASEP + "0" + DATASEP + "0" + DATASEP + "0"; }
+    }
+
+    #endregion
 }

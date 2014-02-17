@@ -11,13 +11,15 @@ public class BuildFinishedArgs : EventArgs
     public readonly float health;
     public readonly float shield;
     public readonly float speed;
+    public readonly float damage;
 
 
-    public BuildFinishedArgs(GameObject ship, float health, float shield, float speed)
+    public BuildFinishedArgs(GameObject ship, float health, float shield, float speed, float damage)
     {
         this.ship = ship;
         this.health = health;
         this.shield = shield;
         this.speed = speed;
+        this.damage = damage;
     }
 }
