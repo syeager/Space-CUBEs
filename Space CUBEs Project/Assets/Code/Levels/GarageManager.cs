@@ -681,7 +681,7 @@ public class GarageManager : MonoBase
             CreateGrid();
         }
         Grid.CreateBuild(currentBuild);
-        shipName.text = Grid.buildName;
+        shipName.value = Grid.buildName;
         stateMachine.SetState(SELECTSTATE, new Dictionary<string,object>());
         selectedBuild = true;
     }
