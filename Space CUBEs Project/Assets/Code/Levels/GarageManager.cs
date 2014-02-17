@@ -855,10 +855,10 @@ public class GarageManager : MonoBase
     {
         currentCUBE = CUBE.allCUBES[ID];
         CUBEName.text = currentCUBE.name;
-        CUBEHealth.text = "♥ " + currentCUBE.health;
-        CUBEShield.text = "Θ " + currentCUBE.shield;
-        CUBESpeed.text = "► " + currentCUBE.speed;
-        CUBEDamage.text = "☼ " + currentCUBE.damage;
+        CUBEHealth.text = CUBE.HEALTHICON + " " + currentCUBE.health;
+        CUBEShield.text = CUBE.SHIELDICON + " " + currentCUBE.shield;
+        CUBESpeed.text = CUBE.SPEEDICON + " " + currentCUBE.speed;
+        CUBEDamage.text = CUBE.DAMAGEICON + " " + currentCUBE.damage;
 
         Grid.CreateCUBE(ID);
     }
@@ -1199,10 +1199,10 @@ public class GarageManager : MonoBase
         Grid.buildName = shipName.value;
 
         // stats
-        shipHealth.text = "♥ " + Grid.shipHealth;
-        shipShield.text = "Θ " + Grid.shipShield;
-        shipSpeed.text = "► " + Grid.shipSpeed;
-        shipDamage.text = "☼ " + Grid.shipDamage;
+        shipHealth.text = CUBE.HEALTHICON + " " + Grid.shipHealth;
+        shipShield.text = CUBE.SHIELDICON + " " + Grid.shipShield;
+        shipSpeed.text = CUBE.SPEEDICON + " " + Grid.shipSpeed;
+        shipDamage.text = CUBE.DAMAGEICON + " " + Grid.shipDamage;
     }
 
     #endregion

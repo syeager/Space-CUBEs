@@ -51,7 +51,12 @@ public class CUBE : MonoBehaviour
 
     public const string CUBELIST = "CUBE List";
     private const string INVENTORYPATH = "Inventory";
-    private const char CUBESEPARATER = '|';
+    private const char CUBESEP = '|';
+
+    public const string HEALTHICON = "♥";
+    public const string SHIELDICON = "Θ";
+    public const string SPEEDICON = "►";
+    public const string DAMAGEICON = "•";
 
     #endregion
 
@@ -108,7 +113,7 @@ public class CUBE : MonoBehaviour
 
     public static int[] GetInventory()
     {
-        string[] data = PlayerPrefs.GetString(INVENTORYPATH, "").Replace(" ", "").Split(CUBESEPARATER);
+        string[] data = PlayerPrefs.GetString(INVENTORYPATH, "").Replace(" ", "").Split(CUBESEP);
         int[] inventory = new int[CUBE.allCUBES.Length];
 
         if (data.Length != 1)
@@ -125,7 +130,7 @@ public class CUBE : MonoBehaviour
 
     public static void SetInventory(int[] inventory)
     {
-        PlayerPrefs.SetString(INVENTORYPATH, string.Join(CUBESEPARATER.ToString(), inventory.Select(c => c.ToString()).ToArray()));
+        PlayerPrefs.SetString(INVENTORYPATH, string.Join(CUBESEP.ToString(), inventory.Select(c => c.ToString()).ToArray()));
     }
 
     #endregion
