@@ -3,6 +3,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class LoadingScreenManager : MonoBehaviour
 {
@@ -17,7 +18,12 @@ public class LoadingScreenManager : MonoBehaviour
 
     private void Awake()
     {
+        // set up GUI
         levelToLoad.text = GameData.Main.nextScene + "...";
+
+        // clean
+        Resources.UnloadUnusedAssets();
+        GC.Collect();
     }
 
 
