@@ -19,19 +19,13 @@ public class FormationCreator : EditorWindow
 
     #endregion
 
-    #region Static Fields
-
-    private static readonly Vector2 SIZE = new Vector2(300f, 50f);
-
-    #endregion
-    
 
     #region EditorWindow Overrides
 
     [MenuItem("Tools/Formation Creator")]
     private static void Init()
     {
-        FormationCreator window = (FormationCreator)EditorWindow.GetWindow(typeof(FormationCreator), true, "Formation Creator");
+        EditorWindow.GetWindow(typeof(FormationCreator), true, "Formation Creator");
     }
 
 

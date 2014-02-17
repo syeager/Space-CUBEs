@@ -60,6 +60,6 @@ public struct CUBEInfo
 
     public override string ToString()
     {
-        return ID + ": " + name + " - " + type + " | " + health + "," + shield + "," + speed + "." + rarity + "," + price;
+        return ID + ": " + name;
     }
 }
