@@ -143,11 +143,38 @@ public static class Utility
             UnityEngine.Object obj = UnityEditor.AssetDatabase.LoadAssetAtPath(files[i], typeof(GameObject));
             if (obj != null && UnityEditor.PrefabUtility.GetPrefabType(obj) == UnityEditor.PrefabType.Prefab)
             {
-                objects.Add((obj as GameObject).GetComponent<T>());
+                T comp = (obj as GameObject).GetComponent<T>();
+                if (comp != null)
+                {
+                    objects.Add(comp);
+                }
             }
         }
 
         return objects;
+    }
+#endif
+
+
+#if UNITY_EDITOR
+    public static T LoadObject<T>(string path) where T : Component
+    {
+        string[] files = System.IO.Directory.GetFiles(path);
+
+        for (int i = 0; i < files.Length; i++)
+        {
+            UnityEngine.Object obj = UnityEditor.AssetDatabase.LoadAssetAtPath(files[i], typeof(GameObject));
+            if (obj != null && UnityEditor.PrefabUtility.GetPrefabType(obj) == UnityEditor.PrefabType.Prefab)
+            {
+                T comp = (obj as GameObject).GetComponent<T>();
+                if (comp != null)
+                {
+                    return comp;
+                }
+            }
+        }
+
+        return null;
     }
 #endif
 

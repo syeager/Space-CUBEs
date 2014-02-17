@@ -127,25 +127,39 @@ public class CUBEUpdater : EditorWindow
     private void UpdatePrefabs()
     {
         // get all CUBE prefabs
-        var prefabs = Utility.LoadObjects<CUBE>(PREFABPATH);
-
-        // get Game Resources
-        //GameResources gameResources = PrefabUtility.get
+        var prefabs = Utility.LoadObjects<CUBE>(PREFABPATH).ToArray();
 
         CUBEInfo[] info = CUBE.LoadAllCUBEInfo();
 
-        SerializedObject so;
-        Debugger.LogList(prefabs);
-        foreach (var cube in prefabs)
+        // update prefab
+        SerializedObject serializedPrefab;
+        for (int i = 0; i < prefabs.Length; i++)
         {
             // set ID
-            so = new SerializedObject(cube);
-            so.FindProperty("ID").intValue = info.First(i => i.name == cube.name).ID;
-            so.ApplyModifiedProperties();
-
-            // Game Resources
-
+            serializedPrefab = new SerializedObject(prefabs[i]);
+            serializedPrefab.FindProperty("ID").intValue = info.First(c => c.name == prefabs[i].name).ID;
+            serializedPrefab.ApplyModifiedProperties();
         }
+
+        // get GameResources
+        GameResources gameResources = Utility.LoadObject<GameMaster>(GAMERESOURCESPATH).GetComponentsInChildren<GameResources>(true)[0];
+        SerializedObject resources = new SerializedObject(gameResources);
+        SerializedProperty resourcesPrefabs = resources.FindProperty("CUBE_Prefabs");
+
+        // update GameResources array size
+        resources.Update();
+        while (resourcesPrefabs.arraySize < info.Length)
+        {
+            resourcesPrefabs.InsertArrayElementAtIndex(resourcesPrefabs.arraySize);
+        }
+
+        // set all prefabs
+        for (int i = 0; i < info.Length; i++)
+        {
+            CUBE[] prefab = prefabs.Where(p => p.ID == i).ToArray();
+            resourcesPrefabs.GetArrayElementAtIndex(i).objectReferenceValue = prefab.Length > 0 ? prefab[0].gameObject : null;
+        }
+        resources.ApplyModifiedProperties();
     }
 
     #endregion

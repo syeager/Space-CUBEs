@@ -43,7 +43,7 @@ public class GameResources : MonoBehaviour
 
     public static CUBE GetCUBE(int ID)
     {
-        return Main.CUBE_Prefabs.First(c => c.ID == ID);
+        return Main.CUBE_Prefabs[ID];
     }
 
     #endregion
