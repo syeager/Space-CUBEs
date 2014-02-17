@@ -86,7 +86,7 @@ public class Player : Ship
 
     private void MovingEnter(Dictionary<string, object> info)
     {
-        stateMachine.update = new Job(MovingUpdate());
+        stateMachine.SetUpdate(MovingUpdate());
     }
 
 
@@ -118,7 +118,7 @@ public class Player : Ship
 
     private void MovingExit(Dictionary<string, object> info)
     {
-        stateMachine.update = new Job(MovingUpdate());
+        stateMachine.SetUpdate(MovingUpdate());
     }
 
 
@@ -137,7 +137,7 @@ public class Player : Ship
             }
         }
 
-        stateMachine.update = new Job(BarrelRollingUpdate(MovementInput()));
+        stateMachine.SetUpdate(BarrelRollingUpdate(MovementInput()));
     }
 
 

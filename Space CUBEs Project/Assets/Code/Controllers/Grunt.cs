@@ -49,7 +49,7 @@ public class Grunt : Enemy
 
     private void MovingEnter(Dictionary<string, object> info)
     {
-        stateMachine.update = new Job(MovingUpdate());
+        stateMachine.SetUpdate(MovingUpdate());
     }
 
 

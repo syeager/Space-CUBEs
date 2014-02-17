@@ -2,6 +2,7 @@
 // 12.17.2013
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,7 +15,6 @@ public class StateMachine
     #region Public Fields
 
     public string initialState;
-    public Job update;
 
     #endregion
 
@@ -29,6 +29,7 @@ public class StateMachine
     #region Properties
 
     public string currentState { get; private set; }
+    public Job update { get; private set; }
 
     #endregion
 
@@ -74,12 +75,12 @@ public class StateMachine
     /// <param name="info">Info to pass to the exit and enter states.</param>
     public void SetState(string stateName, Dictionary<string, object> info)
     {
-        #if LOG
+#if LOG
         if (owner.log)
         {
             Debugger.Log(owner.name + ": " + currentState + "→" + stateName, owner, false, Debugger.LogTypes.StateMachines);
         }
-        #endif
+#endif
 
         // save previous state
         if (info == null)
@@ -88,7 +89,11 @@ public class StateMachine
         }
         info.Add("previous state", currentState);
 
-        update.End();
+        if (update != null)
+        {
+            update.End();
+            update = null;
+        }
 
         // exit state
         exitMethods[currentState](info);
@@ -110,12 +115,12 @@ public class StateMachine
     /// <param name="info">Info to pass to state enter method.</param>
     public void Start(Dictionary<string, object> info)
     {
-        #if LOG
+#if LOG
         if (owner.log)
         {
             Debugger.Log(owner.name + ": Initial State = " + initialState, owner, false, Debugger.LogTypes.StateMachines);
         }
-        #endif
+#endif
 
         if (update != null)
         {
@@ -125,6 +130,31 @@ public class StateMachine
 
         currentState = initialState;
         enterMethods[initialState](info);
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="updateJob"></param>
+    [Obsolete]
+    public void SetUpdate(Job updateJob)
+    {
+        if (update != null)
+        {
+            update.Kill();
+        }
+        update = updateJob;
+    }
+
+
+    public void SetUpdate(IEnumerator updateJob)
+    {
+        if (update != null)
+        {
+            update.Kill();
+        }
+        update = new Job(updateJob);
     }
 
     #endregion
