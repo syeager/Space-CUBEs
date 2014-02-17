@@ -15,4 +15,14 @@ public class HitInfo
     public float damage;
 
     #endregion
+
+
+    #region Public Methods
+
+    public HitInfo MultiplyDamage(float multiplier)
+    {
+        return new HitInfo {damage = this.damage*multiplier};
+    }
+
+    #endregion
 }

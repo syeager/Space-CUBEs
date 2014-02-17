@@ -129,13 +129,7 @@ public class Player : Ship
         collider.enabled = false;
 
         // release all attacks
-        foreach (var weapon in myWeapons.weapons)
-        {
-            if (weapon != null)
-            {
-                weapon.Activate(false);
-            }
-        }
+        myWeapons.ActivateAll(false);
 
         stateMachine.SetUpdate(BarrelRollingUpdate(MovementInput()));
     }
@@ -263,11 +257,14 @@ public class Player : Ship
     }
 
 
-    //
-    public void Initialize(float maxHealth, float maxShield, float speed)
+    /// <summary>
+    /// Initialize ship components. Health, Motor, and Weapons.
+    /// </summary>
+    public void Initialize(float maxHealth, float maxShield, float speed, float damage)
     {
         myHealth.Initialize(maxHealth, maxShield);
         myMotor.Initialize(speed);
+        myWeapons.Initialize(this, damage);
     }
 
     #endregion

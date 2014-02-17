@@ -18,13 +18,13 @@ public class PlasmaLaser : Weapon
 
     #region Weapon Overrides
 
-    public override void Activate(bool pressed)
+    public override void Activate(bool pressed, float multiplier)
     {
         if (!pressed) return;
 
         var laser = PoolManager.Pop(attackName);
         laser.transform.SetPosRot(myTransform.position + myTransform.TransformDirection(laserOffset), myTransform.rotation);
-        laser.GetComponent<Hitbox>().Initialize(myShip, hitInfo, myTransform.forward*speed);
+        laser.GetComponent<Hitbox>().Initialize(myShip, hitInfo.MultiplyDamage(multiplier), myTransform.forward*speed);
         power = 0f;
         if (ActivatedEvent != null)
         {

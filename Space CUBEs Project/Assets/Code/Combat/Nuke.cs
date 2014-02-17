@@ -28,7 +28,7 @@ public class Nuke : Weapon
 
     #region Weapon Overrides
 
-    public override void Activate(bool pressed)
+    public override void Activate(bool pressed, float multiplier)
     {
         // fire
         if (pressed)
@@ -47,7 +47,7 @@ public class Nuke : Weapon
             }
             StopCoroutine("MoveNuke");
             explosion = (GameObject)Instantiate(Explosion_Prefab, nuke.position, nuke.rotation);
-            explosion.GetComponent<Hitbox>().Initialize(myShip, hitInfo);
+            explosion.GetComponent<Hitbox>().Initialize(myShip, hitInfo.MultiplyDamage(multiplier));
             power = 0f;
             Destroy(nuke.gameObject);
             InvokeAction(() => Destroy(explosion), explosionLength);

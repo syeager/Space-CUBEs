@@ -111,7 +111,7 @@ public abstract class Weapon : MonoBase
     /// <returns></returns>
     public abstract Weapon Bake(GameObject parent);
 
-    public abstract void Activate(bool pressed);
+    public abstract void Activate(bool pressed, float multiplier);
 
     #endregion
 

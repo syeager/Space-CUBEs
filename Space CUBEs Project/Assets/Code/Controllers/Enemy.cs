@@ -50,6 +50,8 @@ public class Enemy : Ship
     {
         base.Start();
 
+        myWeapons.Initialize(this, 1f);
+
         // register events
         myHealth.DieEvent += OnDie;
 

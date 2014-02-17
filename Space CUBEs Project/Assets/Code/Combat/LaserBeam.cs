@@ -33,11 +33,11 @@ public class LaserBeam : Weapon
 
     #region Weapon Overrides
 
-    public override void Activate(bool pressed)
+    public override void Activate(bool pressed, float multiplier)
     {
         if (pressed)
         {
-            StartCoroutine("Fire");
+            StartCoroutine("Fire", multiplier);
         }
         else
         {
@@ -70,7 +70,7 @@ public class LaserBeam : Weapon
 
     #region Private Methods
 
-    private IEnumerator Fire()
+    private IEnumerator Fire(float multiplier)
     {
         // create charge
         charge = ((GameObject)Instantiate(Charge_Prefab)).transform;
@@ -91,7 +91,7 @@ public class LaserBeam : Weapon
         laser = ((GameObject)Instantiate(Laser_Prefab)).transform;
         laser.parent = myTransform;
         laser.SetPosRot(myTransform.position + myTransform.TransformDirection(attackOffset), myTransform.rotation);
-        laser.GetComponent<Hitbox>().Initialize(myShip, hitInfo);
+        laser.GetComponent<Hitbox>().Initialize(myShip, hitInfo.MultiplyDamage(multiplier));
         while (power > 0f)
         {
             power -= FULLPOWER/attackTime*deltaTime;

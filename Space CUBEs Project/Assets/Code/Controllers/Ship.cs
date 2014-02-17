@@ -53,9 +53,6 @@ public class Ship : MonoBase
 
     protected virtual void Start()
     {
-        // combat
-        myWeapons.Initialize(this);
-
         // register events
         myHealth.DieEvent += OnDie;
     }

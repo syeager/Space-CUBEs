@@ -19,6 +19,12 @@ public class WeaponManager : MonoBehaviour
 
     #endregion
 
+    #region Private Fields
+
+    private float damageMultiplier;
+
+    #endregion
+
     #region Public Methods
 
     /// <summary>
@@ -48,8 +54,11 @@ public class WeaponManager : MonoBehaviour
     /// Initialize all weapons.
     /// </summary>
     /// <param name="sender">Ship weapons are attached to.</param>
-    public void Initialize(Ship sender)
+    /// <param name="damageStat">Ship's damage stat. Used to create the damage multiplier. 1+damageStat/100.</param>
+    public void Initialize(Ship sender, float damageStat)
     {
+        damageMultiplier = 1 + damageStat/100;
+
         for (int i = 0; i < weapons.Length; i++)
         {
             if (weapons[i] != null)
@@ -88,8 +97,24 @@ public class WeaponManager : MonoBehaviour
     public void Activate(int weapon, bool isPressed)
     {
         if (weapon >= weapons.Length) return;
+        if (weapons[weapon] == null) return;
 
-        weapons[weapon].Activate(isPressed);
+        weapons[weapon].Activate(isPressed, damageMultiplier);
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="isPressed"></param>
+    public void ActivateAll(bool isPressed)
+    {
+        foreach (var weapon in weapons)
+        {
+            if (weapon == null) continue;
+
+            weapon.Activate(isPressed, damageMultiplier);
+        }
     }
 
 
