@@ -29,5 +29,11 @@ public class MainMenuManager : MonoBehaviour
         GameData.LoadLevel("Store");
     }
 
+
+    public void LoadOptions()
+    {
+        GameData.LoadLevel("Options Menu");
+    }
+
     #endregion
 }

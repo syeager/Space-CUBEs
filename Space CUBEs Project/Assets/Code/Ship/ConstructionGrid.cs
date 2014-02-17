@@ -1000,7 +1000,7 @@ public class ConstructionGrid : MonoBase
     /// <param name="build">BuildInfo string to save.</param>
     public static void SaveBuild(string buildName, string build)
     {
-        //Debugger.Log("Saving " + buildName + ": " + build, null, false, Debugger.LogTypes.Data);
+        Debugger.Log("Saving " + buildName + ": " + build, null, false, Debugger.LogTypes.Data);
 
         // get paths
         string dataPath;
