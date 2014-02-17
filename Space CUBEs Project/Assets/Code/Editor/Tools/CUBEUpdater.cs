@@ -15,9 +15,9 @@ using Brands = CUBE.Brands;
 using Object = UnityEngine.Object;
 
 /// <summary>
-/// Converts CUBE List XML to a binary file.
+/// 
 /// </summary>
-public class CUBEListBinaryConverter : EditorWindow
+public class CUBEUpdater : EditorWindow
 {
     #region Private Fields
 
@@ -30,17 +30,18 @@ public class CUBEListBinaryConverter : EditorWindow
     private static readonly Vector2 SIZE = new Vector2(300f, 50f);
     private static readonly string CUBECSVPATH = Directory.GetParent(Directory.GetCurrentDirectory()) + @"\Data\CUBE List.csv";
     private static readonly string CUBELISTPATHEDITOR = Application.dataPath + "/Resources/CUBE List.bytes";
-    private static readonly string PREFABPATH = "Assets/Ship/CUBEs/";
+    private const string PREFABPATH = "Assets/Ship/CUBEs/";
+    private const string GAMERESOURCESPATH = "Assets/Global/";
 
     #endregion
 
 
     #region EditorWindow Overrides
 
-    [MenuItem("Tools/CUBE List Updater")]
+    [MenuItem("Tools/CUBE Updater")]
     private static void Init()
     {
-        CUBEListBinaryConverter window = (CUBEListBinaryConverter)EditorWindow.GetWindow<CUBEListBinaryConverter>(true, "CUBE List Updater");
+        CUBEUpdater window = (CUBEUpdater)EditorWindow.GetWindow<CUBEUpdater>(true, "CUBE Updater");
         window.minSize = window.maxSize = SIZE;
     }
 
@@ -125,8 +126,11 @@ public class CUBEListBinaryConverter : EditorWindow
 
     private void UpdatePrefabs()
     {
+        // get all CUBE prefabs
         var prefabs = Utility.LoadObjects<CUBE>(PREFABPATH);
-        Debugger.LogList(prefabs);
+
+        // get Game Resources
+        //GameResources gameResources = PrefabUtility.get
 
         CUBEInfo[] info = CUBE.LoadAllCUBEInfo();
 
@@ -134,10 +138,13 @@ public class CUBEListBinaryConverter : EditorWindow
         Debugger.LogList(prefabs);
         foreach (var cube in prefabs)
         {
+            // set ID
             so = new SerializedObject(cube);
-            Debug.Log(cube.name);
             so.FindProperty("ID").intValue = info.First(i => i.name == cube.name).ID;
             so.ApplyModifiedProperties();
+
+            // Game Resources
+
         }
     }
 
