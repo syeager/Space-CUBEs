@@ -73,8 +73,6 @@ public class ConstructionGrid : MonoBase
     private const string ENEMYMESHPATH = "Assets/Ship/Characters/";
     /// <summary>Path to the folder with the enemy prefabs.</summary>
     private const string ENEMYPREFABPATH = "Assets/Ship/Characters/";
-    /// <summary>Character used to separate data when joined into a string.</summary>
-    //private const char DATASEP = '|'; // replace with BuildInfo.DataSEP
 
     #endregion
 
