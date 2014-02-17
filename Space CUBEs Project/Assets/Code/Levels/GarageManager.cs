@@ -92,6 +92,7 @@ public class GarageManager : MonoBase
     #region Mobile Fields
 
     private bool canMenuSwipe = true;
+    public float menuSwipeDelay = 0.5f;
     private Rect touchRect;
 
     #endregion
@@ -242,7 +243,7 @@ public class GarageManager : MonoBase
                 float delta = (Input.GetTouch(0).deltaPosition + Input.GetTouch(1).deltaPosition).x;
                 if (Mathf.Abs(delta) >= menuSwipeDist)
                 {
-                    direction = (int)Mathf.Sign(delta);
+                    direction = -(int)Mathf.Sign(delta);
                 }
             }
         }
@@ -540,7 +541,7 @@ public class GarageManager : MonoBase
     private void LoadEnter(Dictionary<string, object> info)
     {
         canMenuSwipe = false;
-        InvokeAction(() => canMenuSwipe = true, 1f);
+        InvokeAction(() => canMenuSwipe = true, menuSwipeDelay);
 
 #if UNITY_ANDROID
         touchRect = new Rect(0f, 0f, 1f, 1f);
@@ -706,10 +707,10 @@ public class GarageManager : MonoBase
     private void SelectEnter(Dictionary<string, object> info)
     {
         canMenuSwipe = false;
-        InvokeAction(() => canMenuSwipe = true, 1f);
+        InvokeAction(() => canMenuSwipe = true, menuSwipeDelay);
 
 #if UNITY_ANDROID
-        touchRect = new Rect(0.25f, 0f, 1f, 1f);
+        touchRect = new Rect(0f, 0.125f, 1f, 1f);
 #endif
 
         mainCamera.camera.rect = new Rect(0.25f, 0f, 1f, 1f);
@@ -869,10 +870,10 @@ public class GarageManager : MonoBase
     private void NavEnter(Dictionary<string, object> info)
     {
         canMenuSwipe = false;
-        InvokeAction(() => canMenuSwipe = true, 1f);
+        InvokeAction(() => canMenuSwipe = true, menuSwipeDelay);
 
 #if UNITY_ANDROID
-        touchRect = new Rect(0.25f, 0f, 1f, 1f);
+        touchRect = new Rect(0f, 0.125f, 1f, 1f);
 #endif
 
         mainCamera.camera.rect = new Rect(0.25f, 0f, 1f, 1f);
@@ -1033,10 +1034,10 @@ public class GarageManager : MonoBase
     public void WeaponEnter(Dictionary<string, object> info)
     {
         canMenuSwipe = false;
-        InvokeAction(() => canMenuSwipe = true, 1f);
+        InvokeAction(() => canMenuSwipe = true, menuSwipeDelay);
 
 #if UNITY_ANDROID
-        touchRect = new Rect(0.25f, 0f, 1f, 1f);
+        touchRect = new Rect(0f, 0.125f, 1f, 1f);
 #endif
 
         // gui
@@ -1224,13 +1225,12 @@ public class GarageManager : MonoBase
         while (true)
         {
             // one finger
-            if (Input.touchCount == 1)
+            if (Input.touchCount == 1 && touchRect.Contains(mainCamera.camera.ScreenToViewportPoint(Input.GetTouch(0).position)))
             {
                 float heldTime = 0f;
                 while (Input.touchCount == 1)
                 {
-                    Touch touch = Input.GetTouch(0);
-                    heldTime += touch.deltaTime;
+                    heldTime += Time.deltaTime;
                     if (heldTime >= saveConfirmationTime)
                     {
                         ConfirmSave();
