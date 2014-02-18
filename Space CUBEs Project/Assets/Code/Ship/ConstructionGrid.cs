@@ -988,6 +988,10 @@ public class ConstructionGrid : MonoBase
 #endif
 
         List<string> builds = PlayerPrefs.GetString(namePath).Split(BuildInfo.DATASEP[0]).ToList();
+        if (builds[0] == "")
+        {
+            builds.RemoveAt(0);
+        }
         return builds;
     }
 
@@ -999,7 +1003,10 @@ public class ConstructionGrid : MonoBase
     /// <param name="build">BuildInfo string to save.</param>
     public static void SaveBuild(string buildName, string build)
     {
-        Debugger.Log("Saving " + buildName + ": " + build, null, false, Debugger.LogTypes.Data);
+        if (Application.isPlaying)
+        {
+            Debugger.Log("Saving " + buildName + ": " + build, null, false, Debugger.LogTypes.Data);
+        }
 
         // get paths
         string dataPath;
@@ -1018,9 +1025,9 @@ public class ConstructionGrid : MonoBase
         if (!buildNames.Contains(buildName))
         {
             buildNames.Add(buildName);
-            string newBuildList = string.Join(BuildInfo.DATASEP, buildNames.ToArray());
-            PlayerPrefs.SetString(namePath, newBuildList.Substring(1, newBuildList.Length-1));
+            PlayerPrefs.SetString(namePath, string.Join(BuildInfo.DATASEP, buildNames.ToArray()));
         }
+        
     }
 
 
