@@ -136,8 +136,13 @@ public class Debugger : Singleton<Debugger>
 
 
     [System.Diagnostics.Conditional("LOG")]
-    public static void LogList(IEnumerable list)
+    public static void LogList(IEnumerable list, string header = "")
     {
+        if (header != "")
+        {
+            Debug.Log(header + '\n');
+        }
+
         int count = 0;
         foreach (var item in list)
         {
