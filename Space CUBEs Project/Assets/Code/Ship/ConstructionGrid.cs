@@ -915,25 +915,6 @@ public class ConstructionGrid : MonoBase
 #endif
     }
 
-    #endregion
-
-    #region Static
-
-    /// <summary>
-    /// Get all build names. User vs Dev.
-    /// </summary>
-    /// <returns>All build names.</returns>
-    public static List<string> BuildNames()
-    {
-        string namePath;
-#if DEVMODE
-        namePath = ALLDEVBUILDSPATH;
-#else
-        namePath = ALLUSERBUILDSPATH;
-#endif
-        return PlayerPrefs.GetString(namePath).Split(BuildInfo.DATASEP[0]).ToList();
-    }
-
 
     /// <summary>
     /// Save build to data.
@@ -994,6 +975,24 @@ public class ConstructionGrid : MonoBase
     #region Static Methods
 
     /// <summary>
+    /// Get all build names. User vs Dev.
+    /// </summary>
+    /// <returns>All build names.</returns>
+    public static List<string> BuildNames()
+    {
+        string namePath;
+#if DEVMODE
+        namePath = ALLDEVBUILDSPATH;
+#else
+        namePath = ALLUSERBUILDSPATH;
+#endif
+
+        List<string> builds = PlayerPrefs.GetString(namePath).Split(BuildInfo.DATASEP[0]).ToList();
+        return builds;
+    }
+
+
+    /// <summary>
     /// Save build to data.
     /// </summary>
     /// <param name="buildName">Name of ship to save.</param>
@@ -1019,7 +1018,8 @@ public class ConstructionGrid : MonoBase
         if (!buildNames.Contains(buildName))
         {
             buildNames.Add(buildName);
-            PlayerPrefs.SetString(namePath, string.Join(BuildInfo.DATASEP, buildNames.ToArray()));
+            string newBuildList = string.Join(BuildInfo.DATASEP, buildNames.ToArray());
+            PlayerPrefs.SetString(namePath, newBuildList.Substring(1, newBuildList.Length-1));
         }
     }
 

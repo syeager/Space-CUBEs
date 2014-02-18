@@ -237,7 +237,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 412799179}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 287.164886, z: 0}
+  m_LocalPosition: {x: 0, y: 287, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1409490820}
@@ -270,7 +270,7 @@ MonoBehaviour:
     absolute: -38
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 881
+  mWidth: 880
   mHeight: 70
   mDepth: 2
   autoResizeBoxCollider: 0
@@ -755,7 +755,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1055127416}
-  - 114: {fileID: 1055127417}
   m_Layer: 8
   m_Name: Levels
   m_TagString: Untagged
@@ -778,23 +777,6 @@ Transform:
   - {fileID: 983721747}
   - {fileID: 472356786}
   m_Father: {fileID: 1409490820}
---- !u!114 &1055127417
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1055127415}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07c4de3b4b6fe9045b059ee627c100df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  arrangement: 1
-  maxPerLine: 0
-  cellWidth: 200
-  cellHeight: 200
-  animateSmoothly: 0
-  sorted: 0
 --- !u!1 &1161063483
 GameObject:
   m_ObjectHideFlags: 0
@@ -1342,10 +1324,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c5ecb5660b11414fb042fb826e03b73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scalingStyle: 2
+  scalingStyle: 1
   manualHeight: 720
-  minimumHeight: 320
-  maximumHeight: 1536
+  minimumHeight: 720
+  maximumHeight: 720
 --- !u!1 &1490034146
 GameObject:
   m_ObjectHideFlags: 0
