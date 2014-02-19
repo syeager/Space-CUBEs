@@ -69,6 +69,14 @@ public class SavedDataTool : EditorWindow
 
     private void OnGUI()
     {
+        EditorGUILayout.PrefixLabel("All");
+        if (GUILayout.Button("Reset"))
+        {
+            PlayerPrefs.DeleteAll();
+            Init();
+        }
+        EditorGUILayout.Separator();
+
         string[] menus = Enum.GetNames(typeof(Menus));
         menu = (Menus)GUILayout.SelectionGrid((int)menu, menus, menus.Length);
         EditorGUILayout.Space();
