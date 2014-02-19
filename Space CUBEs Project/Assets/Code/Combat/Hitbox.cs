@@ -1,7 +1,9 @@
 ﻿// Steve Yeager
 // 12.8.2013
 
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -28,6 +30,7 @@ public class Hitbox : MonoBase
     private HitInfo hitInfo;
     private Ship sender;
     private int hitCount;
+    private Action CollisionMethod;
 
     #endregion
 
@@ -48,7 +51,13 @@ public class Hitbox : MonoBase
         var oppHealth = other.gameObject.GetComponent<Health>();
         if (oppHealth != null)
         {
+            // send damage
             oppHealth.RecieveHit(sender, hitInfo);
+
+            // call collision hit
+            if (CollisionMethod != null) CollisionMethod();
+
+            // disable if applicable
             if (hitNumber > 0)
             {
                 hitCount++;
@@ -76,33 +85,34 @@ public class Hitbox : MonoBase
 
     #region Public Methods
 
-    public void Initialize(Ship sender, HitInfo hitInfo)
+    public void Initialize(Ship sender, HitInfo hitInfo, Action CollisionMethod = null)
     {
         this.sender = sender;
         this.hitInfo = hitInfo;
+        this.CollisionMethod = CollisionMethod;
 
         gameObject.layer = sender.gameObject.layer;
         hitCount = 0;
     }
 
 
-    public void Initialize(Ship sender, HitInfo hitInfo, Vector3 moveVec)
+    public void Initialize(Ship sender, HitInfo hitInfo, Vector3 moveVec, Action CollisionMethod = null)
     {
-        Initialize(sender, hitInfo);
+        Initialize(sender, hitInfo, CollisionMethod);
         StartCoroutine(Move(moveVec));
     }
 
 
-    public void Initialize(Ship sender, HitInfo hitInfo, float time)
+    public void Initialize(Ship sender, HitInfo hitInfo, float time, Action CollisionMethod = null)
     {
-        Initialize(sender, hitInfo);
+        Initialize(sender, hitInfo, CollisionMethod);
         myPoolObject.StartLifeTimer(time);
     }
 
 
-    public void Initialize(Ship sender, HitInfo hitInfo, float time, Vector3 moveVec)
+    public void Initialize(Ship sender, HitInfo hitInfo, float time, Vector3 moveVec, Action CollisionMethod = null)
     {
-        Initialize(sender, hitInfo, time);
+        Initialize(sender, hitInfo, time, CollisionMethod);
         StartCoroutine(Move(moveVec));
     }
 

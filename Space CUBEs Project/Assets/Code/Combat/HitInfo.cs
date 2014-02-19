@@ -16,6 +16,12 @@ public class HitInfo
 
     #endregion
 
+    #region Properties
+
+    public static HitInfo Empty { get { return new HitInfo(); } }
+
+    #endregion
+
 
     #region Public Methods
 

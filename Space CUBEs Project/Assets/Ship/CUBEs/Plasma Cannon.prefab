@@ -72,9 +72,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ID: 100
-  pieces:
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 1}
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -93,6 +90,7 @@ MonoBehaviour:
   hitInfo:
     damage: -10
   laserOffset: {x: 0, y: 0, z: 1}
+  fireRate: 7
   speed: 75
 --- !u!114 &11400004
 MonoBehaviour:

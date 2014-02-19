@@ -72,9 +72,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ID: 102
-  pieces:
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 1}
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -92,7 +89,8 @@ MonoBehaviour:
   Nuke_Prefab: {fileID: 100000, guid: 1292c63f16b9eff4fba7c1b2785b131c, type: 2}
   Explosion_Prefab: {fileID: 100000, guid: 83b7c7dac2b744946ad1667b8e86f5c1, type: 2}
   attackOffset: {x: 0, y: 0, z: 1}
-  speed: 50
+  time: 6
+  speed: 40
   explosionLength: 2
   hitInfo:
     damage: -100

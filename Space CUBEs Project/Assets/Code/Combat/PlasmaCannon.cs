@@ -1,0 +1,73 @@
+﻿// Steve Yeager
+// 12.01.2013
+
+using System;
+using System.Collections;
+using UnityEngine;
+
+public class PlasmaCannon : Weapon
+{
+    #region Public Fields
+
+    public string attackName;
+    public HitInfo hitInfo;
+    public Vector3 laserOffset;
+    public float fireRate;
+    public float speed;
+
+    #endregion
+
+
+    #region Weapon Overrides
+
+    public override void Activate(bool pressed, float multiplier)
+    {
+        if (pressed)
+        {
+            StartCoroutine(Fire(multiplier));
+        }
+        else
+        {
+            StopAllCoroutines();
+        }
+    }
+
+
+    public override Weapon Bake(GameObject parent)
+    {
+        var comp = parent.AddComponent<PlasmaCannon>();
+        comp.index = index;
+        comp.attackName = attackName;
+        comp.cooldownSpeed = cooldownSpeed;
+        comp.hitInfo = hitInfo;
+        comp.laserOffset = laserOffset + transform.localPosition;
+        comp.fireRate = fireRate;
+        comp.speed = speed;
+
+        return comp;
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    private IEnumerator Fire(float multiplier)
+    {
+        WaitForSeconds time = new WaitForSeconds(1f/fireRate);
+        while (true)
+        {
+            GameObject laser = PoolManager.Pop(attackName);
+            laser.transform.SetPosRot(myTransform.position + myTransform.TransformDirection(laserOffset), myTransform.rotation);
+            laser.GetComponent<Hitbox>().Initialize(myShip, hitInfo.MultiplyDamage(multiplier), myTransform.forward * speed);
+            power = 0f;
+            if (ActivatedEvent != null)
+            {
+                ActivatedEvent(this, EventArgs.Empty);
+            }
+
+            yield return time;
+        }
+    }
+
+    #endregion
+}

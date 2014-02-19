@@ -37,7 +37,11 @@ public class LaserBeam : Weapon
     {
         if (pressed)
         {
-            StartCoroutine("Fire", multiplier);
+            if (power > 0)
+            {
+                StopCoroutine("Charge");
+                StartCoroutine("Fire", multiplier);
+            }
         }
         else
         {
@@ -95,14 +99,14 @@ public class LaserBeam : Weapon
         while (power > 0f)
         {
             power -= FULLPOWER/attackTime*deltaTime;
-            Debug.DrawRay(laser.position, myTransform.forward * maxRange, Color.yellow);
+            float size = maxSize * power / FULLPOWER;
             if (Physics.Raycast(laser.position, myTransform.forward, out rayInfo, maxRange) && rayInfo.collider.GetComponent<Ship>() != null)
             {
-                laser.localScale = new Vector3(laser.localScale.x, laser.localScale.y, rayInfo.distance); // change width
+                laser.localScale = new Vector3(size, size, rayInfo.distance); // change width
             }
             else
             {
-                laser.localScale = new Vector3(laser.localScale.x, laser.localScale.y, maxRange); // change width
+                laser.localScale = new Vector3(size, size, maxRange); // change width
             }
             yield return null;
         }
@@ -121,7 +125,7 @@ public class LaserBeam : Weapon
         {
             ActivatedEvent(this, EventArgs.Empty);
         }
-        StartCoroutine(Cooldown());
+        StartCoroutine("Charge");
     }
 
     #endregion
