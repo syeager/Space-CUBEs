@@ -59,11 +59,6 @@ public class PlasmaCannon : Weapon
             GameObject laser = PoolManager.Pop(attackName);
             laser.transform.SetPosRot(myTransform.position + myTransform.TransformDirection(laserOffset), myTransform.rotation);
             laser.GetComponent<Hitbox>().Initialize(myShip, hitInfo.MultiplyDamage(multiplier), myTransform.forward * speed);
-            power = 0f;
-            if (ActivatedEvent != null)
-            {
-                ActivatedEvent(this, EventArgs.Empty);
-            }
 
             yield return time;
         }
