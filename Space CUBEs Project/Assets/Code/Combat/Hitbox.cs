@@ -9,12 +9,13 @@ using UnityEngine;
 /// <summary>
 /// Passes HitInfo from attack to reciever.
 /// </summary>
+[RequireComponent(typeof(Rigidbody))]
 public class Hitbox : MonoBase
 {
     #region References
 
-    private Transform myTransform;
-    private PoolObject myPoolObject;
+    protected Transform myTransform;
+    protected PoolObject myPoolObject;
 
     #endregion
 
@@ -70,7 +71,7 @@ public class Hitbox : MonoBase
     }
 
 
-    private void OnTriggerStay(Collider other)
+    protected virtual void OnTriggerStay(Collider other)
     {
         if (!continuous) return;
 
@@ -85,7 +86,7 @@ public class Hitbox : MonoBase
 
     #region Public Methods
 
-    public void Initialize(Ship sender, HitInfo hitInfo, Action CollisionMethod = null)
+    public virtual void Initialize(Ship sender, HitInfo hitInfo, Action CollisionMethod = null)
     {
         this.sender = sender;
         this.hitInfo = hitInfo;
@@ -96,21 +97,21 @@ public class Hitbox : MonoBase
     }
 
 
-    public void Initialize(Ship sender, HitInfo hitInfo, Vector3 moveVec, Action CollisionMethod = null)
+    public virtual void Initialize(Ship sender, HitInfo hitInfo, Vector3 moveVec, Action CollisionMethod = null)
     {
         Initialize(sender, hitInfo, CollisionMethod);
         StartCoroutine(Move(moveVec));
     }
 
 
-    public void Initialize(Ship sender, HitInfo hitInfo, float time, Action CollisionMethod = null)
+    public virtual void Initialize(Ship sender, HitInfo hitInfo, float time, Action CollisionMethod = null)
     {
         Initialize(sender, hitInfo, CollisionMethod);
         myPoolObject.StartLifeTimer(time);
     }
 
 
-    public void Initialize(Ship sender, HitInfo hitInfo, float time, Vector3 moveVec, Action CollisionMethod = null)
+    public virtual void Initialize(Ship sender, HitInfo hitInfo, float time, Vector3 moveVec, Action CollisionMethod = null)
     {
         Initialize(sender, hitInfo, time, CollisionMethod);
         StartCoroutine(Move(moveVec));

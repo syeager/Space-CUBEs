@@ -18,6 +18,8 @@ public class Health : MonoBase
 
     #region Public Fields
 
+    /// <summary>Material when health is taken away.</summary>
+    public Material HealthHit_Mat;
     /// <summary>Seconds for the hit material.</summary>
     public float healthHitMatTime = 0.5f;
     /// <summary>Can recieve damage?</summary>
@@ -29,8 +31,6 @@ public class Health : MonoBase
 
     /// <summary>Changes material from normal to hit and back.</summary>
     protected Job changeMat;
-    /// <summary>Material when health is taken away.</summary>
-    protected Material HealthHit_Mat;
     /// <summary>Material when gameobject is created.</summary>
     protected Material Normal_Mat;
 
@@ -60,7 +60,8 @@ public class Health : MonoBase
     protected virtual void Awake()
     {
         myRenderer = renderer;
-        HealthHit_Mat = GameResources.Main.HealthHit_Mat;
+        
+        Initialize();
     }
 
 
@@ -113,7 +114,10 @@ public class Health : MonoBase
             return;
         }
 
-        ChangeMat(HealthHit_Mat);
+        if (HealthHit_Mat != null)
+        {
+            HitMat(HealthHit_Mat);
+        }
     }
 
 

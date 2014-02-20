@@ -18,7 +18,7 @@ public class CUBEImporter : MonoBehaviour
 
     #region MonoBehaviour Overrides
 
-    [Conditional("UNITY_EDITOR")]
+#if UNITY_EDITOR
     void Start()
     {
         GameObject model = UnityEditor.AssetDatabase.LoadAssetAtPath(modelPath, typeof(GameObject)) as GameObject;
@@ -28,6 +28,8 @@ public class CUBEImporter : MonoBehaviour
 
         DestroyImmediate(gameObject);
     }
+#endif
+    
 
     #endregion
 

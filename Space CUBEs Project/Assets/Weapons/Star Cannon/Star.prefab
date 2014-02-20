@@ -9,11 +9,15 @@ GameObject:
   m_Component:
   - 4: {fileID: 400000}
   - 33: {fileID: 3300000}
+  - 135: {fileID: 13500000}
+  - 135: {fileID: 13500002}
   - 23: {fileID: 2300000}
-  - 114: {fileID: 11400002}
   - 114: {fileID: 11400000}
+  - 114: {fileID: 11400002}
+  - 54: {fileID: 5400000}
+  - 114: {fileID: 11400004}
   m_Layer: 0
-  m_Name: Bevelled 1
+  m_Name: Star
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25,8 +29,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_LocalRotation: {x: 0, y: -0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.26599121, y: -.377685547, z: -1.56141281}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -42,7 +46,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: e49e89d4e38778345b8367a7baa31088, type: 2}
+  - {fileID: 2100000, guid: c86076cfc31eeab4aab467cb6c1de9f1, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -57,7 +61,22 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Mesh: {fileID: 4300000, guid: bf2ecd0e62d0b3e488ef8d79d5311611, type: 3}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!54 &5400000
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: .0500000007
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 120
+  m_CollisionDetection: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -66,11 +85,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5cddb31ad4dca1141a26c308b5d59954, type: 3}
+  m_Script: {fileID: 11500000, guid: 5828cf0c692bcd74a907b8d33d0dd5ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colors:
-  - {r: .360294104, g: .360294104, b: .360294104, a: 0}
+  log: 1
+  timeScale: 1
+  continuous: 1
+  hitNumber: 1
+  growth: 3
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -79,10 +101,52 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 583375bc492680d4abdf998fb25928d6, type: 3}
+  m_Script: {fileID: 11500000, guid: 5a811daa6c14fc348b0608b4c05762ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: 106
+  PrefabName: Star
+--- !u!114 &11400004
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eac8440067ca07429ad762674d3c391, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  log: 1
+  timeScale: 1
+  HealthHit_Mat: {fileID: 2100000, guid: 7d34c7cf8cf2d1d468c55084184f96f1, type: 2}
+  healthHitMatTime: .5
+  invincible: 0
+  maxHealth: 100
+  health: 0
+--- !u!135 &13500000
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: .5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!135 &13500002
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: .550000012
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

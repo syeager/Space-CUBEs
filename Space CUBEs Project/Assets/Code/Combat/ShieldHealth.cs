@@ -43,6 +43,7 @@ public class ShieldHealth : Health
     protected override void Awake()
     {
         ShieldHit_Mat = GameResources.Main.ShieldHit_Mat;
+        HealthHit_Mat = GameResources.Main.HealthHit_Mat;
         base.Awake();
     }
 

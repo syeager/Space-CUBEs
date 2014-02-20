@@ -40,7 +40,7 @@ public class PlasmaCannon : Weapon
         comp.attackName = attackName;
         comp.cooldownSpeed = cooldownSpeed;
         comp.hitInfo = hitInfo;
-        comp.laserOffset = laserOffset + transform.localPosition;
+        comp.laserOffset = laserOffset + myTransform.localPosition;
         comp.fireRate = fireRate;
         comp.speed = speed;
 

@@ -47,6 +47,12 @@ public class LevelManager : Singleton<LevelManager>
 
     #endregion
 
+    #region Test Fields
+
+    public string testBuild;
+
+    #endregion
+
 
     #region Events
 
@@ -68,7 +74,7 @@ public class LevelManager : Singleton<LevelManager>
         }
         else
         {
-            build = "Test Build";
+            build = testBuild;
         }
 
         #else

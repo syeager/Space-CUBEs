@@ -54,7 +54,7 @@ public class Nuke : Weapon
         comp.cooldownSpeed = cooldownSpeed;
         comp.Nuke_Prefab = Nuke_Prefab;
         comp.Explosion_Prefab = Explosion_Prefab;
-        comp.attackOffset = attackOffset;
+        comp.attackOffset = attackOffset + myTransform.localPosition;
         comp.time = time;
         comp.speed = speed;
         comp.hitInfo = hitInfo;
