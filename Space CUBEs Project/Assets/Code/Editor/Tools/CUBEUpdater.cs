@@ -19,18 +19,12 @@ using Object = UnityEngine.Object;
 /// </summary>
 public class CUBEUpdater : EditorWindow
 {
-    #region Private Fields
-
-    private DateTime startTime;
-
-    #endregion
-
     #region Readonly Fields
 
     private static readonly Vector2 SIZE = new Vector2(300f, 50f);
     private static readonly string CUBECSVPATH = Directory.GetParent(Directory.GetCurrentDirectory()) + @"\Data\CUBE List.csv";
     private static readonly string CUBELISTPATHEDITOR = Application.dataPath + "/Resources/CUBE List.bytes";
-    private const string PREFABPATH = "Assets/Ship/CUBEs/";
+    private const string PREFABPATH = "Assets/Ship/CUBEs/Prefabs/";
     private const string GAMERESOURCESPATH = "Assets/Global/";
 
     #endregion
@@ -51,19 +45,15 @@ public class CUBEUpdater : EditorWindow
         GUILayout.FlexibleSpace();
         if (GUILayout.Button("Update"))
         {
-            startTime = DateTime.Now;
-            ToBinary(CSVToCUBEInfo());
-            UpdatePrefabs();
-            Debug.Log("CUBE list updated successfully at " + DateTime.Now.ToShortTimeString());
-            Debug.Log("Time: " + (DateTime.Now - startTime).TotalSeconds);
+            Update();
         }
     }
 
     #endregion
 
-    #region Private Methods
+    #region Static Methods
 
-    private CUBEInfo[] CSVToCUBEInfo()
+    private static CUBEInfo[] CSVToCUBEInfo()
     {
         List<CUBEInfo> info = new List<CUBEInfo>();
 
@@ -98,7 +88,7 @@ public class CUBEUpdater : EditorWindow
     }
 
 
-    private void ToBinary(CUBEInfo[] info)
+    private static void ToBinary(CUBEInfo[] info)
     {
         using (BinaryWriter writer = new BinaryWriter(File.Open(CUBELISTPATHEDITOR, FileMode.Create)))
         {
@@ -124,7 +114,7 @@ public class CUBEUpdater : EditorWindow
     }
 
 
-    private void UpdatePrefabs()
+    private static void UpdatePrefabs()
     {
         // get all CUBE prefabs
         var prefabs = Utility.LoadObjects<CUBE>(PREFABPATH).ToArray();
@@ -160,6 +150,15 @@ public class CUBEUpdater : EditorWindow
             resourcesPrefabs.GetArrayElementAtIndex(i).objectReferenceValue = prefab.Length > 0 ? prefab[0].gameObject : null;
         }
         resources.ApplyModifiedProperties();
+    }
+
+
+    public static void Update()
+    {
+        DateTime startTime = DateTime.Now;
+        ToBinary(CSVToCUBEInfo());
+        UpdatePrefabs();
+        Debug.Log("CUBE list updated successfully. " + (DateTime.Now - startTime).TotalSeconds);
     }
 
     #endregion
