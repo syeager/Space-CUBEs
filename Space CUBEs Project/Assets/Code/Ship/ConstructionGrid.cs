@@ -338,16 +338,16 @@ public class ConstructionGrid : MonoBase
             {
                 foreach (var cube in currentBuild)
                 {
-                    if (cube.Value.position.y > newLayer) foreach (var mat in cube.Key.renderer.materials) mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, NEARALPHA);
-                    else foreach (var mat in cube.Key.renderer.materials) mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, 1f);
+                    if (cube.Value.position.y > newLayer) foreach (var mat in cube.Key.renderer.materials) mat.SetFloat("_Alpha", NEARALPHA);
+                    else foreach (var mat in cube.Key.renderer.materials) mat.SetFloat("_Alpha", 1f);
                 }
             }
             else
             {
                 foreach (var cube in currentBuild)
                 {
-                    if (cube.Value.position.y < newLayer) foreach (var mat in cube.Key.renderer.materials) mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, NEARALPHA);
-                    else foreach (var mat in cube.Key.renderer.materials) mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, 1f);
+                    if (cube.Value.position.y < newLayer) foreach (var mat in cube.Key.renderer.materials) mat.SetFloat("_Alpha", NEARALPHA);
+                    else foreach (var mat in cube.Key.renderer.materials) mat.SetFloat("_Alpha", 1f);
                 }
             }
         }
@@ -371,16 +371,16 @@ public class ConstructionGrid : MonoBase
             {
                 foreach (var cube in currentBuild)
                 {
-                    if (cube.Value.position.x > newLayer) foreach (var mat in cube.Key.renderer.materials) mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, NEARALPHA);
-                    else foreach (var mat in cube.Key.renderer.materials) mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, 1f);
+                    if (cube.Value.position.x > newLayer) foreach (var mat in cube.Key.renderer.materials) mat.SetFloat("_Alpha", NEARALPHA);
+                    else foreach (var mat in cube.Key.renderer.materials) mat.SetFloat("_Alpha", 1f);
                 }
             }
             else
             {
                 foreach (var cube in currentBuild)
                 {
-                    if (cube.Value.position.x < newLayer) foreach (var mat in cube.Key.renderer.materials) mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, NEARALPHA);
-                    else foreach (var mat in cube.Key.renderer.materials) mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, 1f);
+                    if (cube.Value.position.x < newLayer) foreach (var mat in cube.Key.renderer.materials) mat.SetFloat("_Alpha", NEARALPHA);
+                    else foreach (var mat in cube.Key.renderer.materials) mat.SetFloat("_Alpha", 1f);
                 }
             }
         }
@@ -404,16 +404,16 @@ public class ConstructionGrid : MonoBase
             {
                 foreach (var cube in currentBuild)
                 {
-                    if (cube.Value.position.z > newLayer) foreach (var mat in cube.Key.renderer.materials) mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, NEARALPHA);
-                    else foreach (var mat in cube.Key.renderer.materials) mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, 1f);
+                    if (cube.Value.position.z > newLayer) foreach (var mat in cube.Key.renderer.materials) mat.SetFloat("_Alpha", NEARALPHA);
+                    else foreach (var mat in cube.Key.renderer.materials) mat.SetFloat("_Alpha", 1f);
                 }
             }
             else
             {
                 foreach (var cube in currentBuild)
                 {
-                    if (cube.Value.position.z < newLayer) foreach (var mat in cube.Key.renderer.materials) mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, NEARALPHA);
-                    else foreach (var mat in cube.Key.renderer.materials) mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, 1f);
+                    if (cube.Value.position.z < newLayer) foreach (var mat in cube.Key.renderer.materials) mat.SetFloat("_Alpha", NEARALPHA);
+                    else foreach (var mat in cube.Key.renderer.materials) mat.SetFloat("_Alpha", 1f);
                 }
             }
         }
@@ -439,6 +439,13 @@ public class ConstructionGrid : MonoBase
         cursorOffset = Vector3.zero;
         // create new CUBE
         heldCUBE = (CUBE)GameObject.Instantiate(GameResources.GetCUBE(CUBEID));
+        int materialCount = heldCUBE.renderer.materials.Length;
+        Material[] alphaMats = new Material[materialCount];
+        for (int i = 0; i < materialCount; i++)
+        {
+            alphaMats[i] = GameResources.Main.VertexOverlay_Mat;
+        }
+        heldCUBE.renderer.sharedMaterials = alphaMats;
         heldInfo = CUBE.allCUBES[heldCUBE.ID];
         // set to cursor position and rotation
         heldCUBE.transform.position = cursorWorldPosition;

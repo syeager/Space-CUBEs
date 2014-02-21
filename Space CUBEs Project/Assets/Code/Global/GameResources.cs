@@ -18,6 +18,7 @@ public class GameResources : MonoBehaviour
     public CUBE[] CUBE_Prefabs;
     public GameObject ConstructionGrid_Prefab;
     public Material VertexColor_Mat;
+    public Material VertexOverlay_Mat;
     public Material ShieldHit_Mat;
     public Material HealthHit_Mat;
 

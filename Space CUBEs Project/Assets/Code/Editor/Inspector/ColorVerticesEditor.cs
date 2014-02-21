@@ -11,17 +11,29 @@ using UnityEditor;
 [CustomEditor(typeof(ColorVertices))]
 public class ColorVerticesEditor : Editor
 {
-    #region 
-    
+    #region Private Fields
+
+    private ColorVertices cv;
+
+    #endregion
+
+
+    #region Editor Overrides
+
+    private void OnEnable()
+    {
+        cv = target as ColorVertices;
+    }
+
+
     public override void OnInspectorGUI()
     {
-        base.OnInspectorGUI();
+        serializedObject.Update();
 
-        if (GUILayout.Button("Color"))
-        {
-            ColorVertices cv = target as ColorVertices;
-            cv.Bake();
-        }
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("colors"), true);
+        cv.Bake();
+
+        serializedObject.ApplyModifiedProperties();
     }
     
     #endregion

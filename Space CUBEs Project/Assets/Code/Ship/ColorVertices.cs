@@ -4,10 +4,12 @@
 using UnityEngine;
 using System.Collections;
 using System;
+using System.Diagnostics;
 
 /// <summary>
 /// 
 /// </summary>
+[ExecuteInEditMode]
 public class ColorVertices : MonoBehaviour
 {
     #region Public Fields
@@ -16,6 +18,16 @@ public class ColorVertices : MonoBehaviour
 
     #endregion
 
+
+    #region MonoBehaviour Overrides
+    
+    [Conditional("UNITY_EDITOR")]
+    private void Update()
+    {
+        Bake();
+    }
+
+    #endregion
 
     #region Public Methods
 
@@ -31,7 +43,19 @@ public class ColorVertices : MonoBehaviour
             newColors = colors;
         }
 
-        Mesh mesh = GetComponent<MeshFilter>().mesh;
+        Mesh mesh;
+#if UNITY_EDITOR
+        if (UnityEditor.PrefabUtility.GetPrefabType(gameObject) == UnityEditor.PrefabType.Prefab)
+        {
+            mesh = GetComponent<MeshFilter>().sharedMesh;
+        }
+        else
+        {
+            mesh = GetComponent<MeshFilter>().mesh;
+        }
+#else
+        mesh = GetComponent<MeshFilter>().mesh;
+#endif
 
         Color[] vertColors = new Color[mesh.vertexCount];
 
