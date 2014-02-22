@@ -91,6 +91,14 @@ public abstract class Weapon : MonoBase
     }
 
 
+    protected void Activated()
+    {
+        if (ActivatedEvent != null)
+        {
+            ActivatedEvent(this, EventArgs.Empty);
+        }
+    }
+
     protected IEnumerator Charge()
     {
         while (power < FULLPOWER)

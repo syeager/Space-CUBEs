@@ -26,12 +26,13 @@ public class Hitbox : MonoBase
 
     #endregion
 
-    #region Private Fields
+    #region Protected Fields
 
-    private HitInfo hitInfo;
-    private Ship sender;
-    private int hitCount;
-    private Action CollisionMethod;
+    protected HitInfo hitInfo;
+    protected Ship sender;
+    protected int hitCount;
+    [Obsolete]
+    protected Action CollisionMethod;
 
     #endregion
 

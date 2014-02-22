@@ -26,10 +26,7 @@ public class StarCannon : Weapon
 
         (Instantiate(Star_Prefab, myTransform.position + myTransform.TransformDirection(attackOffset), myTransform.rotation) as GameObject).GetComponent<Hitbox>().Initialize(myShip, hitInfo.MultiplyDamage(multiplier), time, myTransform.forward*speed);
         StartCoroutine(Cooldown(true));
-        if (ActivatedEvent != null)
-        {
-            ActivatedEvent(this, EventArgs.Empty);
-        }
+        Activated();
     }
 
 
