@@ -52,6 +52,7 @@ public class UIButton : UIButtonColor
 		}
 	}
 
+
 	protected override void OnEnable ()
 	{
 		if (isEnabled)

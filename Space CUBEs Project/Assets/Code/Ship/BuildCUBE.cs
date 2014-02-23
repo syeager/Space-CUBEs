@@ -43,7 +43,7 @@ public class BuildCUBE
         if (done) return;
 
         time -= deltaTime;
-        if (time <= 0f || Vector3.Distance(transform.localPosition, localTarget) <= 1f)
+        if (time <= 0f)
         {
             done = true;
             transform.localPosition = localTarget;

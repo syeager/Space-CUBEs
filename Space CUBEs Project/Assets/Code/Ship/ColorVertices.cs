@@ -76,5 +76,12 @@ public class ColorVertices : MonoBehaviour
         }
     }
 
+
+    public void SetandBake(int index, Color color)
+    {
+        colors[index] = color;
+        Bake();
+    }
+
     #endregion
 }

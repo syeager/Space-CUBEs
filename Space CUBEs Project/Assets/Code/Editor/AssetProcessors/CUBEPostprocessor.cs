@@ -12,8 +12,8 @@ public class CUBEPostprocessor : AssetPostprocessor
 {
     #region Const Fields
 
-    private const string MODELPATH = "Assets/Ship/CUBEs/Models/";
-    private const string MATERIALPATH = MODELPATH + "Materials";
+    private const string MESHPATH = "Assets/Ship/CUBEs/Meshes/";
+    private const string MATERIALPATH = MESHPATH + "Materials";
     private const string VERTEXCOLORPATH = "Assets/Ship/CUBEs/Materials/VertexColor_Mat.mat";
     private const string PREFABPATH = "Assets/Ship/CUBEs/Prefabs/";
 
@@ -24,7 +24,7 @@ public class CUBEPostprocessor : AssetPostprocessor
 
     private void OnPreprocessModel()
     {
-        if (!assetPath.Contains(MODELPATH)) return;
+        if (!assetPath.Contains(MESHPATH)) return;
         
         ModelImporter importer = assetImporter as ModelImporter;
 
@@ -36,8 +36,9 @@ public class CUBEPostprocessor : AssetPostprocessor
         importer.addCollider = false;
         importer.swapUVChannels = false;
 
-        importer.normalImportMode = ModelImporterTangentSpaceMode.None;
-        importer.splitTangentsAcrossSeams = false;
+        //importer.normalImportMode = ModelImporterTangentSpaceMode.None;
+
+        //importer.splitTangentsAcrossSeams = false;
 
         importer.importMaterials = false;
 
@@ -47,20 +48,20 @@ public class CUBEPostprocessor : AssetPostprocessor
 
     private void OnPostprocessModel(GameObject gameObject)
     {
-        if (!assetPath.Contains(MODELPATH)) return;
+        if (!assetPath.Contains(MESHPATH)) return;
 
         // create prefab
-        GameObject go = GameObject.Instantiate(gameObject) as GameObject;
-        string prefabPath = PREFABPATH + gameObject.name.Replace('_', ' ').Remove(gameObject.name.Length - 6) + ".prefab";
+        string prefabName = gameObject.name.Replace('_', ' ').Remove(gameObject.name.Length - 6);
+        GameObject go = new GameObject(prefabName);
+        go.AddComponent<MeshFilter>();
+        go.AddComponent<MeshRenderer>();
+        go.renderer.castShadows = false;
+        go.renderer.receiveShadows = false;
+
+        string prefabPath = PREFABPATH + prefabName + ".prefab";
         GameObject prefab = PrefabUtility.CreatePrefab(prefabPath, go);
-
-        var renderer = prefab.GetComponent<MeshRenderer>();
-        renderer.castShadows = false;
-        renderer.receiveShadows = false;
-
         prefab.AddComponent<CUBE>();
         // add weapon
-        CUBEUpdater.Update(); // update one CUBE
 
         var cube = go.AddComponent<CUBEImporter>();
         cube.Create(assetPath, prefabPath);

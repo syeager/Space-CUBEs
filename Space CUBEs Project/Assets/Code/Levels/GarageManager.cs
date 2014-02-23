@@ -148,11 +148,22 @@ public class GarageManager : MonoBase
 
     #endregion
 
-    #region Save Fields
+    #region Paint Fields
 
-    public float saveConfirmationTime = 2f;
-    public GameObject saveConfirmation;
-    public UILabel saveShipName;
+    public GameObject paintGrid;
+    private Color primaryColor;
+    private Color secondaryColor;
+    private bool primarySelected;
+    public ActivateButton[] pieces = new ActivateButton[3];
+    private int pieceSelected;
+    public GameObject colorSelector;
+    public UILabel colorSelectorTitle;
+    public ActivateButton[] paintPositionButtons;
+    public UILabel paintPostionLabel;
+    public ColorButton selectPrimary;
+    public ColorButton selectSecondary;
+    public ColorButton copyPrimary;
+    public ColorButton copySecondary;
 
     #endregion
 
@@ -160,6 +171,14 @@ public class GarageManager : MonoBase
 
     public ActivateButton[] weaponButtons;
     public ActivateButton[] weaponNavButtons;
+
+    #endregion
+
+    #region Save Fields
+
+    public float saveConfirmationTime = 2f;
+    public GameObject saveConfirmation;
+    public UILabel saveShipName;
 
     #endregion
 
@@ -173,6 +192,7 @@ public class GarageManager : MonoBase
         stateMachine.CreateState(LOADSTATE, LoadEnter, LoadExit);
         stateMachine.CreateState(SELECTSTATE, SelectEnter, SelectExit);
         stateMachine.CreateState(NAVSTATE, NavEnter, NavExit);
+        stateMachine.CreateState(PAINTSTATE, PaintEnter, PaintExit);
         stateMachine.CreateState(WEAPONSTATE, WeaponEnter, WeaponExit);
         stateMachine.initialState = LOADSTATE;
 
@@ -205,6 +225,27 @@ public class GarageManager : MonoBase
         {
             button.ActivateEvent += OnRotationButtonPressed;
         }
+
+        // paint menu
+        var paints = paintGrid.GetComponentsInChildren<ActivateButton>(true);
+        foreach (var paint in paints)
+        {
+            paint.ActivateEvent += OnColorSelected;
+        }
+        foreach (var piece in pieces)
+        {
+            piece.ActivateEvent += OnPieceSelected;
+        }
+        foreach (var button in paintPositionButtons)
+        {
+            button.ActivateEvent += OnPaintPositionButtonPressed;
+        }
+        copyPrimary.ActivateEvent += CopyColor;
+        copySecondary.ActivateEvent += CopyColor;
+        selectPrimary.ActivateEvent += OpenColorSelector;
+        selectSecondary.ActivateEvent += OpenColorSelector;
+        primaryColor = paints[0].defaultColor;
+        secondaryColor = paints[1].defaultColor;
     }
 
 
@@ -717,10 +758,7 @@ public class GarageManager : MonoBase
         menuPanels[1].SetActive(true);
         infoPanel.SetActive(true);
         FilterCUBEs(CUBEFilter, true);
-        actionButton1.label.text = "---";
-        actionButton1.isEnabled = false;
-        actionButton2.label.text = "Nav";
-        actionButton2.isEnabled = true;
+        
         actionButton2.ActivateEvent += OnNavMenuPressed;
         stateMachine.SetUpdate(SelectUpdate());
         StartCoroutine("SaveConfirmation");
@@ -729,6 +767,11 @@ public class GarageManager : MonoBase
 
     private IEnumerator SelectUpdate()
     {
+        actionButton1.label.text = "---";
+        actionButton1.isEnabled = false;
+        actionButton2.label.text = "Nav";
+        actionButton2.isEnabled = true;
+
         while (true)
         {
             // update camera
@@ -879,9 +922,7 @@ public class GarageManager : MonoBase
         mainCamera.camera.rect = new Rect(0.25f, 0f, 1f, 1f);
         menuPanels[2].SetActive(true);
         infoPanel.SetActive(true);
-        actionButton1.label.text = "Delete";
         actionButton1.ActivateEvent += OnDeleteButtonPressed;
-        actionButton2.label.text = "Place";
         actionButton2.ActivateEvent += OnActionButtonPressed;
         stateMachine.SetUpdate(NavUpdate());
         StartCoroutine("SaveConfirmation");
@@ -890,6 +931,11 @@ public class GarageManager : MonoBase
 
     private IEnumerator NavUpdate()
     {
+        actionButton1.isEnabled = true;
+        actionButton1.label.text = "Delete";
+        actionButton2.isEnabled = true;
+        actionButton2.label.text = "Place";
+
         while (true)
         {
             // update camera
@@ -904,7 +950,7 @@ public class GarageManager : MonoBase
             }
             else if (dir == 1)
             {
-                stateMachine.SetState(WEAPONSTATE, new Dictionary<string, object>());
+                stateMachine.SetState(PAINTSTATE, new Dictionary<string, object>());
             }
 
             // update position and rotation
@@ -933,7 +979,7 @@ public class GarageManager : MonoBase
                     actionButton2.isEnabled = true;
                     break;
                 case CursorStatuses.None:
-                    actionButton2.label.text = "";
+                    actionButton2.label.text = "---";
                     actionButton2.isEnabled = false;
                     break;
             }
@@ -1029,6 +1075,243 @@ public class GarageManager : MonoBase
 
     #endregion
 
+    #region Paint Methods
+
+    private void PaintEnter(Dictionary<string, object> info)
+    {
+        menuPanels[4].SetActive(true);
+        colorSelector.SetActive(false);
+        infoPanel.SetActive(true);
+
+        actionButton1.ActivateEvent += OnPaint;
+        actionButton2.ActivateEvent += OnPaint;
+
+        stateMachine.SetUpdate(PaintUpdate());
+    }
+
+
+    private IEnumerator PaintUpdate()
+    {
+        actionButton1.label.text = "";
+        actionButton2.label.text = "";
+        UpdatePieces();
+
+        while (true)
+        {
+            // update camera
+            UpdateCamera();
+            CameraMovementEdit();
+
+            // detect swipe
+            int dir = MenuSwipe();
+            if (dir == -1)
+            {
+                stateMachine.SetState(NAVSTATE, new Dictionary<string, object>());
+            }
+            else if (dir == 1)
+            {
+                stateMachine.SetState(WEAPONSTATE, new Dictionary<string, object>());
+            }
+
+            // update position and rotation
+            paintPostionLabel.text = "Position " + (Grid.cursor + Vector3.one).ToString("0");
+
+            UpdateInfoPanel();
+            yield return null;
+        }
+    }
+
+
+    private void PaintExit(Dictionary<string, object> info)
+    {
+        menuPanels[4].SetActive(false);
+        colorSelector.SetActive(false);
+        infoPanel.SetActive(false);
+
+        actionButton1.ActivateEvent -= OnPaint;
+        actionButton1.defaultColor = Color.white;
+        actionButton2.ActivateEvent -= OnPaint;
+        actionButton2.defaultColor = Color.white;
+    }
+
+
+    private void OnColorSelected(object sender, ActivateButtonArgs args)
+    {
+        if (args.isPressed) return;
+
+        if (primarySelected)
+        {
+            SetPrimaryColor((sender as ActivateButton).defaultColor);
+        }
+        else
+        {
+            SetSecondaryColor((sender as ActivateButton).defaultColor);
+        }
+
+        colorSelector.SetActive(false);
+    }
+
+
+    private void OnPaint(object sender, ActivateButtonArgs args)
+    {
+        if (args.isPressed) return;
+        Grid.hoveredCUBE.GetComponent<ColorVertices>().SetandBake(pieceSelected, args.value == "action2" ? primaryColor : secondaryColor);
+    }
+
+
+    private void UpdatePieces()
+    {
+        if (Grid.cursorStatus == CursorStatuses.Hover)
+        {
+            // enable copy to's
+            copyPrimary.isEnabled = true;
+            copySecondary.isEnabled = true;
+
+            // enable paints
+            actionButton1.isEnabled = true;
+            SetSecondaryColor(secondaryColor);
+            actionButton2.isEnabled = true;
+            SetPrimaryColor(primaryColor);
+
+            // enable pieces
+            pieces[pieceSelected].Activate(false);
+            int count = Grid.hoveredCUBE.renderer.sharedMaterials.Length;
+            int cursor = 0;
+            while (cursor < count)
+            {
+                pieces[cursor].isEnabled = true;
+                cursor++;
+            }
+            while (cursor < 3)
+            {
+                pieces[cursor].isEnabled = false;
+                cursor++;
+            }
+
+            while (pieceSelected > count - 1)
+            {
+                pieceSelected--;
+            }
+            pieces[pieceSelected].Activate(true);
+
+            // copy colors
+            Color copyColor = Grid.hoveredCUBE.GetComponent<ColorVertices>().colors[pieceSelected];
+            copyPrimary.SetColor(copyColor);
+            copySecondary.SetColor(copyColor);
+        }
+        else
+        {
+            // disable copy to's
+            copyPrimary.isEnabled = false;
+            copySecondary.isEnabled = false;
+
+            // disable paints
+            actionButton1.isEnabled = false;
+            actionButton2.isEnabled = false;
+
+            // disable pieces
+            foreach (var piece in pieces)
+            {
+                piece.Activate(false);
+                piece.isEnabled = false;
+            }
+
+            // copy colors
+            copyPrimary.SetColor(Color.gray);
+            copySecondary.SetColor(Color.gray);
+        }
+    }
+
+
+    private void OnPieceSelected(object sender, ActivateButtonArgs args)
+    {
+        if (args.isPressed) return;
+        pieces[pieceSelected].Activate(false);
+        pieceSelected = int.Parse(args.value);
+        pieces[pieceSelected].Activate(true);
+
+        // copy colors
+        Color copyColor = Grid.hoveredCUBE.GetComponent<ColorVertices>().colors[pieceSelected];
+        copyPrimary.SetColor(copyColor);
+        copySecondary.SetColor(copyColor);
+    }
+
+
+    private void OpenColorSelector(object sender, ActivateButtonArgs args)
+    {
+        primarySelected = args.value == "Primary";
+        colorSelectorTitle.text = args.value;
+        colorSelector.SetActive(true);
+    }
+
+
+    public void CopyColor(object sender, ActivateButtonArgs args)
+    {
+        if (args.value == "Primary")
+        {
+            SetPrimaryColor(Grid.hoveredCUBE.GetComponent<ColorVertices>().colors[pieceSelected]);
+        }
+        else
+        {
+            SetSecondaryColor(Grid.hoveredCUBE.GetComponent<ColorVertices>().colors[pieceSelected]);
+        }
+    }
+
+
+    private void OnPaintPositionButtonPressed(object sender, ActivateButtonArgs args)
+    {
+        if (!args.isPressed) return;
+
+        switch (args.value)
+        {
+            case "back":
+                Grid.ChangeLayer(-1);
+                CameraZoom(0f);
+                UpdatePieces();
+                break;
+            case "forward":
+                Grid.ChangeLayer(1);
+                CameraZoom(0f);
+                UpdatePieces();
+                break;
+            case "left":
+                Grid.MoveCursor(-cameraTarget.right);
+                UpdatePieces();
+                break;
+            case "right":
+                Grid.MoveCursor(cameraTarget.right);
+                UpdatePieces();
+                break;
+            case "down":
+                Grid.MoveCursor(-cameraTarget.up);
+                UpdatePieces();
+                break;
+            case "up":
+                Grid.MoveCursor(cameraTarget.up);
+                UpdatePieces();
+                break;
+        }
+    }
+
+
+    private void SetPrimaryColor(Color color)
+    {
+        primaryColor = color;
+        actionButton2.Activate(primaryColor);
+        selectPrimary.SetColor(primaryColor);
+    }
+
+
+    private void SetSecondaryColor(Color color)
+    {
+        secondaryColor = color;
+        actionButton1.Activate(secondaryColor);
+        selectSecondary.SetColor(secondaryColor);
+    }
+
+
+    #endregion
+
     #region Weapon Menu Methods
 
     public void WeaponEnter(Dictionary<string, object> info)
@@ -1066,12 +1349,6 @@ public class GarageManager : MonoBase
             button.ActivateEvent += OnWeaponNavButton;
         }
 
-        // action buttons
-        actionButton1.label.text = "---";
-        actionButton1.isEnabled = false;
-        actionButton2.label.text = "---";
-        actionButton2.isEnabled = false;
-
         stateMachine.SetUpdate(WeaponUpdate());
         StartCoroutine("SaveConfirmation");
     }
@@ -1079,6 +1356,12 @@ public class GarageManager : MonoBase
 
     public IEnumerator WeaponUpdate()
     {
+        // action buttons
+        actionButton1.label.text = "---";
+        actionButton1.isEnabled = false;
+        actionButton2.label.text = "---";
+        actionButton2.isEnabled = false;
+
         while (true)
         {
             // update camera
@@ -1089,7 +1372,7 @@ public class GarageManager : MonoBase
             int dir = MenuSwipe();
             if (dir == -1)
             {
-                stateMachine.SetState(NAVSTATE, new Dictionary<string, object>());
+                stateMachine.SetState(PAINTSTATE, new Dictionary<string, object>());
             }
             else if (dir == 1)
             {

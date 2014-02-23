@@ -127,6 +127,7 @@ public class CUBEUpdater : EditorWindow
         {
             // set ID
             serializedPrefab = new SerializedObject(prefabs[i]);
+            Debug.Log(prefabs[i].name);
             serializedPrefab.FindProperty("ID").intValue = info.First(c => c.name == prefabs[i].name).ID;
             serializedPrefab.ApplyModifiedProperties();
         }

@@ -11,17 +11,17 @@ public class SingularityBlaster : Weapon
 {
     #region Public Fields
     
-    public GameObject BlackHoleMissle_Prefab;
-    public Vector3 missleOffset;
+    public GameObject BlackHoleMissile_Prefab;
+    public Vector3 missileOffset;
     public HitInfo hitInfo;
-    public float missleTime;
-    public float missleSpeed;
+    public float missileTime;
+    public float missileSpeed;
     
     #endregion
 
     #region Private Fields
 
-    private BlackHoleMissle missle;
+    private BlackHoleMissile missile;
 
     #endregion
 
@@ -32,13 +32,13 @@ public class SingularityBlaster : Weapon
     {
         if (pressed)
         {
-            if (missle != null)
+            if (missile != null)
             {
                 Release();
             }
             Fire(multiplier);
         }
-        else if (missle != null)
+        else if (missile != null)
         {
             Release();
         }
@@ -50,11 +50,11 @@ public class SingularityBlaster : Weapon
         var comp = parent.AddComponent<SingularityBlaster>();
         comp.index = index;
         comp.cooldownSpeed = cooldownSpeed;
-        comp.BlackHoleMissle_Prefab = BlackHoleMissle_Prefab;
-        comp.missleOffset = missleOffset + myTransform.localPosition;
+        comp.BlackHoleMissile_Prefab = BlackHoleMissile_Prefab;
+        comp.missileOffset = missileOffset + myTransform.localPosition;
         comp.hitInfo = hitInfo;
-        comp.missleTime = missleTime;
-        comp.missleSpeed = missleSpeed;
+        comp.missileTime = missileTime;
+        comp.missileSpeed = missileSpeed;
 
         return comp;
     }
@@ -65,15 +65,15 @@ public class SingularityBlaster : Weapon
 
     private void Fire(float multiplier)
     {
-        missle = (Instantiate(BlackHoleMissle_Prefab, myTransform.position + myTransform.TransformDirection(missleOffset), myTransform.rotation) as GameObject).GetComponent<BlackHoleMissle>();
-        missle.Initialize(myShip, hitInfo.MultiplyDamage(multiplier), missleTime, myTransform.forward*missleSpeed);
+        missile = (Instantiate(BlackHoleMissile_Prefab, myTransform.position + myTransform.TransformDirection(missileOffset), myTransform.rotation) as GameObject).GetComponent<BlackHoleMissile>();
+        missile.Initialize(myShip, hitInfo.MultiplyDamage(multiplier), missileTime, myTransform.forward*missileSpeed);
     }
 
 
     private void Release()
     {
-        missle.Explode();
-        missle = null;
+        missile.Explode();
+        missile = null;
         StartCoroutine(Cooldown(true));
         Activated();
     }

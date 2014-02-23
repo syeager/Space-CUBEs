@@ -37,10 +37,10 @@
 				float4 color : COLOR;
 			};
 
-			VertOut wfiVertCol(VertIn input, float3 normal : NORMAL)
+			VertOut wfiVertCol(VertIn input)
 			{
 				VertOut output;
-				output.position = mul(UNITY_MATRIX_MVP,input.vertex);
+				output.position = mul(UNITY_MATRIX_MVP, input.vertex);
 				output.color = input.color * _Color;
 				output.color.a = _Alpha;
 				return output;
@@ -61,5 +61,4 @@
 
 		}
 	}
-	FallBack "Diffuse"
 }

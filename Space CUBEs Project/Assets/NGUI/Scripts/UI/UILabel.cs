@@ -230,7 +230,7 @@ public class UILabel : UIWidget
 		}
 		set
 		{
-			if (string.IsNullOrEmpty(value))
+            if (string.IsNullOrEmpty(value))
 			{
 				if (!string.IsNullOrEmpty(mText))
 				{

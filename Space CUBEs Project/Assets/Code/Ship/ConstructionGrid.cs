@@ -112,13 +112,21 @@ public class ConstructionGrid : MonoBase
     {
         get
         {
-            return cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].transform.position;
+            return cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].transform.position - Vector3.one/2f;
         }
     }
     /// <summary>Current status of the cursor.</summary>
     public CursorStatuses cursorStatus { get; private set; }
     /// <summary>Current CUBE being held.</summary>
     public CUBE heldCUBE { get; private set; }
+    /// <summary>CUBE being hovered over.</summary>
+    public CUBE hoveredCUBE
+    {
+        get
+        {
+            return grid[(int)cursor.y][(int)cursor.z][(int)cursor.x];
+        }
+    }
     /// <summary>CUBEInfo of currently held CUBE.</summary>
     public CUBEInfo heldInfo { get; private set; }
     /// <summary>Weapon slots for the ship.</summary>
@@ -483,7 +491,7 @@ public class ConstructionGrid : MonoBase
 
         Destroy(heldCUBE.gameObject);
         heldCUBE = null;
-        cursorStatus = CursorStatuses.None;
+        cursorStatus = hoveredCUBE == null ? CursorStatuses.None : CursorStatuses.Hover;
     }
 
 
@@ -558,19 +566,19 @@ public class ConstructionGrid : MonoBase
         List<BuildCUBE> pieces = new List<BuildCUBE>();
         GameObject finishedShip = new GameObject("Player");
 
-        const float minDist = 10f;
-        const float maxDist = 25f;
-        Vector3 halfGrid = Vector3.one * (buildSize / 2f - 0.5f);
+        const float minDist = 100f;
+        const float maxDist = 250f;
+        Vector3 halfGrid = Vector3.one * (buildSize / 2f - 1f); // need to move pivot to 0,0,0 // this might work (-0.5 to -1)
         finishedShip.transform.position = startPosition;
         finishedShip.transform.eulerAngles = startRotation;
-        float speed = (finishedShip.transform.position * maxDist).magnitude / maxTime;
+        float speed = maxDist / maxTime;
 
         foreach (var piece in buildInfo.partList)
         {
             var cube = (CUBE)GameObject.Instantiate(GameResources.GetCUBE(piece.Key));
             cube.transform.parent = finishedShip.transform;
 
-            cube.transform.localPosition = piece.Value.position * UnityEngine.Random.Range(minDist, maxDist);
+            cube.transform.localPosition = piece.Value.position.normalized * UnityEngine.Random.Range(minDist, maxDist);
             cube.transform.localPosition = Quaternion.Euler(UnityEngine.Random.Range(0, 360), UnityEngine.Random.Range(0, 360), UnityEngine.Random.Range(0, 360)) * cube.transform.localPosition;
             cube.transform.localEulerAngles = piece.Value.rotation;
 
