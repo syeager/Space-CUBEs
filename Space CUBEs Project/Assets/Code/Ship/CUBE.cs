@@ -44,12 +44,14 @@ public class CUBE : MonoBehaviour
 
     public static CUBEInfo[] allCUBES { get; private set; }
     public static int[][] gradedCUBEs { get; private set; }
+    public static Color[] colors { get; private set; }
 
     #endregion
 
     #region Const Fields
 
     public const string CUBELIST = "CUBE List";
+    public const string COLORLIST = "Color List";
     private const string INVENTORYPATH = "Inventory";
     private const char CUBESEP = '|';
 
@@ -86,7 +88,7 @@ public class CUBE : MonoBehaviour
                             reader.ReadSingle(),                        // shield
                             reader.ReadSingle(),                        // speed
                             reader.ReadSingle(),                        // damage
-                            Utility.ParseV3(reader.ReadString()),  // size
+                            Utility.ParseV3(reader.ReadString()),       // size
                             reader.ReadInt32(),                         // cost
                             reader.ReadInt32(),                         // rarity
                             reader.ReadInt32()                          // price
@@ -131,6 +133,24 @@ public class CUBE : MonoBehaviour
     public static void SetInventory(int[] inventory)
     {
         PlayerPrefs.SetString(INVENTORYPATH, string.Join(CUBESEP.ToString(), inventory.Select(c => c.ToString()).ToArray()));
+    }
+
+
+    public static Color[] LoadColors()
+    {
+        TextAsset binaryFile = (TextAsset)Resources.Load(COLORLIST);
+        Stream binaryStream = new MemoryStream(binaryFile.bytes);
+        List<Color> colors = new List<Color>();
+        using (BinaryReader reader = new BinaryReader(binaryStream))
+        {
+            while (reader.BaseStream.Position != reader.BaseStream.Length)
+            {
+                colors.Add(Utility.ParseColor(reader.ReadString()));
+            }
+        }
+
+        CUBE.colors = colors.ToArray();
+        return CUBE.colors;
     }
 
     #endregion

@@ -14,6 +14,8 @@ public class ColorVerticesEditor : Editor
     #region Private Fields
 
     private ColorVertices cv;
+    private Color[] allColors;
+    private SerializedProperty colors;
 
     #endregion
 
@@ -23,6 +25,8 @@ public class ColorVerticesEditor : Editor
     private void OnEnable()
     {
         cv = target as ColorVertices;
+        allColors = CUBE.LoadColors();
+        colors = serializedObject.FindProperty("colors");
     }
 
 
@@ -30,10 +34,22 @@ public class ColorVerticesEditor : Editor
     {
         serializedObject.Update();
 
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("colors"), true);
-        cv.Bake();
+        EditorGUILayout.PrefixLabel("Colors");
+        EditorGUI.indentLevel++;
+        for (int i = 0; i < colors.arraySize; i++)
+        {
+            EditorGUILayout.BeginHorizontal();
+            {
+                GUI.backgroundColor = cv.colors[i];
+                if (GUILayout.Button("Piece " + (i + 1)))
+                {
+                    ColorSelector.OpenSelector(allColors, cv, i);
+                }
 
-        serializedObject.ApplyModifiedProperties();
+            }
+            EditorGUILayout.EndHorizontal();
+        }
+        EditorGUI.indentLevel--;
     }
     
     #endregion

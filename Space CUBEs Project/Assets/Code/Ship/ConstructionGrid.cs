@@ -262,7 +262,8 @@ public class ConstructionGrid : MonoBase
         // rotate currently held CUBE
         if (heldCUBE != null)
         {
-            heldCUBE.transform.rotation = cursorRotation;
+            //heldCUBE.transform.rotation = cursorRotation;
+            heldCUBE.transform.RotateAround(cursorWorldPosition, axis, 90f);
         }
     }
 

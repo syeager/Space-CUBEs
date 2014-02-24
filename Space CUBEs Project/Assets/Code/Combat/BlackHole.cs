@@ -30,9 +30,6 @@ public class BlackHole : Hitbox
         // move
         otherTransform.position -= distance.normalized * pull * deltaTime;
 
-        // rotate
-        //otherTransform.rotation = Quaternion.Slerp(otherTransform.rotation, Quaternion.Euler(Vector3.Cross(distance, Vector3.forward)), pull*deltaTime);
-
         // damage
         var oppHealth = other.gameObject.GetComponent<Health>();
         if (oppHealth != null)

@@ -11,7 +11,7 @@ using UnityEngine;
 /// </summary>
 public static class Utility
 {
-    #region Vector Methods
+    #region String Methods
 
     /// <summary>
     /// Converts string to Vector3.
@@ -29,6 +29,20 @@ public static class Utility
         vector.z = float.Parse(split[2]);
 
         return vector;
+    }
+
+
+    public static Color ParseColor(string colorString)
+    {
+        Color color;
+        colorString = colorString.Substring(5, colorString.Length-6).Replace(" ", "");
+        string[] split = colorString.Split(',');
+        color.r = float.Parse(split[0]);
+        color.g = float.Parse(split[1]);
+        color.b = float.Parse(split[2]);
+        color.a = float.Parse(split[3]);
+
+        return color;
     }
 
     #endregion

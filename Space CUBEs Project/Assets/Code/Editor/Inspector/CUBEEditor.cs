@@ -25,8 +25,11 @@ public class CUBEEditor : Editor
 
     private void OnEnable()
     {
-        CUBEInfo[] cubes = CUBE.LoadAllCUBEInfo();
-        info = cubes.First(c => c.name == target.name);
+        if (!Application.isPlaying)
+        {
+            CUBEInfo[] cubes = CUBE.LoadAllCUBEInfo();
+            info = cubes.First(c => c.name == target.name);
+        }
     }
 
 
