@@ -9,6 +9,9 @@ public class DebuggerEditor : Editor
 
     private Debugger myDebugger;
     private string[] logTypes;
+    private SerializedProperty overwrite;
+    private SerializedProperty showTime;
+    private SerializedProperty logFlags;
 
     #endregion
 
@@ -19,6 +22,9 @@ public class DebuggerEditor : Editor
     {
         myDebugger = (Debugger)target;
         logTypes = Enum.GetNames(typeof(Debugger.LogTypes));
+        overwrite = serializedObject.FindProperty("overwrite");
+        showTime = serializedObject.FindProperty("showTime");
+        logFlags = serializedObject.FindProperty("logFlags");
     }
 
 
@@ -55,12 +61,33 @@ public class DebuggerEditor : Editor
         }
 
         // overwrite logs
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("overwrite"), new GUIContent("Overwrite Saved Logs"));
+        EditorGUILayout.PropertyField(overwrite, new GUIContent("Overwrite Saved Logs"));
+        EditorGUILayout.PropertyField(showTime);
+
+        // all
+        EditorGUILayout.BeginHorizontal();
+        {
+            EditorGUILayout.LabelField("All");
+            if (GUILayout.Button("On"))
+            {
+                for (int i = 0; i < myDebugger.logFlags.Length; i++)
+                {
+                    logFlags.GetArrayElementAtIndex(i).boolValue = true;
+                }
+            }
+            if (GUILayout.Button("Off"))
+            {
+                for (int i = 0; i < myDebugger.logFlags.Length; i++)
+                {
+                    logFlags.GetArrayElementAtIndex(i).boolValue = false;
+                }
+            }
+        }
+        EditorGUILayout.EndHorizontal();
 
         // log types
         EditorGUILayout.LabelField("Toggle Log Types");
         EditorGUI.indentLevel++;
-        SerializedProperty logFlags = serializedObject.FindProperty("logFlags");
         for (int i = 0; i < myDebugger.logFlags.Length; i++)
         {
             EditorGUILayout.PropertyField(logFlags.GetArrayElementAtIndex(i), new GUIContent(logTypes[i]));

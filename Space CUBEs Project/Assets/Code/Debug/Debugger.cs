@@ -7,6 +7,7 @@ using Object = UnityEngine.Object;
 using System.IO;
 using System.Collections.Generic;
 using System.Collections;
+using System.Reflection;
 
 /// <summary>
 /// Wrapper for Unity's Debug class.
@@ -24,6 +25,7 @@ public class Debugger : Singleton<Debugger>
 
     #region Public Fields
 
+    public bool showTime;
     public bool overwrite;
     public bool[] logFlags =
     {
@@ -89,7 +91,7 @@ public class Debugger : Singleton<Debugger>
     [System.Diagnostics.Conditional("LOG")]
     public static void Log(object message, Object context = null, bool save = true, LogTypes logType = LogTypes.Default)
     {
-        if (Main.logFlags[(int)logType]) Debug.Log(message, context);
+        if (Main.logFlags[(int)logType]) Debug.Log((Main.showTime ? Time.time + " " : "") + message, context);
 
 #if UNITY_EDITOR
         if (save)
@@ -106,7 +108,7 @@ public class Debugger : Singleton<Debugger>
     [System.Diagnostics.Conditional("WARNING")]
     public static void LogWarning(object message, Object context = null, bool save = true, LogTypes logType = LogTypes.Default)
     {
-        if (Main.logFlags[(int)logType]) Debug.LogWarning(message, context);
+        if (Main.logFlags[(int)logType]) Debug.LogWarning((Main.showTime ? Time.time + " " : "") + message, context);
 
 #if UNITY_EDITOR
         if (save)
@@ -123,7 +125,7 @@ public class Debugger : Singleton<Debugger>
     [System.Diagnostics.Conditional("ERROR")]
     public static void LogError(object message, Object context = null, bool save = true, LogTypes logType = LogTypes.Default)
     {
-        if (Main.logFlags[(int)logType]) Debug.LogError(message, context);
+        if (Main.logFlags[(int)logType]) Debug.LogError((Main.showTime ? Time.time + " " : "") + message, context);
 
 #if UNITY_EDITOR
         if (save)
@@ -138,23 +140,44 @@ public class Debugger : Singleton<Debugger>
 
 
     [System.Diagnostics.Conditional("LOG")]
-    public static void LogList(IEnumerable list, string header = "")
+    public static void LogList(IEnumerable list, string header = "", Object context = null, LogTypes logType = LogTypes.Default)
     {
+        if (!Main.logFlags[(int)logType]) return;
+
         if (header != "")
         {
-            Debug.Log(header + '\n');
+            Debug.Log(header + '\n', context);
         }
 
         int count = 0;
         foreach (var item in list)
         {
-            Debug.Log(count + ": " + item);
+            Debug.Log(count + ": " + item, context);
             count++;
         }
 
         if (count == 0)
         {
             Debug.Log("Empty");
+        }
+    }
+
+
+    [System.Diagnostics.Conditional("DEBUG")]
+    public static void LogFields(object context, string name, bool includePrivate = false, LogTypes logType = LogTypes.Default)
+    {
+        if (!Main.logFlags[(int)logType]) return;
+
+        Type type = context.GetType();
+        BindingFlags flags = BindingFlags.Public | BindingFlags.Instance;
+        if (includePrivate) flags |= BindingFlags.NonPublic;
+        FieldInfo[] info = type.GetFields(flags);
+
+        Debug.Log(name, (context is Object ? context as Object : null));
+        foreach (var i in info)
+        {
+            object o = i.GetValue(context);
+            Debug.Log(i.Name + ": " + o, (o is Object ? o as Object : null));
         }
     }
 
