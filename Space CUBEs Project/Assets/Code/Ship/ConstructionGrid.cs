@@ -19,6 +19,8 @@ public class ConstructionGrid : MonoBase
     public GameObject Cell_Prefab;
     /// <summary>Cell color when cursor is in cell.</summary>
     public Material CellCursor_Mat;
+    /// <summary>Cell color when cell is included in the cursor bounds.</summary>
+    public Material CellCursorBounds_Mat;
     /// <summary>Cell color when nothing is in cell.</summary>
     public Material CellOpen_Mat;
 
@@ -49,10 +51,10 @@ public class ConstructionGrid : MonoBase
     /// <summary>Parent of all of the CUBEs.</summary>
     private GameObject ship;
 
-    /// <summary>Offset from cursor to held CUBE's pivot.</summary>
+    /// <summary>Offset from cursor to held CUBE's pivotOffset.</summary>
     private Vector3 cursorOffset;
-    /// <summary>Current plane being looked through. Affects grid rotation.</summary>
-    private Vector3 plane;
+    /// <summary>Current viewAxis being looked through. Affects grid rotation.</summary>
+    private Vector3 viewAxis;
 
     #endregion
 
@@ -82,20 +84,20 @@ public class ConstructionGrid : MonoBase
     public int size { get; private set; }
     /// <summary>Position of the center of the grid.</summary>
     public Vector3 center { get { return Center.position; } }
-    /// <summary>Cursor's worldposition based on current plane.</summary>
+    /// <summary>Cursor's worldposition based on current viewAxis.</summary>
     public Vector3 layer
     {
         get
         {
-            if (plane == Vector3.right || plane == Vector3.left)
+            if (viewAxis == Vector3.right || viewAxis == Vector3.left)
             {
                 return new Vector3(cursorWorldPosition.x, center.y, center.z);
             }
-            else if (plane == Vector3.up || plane == Vector3.down)
+            else if (viewAxis == Vector3.up || viewAxis == Vector3.down)
             {
                 return new Vector3(center.x, cursorWorldPosition.y, center.z);
             }
-            else if (plane == Vector3.forward || plane == Vector3.back)
+            else if (viewAxis == Vector3.forward || viewAxis == Vector3.back)
             {
                 return new Vector3(center.x, center.y, cursorWorldPosition.z);
             }
@@ -112,9 +114,17 @@ public class ConstructionGrid : MonoBase
     {
         get
         {
-            return cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].transform.position - Vector3.one/2f;
+            return cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].transform.position;
         }
     }
+    //
+    //private Vector3 cursorPivotPosition
+    //{
+    //    get
+    //    {
+    //        return cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].transform.position - new Vector3(0.5f, 0.5f, 0.5f);
+    //    }
+    //}
     /// <summary>Current status of the cursor.</summary>
     public CursorStatuses cursorStatus { get; private set; }
     /// <summary>Current CUBE being held.</summary>
@@ -208,10 +218,10 @@ public class ConstructionGrid : MonoBase
                     cells[i][j][k] = (GameObject)GameObject.Instantiate(Cell_Prefab);
                     cells[i][j][k].transform.parent = transform;
                     cells[i][j][k].transform.localPosition = cursor;
-                    if (i != 0)
-                    {
-                        cells[i][j][k].SetActive(false);
-                    }
+                    //if (i != 0)
+                    //{
+                    //    cells[i][j][k].SetActive(false);
+                    //}
                     cursor.x++;
                 }
                 cursor.z++;
@@ -241,10 +251,10 @@ public class ConstructionGrid : MonoBase
     /// <summary>
     /// Rotate the grid.
     /// </summary>
-    /// <param name="plane"></param>
+    /// <param name="viewAxis"></param>
     public void RotateGrid(Vector3 plane)
     {
-        this.plane = plane.Round();
+        this.viewAxis = plane.Round();
         ChangeLayer(0);
     }
 
@@ -257,13 +267,14 @@ public class ConstructionGrid : MonoBase
     public void RotateCursor(Vector3 axis)
     {
         // quaternion math to get new angle
-        cursorRotation = Quaternion.Euler(axis * 90f) * cursorRotation;
+        cursorRotation = Quaternion.Euler((axis * -90f).Round()) * cursorRotation;
 
         // rotate currently held CUBE
         if (heldCUBE != null)
         {
             //heldCUBE.transform.rotation = cursorRotation;
-            heldCUBE.transform.RotateAround(cursorWorldPosition, axis, 90f);
+            //heldCUBE.transform.RotateAround(cursorWorldPosition, axis, -90f); // might not work on different viewAxis
+            PositionCUBE();
         }
     }
 
@@ -316,34 +327,34 @@ public class ConstructionGrid : MonoBase
     public void ChangeLayer(int amount)
     {
         // turn all cells off
-        for (int i = 0; i < size; i++)
-        {
-            for (int j = 0; j < size; j++)
-            {
-                for (int k = 0; k < size; k++)
-                {
-                    cells[i][j][k].SetActive(false);
-                }
-            }
-        }
+        //for (int i = 0; i < size; i++)
+        //{
+        //    for (int j = 0; j < size; j++)
+        //    {
+        //        for (int k = 0; k < size; k++)
+        //        {
+        //            cells[i][j][k].SetActive(false);
+        //        }
+        //    }
+        //}
 
         // up
-        if (plane == Vector3.up || plane == Vector3.down)
+        if (viewAxis == Vector3.up || viewAxis == Vector3.down)
         {
-            int y = (int)(cursor + plane * amount).y;
+            int y = (int)(cursor + viewAxis * amount).y;
             int newLayer = Mathf.Clamp(y, 0, size - 1);
 
             // toggle cell colors in the previous and new layers
-            for (int i = 0; i < size; i++)
-            {
-                for (int j = 0; j < size; j++)
-                {
-                    cells[newLayer][i][j].SetActive(true);
-                }
-            }
+            //for (int i = 0; i < size; i++)
+            //{
+            //    for (int j = 0; j < size; j++)
+            //    {
+            //        cells[newLayer][i][j].SetActive(true);
+            //    }
+            //}
 
             // toggle CUBE colors; alpha for CUBEs in a higher layer than the new layer; full opacity for CUBEs on the same layer
-            if (plane == Vector3.up)
+            if (viewAxis == Vector3.up)
             {
                 foreach (var cube in currentBuild)
                 {
@@ -361,22 +372,22 @@ public class ConstructionGrid : MonoBase
             }
         }
         // right
-        else if (plane == Vector3.right || plane == Vector3.left)
+        else if (viewAxis == Vector3.right || viewAxis == Vector3.left)
         {
-            int x = (int)(cursor + plane * amount).x;
+            int x = (int)(cursor + viewAxis * amount).x;
             int newLayer = Mathf.Clamp(x, 0, size - 1);
 
             // toggle cell colors in the previous and new layers
-            for (int i = 0; i < size; i++)
-            {
-                for (int j = 0; j < size; j++)
-                {
-                    cells[i][j][newLayer].SetActive(true);
-                }
-            }
+            //for (int i = 0; i < size; i++)
+            //{
+            //    for (int j = 0; j < size; j++)
+            //    {
+            //        cells[i][j][newLayer].SetActive(true);
+            //    }
+            //}
 
             // toggle CUBE colors; alpha for CUBEs in a higher layer than the new layer; full opacity for CUBEs on the same layer
-            if (plane == Vector3.right)
+            if (viewAxis == Vector3.right)
             {
                 foreach (var cube in currentBuild)
                 {
@@ -394,22 +405,22 @@ public class ConstructionGrid : MonoBase
             }
         }
         // forward
-        else if (plane == Vector3.forward || plane == Vector3.back)
+        else if (viewAxis == Vector3.forward || viewAxis == Vector3.back)
         {
-            int z = (int)(cursor + plane * amount).z;
+            int z = (int)(cursor + viewAxis * amount).z;
             int newLayer = Mathf.Clamp(z, 0, size - 1);
 
             // toggle cell colors in the previous and new layers
-            for (int i = 0; i < size; i++)
-            {
-                for (int j = 0; j < size; j++)
-                {
-                    cells[i][newLayer][j].SetActive(true);
-                }
-            }
+            //for (int i = 0; i < size; i++)
+            //{
+            //    for (int j = 0; j < size; j++)
+            //    {
+            //        cells[i][newLayer][j].SetActive(true);
+            //    }
+            //}
 
             // toggle CUBE colors; alpha for CUBEs in a higher layer than the new layer; full opacity for CUBEs on the same layer
-            if (plane == Vector3.forward)
+            if (viewAxis == Vector3.forward)
             {
                 foreach (var cube in currentBuild)
                 {
@@ -428,7 +439,7 @@ public class ConstructionGrid : MonoBase
         }
 
         // move the cursor
-        MoveCursor(plane * amount);
+        MoveCursor(viewAxis * amount);
     }
 
 
@@ -444,10 +455,9 @@ public class ConstructionGrid : MonoBase
             Destroy(heldCUBE.gameObject);
         }
 
-        // reset offset
-        cursorOffset = Vector3.zero;
         // create new CUBE
         heldCUBE = (CUBE)GameObject.Instantiate(GameResources.GetCUBE(CUBEID));
+        // set materials
         int materialCount = heldCUBE.renderer.materials.Length;
         Material[] alphaMats = new Material[materialCount];
         for (int i = 0; i < materialCount; i++)
@@ -455,10 +465,15 @@ public class ConstructionGrid : MonoBase
             alphaMats[i] = GameResources.Main.VertexOverlay_Mat;
         }
         heldCUBE.renderer.sharedMaterials = alphaMats;
+        // get info
         heldInfo = CUBE.allCUBES[heldCUBE.ID];
         // set to cursor position and rotation
-        heldCUBE.transform.position = cursorWorldPosition;
-        heldCUBE.transform.rotation = cursorRotation;
+        //Vector3 diff = new Vector3(-0.5f, -0.5f, -0.5f);
+        //Vector3 newDiff = RotateVector(diff);
+        //heldCUBE.transform.rotation = cursorRotation;
+        //heldCUBE.transform.position = cursorWorldPosition + newDiff + RotateVector(cursorOffset).Round();
+        PositionCUBE(); 
+
         // update status
         cursorStatus = CursorStatuses.Holding;
     }
@@ -569,7 +584,7 @@ public class ConstructionGrid : MonoBase
 
         const float minDist = 100f;
         const float maxDist = 250f;
-        Vector3 halfGrid = Vector3.one * (buildSize / 2f - 1f); // need to move pivot to 0,0,0 // this might work (-0.5 to -1)
+        Vector3 halfGrid = Vector3.one * (buildSize / 2f - 1f); // need to move pivotOffset to 0,0,0 // this might work (-0.5 to -1)
         finishedShip.transform.position = startPosition;
         finishedShip.transform.eulerAngles = startRotation;
         float speed = maxDist / maxTime;
@@ -645,6 +660,17 @@ public class ConstructionGrid : MonoBase
     }
 
 
+    private void PositionCUBE()
+    {
+        Vector3 pivotOffset = RotateVector(new Vector3(-0.5f, -0.5f, -0.5f));
+        heldCUBE.transform.rotation = cursorRotation;
+        Debug.Log("cursorWorldPosition: " + cursorWorldPosition);
+        Debug.Log("RotateVector(cursorOffset).Round(): " + RotateVector(cursorOffset));
+        Debug.Log("pivotOffset: " + pivotOffset);
+        heldCUBE.transform.position = cursorWorldPosition + RotateVector(cursorOffset).Round() + pivotOffset;
+    }
+
+
     /// <summary>
     /// Checks to see if the currently held CUBE fits in the grid and is not in other CUBEs.
     /// </summary>
@@ -653,8 +679,8 @@ public class ConstructionGrid : MonoBase
     {
         if (heldCUBE == null) return false;
 
-        // test pivot against grid bounds and other placed CUBEs
-        Vector3 pivot = cursor + cursorOffset;
+        // test pivotOffset against grid bounds and other placed CUBEs
+        Vector3 pivot = cursor + RotateVector(cursorOffset).Round();
 
         // test CUBE bounds against grid bounds
         Vector3 bounds = heldInfo.size;
@@ -665,10 +691,27 @@ public class ConstructionGrid : MonoBase
                 for (int z = 0; z < bounds.z; z++)
                 {
                     Vector3 point = pivot + RotateVector(new Vector3(x, y, z));
-                    if (point.x < 0 || point.x > size - 1) return false;
-                    if (point.y < 0 || point.y > size - 1) return false;
-                    if (point.z < 0 || point.z > size - 1) return false;
-                    if (grid[(int)point.y][(int)point.z][(int)point.x]) return false;
+                    if (point.x < 0 || point.x > size - 1)
+                    {
+                        Debug.Log("Doesn't Fit Bounds: " + point);
+                        return false;
+                    }
+                    if (point.y < 0 || point.y > size - 1)
+                    {
+                        Debug.Log("Doesn't Fit Bounds: " + point);
+                        return false;
+                    }
+                    if (point.z < 0 || point.z > size - 1)
+                    {
+                        Debug.Log("Doesn't Fit Bounds: " + point);
+                        return false;
+                    }
+                    if (grid[(int)point.y][(int)point.z][(int)point.x])
+                    {
+                        Debug.Log("Doesn't Fit Taken: " + point);
+                        return false;
+                    }
+                    Debug.Log("Fits: " + point);
                 }
             }
         }
@@ -682,12 +725,44 @@ public class ConstructionGrid : MonoBase
     /// </summary>
     /// <param name="localPostion">Piece.</param>
     /// <returns>New piece position.</returns>
-    private Vector3 RotateVector(Vector3 localPostion)
+    private Vector3 RotateVector(Vector3 localVector, bool reverse = false)
     {
-        Matrix4x4 z = Utility.RotationMatrixZ(cursorRotation.eulerAngles.z);
-        Matrix4x4 y = Utility.RotationMatrixY(cursorRotation.eulerAngles.y);
+        //Debug.Log("RotateVector.z = " + dir * cursorRotation.eulerAngles.z);
+        //Debug.Log("RotateVector.y = " + dir * cursorRotation.eulerAngles.y);
+        //Matrix4x4 z = Utility.RotationMatrixZ(dir*cursorRotation.eulerAngles.z);
+        //Matrix4x4 y = Utility.RotationMatrixY(dir*cursorRotation.eulerAngles.y);
 
-        return y.MultiplyVector(z.MultiplyVector(localPostion));
+        Matrix4x4 rot = new Matrix4x4();
+        rot.SetTRS(Vector3.zero, reverse ? Quaternion.Inverse(cursorRotation) : cursorRotation, Vector3.one);
+        return rot.MultiplyVector(localVector);
+
+        //return y.MultiplyVector(z.MultiplyVector(localVector));
+    }
+
+
+    private Vector3 RotatePoint(Vector3 localPosition)
+    {
+        if (viewAxis.x != 0)
+        {
+            Matrix4x4 z = Utility.RotationMatrixZ(cursorRotation.eulerAngles.z);
+            Matrix4x4 y = Utility.RotationMatrixY(cursorRotation.eulerAngles.y);
+
+            return y.MultiplyVector(z.MultiplyVector(localPosition));
+        }
+        else if (viewAxis.y != 0)
+        {
+            Matrix4x4 z = Utility.RotationMatrixZ(cursorRotation.eulerAngles.z);
+            Matrix4x4 x = Utility.RotationMatrixX(cursorRotation.eulerAngles.x);
+
+            return x.MultiplyVector(z.MultiplyVector(localPosition));
+        }
+        else
+        {
+            Matrix4x4 x = Utility.RotationMatrixX(cursorRotation.eulerAngles.x);
+            Matrix4x4 y = Utility.RotationMatrixY(cursorRotation.eulerAngles.y);
+
+            return y.MultiplyVector(x.MultiplyVector(localPosition));
+        }
     }
 
 
@@ -701,10 +776,6 @@ public class ConstructionGrid : MonoBase
         heldCUBE = cube;
         // stock inventory
         inventory[heldCUBE.ID]++;
-        // set cursorRotation to CUBE's rotation
-        //cursorRotation = Quaternion.Euler(currentBuild[heldCUBE].rotation);
-        // get difference between pivot and cursor
-        //cursorOffset = ((cursor - currentBuild[heldCUBE].position).Round());
         // remove CUBE from build
         RemoveCUBE(cube);
         // set status
@@ -750,7 +821,7 @@ public class ConstructionGrid : MonoBase
             weapons[weaponIndex] = heldCUBE.GetComponent<Weapon>();
         }
 
-        Vector3 pivot = cursor + cursorOffset;
+        Vector3 pivot = cursor + RotateVector(cursorOffset).Round();
         currentBuild.Add(heldCUBE, new CUBEGridInfo(pivot, cursorRotation.eulerAngles, weaponIndex));
 
         // add all of the CUBE's bounds to the grid
@@ -762,7 +833,8 @@ public class ConstructionGrid : MonoBase
                 for (int z = 0; z < bounds.z; z++)
                 {
                     Vector3 point = pivot + RotateVector(new Vector3(x, y, z));
-                    grid[(int)point.y][(int)point.z][(int)point.x] = heldCUBE;
+                    Debug.Log("Placing: " + point);
+                    grid[(int)point.y][(int)point.z][(int)point.x] = heldCUBE; // not setting all the time?
                 }
             }
         }
@@ -778,7 +850,7 @@ public class ConstructionGrid : MonoBase
         // empty cursor
         heldCUBE = null;
         // reset
-        cursorOffset = Vector3.zero;
+        //cursorOffset = Vector3.zero;
         cursorStatus = CursorStatuses.Hover;
 
         return true;
@@ -811,11 +883,13 @@ public class ConstructionGrid : MonoBase
     /// <param name="cube"></param>
     private void RemoveCUBE(CUBE cube)
     {
-        // get pivot and rotation 
+        // get pivotOffset and rotation 
         cursorRotation = Quaternion.Euler(currentBuild[cube].rotation);
         cursorOffset = currentBuild[cube].position - cursor;
+        //cursorOffset = RotateVector(cursorOffset.Round(), true).Round();
         Vector3 pivot = cursor + cursorOffset;
-
+        cursorOffset = RotateVector(cursorOffset.Round(), true).Round();
+        //Debug.Log("Remove Pivot: " + pivot);
         // remove all of CUBE's pieces
         Vector3 bounds = heldInfo.size;
         for (int x = 0; x < bounds.x; x++)
@@ -825,6 +899,7 @@ public class ConstructionGrid : MonoBase
                 for (int z = 0; z < bounds.z; z++)
                 {
                     Vector3 point = pivot + RotateVector(new Vector3(x, y, z));
+                    Debug.Log("Removing: " + point);
                     grid[(int)point.y][(int)point.z][(int)point.x] = null;
                     cells[(int)point.y][(int)point.z][(int)point.x].renderer.material = CellOpen_Mat;
                 }
@@ -987,7 +1062,6 @@ public class ConstructionGrid : MonoBase
 
     #endregion
 
-
     #region Static Methods
 
     /// <summary>
@@ -1104,4 +1178,33 @@ public class ConstructionGrid : MonoBase
     }
 
     #endregion
+
+
+    public List<Vector3> taken = new List<Vector3>();
+    void Update()
+    {
+        if (grid != null)
+        {
+            taken.Clear();
+            for (int y = 0; y < grid.Length; y++)
+            {
+                for (int z = 0; z < grid.Length; z++)
+                {
+                    for (int x = 0; x < grid.Length; x++)
+                    {
+                        Vector3 c = new Vector3(x, y, z);
+                        if (grid[y][z][x] != null || cursor == c)
+                        {
+                            taken.Add(c);
+                            cells[y][z][x].SetActive(true);
+                        }
+                        else
+                        {
+                            cells[y][z][x].SetActive(false);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

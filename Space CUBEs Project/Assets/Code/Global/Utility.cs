@@ -22,7 +22,7 @@ public static class Utility
     public static Vector3 ParseV3(string vectorString, char sep = ',')
     {
         Vector3 vector;
-        vectorString = vectorString.Substring(1, vectorString.Length-2).Replace(" ", "");
+        vectorString = vectorString.Substring(1, vectorString.Length - 2).Replace(" ", "");
         string[] split = vectorString.Split(sep);
         vector.x = float.Parse(split[0]);
         vector.y = float.Parse(split[1]);
@@ -35,7 +35,7 @@ public static class Utility
     public static Color ParseColor(string colorString)
     {
         Color color;
-        colorString = colorString.Substring(5, colorString.Length-6).Replace(" ", "");
+        colorString = colorString.Substring(5, colorString.Length - 6).Replace(" ", "");
         string[] split = colorString.Split(',');
         color.r = float.Parse(split[0]);
         color.g = float.Parse(split[1]);
@@ -73,6 +73,9 @@ public static class Utility
 
     public static Matrix4x4 RotationMatrixX(float angle)
     {
+        float c = CosZero(angle);
+        float s = SinZero(angle);
+
         return new Matrix4x4
         {
             m00 = 1,
@@ -80,12 +83,12 @@ public static class Utility
             m02 = 0,
             m03 = 0,
             m10 = 0,
-            m11 = CosZero(angle),
-            m12 = -SinZero(angle),
+            m11 = c,
+            m12 = -s,
             m13 = 0,
             m20 = 0,
-            m21 = SinZero(angle),
-            m22 = CosZero(angle),
+            m21 = s,
+            m22 = c,
             m23 = 0,
             m30 = 0,
             m31 = 0,
@@ -97,19 +100,22 @@ public static class Utility
 
     public static Matrix4x4 RotationMatrixY(float angle)
     {
+        float c = CosZero(angle);
+        float s = SinZero(angle);
+
         return new Matrix4x4
         {
-            m00 = CosZero(angle),
+            m00 = c,
             m01 = 0,
-            m02 = SinZero(angle),
+            m02 = s,
             m03 = 0,
             m10 = 0,
             m11 = 1,
             m12 = 0,
             m13 = 0,
-            m20 = -SinZero(angle),
+            m20 = -s,
             m21 = 0,
-            m22 = CosZero(angle),
+            m22 = c,
             m23 = 0,
             m30 = 0,
             m31 = 0,
@@ -121,19 +127,49 @@ public static class Utility
 
     public static Matrix4x4 RotationMatrixZ(float angle)
     {
+        float c = CosZero(angle);
+        float s = SinZero(angle);
+
         return new Matrix4x4
         {
-            m00 = CosZero(angle),
-            m01 = -SinZero(angle),
+            m00 = c,
+            m01 = -s,
             m02 = 0,
             m03 = 0,
-            m10 = SinZero(angle),
-            m11 = CosZero(angle),
+            m10 = s,
+            m11 = c,
             m12 = 0,
             m13 = 0,
             m20 = 0,
             m21 = 0,
             m22 = 1,
+            m23 = 0,
+            m30 = 0,
+            m31 = 0,
+            m32 = 0,
+            m33 = 1
+        };
+    }
+
+
+    public static Matrix4x4 RotationMatrixAroundPoint(Vector3 axis, float angle)
+    {
+        float c = CosZero(angle);
+        float s = SinZero(angle);
+
+        return new Matrix4x4
+        {
+            m00 = c + (1 - c) * axis.x * axis.x,
+            m01 = (1 - c) * axis.x * axis.y - s * axis.z,
+            m02 = (1 - c) * axis.x * axis.z + s * axis.y,
+            m03 = 0,
+            m10 = (1 - c) * axis.x * axis.y + s * axis.z,
+            m11 = c + (1 - c) * axis.y * axis.y,
+            m12 = (1 - c) * axis.y * axis.z - s * axis.x,
+            m13 = 0,
+            m20 = (1 - c) * axis.x * axis.z - s * axis.y,
+            m21 = (1 - c) * axis.y * axis.z + s * axis.x,
+            m22 = c + (1 - c) * axis.z * axis.z,
             m23 = 0,
             m30 = 0,
             m31 = 0,
