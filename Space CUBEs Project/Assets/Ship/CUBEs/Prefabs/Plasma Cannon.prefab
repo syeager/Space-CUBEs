@@ -12,6 +12,7 @@ GameObject:
   - 23: {fileID: 2300000}
   - 114: {fileID: 11400000}
   - 114: {fileID: 11400002}
+  - 114: {fileID: 11400004}
   m_Layer: 0
   m_Name: Plasma Cannon
   m_TagString: Untagged
@@ -83,8 +84,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colors:
-  - {r: 0, g: 0, b: 0, a: 0}
-  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 1, b: 0, a: 1}
+  - {r: .219999999, g: .219999999, b: .219999999, a: 1}
+--- !u!114 &11400004
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 338eadfdc1ef901409328689e2f52b4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  log: 1
+  timeScale: 1
+  cooldownSpeed: 0
+  attackName: Plasma Laser
+  hitInfo:
+    damage: -10
+  laserOffset: {x: 0, y: 0, z: 1}
+  fireRate: 4
+  speed: 50
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

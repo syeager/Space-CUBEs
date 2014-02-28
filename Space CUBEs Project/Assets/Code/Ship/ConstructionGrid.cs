@@ -117,14 +117,6 @@ public class ConstructionGrid : MonoBase
             return cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].transform.position;
         }
     }
-    //
-    //private Vector3 cursorPivotPosition
-    //{
-    //    get
-    //    {
-    //        return cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].transform.position - new Vector3(0.5f, 0.5f, 0.5f);
-    //    }
-    //}
     /// <summary>Current status of the cursor.</summary>
     public CursorStatuses cursorStatus { get; private set; }
     /// <summary>Current CUBE being held.</summary>
@@ -250,10 +242,6 @@ public class ConstructionGrid : MonoBase
                     cells[i][j][k] = (GameObject)GameObject.Instantiate(Cell_Prefab);
                     cells[i][j][k].transform.parent = transform;
                     cells[i][j][k].transform.localPosition = cursor;
-                    //if (i != 0)
-                    //{
-                    //    cells[i][j][k].SetActive(false);
-                    //}
                     cursor.x++;
                 }
                 cursor.z++;
@@ -354,6 +342,7 @@ public class ConstructionGrid : MonoBase
     /// Move the cursor up or down.
     /// </summary>
     /// <param name="amount">Direction and distance to move.</param>
+    [Obsolete("Use new method of calculating layer.")]
     public void ChangeLayer(int amount)
     {
         // turn all cells off
@@ -495,6 +484,14 @@ public class ConstructionGrid : MonoBase
             alphaMats[i] = GameResources.Main.VertexOverlay_Mat;
         }
         heldCUBE.renderer.sharedMaterials = alphaMats;
+        heldCUBE.GetComponent<ColorVertices>().Bake();
+        
+        // reset cursorOffset when creating new type of CUBE
+        if (heldInfo.ID != CUBEID)
+        {
+            cursorOffset = Vector3.zero;
+        }
+
         // get info
         heldInfo = CUBE.allCUBES[heldCUBE.ID];
 

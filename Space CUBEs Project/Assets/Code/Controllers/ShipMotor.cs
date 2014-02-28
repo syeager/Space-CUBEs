@@ -24,7 +24,7 @@ public class ShipMotor : MonoBase
     /// <summary>Movement speed during barrel roll.</summary>
     public float barrelRollMoveSpeed;
     /// <summary>How long the barrel roll lasts.</summary>
-    public float barrelRollTime = 0.2f;
+    public float barrelRollTime = 0.25f;
     /// <summary>Time between allowed barrel rolls.</summary>
     public float barrelRollBuffer = 0.5f;
     
@@ -40,6 +40,13 @@ public class ShipMotor : MonoBase
 
     private enum BarrelRollStatuses { Ready, Rolling, Waiting }
     private BarrelRollStatuses barrelRollStatus = BarrelRollStatuses.Ready;
+
+    #endregion
+
+    #region Const Fields
+
+    private const float SPEEDMODIFIER = 0.75f;
+    private const float BARRELROLLMODIFIER = 1.5f;
 
     #endregion
 
@@ -64,8 +71,8 @@ public class ShipMotor : MonoBase
     
     public void Initialize(float speed)
     {
-        this.speed = speed;
-        barrelRollMoveSpeed = 2*speed;
+        this.speed = speed * SPEEDMODIFIER;
+        barrelRollMoveSpeed = BARRELROLLMODIFIER * this.speed;
     }
 
 

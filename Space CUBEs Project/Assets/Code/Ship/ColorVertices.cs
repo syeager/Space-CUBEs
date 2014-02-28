@@ -77,13 +77,16 @@ public class ColorVertices : MonoBehaviour
     }
 
 
-
-    [Conditional("UNITY_EDITOR")]
     public void SetandBake(int index, Color color)
     {
+#if UNITY_EDITOR
         UnityEditor.SerializedObject so = new UnityEditor.SerializedObject(this);
         so.FindProperty("colors").GetArrayElementAtIndex(index).colorValue = color;
         so.ApplyModifiedProperties();
+#else
+        colors[index] = color;
+#endif
+
         Bake();
     }
 

@@ -12,6 +12,7 @@ GameObject:
   - 23: {fileID: 2300000}
   - 114: {fileID: 11400000}
   - 114: {fileID: 11400002}
+  - 114: {fileID: 11400004}
   m_Layer: 0
   m_Name: Singularity Blaster
   m_TagString: Untagged
@@ -84,9 +85,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colors:
-  - {r: .676470578, g: .184039801, b: .184039801, a: 0}
-  - {r: 1, g: 0, b: 0, a: 0}
-  - {r: .45588237, g: .45588237, b: .45588237, a: 0}
+  - {r: 0, g: 0, b: 0, a: 1}
+  - {r: .501999974, g: .501999974, b: .501999974, a: 1}
+  - {r: .0780000016, g: 0, b: .321999997, a: 1}
+--- !u!114 &11400004
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c03bb0ea66dfcab4290f01cb7268227c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  log: 1
+  timeScale: 1
+  cooldownSpeed: 25
+  BlackHoleMissile_Prefab: {fileID: 100000, guid: cb0c0bb4d7f6fd24eba059d786abcba6,
+    type: 2}
+  missileOffset: {x: 0, y: 0, z: 1}
+  hitInfo:
+    damage: -40
+  missileTime: 10
+  missileSpeed: 30
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
