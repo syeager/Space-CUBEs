@@ -609,6 +609,7 @@ public class ConstructionGrid : MonoBase
         const float minDist = 100f;
         const float maxDist = 250f;
         Vector3 halfGrid = Vector3.one * (buildSize / 2f - 1f); // need to move pivotOffset to 0,0,0 // this might work (-0.5 to -1)
+        Vector3 pivotOffset = new Vector3(-0.5f, -0.5f, -0.5f);
         finishedShip.transform.position = startPosition;
         finishedShip.transform.eulerAngles = startRotation;
         float speed = maxDist / maxTime;
@@ -629,7 +630,7 @@ public class ConstructionGrid : MonoBase
 
             cube.GetComponent<ColorVertices>().Bake();
 
-            pieces.Add(new BuildCUBE(cube.transform, piece.Value.position - halfGrid, speed));
+            pieces.Add(new BuildCUBE(cube.transform, piece.Value.position - halfGrid + Utility.RotateVector(pivotOffset, Quaternion.Euler(piece.Value.rotation)), speed));
         }
 
         float time = maxTime;
@@ -755,32 +756,6 @@ public class ConstructionGrid : MonoBase
         Matrix4x4 rot = new Matrix4x4();
         rot.SetTRS(Vector3.zero, reverse ? Quaternion.Inverse(cursorRotation) : cursorRotation, Vector3.one);
         return rot.MultiplyVector(localVector);
-    }
-
-
-    private Vector3 RotatePoint(Vector3 localPosition)
-    {
-        if (viewAxis.x != 0)
-        {
-            Matrix4x4 z = Utility.RotationMatrixZ(cursorRotation.eulerAngles.z);
-            Matrix4x4 y = Utility.RotationMatrixY(cursorRotation.eulerAngles.y);
-
-            return y.MultiplyVector(z.MultiplyVector(localPosition));
-        }
-        else if (viewAxis.y != 0)
-        {
-            Matrix4x4 z = Utility.RotationMatrixZ(cursorRotation.eulerAngles.z);
-            Matrix4x4 x = Utility.RotationMatrixX(cursorRotation.eulerAngles.x);
-
-            return x.MultiplyVector(z.MultiplyVector(localPosition));
-        }
-        else
-        {
-            Matrix4x4 x = Utility.RotationMatrixX(cursorRotation.eulerAngles.x);
-            Matrix4x4 y = Utility.RotationMatrixY(cursorRotation.eulerAngles.y);
-
-            return y.MultiplyVector(x.MultiplyVector(localPosition));
-        }
     }
 
 
