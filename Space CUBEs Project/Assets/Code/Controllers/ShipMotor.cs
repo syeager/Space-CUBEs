@@ -29,8 +29,8 @@ public class ShipMotor : MonoBase
     public float barrelRollBuffer = 0.5f;
     
     /// <summary>Screen percentage for screen top/bottom boundary.</summary>
-    public float verticalBounds = 0.05f; // should be set by initialize
-    public bool hasHorizontalBounds = true;
+    public float verticalBounds = 0.05f;
+    public bool hasHorizontalBounds;
     public float leftBound = 0.01f;
     public float rightBound = 0.5f;
 

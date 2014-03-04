@@ -725,7 +725,7 @@ MonoBehaviour:
     needsClearing: 0
     spawnTime: 0
   - formation: {fileID: 11400000, guid: 751c02be967f91448a87b780c464c093, type: 2}
-    enemies: 000000000000000000000000000000000000000000000000000000000000000000000000
+    enemies: 000000000000000000000000010000000100000001000000000000000000000000000000
     paths:
     - {fileID: 457533869}
     - {fileID: 582655658}
@@ -817,6 +817,13 @@ MonoBehaviour:
     cull: 0
     cullLimit: 3
   - Prefab: {fileID: 11400000, guid: e6ee90c6d98d0a449b1727cb1c1a0511, type: 2}
+    preAllocate: 10
+    allocateBlock: 2
+    hardLimit: 0
+    limit: 0
+    cull: 0
+    cullLimit: 3
+  - Prefab: {fileID: 11400000, guid: 97b1c7596f24e3e468225c91a9926532, type: 2}
     preAllocate: 10
     allocateBlock: 2
     hardLimit: 0

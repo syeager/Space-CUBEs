@@ -279,7 +279,14 @@ public class LevelCreator : EditorWindow
         // toggle
         enemyToggles[formationIndex][enemyIndex] = GUI.Toggle(new Rect(12f, y, 16f, 16f), enemyToggles[formationIndex][enemyIndex], GUIContent.none);
         // enemy
-        EditorGUI.PropertyField(new Rect(26f, y, 100f, 20f), sformationGroup.FindPropertyRelative("enemies").GetArrayElementAtIndex(enemyIndex), GUIContent.none);
+        EditorGUI.BeginChangeCheck();
+        {
+            EditorGUI.PropertyField(new Rect(26f, y, 100f, 20f), sformationGroup.FindPropertyRelative("enemies").GetArrayElementAtIndex(enemyIndex), GUIContent.none);
+        }
+        if (EditorGUI.EndChangeCheck())
+        {
+            sLevelManager.ApplyModifiedProperties();
+        }
         // path
         SerializedProperty path = sformationGroup.FindPropertyRelative("paths").GetArrayElementAtIndex(enemyIndex);
         Type pathType = levelManager.formationGroups[formationIndex].paths[enemyIndex].GetType();
