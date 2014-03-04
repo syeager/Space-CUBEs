@@ -11,7 +11,6 @@
 		Tags 
 		{ 
 			"Queue" = "Overlay"
-			"Queue" = "Transparent"
 		}
 
 		Pass

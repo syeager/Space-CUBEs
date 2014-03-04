@@ -7,7 +7,7 @@
 	
 	SubShader 
 	{
-		Tags { "Queue"="Transparent" "RenderType"="Transparent" "IgnoreProjector"="True" "LightMode"="Always"}      
+		Tags { "Queue"="Transparent" "RenderType"="Transparent" }      
 		
 		Lighting Off
 		Fog { Mode Off }

@@ -30,7 +30,7 @@ public class ShipMotor : MonoBase
     
     /// <summary>Screen percentage for screen top/bottom boundary.</summary>
     public float verticalBounds = 0.05f;
-    public bool hasHorizontalBounds;
+    public bool hasHorizontalBounds = true;
     public float leftBound = 0.01f;
     public float rightBound = 0.5f;
 
