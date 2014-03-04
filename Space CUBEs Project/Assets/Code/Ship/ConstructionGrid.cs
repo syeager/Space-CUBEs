@@ -1002,11 +1002,11 @@ public class ConstructionGrid : MonoBase
         }
 
         // bake colors
-        var colorVertices = ship.GetComponentsInChildren<ColorVertices>();
-        foreach (var color in colorVertices)
-        {
-            color.Bake();
-        }
+        //var colorVertices = ship.GetComponentsInChildren<ColorVertices>();
+        //foreach (var color in colorVertices)
+        //{
+        //    color.Bake();
+        //}
 
         // create one mesh
         var compactor = ship.AddComponent<ShipCompactor>();

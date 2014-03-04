@@ -21,6 +21,7 @@ public class Enemy : Ship
     public enum Classes
     {
         Grunt,
+        Tank,
     }
     public Classes enemyClass;
     public int score;

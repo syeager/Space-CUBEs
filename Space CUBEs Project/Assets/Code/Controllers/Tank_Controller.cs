@@ -1,5 +1,5 @@
 ﻿// Steve Yeager
-// 12.17.2013
+// 3.3.2013
 
 using UnityEngine;
 using System.Collections.Generic;
@@ -8,18 +8,22 @@ using System.Collections;
 /// <summary>
 /// Basic enemy. Flies forward and shoots Plasma Lasers.
 /// </summary>
-public class Grunt : Enemy
+public class Tank_Controller : Enemy
 {
     #region Public Fields
 
-    public float minAttackDelay;
-    public float maxAttackDelay;
+    public float minRandomDelay;
+    public float maxRandomDelay;
+    public float repeatingDelay;
+    public int repeatingShots;
+    public float repeatingBuffer;
 
     #endregion
 
     #region Private Fields
 
-    private Job attackCycle;
+    private Job attackCycle1;
+    private Job attackCycle2;
 
     #endregion
 
@@ -48,11 +52,16 @@ public class Grunt : Enemy
 
     private void MovingEnter(Dictionary<string, object> info)
     {
-        if (attackCycle != null)
+        if (attackCycle1 != null)
         {
-            attackCycle.Kill();
+            attackCycle1.Kill();
         }
-        attackCycle = new Job(AttackCycle(0));
+        attackCycle1 = new Job(RandomCannon());
+        if (attackCycle2 != null)
+        {
+            attackCycle2.Kill();
+        }
+        attackCycle2 = new Job(RepeatingCannon()); 
         
         stateMachine.SetUpdate(MovingUpdate());
     }
@@ -73,7 +82,8 @@ public class Grunt : Enemy
     {
         // send hitinfo to player
 
-        attackCycle.Kill();
+        attackCycle1.Kill();
+        attackCycle2.Kill();
         poolObject.Disable();
     }
 
@@ -81,13 +91,28 @@ public class Grunt : Enemy
 
     #region Private Methods
 
-    private IEnumerator AttackCycle(int weapon)
+    private IEnumerator RandomCannon()
     {
         while (true)
         {
-            yield return new WaitForSeconds(Random.Range(minAttackDelay, maxAttackDelay));
-            myWeapons.TryActivate(weapon, true);
-            myWeapons.TryActivate(weapon, false);
+            yield return new WaitForSeconds(Random.Range(minRandomDelay, maxRandomDelay));
+            myWeapons.TryActivate(0, true);
+            myWeapons.TryActivate(0, false);
+        }
+    }
+
+
+    private IEnumerator RepeatingCannon()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(repeatingDelay);
+            for (int i = 0; i < repeatingShots; i++)
+            {
+                myWeapons.TryActivate(1, true);
+                myWeapons.TryActivate(1, false);
+                yield return new WaitForSeconds(repeatingBuffer);
+            }
         }
     }
 

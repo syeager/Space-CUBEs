@@ -36,10 +36,6 @@ public class CUBEPostprocessor : AssetPostprocessor
         importer.addCollider = false;
         importer.swapUVChannels = false;
 
-        //importer.normalImportMode = ModelImporterTangentSpaceMode.None;
-
-        //importer.splitTangentsAcrossSeams = false;
-
         importer.importMaterials = false;
 
         importer.animationType = ModelImporterAnimationType.None;
@@ -65,6 +61,8 @@ public class CUBEPostprocessor : AssetPostprocessor
 
         var cube = go.AddComponent<CUBEImporter>();
         cube.Create(assetPath, prefabPath);
+
+        CUBEUpdater.Update();
     }
 
 
