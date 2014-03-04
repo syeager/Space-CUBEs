@@ -31,9 +31,9 @@ public class Star : Hitbox
 
     #region Hitbox Overrides
 
-    public override void Initialize(Ship sender, HitInfo hitInfo, float time, Vector3 moveVec, System.Action CollisionMethod = null)
+    public override void Initialize(Ship sender, HitInfo hitInfo, float time, Vector3 moveVec)
     {
-        base.Initialize(sender, hitInfo, time, moveVec, CollisionMethod);
+        base.Initialize(sender, hitInfo, time, moveVec);
 
         StartCoroutine(Grow());
     }

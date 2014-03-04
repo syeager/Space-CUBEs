@@ -80,7 +80,7 @@ public class ColorVertices : MonoBehaviour
         so.FindProperty("colors").GetArrayElementAtIndex(index).intValue = colorIndex;
         so.ApplyModifiedProperties();
 #else
-        colors[index] = color;
+        colors[index] = colorIndex;
 #endif
 
         Bake();

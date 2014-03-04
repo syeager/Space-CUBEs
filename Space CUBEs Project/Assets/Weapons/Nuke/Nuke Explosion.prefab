@@ -12,6 +12,7 @@ GameObject:
   - 135: {fileID: 13500000}
   - 23: {fileID: 2300000}
   - 114: {fileID: 11400000}
+  - 114: {fileID: 11400002}
   m_Layer: 0
   m_Name: Nuke Explosion
   m_TagString: Untagged
@@ -73,6 +74,18 @@ MonoBehaviour:
   timeScale: 1
   continuous: 1
   hitNumber: 0
+--- !u!114 &11400002
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a811daa6c14fc348b0608b4c05762ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PrefabName: CBombExplosion
 --- !u!135 &13500000
 SphereCollider:
   m_ObjectHideFlags: 1

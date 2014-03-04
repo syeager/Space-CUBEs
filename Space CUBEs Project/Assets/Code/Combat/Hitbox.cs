@@ -31,8 +31,6 @@ public class Hitbox : MonoBase
     protected HitInfo hitInfo;
     protected Ship sender;
     protected int hitCount;
-    [Obsolete]
-    protected Action CollisionMethod;
 
     #endregion
 
@@ -46,7 +44,7 @@ public class Hitbox : MonoBase
     }
 
 
-    private void OnTriggerEnter(Collider other)
+    protected virtual void OnTriggerEnter(Collider other)
     {
         if (continuous) return;
 
@@ -55,9 +53,6 @@ public class Hitbox : MonoBase
         {
             // send damage
             oppHealth.RecieveHit(sender, hitInfo);
-
-            // call collision hit
-            if (CollisionMethod != null) CollisionMethod();
 
             // disable if applicable
             if (hitNumber > 0)
@@ -87,34 +82,33 @@ public class Hitbox : MonoBase
 
     #region Public Methods
 
-    public virtual void Initialize(Ship sender, HitInfo hitInfo, Action CollisionMethod = null)
+    public virtual void Initialize(Ship sender, HitInfo hitInfo)
     {
         this.sender = sender;
         this.hitInfo = hitInfo;
-        this.CollisionMethod = CollisionMethod;
 
         gameObject.layer = sender.gameObject.layer;
         hitCount = 0;
     }
 
 
-    public virtual void Initialize(Ship sender, HitInfo hitInfo, Vector3 moveVec, Action CollisionMethod = null)
+    public virtual void Initialize(Ship sender, HitInfo hitInfo, Vector3 moveVec)
     {
-        Initialize(sender, hitInfo, CollisionMethod);
+        Initialize(sender, hitInfo);
         StartCoroutine(Move(moveVec));
     }
 
 
-    public virtual void Initialize(Ship sender, HitInfo hitInfo, float time, Action CollisionMethod = null)
+    public virtual void Initialize(Ship sender, HitInfo hitInfo, float time)
     {
-        Initialize(sender, hitInfo, CollisionMethod);
+        Initialize(sender, hitInfo);
         myPoolObject.StartLifeTimer(time);
     }
 
 
-    public virtual void Initialize(Ship sender, HitInfo hitInfo, float time, Vector3 moveVec, Action CollisionMethod = null)
+    public virtual void Initialize(Ship sender, HitInfo hitInfo, float time, Vector3 moveVec)
     {
-        Initialize(sender, hitInfo, time, CollisionMethod);
+        Initialize(sender, hitInfo, time);
         StartCoroutine(Move(moveVec));
     }
 
