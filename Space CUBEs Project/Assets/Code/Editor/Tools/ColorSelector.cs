@@ -46,7 +46,7 @@ public class ColorSelector : EditorWindow
                 {
                     SerializedObject so = new SerializedObject(cv);
                     so.Update();
-                    cv.SetandBake(piece, colors[(r * 8) + (c)]);
+                    cv.SetandBake(piece, (r * 8) + (c));
                     so.ApplyModifiedProperties();
                     Close();
                 }

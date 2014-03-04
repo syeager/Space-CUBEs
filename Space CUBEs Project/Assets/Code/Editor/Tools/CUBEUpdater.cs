@@ -57,7 +57,7 @@ public class CUBEUpdater : EditorWindow
     {
         List<CUBEInfo> info = new List<CUBEInfo>();
 
-        // get info from csv file
+        // get data from csv file
         string[] infoStrips = File.ReadAllText(CUBECSVPATH).Split('\n');
 
         for (int i = 1; i < infoStrips.Length; i++)

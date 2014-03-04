@@ -14,20 +14,10 @@ public class ColorVertices : MonoBehaviour
 {
     #region Public Fields
 
-    public Color[] colors;
+    public int[] colors;
 
     #endregion
 
-
-    #region MonoBehaviour Overrides
-    
-    [Conditional("UNITY_EDITOR")]
-    private void Update()
-    {
-        Bake();
-    }
-
-    #endregion
 
     #region Public Methods
 
@@ -36,11 +26,17 @@ public class ColorVertices : MonoBehaviour
     /// </summary>
     /// <param name="newColors"></param>
     /// <param name="delete"></param>
-    public void Bake(Color[] newColors = null, bool delete = false)
+    public void Bake(int[] newColors = null, bool delete = false)
     {
-        if (newColors == null)
+        Color[] allColors = CUBE.LoadColors();
+
+        if (newColors != null)
         {
-            newColors = colors;
+            colors = newColors;
+        }
+        else if (colors == null)
+        {
+            colors = new int[renderer.sharedMaterials.Length];
         }
 
         Mesh mesh;
@@ -59,12 +55,12 @@ public class ColorVertices : MonoBehaviour
 
         Color[] vertColors = new Color[mesh.vertexCount];
 
-        for (int i = 0; i < newColors.Length; i++)
+        for (int i = 0; i < colors.Length; i++)
         {
             int[] tris = mesh.GetTriangles(i);
             for (int j = 0; j < tris.Length; j++)
             {
-                vertColors[tris[j]] = newColors[i];
+                vertColors[tris[j]] = allColors[colors[i]];
             }
         }
 
@@ -77,11 +73,11 @@ public class ColorVertices : MonoBehaviour
     }
 
 
-    public void SetandBake(int index, Color color)
+    public void SetandBake(int index, int colorIndex)
     {
 #if UNITY_EDITOR
         UnityEditor.SerializedObject so = new UnityEditor.SerializedObject(this);
-        so.FindProperty("colors").GetArrayElementAtIndex(index).colorValue = color;
+        so.FindProperty("colors").GetArrayElementAtIndex(index).intValue = colorIndex;
         so.ApplyModifiedProperties();
 #else
         colors[index] = color;

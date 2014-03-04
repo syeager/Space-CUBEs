@@ -40,7 +40,7 @@ public class ColorVerticesEditor : Editor
         {
             EditorGUILayout.BeginHorizontal();
             {
-                GUI.backgroundColor = cv.colors[i];
+                GUI.backgroundColor = allColors[cv.colors[i]];
                 if (GUILayout.Button("Piece " + (i + 1)))
                 {
                     ColorSelector.OpenSelector(allColors, cv, i);

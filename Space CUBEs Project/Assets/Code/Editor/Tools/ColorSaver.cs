@@ -79,6 +79,7 @@ public class ColorSaver : EditorWindow
         for (int i = 0; i < sprites.Length; i++)
         {
             colors[i] = sprites[i].color;
+            sprites[i].GetComponent<ActivateButton>().value = i.ToString();
         }
 
         using (BinaryWriter writer = new BinaryWriter(File.Open(COLORLISTPATHEDITOR, FileMode.Create)))

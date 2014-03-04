@@ -65,7 +65,7 @@ public class CUBEImporter : MonoBehaviour
             alphaMats[i] = VertexColor_Mat;
         }
         prefab.renderer.sharedMaterials = alphaMats;
-        prefab.AddComponent<ColorVertices>().colors = new Color[materialCount];
+        prefab.AddComponent<ColorVertices>().colors = new int[materialCount];
 
         // delete model
         UnityEditor.AssetDatabase.DeleteAsset(meshPath);       

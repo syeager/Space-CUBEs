@@ -20,11 +20,14 @@ public class BuildInfo
     #region Static Fields
 
     public const string DATASEP = "|";
+    public const string PIECESEP = "/";
+    public const string COLORSEP = "~";
 
     #endregion
 
     #region Properties
 
+    [System.Obsolete()]
     public static string Empty
     {
         get { return "" + DATASEP + "0" + DATASEP + "0" + DATASEP + "0" + DATASEP + "0"; }

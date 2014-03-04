@@ -151,8 +151,9 @@ public class GarageManager : MonoBase
     #region Paint Fields
 
     public GameObject paintGrid;
-    private Color primaryColor;
-    private Color secondaryColor;
+    private Color[] colors;
+    private int primaryColor;
+    private int secondaryColor;
     private bool primarySelected;
     public ActivateButton[] pieces = new ActivateButton[3];
     private int pieceSelected;
@@ -197,6 +198,9 @@ public class GarageManager : MonoBase
         stateMachine.initialState = LOADSTATE;
 
         cameraTarget = new GameObject("Camera Target").transform;
+
+        // load colors
+        colors = CUBE.LoadColors();
 
         // set to load menu
         menuPanels[0].SetActive(true);
@@ -244,8 +248,8 @@ public class GarageManager : MonoBase
         copySecondary.ActivateEvent += CopyColor;
         selectPrimary.ActivateEvent += OpenColorSelector;
         selectSecondary.ActivateEvent += OpenColorSelector;
-        primaryColor = paints[0].defaultColor;
-        secondaryColor = paints[1].defaultColor;
+        primaryColor = int.Parse(paints[0].value);
+        secondaryColor = int.Parse(paints[1].value);
     }
 
 
@@ -1087,6 +1091,7 @@ public class GarageManager : MonoBase
         actionButton2.ActivateEvent += OnPaint;
 
         stateMachine.SetUpdate(PaintUpdate());
+        StartCoroutine("SaveConfirmation");
     }
 
 
@@ -1132,6 +1137,8 @@ public class GarageManager : MonoBase
         actionButton1.defaultColor = Color.white;
         actionButton2.ActivateEvent -= OnPaint;
         actionButton2.defaultColor = Color.white;
+
+        StopCoroutine("SaveConfirmation");
     }
 
 
@@ -1141,11 +1148,11 @@ public class GarageManager : MonoBase
 
         if (primarySelected)
         {
-            SetPrimaryColor((sender as ActivateButton).defaultColor);
+            SetPrimaryColor(int.Parse(args.value));
         }
         else
         {
-            SetSecondaryColor((sender as ActivateButton).defaultColor);
+            SetSecondaryColor(int.Parse(args.value));
         }
 
         colorSelector.SetActive(false);
@@ -1155,7 +1162,8 @@ public class GarageManager : MonoBase
     private void OnPaint(object sender, ActivateButtonArgs args)
     {
         if (args.isPressed) return;
-        Grid.hoveredCUBE.GetComponent<ColorVertices>().SetandBake(pieceSelected, args.value == "action2" ? primaryColor : secondaryColor);
+
+        Grid.Paint(pieceSelected, args.value == "action2" ? primaryColor : secondaryColor);
     }
 
 
@@ -1195,7 +1203,7 @@ public class GarageManager : MonoBase
             pieces[pieceSelected].Activate(true);
 
             // copy colors
-            Color copyColor = Grid.hoveredCUBE.GetComponent<ColorVertices>().colors[pieceSelected];
+            Color copyColor = colors[Grid.hoveredCUBE.GetComponent<ColorVertices>().colors[pieceSelected]];
             copyPrimary.SetColor(copyColor);
             copySecondary.SetColor(copyColor);
         }
@@ -1231,7 +1239,7 @@ public class GarageManager : MonoBase
         pieces[pieceSelected].Activate(true);
 
         // copy colors
-        Color copyColor = Grid.hoveredCUBE.GetComponent<ColorVertices>().colors[pieceSelected];
+        Color copyColor = colors[Grid.hoveredCUBE.GetComponent<ColorVertices>().colors[pieceSelected]];
         copyPrimary.SetColor(copyColor);
         copySecondary.SetColor(copyColor);
     }
@@ -1249,11 +1257,13 @@ public class GarageManager : MonoBase
     {
         if (args.value == "Primary")
         {
-            SetPrimaryColor(Grid.hoveredCUBE.GetComponent<ColorVertices>().colors[pieceSelected]);
+            Color color = colors[Grid.hoveredCUBE.GetComponent<ColorVertices>().colors[pieceSelected]];
+            SetPrimaryColor(Array.IndexOf(CUBE.colors, color));
         }
         else
         {
-            SetSecondaryColor(Grid.hoveredCUBE.GetComponent<ColorVertices>().colors[pieceSelected]);
+            Color color = colors[Grid.hoveredCUBE.GetComponent<ColorVertices>().colors[pieceSelected]];
+            SetSecondaryColor(Array.IndexOf(CUBE.colors, color));
         }
     }
 
@@ -1294,19 +1304,19 @@ public class GarageManager : MonoBase
     }
 
 
-    private void SetPrimaryColor(Color color)
+    private void SetPrimaryColor(int colorIndex)
     {
-        primaryColor = color;
-        actionButton2.Activate(primaryColor);
-        selectPrimary.SetColor(primaryColor);
+        primaryColor = colorIndex;
+        actionButton2.Activate(CUBE.colors[primaryColor]);
+        selectPrimary.SetColor(CUBE.colors[primaryColor]);
     }
 
 
-    private void SetSecondaryColor(Color color)
+    private void SetSecondaryColor(int colorIndex)
     {
-        secondaryColor = color;
-        actionButton1.Activate(secondaryColor);
-        selectSecondary.SetColor(secondaryColor);
+        secondaryColor = colorIndex;
+        actionButton1.Activate(CUBE.colors[secondaryColor]);
+        selectSecondary.SetColor(CUBE.colors[secondaryColor]);
     }
 
 

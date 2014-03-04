@@ -17,11 +17,11 @@ public class ConstructionGrid : MonoBase
     public GameObject Center_Prefab;
     /// <summary>GameObject representations of the grid's cells.</summary>
     public GameObject Cell_Prefab;
-    /// <summary>Cell color when cursor is in cell.</summary>
+    /// <summary>Cell colorIndex when cursor is in cell.</summary>
     public Material CellCursor_Mat;
-    /// <summary>Cell color when cell is included in the cursor bounds.</summary>
+    /// <summary>Cell colorIndex when cell is included in the cursor bounds.</summary>
     public Material CellCursorBounds_Mat;
-    /// <summary>Cell color when nothing is in cell.</summary>
+    /// <summary>Cell colorIndex when nothing is in cell.</summary>
     public Material CellOpen_Mat;
 
     /// <summary>Different statuses of the cursor.</summary>
@@ -306,7 +306,7 @@ public class ConstructionGrid : MonoBase
         // get rid of floating points
         vector = vector.Round();
 
-        // reset last cell to open color
+        // reset last cell to open colorIndex
         cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].renderer.material = CellOpen_Mat;
 
         // contain new position within grid
@@ -316,7 +316,7 @@ public class ConstructionGrid : MonoBase
         // move cursor
         cursor += vector;
 
-        // set new cursor cell to cursor color
+        // set new cursor cell to cursor colorIndex
         cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].renderer.material = CellCursor_Mat;
 
         // move currently held CUBE
@@ -492,7 +492,7 @@ public class ConstructionGrid : MonoBase
             cursorOffset = Vector3.zero;
         }
 
-        // get info
+        // get data
         heldInfo = CUBE.allCUBES[heldCUBE.ID];
 
         // set rotation and position
@@ -541,7 +541,7 @@ public class ConstructionGrid : MonoBase
     /// <param name="build">Name of the build.</param>
     public void CreateBuild(string build)
     {
-        // load build's info
+        // load build's data
         BuildInfo buildInfo = LoadBuild(build);
         if (buildInfo == null) return;
 
@@ -552,9 +552,15 @@ public class ConstructionGrid : MonoBase
         Vector3 position = cursor;
         foreach (var piece in buildInfo.partList)
         {
+            // position
             cursor = piece.Value.position;
+            // rotation
             cursorRotation = Quaternion.Euler(piece.Value.rotation);
+            // create CUBE
             CreateCUBE(piece.Key);
+            // colors
+            heldCUBE.GetComponent<ColorVertices>().Bake(piece.Value.colors);
+            // place
             PlaceCUBE(piece.Value.weaponMap);
         }
         cursor = position;
@@ -590,6 +596,14 @@ public class ConstructionGrid : MonoBase
     }
 
 
+    //
+    public void Paint(int pieceSelected, int colorIndex)
+    {
+        hoveredCUBE.GetComponent<ColorVertices>().SetandBake(pieceSelected, colorIndex);
+        currentBuild[hoveredCUBE].colors[pieceSelected] = colorIndex;
+    }
+
+
     [Obsolete("Move to a new class.")]
     public IEnumerator Build(string build, int buildSize, Vector3 startPosition, Vector3 startRotation, float maxTime)
     {
@@ -608,7 +622,7 @@ public class ConstructionGrid : MonoBase
 
         const float minDist = 100f;
         const float maxDist = 250f;
-        Vector3 halfGrid = Vector3.one * (buildSize / 2f - 1f); // need to move pivotOffset to 0,0,0 // this might work (-0.5 to -1)
+        Vector3 halfGrid = Vector3.one * (buildSize / 2f - 1f);
         Vector3 pivotOffset = new Vector3(-0.5f, -0.5f, -0.5f);
         finishedShip.transform.position = startPosition;
         finishedShip.transform.eulerAngles = startRotation;
@@ -628,7 +642,7 @@ public class ConstructionGrid : MonoBase
                 cube.GetComponent<Weapon>().index = piece.Value.weaponMap;
             }
 
-            cube.GetComponent<ColorVertices>().Bake();
+            cube.GetComponent<ColorVertices>().Bake(piece.Value.colors);
 
             pieces.Add(new BuildCUBE(cube.transform, piece.Value.position - halfGrid + Utility.RotateVector(pivotOffset, Quaternion.Euler(piece.Value.rotation)), speed));
         }
@@ -816,7 +830,9 @@ public class ConstructionGrid : MonoBase
         }
 
         Vector3 pivot = cursor + RotateVector(cursorOffset).Round();
-        currentBuild.Add(heldCUBE, new CUBEGridInfo(pivot, cursorRotation.eulerAngles, weaponIndex));
+
+        // add to build
+        currentBuild.Add(heldCUBE, new CUBEGridInfo(pivot, cursorRotation.eulerAngles, weaponIndex, heldCUBE.GetComponent<ColorVertices>().colors));
 
         // add all of the CUBE's bounds to the grid
         Vector3 bounds = heldInfo.size;
@@ -829,7 +845,7 @@ public class ConstructionGrid : MonoBase
                     Vector3 point = pivot + RotateVector(new Vector3(x, y, z)).Round();
                     point = point.Round();
                     Debugger.Log("Placing: " + point, this, true, Debugger.LogTypes.Construction);
-                    grid[(int)point.y][(int)point.z][(int)point.x] = heldCUBE; // not setting all the time?
+                    grid[(int)point.y][(int)point.z][(int)point.x] = heldCUBE;
                 }
             }
         }
@@ -845,7 +861,6 @@ public class ConstructionGrid : MonoBase
         // empty cursor
         heldCUBE = null;
         // reset
-        //cursorOffset = Vector3.zero;
         cursorStatus = CursorStatuses.Hover;
 
         return true;
@@ -923,7 +938,7 @@ public class ConstructionGrid : MonoBase
 
 
     /// <summary>
-    /// Get build info from data.
+    /// Get build data from data.
     /// </summary>
     /// <param name="buildName">Name of the ship.</param>
     /// <returns>BuildInfo for the ship.</returns>
@@ -946,24 +961,26 @@ public class ConstructionGrid : MonoBase
         BuildInfo buildInfo = new BuildInfo();
         buildInfo.partList = new List<KeyValuePair<int, CUBEGridInfo>>();
 
-        string[] info = build.Split(BuildInfo.DATASEP[0]);
+        string[] data = build.Split(BuildInfo.DATASEP[0]);
 
         // stats
-        buildInfo.name = info[0];
-        buildInfo.health = float.Parse(info[1]);
-        buildInfo.shield = float.Parse(info[2]);
-        buildInfo.speed = float.Parse(info[3]);
-        buildInfo.damage = float.Parse(info[4]);
+        buildInfo.name = data[0];
+        buildInfo.health = float.Parse(data[1]);
+        buildInfo.shield = float.Parse(data[2]);
+        buildInfo.speed = float.Parse(data[3]);
+        buildInfo.damage = float.Parse(data[4]);
 
         // pieces
-        int i = 5;
-        while (i < info.Length-1)
+        for (int i = 5; i < data.Length-1; i++)
         {
-            buildInfo.partList.Add(new KeyValuePair<int, CUBEGridInfo>(int.Parse(info[i++]),
-                                                                       new CUBEGridInfo(
-                                                                           Utility.ParseV3(info[i++]),
-                                                                           Utility.ParseV3(info[i++]),
-                                                                           int.Parse(info[i++]))));
+            string[] info = data[i].Split(BuildInfo.PIECESEP[0]);
+            int[] colors = info[4].Substring(0, info[4].Length-1).Split(BuildInfo.COLORSEP[0]).Select(c => int.Parse(c)).ToArray();
+            buildInfo.partList.Add(new KeyValuePair<int,CUBEGridInfo>(int.Parse(info[0]),
+                                                                      new CUBEGridInfo(
+                                                                          Utility.ParseV3(info[1]),
+                                                                          Utility.ParseV3(info[2]),
+                                                                          int.Parse(info[3]),
+                                                                          colors)));
         }
 
         return buildInfo;
@@ -1027,15 +1044,22 @@ public class ConstructionGrid : MonoBase
         {
             // ID
             build.Append(piece.Key.ID);
-            build.Append(BuildInfo.DATASEP);
+            build.Append(BuildInfo.PIECESEP);
             // positon
             build.Append(piece.Value.position);
-            build.Append(BuildInfo.DATASEP);
+            build.Append(BuildInfo.PIECESEP);
             // rotation
             build.Append(piece.Value.rotation);
-            build.Append(BuildInfo.DATASEP);
+            build.Append(BuildInfo.PIECESEP);
             // weapon map
             build.Append(piece.Value.weaponMap);
+            build.Append(BuildInfo.PIECESEP);
+            // colors
+            for (int i = 0; i < piece.Value.colors.Length; i++)
+            {
+                build.Append(piece.Value.colors[i]);
+                build.Append(BuildInfo.COLORSEP);
+            }
             build.Append(BuildInfo.DATASEP);
         }
 
@@ -1073,7 +1097,7 @@ public class ConstructionGrid : MonoBase
         namePath = ALLUSERBUILDSPATH;
 #endif
 
-        List<string> builds = PlayerPrefs.GetString(namePath).Split(BuildInfo.DATASEP[0]).ToList();
+        List<string> builds = PlayerPrefs.GetString(namePath).Split(BuildInfo.PIECESEP[0]).ToList();
         if (builds[0] == "")
         {
             builds.RemoveAt(0);
@@ -1111,7 +1135,7 @@ public class ConstructionGrid : MonoBase
         if (!buildNames.Contains(buildName))
         {
             buildNames.Add(buildName);
-            PlayerPrefs.SetString(namePath, string.Join(BuildInfo.DATASEP, buildNames.ToArray()));
+            PlayerPrefs.SetString(namePath, string.Join(BuildInfo.PIECESEP, buildNames.ToArray()));
         }
         
     }
@@ -1135,10 +1159,10 @@ public class ConstructionGrid : MonoBase
 #endif
 
         // remove from list of all builds
-        string[] builds = PlayerPrefs.GetString(namePath).Split(BuildInfo.DATASEP[0]).Where(b => b != buildName && !string.IsNullOrEmpty(b)).ToArray();
-        PlayerPrefs.SetString(namePath, string.Join(BuildInfo.DATASEP, builds));
+        string[] builds = PlayerPrefs.GetString(namePath).Split(BuildInfo.PIECESEP[0]).Where(b => b != buildName && !string.IsNullOrEmpty(b)).ToArray();
+        PlayerPrefs.SetString(namePath, string.Join(BuildInfo.PIECESEP, builds));
 
-        // remove build info
+        // remove build data
         PlayerPrefs.DeleteKey(dataPath);
     }
 
@@ -1162,12 +1186,12 @@ public class ConstructionGrid : MonoBase
 #endif
 
         // update list of all builds
-        string[] builds = PlayerPrefs.GetString(namePath).Split(BuildInfo.DATASEP[0]);
+        string[] builds = PlayerPrefs.GetString(namePath).Split(BuildInfo.PIECESEP[0]);
         int index = Array.IndexOf(builds, oldName);
         builds[index] = newName;
-        PlayerPrefs.SetString(namePath, string.Join(BuildInfo.DATASEP, builds));
+        PlayerPrefs.SetString(namePath, string.Join(BuildInfo.PIECESEP, builds));
 
-        // update build info
+        // update build data
         string buildInfo = PlayerPrefs.GetString(dataPath + oldName);
         PlayerPrefs.DeleteKey(oldName);
         PlayerPrefs.SetString(dataPath + newName, buildInfo);

@@ -11,12 +11,14 @@ public class CUBEGridInfo
     public Vector3 position;
     public Vector3 rotation;
     public int weaponMap;
+    public int[] colors;
 
 
-    public CUBEGridInfo(Vector3 position, Vector3 rotation, int weaponMap)
+    public CUBEGridInfo(Vector3 position, Vector3 rotation, int weaponMap, int[] colors = null)
     {
         this.position = position;
         this.rotation = rotation;
         this.weaponMap = weaponMap;
+        this.colors = colors;
     }
 }
