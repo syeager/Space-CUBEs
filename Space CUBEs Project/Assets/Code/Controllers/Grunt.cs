@@ -49,12 +49,6 @@ public class Grunt : Enemy
 
     private void MovingEnter(Dictionary<string, object> info)
     {
-        stateMachine.SetUpdate(MovingUpdate());
-    }
-
-
-    private IEnumerator MovingUpdate()
-    {
         if (attackCycle1 != null)
         {
             attackCycle1.Kill();
@@ -64,8 +58,14 @@ public class Grunt : Enemy
         {
             attackCycle2.Kill();
         }
-        attackCycle2 = new Job(AttackCycle(1));
+        attackCycle2 = new Job(AttackCycle(1)); 
+        
+        stateMachine.SetUpdate(MovingUpdate());
+    }
 
+
+    private IEnumerator MovingUpdate()
+    {
         while (true)
         {
             // move
@@ -94,6 +94,7 @@ public class Grunt : Enemy
         {
             yield return new WaitForSeconds(Random.Range(minAttackDelay, maxAttackDelay));
             myWeapons.TryActivate(weapon, true);
+            myWeapons.TryActivate(weapon, false);
         }
     }
 
