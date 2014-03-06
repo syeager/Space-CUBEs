@@ -27,12 +27,13 @@ public class ShipMotor : MonoBase
     public float barrelRollTime = 0.25f;
     /// <summary>Time between allowed barrel rolls.</summary>
     public float barrelRollBuffer = 0.5f;
-    
+
+    public bool hasVerticalBounds = true;
     /// <summary>Screen percentage for screen top/bottom boundary.</summary>
     public float verticalBounds = 0.05f;
     public bool hasHorizontalBounds = true;
     public float leftBound = 0.01f;
-    public float rightBound = 0.5f;
+    public float rightBound = 0.01f;
 
     #endregion
 
@@ -78,7 +79,10 @@ public class ShipMotor : MonoBase
 
     public void Move(Vector2 input)
     {
-        TestBoundaries(ref input);
+        if (hasVerticalBounds || hasHorizontalBounds)
+        {
+            TestBoundaries(ref input);
+        }
         myTransform.Translate(input * speed * deltaTime, Space.World);
     }
 
@@ -128,22 +132,27 @@ public class ShipMotor : MonoBase
     {
         Vector3 screenPosition = LevelCamera.WorldToViewportPoint(myTransform.position);
 
-        // top
-        if (input.y > 0f)
+        // vertical
+        if (hasVerticalBounds)
         {
-            if (screenPosition.y >= (1 - verticalBounds))
+            // top
+            if (input.y > 0f)
             {
-                input.y = 0f;
+                if (screenPosition.y >= (1 - verticalBounds))
+                {
+                    input.y = 0f;
+                }
+            }
+            // bottom
+            else if (input.y < 0f)
+            {
+                if (screenPosition.y <= verticalBounds)
+                {
+                    input.y = 0f;
+                }
             }
         }
-        // bottom
-        else if (input.y < 0f)
-        {
-            if (screenPosition.y <= verticalBounds)
-            {
-                input.y = 0f;
-            }
-        }
+        // horizontal
         if (hasHorizontalBounds)
         {
             // left

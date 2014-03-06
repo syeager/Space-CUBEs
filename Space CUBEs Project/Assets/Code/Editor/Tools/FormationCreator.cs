@@ -19,6 +19,12 @@ public class FormationCreator : EditorWindow
 
     #endregion
 
+    #region Const Fields
+
+    private const string FormationPrefix = "Formation ";
+
+    #endregion
+
 
     #region EditorWindow Overrides
 
@@ -60,7 +66,7 @@ public class FormationCreator : EditorWindow
                 if (GUILayout.Button(formation.name))
                 {
                     prefab = new GameObject("___Formation", typeof(Formation));
-                    formationName = formation.name;
+                    formationName = formation.name.Substring(FormationPrefix.Length, formation.name.Length-FormationPrefix.Length);
                     foreach (var position in formation.positions)
                     {
                         var placeholder = (GameObject)GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -100,7 +106,7 @@ public class FormationCreator : EditorWindow
             if (GUILayout.Button("Save"))
             {
                 // test for alreay there
-                oldFormation = formations.FirstOrDefault(p => p.name == formationName);
+                oldFormation = formations.FirstOrDefault(p => p.name == FormationPrefix + formationName);
                 if (oldFormation == null)
                 {
                     Save(false);
@@ -122,18 +128,18 @@ public class FormationCreator : EditorWindow
         // delete old
         if (overwrite)
         {
-            Debug.Log("Deleting: " + Formation.FORMATIONPATH + oldFormation.name);
-            AssetDatabase.DeleteAsset(Formation.FORMATIONPATH + oldFormation.name + ".prefab");
+            Debug.Log("Deleting: " + Formation.FORMATIONPATH + FormationPrefix + oldFormation.name);
+            AssetDatabase.DeleteAsset(Formation.FORMATIONPATH + FormationPrefix + oldFormation.name + ".prefab");
         }
 
-        GameObject savedPrefab = new GameObject(formationName, typeof(Formation));
+        GameObject savedPrefab = new GameObject(FormationPrefix + formationName, typeof(Formation));
         var formationComp = savedPrefab.GetComponent<Formation>();
         formationComp.positions = new Vector3[prefab.transform.childCount];
         for (int i = 0; i < formationComp.positions.Length; i++)
         {
             savedPrefab.GetComponent<Formation>().positions[i] = prefab.transform.GetChild(i).localPosition;
         }
-        PrefabUtility.CreatePrefab(Formation.FORMATIONPATH + formationName + ".prefab", savedPrefab);
+        PrefabUtility.CreatePrefab(Formation.FORMATIONPATH + FormationPrefix + formationName + ".prefab", savedPrefab);
         DestroyImmediate(savedPrefab);
 
         formations = Formation.AllFormations();

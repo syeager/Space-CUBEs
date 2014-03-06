@@ -16,7 +16,7 @@ namespace Paths
         public override Vector3 Direction(float deltaTime)
         {
             time += deltaTime;
-            return Vector3.left + Vector3.up * Mathf.Sin(time * frequency) * amplitude;
+            return new Vector3(-1f, Mathf.Sin(time * frequency) * amplitude, 0f);
         }
     }
 }

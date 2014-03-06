@@ -20,6 +20,7 @@ public class Enemy : Ship
 
     public enum Classes
     {
+        None,
         Grunt,
         Tank,
     }

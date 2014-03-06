@@ -20,12 +20,6 @@ public class FormationLevelManager : LevelManager
 
     #endregion
 
-    #region Readonly Fields
-
-    private readonly Vector3 SPAWNSTART = Vector3.right * 100f;
-
-    #endregion
-
 
     #region Unity Overrides
 
@@ -65,10 +59,13 @@ public class FormationLevelManager : LevelManager
         
         // create enemies
         enemiesLeft = 0;
+        Vector3 formationCenter = formationGroups[segmentCursor].position;
         for (int i = 0; i < formationGroups[segmentCursor].formation.positions.Length; i++)
         {
+            if (formationGroups[segmentCursor].enemies[i] == Enemy.Classes.None) continue;
+
             var enemy = PoolManager.Pop(formationGroups[segmentCursor].enemies[i].ToString());
-            enemy.transform.SetPosRot(formationGroups[segmentCursor].formation.positions[i] + SPAWNSTART, SPAWNROTATION);
+            enemy.transform.SetPosRot(formationGroups[segmentCursor].formation.positions[i] + formationCenter, SPAWNROTATION);
             enemy.GetComponent<Enemy>().Spawn(formationGroups[segmentCursor].paths[i]);
             if (clear || lastSegment)
             {

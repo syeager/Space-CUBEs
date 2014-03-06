@@ -84,10 +84,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cddb31ad4dca1141a26c308b5d59954, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colors:
-  - {r: 0, g: 0, b: 0, a: 1}
-  - {r: .501999974, g: .501999974, b: .501999974, a: 1}
-  - {r: .0780000016, g: 0, b: .321999997, a: 1}
+  colors: 000000000000000007000000
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -106,9 +103,9 @@ MonoBehaviour:
     type: 2}
   missileOffset: {x: 0, y: 0, z: 1}
   hitInfo:
-    damage: -40
+    damage: -50
   missileTime: 10
-  missileSpeed: 30
+  missileSpeed: 40
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

@@ -90,7 +90,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 2.57324624, y: 10, z: 2.80221844}
-  m_Center: {x: .499999911, y: .5, z: -.502798796}
+  m_Center: {x: .5, y: .5, z: -.502798796}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -119,10 +119,10 @@ MonoBehaviour:
   HealthHit_Mat: {fileID: 2100000, guid: 714fd6fe39d4b7e4786c808fbccc8dd9, type: 2}
   healthHitMatTime: .5
   invincible: 0
-  maxHealth: 25
+  maxHealth: 20
   health: 0
-  rechargeSpeed: 25
-  rechargeDelay: 1
+  rechargeSpeed: 0
+  rechargeDelay: 0
   maxShield: 0
   shield: 0
 --- !u!114 &11400006
@@ -140,8 +140,9 @@ MonoBehaviour:
   timeScale: 1
   speed: 15
   barrelRollMoveSpeed: 0
-  barrelRollTime: .25
-  barrelRollBuffer: .5
+  barrelRollTime: 0
+  barrelRollBuffer: 0
+  hasVerticalBounds: 0
   verticalBounds: .0500000007
   hasHorizontalBounds: 0
   leftBound: .00999999978

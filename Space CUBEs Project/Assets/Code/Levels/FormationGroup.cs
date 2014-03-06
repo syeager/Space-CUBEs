@@ -8,6 +8,7 @@ using System;
 public class FormationGroup
 {
     public Formation formation;
+    public Vector3 position;
     public Enemy.Classes[] enemies = new Enemy.Classes[1];
     public Path[] paths = new Path[1];
     public bool needsClearing;

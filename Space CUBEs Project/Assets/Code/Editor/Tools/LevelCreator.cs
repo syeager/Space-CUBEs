@@ -251,6 +251,11 @@ public class LevelCreator : EditorWindow
             EditorGUI.LabelField(new Rect(150f, formationHeight / 2f - 10f, 80f, 20f), "Spawn Time");
             property = sFormSeg.FindPropertyRelative("spawnTime");
             EditorGUI.PropertyField(new Rect(230f, formationHeight / 2f - 10f, 30f, 20f), property, new GUIContent(""));
+
+            // start position
+            EditorGUI.LabelField(new Rect(280f, formationHeight / 2f - 10f, 40f, 20f), "Start");
+            property = sFormSeg.FindPropertyRelative("position");
+            EditorGUI.PropertyField(new Rect(320f, formationHeight / 2f - 10f, 150f, 20f), property, new GUIContent(""));
         }
         GUI.EndGroup();
 
@@ -274,10 +279,15 @@ public class LevelCreator : EditorWindow
     {
         float height = enemyHeight;
 
+        // enemy type
+        int enemyType = sformationGroup.FindPropertyRelative("enemies").GetArrayElementAtIndex(enemyIndex).intValue;
+
         // number
         GUI.Label(new Rect(0f, y, 10f, enemyHeight), (enemyIndex + 1).ToString());
         // toggle
+        GUI.enabled = enemyType != 0;
         enemyToggles[formationIndex][enemyIndex] = GUI.Toggle(new Rect(12f, y, 16f, 16f), enemyToggles[formationIndex][enemyIndex], GUIContent.none);
+        GUI.enabled = true;
         // enemy
         EditorGUI.BeginChangeCheck();
         {
@@ -288,6 +298,7 @@ public class LevelCreator : EditorWindow
             sLevelManager.ApplyModifiedProperties();
         }
         // path
+        GUI.enabled = enemyType != 0;
         SerializedProperty path = sformationGroup.FindPropertyRelative("paths").GetArrayElementAtIndex(enemyIndex);
         Type pathType = levelManager.formationGroups[formationIndex].paths[enemyIndex].GetType();
         int pathIndex = levelManager.formationGroups[formationIndex].paths[enemyIndex] == null ? -1 : Array.IndexOf(pathTypes, pathType);
@@ -300,7 +311,9 @@ public class LevelCreator : EditorWindow
             path.objectReferenceValue = ScriptableObject.CreateInstance(pathTypes[pathIndex]);
             sLevelManager.ApplyModifiedProperties();
             EditorUtility.UnloadUnusedAssets();
+            return height;
         }
+        GUI.enabled = true;
 
         // params
         if (enemyToggles[formationIndex][enemyIndex])

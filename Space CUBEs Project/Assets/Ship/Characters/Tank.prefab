@@ -145,8 +145,8 @@ MonoBehaviour:
   maxHealth: 50
   health: 0
   rechargeSpeed: 25
-  rechargeDelay: 1
-  maxShield: 10
+  rechargeDelay: 2
+  maxShield: 15
   shield: 0
 --- !u!114 &11400006
 MonoBehaviour:
@@ -163,8 +163,9 @@ MonoBehaviour:
   timeScale: 1
   speed: 10
   barrelRollMoveSpeed: 0
-  barrelRollTime: .25
-  barrelRollBuffer: .5
+  barrelRollTime: 0
+  barrelRollBuffer: 0
+  hasVerticalBounds: 0
   verticalBounds: .0500000007
   hasHorizontalBounds: 0
   leftBound: .00999999978
