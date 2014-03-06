@@ -258,6 +258,15 @@ public class GarageManager : MonoBase
         stateMachine.Start(new Dictionary<string, object>());
     }
 
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            stateMachine.SetState(LOADSTATE, null);
+        }
+    }
+
     #endregion
 
     #region Camera Methods
