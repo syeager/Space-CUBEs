@@ -58,16 +58,6 @@ public class Ship : MonoBase
     }
 
 
-    private void OnTriggerEnter(Collider other)
-    {
-        Health otherHealth = other.GetComponent<Health>();
-        if (otherHealth != null)
-        {
-            otherHealth.RecieveHit(this, new HitInfo { damage = COLLISIONDAMAGE });
-        }
-    }
-
-
     private void OnDestroy()
     {
         stateMachine = null;
