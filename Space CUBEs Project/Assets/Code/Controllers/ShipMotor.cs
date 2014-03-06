@@ -24,7 +24,7 @@ public class ShipMotor : MonoBase
     /// <summary>Movement speed during barrel roll.</summary>
     public float barrelRollMoveSpeed;
     /// <summary>How long the barrel roll lasts.</summary>
-    public float barrelRollTime = 0.25f;
+    public float barrelRollTime = 0.35f;
     /// <summary>Time between allowed barrel rolls.</summary>
     public float barrelRollBuffer = 0.5f;
 
@@ -95,7 +95,7 @@ public class ShipMotor : MonoBase
     /// <returns></returns>
     public IEnumerator BarrelRoll(Vector2 direction, float bounds)
     {
-        if (barrelRollStatus == BarrelRollStatuses.Rolling) yield break;
+        if (barrelRollStatus != BarrelRollStatuses.Ready) yield break;
         
         barrelRollStatus = BarrelRollStatuses.Rolling;
         float rollingSpeed = 360f / barrelRollTime;
