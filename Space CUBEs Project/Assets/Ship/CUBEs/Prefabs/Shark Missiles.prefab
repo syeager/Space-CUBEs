@@ -12,6 +12,7 @@ GameObject:
   - 23: {fileID: 2300000}
   - 114: {fileID: 11400000}
   - 114: {fileID: 11400002}
+  - 114: {fileID: 11400004}
   m_Layer: 0
   m_Name: Shark Missiles
   m_TagString: Untagged
@@ -82,9 +83,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cddb31ad4dca1141a26c308b5d59954, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colors:
-  - {r: .0780000016, g: 0, b: .321999997, a: 1}
-  - {r: 1, g: .333999991, b: 0, a: 1}
+  colors: 1100000001000000
+--- !u!114 &11400004
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf34d7c78173fd442872704701dd8a26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  log: 1
+  timeScale: 1
+  cooldownSpeed: 25
+  SharkMissile_Prefab: {fileID: 100002, guid: 79176bd7d46ddf84680f00ee2b12d1a9, type: 2}
+  missileOffset: {x: 0, y: 0, z: 1}
+  missileDelay: 1
+  missileDelaySpeed: 15
+  missileHomingSpeed: 60
+  hitInfo:
+    damage: -100
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

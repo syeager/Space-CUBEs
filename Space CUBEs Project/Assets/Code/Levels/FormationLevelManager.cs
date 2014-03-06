@@ -15,7 +15,6 @@ public class FormationLevelManager : LevelManager
     #region Private Fields
 
     private int segmentCursor;
-    private int enemiesLeft;
     private bool lastSegment;
 
     #endregion
@@ -58,7 +57,6 @@ public class FormationLevelManager : LevelManager
         lastSegment = segmentCursor + 1 == formationGroups.Length;
         
         // create enemies
-        enemiesLeft = 0;
         Vector3 formationCenter = formationGroups[segmentCursor].position;
         for (int i = 0; i < formationGroups[segmentCursor].formation.positions.Length; i++)
         {
@@ -68,11 +66,7 @@ public class FormationLevelManager : LevelManager
             enemyGO.transform.SetPosRot(formationGroups[segmentCursor].formation.positions[i] + formationCenter, SPAWNROTATION);
             Enemy enemy = enemyGO.GetComponent<Enemy>();
             enemy.GetComponent<Enemy>().Spawn(formationGroups[segmentCursor].paths[i]);
-            if (clear || lastSegment)
-            {
-                enemiesLeft++;
-                enemy.GetComponent<ShieldHealth>().DieEvent += OnEnemyDeath;
-            }
+            enemy.GetComponent<ShieldHealth>().DieEvent += OnEnemyDeath;
             activeEnemies.Add(enemy);
         }
 
@@ -96,9 +90,9 @@ public class FormationLevelManager : LevelManager
     {
         ShieldHealth enemyHealth = sender as ShieldHealth;
         enemyHealth.DieEvent -= OnEnemyDeath;
-        enemiesLeft--;
         activeEnemies.Remove(enemyHealth.GetComponent<Enemy>());
-        if (enemiesLeft == 0)
+
+        if (activeEnemies.Count == 0)
         {
             Log("Formation " + (segmentCursor - 1) + " cleared.", true, Debugger.LogTypes.LevelEvents);
             if (lastSegment)
