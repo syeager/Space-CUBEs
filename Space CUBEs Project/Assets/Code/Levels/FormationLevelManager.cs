@@ -64,14 +64,16 @@ public class FormationLevelManager : LevelManager
         {
             if (formationGroups[segmentCursor].enemies[i] == Enemy.Classes.None) continue;
 
-            var enemy = PoolManager.Pop(formationGroups[segmentCursor].enemies[i].ToString());
-            enemy.transform.SetPosRot(formationGroups[segmentCursor].formation.positions[i] + formationCenter, SPAWNROTATION);
+            GameObject enemyGO = PoolManager.Pop(formationGroups[segmentCursor].enemies[i].ToString());
+            enemyGO.transform.SetPosRot(formationGroups[segmentCursor].formation.positions[i] + formationCenter, SPAWNROTATION);
+            Enemy enemy = enemyGO.GetComponent<Enemy>();
             enemy.GetComponent<Enemy>().Spawn(formationGroups[segmentCursor].paths[i]);
             if (clear || lastSegment)
             {
                 enemiesLeft++;
                 enemy.GetComponent<ShieldHealth>().DieEvent += OnEnemyDeath;
             }
+            activeEnemies.Add(enemy);
         }
 
         // increase segmentCursor
@@ -92,8 +94,10 @@ public class FormationLevelManager : LevelManager
 
     private void OnEnemyDeath(object sender, DieArgs args)
     {
-        ((ShieldHealth)sender).DieEvent -= OnEnemyDeath;
+        ShieldHealth enemyHealth = sender as ShieldHealth;
+        enemyHealth.DieEvent -= OnEnemyDeath;
         enemiesLeft--;
+        activeEnemies.Remove(enemyHealth.GetComponent<Enemy>());
         if (enemiesLeft == 0)
         {
             Log("Formation " + (segmentCursor - 1) + " cleared.", true, Debugger.LogTypes.LevelEvents);
