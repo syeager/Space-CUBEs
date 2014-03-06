@@ -10,7 +10,17 @@ using System.Linq;
 /// </summary>
 public class ShipCompactor : MonoBehaviour
 {
-    public Ship Compact(Type shipType, bool cleanUnused, params Type[] components)
+    #region Const Fields
+
+    private const float PlayerCollider = 0.9f;
+    private const float EnemyCollider = 1.1f;
+
+    #endregion
+
+
+    #region Public Methods
+
+    public Ship Compact(Type shipType, bool player, bool cleanUnused, params Type[] components)
     {
         List<Weapon> weapons = new List<Weapon>();
 
@@ -47,7 +57,7 @@ public class ShipCompactor : MonoBehaviour
         transform.GetComponent<MeshFilter>().mesh.CombineMeshes(combine.ToArray());
         transform.GetComponent<MeshFilter>().mesh.Optimize();
         transform.renderer.sharedMaterial = GameResources.Main.VertexColor_Mat;
-        
+
         if (cleanUnused)
         {
             Resources.UnloadUnusedAssets();
@@ -57,7 +67,14 @@ public class ShipCompactor : MonoBehaviour
         Ship ship = gameObject.AddComponent(shipType.ToString()) as Ship;
         ship.myWeapons.Bake(weapons);
         var box = ship.gameObject.AddComponent<BoxCollider>();
-        box.size = new Vector3(box.size.x, 10f, box.size.z);
+        if (player)
+        {
+            box.size = new Vector3(box.size.x * PlayerCollider, 10f, box.size.z * PlayerCollider);
+        }
+        else
+        {
+            box.size = new Vector3(box.size.x * EnemyCollider, 10f, box.size.z * EnemyCollider);
+        }
         box.isTrigger = true;
         var body = ship.gameObject.AddComponent<Rigidbody>();
         body.useGravity = false;
@@ -74,8 +91,10 @@ public class ShipCompactor : MonoBehaviour
 
 
     //
-    public Ship Compact(params Type[] components)
+    public Ship Compact(bool player, params Type[] components)
     {
-        return Compact(typeof(Ship), false, components);
+        return Compact(typeof(Ship), player, false, components);
     }
+
+    #endregion
 }

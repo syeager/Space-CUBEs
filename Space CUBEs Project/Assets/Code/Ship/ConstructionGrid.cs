@@ -1010,7 +1010,7 @@ public class ConstructionGrid : MonoBase
 
         // create one mesh
         var compactor = ship.AddComponent<ShipCompactor>();
-        var compShip = compactor.Compact(typeof(PoolObject));
+        var compShip = compactor.Compact(false, typeof(PoolObject));
 
         yield return new WaitForEndOfFrame();
 #if UNITY_EDITOR

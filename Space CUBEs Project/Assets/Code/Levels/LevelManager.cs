@@ -186,7 +186,7 @@ public class LevelManager : Singleton<LevelManager>
         Grid.BuildFinishedEvent -= OnBuildFinished;
 
         var buildShip = args.ship.AddComponent<ShipCompactor>();
-        player = buildShip.Compact(typeof(Player), true) as Player;
+        player = buildShip.Compact(typeof(Player), true, true) as Player;
         player.Initialize(args.health, args.shield, args.speed, args.damage);
 
         player.GetComponent<ShieldHealth>().DieEvent += OnPlayerDeath;
