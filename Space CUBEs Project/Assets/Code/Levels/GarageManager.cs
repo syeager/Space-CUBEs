@@ -27,6 +27,7 @@ public class GarageManager : MonoBase
     public float zoomSpeed;
     public float zoomMin;
     public float zoomMax;
+    public float zoomStart;
 
     public float swipeDist;
     public float swipeTime;
@@ -79,7 +80,7 @@ public class GarageManager : MonoBase
     private int[] inventory;
 
     private Vector3 cameraDirection = Vector3.up;
-    private float zoom = 15f;
+    private float zoom;
 
     private bool selectedBuild;
     private string currentBuild = "";
@@ -198,6 +199,7 @@ public class GarageManager : MonoBase
         stateMachine.initialState = LOADSTATE;
 
         cameraTarget = new GameObject("Camera Target").transform;
+        StartCoroutine(ResetCamera());
 
         // load colors
         colors = CUBE.LoadColors();
@@ -265,6 +267,18 @@ public class GarageManager : MonoBase
         {
             stateMachine.SetState(LOADSTATE, null);
         }
+
+#if UNITY_STANDALONE
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            StartCoroutine(ResetCamera());
+        }
+#else
+        if (Input.touchCount > 0 && Input.touches[0].tapCount == 2)
+        {
+            StartCoroutine(ResetCamera());
+        }
+#endif
     }
 
     #endregion
@@ -514,6 +528,23 @@ public class GarageManager : MonoBase
     {
         zoom = Mathf.Clamp(zoom + (strength * zoomSpeed * Time.deltaTime), zoomMin, zoomMax);
         cameraTarget.position = CalculateTargetPostion(cameraDirection);
+    }
+
+
+    private IEnumerator ResetCamera()
+    {
+        while (cameraDirection != cameraPositions[0])
+        {
+            RotateCamera(Vector3.up);
+        }
+
+        float direction = (zoom-zoomStart > 0 ? -1f : 1f);
+        while (Mathf.Abs(zoom - zoomStart) > 0.1f)
+        {
+            CameraZoom(direction);
+            yield return null;
+        }
+
     }
 
     #endregion
