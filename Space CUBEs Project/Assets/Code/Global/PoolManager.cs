@@ -25,8 +25,10 @@ public class PoolManager : Singleton<PoolManager>
 
     #region MonoBehaviour Overrides
 
-    private void Start()
+    protected override void Awake()
     {
+        base.Awake();
+
         Initialize();
         StartCoroutine(Cull());
     }

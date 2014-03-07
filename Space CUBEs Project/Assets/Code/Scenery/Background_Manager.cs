@@ -10,7 +10,8 @@ using System.Collections;
 public class Background_Manager : MonoBase
 {
     #region Public Fields
-    
+
+    public Material back_Mat;
     public float backgroundSpeed;
     public float start;
     public float vertical;
@@ -21,12 +22,11 @@ public class Background_Manager : MonoBase
     public float[] minSizes;
     public float[] maxSizes;
     public GameObject[] objects;
-    
+
     #endregion
 
     #region Private Fields
 
-    private Material material;
     private Transform myTransform;
 
     #endregion
@@ -37,9 +37,12 @@ public class Background_Manager : MonoBase
     private void Awake()
     {
         myTransform = transform;
-        material = renderer.sharedMaterial;
-        material.mainTextureOffset = Vector2.zero;
+        back_Mat.mainTextureOffset = Vector2.zero;
+    }
 
+
+    private void Start()
+    {
         for (int i = 0; i < positions.Length; i++)
         {
             StartCoroutine(Spawn(i));
@@ -50,7 +53,7 @@ public class Background_Manager : MonoBase
     private void Update()
     {
         // background
-        material.mainTextureOffset += Vector2.right * backgroundSpeed * deltaTime;
+        back_Mat.mainTextureOffset += Vector2.right * backgroundSpeed * deltaTime;
     }
 
     #endregion
@@ -61,8 +64,12 @@ public class Background_Manager : MonoBase
     {
         while (true)
         {
+            PoolManager.Pop(objects[Random.Range(0, objects.Length)],
+                            new Vector3(start, Random.Range(-vertical, vertical), positions[layer]),
+                            Quaternion.identity)
+                                .GetComponent<BackgroundObject>().Initialize(Random.Range(minSizes[layer], maxSizes[layer]), speeds[layer]);
+
             yield return new WaitForSeconds(Random.Range(minDelays[layer], maxDelays[layer]));
-            (Instantiate(objects[Random.Range(0, objects.Length)]) as GameObject).GetComponent<BackgroundObject>().Initialize(myTransform, new Vector3(start, Random.Range(-vertical, vertical), positions[layer]), Random.Range(minSizes[layer], maxSizes[layer]), speeds[layer]);
         }
     }
 

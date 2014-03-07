@@ -7,7 +7,7 @@ public class Destroyer : MonoBehaviour
 {
     #region MonoBehaviour Overrides
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerExit(Collider other)
     {
         ShieldHealth health = other.GetComponent<ShieldHealth>();
         if (health != null)
