@@ -17,17 +17,17 @@
 			#pragma fragment passThrough
 			#include "UnityCG.cginc"
 
-			struct VertOut
-			{
-				float4 position : POSITION;
-				float4 color : COLOR;
-			};
-
 			struct VertIn
 			{
 				float4 vertex : POSITION;
 				float4 color : COLOR;
 			};
+
+			struct VertOut
+			{
+				float4 position : POSITION;
+				float4 color : COLOR;
+			};			
 
 			VertOut wfiVertCol(VertIn input, float3 normal : NORMAL)
 			{

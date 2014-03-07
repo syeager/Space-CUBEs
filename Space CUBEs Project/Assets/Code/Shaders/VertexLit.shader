@@ -1,8 +1,7 @@
-﻿Shader "CUBEs/Diffuse_Vertex" 
+﻿Shader "CUBEs/VertexLit" 
 {
 	Properties 
 	{
-		_Color ("Color", Color) = (0.5, 0.5, 0.5, 1.0)
 		_Attenu ( "Attenuation", Range (0.0, 4.0)) = 2.0
 	}
 
@@ -26,12 +25,13 @@
 			{
 				float4 vertex : POSITION;
 				float3 normal : NORMAL;
+				float4 color : COLOR;
 			};
 
 			struct vertOut
 			{
-				float4 pos : SV_POSITION;	// object vertex position from gpu (SV_ because of directX 11)
-				float4 clr : COLOR;
+				float4 position : SV_POSITION;	// object vertex position from gpu (SV_ because of directX 11)
+				float4 color : COLOR;
 			};
 
 			// per-vertex function
@@ -44,15 +44,15 @@
 				float3 diffuseReflect = _Attenu * _LightColor0.xyz * max( 0.0, dot(normalDir, lightDir) );
 				float3 lightFinal = diffuseReflect + UNITY_LIGHTMODEL_AMBIENT.xyz;
 
-				o.clr = float4(lightFinal * _Color.rgb, 1.0);
-				o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
+				o.color = float4(lightFinal * v.color.rgb, 1.0);
+				o.position = mul(UNITY_MATRIX_MVP, v.vertex);
 				return o;
 			}
 
 			// per-fragment function
 			float4 Frag(vertOut i) : COLOR
 			{
-				return i.clr;
+				return i.color;
 			}
 
 			ENDCG

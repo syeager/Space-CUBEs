@@ -1,4 +1,4 @@
-﻿Shader "Custom/Cursor_shdr" 
+﻿Shader "CUBEs/SurfaceOverlay" 
 {
 	Properties 
 	{
