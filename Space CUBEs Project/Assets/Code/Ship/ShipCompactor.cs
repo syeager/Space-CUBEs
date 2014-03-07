@@ -13,7 +13,7 @@ public class ShipCompactor : MonoBehaviour
     #region Const Fields
 
     private const float PlayerCollider = 0.9f;
-    private const float EnemyCollider = 1.1f;
+    public const float EnemyCollider = 1.1f;
 
     #endregion
 
@@ -63,9 +63,11 @@ public class ShipCompactor : MonoBehaviour
             Resources.UnloadUnusedAssets();
         }
 
-        // add ship essentials
+        // add ship
         Ship ship = gameObject.AddComponent(shipType.ToString()) as Ship;
+        // back weapons
         ship.myWeapons.Bake(weapons);
+        // add collider
         var box = ship.gameObject.AddComponent<BoxCollider>();
         if (player)
         {
@@ -76,6 +78,7 @@ public class ShipCompactor : MonoBehaviour
             box.size = new Vector3(box.size.x * EnemyCollider, 10f, box.size.z * EnemyCollider);
         }
         box.isTrigger = true;
+        // add rigidbody
         var body = ship.gameObject.AddComponent<Rigidbody>();
         body.useGravity = false;
 

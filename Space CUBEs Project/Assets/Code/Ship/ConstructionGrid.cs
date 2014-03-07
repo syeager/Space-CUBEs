@@ -1001,13 +1001,6 @@ public class ConstructionGrid : MonoBase
             }
         }
 
-        // bake colors
-        //var colorVertices = ship.GetComponentsInChildren<ColorVertices>();
-        //foreach (var color in colorVertices)
-        //{
-        //    color.Bake();
-        //}
-
         // create one mesh
         var compactor = ship.AddComponent<ShipCompactor>();
         var compShip = compactor.Compact(false, typeof(PoolObject));
@@ -1015,7 +1008,21 @@ public class ConstructionGrid : MonoBase
         yield return new WaitForEndOfFrame();
 #if UNITY_EDITOR
         UnityEditor.AssetDatabase.CreateAsset(compShip.GetComponent<MeshFilter>().mesh, ENEMYMESHPATH + buildName + "_Mesh.asset");
-        UnityEditor.PrefabUtility.CreatePrefab(ENEMYPREFABPATH + buildName + ".prefab", compShip.gameObject); // keeping children
+        if (!File.Exists(Application.dataPath + "/Ship/Characters/" + buildName + ".prefab"))
+        {
+            UnityEditor.PrefabUtility.CreatePrefab(ENEMYPREFABPATH + buildName + ".prefab", compShip.gameObject);
+        }
+        else
+        {
+            Mesh mesh = UnityEditor.AssetDatabase.LoadAssetAtPath(ENEMYPREFABPATH + buildName + "_Mesh.asset", typeof(Mesh)) as Mesh;
+            GameObject enemy = UnityEditor.AssetDatabase.LoadAssetAtPath(ENEMYPREFABPATH + buildName + ".prefab", typeof(GameObject)) as GameObject;
+            enemy.GetComponent<MeshFilter>().sharedMesh = mesh;
+            DestroyImmediate(enemy.GetComponent<BoxCollider>(), true);
+            yield return null;
+            BoxCollider box = enemy.AddComponent<BoxCollider>();
+            box.isTrigger = true;
+            box.size = new Vector3(box.size.x * ShipCompactor.EnemyCollider, 10f, box.size.z * ShipCompactor.EnemyCollider);
+        }
 #endif
     }
 
