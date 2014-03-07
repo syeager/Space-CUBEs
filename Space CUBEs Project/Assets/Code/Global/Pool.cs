@@ -14,13 +14,14 @@ public class Pool
 
     public Stack<GameObject> pool = new Stack<GameObject>();
 
-    public PoolObject Prefab;
+    public PoolObject prefab;
     public int preAllocate;
     public int allocateBlock = 1;
     public bool hardLimit;
     public int limit;
     public bool cull;
     public int cullLimit;
+    public Transform parent;
 
     #endregion
 
@@ -29,15 +30,42 @@ public class Pool
     private int poolSize;
 
     #endregion
-    
+
+
+    #region Constructors
+
+    public Pool()
+    {
+        pool = new Stack<GameObject>();
+    }
+
+
+    public Pool(GameObject prefab)
+    {
+        this.prefab = prefab.GetComponent<PoolObject>();
+        pool = new Stack<GameObject>();
+    }
+
+    #endregion
 
     #region Public Methods
 
-    /// <summary>
-    /// 
-    /// </summary>
     public void Initialize()
     {
+        if (parent != null)
+        {
+            PoolObject[] children = parent.GetComponentsInChildren<PoolObject>(true);
+            foreach (var child in children)
+            {
+                child.Initialize(this);
+                poolSize++;
+                if (!child.gameObject.active)
+                {
+                    Push(child);
+                }
+            }
+        }
+
         if (preAllocate > 0)
         {
             Allocate(preAllocate);
@@ -50,44 +78,35 @@ public class Pool
     }
 
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
     public GameObject Pop()
     {
         // object ready
         if (pool.Count > 0)
         {
-            var prefab = pool.Pop();
-            prefab.SetActive(true);
-            return prefab;
+            GameObject go = pool.Pop();
+            go.SetActiveRecursively(true);
+            return go;
         }
-        
-        // reached hard limit        
+
+        // reached hard limit
         if (hardLimit && poolSize >= limit)
         {
             return null;
         }
-        
+
         // allocate more
         Allocate(allocateBlock);
         return Pop();
     }
 
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="life"></param>
-    /// <returns></returns>
     public GameObject Pop(float life)
     {
-        var prefab = Pop();
-        if (prefab != null)
+        GameObject go = Pop();
+        if (go != null)
         {
-            prefab.GetComponent<PoolObject>().StartLifeTimer(life);
-            return prefab;
+            go.GetComponent<PoolObject>().StartLifeTimer(life);
+            return go;
         }
         else
         {
@@ -96,40 +115,29 @@ public class Pool
     }
 
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="po"></param>
-    public void Push(PoolObject po)
+    public void Push(PoolObject poolObject)
     {
-        pool.Push(po.gameObject);
+        pool.Push(poolObject.gameObject);
     }
 
 
-    /// <summary>
-    /// Destroy all objects in pool and clear list.
-    /// </summary>
     public void Clear()
     {
-        foreach (var p in pool)
+        while (pool.Count > 0)
         {
-            Object.Destroy(p.gameObject);
+            Object.Destroy(pool.Pop());
         }
 
         pool.Clear();
     }
 
 
-    /// <summary>
-    /// 
-    /// </summary>
     public void Cull()
     {
         while (pool.Count > cullLimit)
         {
             poolSize--;
-            var g = pool.Pop();
-            Object.Destroy(g);
+            Object.Destroy(pool.Pop());
         }
     }
 
@@ -146,10 +154,13 @@ public class Pool
 
         for (int i = 0; i < size; i++)
         {
-            var prefab = (GameObject)GameObject.Instantiate(Prefab.gameObject);
-            pool.Push(prefab);
-            prefab.SetActive(false);
+            GameObject go = GameObject.Instantiate(prefab.gameObject) as GameObject;
+            go.transform.parent = parent;
+            go.GetComponent<PoolObject>().Initialize(this);
+            pool.Push(go);
+            go.SetActiveRecursively(false);
             poolSize++;
+
         }
     }
 

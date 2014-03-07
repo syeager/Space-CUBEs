@@ -4,9 +4,6 @@
 using UnityEngine;
 using System.Collections;
 
-/// <summary>
-/// 
-/// </summary>
 public class SharkMissile : Hitbox
 {
     #region Private Fields

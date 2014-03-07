@@ -18,6 +18,7 @@ public class LevelManager : Singleton<LevelManager>
 
     #region Public Fields
 
+    public GameObject[] enemyPrefabs;
     public int[] rankLimits = new int[6];
 
     #endregion
@@ -25,6 +26,7 @@ public class LevelManager : Singleton<LevelManager>
     #region Protected Fields
 
     protected Player player;
+    protected Dictionary<Enemy.Classes, GameObject> enemies;
 
     #endregion
 
@@ -67,6 +69,18 @@ public class LevelManager : Singleton<LevelManager>
 
 
     #region Unity Overrides
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        enemies = new Dictionary<Enemy.Classes,GameObject>();
+        foreach (var enemy in enemyPrefabs)
+        {
+            enemies.Add(enemy.GetComponent<Enemy>().enemyClass, enemy);
+        }
+    }
+
 
     protected virtual void Start()
     {

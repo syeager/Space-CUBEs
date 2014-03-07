@@ -10,16 +10,12 @@ GameObject:
   - 4: {fileID: 400000}
   - 33: {fileID: 3300000}
   - 23: {fileID: 2300000}
-  - 114: {fileID: 11400010}
-  - 114: {fileID: 11400008}
-  - 114: {fileID: 11400006}
-  - 114: {fileID: 11400004}
-  - 54: {fileID: 5400000}
   - 114: {fileID: 11400000}
-  - 114: {fileID: 11400012}
   - 65: {fileID: 6500000}
-  m_Layer: 10
-  m_Name: Grunt
+  - 54: {fileID: 5400000}
+  - 114: {fileID: 11400002}
+  m_Layer: 0
+  m_Name: C-Bomb Missile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,8 +28,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 14.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 2.09887695, y: 1.14013672, z: 14.5722656}
+  m_LocalScale: {x: 1.36904049, y: .816928625, z: 2.73622394}
   m_Children: []
   m_Father: {fileID: 0}
 --- !u!23 &2300000
@@ -48,7 +44,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: 6d9e17dd27ab6bc4ea90d40a327ec967, type: 2}
+  - {fileID: 2100000, guid: 2f90210e2c6ac8a4b94cde92ab1cb571, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -63,7 +59,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Mesh: {fileID: 4300000, guid: f2288637af0a88c499a30d6072fa073f, type: 2}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!54 &5400000
 Rigidbody:
   m_ObjectHideFlags: 1
@@ -89,8 +85,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3.30000019, y: 10, z: 3.08244038}
-  m_Center: {x: -.49999994, y: .893311501, z: -.502798796}
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -102,7 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a811daa6c14fc348b0608b4c05762ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &11400004
+--- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -110,95 +106,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 879732c991b3f1847bf66979f468cebe, type: 3}
+  m_Script: {fileID: 11500000, guid: 3459cc167097cce4ea212ba0a5903748, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   log: 1
   timeScale: 1
-  HealthHit_Mat: {fileID: 2100000, guid: 714fd6fe39d4b7e4786c808fbccc8dd9, type: 2}
-  healthHitMatTime: .5
-  invincible: 0
-  maxHealth: 20
-  health: 0
-  rechargeSpeed: 0
-  rechargeDelay: 0
-  maxShield: 0
-  shield: 0
---- !u!114 &11400006
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8554868e05a91184595a4b4de41cc903, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  log: 1
-  timeScale: 1
-  speed: 15
-  barrelRollMoveSpeed: 0
-  barrelRollTime: 0
-  barrelRollBuffer: 0
-  hasVerticalBounds: 0
-  verticalBounds: .0500000007
-  hasHorizontalBounds: 0
-  leftBound: .00999999978
-  rightBound: .5
---- !u!114 &11400008
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2cedf86e75aa7e47ba8376813cf1e63, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weapons:
-  - {fileID: 11400010}
-  canActivate: 1
---- !u!114 &11400010
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 338eadfdc1ef901409328689e2f52b4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  log: 1
-  timeScale: 1
-  cooldownSpeed: 0
-  Laser_Prefab: {fileID: 100000, guid: 5a19f2fa1cd2e0347ba232995a185ac1, type: 2}
-  hitInfo:
-    damage: -10
-  laserOffset: {x: 0, y: 0, z: 0}
-  fireRate: 4
-  speed: 50
---- !u!114 &11400012
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93f3fa378aada4e469a1467aa1626c11, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  log: 1
-  timeScale: 1
-  myWeapons: {fileID: 11400008}
-  enemyClass: 1
-  score: 100
-  money: 10
-  minAttackDelay: 3
-  maxAttackDelay: 10
+  continuous: 0
+  hitNumber: 1
+  CBombExplosion_Prefab: {fileID: 100000, guid: 83b7c7dac2b744946ad1667b8e86f5c1,
+    type: 2}
+  explosionLength: 1
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

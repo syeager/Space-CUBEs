@@ -4,10 +4,7 @@
 using UnityEngine;
 using System.Collections;
 
-/// <summary>
-/// 
-/// </summary>
-public class Star : Hitbox
+public class PlanetSeed : Hitbox
 {
     #region Public Fields
     
@@ -16,25 +13,15 @@ public class Star : Hitbox
     #endregion
 
 
-    #region MonoBehaviour Overrides
-
-    //protected override void OnTriggerStay(Collider other)
-    //{
-    //    // damage
-    //    base.OnTriggerStay(other);
-
-    //    // movement
-
-    //}
-
-    #endregion
-
     #region Hitbox Overrides
 
     public override void Initialize(Ship sender, HitInfo hitInfo, float time, Vector3 moveVec)
     {
         base.Initialize(sender, hitInfo, time, moveVec);
 
+        GetComponent<Health>().Initialize();
+
+        myTransform.localScale = Vector3.one;
         StartCoroutine(Grow());
     }
 

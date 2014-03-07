@@ -17,7 +17,7 @@ GameObject:
   - 54: {fileID: 5400000}
   - 114: {fileID: 11400004}
   m_Layer: 0
-  m_Name: Star
+  m_Name: Planet Seed Missile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -104,7 +104,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a811daa6c14fc348b0608b4c05762ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PrefabName: Star
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -121,7 +120,7 @@ MonoBehaviour:
   HealthHit_Mat: {fileID: 2100000, guid: 7d34c7cf8cf2d1d468c55084184f96f1, type: 2}
   healthHitMatTime: .5
   invincible: 0
-  maxHealth: 80
+  maxHealth: 60
   health: 0
 --- !u!135 &13500000
 SphereCollider:

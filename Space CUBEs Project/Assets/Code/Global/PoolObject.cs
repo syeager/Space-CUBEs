@@ -8,18 +8,23 @@ public class PoolObject : MonoBehaviour
 {
     #region Readonly Fields
 
-    public string PrefabName;
+    private Pool pool;
 
     #endregion
 
 
     #region Public Methods
 
+    public void Initialize(Pool pool)
+    {
+        this.pool = pool;
+    }
+
+
     public void Disable()
     {
-        if (!gameObject.activeSelf) return;
-        gameObject.SetActive(false);
-        PoolManager.Push(this);
+        gameObject.SetActiveRecursively(false);
+        pool.Push(this);
     }
 
 
@@ -31,7 +36,7 @@ public class PoolObject : MonoBehaviour
     #endregion
 
     #region Private Methods
-    
+
     private IEnumerator LifeTimer(float time)
     {
         yield return new WaitForSeconds(time);

@@ -5,7 +5,7 @@ using UnityEngine;
 using System.Collections;
 using System;
 
-public class StarCannon : Weapon
+public class PlanetSeed_Weapon : Weapon
 {
     #region Public Fields
     
@@ -24,7 +24,7 @@ public class StarCannon : Weapon
     {
         if (!pressed) return;
 
-        (Instantiate(Star_Prefab, myTransform.position + myTransform.TransformDirection(attackOffset), myTransform.rotation) as GameObject).GetComponent<Hitbox>().Initialize(myShip, hitInfo.MultiplyDamage(multiplier), time, myTransform.forward*speed);
+        PoolManager.Pop(Star_Prefab, myTransform.position + myTransform.TransformDirection(attackOffset), myTransform.rotation).GetComponent<Hitbox>().Initialize(myShip, hitInfo.MultiplyDamage(multiplier), time, myTransform.forward*speed);
         StartCoroutine(Cooldown(true));
         Activated();
     }
@@ -32,7 +32,7 @@ public class StarCannon : Weapon
 
     public override Weapon Bake(GameObject parent)
     {
-        var comp = parent.AddComponent<StarCannon>();
+        var comp = parent.AddComponent<PlanetSeed_Weapon>();
         comp.index = index;
         comp.cooldownSpeed = cooldownSpeed;
         comp.Star_Prefab = Star_Prefab;

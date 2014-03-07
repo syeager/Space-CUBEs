@@ -65,7 +65,7 @@ public class SingularityBlaster : Weapon
 
     private void Fire(float multiplier)
     {
-        missile = (Instantiate(BlackHoleMissile_Prefab, myTransform.position + myTransform.TransformDirection(missileOffset), myTransform.rotation) as GameObject).GetComponent<BlackHoleMissile>();
+        missile = PoolManager.Pop(BlackHoleMissile_Prefab, myTransform.position + myTransform.TransformDirection(missileOffset), myTransform.rotation).GetComponent<BlackHoleMissile>();
         missile.Initialize(myShip, hitInfo.MultiplyDamage(multiplier), missileTime, myTransform.forward*missileSpeed);
     }
 

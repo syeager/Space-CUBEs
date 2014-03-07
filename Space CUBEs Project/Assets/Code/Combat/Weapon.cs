@@ -18,7 +18,6 @@ public abstract class Weapon : MonoBase
 
     /// <summary>1 per second.</summary>
     public float cooldownSpeed;
-    
 
     #endregion
 

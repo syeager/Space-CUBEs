@@ -103,7 +103,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a811daa6c14fc348b0608b4c05762ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PrefabName: Tank
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -118,7 +117,7 @@ MonoBehaviour:
   log: 1
   timeScale: 1
   myWeapons: {fileID: 11400008}
-  enemyClass: 1
+  enemyClass: 2
   score: 300
   money: 50
   minRandomDelay: 5
@@ -199,7 +198,7 @@ MonoBehaviour:
   log: 1
   timeScale: 1
   cooldownSpeed: 0
-  attackName: Plasma Laser
+  Laser_Prefab: {fileID: 100000, guid: 5a19f2fa1cd2e0347ba232995a185ac1, type: 2}
   hitInfo:
     damage: -10
   laserOffset: {x: 2, y: 1, z: 2}
@@ -219,7 +218,7 @@ MonoBehaviour:
   log: 1
   timeScale: 1
   cooldownSpeed: 0
-  attackName: Plasma Laser
+  Laser_Prefab: {fileID: 100000, guid: 5a19f2fa1cd2e0347ba232995a185ac1, type: 2}
   hitInfo:
     damage: -10
   laserOffset: {x: -5.96046448e-08, y: 0, z: 1}

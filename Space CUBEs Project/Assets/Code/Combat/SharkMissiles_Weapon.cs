@@ -5,9 +5,6 @@ using UnityEngine;
 using System.Collections;
 using System.Linq;
 
-/// <summary>
-/// 
-/// </summary>
 public class SharkMissiles_Weapon : Weapon
 {
     #region Public Fields
@@ -86,7 +83,7 @@ public class SharkMissiles_Weapon : Weapon
         }
 
         // create missile
-        SharkMissile missile = (Instantiate(SharkMissile_Prefab, myTransform.position + myTransform.TransformDirection(missileOffset), myTransform.rotation) as GameObject).GetComponent<SharkMissile>();
+        SharkMissile missile = PoolManager.Pop(SharkMissile_Prefab, myTransform.position + myTransform.TransformDirection(missileOffset), myTransform.rotation).GetComponent<SharkMissile>();
 
         // fire missile
         missile.Initialize(myShip, hitInfo.MultiplyDamage(multiplier), (target ? target.transform : null), missileDelay, missileDelaySpeed, missileHomingSpeed);

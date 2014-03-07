@@ -38,11 +38,10 @@ public class CBomb : Hitbox
 
     private void Detonate()
     {
-        explosion = (GameObject)Instantiate(CBombExplosion_Prefab, myTransform.position, myTransform.rotation);
+        explosion = PoolManager.Pop(CBombExplosion_Prefab, myTransform.position, myTransform.rotation);
         explosion.GetComponent<Hitbox>().Initialize(sender, hitInfo, explosionLength);
 
-        Destroy(gameObject);
-
+        GetComponent<PoolObject>().Disable();
     }
 
     #endregion

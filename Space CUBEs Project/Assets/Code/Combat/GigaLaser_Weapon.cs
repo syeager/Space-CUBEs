@@ -5,7 +5,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class LaserBeam : Weapon
+public class GigaLaser_Weapon : Weapon
 {
     #region Public Fields
 
@@ -53,7 +53,7 @@ public class LaserBeam : Weapon
 
     public override Weapon Bake(GameObject parent)
     {
-        var comp = parent.AddComponent<LaserBeam>();
+        var comp = parent.AddComponent<GigaLaser_Weapon>();
         comp.index = index;
         comp.cooldownSpeed = cooldownSpeed;
         comp.Laser_Prefab = Laser_Prefab;
@@ -77,7 +77,7 @@ public class LaserBeam : Weapon
     private IEnumerator Fire(float multiplier)
     {
         // create charge
-        charge = ((GameObject)Instantiate(Charge_Prefab)).transform;
+        charge = PoolManager.Pop(Charge_Prefab).transform;
         charge.parent = myTransform;
         charge.SetPosRot(myTransform.position + myTransform.TransformDirection(attackOffset), myTransform.rotation);
         
@@ -92,7 +92,7 @@ public class LaserBeam : Weapon
         Destroy(charge.gameObject);
 
         // fire
-        laser = ((GameObject)Instantiate(Laser_Prefab)).transform;
+        laser = PoolManager.Pop(Laser_Prefab).transform;
         laser.parent = myTransform;
         laser.SetPosRot(myTransform.position + myTransform.TransformDirection(attackOffset), myTransform.rotation);
         laser.GetComponent<Hitbox>().Initialize(myShip, hitInfo.MultiplyDamage(multiplier));
@@ -102,11 +102,11 @@ public class LaserBeam : Weapon
             float size = maxSize * power / FULLPOWER;
             if (Physics.Raycast(laser.position, myTransform.forward, out rayInfo, maxRange) && rayInfo.collider.GetComponent<Ship>() != null)
             {
-                laser.localScale = new Vector3(size, size, rayInfo.distance); // change width
+                laser.localScale = new Vector3(size, size, rayInfo.distance);
             }
             else
             {
-                laser.localScale = new Vector3(size, size, maxRange); // change width
+                laser.localScale = new Vector3(size, size, maxRange);
             }
             yield return null;
         }

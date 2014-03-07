@@ -9,20 +9,16 @@ public class PoolManager : Singleton<PoolManager>
 {
     #region Public Fields
 
+    public bool cull = true;
     public float cullDelay = 10f;
-    public Pool[] PoolList;
-
-    #endregion
-
-    #region Private Fields
-
-    private static Dictionary<string, Pool> Pools = new Dictionary<string, Pool>();
+    public List<Pool> poolList;
 
     #endregion
 
     #region Static Fields
 
-    private static List<Pool> CullList = new List<Pool>();
+    private static Dictionary<GameObject, Pool> pools = new Dictionary<GameObject, Pool>();
+    private static List<Pool> cullList = new List<Pool>();
 
     #endregion
 
@@ -45,110 +41,134 @@ public class PoolManager : Singleton<PoolManager>
 
     #region Private Methods
 
-    /// <summary>
-    /// 
-    /// </summary>
     private void Initialize()
     {
         Clear();
-        foreach (var pool in PoolList)
+
+        foreach (Pool pool in poolList)
         {
-            Pools.Add(pool.Prefab.name, pool);
+            pools.Add(pool.prefab.gameObject, pool);
             pool.Initialize();
         }
     }
 
 
-    /// <summary>
-    /// 
-    /// </summary>
     private void Clear()
     {
-        foreach (var pool in PoolList)
+        StopAllCoroutines();
+        foreach (Pool pool in poolList)
         {
             pool.Clear();
         }
 
-        Pools.Clear();
+        pools.Clear();
     }
 
     #endregion
 
     #region Static Methods
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="PrefabName"></param>
-    /// <returns></returns>
-    public static GameObject Pop(string PrefabName)
+    public static GameObject Pop(GameObject prefab)
     {
         Pool pool;
-        if (Pools.TryGetValue(PrefabName, out pool))
+        if (pools.TryGetValue(prefab, out pool))
         {
             return pool.Pop();
         }
         else
         {
-            return null;
+            pool = new Pool(prefab);
+            Main.poolList.Add(pool);
+            pools.Add(prefab, pool);
+            pool.Initialize();
+
+            return pool.Pop();
         }
     }
 
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="PrefabName"></param>
-    /// <param name="life"></param>
-    /// <returns></returns>
-    public static GameObject Pop(string PrefabName, float life)
+    public static GameObject Pop(GameObject prefab, float life)
     {
         Pool pool;
-        if (Pools.TryGetValue(PrefabName, out pool))
+        if (pools.TryGetValue(prefab, out pool))
         {
             return pool.Pop(life);
         }
         else
         {
-            return null;
+            pool = new Pool(prefab);
+            Main.poolList.Add(pool);
+            pools.Add(prefab, pool);
+            pool.Initialize();
+
+            return pool.Pop(life);
         }
     }
 
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="po"></param>
-    public static void Push(PoolObject po)
+    public static GameObject Pop(GameObject prefab, Vector3 position, Quaternion rotation)
     {
-        if (po == null) return;
         Pool pool;
-        if (!Pools.TryGetValue(po.PrefabName, out pool)) return;
-        pool.Push(po);
+        if (pools.TryGetValue(prefab, out pool))
+        {
+            Transform popped = pool.Pop().transform;
+            popped.position = position;
+            popped.rotation = rotation;
+            return popped.gameObject;
+        }
+        else
+        {
+            pool = new Pool(prefab);
+            Main.poolList.Add(pool);
+            pools.Add(prefab, pool);
+            pool.Initialize();
+
+            Transform popped = pool.Pop().transform;
+            popped.position = position;
+            popped.rotation = rotation;
+            return popped.gameObject;
+        }
     }
 
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="pool"></param>
+    public static GameObject Pop(GameObject prefab, Vector3 position, Quaternion rotation, float life)
+    {
+        Pool pool;
+        if (pools.TryGetValue(prefab, out pool))
+        {
+            Transform popped = pool.Pop(life).transform;
+            popped.position = position;
+            popped.rotation = rotation;
+            return popped.gameObject;
+        }
+        else
+        {
+            pool = new Pool(prefab);
+            Main.poolList.Add(pool);
+            pools.Add(prefab, pool);
+            pool.Initialize();
+
+            Transform popped = pool.Pop(life).transform;
+            popped.position = position;
+            popped.rotation = rotation;
+            return popped.gameObject;
+        }
+    }
+
+
     public static void AddCullListener(Pool pool)
     {
-        CullList.Add(pool);
+        cullList.Add(pool);
     }
 
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="pool"></param>
     private static IEnumerator Cull()
     {
-        float cullDelay = Main.cullDelay;
+        WaitForSeconds wait = new WaitForSeconds(Main.cullDelay);
         while (true)
         {
-            yield return new WaitForSeconds(cullDelay);
-            foreach (var pool in CullList)
+            yield return wait;
+            foreach (var pool in cullList)
             {
                 pool.Cull();
             }
