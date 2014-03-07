@@ -1414,11 +1414,11 @@ public class GarageManager : MonoBase
                     weaponButtons[i].isEnabled = true;
                     if (i == weaponIndex)
                     {
-                        weaponButtons[i].label.text = "★ " + Grid.weapons[i].GetType().Name;
+                        weaponButtons[i].label.text = "★ " + Grid.weapons[i].name;
                     }
                     else
                     {
-                        weaponButtons[i].label.text = Grid.weapons[i].GetType().Name;
+                        weaponButtons[i].label.text = Grid.weapons[i].name;
                     }
                 }
             }
