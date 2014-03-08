@@ -12,7 +12,7 @@ public class Path : ScriptableObject
 
     public virtual Vector3 Direction(float deltaTime) { return Vector3.zero; }
     
-    public virtual void Initialize(Transform transform, object data)
+    public virtual void Initialize(Transform transform)
     {
         myTransform = transform;
     }

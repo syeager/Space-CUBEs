@@ -12,9 +12,9 @@ namespace Paths
         public float speed = 2f;
         private Vector3 ray = Vector3.up;
 
-        public override void Initialize(Transform transform, object data)
+        public override void Initialize(Transform transform)
         {
-            base.Initialize(transform, data);
+            base.Initialize(transform);
             myTransform.position += Vector3.left * radius;
         }
 
