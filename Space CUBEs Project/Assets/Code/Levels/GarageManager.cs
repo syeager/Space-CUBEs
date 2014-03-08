@@ -190,13 +190,12 @@ public class GarageManager : MonoBase
     private void Awake()
     {
         // create states
-        stateMachine = new StateMachine(this);
+        stateMachine = new StateMachine(this, LOADSTATE);
         stateMachine.CreateState(LOADSTATE, LoadEnter, LoadExit);
         stateMachine.CreateState(SELECTSTATE, SelectEnter, SelectExit);
         stateMachine.CreateState(NAVSTATE, NavEnter, NavExit);
         stateMachine.CreateState(PAINTSTATE, PaintEnter, PaintExit);
         stateMachine.CreateState(WEAPONSTATE, WeaponEnter, WeaponExit);
-        stateMachine.initialState = LOADSTATE;
 
         cameraTarget = new GameObject("Camera Target").transform;
         StartCoroutine(ResetCamera());
