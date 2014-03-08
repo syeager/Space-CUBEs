@@ -49,7 +49,7 @@ public class LevelCreator : EditorWindow
 
     #region EditorWindow Overrides
 
-    [MenuItem("Tools/Level Creator", true)]
+    [MenuItem("Tools/Level Creator %l", true)]
     public static bool Validate()
     {
         levelManager = FindObjectOfType<FormationLevelManager>();
@@ -57,7 +57,7 @@ public class LevelCreator : EditorWindow
     }
 
 
-    [MenuItem("Tools/Level Creator")]
+    [MenuItem("Tools/Level Creator %l")]
     public static void Init()
     {
         LevelCreator window = (LevelCreator)GetWindow<LevelCreator>("Level Creator");
@@ -243,9 +243,11 @@ public class LevelCreator : EditorWindow
         GUI.BeginGroup(new Rect(formationWidth, formationTotalHeight, W-formationWidth, formationHeight), "");
         {
             // needs clearing
+            GUI.enabled = formationIndex != 0;
             EditorGUI.LabelField(new Rect(10f, formationHeight / 2f-10f, 100f, 20f), "Needs Clearing");
             SerializedProperty property = sFormSeg.FindPropertyRelative("needsClearing");
             EditorGUI.PropertyField(new Rect(110f, formationHeight/2f-8f, 16f, 16f), property, new GUIContent(""));
+            GUI.enabled = true;
 
             // spawn time
             EditorGUI.LabelField(new Rect(150f, formationHeight / 2f - 10f, 80f, 20f), "Spawn Time");
@@ -253,9 +255,14 @@ public class LevelCreator : EditorWindow
             EditorGUI.PropertyField(new Rect(230f, formationHeight / 2f - 10f, 30f, 20f), property, new GUIContent(""));
 
             // start position
-            EditorGUI.LabelField(new Rect(280f, formationHeight / 2f - 10f, 40f, 20f), "Start");
+            EditorGUI.LabelField(new Rect(280f, formationHeight / 2f - 10f, 50f, 20f), "Position");
             property = sFormSeg.FindPropertyRelative("position");
-            EditorGUI.PropertyField(new Rect(320f, formationHeight / 2f - 10f, 150f, 20f), property, new GUIContent(""));
+            EditorGUI.PropertyField(new Rect(330f, formationHeight / 2f - 10f, 150f, 20f), property, new GUIContent(""));
+
+            // start rotation
+            EditorGUI.LabelField(new Rect(500f, formationHeight / 2f - 10f, 50f, 20f), "Rotation");
+            property = sFormSeg.FindPropertyRelative("rotation");
+            EditorGUI.PropertyField(new Rect(555f, formationHeight / 2f - 10f, 30f, 20f), property, new GUIContent(""));
         }
         GUI.EndGroup();
 

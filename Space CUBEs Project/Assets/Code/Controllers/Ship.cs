@@ -22,18 +22,16 @@ public class Ship : MonoBase
 
     #endregion
 
-    #region Protected Fields
-
-    protected StateMachine stateMachine;
-
-    #endregion
-
     #region Const Fields
 
     protected const string SpawningState = "Spawning";
     protected const string DyingState = "Dying";
 
-    private const float COLLISIONDAMAGE = -20f;
+    #endregion
+
+    #region Properties
+
+    public StateMachine stateMachine { get; protected set; }
 
     #endregion
 
@@ -47,8 +45,6 @@ public class Ship : MonoBase
         myMotor = GetComponent<ShipMotor>() ?? gameObject.AddComponent<ShipMotor>();
         myWeapons = GetComponent<WeaponManager>() ?? gameObject.AddComponent<WeaponManager>();
         myHealth = GetComponent<ShieldHealth>() ?? gameObject.AddComponent<ShieldHealth>();
-
-        stateMachine = new StateMachine(this);
     }
 
     protected virtual void Start()

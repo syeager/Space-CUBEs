@@ -70,9 +70,9 @@ public class ShipMotor : MonoBase
 
     #region Public Methods
     
-    public void Initialize(float speed)
+    public void Initialize(float speed, bool modify)
     {
-        this.speed = speed * SPEEDMODIFIER;
+        this.speed = speed * (modify ? SPEEDMODIFIER : 1);
         barrelRollMoveSpeed = BARRELROLLMODIFIER * this.speed;
     }
 

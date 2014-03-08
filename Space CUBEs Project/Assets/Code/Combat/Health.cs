@@ -80,7 +80,7 @@ public class Health : MonoBase
     /// <summary>
     /// Set health to max health.
     /// </summary>
-    public void Initialize()
+    public virtual void Initialize()
     {
         health = maxHealth;
 

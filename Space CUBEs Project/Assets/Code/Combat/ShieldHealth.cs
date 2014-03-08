@@ -52,6 +52,13 @@ public class ShieldHealth : Health
 
     #region Health Overrides
 
+    public override void Initialize()
+    {
+        base.Initialize();
+        shield = maxShield;
+    }
+
+
     public override void RecieveHit(Ship sender, HitInfo hitInfo)
     {
         if (invincible) return;

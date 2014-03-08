@@ -29,6 +29,7 @@ public class Gunner : Enemy
 
     #region Const Fields
 
+    private const string SpawningState = "Spawning";
     private const string MovingState = "Moving";
 
     #endregion
@@ -41,17 +42,22 @@ public class Gunner : Enemy
         base.Awake();
 
         // states
-        stateMachine.CreateState(MovingState, MovingEnter, info => { });
+        stateMachine = new StateMachine(this, SpawningState);
+        stateMachine.CreateState(SpawningState, SpawnEnter, info => { });
+        stateMachine.CreateState(MovingState, info => stateMachine.SetUpdate(MovingUpdate()), info => { });
         stateMachine.CreateState(DyingState, DieEnter, info => { });
-        stateMachine.initialState = MovingState;
     }
 
     #endregion
 
     #region State Methods
 
-    private void MovingEnter(Dictionary<string, object> info)
+    private void SpawnEnter(Dictionary<string, object> info)
     {
+        path = info["path"] as Path;
+        path.Initialize(myTransform);
+        myMotor.Initialize(path.speed, false);
+
         if (attackCycle1 != null)
         {
             attackCycle1.Kill();
@@ -61,9 +67,11 @@ public class Gunner : Enemy
         {
             attackCycle2.Kill();
         }
-        attackCycle2 = new Job(RepeatingCannon()); 
-        
-        stateMachine.SetUpdate(MovingUpdate());
+        attackCycle2 = new Job(RepeatingCannon());
+
+        myHealth.Initialize();
+
+        stateMachine.SetState(MovingState);
     }
 
 

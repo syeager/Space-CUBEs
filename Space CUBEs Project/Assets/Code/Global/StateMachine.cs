@@ -12,17 +12,17 @@ using UnityEngine;
 [Serializable]
 public class StateMachine
 {
-    #region Public Fields
-
-    public string initialState;
-
-    #endregion
-
     #region Private Fields
 
     private MonoBase owner;
+
+    #endregion
+
+    #region Readonly Fields
+
     private readonly Dictionary<string, Action<Dictionary<string, object>>> enterMethods = new Dictionary<string, Action<Dictionary<string, object>>>();
     private readonly Dictionary<string, Action<Dictionary<string, object>>> exitMethods = new Dictionary<string, Action<Dictionary<string, object>>>();
+    private readonly string initialState;
 
     #endregion
 
@@ -36,9 +36,10 @@ public class StateMachine
 
     #region Constructors/Deconstructors
 
-    public StateMachine(MonoBase owner)
+    public StateMachine(MonoBase owner, string initialState)
     {
         this.owner = owner;
+        this.initialState = initialState;
     }
 
 
@@ -73,7 +74,7 @@ public class StateMachine
     /// </summary>
     /// <param name="stateName">State to transition to.</param>
     /// <param name="info">Info to pass to the exit and enter states.</param>
-    public void SetState(string stateName, Dictionary<string, object> info)
+    public void SetState(string stateName, Dictionary<string, object> info = null)
     {
 #if LOG
         if (owner.log)
@@ -113,7 +114,7 @@ public class StateMachine
     /// Start the initial state. Doesn't call any exit methods.
     /// </summary>
     /// <param name="info">Info to pass to state enter method.</param>
-    public void Start(Dictionary<string, object> info)
+    public void Start(Dictionary<string, object> info = null)
     {
 #if LOG
         if (owner.log)
@@ -124,27 +125,16 @@ public class StateMachine
 
         if (update != null)
         {
-            update.Kill();
+            update.End();
             update = null;
         }
 
+        // exit state
+        exitMethods[initialState](info);
+
+        // enter state
         currentState = initialState;
-        enterMethods[initialState](info);
-    }
-
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="updateJob"></param>
-    [Obsolete]
-    public void SetUpdate(Job updateJob)
-    {
-        if (update != null)
-        {
-            update.Kill();
-        }
-        update = updateJob;
+        enterMethods[currentState](info);
     }
 
 
@@ -155,6 +145,16 @@ public class StateMachine
             update.Kill();
         }
         update = new Job(updateJob);
+    }
+
+
+    public void Kill()
+    {
+        if (update != null)
+        {
+            update.End();
+            update = null;
+        }
     }
 
     #endregion

@@ -57,20 +57,6 @@ public class Enemy : Ship
 
         // register events
         myHealth.DieEvent += OnDie;
-
-        stateMachine.Start(new Dictionary<string, object>());
-    }
-
-    #endregion
-
-    #region Public Methods
-
-    public void Spawn(Path path)
-    {
-        this.path = path;
-        path.Initialize(myTransform);
-        myHealth.Initialize();
-        stateMachine.Start(new Dictionary<string, object>());
     }
 
     #endregion

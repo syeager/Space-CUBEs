@@ -63,10 +63,10 @@ public class Player : Ship
         myMoney = new MoneyManager();
 
         // create states
+        stateMachine = new StateMachine(this, MovingState);
         stateMachine.CreateState(MovingState, MovingEnter, MovingExit);
         stateMachine.CreateState(BarrelRollingState, BarrelRollingEnter, BarrelRollingExit);
         stateMachine.CreateState(DyingState, DyingEnter, info => { });
-        stateMachine.initialState = MovingState;
     }
 
 
@@ -263,7 +263,7 @@ public class Player : Ship
     public void Initialize(float maxHealth, float maxShield, float speed, float damage)
     {
         myHealth.Initialize(maxHealth, maxShield);
-        myMotor.Initialize(speed);
+        myMotor.Initialize(speed, true);
         myWeapons.Initialize(this, damage);
     }
 

@@ -7,6 +7,7 @@ using System;
 //
 public class Path : ScriptableObject
 {
+    public float speed = 15f;
     protected Transform myTransform;
 
 

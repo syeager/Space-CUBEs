@@ -19,7 +19,7 @@ GameObject:
   - 114: {fileID: 11400000}
   - 65: {fileID: 6500000}
   - 114: {fileID: 11400014}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Tank
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -141,11 +141,11 @@ MonoBehaviour:
   HealthHit_Mat: {fileID: 2100000, guid: 714fd6fe39d4b7e4786c808fbccc8dd9, type: 2}
   healthHitMatTime: .5
   invincible: 0
-  maxHealth: 60
+  maxHealth: 100
   health: 0
   rechargeSpeed: 25
   rechargeDelay: 1
-  maxShield: 20
+  maxShield: 50
   shield: 0
 --- !u!114 &11400008
 MonoBehaviour:
