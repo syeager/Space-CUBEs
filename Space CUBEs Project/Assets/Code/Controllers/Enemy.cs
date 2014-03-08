@@ -22,6 +22,7 @@ public class Enemy : Ship
     {
         None,
         Grunt,
+        Gunner,
         Tank,
     }
     public Classes enemyClass;
@@ -67,6 +68,7 @@ public class Enemy : Ship
     public void Spawn(Path path)
     {
         this.path = path;
+        path.Initialize(myTransform);
         myHealth.Initialize();
         stateMachine.Start(new Dictionary<string, object>());
     }

@@ -8,7 +8,7 @@ using System.Collections;
 /// <summary>
 /// Basic enemy. Flies forward and shoots Plasma Lasers.
 /// </summary>
-public class Tank_Controller : Enemy
+public class Gunner : Enemy
 {
     #region Public Fields
 
