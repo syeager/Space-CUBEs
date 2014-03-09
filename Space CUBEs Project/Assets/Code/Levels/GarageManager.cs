@@ -1122,6 +1122,9 @@ public class GarageManager : MonoBase
 
     private void PaintEnter(Dictionary<string, object> info)
     {
+        canMenuSwipe = false;
+        InvokeAction(() => canMenuSwipe = true, menuSwipeDelay);
+
         menuPanels[4].SetActive(true);
         colorSelector.SetActive(false);
         infoPanel.SetActive(true);
