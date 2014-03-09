@@ -14,7 +14,7 @@ public class ColorVertices : MonoBehaviour
 {
     #region Public Fields
 
-    public int[] colors;
+    public int[] colors = new int[1];
 
     #endregion
 

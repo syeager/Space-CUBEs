@@ -8,7 +8,6 @@ public class Joystick : MonoBehaviour
 {
     #region References
 
-    public Transform Center;
     new public Camera camera;
     private Collider myCollider;
 
