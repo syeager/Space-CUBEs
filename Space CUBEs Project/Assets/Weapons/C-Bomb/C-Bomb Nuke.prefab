@@ -15,7 +15,7 @@ GameObject:
   - 54: {fileID: 5400000}
   - 114: {fileID: 11400002}
   m_Layer: 0
-  m_Name: C-Bomb Missile
+  m_Name: C-Bomb Nuke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,8 +28,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.88914299, y: .850558996, z: 3.12279463}
-  m_LocalScale: {x: 2.39732289, y: 1.43052208, z: 4.79139423}
+  m_LocalPosition: {x: 49.6582565, y: 30.079155, z: -104.848145}
+  m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
   m_Children: []
   m_Father: {fileID: 0}
 --- !u!23 &2300000
@@ -44,7 +44,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: 2f90210e2c6ac8a4b94cde92ab1cb571, type: 2}
+  - {fileID: 2100000, guid: 3904b2102aee3f445849d65cc72c80f7, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -59,7 +59,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 4300000, guid: ab52844a72cb84341b43734ff8c4cffa, type: 3}
 --- !u!54 &5400000
 Rigidbody:
   m_ObjectHideFlags: 1
@@ -85,8 +85,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: .895840049, y: .895840049, z: 2}
+  m_Center: {x: .5, y: .5, z: 1}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -115,7 +115,9 @@ MonoBehaviour:
   hitNumber: 1
   CBombExplosion_Prefab: {fileID: 100000, guid: 83b7c7dac2b744946ad1667b8e86f5c1,
     type: 2}
-  explosionLength: 1
+  growTime: .075000003
+  explosionLength: .300000012
+  shrinkTime: 1.5
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

@@ -31,6 +31,7 @@ public class Hitbox : MonoBase
     protected HitInfo hitInfo;
     protected Ship sender;
     protected int hitCount;
+    protected bool disabled;
 
     #endregion
 
@@ -46,7 +47,7 @@ public class Hitbox : MonoBase
 
     protected virtual void OnTriggerEnter(Collider other)
     {
-        if (continuous) return;
+        if (continuous || disabled) return;
 
         var oppHealth = other.gameObject.GetComponent<Health>();
         if (oppHealth != null)
@@ -60,6 +61,7 @@ public class Hitbox : MonoBase
                 hitCount++;
                 if (hitCount >= hitNumber)
                 {
+                    disabled = true;
                     GetComponent<PoolObject>().Disable();
                 }
             }
@@ -84,6 +86,8 @@ public class Hitbox : MonoBase
 
     public virtual void Initialize(Ship sender, HitInfo hitInfo)
     {
+        disabled = false;
+
         this.sender = sender;
         this.hitInfo = hitInfo;
 

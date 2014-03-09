@@ -12,14 +12,10 @@ public class CBomb : Hitbox
     #region Public Fields
 
     public GameObject CBombExplosion_Prefab;
-    public float explosionLength;    
+    public float growTime;
+    public float explosionLength;
+    public float shrinkTime;
     
-    #endregion
-
-    #region Private Fields
-
-    private GameObject explosion;
-
     #endregion
 
 
@@ -27,6 +23,8 @@ public class CBomb : Hitbox
 
     protected override void OnTriggerEnter(Collider other)
     {
+        if (disabled) return;
+
         base.OnTriggerEnter(other);
 
         Detonate();
@@ -38,8 +36,8 @@ public class CBomb : Hitbox
 
     private void Detonate()
     {
-        explosion = PoolManager.Pop(CBombExplosion_Prefab, myTransform.position, myTransform.rotation);
-        explosion.GetComponent<Hitbox>().Initialize(sender, hitInfo, explosionLength);
+        Debug.Log("detonating");
+        PoolManager.Pop(CBombExplosion_Prefab, myTransform.position, myTransform.rotation).GetComponent<CBombExplosion>().Initialize(sender, hitInfo, growTime, explosionLength, shrinkTime);
 
         GetComponent<PoolObject>().Disable();
     }
