@@ -97,6 +97,8 @@ public class LevelCreator : EditorWindow
 
     private void OnGUI()
     {
+        if (Application.isPlaying) return;
+
         //return;
         W = Screen.width;
         H = Screen.height;
@@ -134,9 +136,13 @@ public class LevelCreator : EditorWindow
             {
                 for (int i = 0; i < enemyToggles.Count; i++)
                 {
+                    if (!formationToggles[i]) continue;
                     for (int j = 0; j < enemyToggles[i].Length; j++)
                     {
-                        enemyToggles[i][j] = true;
+                        if (sFormationGroups.GetArrayElementAtIndex(i).FindPropertyRelative("enemies").GetArrayElementAtIndex(j).intValue != 0)
+                        {
+                            enemyToggles[i][j] = true;
+                        }
                     }
                 }
             }
@@ -322,6 +328,40 @@ public class LevelCreator : EditorWindow
         }
         GUI.enabled = true;
 
+        // move up
+        GUI.enabled = enemyIndex > 0;
+        if (GUI.Button(new Rect(26f, y+16f, 50f, 18f), "↑"))
+        {
+            MoveEnemy(formationIndex, enemyIndex, enemyIndex-1);
+            return height;
+        }
+        GUI.enabled = true;
+
+        // move down
+        GUI.enabled = enemyIndex < sformationGroup.FindPropertyRelative("enemies").arraySize-1;
+        if (GUI.Button(new Rect(76f, y + 16f, 50f, 18f), "↓"))
+        {
+            MoveEnemy(formationIndex, enemyIndex, enemyIndex + 1);
+            return height;
+        }
+        GUI.enabled = true;
+
+        // copy up
+        GUI.enabled = enemyIndex > 0;
+        if (GUI.Button(new Rect(126f, y + 16f, 50f, 18f), "C↑"))
+        {
+            CopyEnemy(formationIndex, enemyIndex, enemyIndex - 1);
+        }
+        GUI.enabled = true;
+
+        // copy down
+        GUI.enabled = enemyIndex < sformationGroup.FindPropertyRelative("enemies").arraySize - 1;
+        if (GUI.Button(new Rect(176f, y + 16f, 50f, 18f), "C↓"))
+        {
+            CopyEnemy(formationIndex, enemyIndex, enemyIndex + 1);
+        }
+        GUI.enabled = true;
+
         // params
         if (enemyToggles[formationIndex][enemyIndex])
         {
@@ -362,6 +402,13 @@ public class LevelCreator : EditorWindow
     private void DuplicateFormation(int formationIndex)
     {
         sFormationGroups.InsertArrayElementAtIndex(formationIndex);
+
+        SerializedProperty paths = sFormationGroups.GetArrayElementAtIndex(formationIndex + 1).FindPropertyRelative("paths");
+        for (int i = 0; i < paths.arraySize; i++)
+        {
+            paths.GetArrayElementAtIndex(i).objectReferenceValue = Instantiate(paths.GetArrayElementAtIndex(i).objectReferenceValue);
+        }
+
         formationToggles.Insert(formationIndex+1, true);
         enemyToggles.Insert(formationIndex+1, (bool[])enemyToggles[formationIndex].Clone());
 
@@ -428,6 +475,35 @@ public class LevelCreator : EditorWindow
         bool[] destToggles = enemyToggles[formationIndex];
         enemyToggles[formationIndex] = enemyToggles[dest];
         enemyToggles[dest] = destToggles;
+
+        sLevelManager.ApplyModifiedProperties();
+    }
+
+
+    private void MoveEnemy(int formation, int index, int dest)
+    {
+        // move enemies and paths
+        sFormationGroups.GetArrayElementAtIndex(formation).FindPropertyRelative("enemies").MoveArrayElement(index, dest);
+        sFormationGroups.GetArrayElementAtIndex(formation).FindPropertyRelative("paths").MoveArrayElement(index, dest);
+
+        // toggles
+        bool toggle = enemyToggles[formation][index];
+        enemyToggles[formation][index] = enemyToggles[formation][dest];
+        enemyToggles[formation][dest] = toggle;
+
+        sLevelManager.ApplyModifiedProperties();
+    }
+
+
+    private void CopyEnemy(int formation, int index, int dest)
+    {
+        // enemy type
+        sFormationGroups.GetArrayElementAtIndex(formation).FindPropertyRelative("enemies").GetArrayElementAtIndex(dest).intValue =
+        sFormationGroups.GetArrayElementAtIndex(formation).FindPropertyRelative("enemies").GetArrayElementAtIndex(index).intValue;
+
+        // path
+        sFormationGroups.GetArrayElementAtIndex(formation).FindPropertyRelative("paths").GetArrayElementAtIndex(dest).objectReferenceValue =
+        Instantiate(levelManager.formationGroups[formation].paths[index]);
 
         sLevelManager.ApplyModifiedProperties();
     }

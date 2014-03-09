@@ -28,7 +28,7 @@ public class FormationCreator : EditorWindow
 
     #region EditorWindow Overrides
 
-    [MenuItem("Tools/Formation Creator %f")]
+    [MenuItem("Tools/Formation Creator %#l")]
     private static void Init()
     {
         EditorWindow.GetWindow(typeof(FormationCreator), true, "Formation Creator");

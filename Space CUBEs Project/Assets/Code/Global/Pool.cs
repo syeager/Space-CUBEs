@@ -78,6 +78,13 @@ public class Pool
     }
 
 
+    public void Initialize(Transform parent)
+    {
+        this.parent = parent;
+        Initialize();
+    }
+
+
     public GameObject Pop()
     {
         // object ready

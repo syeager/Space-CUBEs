@@ -82,7 +82,7 @@ public class PoolManager : Singleton<PoolManager>
             pool = new Pool(prefab);
             Main.poolList.Add(pool);
             pools.Add(prefab, pool);
-            pool.Initialize();
+            pool.Initialize(new GameObject(prefab.name).transform);
 
             return pool.Pop();
         }
@@ -101,7 +101,7 @@ public class PoolManager : Singleton<PoolManager>
             pool = new Pool(prefab);
             Main.poolList.Add(pool);
             pools.Add(prefab, pool);
-            pool.Initialize();
+            pool.Initialize(new GameObject(prefab.name).transform);
 
             return pool.Pop(life);
         }
@@ -123,7 +123,7 @@ public class PoolManager : Singleton<PoolManager>
             pool = new Pool(prefab);
             Main.poolList.Add(pool);
             pools.Add(prefab, pool);
-            pool.Initialize();
+            pool.Initialize(new GameObject(prefab.name).transform);
 
             Transform popped = pool.Pop().transform;
             popped.position = position;
@@ -148,7 +148,7 @@ public class PoolManager : Singleton<PoolManager>
             pool = new Pool(prefab);
             Main.poolList.Add(pool);
             pools.Add(prefab, pool);
-            pool.Initialize();
+            pool.Initialize(new GameObject(prefab.name).transform);
 
             Transform popped = pool.Pop(life).transform;
             popped.position = position;

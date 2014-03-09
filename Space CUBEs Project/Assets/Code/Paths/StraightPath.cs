@@ -18,7 +18,7 @@ namespace Paths
         {
             base.Initialize(transform);
 
-            myTransform.Rotate(Vector3.forward, rotation, Space.World);
+            myTransform.Rotate(Vector3.back, rotation, Space.World);
             direction = Utility.RotateVector(Vector3.left, Quaternion.AngleAxis(angle, Vector3.back));
         }
 
