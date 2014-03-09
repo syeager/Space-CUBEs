@@ -273,7 +273,7 @@ public class GarageManager : MonoBase
             StartCoroutine(ResetCamera());
         }
 #else
-        if (Input.touchCount > 0 && Input.touches[0].tapCount == 2)
+        if (Input.touchCount > 0 && Input.GetTouch(0).tapCount == 2 && touchRect.Contains(mainCamera.camera.ScreenToViewportPoint(Input.GetTouch(0).position)))
         {
             StartCoroutine(ResetCamera());
         }
