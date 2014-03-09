@@ -24,7 +24,7 @@ public class ShipMotor : MonoBase
     /// <summary>Movement speed during barrel roll.</summary>
     public float barrelRollMoveSpeed;
     /// <summary>How long the barrel roll lasts.</summary>
-    public float barrelRollTime = 0.35f;
+    public float barrelRollTime = 0.3f;
     /// <summary>Time between allowed barrel rolls.</summary>
     public float barrelRollBuffer = 0.5f;
 
@@ -46,8 +46,8 @@ public class ShipMotor : MonoBase
 
     #region Const Fields
 
-    private const float SPEEDMODIFIER = 0.75f;
-    private const float BARRELROLLMODIFIER = 1.5f;
+    private const float SPEEDMODIFIER = 0.65f;
+    private const float BARRELROLLMODIFIER = 2f;
 
     #endregion
 
