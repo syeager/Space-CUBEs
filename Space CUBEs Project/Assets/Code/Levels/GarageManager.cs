@@ -178,7 +178,7 @@ public class GarageManager : MonoBase
 
     #region Save Fields
 
-    public float saveConfirmationTime = 2f;
+    public float saveConfirmationTime = 0.6f;
     public GameObject saveConfirmation;
     public UILabel saveShipName;
 
