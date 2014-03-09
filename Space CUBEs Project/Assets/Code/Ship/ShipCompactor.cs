@@ -76,11 +76,14 @@ public class ShipCompactor : MonoBehaviour
         else
         {
             box.size = new Vector3(box.size.x * EnemyCollider, 10f, box.size.z * EnemyCollider);
+            BoxCollider boxCollider = ship.gameObject.AddComponent<BoxCollider>();
+            boxCollider.size = new Vector3(box.size.x * EnemyCollider, boxCollider.size.y * EnemyCollider, box.size.z * EnemyCollider);
         }
         box.isTrigger = true;
         // add rigidbody
         var body = ship.gameObject.AddComponent<Rigidbody>();
         body.useGravity = false;
+        body.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionZ;
 
         // add extra components
         foreach (var comp in components)

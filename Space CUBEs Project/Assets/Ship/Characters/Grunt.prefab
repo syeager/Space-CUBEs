@@ -18,6 +18,7 @@ GameObject:
   - 114: {fileID: 11400000}
   - 114: {fileID: 11400012}
   - 65: {fileID: 6500000}
+  - 65: {fileID: 6500002}
   m_Layer: 10
   m_Name: Grunt
   m_TagString: Untagged
@@ -87,6 +88,18 @@ BoxCollider:
   m_GameObject: {fileID: 100000}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.30000019, y: 10, z: 3.08244038}
+  m_Center: {x: -.49999994, y: .893311501, z: -.502798796}
+--- !u!65 &6500002
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 3.30000019, y: 10, z: 3.08244038}
@@ -173,6 +186,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 1
   timeScale: 1
+  name: 
   cooldownSpeed: 0
   Laser_Prefab: {fileID: 100000, guid: 5a19f2fa1cd2e0347ba232995a185ac1, type: 2}
   hitInfo:
