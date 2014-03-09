@@ -84,7 +84,7 @@ public class PoolManager : Singleton<PoolManager>
             pools.Add(prefab, pool);
             pool.Initialize(new GameObject(prefab.name).transform);
 
-            return pool.Pop();
+            return Pop(prefab);
         }
     }
 
@@ -103,7 +103,7 @@ public class PoolManager : Singleton<PoolManager>
             pools.Add(prefab, pool);
             pool.Initialize(new GameObject(prefab.name).transform);
 
-            return pool.Pop(life);
+            return Pop(prefab, life);
         }
     }
 
@@ -125,10 +125,7 @@ public class PoolManager : Singleton<PoolManager>
             pools.Add(prefab, pool);
             pool.Initialize(new GameObject(prefab.name).transform);
 
-            Transform popped = pool.Pop().transform;
-            popped.position = position;
-            popped.rotation = rotation;
-            return popped.gameObject;
+            return Pop(prefab, position, rotation);
         }
     }
 
@@ -150,10 +147,7 @@ public class PoolManager : Singleton<PoolManager>
             pools.Add(prefab, pool);
             pool.Initialize(new GameObject(prefab.name).transform);
 
-            Transform popped = pool.Pop(life).transform;
-            popped.position = position;
-            popped.rotation = rotation;
-            return popped.gameObject;
+            return Pop(prefab, position, rotation, life);
         }
     }
 

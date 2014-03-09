@@ -59,7 +59,7 @@ public class Pool
             {
                 child.Initialize(this);
                 poolSize++;
-                if (!child.gameObject.active)
+                if (!child.gameObject.activeSelf)
                 {
                     Push(child);
                 }
@@ -80,8 +80,8 @@ public class Pool
 
     public void Initialize(Transform parent)
     {
-        this.parent = parent;
         Initialize();
+        this.parent = parent;
     }
 
 

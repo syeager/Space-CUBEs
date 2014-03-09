@@ -70,23 +70,11 @@ public class SharkMissiles_Weapon : Weapon
 
     private void FireMissile(float multiplier)
     {
-        // find enemy
-        Enemy target = null;
-        float max = 0f;
-        foreach (var enemy in LevelManager.Main.activeEnemies)
-        {
-            if (enemy.GetComponent<ShieldHealth>().strength > max)
-            {
-                max = enemy.GetComponent<ShieldHealth>().strength;
-                target = enemy;
-            }
-        }
-
         // create missile
         SharkMissile missile = PoolManager.Pop(SharkMissile_Prefab, myTransform.position + myTransform.TransformDirection(missileOffset), myTransform.rotation).GetComponent<SharkMissile>();
 
         // fire missile
-        missile.Initialize(myShip, hitInfo.MultiplyDamage(multiplier), (target ? target.transform : null), missileDelay, missileDelaySpeed, missileHomingSpeed);
+        missile.Initialize(myShip, hitInfo.MultiplyDamage(multiplier), missileDelay, missileDelaySpeed, missileHomingSpeed);
     }
 
     #endregion

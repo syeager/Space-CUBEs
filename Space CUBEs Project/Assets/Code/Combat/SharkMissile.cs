@@ -8,7 +8,6 @@ public class SharkMissile : Hitbox
 {
     #region Private Fields
     
-    private float delaySpeed;
     private float homingSpeed;
     private Transform target;
     
@@ -24,55 +23,61 @@ public class SharkMissile : Hitbox
         var oppHealth = other.gameObject.GetComponent<Health>();
         oppHealth.RecieveHit(sender, hitInfo);
 
-        Destroy(gameObject);
+        Detonate();
     }
 
     #endregion
 
     #region Hitbox Overrides
 
-    public void Initialize(Ship sender, HitInfo hitInfo, Transform target, float delay, float delaySpeed, float homingSpeed)
+    public void Initialize(Ship sender, HitInfo hitInfo, float delay, float delaySpeed, float homingSpeed)
     {
         this.sender = sender;
         this.hitInfo = hitInfo;
-        this.delaySpeed = delaySpeed;
         this.homingSpeed = homingSpeed;
-        this.target = target;
+        target = null;
 
         gameObject.layer = sender.gameObject.layer;
         collider.enabled = false;
 
-        if (target != null)
-        {
-            target.GetComponent<ShieldHealth>().DieEvent += OnTargetDeath;
-        }
-
-        StartCoroutine(Delay(delay));
+        StartCoroutine(Delay(delay, delaySpeed));
     }
 
     #endregion
 
     #region Private Methods
 
-    private IEnumerator Delay(float time)
+    private IEnumerator Delay(float time, float speed)
     {
         while (time > 0f)
         {
             time -= deltaTime;
 
-            myTransform.Translate(Vector3.forward * delaySpeed * deltaTime);
+            myTransform.Translate(Vector3.forward * speed * deltaTime);
 
             yield return null;
         }
 
+        // find enemy
+        float max = 0f;
+        foreach (var enemy in LevelManager.Main.activeEnemies)
+        {
+            if (enemy.GetComponent<ShieldHealth>().strength > max)
+            {
+                max = enemy.GetComponent<ShieldHealth>().strength;
+                target = enemy.transform;
+            }
+        }
+
         if (target != null)
         {
+            target.GetComponent<ShieldHealth>().DieEvent += OnTargetDeath;
             collider.enabled = true;
             StartCoroutine(Homing());
         }
         else
         {
-            Destroy(gameObject);
+            Detonate();
         }
     }
 
@@ -91,15 +96,26 @@ public class SharkMissile : Hitbox
         }
     }
 
+
+    private void Detonate()
+    {
+        if (!gameObject.activeSelf) return;
+
+        if (target != null)
+        {
+            target.GetComponent<ShieldHealth>().DieEvent -= OnTargetDeath;
+        }
+        StopAllCoroutines();
+        GetComponent<PoolObject>().Disable();
+    }
+
     #endregion
 
     #region Event Handlers
 
     private void OnTargetDeath(object sender, DieArgs args)
     {
-        (sender as ShieldHealth).DieEvent -= OnTargetDeath;
-
-        Destroy(gameObject);
+        Detonate();
     }
 
     #endregion
