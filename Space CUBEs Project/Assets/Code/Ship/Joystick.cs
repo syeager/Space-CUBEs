@@ -8,6 +8,7 @@ public class Joystick : MonoBehaviour
 {
     #region References
 
+    public Transform Center;
     new public Camera camera;
     private Collider myCollider;
 
@@ -16,7 +17,7 @@ public class Joystick : MonoBehaviour
     #region Public Fields
 
     public float maxDistance = 50f;
-    public float deadzone = 0.2f;
+    public float deadzone = 0.3f;
 
     #endregion
 
@@ -24,7 +25,8 @@ public class Joystick : MonoBehaviour
 
     private int touchID = -1;
     private Vector2 center;
-    RaycastHit rayInfo;
+    private RaycastHit rayInfo;
+    private bool cache;
 
     #endregion
 
@@ -37,9 +39,10 @@ public class Joystick : MonoBehaviour
 
     #region MonoBehaviour Overrides
 
-    private void Awake()
+    private void Start()
     {
-        center = camera.WorldToScreenPoint(transform.position);
+        center = GetComponent<UITexture>().CalculateBounds().extents;
+      
         myCollider = collider;
     }
 
@@ -51,11 +54,12 @@ public class Joystick : MonoBehaviour
             for (int i = 0; i < Input.touchCount; i++)
             {
                 Touch touch = Input.GetTouch(i);
-                if (touch.phase == TouchPhase.Began)
+                //if (touch.phase == TouchPhase.Began)
                 {
                     Physics.Raycast(camera.ScreenPointToRay(touch.position), out rayInfo);
                     if (rayInfo.collider == myCollider)
                     {
+                        cache = false;
                         touchID = touch.fingerId;
                         return;
                     }
@@ -66,18 +70,30 @@ public class Joystick : MonoBehaviour
         {
             for (int i = 0; i < Input.touchCount; i++)
             {
-                if (Input.GetTouch(i).fingerId == touchID)
+                Touch touch = Input.GetTouch(i);
+                if (touch.fingerId == touchID)
                 {
                     // apply deadzone
-                    Vector2 input = Vector2.ClampMagnitude((Input.GetTouch(i).position - center) / maxDistance, 1);
+                    Vector2 input = Vector2.ClampMagnitude((touch.position - center) / maxDistance, 1);
                     value = input.magnitude >= deadzone ? input : Vector2.zero;
+
+                    // let go
+                    if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
+                    {
+                        //Debugger.LogConsoleLine(touch.position.ToString(), 1.5f);
+                        cache = touch.position.x <= 0f || touch.position.y <= 1f;
+                    }
+
                     return;
                 }
             }
 
             // let go
             touchID = -1;
-            value = Vector2.zero;
+            if (!cache)
+            {
+                value = Vector2.zero;
+            }
         }
     }
 
