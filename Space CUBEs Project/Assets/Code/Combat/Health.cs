@@ -60,7 +60,8 @@ public class Health : MonoBase
     protected virtual void Awake()
     {
         myRenderer = renderer;
-        
+        Normal_Mat = myRenderer.material;
+
         Initialize();
     }
 
@@ -84,7 +85,7 @@ public class Health : MonoBase
     {
         health = maxHealth;
 
-        Normal_Mat = myRenderer.material;
+        myRenderer.material = Normal_Mat;
     }
 
 
