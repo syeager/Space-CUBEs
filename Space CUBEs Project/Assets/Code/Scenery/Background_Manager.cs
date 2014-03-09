@@ -13,6 +13,8 @@ public class Background_Manager : MonoBase
 
     public Material back_Mat;
     public float backgroundSpeed;
+    public Material star_Mat;
+    public float starSpeed;
     public float start;
     public float vertical;
     public float[] positions;
@@ -54,6 +56,9 @@ public class Background_Manager : MonoBase
     {
         // background
         back_Mat.mainTextureOffset += Vector2.right * backgroundSpeed * deltaTime;
+
+        // stars
+        star_Mat.mainTextureOffset += Vector2.right * starSpeed * deltaTime;
     }
 
     #endregion
