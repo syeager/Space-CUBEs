@@ -22,7 +22,7 @@ public class TechMissiles_Weapon : Weapon
     public override void Activate(bool pressed, float multiplier)
     {
         if (!pressed) return;
-
+        
         StartCoroutine(Fire(multiplier));
     }
 
@@ -51,6 +51,8 @@ public class TechMissiles_Weapon : Weapon
 
     private IEnumerator Fire(float multiplier)
     {
+        canActivate = false;
+
         WaitForSeconds wait = new WaitForSeconds(delay);
 
         for (int i = 0; i < 8; i++)
@@ -59,8 +61,8 @@ public class TechMissiles_Weapon : Weapon
             yield return wait;
         }
 
-        StartCoroutine(Cooldown(true));
         Activated();
+        StartCoroutine(Cooldown(true));
     }
 
     #endregion
