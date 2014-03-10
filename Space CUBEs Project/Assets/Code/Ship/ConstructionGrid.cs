@@ -1004,6 +1004,7 @@ public class ConstructionGrid : MonoBase
         // create one mesh
         var compactor = ship.AddComponent<ShipCompactor>();
         var compShip = compactor.Compact(false, typeof(PoolObject));
+        compShip.gameObject.layer = LayerMask.NameToLayer("Enemy");
 
         yield return new WaitForEndOfFrame();
 #if UNITY_EDITOR
