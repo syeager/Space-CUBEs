@@ -24,7 +24,6 @@ public class Ship : MonoBase
 
     #region Const Fields
 
-    protected const string SpawningState = "Spawning";
     protected const string DyingState = "Dying";
 
     #endregion

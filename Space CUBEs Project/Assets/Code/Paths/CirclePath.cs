@@ -9,7 +9,7 @@ namespace Paths
     public class CirclePath : Path
     {
         public float radius = 5f;
-        public float speed = 2f;
+        public float rotSpeed = 2f;
         private Vector3 ray = Vector3.up;
 
         public override void Initialize(Transform transform)

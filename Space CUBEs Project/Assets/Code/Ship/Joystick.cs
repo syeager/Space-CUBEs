@@ -10,7 +10,6 @@ public class Joystick : MonoBehaviour
 
     new public Camera camera;
     private Collider myCollider;
-    private Transform myTransform;
     public UISprite thumb;
 
     #endregion
@@ -43,7 +42,6 @@ public class Joystick : MonoBehaviour
     private void Start()
     {
         myCollider = collider;
-        myTransform = transform;
         
         centerScreen = GetComponent<UIWidget>().CalculateBounds().extents;
 

@@ -91,7 +91,7 @@ public class Pool
         if (pool.Count > 0)
         {
             GameObject go = pool.Pop();
-            go.SetActiveRecursively(true);
+            go.SetActive(true);
             return go;
         }
 
@@ -165,7 +165,7 @@ public class Pool
             go.transform.parent = parent;
             go.GetComponent<PoolObject>().Initialize(this);
             pool.Push(go);
-            go.SetActiveRecursively(false);
+            go.SetActive(false);
             poolSize++;
 
         }

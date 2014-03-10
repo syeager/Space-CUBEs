@@ -27,18 +27,11 @@ public class Background_Manager : MonoBase
 
     #endregion
 
-    #region Private Fields
-
-    private Transform myTransform;
-
-    #endregion
-
 
     #region MonoBehaviour Overrides
 
     private void Awake()
     {
-        myTransform = transform;
         back_Mat.mainTextureOffset = Vector2.zero;
     }
 

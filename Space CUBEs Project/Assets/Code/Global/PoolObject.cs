@@ -23,7 +23,7 @@ public class PoolObject : MonoBehaviour
 
     public void Disable()
     {
-        gameObject.SetActiveRecursively(false);
+        gameObject.SetActive(false);
         pool.Push(this);
     }
 

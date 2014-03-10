@@ -27,7 +27,6 @@ public class BuildInfo
 
     #region Properties
 
-    [System.Obsolete()]
     public static string Empty
     {
         get { return "" + DATASEP + "0" + DATASEP + "0" + DATASEP + "0" + DATASEP + "0"; }
