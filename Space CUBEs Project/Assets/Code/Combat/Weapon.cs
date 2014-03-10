@@ -71,12 +71,12 @@ public abstract class Weapon : MonoBase
 
     #region Protected Methods
 
-    protected IEnumerator Cooldown(bool empty = false)
+    protected IEnumerator Cooldown(bool empty = false, bool deActivate = true)
     {
         if (empty) power = 0f;
-        canActivate = false;
+        if (deActivate) canActivate = false;
 
-        while (power < FULLPOWER)
+        do
         {
             power += cooldownSpeed * deltaTime;
             if (PowerUpdateEvent != null)
@@ -85,6 +85,7 @@ public abstract class Weapon : MonoBase
             }
             yield return null;
         }
+        while (power < FULLPOWER);
 
         power = FULLPOWER;
         canActivate = true;
@@ -98,6 +99,7 @@ public abstract class Weapon : MonoBase
             ActivatedEvent(this, EventArgs.Empty);
         }
     }
+
 
     protected IEnumerator Charge()
     {

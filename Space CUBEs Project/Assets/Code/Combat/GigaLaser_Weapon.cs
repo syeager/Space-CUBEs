@@ -39,7 +39,7 @@ public class GigaLaser_Weapon : Weapon
         {
             if (power > 0)
             {
-                StopCoroutine("Charge");
+                StopAllCoroutines();
                 StartCoroutine("Fire", multiplier);
             }
         }
@@ -117,15 +117,24 @@ public class GigaLaser_Weapon : Weapon
 
     private void EndAttack()
     {
-        if (charge != null) Destroy(charge.gameObject);
-        else if (laser != null) Destroy(laser.gameObject);
-        else return;
+        if (charge != null)
+        {
+            charge.GetComponent<PoolObject>().Disable();
+        }
+        else if (laser != null)
+        {
+            laser.GetComponent<PoolObject>().Disable();
+        }
+        else
+        {
+            return;
+        }
 
         if (ActivatedEvent != null)
         {
             ActivatedEvent(this, EventArgs.Empty);
         }
-        StartCoroutine("Charge");
+        StartCoroutine(Cooldown(false, false));
     }
 
     #endregion
