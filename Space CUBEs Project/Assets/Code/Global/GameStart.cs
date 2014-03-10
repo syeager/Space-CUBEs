@@ -71,7 +71,7 @@ public class GameStart : MonoBehaviour
         int[] inventory = new int[CUBECount];
         for (int i = 0; i < CUBECount; i++)
         {
-            inventory[i] = 10;
+            inventory[i] = 100;
         }
 
         CUBE.SetInventory(inventory);

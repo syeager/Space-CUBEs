@@ -12,8 +12,8 @@ public class ShieldHealth : Health
 {
     #region Public Fields
 
-    public float rechargeSpeed = 25f;
-    public float rechargeDelay = 1f;
+    public float rechargeSpeed = 20f;
+    public float rechargeDelay = 1.5f;
     public float maxShield;
     public float shield;
 

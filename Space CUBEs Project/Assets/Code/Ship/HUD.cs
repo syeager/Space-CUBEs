@@ -13,23 +13,16 @@ public class HUD : Singleton<HUD>
 {
     #region References
 
+    public GameObject multX;
+    public UISprite[] multipliers;
     private ShieldHealth PlayerHealth;
     public ActivateButton[] weaponButtons;
     public Joystick joystick;
     public ActivateButton barrelRoll;
-    public UITexture ShieldBar;
-    public UITexture HealthBar;
+    public UISprite ShieldBar;
+    public UISprite HealthBar;
     public UILabel Points;
     public UILabel Multiplier;
-    public UILabel Cash;
-    public UILabel Wave;
-
-    #endregion
-
-    #region Private Fields
-
-    private float healthBarPer;
-    private float shieldBarPer;
 
     #endregion
 
@@ -50,8 +43,12 @@ public class HUD : Singleton<HUD>
 
     private void Start()
     {
-        healthBarPer = HealthBar.rightAnchor.relative - HealthBar.leftAnchor.relative;
-        shieldBarPer = ShieldBar.rightAnchor.relative - ShieldBar.leftAnchor.relative;
+        // multiplier
+        multX.SetActive(false);
+        foreach (var mult in multipliers)
+        {
+            mult.gameObject.SetActive(false);
+        }
     }
 
     #endregion
@@ -66,7 +63,6 @@ public class HUD : Singleton<HUD>
 
         player.myScore.PointsUpdateEvent += Main.OnPointsChanged;
         player.myScore.MultiplierUpdateEvent += Main.OnMultiplierChanged;
-        player.myMoney.CashUpdateEvent += Main.OnCashChanged;
 
         // barrel roll
         Main.barrelRoll.ActivateEvent += Main.OnBarrelRoll;
@@ -92,31 +88,42 @@ public class HUD : Singleton<HUD>
 
     private void OnShieldUpdate(object sender, ShieldUpdateArgs args)
     {
-        ShieldBar.rightAnchor.relative = ShieldBar.leftAnchor.relative + shieldBarPer * (args.shield / args.max);
+        ShieldBar.fillAmount = (args.shield / args.max);
     }
 
 
     private void OnHealthUpdate(object sender, HealthUpdateArgs args)
     {
-        HealthBar.rightAnchor.relative = HealthBar.leftAnchor.relative + healthBarPer * (args.health / args.max);
+        HealthBar.fillAmount = (args.health / args.max);
     }
 
 
     private void OnPointsChanged(object sender, PointsUpdateArgs args)
     {
-        Points.text = String.Format("P: {0:#,###0}", args.points);
+        Points.text = String.Format("{0:#,###0}", args.points);
     }
 
 
     private void OnMultiplierChanged(object sender, MultiplierUpdateArgs args)
     {
-        Multiplier.text = "M: " + args.multiplier.ToString();
-    }
-
-
-    private void OnCashChanged(object sender, CashUpdateArgs args)
-    {
-        Cash.text = String.Format("C: ${0:#,###0}", args.cash);
+        if (args.multiplier == 1)
+        {
+            multX.SetActive(false);
+            foreach (var mult in multipliers)
+            {
+                mult.gameObject.SetActive(false);
+            }
+        }
+        else
+        {
+            multX.SetActive(true);
+            string multiplier = args.multiplier.ToString();
+            for (int i = 0; i < multiplier.Length; i++)
+            {
+                multipliers[i].gameObject.SetActive(true);
+                multipliers[i].spriteName = "multiplier"+multiplier[i];
+            }
+        }
     }
 
 

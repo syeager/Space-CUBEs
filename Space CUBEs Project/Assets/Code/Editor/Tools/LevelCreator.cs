@@ -97,7 +97,7 @@ public class LevelCreator : EditorWindow
 
     private void OnGUI()
     {
-        if (Application.isPlaying) return;
+        if (levelManager == null) return;
 
         //return;
         W = Screen.width;
@@ -268,7 +268,7 @@ public class LevelCreator : EditorWindow
             // start rotation
             EditorGUI.LabelField(new Rect(500f, formationHeight / 2f - 10f, 50f, 20f), "Rotation");
             property = sFormSeg.FindPropertyRelative("rotation");
-            EditorGUI.PropertyField(new Rect(555f, formationHeight / 2f - 10f, 30f, 20f), property, new GUIContent(""));
+            EditorGUI.PropertyField(new Rect(555f, formationHeight / 2f - 10f, 40f, 20f), property, new GUIContent(""));
         }
         GUI.EndGroup();
 

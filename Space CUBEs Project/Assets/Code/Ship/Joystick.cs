@@ -10,6 +10,8 @@ public class Joystick : MonoBehaviour
 
     new public Camera camera;
     private Collider myCollider;
+    private Transform myTransform;
+    public UISprite thumb;
 
     #endregion
 
@@ -23,7 +25,7 @@ public class Joystick : MonoBehaviour
     #region Private Fields
 
     private int touchID = -1;
-    private Vector2 center;
+    private Vector2 centerScreen;
     private RaycastHit rayInfo;
     private bool cache;
 
@@ -40,28 +42,32 @@ public class Joystick : MonoBehaviour
 
     private void Start()
     {
-        center = GetComponent<UITexture>().CalculateBounds().extents;
-      
         myCollider = collider;
+        myTransform = transform;
+        
+        centerScreen = GetComponent<UIWidget>().CalculateBounds().extents;
+
+        thumb.leftAnchor.target = null;
+        thumb.rightAnchor.target = null;
+        thumb.topAnchor.target = null;
+        thumb.bottomAnchor.target = null;
     }
 
 
     private void Update()
     {
+        MoveJoystick();
         if (touchID == -1)
         {
             for (int i = 0; i < Input.touchCount; i++)
             {
                 Touch touch = Input.GetTouch(i);
-                //if (touch.phase == TouchPhase.Began)
+                Physics.Raycast(camera.ScreenPointToRay(touch.position), out rayInfo);
+                if (rayInfo.collider == myCollider)
                 {
-                    Physics.Raycast(camera.ScreenPointToRay(touch.position), out rayInfo);
-                    if (rayInfo.collider == myCollider)
-                    {
-                        cache = false;
-                        touchID = touch.fingerId;
-                        return;
-                    }
+                    cache = false;
+                    touchID = touch.fingerId;
+                    return;
                 }
             }
         }
@@ -73,15 +79,16 @@ public class Joystick : MonoBehaviour
                 if (touch.fingerId == touchID)
                 {
                     // apply deadzone
-                    Vector2 input = Vector2.ClampMagnitude((touch.position - center) / maxDistance, 1);
+                    Vector2 input = Vector2.ClampMagnitude((touch.position - centerScreen) / maxDistance, 1);
                     value = input.magnitude >= deadzone ? input : Vector2.zero;
 
                     // let go
                     if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
                     {
-                        //Debugger.LogConsoleLine(touch.position.ToString(), 1.5f);
                         cache = touch.position.x <= 0f || touch.position.y <= 1f;
                     }
+
+                    MoveJoystick();
 
                     return;
                 }
@@ -92,8 +99,19 @@ public class Joystick : MonoBehaviour
             if (!cache)
             {
                 value = Vector2.zero;
+                MoveJoystick();
             }
         }
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    private void MoveJoystick()
+    {
+        // move joystick
+        thumb.transform.localPosition = new Vector3(value.x*maxDistance, value.y* maxDistance, 0);
     }
 
     #endregion

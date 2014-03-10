@@ -18,7 +18,6 @@ public class WeaponButton : MonoBehaviour
     #region Private Fields
 
     private Weapon weapon;
-    private float cooldownHeight;
 
     #endregion
 
@@ -48,7 +47,6 @@ public class WeaponButton : MonoBehaviour
         GetComponent<ActivateButton>().isEnabled = true;
         number.color = readyColor;
         cooldownOverlay.enabled = false;
-        cooldownHeight = cooldownOverlay.topAnchor.relative - cooldownOverlay.bottomAnchor.relative;
 
         weapon.PowerUpdateEvent += OnPowerUpdate;
         weapon.ActivatedEvent += OnActivated;
@@ -76,7 +74,7 @@ public class WeaponButton : MonoBehaviour
         }
         else
         {
-            cooldownOverlay.topAnchor.relative = cooldownOverlay.bottomAnchor.relative + cooldownHeight * (1 - (float)args.value / Weapon.FULLPOWER);
+            cooldownOverlay.fillAmount = 1-(float)args.value / Weapon.FULLPOWER;
         }
     }
 
@@ -85,7 +83,7 @@ public class WeaponButton : MonoBehaviour
     {
         number.color = cooldownColor;
         cooldownOverlay.enabled = true;
-        cooldownOverlay.topAnchor.relative = cooldownOverlay.bottomAnchor.relative + cooldownHeight;
+        cooldownOverlay.fillAmount = 1f;
     }
 
     #endregion
