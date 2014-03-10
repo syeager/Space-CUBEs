@@ -54,6 +54,16 @@ public class Background_Manager : MonoBase
         star_Mat.mainTextureOffset += Vector2.right * starSpeed * deltaTime;
     }
 
+
+    private void OnApplicationQuit()
+    {
+        // background
+        back_Mat.mainTextureOffset = Vector2.zero;
+
+        // stars
+        star_Mat.mainTextureOffset = Vector2.zero;
+    }
+
     #endregion
 
     #region Private Methods
