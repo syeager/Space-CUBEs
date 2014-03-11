@@ -30,7 +30,10 @@ public class PoolManager : Singleton<PoolManager>
         base.Awake();
 
         Initialize();
-        StartCoroutine(Cull());
+        if (cull)
+        {
+            StartCoroutine(Cull());
+        }
     }
 
 
