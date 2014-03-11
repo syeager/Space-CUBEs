@@ -11,73 +11,28 @@ public class Background_Manager : MonoBase
 {
     #region Public Fields
 
-    public Material back_Mat;
-    public float backgroundSpeed;
-    public Material star_Mat;
-    public float starSpeed;
-    public float start;
-    public float vertical;
-    public float[] positions;
+    public Material[] materials;
     public float[] speeds;
-    public float[] minDelays;
-    public float[] maxDelays;
-    public float[] minSizes;
-    public float[] maxSizes;
-    public GameObject[] objects;
 
     #endregion
 
 
     #region MonoBehaviour Overrides
 
-    private void Awake()
-    {
-        back_Mat.mainTextureOffset = Vector2.zero;
-    }
-
-
-    private void Start()
-    {
-        for (int i = 0; i < positions.Length; i++)
-        {
-            StartCoroutine(Spawn(i));
-        }
-    }
-
-
     private void Update()
     {
-        // background
-        back_Mat.mainTextureOffset += Vector2.right * backgroundSpeed * deltaTime;
-
-        // stars
-        star_Mat.mainTextureOffset += Vector2.right * starSpeed * deltaTime;
+        for (int i = 0; i < materials.Length; i++)
+        {
+            materials[i].mainTextureOffset += Vector2.right * speeds[i] * deltaTime;
+        }
     }
 
 
     private void OnApplicationQuit()
     {
-        // background
-        back_Mat.mainTextureOffset = Vector2.zero;
-
-        // stars
-        star_Mat.mainTextureOffset = Vector2.zero;
-    }
-
-    #endregion
-
-    #region Private Methods
-
-    private IEnumerator Spawn(int layer)
-    {
-        while (true)
+        foreach (var material in materials)
         {
-            PoolManager.Pop(objects[Random.Range(0, objects.Length)],
-                            new Vector3(start, Random.Range(-vertical, vertical), positions[layer]),
-                            Quaternion.identity)
-                                .GetComponent<BackgroundObject>().Initialize(Random.Range(minSizes[layer], maxSizes[layer]), speeds[layer]);
-
-            yield return new WaitForSeconds(Random.Range(minDelays[layer], maxDelays[layer]));
+            material.mainTextureOffset = Vector2.zero;
         }
     }
 

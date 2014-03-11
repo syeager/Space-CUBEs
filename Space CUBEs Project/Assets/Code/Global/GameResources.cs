@@ -22,9 +22,6 @@ public class GameResources : MonoBehaviour
     public Material ShieldHit_Mat;
     public Material HealthHit_Mat;
 
-    public GameObject[] EnemyPrefabs;
-    public Enemy.Classes[] EnemyClasses;
-
     #endregion
 
 
