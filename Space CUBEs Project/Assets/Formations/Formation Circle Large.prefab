@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400000}
   m_Layer: 0
-  m_Name: Calculator
+  m_Name: Formation Circle Large
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23,7 +23,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.96046448e-08, y: 0, z: -1.1920929e-07}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -35,12 +35,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77d858f17c7bbf6469d627ddc9dcb147, type: 3}
+  m_Script: {fileID: 11500000, guid: fd56c00ee1db28c4eabafeae04f124ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  position: {x: 1, y: 0, z: 0}
-  magnitude: 20
-  angle: 22.5
+  positions:
+  - {x: 0, y: 0, z: 0}
+  - {x: -20, y: 0, z: 0}
+  - {x: -18.5, y: 7.69999981, z: 0}
+  - {x: 14.1000004, y: -14.1000004, z: 0}
+  - {x: -7.69999981, y: 18.5, z: 0}
+  - {x: 0, y: 20, z: 0}
+  - {x: 7.69999981, y: 18.5, z: 0}
+  - {x: 14.1000004, y: 14.1000004, z: 0}
+  - {x: 18.5, y: 7.69999981, z: 0}
+  - {x: 20, y: 0, z: 0}
+  - {x: 18.5, y: -7.69999981, z: 0}
+  - {x: 14.1000004, y: -14.1000004, z: 0}
+  - {x: 7.69999981, y: -18.5, z: 0}
+  - {x: 0, y: -20, z: 0}
+  - {x: -7.69999981, y: -18.5, z: 0}
+  - {x: -14.1000004, y: -14.1000004, z: 0}
+  - {x: -18.5, y: -7.69999981, z: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

@@ -296,15 +296,15 @@ public class LevelCreator : EditorWindow
         int enemyType = sformationGroup.FindPropertyRelative("enemies").GetArrayElementAtIndex(enemyIndex).intValue;
 
         // number
-        GUI.Label(new Rect(0f, y, 10f, enemyHeight), (enemyIndex + 1).ToString());
+        GUI.Label(new Rect(0f, y, 20f, enemyHeight), (enemyIndex + 1).ToString());
         // toggle
         GUI.enabled = enemyType != 0;
-        enemyToggles[formationIndex][enemyIndex] = GUI.Toggle(new Rect(12f, y, 16f, 16f), enemyToggles[formationIndex][enemyIndex], GUIContent.none);
+        enemyToggles[formationIndex][enemyIndex] = GUI.Toggle(new Rect(22f, y, 16f, 16f), enemyToggles[formationIndex][enemyIndex], GUIContent.none);
         GUI.enabled = true;
         // enemy
         EditorGUI.BeginChangeCheck();
         {
-            EditorGUI.PropertyField(new Rect(26f, y, 100f, 20f), sformationGroup.FindPropertyRelative("enemies").GetArrayElementAtIndex(enemyIndex), GUIContent.none);
+            EditorGUI.PropertyField(new Rect(36f, y, 100f, 20f), sformationGroup.FindPropertyRelative("enemies").GetArrayElementAtIndex(enemyIndex), GUIContent.none);
         }
         if (EditorGUI.EndChangeCheck())
         {
@@ -317,7 +317,7 @@ public class LevelCreator : EditorWindow
         int pathIndex = levelManager.formationGroups[formationIndex].paths[enemyIndex] == null ? -1 : Array.IndexOf(pathTypes, pathType);
         EditorGUI.BeginChangeCheck();
         {
-            pathIndex = EditorGUI.Popup(new Rect(126f, y, 100f, 20f), pathIndex, pathNames);
+            pathIndex = EditorGUI.Popup(new Rect(136f, y, 100f, 20f), pathIndex, pathNames);
         }
         if (EditorGUI.EndChangeCheck())
         {
@@ -330,7 +330,7 @@ public class LevelCreator : EditorWindow
 
         // move up
         GUI.enabled = enemyIndex > 0;
-        if (GUI.Button(new Rect(26f, y+16f, 50f, 18f), "↑"))
+        if (GUI.Button(new Rect(36f, y+16f, 50f, 18f), "↑"))
         {
             MoveEnemy(formationIndex, enemyIndex, enemyIndex-1);
             return height;
@@ -339,7 +339,7 @@ public class LevelCreator : EditorWindow
 
         // move down
         GUI.enabled = enemyIndex < sformationGroup.FindPropertyRelative("enemies").arraySize-1;
-        if (GUI.Button(new Rect(76f, y + 16f, 50f, 18f), "↓"))
+        if (GUI.Button(new Rect(86f, y + 16f, 50f, 18f), "↓"))
         {
             MoveEnemy(formationIndex, enemyIndex, enemyIndex + 1);
             return height;
@@ -348,7 +348,7 @@ public class LevelCreator : EditorWindow
 
         // copy up
         GUI.enabled = enemyIndex > 0;
-        if (GUI.Button(new Rect(126f, y + 16f, 50f, 18f), "C↑"))
+        if (GUI.Button(new Rect(136f, y + 16f, 50f, 18f), "C↑"))
         {
             CopyEnemy(formationIndex, enemyIndex, enemyIndex - 1);
         }
@@ -356,7 +356,7 @@ public class LevelCreator : EditorWindow
 
         // copy down
         GUI.enabled = enemyIndex < sformationGroup.FindPropertyRelative("enemies").arraySize - 1;
-        if (GUI.Button(new Rect(176f, y + 16f, 50f, 18f), "C↓"))
+        if (GUI.Button(new Rect(186f, y + 16f, 50f, 18f), "C↓"))
         {
             CopyEnemy(formationIndex, enemyIndex, enemyIndex + 1);
         }
@@ -371,13 +371,15 @@ public class LevelCreator : EditorWindow
             // display params
             for (int i = 0; i < fieldInfos.Length; i++)
             {
+                SerializedProperty pathInfo = pathSO.FindProperty(fieldInfos[i].Name);
+                float pathHeight = enemyHeight * (pathInfo.isExpanded ? pathInfo.CountInProperty() : 1);
                 if (i % 2 == 0)
                 {
-                    EditorGUI.DrawRect(new Rect(formationWidth, y + height, W - formationWidth, enemyHeight), Color.gray);
+                    EditorGUI.DrawRect(new Rect(formationWidth, y + height, W - formationWidth, pathHeight), Color.gray);
                 }
-                EditorGUI.PropertyField(new Rect(formationWidth + 10f, y + height, W - formationWidth - 20f, enemyHeight), pathSO.FindProperty(fieldInfos[i].Name));
+                EditorGUI.PropertyField(new Rect(formationWidth + 10f, y + height, W - formationWidth - 20f, pathHeight), pathSO.FindProperty(fieldInfos[i].Name), true);
                 pathSO.ApplyModifiedProperties();
-                height += enemyHeight;
+                height += pathHeight;
             }
         }
 

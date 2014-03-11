@@ -11,12 +11,13 @@ public class NormalizationCalculator : MonoBehaviour
     
     public Vector3 position;
     public float magnitude = 1;
+    public float angle;
     
     #endregion
 
 
     public void Normalize()
     {
-        Debug.Log(position.normalized*magnitude);
+        Debug.Log(Utility.RotateVector(position.normalized, Quaternion.AngleAxis(angle, Vector3.back))*magnitude);
     }
 }

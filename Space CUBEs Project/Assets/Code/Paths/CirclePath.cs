@@ -10,10 +10,11 @@ namespace Paths
     {
         public float angle;
         public Vector3 center;
-        public float angularSpeed;
+        public float angularSpeed = 1f;
 
         private Vector3 angularPosition;
         private Vector3 direction;
+        private Vector3 lastTarget;
 
 
         public override void Initialize(Transform transform)
@@ -22,6 +23,7 @@ namespace Paths
             direction = Utility.RotateVector(Vector3.left, Quaternion.AngleAxis(angle, Vector3.back))*speed;
             angularPosition = -center;
             center += myTransform.position;
+            lastTarget = myTransform.position;
         }
 
 
@@ -30,7 +32,9 @@ namespace Paths
             center += direction*deltaTime;
             angularPosition = Utility.RotateVector(angularPosition, Quaternion.AngleAxis(angularSpeed, Vector3.back));
             Vector3 target = center + angularPosition;
-            return target-myTransform.position;
+            Vector3 move = target - lastTarget;
+            lastTarget = target;
+            return move;  // can't use position
         }
     }
 }
