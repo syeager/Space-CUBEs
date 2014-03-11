@@ -115,6 +115,36 @@ public class LevelManager : Singleton<LevelManager>
         {
             GameData.LoadLevel("Main Menu", true);
         }
+
+#if UNITY_EDITOR
+        // invincible
+        if (Input.GetKeyDown(KeyCode.KeypadEnter))
+        {
+            player.GetComponent<ShieldHealth>().invincible = true;
+        }
+        if (Input.GetKeyDown(KeyCode.KeypadPlus))
+        {
+            player.GetComponent<ShieldHealth>().invincible = false;
+        }
+
+        // time controls
+        if (Input.GetKey(KeyCode.UpArrow))
+        {
+            Time.timeScale += 1f * Time.deltaTime;
+        }
+        if (Input.GetKey(KeyCode.DownArrow))
+        {
+            Time.timeScale = Mathf.Clamp(Time.timeScale - 0.5f * Time.deltaTime, 0f, 5f);
+        }
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            Time.timeScale = 1f;
+        }
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            UnityEditor.EditorApplication.isPaused = true;
+        }
+#endif
     }
 
     #endregion

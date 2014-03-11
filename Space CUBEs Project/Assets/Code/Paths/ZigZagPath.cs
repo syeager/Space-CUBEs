@@ -22,7 +22,7 @@ namespace Paths
                 angle.y *= -1f;
             }
 
-            return angle.normalized;
+            return angle.normalized*speed*deltaTime;
         }
     }
 }

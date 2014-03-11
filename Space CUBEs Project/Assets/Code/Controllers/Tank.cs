@@ -48,7 +48,6 @@ public class Tank : Enemy
     {
         path = info["path"] as Path;
         path.Initialize(myTransform);
-        myMotor.Initialize(path.speed, false);
 
         if (attackCycle != null)
         {

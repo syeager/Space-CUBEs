@@ -8,21 +8,29 @@ namespace Paths
 {
     public class CirclePath : Path
     {
-        public float radius = 5f;
-        public float rotSpeed = 2f;
-        private Vector3 ray = Vector3.up;
+        public float angle;
+        public Vector3 center;
+        public float angularSpeed;
+
+        private Vector3 angularPosition;
+        private Vector3 direction;
+
 
         public override void Initialize(Transform transform)
         {
             base.Initialize(transform);
-            myTransform.position += Vector3.left * radius;
+            direction = Utility.RotateVector(Vector3.left, Quaternion.AngleAxis(angle, Vector3.back))*speed;
+            angularPosition = -center;
+            center += myTransform.position;
         }
 
 
         public override Vector3 Direction(float deltaTime)
         {
-
-            return (Vector3.left + ray).normalized;
+            center += direction*deltaTime;
+            angularPosition = Utility.RotateVector(angularPosition, Quaternion.AngleAxis(angularSpeed, Vector3.back));
+            Vector3 target = center + angularPosition;
+            return target-myTransform.position;
         }
     }
 }

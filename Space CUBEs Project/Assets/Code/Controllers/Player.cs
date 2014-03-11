@@ -263,7 +263,7 @@ public class Player : Ship
     public void Initialize(float maxHealth, float maxShield, float speed, float damage)
     {
         myHealth.Initialize(maxHealth, maxShield);
-        myMotor.Initialize(speed, true);
+        myMotor.Initialize(speed);
         myWeapons.Initialize(this, damage);
     }
 

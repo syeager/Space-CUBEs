@@ -70,9 +70,9 @@ public class ShipMotor : MonoBase
 
     #region Public Methods
     
-    public void Initialize(float speed, bool modify)
+    public void Initialize(float speed)
     {
-        this.speed = speed * (modify ? SPEEDMODIFIER : 1);
+        this.speed = speed;
         barrelRollMoveSpeed = BARRELROLLMODIFIER * this.speed;
     }
 
@@ -84,6 +84,12 @@ public class ShipMotor : MonoBase
             TestBoundaries(ref input);
         }
         myTransform.Translate(input * speed * deltaTime, Space.World);
+    }
+
+
+    public void Move(Vector3 vector)
+    {
+        myTransform.Translate(vector, Space.World);
     }
 
 

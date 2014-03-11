@@ -19,12 +19,12 @@ namespace Paths
             base.Initialize(transform);
 
             myTransform.Rotate(Vector3.back, rotation, Space.World);
-            direction = Utility.RotateVector(Vector3.left, Quaternion.AngleAxis(angle, Vector3.back));
+            direction = Utility.RotateVector(Vector3.left, Quaternion.AngleAxis(angle, Vector3.back))*speed;
         }
 
         public override Vector3 Direction(float deltaTime)
         {
-            return direction;
+            return direction*deltaTime;
         }
     }
 }
