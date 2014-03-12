@@ -78,7 +78,14 @@ public class FormationLevelManager : LevelManager
         if (segmentCursor < formationGroups.Length && !clear)
         {
             Log("Spawn formation " + segmentCursor + " in " + formationGroups[segmentCursor].spawnTime + " seconds.", true, Debugger.LogTypes.LevelEvents);
-            InvokeAction(() => SpawnNextFormation(), formationGroups[segmentCursor].spawnTime);
+            if (formationGroups[segmentCursor].spawnTime == 0)
+            {
+                SpawnNextFormation();
+            }
+            else
+            {
+                InvokeAction(() => SpawnNextFormation(), formationGroups[segmentCursor].spawnTime);
+            }
         }
     }
 
