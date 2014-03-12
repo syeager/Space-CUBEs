@@ -893,6 +893,7 @@ public class GarageManager : MonoBase
         ScrollviewButton button = (Instantiate(CUBESelectionButton_Prefab) as GameObject).GetComponent<ScrollviewButton>();
         button.Initialize(ID.ToString(), info.name + "\n" + inventory[ID], ID.ToString(), selectionGrid.transform);
         button.ActivateEvent += OnCUBESelected;
+        button.isEnabled = GameResources.GetCUBE(ID) != null;
         filteredCUBEButtons[info.ID] = button;
     }
 
