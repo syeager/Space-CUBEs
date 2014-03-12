@@ -13,11 +13,12 @@ public class BlackHole : Hitbox
     
     public float pullRadius;
     public float pullStrength;
+    public float spinSpeed;
     
     #endregion
 
 
-    #region Hitbox Overrides
+    #region MonoBehaviour Overrides
 
     protected override void OnTriggerStay(Collider other)
     {
@@ -25,8 +26,8 @@ public class BlackHole : Hitbox
 
         // pull
         Vector3 distance = myTransform.position - otherTransform.position;
-        float pull = ((pullRadius-distance.sqrMagnitude) / pullRadius * pullStrength);
-                
+        float pull = ((pullRadius - distance.sqrMagnitude) / pullRadius * pullStrength);
+
         // move
         otherTransform.position -= distance.normalized * pull * deltaTime;
 
@@ -38,5 +39,35 @@ public class BlackHole : Hitbox
         }
     }
 
+
+    private void OnDisabled()
+    {
+        StopAllCoroutines();
+    }
+
+    #endregion
+
+    #region Hitbox Overrides
+
+    public override void Initialize(Ship sender, HitInfo hitInfo)
+    {
+        base.Initialize(sender, hitInfo);
+
+        StartCoroutine(Spin());
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    private IEnumerator Spin()
+    {
+        while (true)
+        {
+            myTransform.Rotate(Vector3.back, spinSpeed*deltaTime, Space.World);
+            yield return null;
+        }
+    }
+    
     #endregion
 }
