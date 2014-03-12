@@ -633,6 +633,9 @@ public class GarageManager : MonoBase
 
         mainCamera.camera.rect = new Rect(0f, 0f, 1f, 1f);
         menuPanels[0].SetActive(true);
+        CreateBuildButtons();
+        loadGrid.GetComponent<UICenterOnChild>().CenterOn(loadGrid.transform.GetChild(0));
+
         stateMachine.SetUpdate(LoadUpdate());
     }
 
@@ -678,6 +681,15 @@ public class GarageManager : MonoBase
     /// </summary>
     private void CreateBuildButtons()
     {
+        // clear
+        ActivateButton[] buttons = loadGrid.GetComponentsInChildren<ActivateButton>();
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            buttons[i].ActivateEvent -= OnBuildChosen;
+            Destroy(buttons[i].gameObject);
+        }
+
+        // create
         string[] buildNames = ConstructionGrid.BuildNames().ToArray();
         if (buildNames.Length > 0) currentBuild = buildNames[0];
         for (int i = 0; i < buildNames.Length; i++)
@@ -729,7 +741,7 @@ public class GarageManager : MonoBase
         // reload grid
         StartCoroutine(Utility.UpdateScrollView(loadGrid, loadScrollBar, false));
 
-        currentBuild = "";
+        currentBuild = ConstructionGrid.BuildNames()[0];
     }
 
 
