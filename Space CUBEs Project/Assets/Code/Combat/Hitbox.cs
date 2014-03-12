@@ -9,7 +9,6 @@ using UnityEngine;
 /// <summary>
 /// Passes HitInfo from attack to reciever.
 /// </summary>
-[RequireComponent(typeof(Rigidbody))]
 public class Hitbox : MonoBase
 {
     #region References

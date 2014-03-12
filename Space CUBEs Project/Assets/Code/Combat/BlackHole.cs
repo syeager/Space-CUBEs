@@ -26,7 +26,7 @@ public class BlackHole : Hitbox
         // pull
         Vector3 distance = myTransform.position - otherTransform.position;
         float pull = ((pullRadius-distance.sqrMagnitude) / pullRadius * pullStrength);
-
+                
         // move
         otherTransform.position -= distance.normalized * pull * deltaTime;
 
@@ -34,7 +34,7 @@ public class BlackHole : Hitbox
         var oppHealth = other.gameObject.GetComponent<Health>();
         if (oppHealth != null)
         {
-            oppHealth.RecieveHit(sender, new HitInfo { damage = hitInfo.damage * pull * deltaTime });
+            oppHealth.RecieveHit(sender, new HitInfo { damage = hitInfo.damage * Mathf.Abs(pull) * deltaTime });
         }
     }
 
