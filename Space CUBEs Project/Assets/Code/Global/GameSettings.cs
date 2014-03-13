@@ -8,6 +8,12 @@ using UnityEngine;
 /// </summary>
 public class GameSettings : Singleton<GameSettings>
 {
+    #region Testing Fields
+
+    public bool invincible;
+
+    #endregion
+
     #region Volume Fields
 
     public float volumeSE;

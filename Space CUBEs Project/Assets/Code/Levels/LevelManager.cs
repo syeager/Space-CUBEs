@@ -241,7 +241,14 @@ public class LevelManager : Singleton<LevelManager>
         player = buildShip.Compact(typeof(Player), true, true) as Player;
         player.Initialize(args.health, args.shield, args.speed, args.damage);
 
-        player.GetComponent<ShieldHealth>().DieEvent += OnPlayerDeath;
+        if (GameSettings.Main.invincible)
+        {
+            player.GetComponent<ShieldHealth>().invincible = true;
+        }
+        else
+        {
+            player.GetComponent<ShieldHealth>().DieEvent += OnPlayerDeath;
+        }
     }
 
 
