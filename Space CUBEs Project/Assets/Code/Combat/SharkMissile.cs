@@ -58,27 +58,8 @@ public class SharkMissile : Hitbox
             yield return null;
         }
 
-        // find enemy
-        float max = 0f;
-        foreach (var enemy in LevelManager.Main.activeEnemies)
-        {
-            if (enemy.GetComponent<ShieldHealth>().strength > max)
-            {
-                max = enemy.GetComponent<ShieldHealth>().strength;
-                target = enemy.transform;
-            }
-        }
-
-        if (target != null)
-        {
-            target.GetComponent<ShieldHealth>().DieEvent += OnTargetDeath;
-            collider.enabled = true;
-            StartCoroutine(Homing());
-        }
-        else
-        {
-            Detonate();
-        }
+        // find target
+        FindTarget();
     }
 
 
@@ -101,12 +82,34 @@ public class SharkMissile : Hitbox
     {
         if (!gameObject.activeSelf) return;
 
-        if (target != null)
-        {
-            target.GetComponent<ShieldHealth>().DieEvent -= OnTargetDeath;
-        }
+        target = null;
         StopAllCoroutines();
         GetComponent<PoolObject>().Disable();
+    }
+
+
+    private void FindTarget()
+    {
+        float max = 0f;
+        foreach (var enemy in LevelManager.Main.activeEnemies)
+        {
+            if (enemy.GetComponent<ShieldHealth>().strength > max)
+            {
+                max = enemy.GetComponent<ShieldHealth>().strength;
+                target = enemy.transform;
+            }
+        }
+
+        if (target != null)
+        {
+            target.GetComponent<ShieldHealth>().DieEvent += OnTargetDeath;
+            collider.enabled = true;
+            StartCoroutine(Homing());
+        }
+        else
+        {
+            Detonate();
+        }
     }
 
     #endregion
@@ -115,7 +118,13 @@ public class SharkMissile : Hitbox
 
     private void OnTargetDeath(object sender, DieArgs args)
     {
-        Detonate();
+        (sender as Health).DieEvent -= OnTargetDeath;
+        StopAllCoroutines();
+
+        if (target != null)
+        {
+            FindTarget();
+        }
     }
 
     #endregion
