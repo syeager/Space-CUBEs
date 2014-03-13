@@ -80,11 +80,11 @@ public class ScoreManager
         while (multiplier > 1)
         {
             yield return new WaitForSeconds(multiplierLife);
-            multiplier--;
             if (MultiplierUpdateEvent != null)
             {
-                MultiplierUpdateEvent(this, new MultiplierUpdateArgs(-1, multiplier));
+                MultiplierUpdateEvent(this, new MultiplierUpdateArgs(-multiplier+1, 1));
             }
+            multiplier = 1;
         }
     }
 
