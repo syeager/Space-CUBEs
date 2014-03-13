@@ -13,7 +13,7 @@ public class ScoreManager
 {
     #region Public Fields
 
-    public float multiplierLife = 3f;
+    public float multiplierLife = 1.5f;
 
     #endregion
 
@@ -77,15 +77,12 @@ public class ScoreManager
 
     private IEnumerator MultiplierLife()
     {
-        while (multiplier > 1)
+        yield return new WaitForSeconds(multiplierLife);
+        if (MultiplierUpdateEvent != null)
         {
-            yield return new WaitForSeconds(multiplierLife);
-            if (MultiplierUpdateEvent != null)
-            {
-                MultiplierUpdateEvent(this, new MultiplierUpdateArgs(-multiplier+1, 1));
-            }
-            multiplier = 1;
+            MultiplierUpdateEvent(this, new MultiplierUpdateArgs(-multiplier+1, 1));
         }
+        multiplier = 1;
     }
 
     #endregion
