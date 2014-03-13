@@ -21,6 +21,7 @@ public class GameResources : MonoBehaviour
     public Material VertexOverlay_Mat;
     public Material ShieldHit_Mat;
     public Material HealthHit_Mat;
+    public GameObject Player_TR;
 
     #endregion
 

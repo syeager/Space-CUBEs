@@ -62,6 +62,12 @@ public class Player : Ship
         myScore = new ScoreManager();
         myMoney = new MoneyManager();
 
+        // effects
+        Transform trail = (Instantiate(GameResources.Main.Player_TR) as GameObject).transform;
+        trail.parent = myTransform;
+        trail.localPosition = Vector3.zero;
+        trail.localRotation = Quaternion.identity;
+
         // create states
         stateMachine = new StateMachine(this, MovingState);
         stateMachine.CreateState(MovingState, MovingEnter, MovingExit);
