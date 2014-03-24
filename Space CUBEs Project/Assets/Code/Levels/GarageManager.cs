@@ -47,11 +47,11 @@ public class GarageManager : MonoBase
     public UIScrollBar selectionScrollBar;
     public UIGrid selectionGrid;
     public GameObject CUBESelectionButton_Prefab;
-    
+
     public ActivateButton leftFilter;
     public UILabel filterLabel;
     public ActivateButton rightFilter;
-    
+
     public UILabel CUBEName;
     public UILabel CUBEHealth;
     public UILabel CUBEShield;
@@ -74,7 +74,7 @@ public class GarageManager : MonoBase
 
     private bool menuOpen;
     private CUBE.Types CUBEFilter;
-   
+
     private int weaponIndex = -1;
 
     private int[] inventory;
@@ -131,6 +131,9 @@ public class GarageManager : MonoBase
         new Vector3(0, 0, 0),
     };
 
+    private readonly Rect InfoPanelRect = new Rect(0f, 0f, 1f, 0.125f);
+    private readonly Rect NavMenuButtonsRect = new Rect(0.86f, 0.9f, 0.14f, 0.1f);
+
     #endregion
 
     #region Load Menu Fields
@@ -184,6 +187,12 @@ public class GarageManager : MonoBase
 
     #endregion
 
+    #region Info Panel Fields
+
+    public ActivateButton[] menuNavButtons = new ActivateButton[2];
+
+    #endregion
+
 
     #region Unity Overrides
 
@@ -198,7 +207,7 @@ public class GarageManager : MonoBase
         stateMachine.CreateState(WEAPONSTATE, WeaponEnter, WeaponExit);
 
         cameraTarget = new GameObject("Camera Target").transform;
-        StartCoroutine(ResetCamera());
+        StartCoroutine(ResetingCamera());
 
         // load colors
         colors = CUBE.LoadColors();
@@ -251,6 +260,12 @@ public class GarageManager : MonoBase
         selectSecondary.ActivateEvent += OpenColorSelector;
         primaryColor = int.Parse(paints[0].value);
         secondaryColor = int.Parse(paints[1].value);
+
+        // info panel
+        foreach (var button in menuNavButtons)
+        {
+            button.ActivateEvent += ChangeMenu;
+        }
     }
 
 
@@ -266,18 +281,6 @@ public class GarageManager : MonoBase
         {
             stateMachine.SetState(LOADSTATE, null);
         }
-
-#if UNITY_STANDALONE
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            StartCoroutine(ResetCamera());
-        }
-#else
-        if (Input.touchCount > 0 && Input.GetTouch(0).tapCount == 2 && touchRect.Contains(mainCamera.camera.ScreenToViewportPoint(Input.GetTouch(0).position)))
-        {
-            StartCoroutine(ResetCamera());
-        }
-#endif
     }
 
     #endregion
@@ -285,12 +288,73 @@ public class GarageManager : MonoBase
     #region Camera Methods
 
     /// <summary>
+    /// Event handler for menu nav buttons.
+    /// </summary>
+    public void ChangeMenu(object sender, ActivateButtonArgs args)
+    {
+        if (args.isPressed) return;
+
+        SwitchMenu(args.value == "right");
+    }
+
+
+    /// <summary>
+    /// Switch to the next menu.
+    /// </summary>
+    /// <param name="moveRight">Should we move to the next right menu?</param>
+    private void SwitchMenu(bool moveRight)
+    {
+        if (moveRight)
+        {
+            switch (stateMachine.currentState)
+            {
+                case LOADSTATE:
+                    stateMachine.SetState(SELECTSTATE);
+                    break;
+                case SELECTSTATE:
+                    stateMachine.SetState(NAVSTATE);
+                    break;
+                case NAVSTATE:
+                    stateMachine.SetState(PAINTSTATE);
+                    break;
+                case PAINTSTATE:
+                    stateMachine.SetState(WEAPONSTATE);
+                    break;
+            }
+
+            menuNavButtons[0].isEnabled = true;
+            menuNavButtons[1].isEnabled = stateMachine.currentState != WEAPONSTATE;
+        }
+        else
+        {
+            switch (stateMachine.currentState)
+            {
+                case SELECTSTATE:
+                    stateMachine.SetState(LOADSTATE);
+                    break;
+                case NAVSTATE:
+                    stateMachine.SetState(SELECTSTATE);
+                    break;
+                case PAINTSTATE:
+                    stateMachine.SetState(NAVSTATE);
+                    break;
+                case WEAPONSTATE:
+                    stateMachine.SetState(PAINTSTATE);
+                    break;
+            }
+
+            menuNavButtons[1].isEnabled = true;
+        }
+    }
+
+
+    /// <summary>
     /// 
     /// </summary>
     private int MenuSwipe()
     {
         int direction = 0;
-#if UNITY_STANDALONE
+
         if (Input.GetKey(KeyCode.LeftAlt))
         {
             if (Input.GetKeyDown(KeyCode.LeftArrow))
@@ -302,20 +366,6 @@ public class GarageManager : MonoBase
                 direction = 1;
             }
         }
-#else
-        if (canMenuSwipe)
-        {
-            if (Input.touchCount == 2)
-            {
-                float delta = (Input.GetTouch(0).deltaPosition + Input.GetTouch(1).deltaPosition).x;
-                if (Mathf.Abs(delta) >= menuSwipeDist)
-                {
-                    direction = -(int)Mathf.Sign(delta);
-                }
-            }
-        }
-
-#endif
 
         return direction;
     }
@@ -333,7 +383,7 @@ public class GarageManager : MonoBase
 
 
     /// <summary>
-    /// 
+    /// Move and rotate camera to target position and rotation.
     /// </summary>
     private void UpdateCamera()
     {
@@ -520,7 +570,7 @@ public class GarageManager : MonoBase
 
 
     /// <summary>
-    /// 
+    /// Set zoom and target camera position.
     /// </summary>
     /// <param name="strength"></param>
     private void CameraZoom(float strength)
@@ -530,14 +580,44 @@ public class GarageManager : MonoBase
     }
 
 
-    private IEnumerator ResetCamera()
+    //
+    private void ResetCamera(params Rect[] restricted)
+    {
+        //Debugger.LogConsoleLine(mainCamera.camera.ScreenToViewportPoint(Input.mousePosition).ToString());
+#if UNITY_STANDALONE
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            StartCoroutine(ResetCamera());
+        }
+#else
+        if (Input.touchCount > 0 && Input.GetTouch(0).tapCount == 2)
+        {
+            Vector3 screenPos = mainCamera.camera.ScreenToViewportPoint(Input.GetTouch(0).position);
+
+            if (screenPos.x < 0f) return;
+
+            for (int i = 0; i < restricted.Length; i++)
+            {
+                if (restricted[i].Contains(screenPos)) return;
+            }
+
+            StartCoroutine(ResetingCamera());
+        }
+#endif
+    }
+
+
+    /// <summary>
+    /// Return camera back to original position and rotation over time.
+    /// </summary>
+    private IEnumerator ResetingCamera()
     {
         while (cameraDirection != cameraPositions[0])
         {
             RotateCamera(Vector3.up);
         }
 
-        float direction = (zoom-zoomStart > 0 ? -1f : 1f);
+        float direction = (zoom - zoomStart > 0 ? -1f : 1f);
         while (Mathf.Abs(zoom - zoomStart) > 0.1f)
         {
             CameraZoom(direction);
@@ -626,10 +706,6 @@ public class GarageManager : MonoBase
     {
         canMenuSwipe = false;
         InvokeAction(() => canMenuSwipe = true, menuSwipeDelay);
-
-#if UNITY_ANDROID
-        touchRect = new Rect(0f, 0f, 1f, 1f);
-#endif
 
         mainCamera.camera.rect = new Rect(0f, 0f, 1f, 1f);
         menuPanels[0].SetActive(true);
@@ -778,7 +854,7 @@ public class GarageManager : MonoBase
         }
         Grid.CreateBuild(currentBuild);
         shipName.value = Grid.buildName;
-        stateMachine.SetState(SELECTSTATE, new Dictionary<string,object>());
+        stateMachine.SetState(SELECTSTATE, new Dictionary<string, object>());
         selectedBuild = true;
     }
 
@@ -805,16 +881,11 @@ public class GarageManager : MonoBase
         canMenuSwipe = false;
         InvokeAction(() => canMenuSwipe = true, menuSwipeDelay);
 
-#if UNITY_ANDROID
-        touchRect = new Rect(0f, 0.125f, 1f, 1f);
-#endif
-
         mainCamera.camera.rect = new Rect(0.25f, 0f, 1f, 1f);
         menuPanels[1].SetActive(true);
         infoPanel.SetActive(true);
         FilterCUBEs(CUBEFilter, true);
-        
-        actionButton2.ActivateEvent += OnNavMenuPressed;
+
         stateMachine.SetUpdate(SelectUpdate());
         StartCoroutine("SaveConfirmation");
     }
@@ -824,8 +895,8 @@ public class GarageManager : MonoBase
     {
         actionButton1.label.text = "---";
         actionButton1.isEnabled = false;
-        actionButton2.label.text = "Nav";
-        actionButton2.isEnabled = true;
+        actionButton2.label.text = "---";
+        actionButton2.isEnabled = false;
 
         while (true)
         {
@@ -843,6 +914,9 @@ public class GarageManager : MonoBase
             {
                 stateMachine.SetState(NAVSTATE, new Dictionary<string, object>());
             }
+
+            // reset camera
+            ResetCamera(InfoPanelRect, NavMenuButtonsRect);
 
             // update ship stats
             UpdateInfoPanel();
@@ -933,7 +1007,7 @@ public class GarageManager : MonoBase
         if (!args.isPressed) return;
 
         int direction = int.Parse(args.value);
-        int filter = Mathf.Clamp((int)CUBEFilter+direction, 0, Enum.GetNames(typeof(CUBE.Types)).Length);
+        int filter = Mathf.Clamp((int)CUBEFilter + direction, 0, Enum.GetNames(typeof(CUBE.Types)).Length);
         FilterCUBEs((Types)filter);
     }
 
@@ -942,7 +1016,7 @@ public class GarageManager : MonoBase
     {
         if (args.isPressed) return;
 
-        stateMachine.SetState(NAVSTATE, new Dictionary<string,object>());
+        stateMachine.SetState(NAVSTATE, new Dictionary<string, object>());
     }
 
 
@@ -1043,6 +1117,9 @@ public class GarageManager : MonoBase
             // update ship stats
             UpdateInfoPanel();
 
+            // reset camera
+            ResetCamera(InfoPanelRect, NavMenuButtonsRect);
+
             yield return null;
         }
     }
@@ -1055,12 +1132,6 @@ public class GarageManager : MonoBase
         actionButton1.ActivateEvent -= OnDeleteButtonPressed;
         actionButton2.ActivateEvent -= OnActionButtonPressed;
         StopCoroutine("SaveConfirmation");
-    }
-
-
-    public void SetSelectMenu()
-    {
-        stateMachine.SetState(SELECTSTATE, new Dictionary<string,object>());
     }
 
 
@@ -1177,6 +1248,10 @@ public class GarageManager : MonoBase
             paintPostionLabel.text = "Position " + (Grid.cursor + Vector3.one).ToString("0");
 
             UpdateInfoPanel();
+
+            // reset camera
+            ResetCamera(InfoPanelRect, NavMenuButtonsRect);
+
             yield return null;
         }
     }
@@ -1446,7 +1521,7 @@ public class GarageManager : MonoBase
 
             // update ship stats
             UpdateInfoPanel();
-            
+
             // update weapon buttons
             for (int i = 0; i < 4; i++)
             {
@@ -1468,6 +1543,9 @@ public class GarageManager : MonoBase
                     }
                 }
             }
+
+            // reset camera
+            ResetCamera(InfoPanelRect, NavMenuButtonsRect);
 
             yield return null;
         }
