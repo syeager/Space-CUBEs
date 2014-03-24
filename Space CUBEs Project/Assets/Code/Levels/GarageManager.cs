@@ -1206,6 +1206,8 @@ public class GarageManager : MonoBase
         actionButton1.ActivateEvent += OnPaint;
         actionButton2.ActivateEvent += OnPaint;
 
+        Grid.DeleteCUBE();
+
         stateMachine.SetUpdate(PaintUpdate());
         StartCoroutine("SaveConfirmation");
     }
