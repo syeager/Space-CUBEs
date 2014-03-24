@@ -46,7 +46,7 @@ public class ShipMotor : MonoBase
 
     #region Const Fields
 
-    private const float SPEEDMODIFIER = 0.65f;
+    private const float SPEEDMODIFIER = 0.5f;
     private const float BARRELROLLMODIFIER = 2f;
 
     #endregion

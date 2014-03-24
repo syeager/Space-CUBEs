@@ -18,6 +18,8 @@ public class Joystick : MonoBehaviour
 
     public float maxDistance = 50f;
     public float deadzone = 0.3f;
+    public float xBuffer = 20f;
+    public float yBuffer = 20f;
 
     #endregion
 
@@ -27,6 +29,7 @@ public class Joystick : MonoBehaviour
     private Vector2 centerScreen;
     private RaycastHit rayInfo;
     private bool cache;
+    private Vector2 position;
 
     #endregion
 
@@ -49,12 +52,17 @@ public class Joystick : MonoBehaviour
         thumb.rightAnchor.target = null;
         thumb.topAnchor.target = null;
         thumb.bottomAnchor.target = null;
+
+        // settings
+        maxDistance *= (1f - GameSettings.Main.joystickSensitivity);
+        xBuffer *= GameSettings.Main.joystickXBuffer;
+        yBuffer *= GameSettings.Main.joystickYBuffer;
+        deadzone = GameSettings.Main.joystickDeadzone;
     }
 
 
     private void Update()
     {
-        MoveJoystick();
         if (touchID == -1)
         {
             for (int i = 0; i < Input.touchCount; i++)
@@ -77,13 +85,13 @@ public class Joystick : MonoBehaviour
                 if (touch.fingerId == touchID)
                 {
                     // apply deadzone
-                    Vector2 input = Vector2.ClampMagnitude((touch.position - centerScreen) / maxDistance, 1);
+                    position = touch.position;
+                    Vector2 input = Vector2.ClampMagnitude((position - centerScreen) / maxDistance, 1);
                     value = input.magnitude >= deadzone ? input : Vector2.zero;
-
                     // let go
                     if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
                     {
-                        cache = touch.position.x <= 0f || touch.position.y <= 1f;
+                        cache = touch.position.x <= xBuffer || touch.position.y <= yBuffer;
                     }
 
                     MoveJoystick();
@@ -96,6 +104,7 @@ public class Joystick : MonoBehaviour
             touchID = -1;
             if (!cache)
             {
+                position = Vector2.zero;
                 value = Vector2.zero;
                 MoveJoystick();
             }

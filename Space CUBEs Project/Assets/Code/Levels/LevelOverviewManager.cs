@@ -72,22 +72,22 @@ public class LevelOverviewManager : MonoBehaviour
 
     private IEnumerator Roundups(States start)
     {
-        if (start == States.Score)
+        //if (start == States.Score)
         {
             yield return StartCoroutine(RoundupScore((int)GameData.Main.levelData["Score"]));
             state = States.Money;
         }
-        if (start == States.Money)
+        //if (start == States.Money)
         {
             yield return StartCoroutine(RoundupMoney((int)GameData.Main.levelData["Money"]));
             state = States.Rank;
         }
-        if (start == States.Rank)
+        //if (start == States.Rank)
         {
             yield return StartCoroutine(RoundupRank((char)GameData.Main.levelData["Rank"]));
             state = States.Awards;
         }
-        if (start == States.Awards)
+        //if (start == States.Awards)
         {
             yield return StartCoroutine(RoundupAwards((int[])GameData.Main.levelData["Awards"]));
             state = States.Done;

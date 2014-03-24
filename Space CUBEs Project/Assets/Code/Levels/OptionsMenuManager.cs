@@ -12,15 +12,25 @@ public class OptionsMenuManager : MonoBase
     #region Public Fields
 
     public UILabel invincibility_Label;
+    public UISlider joystickSensitivity;
+    public UISlider joystickXBuffer;
+    public UISlider joystickYBuffer;
+    public UISlider joystickDeadzone;
+    public UIToggle trailRenderer;
 
     #endregion
 
 
     #region MonoBehaviour Overrides
 
-    private void Awake()
+    private void Start()
     {
         invincibility_Label.text = "Invincibility is " + (GameSettings.Main.invincible ? "on" : "off");
+        joystickSensitivity.value = GameSettings.Main.joystickSensitivity;
+        joystickXBuffer.value = GameSettings.Main.joystickXBuffer;
+        joystickYBuffer.value = GameSettings.Main.joystickYBuffer;
+        joystickDeadzone.value = GameSettings.Main.joystickDeadzone;
+        trailRenderer.value = GameSettings.Main.trailRenderer;
     }
 
     #endregion
@@ -42,7 +52,23 @@ public class OptionsMenuManager : MonoBase
 
     public void LoadMainMenu()
     {
+        Save();
         GameData.LoadLevel("Main Menu");
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    private void Save()
+    {
+        GameSettings.Main.joystickSensitivity = joystickSensitivity.value;
+        GameSettings.Main.joystickXBuffer = joystickXBuffer.value;
+        GameSettings.Main.joystickYBuffer = joystickYBuffer.value;
+        GameSettings.Main.joystickDeadzone = joystickDeadzone.value;
+        GameSettings.Main.trailRenderer = trailRenderer.value;
+
+        GameSettings.Save();
     }
 
     #endregion

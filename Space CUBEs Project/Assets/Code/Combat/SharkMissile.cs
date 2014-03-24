@@ -6,8 +6,14 @@ using System.Collections;
 
 public class SharkMissile : Hitbox
 {
+    #region Public Fields
+
+    public float rotationSpeed;
+
+    #endregion
+
     #region Private Fields
-    
+
     private float homingSpeed;
     private Transform target;
     
@@ -68,7 +74,7 @@ public class SharkMissile : Hitbox
         while (true)
         {
             // rotate towards
-            myTransform.rotation = Quaternion.Slerp(myTransform.rotation, Quaternion.LookRotation(target.position-myTransform.position, Vector3.back), homingSpeed*0.5f*deltaTime);
+            myTransform.rotation = Quaternion.Slerp(myTransform.rotation, Quaternion.LookRotation(target.position - myTransform.position, Vector3.back), rotationSpeed * deltaTime);
 
             // move towards
             myTransform.Translate(Vector3.forward * homingSpeed * deltaTime);
