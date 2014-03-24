@@ -32,6 +32,9 @@ public class ConstructionGrid : MonoBase
         Holding,
     }
 
+    public float cellSize = 0.9f;
+    public float cursorSize = 0.7f;
+
     /// <summary>Name of the build. Set in a textfield by player.</summary>
     public string buildName;
 
@@ -308,6 +311,7 @@ public class ConstructionGrid : MonoBase
 
         // reset last cell to open colorIndex
         cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].renderer.material = CellOpen_Mat;
+        cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].transform.localScale = Vector3.one*cellSize;
 
         // contain new position within grid
         if (cursor.x + vector.x < 0 || cursor.x + vector.x > size - 1) vector.x = 0;
@@ -318,6 +322,7 @@ public class ConstructionGrid : MonoBase
 
         // set new cursor cell to cursor colorIndex
         cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].renderer.material = CellCursor_Mat;
+        cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].transform.localScale = Vector3.one * cursorSize;
 
         // move currently held CUBE
         if (heldCUBE != null)

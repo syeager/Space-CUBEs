@@ -205,7 +205,7 @@ public class GarageManager : MonoBase
         stateMachine.CreateState(WEAPONSTATE, WeaponEnter, WeaponExit);
 
         cameraTarget = new GameObject("Camera Target").transform;
-        StartCoroutine(ResetingCamera());
+        StartCoroutine(ResettingCamera());
 
         // load colors
         colors = CUBE.LoadColors();
@@ -387,6 +387,8 @@ public class GarageManager : MonoBase
     {
         mainCamera.position = Vector3.Lerp(mainCamera.position, cameraTarget.position, Time.deltaTime * cameraSpeed);
         mainCamera.rotation = Quaternion.Slerp(mainCamera.rotation, cameraTarget.rotation, Time.deltaTime * cameraSpeed);
+
+        mainCamera.camera.orthographicSize = Mathf.Lerp(mainCamera.camera.orthographicSize, zoom, Time.deltaTime * zoomSpeed);
     }
 
 
@@ -574,18 +576,16 @@ public class GarageManager : MonoBase
     private void CameraZoom(float strength)
     {
         zoom = Mathf.Clamp(zoom + (strength * zoomSpeed * Time.deltaTime), zoomMin, zoomMax);
-        cameraTarget.position = CalculateTargetPostion(cameraDirection);
     }
 
 
     //
     private void ResetCamera(params Rect[] restricted)
     {
-        //Debugger.LogConsoleLine(mainCamera.camera.ScreenToViewportPoint(Input.mousePosition).ToString());
 #if UNITY_STANDALONE
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            StartCoroutine(ResetCamera());
+            StartCoroutine(ResettingCamera());
         }
 #else
         if (Input.touchCount > 0 && Input.GetTouch(0).tapCount == 2)
@@ -599,7 +599,7 @@ public class GarageManager : MonoBase
                 if (restricted[i].Contains(screenPos)) return;
             }
 
-            StartCoroutine(ResetingCamera());
+            StartCoroutine(ResettingCamera());
         }
 #endif
     }
@@ -608,7 +608,7 @@ public class GarageManager : MonoBase
     /// <summary>
     /// Return camera back to original position and rotation over time.
     /// </summary>
-    private IEnumerator ResetingCamera()
+    private IEnumerator ResettingCamera()
     {
         while (cameraDirection != cameraPositions[0])
         {
