@@ -92,8 +92,6 @@ public class GarageManager : MonoBase
 
     #region Mobile Fields
 
-    private bool canMenuSwipe = true;
-    public float menuSwipeDelay = 0.5f;
     private Rect touchRect;
 
     #endregion
@@ -704,9 +702,6 @@ public class GarageManager : MonoBase
 
     private void LoadEnter(Dictionary<string, object> info)
     {
-        canMenuSwipe = false;
-        InvokeAction(() => canMenuSwipe = true, menuSwipeDelay);
-
         mainCamera.camera.rect = new Rect(0f, 0f, 1f, 1f);
         menuPanels[0].SetActive(true);
         CreateBuildButtons();
@@ -878,8 +873,9 @@ public class GarageManager : MonoBase
 
     private void SelectEnter(Dictionary<string, object> info)
     {
-        canMenuSwipe = false;
-        InvokeAction(() => canMenuSwipe = true, menuSwipeDelay);
+#if UNITY_ANDROID
+        touchRect = new Rect(0f, 0.125f, 1f, 1f);
+#endif
 
         mainCamera.camera.rect = new Rect(0.25f, 0f, 1f, 1f);
         menuPanels[1].SetActive(true);
@@ -1042,9 +1038,6 @@ public class GarageManager : MonoBase
 
     private void NavEnter(Dictionary<string, object> info)
     {
-        canMenuSwipe = false;
-        InvokeAction(() => canMenuSwipe = true, menuSwipeDelay);
-
 #if UNITY_ANDROID
         touchRect = new Rect(0f, 0.125f, 1f, 1f);
 #endif
@@ -1206,9 +1199,6 @@ public class GarageManager : MonoBase
 
     private void PaintEnter(Dictionary<string, object> info)
     {
-        canMenuSwipe = false;
-        InvokeAction(() => canMenuSwipe = true, menuSwipeDelay);
-
         menuPanels[4].SetActive(true);
         colorSelector.SetActive(false);
         infoPanel.SetActive(true);
@@ -1456,9 +1446,6 @@ public class GarageManager : MonoBase
 
     public void WeaponEnter(Dictionary<string, object> info)
     {
-        canMenuSwipe = false;
-        InvokeAction(() => canMenuSwipe = true, menuSwipeDelay);
-
 #if UNITY_ANDROID
         touchRect = new Rect(0f, 0.125f, 1f, 1f);
 #endif
