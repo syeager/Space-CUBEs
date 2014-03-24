@@ -58,6 +58,18 @@ public class ShipCompactor : MonoBehaviour
         transform.GetComponent<MeshFilter>().mesh.Optimize();
         transform.renderer.sharedMaterial = GameResources.Main.VertexColor_Mat;
 
+        // center mesh
+        Mesh mesh = GetComponent<MeshFilter>().mesh;
+        Vector3 center = mesh.bounds.center;
+        transform.position = renderer.bounds.center;
+        Vector3[] vertices = mesh.vertices;
+        for (int i = 0; i < vertices.Length; i++)
+        {
+            vertices[i] -= center;
+        }
+        mesh.vertices = vertices;
+        mesh.RecalculateBounds();
+
         if (cleanUnused)
         {
             Resources.UnloadUnusedAssets();
