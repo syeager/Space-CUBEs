@@ -1,8 +1,8 @@
-﻿Shader "CUBEs/Vertex Overlay" {
+﻿Shader "CUBEs/Vertex Color Lerp" {
 	Properties
 	{
 		_Color ("Main Color", Color) = (1,1,1,0)
-		_Alpha ("Alpha", Range(0,1)) = 1
+		_Alpha ("Alpha", Range(0,1)) = 0
 	}
 	
 	SubShader 
@@ -41,8 +41,7 @@
 			{
 				VertOut output;
 				output.position = mul(UNITY_MATRIX_MVP, input.vertex);
-				output.color = input.color * _Color;
-				output.color.a = _Alpha;
+				output.color = lerp(input.color, _Color, _Alpha);
 				return output;
 			}
 

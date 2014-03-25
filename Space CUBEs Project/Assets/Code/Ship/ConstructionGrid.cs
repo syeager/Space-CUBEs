@@ -38,6 +38,9 @@ public class ConstructionGrid : MonoBase
     /// <summary>Name of the build. Set in a textfield by player.</summary>
     public string buildName;
 
+    public Color blinkColor;
+    public float blinkTime;
+
     #endregion
 
     #region Private Fields
@@ -474,10 +477,7 @@ public class ConstructionGrid : MonoBase
     public void CreateCUBE(int CUBEID)
     {
         // destroy currently held CUBE
-        if (heldCUBE != null)
-        {
-            Destroy(heldCUBE.gameObject);
-        }
+        DeleteCUBE();
 
         // create new CUBE
         heldCUBE = (CUBE)GameObject.Instantiate(GameResources.GetCUBE(CUBEID));
@@ -486,10 +486,12 @@ public class ConstructionGrid : MonoBase
         Material[] alphaMats = new Material[materialCount];
         for (int i = 0; i < materialCount; i++)
         {
-            alphaMats[i] = GameResources.Main.VertexOverlay_Mat;
+            alphaMats[i] = new Material(GameResources.Main.VertexColorLerp_Mat);
         }
-        heldCUBE.renderer.sharedMaterials = alphaMats;
+        heldCUBE.renderer.materials = alphaMats;
         heldCUBE.GetComponent<ColorVertices>().Bake();
+        // blink
+        StartBlink(heldCUBE.renderer);
         
         // reset cursorOffset when creating new type of CUBE
         if (heldInfo.ID != CUBEID)
@@ -534,6 +536,7 @@ public class ConstructionGrid : MonoBase
     {
         if (heldCUBE == null) return;
 
+        StopBlink(heldCUBE.renderer);
         Destroy(heldCUBE.gameObject);
         heldCUBE = null;
         cursorStatus = hoveredCUBE == null ? CursorStatuses.None : CursorStatuses.Hover;
@@ -787,6 +790,7 @@ public class ConstructionGrid : MonoBase
         // grab CUBE
         heldCUBE = cube;
         heldInfo = CUBE.allCUBES[heldCUBE.ID];
+        StartBlink(heldCUBE.renderer);
         // stock inventory
         inventory[heldCUBE.ID]++;
         // remove CUBE from build
@@ -864,6 +868,8 @@ public class ConstructionGrid : MonoBase
         // set parent to ship
         heldCUBE.transform.parent = ship.transform;
         // empty cursor
+        StopBlink(heldCUBE.renderer);
+
         heldCUBE = null;
         // reset
         cursorStatus = CursorStatuses.Hover;
@@ -1208,6 +1214,62 @@ public class ConstructionGrid : MonoBase
         string buildInfo = PlayerPrefs.GetString(dataPath + oldName);
         PlayerPrefs.DeleteKey(oldName);
         PlayerPrefs.SetString(dataPath + newName, buildInfo);
+    }
+
+    #endregion
+
+    #region Blink Methods
+
+    private void StartBlink(Renderer target)
+    {
+        for (int i = 0; i < target.sharedMaterials.Length; i++)
+        {
+            target.sharedMaterials[i].color = blinkColor;
+        }
+        StartCoroutine("Blinking", target);
+    }
+
+
+    private IEnumerator Blinking(Renderer target)
+    {
+        float timer = 0f;
+        while (timer < 1f)
+        {
+            timer += Time.deltaTime / blinkTime;
+
+            for (int i = 0; i < target.sharedMaterials.Length; i++)
+            {
+                target.sharedMaterials[i].SetFloat("_Alpha", timer);
+            }
+
+            yield return null;
+        }
+
+        timer = 0f;
+        while (timer < 1f)
+        {
+            timer += Time.deltaTime / blinkTime;
+
+            for (int i = 0; i < target.sharedMaterials.Length; i++)
+            {
+                target.sharedMaterials[i].SetFloat("_Alpha", 1 - timer);
+            }
+
+            yield return null;
+        }
+
+        StartCoroutine("Blinking", target);
+    }
+
+
+    private void StopBlink(Renderer target)
+    {
+        StopCoroutine("Blinking");
+
+        for (int i = 0; i < target.sharedMaterials.Length; i++)
+        {
+            target.sharedMaterials[i].SetFloat("_Alpha", 0f);
+        }
     }
 
     #endregion
