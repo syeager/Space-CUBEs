@@ -7,7 +7,6 @@ using UnityEngine;
 /// <summary>
 /// Base class for all enemies.
 /// </summary>
-[RequireComponent(typeof(PoolObject))]
 public class Enemy : Ship
 {
     #region References
@@ -24,6 +23,7 @@ public class Enemy : Ship
         Grunt,
         Gunner,
         Tank,
+        SwitchBlade,
     }
     public Classes enemyClass;
     public int score;

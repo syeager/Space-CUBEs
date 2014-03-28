@@ -25,7 +25,6 @@ public class LevelManager : Singleton<LevelManager>
 
     #region Protected Fields
 
-    protected Player player;
     protected Dictionary<Enemy.Classes, GameObject> enemies;
 
     #endregion
@@ -58,6 +57,7 @@ public class LevelManager : Singleton<LevelManager>
     #region Properties
 
     public List<Enemy> activeEnemies { get; protected set; }
+    public Player player { get; protected set; }
 
     #endregion
 
@@ -74,7 +74,7 @@ public class LevelManager : Singleton<LevelManager>
     {
         base.Awake();
 
-        enemies = new Dictionary<Enemy.Classes,GameObject>();
+        enemies = new Dictionary<Enemy.Classes, GameObject>();
         foreach (var enemy in enemyPrefabs)
         {
             enemies.Add(enemy.GetComponent<Enemy>().enemyClass, enemy);
@@ -88,7 +88,7 @@ public class LevelManager : Singleton<LevelManager>
         activeEnemies = new List<Enemy>();
 
         Grid = ((GameObject)Instantiate(GameResources.Main.ConstructionGrid_Prefab, Vector3.zero, Quaternion.identity)).GetComponent<ConstructionGrid>();
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
 
         if (GameData.Main.levelData.ContainsKey("Build"))
         {
@@ -99,17 +99,17 @@ public class LevelManager : Singleton<LevelManager>
             build = testBuild;
         }
 
-        #else
+#else
 
         build = (string)GameData.Main.levelData["Build"];
 
-        #endif
+#endif
 
         InvokeAction(() => CreatePlayer(build), 1f);
     }
 
 
-    private void Update()
+    protected virtual void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -213,7 +213,7 @@ public class LevelManager : Singleton<LevelManager>
             {
                 if (gradeChances[j] <= rand)
                 {
-                    grades[i] = j-1;
+                    grades[i] = j - 1;
                     break;
                 }
             }
@@ -223,7 +223,7 @@ public class LevelManager : Singleton<LevelManager>
         int[] awards = new int[5];
         for (int i = 0; i < 5; i++)
         {
-            awards[i] = CUBE.gradedCUBEs[grades[i]][Random.Range(0, CUBE.gradedCUBEs[grades[i]].Length-1)];
+            awards[i] = CUBE.gradedCUBEs[grades[i]][Random.Range(0, CUBE.gradedCUBEs[grades[i]].Length - 1)];
         }
 
         return awards;

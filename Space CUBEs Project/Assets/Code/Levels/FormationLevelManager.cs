@@ -19,6 +19,14 @@ public class FormationLevelManager : LevelManager
 
     #endregion
 
+    #region Boss Fields
+
+    public GameObject Boss_Prefab;
+    private Boss boss;
+    public Vector3 bossSpawnPosition;
+
+    #endregion
+
 
     #region Unity Overrides
 
@@ -27,6 +35,22 @@ public class FormationLevelManager : LevelManager
         base.Start();
 
         InvokeAction(() => SpawnNextFormation(), 3f);
+    }
+
+
+    protected override void Update()
+    {
+        base.Update();
+
+        if (Input.GetKeyDown(KeyCode.Keypad1))
+        {
+            lastSegment = true;
+            segmentCursor = 100000;
+            while (activeEnemies.Count > 0)
+            {
+                activeEnemies[0].GetComponent<ShieldHealth>().Trash();
+            }
+        }
     }
 
     #endregion
@@ -89,6 +113,14 @@ public class FormationLevelManager : LevelManager
         }
     }
 
+
+    private void SpawnBoss()
+    {
+        boss = (Instantiate(Boss_Prefab, bossSpawnPosition, SPAWNROTATION) as GameObject).GetComponent<Boss>();
+        boss.GetComponent<ShieldHealth>().DieEvent += (s, a) => { LevelFinished(); };
+        boss.stateMachine.Start();
+    }
+
     #endregion
 
     #region EventHandlers
@@ -104,7 +136,7 @@ public class FormationLevelManager : LevelManager
             Log("Formation " + (segmentCursor - 1) + " cleared.", true, Debugger.LogTypes.LevelEvents);
             if (lastSegment)
             {
-                LevelFinished();
+                SpawnBoss();
             }
             else
             {

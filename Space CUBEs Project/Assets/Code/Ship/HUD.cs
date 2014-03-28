@@ -22,6 +22,7 @@ public class HUD : Singleton<HUD>
     public UISprite ShieldBar;
     public UISprite HealthBar;
     public UILabel Points;
+    public UISprite bossHealth;
 
     #endregion
 
