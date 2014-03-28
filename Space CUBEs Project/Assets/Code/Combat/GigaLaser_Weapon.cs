@@ -80,6 +80,7 @@ public class GigaLaser_Weapon : Weapon
         charge = PoolManager.Pop(Charge_Prefab).transform;
         charge.parent = myTransform;
         charge.SetPosRot(myTransform.position + myTransform.TransformDirection(attackOffset), myTransform.rotation);
+        charge.localScale = Vector3.one;
         
         // increase charge
         float timer = chargeTime;
