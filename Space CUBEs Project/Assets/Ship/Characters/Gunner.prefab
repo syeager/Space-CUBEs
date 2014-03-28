@@ -127,7 +127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dec5f53910ad00b4abc79e1d33380bfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 1
+  log: 0
   timeScale: 1
   myWeapons: {fileID: 11400008}
   enemyClass: 2
@@ -151,6 +151,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 1
   timeScale: 1
+  myRenderer: {fileID: 0}
   HealthHit_Mat: {fileID: 2100000, guid: 714fd6fe39d4b7e4786c808fbccc8dd9, type: 2}
   healthHitMatTime: .5
   invincible: 0
