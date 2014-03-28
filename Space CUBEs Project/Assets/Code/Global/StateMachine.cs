@@ -129,9 +129,6 @@ public class StateMachine
             update = null;
         }
 
-        // exit state
-        exitMethods[initialState](info);
-
         // enter state
         currentState = initialState;
         enterMethods[currentState](info);
