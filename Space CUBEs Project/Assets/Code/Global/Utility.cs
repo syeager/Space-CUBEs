@@ -56,6 +56,12 @@ public static class Utility
         return rot.MultiplyVector(vector);
     }
 
+
+    public static Vector3 RotateVector(Vector3 vector, float angle, Vector3 axis)
+    {
+        return Utility.RotateVector(vector, Quaternion.AngleAxis(angle, axis));
+    }
+
     #endregion
 
     #region Editor Methods
