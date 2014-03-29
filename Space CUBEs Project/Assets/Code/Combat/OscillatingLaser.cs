@@ -48,7 +48,7 @@ public class OscillatingLaser : Weapon
 
     private IEnumerator Fire()
     {
-        Transform laser = PoolManager.Pop(Laser_Prefab, myTransform.position + myTransform.InverseTransformDirection(laserOffset), myTransform.rotation).transform;
+        Transform laser = PoolManager.Pop(Laser_Prefab, myTransform.position + myTransform.TransformDirection(laserOffset), myTransform.rotation).transform;
         laser.parent = myTransform;
         laser.GetComponent<Hitbox>().Initialize(myShip, hitInfo);
 
