@@ -134,26 +134,26 @@ public class Player : Ship
     private void BarrelRollingEnter(Dictionary<string, object> info)
     {
         barrelRoll = false;
-        myHealth.invincible = true;
         collider.enabled = false;
 
         // release all attacks
         myWeapons.ActivateAll(false);
 
-        stateMachine.SetUpdate(BarrelRollingUpdate(MovementInput()));
+        stateMachine.SetUpdate(BarrelRollingUpdate(MovementInput(), myHealth.invincible));
+        myHealth.invincible = true;
     }
 
 
-    private IEnumerator BarrelRollingUpdate(Vector2 direction)
+    private IEnumerator BarrelRollingUpdate(Vector2 direction, bool invincible)
     {
         yield return StartCoroutine(myMotor.BarrelRoll(direction, horizontalBounds));
-        stateMachine.SetState(MovingState, new Dictionary<string, object>());
+        stateMachine.SetState(MovingState, new Dictionary<string, object>{{"invincible", invincible}});
     }
 
 
     private void BarrelRollingExit(Dictionary<string, object> info)
     {
-        myHealth.invincible = false;
+        myHealth.invincible = (bool)info["invincible"];
         collider.enabled = true;
         barrelRoll = false;
     }
