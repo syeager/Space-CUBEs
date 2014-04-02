@@ -101,7 +101,7 @@ public class GigaLaser_Weapon : Weapon
         {
             power -= FULLPOWER/attackTime*deltaTime;
             float size = maxSize * power / FULLPOWER;
-            if (Physics.Raycast(laser.position, myTransform.forward, out rayInfo, maxRange) && rayInfo.collider.GetComponent<Ship>() != null)
+            if (Physics.Raycast(laser.position, myTransform.forward, out rayInfo, maxRange) && rayInfo.collider.GetComponent<Health>() != null)
             {
                 laser.localScale = new Vector3(size, size, rayInfo.distance);
             }
