@@ -5,7 +5,6 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 /// <summary>
 /// Singleton to hold game data and handle player sign in.
@@ -41,23 +40,6 @@ public class GameData : Singleton<GameData>
          levelData = new Dictionary<string, object>();
     }
 
-
-    private void Update()
-    {
-        #if UNITY_EDITOR
-        
-        // clear console
-        if (Input.GetKeyDown(KeyCode.KeypadEnter))
-        {
-            Assembly assembly = Assembly.GetAssembly(typeof(UnityEditor.SceneView));
-            Type type = assembly.GetType("UnityEditorInternal.LogEntries");
-            MethodInfo method = type.GetMethod("Clear");
-            method.Invoke(new object(), null);
-        }
-
-        #endif
-    }
-
     #endregion
 
     #region Loading Methods
@@ -90,7 +72,10 @@ public class GameData : Singleton<GameData>
     /// </summary>
     public static void ReloadLevel(Dictionary<string, object> levelData = null)
     {
-        Main.levelData = levelData;
+        if (levelData != null)
+        {
+            Main.levelData = levelData;
+        }
         Application.LoadLevel(Application.loadedLevel);
     }
 

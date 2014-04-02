@@ -7,7 +7,9 @@ using Object = UnityEngine.Object;
 using System.IO;
 using System.Collections.Generic;
 using System.Collections;
+#if UNITY_EDITOR
 using System.Reflection;
+#endif
 
 /// <summary>
 /// Wrapper for Unity's Debug class.
@@ -63,7 +65,7 @@ public class Debugger : Singleton<Debugger>
     #region MonoBehaviour Overrides
 
     [System.Diagnostics.Conditional("LOG")]
-    protected void Start()
+    private void Start()
     {
         string[] logTypes = Enum.GetNames(typeof(LogTypes));
         for (int i = 0; i < logFlags.Length; i++)
@@ -83,6 +85,26 @@ public class Debugger : Singleton<Debugger>
             File.AppendAllText(path, "*** " + DateTime.Now + " ***\r\n");
         }
     }
+
+#if UNITY_EDITOR
+    private void Update()
+    {
+        // reload level
+        if (Input.GetKeyUp(KeyCode.Keypad9))
+        {
+            GameData.ReloadLevel();
+        }
+
+        // clear console
+        if (Input.GetKeyDown(KeyCode.Keypad8))
+        {
+            Assembly assembly = Assembly.GetAssembly(typeof(UnityEditor.SceneView));
+            Type type = assembly.GetType("UnityEditorInternal.LogEntries");
+            MethodInfo method = type.GetMethod("Clear");
+            method.Invoke(new object(), null);
+        }
+    }
+#endif
 
     #endregion
 
