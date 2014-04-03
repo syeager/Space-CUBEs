@@ -20,6 +20,12 @@ public class OscillatingLaser : Weapon
     
     #endregion
 
+    #region Private Fields
+
+    private Transform laser;
+
+    #endregion
+
 
     #region Weapon Overrides
 
@@ -27,19 +33,16 @@ public class OscillatingLaser : Weapon
     {
         if (pressed)
         {
-            gameObject.SetActive(true);
             StartCoroutine(Fire());
         }
         else
         {
-            gameObject.SetActive(false);
+            StopAllCoroutines();
+            if (laser != null)
+            {
+                laser.GetComponent<PoolObject>().Disable();
+            }
         }
-    }
-
-
-    public override Weapon Bake(GameObject parent)
-    {
-        throw new System.NotImplementedException();
     }
 
     #endregion
@@ -48,7 +51,7 @@ public class OscillatingLaser : Weapon
 
     private IEnumerator Fire()
     {
-        Transform laser = PoolManager.Pop(Laser_Prefab, myTransform.position + myTransform.TransformDirection(laserOffset), myTransform.rotation).transform;
+        laser = PoolManager.Pop(Laser_Prefab, myTransform.position + myTransform.TransformDirection(laserOffset), myTransform.rotation).transform;
         laser.parent = myTransform;
         laser.GetComponent<Hitbox>().Initialize(myShip, hitInfo);
 

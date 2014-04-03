@@ -73,7 +73,6 @@ public class Boss : Enemy
         // next stage
         if (args.health < stages[stage-1])
         {
-            Log("Staging to " + stage+1, true, Debugger.LogTypes.StateMachines);
             stage++;
             NextStageEvent(this, new ValueArgs(stage));
         }

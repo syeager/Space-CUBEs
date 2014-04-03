@@ -59,16 +59,6 @@ public abstract class Weapon : MonoBase
 
     #endregion
 
-    #region Public Methods
-
-    public void Initialize(Ship sender)
-    {
-        myShip = sender;
-        power = FULLPOWER;
-    }
-
-    #endregion
-
     #region Protected Methods
 
     protected IEnumerator Cooldown(bool empty = false, bool deActivate = true)
@@ -120,14 +110,19 @@ public abstract class Weapon : MonoBase
 
     #region Virtual Methods
 
+    public virtual void Initialize(Ship sender)
+    {
+        myTransform = transform;
+        myShip = sender;
+        power = FULLPOWER;
+    }
+
+
     public virtual bool CanActivate()
     {
         return canActivate;
     }
 
-    #endregion
-
-    #region Abstract Methods
 
     /// <summary>
     /// attach new Weapon to parent
@@ -137,7 +132,14 @@ public abstract class Weapon : MonoBase
     /// <param name="parent"></param>
     /// <param name="index"></param>
     /// <returns></returns>
-    public abstract Weapon Bake(GameObject parent);
+    public virtual Weapon Bake(GameObject parent)
+    {
+        return null;
+    }
+
+    #endregion
+
+    #region Abstract Methods
 
     public abstract void Activate(bool pressed, float multiplier);
 

@@ -23,12 +23,6 @@ public class SidewinderMissileLauncher : Weapon
     
     #endregion
 
-    #region Private Fields
-
-    private bool finalTarget;
-
-    #endregion
-
 
     #region Weapon Overrides
 
@@ -40,25 +34,17 @@ public class SidewinderMissileLauncher : Weapon
         }
     }
 
-
-    public override Weapon Bake(GameObject parent)
-    {
-        throw new System.NotImplementedException();
-    }
-
     #endregion
 
     #region Private Methods
 
     private IEnumerator Firing()
     {
-        finalTarget = false;
-
         WaitForSeconds wait = new WaitForSeconds(missileDelay);
         for (int i = 0; i < missilePositions.Length; i++)
         {
             yield return wait;
-            PoolManager.Pop(Missile_Prefab, myTransform.position + myTransform.InverseTransformDirection(missilePositions[i]), myTransform.rotation).
+            PoolManager.Pop(Missile_Prefab, myTransform.position + myTransform.TransformDirection(missilePositions[i]), myTransform.rotation).
                 GetComponent<SidewinderMissile>().Initialize(myShip, hitInfo, missileSpeed, rotationSpeed, homingTime, dummyTargets, LevelManager.Main.player.transform);
         }
     }

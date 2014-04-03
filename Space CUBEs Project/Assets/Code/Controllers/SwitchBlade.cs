@@ -24,6 +24,8 @@ public class SwitchBlade : Boss
 
     public Vector3 startPosition;
     public float stagingTime;
+    public float stagingSize;
+    public float stagingSpeed;
     public float moveSpeed;
     public float moveHeight;
 
@@ -37,9 +39,23 @@ public class SwitchBlade : Boss
 
     #region Stage 1
 
-    public int stage1AllFireChance;
-    public float stage1CycleTime;
-    public float stage1CycleDelay;
+    public float stage1AttackTime;
+    public float stage1SwitchTime;
+    public float bulletEmitterTime;
+
+    #endregion
+
+    #region Stage 2
+
+    public float shieldTime = 5f;
+    public float shieldBuffer = 3f;
+    private Job shieldJob;
+
+    #endregion
+
+    #region Stage 3
+
+    public float deathLaserTime;
 
     #endregion
 
@@ -53,11 +69,11 @@ public class SwitchBlade : Boss
         // state machine
         stateMachine = new StateMachine(this, EnteringState);
         stateMachine.CreateState(EnteringState, EnteringEnter, EnteringExit);
-        stateMachine.CreateState(StagingState, i => { stateMachine.SetUpdate(StagingUpdate()); }, i => { });
+        stateMachine.CreateState(StagingState, StagingEnter, StagingExit);
         stateMachine.CreateState(Stage1State, Stage1Enter, i => { });
-        stateMachine.CreateState(Stage2State, i => { stateMachine.SetUpdate(Stage2Update());  }, i => { });
-        stateMachine.CreateState(Stage3State, i => { }, i => { });
-        stateMachine.CreateState(DyingState, i => { Destroy(gameObject); }, i => { });
+        stateMachine.CreateState(Stage2State, Stage2Enter, Stage2Exit);
+        stateMachine.CreateState(Stage3State, Stage3Enter, i => { });
+        stateMachine.CreateState(DyingState, DyingEnter, i => { });
 
         // stages
         NextStageEvent += OnStageIncrease;
@@ -94,11 +110,34 @@ public class SwitchBlade : Boss
     }
 
 
-    private IEnumerator StagingUpdate()
+    private void StagingEnter(Dictionary<string, object> info)
     {
         myHealth.invincible = true;
-        yield return new WaitForSeconds(stagingTime);
-        myHealth.invincible = false;
+        moveJob.Pause();
+
+        for (int i = 0; i < myWeapons.weapons.Length; i++)
+        {
+            myWeapons.Activate(i, false);
+            myWeapons.weapons[i].gameObject.SetActive(false);
+        }
+
+        StopAllCoroutines();
+
+        stateMachine.SetUpdate(StagingUpdate());
+    }
+
+
+    private IEnumerator StagingUpdate()
+    {
+        // resize
+        float timer = stagingTime;
+        while (timer > 0f)
+        {
+            timer -= Time.deltaTime;
+            myTransform.localScale += Vector3.one * Mathf.Sin(timer * stagingSpeed) * stagingSize * Time.deltaTime;
+            yield return null;
+        }
+        myTransform.localScale = Vector3.one;
 
         if (stage == 2)
         {
@@ -108,6 +147,15 @@ public class SwitchBlade : Boss
         {
             stateMachine.SetState(Stage3State);
         }
+    }
+
+
+    private void StagingExit(Dictionary<string, object> info)
+    {
+        myHealth.invincible = false;
+        moveJob.UnPause();
+
+        stateMachine.SetUpdate(StagingUpdate());
     }
 
 
@@ -127,24 +175,41 @@ public class SwitchBlade : Boss
             int cycles = Random.Range(1, 3);
             for (int i = 0; i < cycles; i++)
             {
-                yield return StartCoroutine(FireSideWeapons());
+                yield return StartCoroutine(FireSideWeapons(true));
             }
 
             // top
-            Debug.Log("firing top");
-            yield return new WaitForSeconds(stage1CycleTime);
+            yield return StartCoroutine(FirePattern(true));
 
             // sides
             cycles = Random.Range(1, 3);
             for (int i = 0; i < cycles; i++)
             {
-                yield return StartCoroutine(FireSideWeapons());
+                yield return StartCoroutine(FireSideWeapons(true));
             }
 
             // all
-            Debug.Log("firing all");
-            yield return new WaitForSeconds(stage1CycleTime);
+            StartCoroutine(FirePattern(true));
+            StartCoroutine(FireSideWeapons(false));
+            yield return new WaitForSeconds(bulletEmitterTime + stage1SwitchTime);
         }
+    }
+
+
+    private void Stage1Exit(Dictionary<string, object> info)
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            myWeapons.Activate(i, false);
+            myWeapons.weapons[i].gameObject.SetActive(false);
+        }
+    }
+
+
+    private void Stage2Enter(Dictionary<string, object> info)
+    {
+        stateMachine.SetUpdate(Stage2Update());
+        shieldJob = new Job(Shield());
     }
 
 
@@ -152,7 +217,69 @@ public class SwitchBlade : Boss
     {
         while (true)
         {
-            yield return null;
+            // sides
+            int cycles = Random.Range(1, 3);
+            for (int i = 0; i < cycles; i++)
+            {
+                yield return StartCoroutine(FireSideWeapons(true));
+            }
+
+            // top
+            yield return StartCoroutine(FirePattern(true));
+
+            // sides
+            cycles = Random.Range(1, 3);
+            for (int i = 0; i < cycles; i++)
+            {
+                yield return StartCoroutine(FireSideWeapons(true));
+            }
+
+            // all
+            StartCoroutine(FirePattern(true));
+            StartCoroutine(FireSideWeapons(false));
+            yield return new WaitForSeconds(stage1AttackTime + stage1SwitchTime);
+        }
+    }
+
+
+    private void Stage2Exit(Dictionary<string, object> info)
+    {
+        shieldJob.Pause();
+    }
+
+
+    private void Stage3Enter(Dictionary<string, object> info)
+    {
+        stateMachine.SetUpdate(Stage3Update());
+        shieldJob.UnPause();
+    }
+
+
+    private IEnumerator Stage3Update()
+    {
+        // death laser
+        myWeapons.Activate(6, true);
+        yield return new WaitForSeconds(deathLaserTime);
+        myWeapons.Activate(6, false);
+
+        while (true)
+        {
+            // sides
+            yield return StartCoroutine(FireSideWeapons(true));
+
+            // top
+            yield return StartCoroutine(FirePattern(true));
+
+            // sides
+            yield return StartCoroutine(FireSideWeapons(true));
+
+            // all
+            myWeapons.Activate(6, true);
+            StartCoroutine(FireSideWeapons(false));
+            yield return new WaitForSeconds(deathLaserTime);
+
+            myWeapons.Activate(6, false);
+            yield return new WaitForSeconds(stage1SwitchTime);
         }
     }
 
@@ -183,27 +310,93 @@ public class SwitchBlade : Boss
     }
 
 
-    private IEnumerator FireSideWeapons()
+    private IEnumerator FireSideWeapons(bool controlMovement)
     {
-        // activate
+        // get weapons
         int weapon1 = Random.Range(0, 2);
         int weapon2 = Random.Range(2, 4);
 
+        // open
+        if (controlMovement)
+        {
+            moveJob.Pause();
+        }
         myWeapons.weapons[weapon1].gameObject.SetActive(true);
         myWeapons.weapons[weapon2].gameObject.SetActive(true);
+        yield return new WaitForSeconds(stage1SwitchTime);
 
-        moveJob.Pause();
-        yield return new WaitForSeconds(stage1CycleDelay);
-        moveJob.UnPause();
-
-        // left
+        // fire
+        if (controlMovement)
+        {
+            moveJob.UnPause();
+        }
         myWeapons.Activate(weapon1, true);
-        // right
         myWeapons.Activate(weapon2, true);
+        yield return new WaitForSeconds(stage1AttackTime);
+        myWeapons.Activate(weapon1, false);
+        myWeapons.Activate(weapon2, false);
 
-        yield return new WaitForSeconds(stage1CycleTime);
+        // close
+        if (controlMovement)
+        {
+            moveJob.Pause();
+        }
         myWeapons.weapons[weapon1].gameObject.SetActive(false);
         myWeapons.weapons[weapon2].gameObject.SetActive(false);
+        yield return new WaitForSeconds(stage1SwitchTime);
+        if (controlMovement)
+        {
+            moveJob.UnPause();
+        }
+    }
+
+
+    private IEnumerator FirePattern(bool controlMovement)
+    {
+        // open
+        if (controlMovement)
+        {
+            moveJob.Pause();
+        }
+        myWeapons.weapons[4].gameObject.SetActive(true);
+        yield return new WaitForSeconds(stage1SwitchTime);
+
+        // fire
+        myWeapons.Activate(4, true);
+        yield return new WaitForSeconds(bulletEmitterTime);
+
+        // close
+        myWeapons.weapons[4].gameObject.SetActive(false);
+        yield return new WaitForSeconds(stage1SwitchTime);
+        if (controlMovement)
+        {
+            moveJob.UnPause();
+        }
+    }
+
+
+    private IEnumerator Shield()
+    {
+        WaitForSeconds activated = new WaitForSeconds(shieldTime);
+        WaitForSeconds deactivated = new WaitForSeconds(shieldBuffer);
+
+        while (true)
+        {
+            // activate
+            myWeapons.Activate(5, true);
+            yield return activated;
+ 
+            // close
+            myWeapons.Activate(5, false);
+            yield return deactivated;
+        }
+    }
+
+
+    private void DyingEnter(Dictionary<string, object> info)
+    {
+        moveJob.Kill();
+        Destroy(gameObject);
     }
 
     #endregion
@@ -212,7 +405,6 @@ public class SwitchBlade : Boss
 
     private void OnStageIncrease(object sender, ValueArgs args)
     {
-        stage++;
         stateMachine.SetState(StagingState);
     }
 

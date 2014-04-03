@@ -58,6 +58,7 @@ public class LevelManager : Singleton<LevelManager>
 
     public List<Enemy> activeEnemies { get; protected set; }
     public Player player { get; protected set; }
+    public Transform playerTransform { get; protected set; }
 
     #endregion
 
@@ -239,6 +240,7 @@ public class LevelManager : Singleton<LevelManager>
 
         var buildShip = args.ship.AddComponent<ShipCompactor>();
         player = buildShip.Compact(typeof(Player), true, true) as Player;
+        playerTransform = player.transform;
         player.Initialize(args.health, args.shield, args.speed, args.damage);
 
         if (GameSettings.Main.invincible)
