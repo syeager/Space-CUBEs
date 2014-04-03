@@ -10,7 +10,7 @@ public class MonoBase : MonoBehaviour
 {
     #region Public Fields
 
-    public bool log = true;
+    public bool log = false;
     public float timeScale = 1f;
 
     #endregion
