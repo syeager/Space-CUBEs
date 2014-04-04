@@ -21,7 +21,7 @@ public class BlackHoleMissile : Hitbox
 
     public void Explode()
     {
-        PoolManager.Pop(BlackHole_Prefab, myTransform.position, myTransform.rotation).GetComponent<BlackHole>().Initialize(sender, hitInfo, explosionTime);
+        PoolManager.Pop(BlackHole_Prefab, myTransform.position, myTransform.rotation).GetComponent<BlackHole>().Initialize(sender, damage, explosionTime);
         GetComponent<PoolObject>().Disable();
     }
 

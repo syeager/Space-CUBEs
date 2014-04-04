@@ -12,7 +12,7 @@ public class DeathLaser : Weapon
     #region Public Fields
     
     public GameObject laser;
-    public HitInfo hitInfo;
+    public float damage;
     
     #endregion
 
@@ -23,7 +23,7 @@ public class DeathLaser : Weapon
     {
         if (pressed)
         {
-            laser.GetComponent<Hitbox>().Initialize(myShip, hitInfo);
+            laser.GetComponent<Hitbox>().Initialize(myShip, damage);
             laser.SetActive(true);
         }
         else

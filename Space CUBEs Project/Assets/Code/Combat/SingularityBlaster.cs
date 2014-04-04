@@ -13,7 +13,7 @@ public class SingularityBlaster : Weapon
     
     public GameObject BlackHoleMissile_Prefab;
     public Vector3 missileOffset;
-    public HitInfo hitInfo;
+    public float damage;
     public float missileTime;
     public float missileSpeed;
     
@@ -52,7 +52,7 @@ public class SingularityBlaster : Weapon
         comp.cooldownSpeed = cooldownSpeed;
         comp.BlackHoleMissile_Prefab = BlackHoleMissile_Prefab;
         comp.missileOffset = missileOffset + myTransform.localPosition;
-        comp.hitInfo = hitInfo;
+        comp.damage = damage;
         comp.missileTime = missileTime;
         comp.missileSpeed = missileSpeed;
 
@@ -66,7 +66,7 @@ public class SingularityBlaster : Weapon
     private void Fire(float multiplier)
     {
         missile = PoolManager.Pop(BlackHoleMissile_Prefab, myTransform.position + myTransform.TransformDirection(missileOffset), myTransform.rotation).GetComponent<BlackHoleMissile>();
-        missile.Initialize(myShip, hitInfo.MultiplyDamage(multiplier), missileTime, myTransform.forward*missileSpeed);
+        missile.Initialize(myShip, damage * multiplier, missileTime, myTransform.forward*missileSpeed);
     }
 
 

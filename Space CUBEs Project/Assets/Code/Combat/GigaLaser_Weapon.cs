@@ -13,7 +13,7 @@ public class GigaLaser_Weapon : Weapon
     public GameObject Charge_Prefab;
     public string attackName;
     public Vector3 attackOffset;
-    public HitInfo hitInfo;
+    public float damage;
     public float chargeSpeed;
     public float chargeTime;
     public float maxSize;
@@ -59,7 +59,7 @@ public class GigaLaser_Weapon : Weapon
         comp.Laser_Prefab = Laser_Prefab;
         comp.Charge_Prefab = Charge_Prefab;
         comp.attackName = attackName;
-        comp.hitInfo = hitInfo;
+        comp.damage = damage;
         comp.attackOffset = attackOffset+transform.localPosition;
         comp.chargeSpeed = chargeSpeed;
         comp.chargeTime = chargeTime;
@@ -96,7 +96,7 @@ public class GigaLaser_Weapon : Weapon
         laser = PoolManager.Pop(Laser_Prefab).transform;
         laser.parent = myTransform;
         laser.SetPosRot(myTransform.position + myTransform.TransformDirection(attackOffset), myTransform.rotation);
-        laser.GetComponent<Hitbox>().Initialize(myShip, hitInfo.MultiplyDamage(multiplier));
+        laser.GetComponent<Hitbox>().Initialize(myShip, damage*multiplier);
         while (power > 0f)
         {
             power -= FULLPOWER/attackTime*deltaTime;

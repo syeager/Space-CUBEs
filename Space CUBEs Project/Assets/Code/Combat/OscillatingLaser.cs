@@ -16,7 +16,7 @@ public class OscillatingLaser : Weapon
     public int cycles;
     public float speed;
     public float time;
-    public HitInfo hitInfo;
+    public float damage;
     
     #endregion
 
@@ -53,7 +53,7 @@ public class OscillatingLaser : Weapon
     {
         laser = PoolManager.Pop(Laser_Prefab, myTransform.position + myTransform.TransformDirection(laserOffset), myTransform.rotation).transform;
         laser.parent = myTransform;
-        laser.GetComponent<Hitbox>().Initialize(myShip, hitInfo);
+        laser.GetComponent<Hitbox>().Initialize(myShip, damage);
 
         float direction = 1f;
         float cycleTime = time/cycles;

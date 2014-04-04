@@ -10,7 +10,7 @@ public class PlanetSeed_Weapon : Weapon
     #region Public Fields
     
     public GameObject Star_Prefab;
-    public HitInfo hitInfo;
+    public float damage;
     public float speed;
     public float time;
     public Vector3 attackOffset;
@@ -24,7 +24,7 @@ public class PlanetSeed_Weapon : Weapon
     {
         if (!pressed) return;
 
-        PoolManager.Pop(Star_Prefab, myTransform.position + myTransform.TransformDirection(attackOffset), myTransform.rotation).GetComponent<Hitbox>().Initialize(myShip, hitInfo.MultiplyDamage(multiplier), time, myTransform.forward*speed);
+        PoolManager.Pop(Star_Prefab, myTransform.position + myTransform.TransformDirection(attackOffset), myTransform.rotation).GetComponent<Hitbox>().Initialize(myShip, damage*multiplier, time, myTransform.forward*speed);
         StartCoroutine(Cooldown(true));
         Activated();
     }
@@ -36,7 +36,7 @@ public class PlanetSeed_Weapon : Weapon
         comp.index = index;
         comp.cooldownSpeed = cooldownSpeed;
         comp.Star_Prefab = Star_Prefab;
-        comp.hitInfo = hitInfo;
+        comp.damage = damage;
         comp.speed = speed;
         comp.time = time;
         comp.attackOffset = attackOffset + myTransform.localPosition;

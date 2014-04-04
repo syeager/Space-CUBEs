@@ -104,12 +104,12 @@ public class Health : MonoBase
     /// Recieve hit info from weapon.
     /// </summary>
     /// <param name="sender">Who shot the weapon.</param>
-    /// <param name="hitInfo">HitInfo from weapon.</param>
-    public virtual void RecieveHit(Ship sender, HitInfo hitInfo)
+    /// <param name="damage">HitInfo from weapon.</param>
+    public virtual void RecieveHit(Ship sender, float damage)
     {
         if (invincible) return;
 
-        if (ChangeHealth(hitInfo.damage))
+        if (ChangeHealth(-damage))
         {
             Killed(sender);
             return;

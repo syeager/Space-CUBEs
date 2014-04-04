@@ -9,7 +9,7 @@ public class TechMissiles_Weapon : Weapon
     #region Public Fields
     
     public GameObject TechMissile_Prefab;
-    public HitInfo hitInfo;
+    public float damage;
     public Vector3[] launchPositions = new Vector3[8];
     public float delay;
     public float speed;
@@ -33,7 +33,7 @@ public class TechMissiles_Weapon : Weapon
         comp.index = index;
         comp.cooldownSpeed = cooldownSpeed;
         comp.TechMissile_Prefab = TechMissile_Prefab;
-        comp.hitInfo = hitInfo;
+        comp.damage = damage;
         comp.launchPositions = new Vector3[8];
         for (int i = 0; i < 8; i++)
         {
@@ -57,7 +57,7 @@ public class TechMissiles_Weapon : Weapon
 
         for (int i = 0; i < 8; i++)
         {
-            PoolManager.Pop(TechMissile_Prefab, myTransform.TransformPoint(launchPositions[i]), myTransform.rotation).GetComponent<Hitbox>().Initialize(myShip, hitInfo.MultiplyDamage(multiplier), myTransform.forward*speed);
+            PoolManager.Pop(TechMissile_Prefab, myTransform.TransformPoint(launchPositions[i]), myTransform.rotation).GetComponent<Hitbox>().Initialize(myShip, damage * multiplier, myTransform.forward*speed);
             yield return wait;
         }
 

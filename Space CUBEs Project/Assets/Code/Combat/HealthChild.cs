@@ -18,9 +18,9 @@ public class HealthChild : Health
 
     #region MonoBehaviour Overrides
 
-    public override void RecieveHit(Ship sender, HitInfo hitInfo)
+    public override void RecieveHit(Ship sender, float damage)
     {
-        parent.RecieveHit(sender, hitInfo);
+        parent.RecieveHit(sender, damage);
     }
 
     #endregion

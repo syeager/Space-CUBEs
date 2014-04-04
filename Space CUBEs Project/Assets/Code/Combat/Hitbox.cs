@@ -27,7 +27,7 @@ public class Hitbox : MonoBase
 
     #region Protected Fields
 
-    protected HitInfo hitInfo;
+    protected float damage;
     protected Ship sender;
     protected int hitCount;
     protected bool disabled;
@@ -52,7 +52,7 @@ public class Hitbox : MonoBase
         if (oppHealth != null)
         {
             // send damage
-            oppHealth.RecieveHit(sender, hitInfo);
+            oppHealth.RecieveHit(sender, damage);
 
             // disable if applicable
             if (hitNumber > 0)
@@ -75,7 +75,7 @@ public class Hitbox : MonoBase
         var oppHealth = other.gameObject.GetComponent<Health>();
         if (oppHealth != null)
         {
-            oppHealth.RecieveHit(sender, new HitInfo { damage = hitInfo.damage * deltaTime });
+            oppHealth.RecieveHit(sender, damage * deltaTime);
         }
     }
 
@@ -83,35 +83,35 @@ public class Hitbox : MonoBase
 
     #region Public Methods
 
-    public virtual void Initialize(Ship sender, HitInfo hitInfo)
+    public virtual void Initialize(Ship sender, float damage)
     {
         disabled = false;
 
         this.sender = sender;
-        this.hitInfo = hitInfo;
+        this.damage = damage;
 
         gameObject.layer = sender.gameObject.layer;
         hitCount = 0;
     }
 
 
-    public virtual void Initialize(Ship sender, HitInfo hitInfo, Vector3 moveVec)
+    public virtual void Initialize(Ship sender, float damage, Vector3 moveVec)
     {
-        Initialize(sender, hitInfo);
+        Initialize(sender, damage);
         StartCoroutine(Move(moveVec));
     }
 
 
-    public virtual void Initialize(Ship sender, HitInfo hitInfo, float time)
+    public virtual void Initialize(Ship sender, float damage, float time)
     {
-        Initialize(sender, hitInfo);
+        Initialize(sender, damage);
         myPoolObject.StartLifeTimer(time);
     }
 
 
-    public virtual void Initialize(Ship sender, HitInfo hitInfo, float time, Vector3 moveVec)
+    public virtual void Initialize(Ship sender, float damage, float time, Vector3 moveVec)
     {
-        Initialize(sender, hitInfo, time);
+        Initialize(sender, damage, time);
         StartCoroutine(Move(moveVec));
     }
 

@@ -36,7 +36,7 @@ public class CBomb : Hitbox
 
     private void Detonate()
     {
-        PoolManager.Pop(CBombExplosion_Prefab, myTransform.position, myTransform.rotation).GetComponent<CBombExplosion>().Initialize(sender, hitInfo, growTime, explosionLength, shrinkTime);
+        PoolManager.Pop(CBombExplosion_Prefab, myTransform.position, myTransform.rotation).GetComponent<CBombExplosion>().Initialize(sender, damage, growTime, explosionLength, shrinkTime);
 
         GetComponent<PoolObject>().Disable();
     }

@@ -221,7 +221,7 @@ GameObject:
   - 114: {fileID: 11400000}
   - 54: {fileID: 5400000}
   m_Layer: 10
-  m_Name: Switchblade
+  m_Name: SwitchBlade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -661,7 +661,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100024}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -226.507111, y: 198.672607, z: -142.768173}
+  m_LocalPosition: {x: 22.7108555, y: 343.687744, z: -14.3838606}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400022}
@@ -1828,8 +1828,7 @@ MonoBehaviour:
   cycles: 2
   speed: 4
   time: 5
-  hitInfo:
-    damage: -10
+  damage: 50
 --- !u!114 &11400016
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1869,15 +1868,13 @@ MonoBehaviour:
   missilePositions:
   - {x: -2, y: 0, z: 0}
   - {x: -1, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
   - {x: 1, y: 0, z: 0}
   - {x: 2, y: 0, z: 0}
   missileDelay: 0
   missileSpeed: 50
   rotationSpeed: 3
   homingTime: 1.5
-  hitInfo:
-    damage: -10
+  damage: 25
   dummyTargets: 5
 --- !u!114 &11400020
 MonoBehaviour:
@@ -1899,8 +1896,7 @@ MonoBehaviour:
   cycles: 2
   speed: 4
   time: 5
-  hitInfo:
-    damage: -10
+  damage: 50
 --- !u!114 &11400022
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1940,15 +1936,13 @@ MonoBehaviour:
   missilePositions:
   - {x: -2, y: 0, z: 0}
   - {x: -1, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
   - {x: 1, y: 0, z: 0}
   - {x: 2, y: 0, z: 0}
   missileDelay: 0
   missileSpeed: 50
   rotationSpeed: 3
   homingTime: 1.5
-  hitInfo:
-    damage: -10
+  damage: 25
   dummyTargets: 5
 --- !u!114 &11400026
 MonoBehaviour:
@@ -1988,8 +1982,7 @@ MonoBehaviour:
   Bullet_Prefab: {fileID: 100000, guid: 023549f1a73033642a26c4403e392f54, type: 2}
   number: 20
   speed: 30
-  hitInfo:
-    damage: -10
+  damage: 10
   offset: {x: 0, y: 0, z: 0}
 --- !u!114 &11400030
 MonoBehaviour:
@@ -2009,8 +2002,7 @@ MonoBehaviour:
   Bullet_Prefab: {fileID: 100000, guid: 023549f1a73033642a26c4403e392f54, type: 2}
   number: 10
   speed: 30
-  hitInfo:
-    damage: -10
+  damage: 10
   offset: {x: 0, y: 0, z: 0}
 --- !u!114 &11400032
 MonoBehaviour:

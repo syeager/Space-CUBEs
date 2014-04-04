@@ -17,7 +17,7 @@ public class SidewinderMissileLauncher : Weapon
     public float missileSpeed;
     public float rotationSpeed;
     public float homingTime;
-    public HitInfo hitInfo;
+    public float damage;
 
     public int dummyTargets = 5;
     
@@ -45,7 +45,7 @@ public class SidewinderMissileLauncher : Weapon
         {
             yield return wait;
             PoolManager.Pop(Missile_Prefab, myTransform.position + myTransform.TransformDirection(missilePositions[i]), myTransform.rotation).
-                GetComponent<SidewinderMissile>().Initialize(myShip, hitInfo, missileSpeed, rotationSpeed, homingTime, dummyTargets, LevelManager.Main.player.transform);
+                GetComponent<SidewinderMissile>().Initialize(myShip, damage, missileSpeed, rotationSpeed, homingTime, dummyTargets, LevelManager.Main.player.transform);
         }
     }
 

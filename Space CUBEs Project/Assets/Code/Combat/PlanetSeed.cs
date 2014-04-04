@@ -15,9 +15,9 @@ public class PlanetSeed : Hitbox
 
     #region Hitbox Overrides
 
-    public override void Initialize(Ship sender, HitInfo hitInfo, float time, Vector3 moveVec)
+    public override void Initialize(Ship sender, float damage, float time, Vector3 moveVec)
     {
-        base.Initialize(sender, hitInfo, time, moveVec);
+        base.Initialize(sender, damage, time, moveVec);
 
         GetComponent<Health>().Initialize();
 

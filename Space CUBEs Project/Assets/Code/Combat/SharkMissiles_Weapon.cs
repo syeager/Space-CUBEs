@@ -14,7 +14,7 @@ public class SharkMissiles_Weapon : Weapon
     public float missileDelay = 1f;
     public float missileDelaySpeed;
     public float missileHomingSpeed;
-    public HitInfo hitInfo;
+    public float damage;
 
     #endregion
 
@@ -59,7 +59,7 @@ public class SharkMissiles_Weapon : Weapon
         comp.missileDelay = missileDelay;
         comp.missileDelaySpeed = missileDelaySpeed;
         comp.missileHomingSpeed = missileHomingSpeed;
-        comp.hitInfo = hitInfo;
+        comp.damage = damage;
 
         return comp;
     }
@@ -74,7 +74,7 @@ public class SharkMissiles_Weapon : Weapon
         SharkMissile missile = PoolManager.Pop(SharkMissile_Prefab, myTransform.position + myTransform.TransformDirection(missileOffset), myTransform.rotation).GetComponent<SharkMissile>();
 
         // fire missile
-        missile.Initialize(myShip, hitInfo.MultiplyDamage(multiplier), missileDelay, missileDelaySpeed, missileHomingSpeed);
+        missile.Initialize(myShip, damage * multiplier, missileDelay, missileDelaySpeed, missileHomingSpeed);
     }
 
     #endregion

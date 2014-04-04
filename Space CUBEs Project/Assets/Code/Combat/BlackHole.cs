@@ -35,7 +35,7 @@ public class BlackHole : Hitbox
         var oppHealth = other.gameObject.GetComponent<Health>();
         if (oppHealth != null)
         {
-            oppHealth.RecieveHit(sender, new HitInfo { damage = hitInfo.damage * Mathf.Abs(pull) * deltaTime });
+            oppHealth.RecieveHit(sender, damage * Mathf.Abs(pull) * deltaTime);
         }
     }
 
@@ -49,9 +49,9 @@ public class BlackHole : Hitbox
 
     #region Hitbox Overrides
 
-    public override void Initialize(Ship sender, HitInfo hitInfo)
+    public override void Initialize(Ship sender, float damage)
     {
-        base.Initialize(sender, hitInfo);
+        base.Initialize(sender, damage);
 
         StartCoroutine(Spin());
     }

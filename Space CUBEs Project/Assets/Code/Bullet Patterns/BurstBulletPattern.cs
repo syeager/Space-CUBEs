@@ -14,7 +14,7 @@ public class BurstBulletPattern : Weapon
     public GameObject Bullet_Prefab;
     public int number;
     public float speed;
-    public HitInfo hitInfo;
+    public float damage;
     public Vector3 offset;
     
     #endregion
@@ -45,7 +45,7 @@ public class BurstBulletPattern : Weapon
         {
             rotation = Utility.RotateVector(Vector3.left, angle*i, Vector3.back);
             PoolManager.Pop(Bullet_Prefab, position, Quaternion.LookRotation(rotation, Vector3.back)).
-                GetComponent<Hitbox>().Initialize(myShip, hitInfo, rotation*speed);
+                GetComponent<Hitbox>().Initialize(myShip, damage, rotation*speed);
         }
     }
 

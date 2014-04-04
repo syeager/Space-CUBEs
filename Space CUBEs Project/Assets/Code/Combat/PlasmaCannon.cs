@@ -10,7 +10,7 @@ public class PlasmaCannon : Weapon
     #region Public Fields
 
     public GameObject Laser_Prefab;
-    public HitInfo hitInfo;
+    public float damage;
     public Vector3 laserOffset;
     public float fireRate;
     public float speed;
@@ -39,7 +39,7 @@ public class PlasmaCannon : Weapon
         comp.index = index;
         comp.Laser_Prefab = Laser_Prefab;
         comp.cooldownSpeed = cooldownSpeed;
-        comp.hitInfo = hitInfo;
+        comp.damage = damage;
         comp.laserOffset = laserOffset + myTransform.localPosition;
         comp.fireRate = fireRate;
         comp.speed = speed;
@@ -58,7 +58,7 @@ public class PlasmaCannon : Weapon
         {
             GameObject laser = PoolManager.Pop(Laser_Prefab);
             laser.transform.SetPosRot(myTransform.position + myTransform.TransformDirection(laserOffset), myTransform.rotation);
-            laser.GetComponent<Hitbox>().Initialize(myShip, hitInfo.MultiplyDamage(multiplier), myTransform.forward * speed);
+            laser.GetComponent<Hitbox>().Initialize(myShip, damage * multiplier, myTransform.forward * speed);
 
             yield return time;
         }

@@ -27,7 +27,7 @@ public class SharkMissile : Hitbox
         if (other.transform != target) return;
 
         var oppHealth = other.gameObject.GetComponent<Health>();
-        oppHealth.RecieveHit(sender, hitInfo);
+        oppHealth.RecieveHit(sender, damage);
 
         Detonate();
     }
@@ -36,10 +36,10 @@ public class SharkMissile : Hitbox
 
     #region Hitbox Overrides
 
-    public void Initialize(Ship sender, HitInfo hitInfo, float delay, float delaySpeed, float homingSpeed)
+    public void Initialize(Ship sender, float damage, float delay, float delaySpeed, float homingSpeed)
     {
         this.sender = sender;
-        this.hitInfo = hitInfo;
+        this.damage = damage;
         this.homingSpeed = homingSpeed;
         target = null;
 

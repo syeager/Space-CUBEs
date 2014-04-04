@@ -42,9 +42,9 @@ public class SidewinderMissile : Hitbox
 
     #region Hitbox Overrides
 
-    public void Initialize(Ship sender, HitInfo hitInfo, float speed, float angularSpeed, float homingTime, int dummyTargets, Transform target)
+    public void Initialize(Ship sender, float damage, float speed, float angularSpeed, float homingTime, int dummyTargets, Transform target)
     {
-        Initialize(sender, hitInfo);
+        Initialize(sender, damage);
 
         this.speed = speed;
         this.angularSpeed = angularSpeed;

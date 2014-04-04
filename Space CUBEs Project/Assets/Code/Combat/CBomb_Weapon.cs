@@ -13,7 +13,7 @@ public class CBomb_Weapon : Weapon
     public Vector3 attackOffset;
     public float time = 4f;
     public float speed;
-    public HitInfo hitInfo;
+    public float damage;
 
     #endregion
 
@@ -26,7 +26,7 @@ public class CBomb_Weapon : Weapon
 
          // replace with pool
         GameObject bomb = PoolManager.Pop(CBomb_Prefab, myTransform.position + myTransform.TransformDirection(attackOffset), myTransform.rotation);
-        bomb.GetComponent<Hitbox>().Initialize(myShip, hitInfo.MultiplyDamage(multiplier), time, myTransform.forward * speed);
+        bomb.GetComponent<Hitbox>().Initialize(myShip, damage*multiplier, time, myTransform.forward * speed);
         StartCoroutine(Cooldown(true));
 
         if (ActivatedEvent != null)
@@ -45,7 +45,7 @@ public class CBomb_Weapon : Weapon
         comp.attackOffset = attackOffset + myTransform.localPosition;
         comp.time = time;
         comp.speed = speed;
-        comp.hitInfo = hitInfo;
+        comp.damage = damage;
 
         return comp;
     }

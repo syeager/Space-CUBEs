@@ -16,9 +16,9 @@ public class CBombExplosion : Hitbox
 
     #region Hitbox Overrides
 
-    public void Initialize(Ship sender, HitInfo hitInfo, float growTime, float explosionTime, float shrinkTime)
+    public void Initialize(Ship sender, float damage, float growTime, float explosionTime, float shrinkTime)
     {
-        Initialize(sender, hitInfo);
+        Initialize(sender, damage);
         shockwave.layer = gameObject.layer;
 
         // reset
