@@ -296,6 +296,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b99d3de23254a2e49b07e955872fa626, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debugTouchRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 100
+    height: 100
 --- !u!4 &497402237
 Transform:
   m_ObjectHideFlags: 0
@@ -1091,7 +1097,7 @@ MonoBehaviour:
   ConstructionGrid_Prefab: {fileID: 100000, guid: 4e5347b39b5684b419e7b119a1b0d0ff,
     type: 2}
   VertexColor_Mat: {fileID: 2100000, guid: 6d9e17dd27ab6bc4ea90d40a327ec967, type: 2}
-  VertexOverlay_Mat: {fileID: 2100000, guid: 7c7cad9edc388da41a9033670888b17b, type: 2}
+  VertexColorLerp_Mat: {fileID: 2100000, guid: 7c7cad9edc388da41a9033670888b17b, type: 2}
   ShieldHit_Mat: {fileID: 2100000, guid: 71367417f5c929240bcef731c61da6be, type: 2}
   HealthHit_Mat: {fileID: 2100000, guid: 714fd6fe39d4b7e4786c808fbccc8dd9, type: 2}
   Player_TR: {fileID: 100000, guid: 52986c95ddd530342846a11fe85cb87a, type: 2}
@@ -1510,10 +1516,12 @@ MonoBehaviour:
   log: 1
   timeScale: 1
   invincible: 0
+  jumpToBoss: 0
   volumeSE: 5
   volumeMusic: 0
   joystickSensitivity: .5
   joystickXBuffer: .0500000007
+  joystickYBuffer: .0500000007
   joystickDeadzone: .300000012
   trailRenderer: 1
 --- !u!1 &1625100443
