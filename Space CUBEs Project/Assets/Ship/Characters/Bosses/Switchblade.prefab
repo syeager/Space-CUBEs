@@ -506,7 +506,7 @@ GameObject:
   - 23: {fileID: 2300044}
   - 114: {fileID: 11400034}
   - 114: {fileID: 11400032}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Shield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1678,7 +1678,6 @@ MonoBehaviour:
   stagingSpeed: 2
   moveSpeed: 5
   moveHeight: 15
-  stage1AllFireChance: 4
   stage1AttackTime: 5
   stage1SwitchTime: 1
   bulletEmitterTime: 5
@@ -1868,13 +1867,15 @@ MonoBehaviour:
   cooldownSpeed: 0
   Missile_Prefab: {fileID: 100002, guid: d489c3f61a7c36d4abdcc9e6b6319f47, type: 2}
   missilePositions:
+  - {x: -2, y: 0, z: 0}
+  - {x: -1, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
+  - {x: 1, y: 0, z: 0}
+  - {x: 2, y: 0, z: 0}
   missileDelay: 0
   missileSpeed: 50
   rotationSpeed: 3
-  homingTime: 1.25
+  homingTime: 1.5
   hitInfo:
     damage: -10
   dummyTargets: 5
@@ -1937,13 +1938,15 @@ MonoBehaviour:
   cooldownSpeed: 0
   Missile_Prefab: {fileID: 100002, guid: d489c3f61a7c36d4abdcc9e6b6319f47, type: 2}
   missilePositions:
+  - {x: -2, y: 0, z: 0}
+  - {x: -1, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 0}
+  - {x: 1, y: 0, z: 0}
+  - {x: 2, y: 0, z: 0}
   missileDelay: 0
   missileSpeed: 50
   rotationSpeed: 3
-  homingTime: 1.25
+  homingTime: 1.5
   hitInfo:
     damage: -10
   dummyTargets: 5
