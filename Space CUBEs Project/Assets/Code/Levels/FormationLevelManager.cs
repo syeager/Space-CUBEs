@@ -34,10 +34,21 @@ public class FormationLevelManager : LevelManager
     {
         base.Start();
 
+#if DEBUG
+        if (GameSettings.Main.jumpToBoss)
+        {
+            SpawnBoss();
+        }
+        else
+        {
+            InvokeAction(() => SpawnNextFormation(), 3f);
+        }
+#else
         InvokeAction(() => SpawnNextFormation(), 3f);
+#endif
     }
 
-
+#if UNITY_EDITOR
     protected override void Update()
     {
         base.Update();
@@ -52,6 +63,7 @@ public class FormationLevelManager : LevelManager
             }
         }
     }
+#endif
 
     #endregion
 

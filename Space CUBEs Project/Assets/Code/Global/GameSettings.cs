@@ -10,7 +10,10 @@ public class GameSettings : Singleton<GameSettings>
 {
     #region Testing Fields
 
+#if DEBUG
     public bool invincible;
+    public bool jumpToBoss;
+#endif
 
     #endregion
 

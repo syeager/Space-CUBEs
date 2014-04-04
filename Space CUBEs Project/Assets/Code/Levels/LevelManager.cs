@@ -90,7 +90,6 @@ public class LevelManager : Singleton<LevelManager>
 
         Grid = ((GameObject)Instantiate(GameResources.Main.ConstructionGrid_Prefab, Vector3.zero, Quaternion.identity)).GetComponent<ConstructionGrid>();
 #if UNITY_EDITOR
-
         if (GameData.Main.levelData.ContainsKey("Build"))
         {
             build = (string)GameData.Main.levelData["Build"];
@@ -99,11 +98,8 @@ public class LevelManager : Singleton<LevelManager>
         {
             build = testBuild;
         }
-
 #else
-
         build = (string)GameData.Main.levelData["Build"];
-
 #endif
 
         InvokeAction(() => CreatePlayer(build), 1f);
