@@ -27,6 +27,7 @@ public class GameData : Singleton<GameData>
     #region Level Fields
 
     public Dictionary<string, object> levelData { get; private set; }
+    public string currentBuild = "Test Build";
 
     #endregion
 

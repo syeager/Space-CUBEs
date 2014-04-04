@@ -44,7 +44,7 @@ public class MainMenuManager : MonoBehaviour
 
     public void LoadPlay()
     {
-        GameData.LoadLevel("Deep Space", true, new Dictionary<string,object>{{"Build", "Test Build"}});
+        GameData.LoadLevel("Level Select Menu");
     }
 
 

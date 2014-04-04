@@ -73,7 +73,7 @@ public class GarageManager : MonoBase
     private Transform cameraTarget;
 
     private bool menuOpen;
-    private CUBE.Types CUBEFilter;
+    private Types CUBEFilter;
 
     private int weaponIndex = -1;
 
@@ -83,7 +83,6 @@ public class GarageManager : MonoBase
     private float zoom;
 
     private bool selectedBuild;
-    private string currentBuild = "";
 
     private ActivateButton[] filteredCUBEButtons;
     private CUBEInfo currentCUBE;
@@ -762,7 +761,7 @@ public class GarageManager : MonoBase
 
         // create
         string[] buildNames = ConstructionGrid.BuildNames().ToArray();
-        if (buildNames.Length > 0) currentBuild = buildNames[0];
+        if (buildNames.Length > 0) GameData.Main.currentBuild = buildNames[0];
         for (int i = 0; i < buildNames.Length; i++)
         {
             ScrollviewButton button = (Instantiate(BuildButton_Prefab) as GameObject).GetComponent<ScrollviewButton>();
@@ -790,7 +789,7 @@ public class GarageManager : MonoBase
     {
         if (args.isPressed) return;
 
-        currentBuild = args.value;
+        GameData.Main.currentBuild = args.value;
     }
 
 
@@ -799,39 +798,39 @@ public class GarageManager : MonoBase
     /// </summary>
     public void DeleteBuild()
     {
-        if (string.IsNullOrEmpty(currentBuild)) return;
+        if (string.IsNullOrEmpty(GameData.Main.currentBuild)) return;
 
         // delete build
-        ConstructionGrid.DeleteBuild(currentBuild);
+        ConstructionGrid.DeleteBuild(GameData.Main.currentBuild);
 
         // remove build button
-        ScrollviewButton button = loadGrid.GetComponentsInChildren<ScrollviewButton>().First(b => b.value == currentBuild);
+        ScrollviewButton button = loadGrid.GetComponentsInChildren<ScrollviewButton>().First(b => b.value == GameData.Main.currentBuild);
         button.ActivateEvent -= OnBuildChosen;
         Destroy(button.gameObject);
 
         // reload grid
         StartCoroutine(Utility.UpdateScrollView(loadGrid, loadScrollBar, false));
 
-        currentBuild = ConstructionGrid.BuildNames()[0];
+        GameData.Main.currentBuild = ConstructionGrid.BuildNames()[0];
     }
 
 
     public void ConfirmRename()
     {
         renamePanel.SetActive(true);
-        renameInput.value = currentBuild;
+        renameInput.value = GameData.Main.currentBuild;
     }
 
 
     public void RenameBuild()
     {
-        ConstructionGrid.RenameBuild(currentBuild, renameInput.value);
+        ConstructionGrid.RenameBuild(GameData.Main.currentBuild, renameInput.value);
         renamePanel.SetActive(false);
 
-        ScrollviewButton button = loadGrid.GetComponentsInChildren<ScrollviewButton>().First(b => b.value == currentBuild);
-        currentBuild = renameInput.value;
-        button.value = currentBuild;
-        button.label.text = currentBuild;
+        ScrollviewButton button = loadGrid.GetComponentsInChildren<ScrollviewButton>().First(b => b.value == GameData.Main.currentBuild);
+        GameData.Main.currentBuild = renameInput.value;
+        button.value = GameData.Main.currentBuild;
+        button.label.text = GameData.Main.currentBuild;
     }
 
 
@@ -847,7 +846,7 @@ public class GarageManager : MonoBase
         {
             CreateGrid();
         }
-        Grid.CreateBuild(currentBuild);
+        Grid.CreateBuild(GameData.Main.currentBuild);
         shipName.value = Grid.buildName;
         stateMachine.SetState(SELECTSTATE, new Dictionary<string, object>());
         selectedBuild = true;
@@ -864,7 +863,7 @@ public class GarageManager : MonoBase
 
     public void Play()
     {
-        GameData.LoadLevel("Deep Space", true, new Dictionary<string, object> { { "Build", currentBuild } });
+        GameData.LoadLevel("Deep Space", true, new Dictionary<string, object> { { "Build", GameData.Main.currentBuild } });
     }
 
     #endregion

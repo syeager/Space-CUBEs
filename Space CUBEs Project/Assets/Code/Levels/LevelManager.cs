@@ -29,12 +29,6 @@ public class LevelManager : Singleton<LevelManager>
 
     #endregion
 
-    #region Private Fields
-
-    private string build;
-
-    #endregion
-
     #region Readonly Fields
 
     protected readonly Quaternion SPAWNROTATION = Quaternion.Euler(0f, 270f, 90f);
@@ -45,12 +39,6 @@ public class LevelManager : Singleton<LevelManager>
 
     private static readonly char[] ranks = { 'F', 'D', 'C', 'B', 'A', 'S' };
     private static readonly int[] gradeChances = { 50000, 25000, 12500, 6250, 3125 };
-
-    #endregion
-
-    #region Test Fields
-
-    public string testBuild;
 
     #endregion
 
@@ -89,20 +77,8 @@ public class LevelManager : Singleton<LevelManager>
         activeEnemies = new List<Enemy>();
 
         Grid = ((GameObject)Instantiate(GameResources.Main.ConstructionGrid_Prefab, Vector3.zero, Quaternion.identity)).GetComponent<ConstructionGrid>();
-#if UNITY_EDITOR
-        if (GameData.Main.levelData.ContainsKey("Build"))
-        {
-            build = (string)GameData.Main.levelData["Build"];
-        }
-        else
-        {
-            build = testBuild;
-        }
-#else
-        build = (string)GameData.Main.levelData["Build"];
-#endif
 
-        InvokeAction(() => CreatePlayer(build), 1f);
+        InvokeAction(() => CreatePlayer(GameData.Main.currentBuild), 1f);
     }
 
 
