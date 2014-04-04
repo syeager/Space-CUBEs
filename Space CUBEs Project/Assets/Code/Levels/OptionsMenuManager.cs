@@ -2,7 +2,6 @@
 // 2.17.2014
 
 using UnityEngine;
-using System.Collections;
 
 /// <summary>
 /// Manager for the Options Menu.
@@ -11,7 +10,6 @@ public class OptionsMenuManager : MonoBase
 {
     #region Public Fields
 
-    public UILabel invincibility_Label;
     public UISlider joystickSensitivity;
     public UISlider joystickXBuffer;
     public UISlider joystickYBuffer;
@@ -23,9 +21,8 @@ public class OptionsMenuManager : MonoBase
 
     #region MonoBehaviour Overrides
 
-    private void Start()
+    internal void Start()
     {
-        invincibility_Label.text = "Invincibility is " + (GameSettings.Main.invincible ? "on" : "off");
         joystickSensitivity.value = GameSettings.Main.joystickSensitivity;
         joystickXBuffer.value = GameSettings.Main.joystickXBuffer;
         joystickYBuffer.value = GameSettings.Main.joystickYBuffer;
@@ -36,13 +33,6 @@ public class OptionsMenuManager : MonoBase
     #endregion
 
     #region Button Methods
-
-    public void ToggleInvincibility()
-    {
-        GameSettings.Main.invincible = !GameSettings.Main.invincible;
-        invincibility_Label.text = "Invincibility is " + (GameSettings.Main.invincible ? "on" : "off");
-    }
-
 
     public void GameReset()
     {

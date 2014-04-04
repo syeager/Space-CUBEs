@@ -10,6 +10,36 @@ using System.Collections.Generic;
 /// </summary>
 public class MainMenuManager : MonoBehaviour
 {
+    #region Public Fields
+
+    public Rect debugTouchRect;
+
+    #endregion
+
+
+    #region MonoBehaviour Overrides
+
+    private void Update()
+    {
+#if UNITY_EDITOR
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            GameData.LoadLevel("Debug Menu");
+        }
+
+#else
+
+        if (Input.touchCount > 0 && Input.GetTouch(0).tapCount == 2 && debugTouchRect.Contains(Input.GetTouch(0).position))
+        {
+            GameData.LoadLevel("Debug Menu");
+        }
+
+#endif
+    }
+
+    #endregion
+
     #region Button Methods
 
     public void LoadPlay()
