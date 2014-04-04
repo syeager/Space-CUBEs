@@ -3,13 +3,12 @@
 
 using System;
 using UnityEngine;
-using Object = UnityEngine.Object;
 using System.IO;
 using System.Collections.Generic;
 using System.Collections;
-#if UNITY_EDITOR
 using System.Reflection;
-#endif
+
+using Object = UnityEngine.Object;
 
 /// <summary>
 /// Wrapper for Unity's Debug class.
@@ -127,7 +126,7 @@ public class Debugger : Singleton<Debugger>
     }
 
 
-    [System.Diagnostics.Conditional("WARNING")]
+    [System.Diagnostics.Conditional("LOG")]
     public static void LogWarning(object message, Object context = null, bool save = true, LogTypes logType = LogTypes.Default)
     {
         if (Main.logFlags[(int)logType]) Debug.LogWarning((Main.showTime ? Time.time + " " : "") + message, context);
@@ -144,7 +143,7 @@ public class Debugger : Singleton<Debugger>
     }
 
 
-    [System.Diagnostics.Conditional("ERROR")]
+    [System.Diagnostics.Conditional("LOG")]
     public static void LogError(object message, Object context = null, bool save = true, LogTypes logType = LogTypes.Default)
     {
         if (Main.logFlags[(int)logType]) Debug.LogError((Main.showTime ? Time.time + " " : "") + message, context);
@@ -185,7 +184,7 @@ public class Debugger : Singleton<Debugger>
     }
 
 
-    [System.Diagnostics.Conditional("DEBUG")]
+    [System.Diagnostics.Conditional("LOG")]
     public static void LogFields(object context, string name, bool includePrivate = false, LogTypes logType = LogTypes.Default)
     {
         if (!Main.logFlags[(int)logType]) return;
@@ -207,7 +206,7 @@ public class Debugger : Singleton<Debugger>
 
     #region ConsoleLine Messages
 
-    [System.Diagnostics.Conditional("CONSOLELINE")]
+    [System.Diagnostics.Conditional("LOG")]
     public static void LogConsoleLine(string message, float time = 0f)
     {
         if (Main.ConsoleLine == null) return;
