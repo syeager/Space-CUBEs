@@ -2,7 +2,8 @@
 	Properties
 	{
 		_Color ("Main Color", Color) = (1,1,1,0)
-		_Alpha ("Alpha", Range(0,1)) = 0
+		_Mix ("Mix", Range(0,1)) = 0
+		_Alpha ("Alpha", Range(0,1)) = 1
 	}
 	
 	SubShader 
@@ -23,6 +24,7 @@
 			#include "UnityCG.cginc"
 
 			float4 _Color;
+			float _Mix;
 			float _Alpha;
 
 			struct VertOut
@@ -41,7 +43,8 @@
 			{
 				VertOut output;
 				output.position = mul(UNITY_MATRIX_MVP, input.vertex);
-				output.color = lerp(input.color, _Color, _Alpha);
+				output.color = lerp(input.color, _Color, _Mix);
+				output.color.a = _Alpha;
 				return output;
 			}
 
@@ -57,7 +60,6 @@
 				return output;
 			}
 			ENDCG
-
 		}
 	}
 }

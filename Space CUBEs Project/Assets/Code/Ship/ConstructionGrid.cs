@@ -1,6 +1,7 @@
 ﻿// Steve Yeager
 // 11.26.2013
 
+using Annotations;
 using UnityEngine;
 using System;
 using System.Collections.Generic;
@@ -139,21 +140,6 @@ public class ConstructionGrid : MonoBase
     public CUBEInfo heldInfo { get; private set; }
     /// <summary>Weapon slots for the ship.</summary>
     public Weapon[] weapons { get; private set; }
-    /// <summary>Returns the next free weapon slot. -1 if all are taken.</summary>
-    private int nextWeaponSlot
-    {
-        get
-        {
-            for (int i = 0; i < weapons.Length; i++)
-            {
-                if (weapons[i] == null)
-                {
-                    return i;
-                }
-            }
-            return -1;
-        }
-    }
 
     /// <summary>Current health of the ship.</summary>
     public float shipHealth { get; private set; }
@@ -171,38 +157,6 @@ public class ConstructionGrid : MonoBase
 
     #endregion
 
-
-    #region MonoBehaviour Overrides
-
-    private void Update()
-    {
-        if (grid != null)
-        {
-            Vector3 cursorLayer = new Vector3(viewAxis.x * cursor.x, viewAxis.y * cursor.y, viewAxis.z * cursor.z).Round();
-
-            for (int y = 0; y < grid.Length; y++)
-            {
-                for (int z = 0; z < grid.Length; z++)
-                {
-                    for (int x = 0; x < grid.Length; x++)
-                    {
-                        Vector3 c = new Vector3(x, y, z);
-                        Vector3 cLayer = new Vector3(viewAxis.x * c.x, viewAxis.y * c.y, viewAxis.z * c.z).Round();
-                        if (cLayer == cursorLayer && (grid[y][z][x] == null || cursor == c))
-                        {
-                            cells[y][z][x].SetActive(true);
-                        }
-                        else
-                        {
-                            cells[y][z][x].SetActive(false);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    #endregion
 
     #region Public Methods
 
@@ -222,36 +176,35 @@ public class ConstructionGrid : MonoBase
         this.size = size;
         grid = new CUBE[size][][];
         cells = new GameObject[size][][];
-        Vector3 cursor = new Vector3(-size / 2f + 0.5f, 0f, -size / 2f + 0.5f);
+        Vector3 cursorPosition = new Vector3(-size / 2f + 0.5f, 0f, -size / 2f + 0.5f);
 
         // create grid and cells
         for (int i = 0; i < size; i++)
         {
             grid[i] = new CUBE[size][];
             cells[i] = new GameObject[size][];
-            cursor.z = -size / 2f + 0.5f;
+            cursorPosition.z = -size / 2f + 0.5f;
 
             for (int j = 0; j < size; j++)
             {
                 grid[i][j] = new CUBE[size];
                 cells[i][j] = new GameObject[size];
-                cursor.x = -size / 2f + 0.5f;
+                cursorPosition.x = -size / 2f + 0.5f;
 
                 for (int k = 0; k < size; k++)
                 {
-                    cells[i][j][k] = (GameObject)GameObject.Instantiate(Cell_Prefab);
+                    cells[i][j][k] = (GameObject)Instantiate(Cell_Prefab);
                     cells[i][j][k].transform.parent = transform;
-                    cells[i][j][k].transform.localPosition = cursor;
-                    cursor.x++;
+                    cells[i][j][k].transform.localPosition = cursorPosition;
+                    cursorPosition.x++;
                 }
-                cursor.z++;
+                cursorPosition.z++;
             }
-            cursor.y++;
+            cursorPosition.y++;
         }
 
         // set current layer and cursor
-        this.cursor = new Vector3(4, 5, 4);
-        ChangeLayer(0);
+        cursor = new Vector3(4, 5, 4);
 
         // create ship
         if (ship == null)
@@ -271,11 +224,11 @@ public class ConstructionGrid : MonoBase
     /// <summary>
     /// Rotate the grid.
     /// </summary>
-    /// <param name="viewAxis"></param>
+    /// <param name="plane"></param>
     public void RotateGrid(Vector3 plane)
     {
-        this.viewAxis = plane.Round();
-        ChangeLayer(0);
+        viewAxis = plane.Round();
+        MoveCursor(Vector3.zero);
     }
 
 
@@ -337,130 +290,8 @@ public class ConstructionGrid : MonoBase
         {
             cursorStatus = CursorStatuses.None;
         }
-    }
 
-
-    /// <summary>
-    /// Move the cursor up or down.
-    /// </summary>
-    /// <param name="amount">Direction and distance to move.</param>
-    [Obsolete("Use new method of calculating layer.")]
-    public void ChangeLayer(int amount)
-    {
-        // turn all cells off
-        //for (int i = 0; i < size; i++)
-        //{
-        //    for (int j = 0; j < size; j++)
-        //    {
-        //        for (int k = 0; k < size; k++)
-        //        {
-        //            cells[i][j][k].SetActive(false);
-        //        }
-        //    }
-        //}
-
-        // up
-        if (viewAxis == Vector3.up || viewAxis == Vector3.down)
-        {
-            int y = (int)(cursor + viewAxis * amount).y;
-            int newLayer = Mathf.Clamp(y, 0, size - 1);
-
-            // toggle cell colors in the previous and new layers
-            //for (int i = 0; i < size; i++)
-            //{
-            //    for (int j = 0; j < size; j++)
-            //    {
-            //        cells[newLayer][i][j].SetActive(true);
-            //    }
-            //}
-
-            // toggle CUBE colors; alpha for CUBEs in a higher layer than the new layer; full opacity for CUBEs on the same layer
-            if (viewAxis == Vector3.up)
-            {
-                foreach (var cube in currentBuild)
-                {
-                    if (cube.Value.position.y > newLayer) foreach (var mat in cube.Key.renderer.materials) mat.SetFloat("_Alpha", NEARALPHA);
-                    else foreach (var mat in cube.Key.renderer.materials) mat.SetFloat("_Alpha", 1f);
-                }
-            }
-            else
-            {
-                foreach (var cube in currentBuild)
-                {
-                    if (cube.Value.position.y < newLayer) foreach (var mat in cube.Key.renderer.materials) mat.SetFloat("_Alpha", NEARALPHA);
-                    else foreach (var mat in cube.Key.renderer.materials) mat.SetFloat("_Alpha", 1f);
-                }
-            }
-        }
-        // right
-        else if (viewAxis == Vector3.right || viewAxis == Vector3.left)
-        {
-            int x = (int)(cursor + viewAxis * amount).x;
-            int newLayer = Mathf.Clamp(x, 0, size - 1);
-
-            // toggle cell colors in the previous and new layers
-            //for (int i = 0; i < size; i++)
-            //{
-            //    for (int j = 0; j < size; j++)
-            //    {
-            //        cells[i][j][newLayer].SetActive(true);
-            //    }
-            //}
-
-            // toggle CUBE colors; alpha for CUBEs in a higher layer than the new layer; full opacity for CUBEs on the same layer
-            if (viewAxis == Vector3.right)
-            {
-                foreach (var cube in currentBuild)
-                {
-                    if (cube.Value.position.x > newLayer) foreach (var mat in cube.Key.renderer.materials) mat.SetFloat("_Alpha", NEARALPHA);
-                    else foreach (var mat in cube.Key.renderer.materials) mat.SetFloat("_Alpha", 1f);
-                }
-            }
-            else
-            {
-                foreach (var cube in currentBuild)
-                {
-                    if (cube.Value.position.x < newLayer) foreach (var mat in cube.Key.renderer.materials) mat.SetFloat("_Alpha", NEARALPHA);
-                    else foreach (var mat in cube.Key.renderer.materials) mat.SetFloat("_Alpha", 1f);
-                }
-            }
-        }
-        // forward
-        else if (viewAxis == Vector3.forward || viewAxis == Vector3.back)
-        {
-            int z = (int)(cursor + viewAxis * amount).z;
-            int newLayer = Mathf.Clamp(z, 0, size - 1);
-
-            // toggle cell colors in the previous and new layers
-            //for (int i = 0; i < size; i++)
-            //{
-            //    for (int j = 0; j < size; j++)
-            //    {
-            //        cells[i][newLayer][j].SetActive(true);
-            //    }
-            //}
-
-            // toggle CUBE colors; alpha for CUBEs in a higher layer than the new layer; full opacity for CUBEs on the same layer
-            if (viewAxis == Vector3.forward)
-            {
-                foreach (var cube in currentBuild)
-                {
-                    if (cube.Value.position.z > newLayer) foreach (var mat in cube.Key.renderer.materials) mat.SetFloat("_Alpha", NEARALPHA);
-                    else foreach (var mat in cube.Key.renderer.materials) mat.SetFloat("_Alpha", 1f);
-                }
-            }
-            else
-            {
-                foreach (var cube in currentBuild)
-                {
-                    if (cube.Value.position.z < newLayer) foreach (var mat in cube.Key.renderer.materials) mat.SetFloat("_Alpha", NEARALPHA);
-                    else foreach (var mat in cube.Key.renderer.materials) mat.SetFloat("_Alpha", 1f);
-                }
-            }
-        }
-
-        // move the cursor
-        MoveCursor(viewAxis * amount);
+        UpdateGrid();
     }
 
 
@@ -1041,6 +872,58 @@ public class ConstructionGrid : MonoBase
 #endif
     }
 
+
+    /// <summary>
+    /// Update all cell's visibility and CUBE's alpha.
+    /// </summary>
+    private void UpdateGrid()
+    {
+        Vector3 cursorLayer = new Vector3(viewAxis.x * cursor.x, viewAxis.y * cursor.y, viewAxis.z * cursor.z).Round();
+
+        // update cells
+        for (int y = 0; y < grid.Length; y++)
+        {
+            for (int z = 0; z < grid.Length; z++)
+            {
+                for (int x = 0; x < grid.Length; x++)
+                {
+                    Vector3 c = new Vector3(x, y, z);
+                    Vector3 cLayer = new Vector3(viewAxis.x * c.x, viewAxis.y * c.y, viewAxis.z * c.z).Round();
+                    if (cLayer == cursorLayer && (grid[y][z][x] == null || cursor == c))
+                    {
+                        cells[y][z][x].SetActive(true);
+                    }
+                    else
+                    {
+                        cells[y][z][x].SetActive(false);
+                    }
+                }
+            }
+        }
+
+        float direction = (viewAxis == Vector3.right || viewAxis == Vector3.up || viewAxis == Vector3.forward ? 1f : -1f);
+        Vector3 viewAxisNorm = viewAxis.normalized;
+
+        // update CUBEs
+        foreach (var cube in currentBuild)
+        {
+            Vector3 cPosition = new Vector3(cube.Value.position.x * viewAxis.x, cube.Value.position.y * viewAxis.y, cube.Value.position.z*viewAxis.z).Round();
+            Vector3 difference = cPosition - cursorLayer;
+
+            if (difference.normalized*direction == viewAxisNorm)
+            {
+                foreach (var mat in cube.Key.renderer.materials)
+                {
+                    mat.SetFloat("_Alpha", NEARALPHA);
+                }
+            }
+            else
+            {
+                foreach (var mat in cube.Key.renderer.materials) mat.SetFloat("_Alpha", 1f);
+            }
+        }
+    }
+
     #endregion
 
     #region Static Methods
@@ -1172,6 +1055,7 @@ public class ConstructionGrid : MonoBase
     }
 
 
+    [UsedImplicitly]
     private IEnumerator Blinking(Renderer target)
     {
         float timer = 0f;
@@ -1181,7 +1065,7 @@ public class ConstructionGrid : MonoBase
 
             for (int i = 0; i < target.sharedMaterials.Length; i++)
             {
-                target.sharedMaterials[i].SetFloat("_Alpha", timer);
+                target.sharedMaterials[i].SetFloat("_Mix", timer);
             }
 
             yield return null;
@@ -1194,7 +1078,7 @@ public class ConstructionGrid : MonoBase
 
             for (int i = 0; i < target.sharedMaterials.Length; i++)
             {
-                target.sharedMaterials[i].SetFloat("_Alpha", 1 - timer);
+                target.sharedMaterials[i].SetFloat("_Mix", 1 - timer);
             }
 
             yield return null;
@@ -1210,7 +1094,7 @@ public class ConstructionGrid : MonoBase
 
         for (int i = 0; i < target.sharedMaterials.Length; i++)
         {
-            target.sharedMaterials[i].SetFloat("_Alpha", 0f);
+            target.sharedMaterials[i].SetFloat("_Mix", 0f);
         }
     }
 

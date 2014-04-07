@@ -462,12 +462,12 @@ public class GarageManager : MonoBase
         {
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-                Grid.ChangeLayer(-1);
+                Grid.MoveCursor(Vector3.back);
                 CameraZoom(0f);
             }
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
-                Grid.ChangeLayer(1);
+                Grid.MoveCursor(Vector3.forward);
                 CameraZoom(0f);
             }
         }
@@ -1134,11 +1134,11 @@ public class GarageManager : MonoBase
         switch (args.value)
         {
             case "back":
-                Grid.ChangeLayer(-1);
+                Grid.MoveCursor(-cameraTarget.forward);
                 CameraZoom(0f);
                 break;
             case "forward":
-                Grid.ChangeLayer(1);
+                Grid.MoveCursor(cameraTarget.forward);
                 CameraZoom(0f);
                 break;
             case "left":
@@ -1396,12 +1396,12 @@ public class GarageManager : MonoBase
         switch (args.value)
         {
             case "back":
-                Grid.ChangeLayer(-1);
+                Grid.MoveCursor(-cameraTarget.forward);
                 CameraZoom(0f);
                 UpdatePieces();
                 break;
             case "forward":
-                Grid.ChangeLayer(1);
+                Grid.MoveCursor(cameraTarget.forward);
                 CameraZoom(0f);
                 UpdatePieces();
                 break;
