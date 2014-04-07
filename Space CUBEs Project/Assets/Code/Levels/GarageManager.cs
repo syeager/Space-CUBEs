@@ -109,23 +109,23 @@ public class GarageManager : MonoBase
 
     #region Readonly Fields
 
-    private readonly Vector3[] cameraPositions = new Vector3[6]
+    private readonly Vector3[] cameraPositions =
     {
         new Vector3(0, 1, 0),
         new Vector3(0, -1, 0),
         new Vector3(1, 0, 0),
         new Vector3(-1, 0, 0),
         new Vector3(0, 0, 1),
-        new Vector3(0, 0, -1),
+        new Vector3(0, 0, -1)
     };
-    private readonly Vector3[] cameraRotations = new Vector3[6]
+    private readonly Vector3[] cameraRotations =
     {
         new Vector3(90, 0, 0),
         new Vector3(270, 180, 0),
         new Vector3(0, 270, 0),
         new Vector3(0, 90, 0),
         new Vector3(0, 180, 0),
-        new Vector3(0, 0, 0),
+        new Vector3(0, 0, 0)
     };
 
     private readonly Rect InfoPanelRect = new Rect(0f, 0f, 1f, 0.125f);
@@ -1002,7 +1002,7 @@ public class GarageManager : MonoBase
         if (!args.isPressed) return;
 
         int direction = int.Parse(args.value);
-        int filter = Mathf.Clamp((int)CUBEFilter + direction, 0, Enum.GetNames(typeof(CUBE.Types)).Length);
+        int filter = Mathf.Clamp((int)CUBEFilter + direction, 0, Enum.GetNames(typeof(Types)).Length);
         FilterCUBEs((Types)filter);
     }
 

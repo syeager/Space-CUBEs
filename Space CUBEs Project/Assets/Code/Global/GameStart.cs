@@ -1,8 +1,8 @@
 ﻿// Steve Yeager
 // 1.15.2014
 
+using Annotations;
 using UnityEngine;
-using System.Collections;
 using System;
 using System.Collections.Generic;
 
@@ -20,7 +20,7 @@ public class GameStart : MonoBehaviour
 
     #region Readonly Fields
 
-    private static readonly List<Action> startActions = new List<Action> { Version1 };
+    private static readonly List<Action> StartActions = new List<Action> { Version1 };
 
     #endregion
 
@@ -34,6 +34,7 @@ public class GameStart : MonoBehaviour
 
     #region MonoBehaviour Overrides
 
+    [UsedImplicitly]
     private void Awake()
     {
         LoadGame();
@@ -45,7 +46,7 @@ public class GameStart : MonoBehaviour
 
     #region Private Methods
 
-    private void LoadGame()
+    private static void LoadGame()
     {
         CUBE.LoadAllCUBEInfo();
     }
@@ -57,7 +58,7 @@ public class GameStart : MonoBehaviour
         while (previousVersion < version)
         {
             Debugger.Log("GameStart: " + previousVersion, null, true, Debugger.LogTypes.Data);
-            startActions[previousVersion].Invoke();
+            StartActions[previousVersion].Invoke();
             previousVersion++;
         }
         PlayerPrefs.SetInt("Build Version", version);

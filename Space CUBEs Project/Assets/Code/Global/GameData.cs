@@ -2,9 +2,7 @@
 // 8.18.2013
 
 using UnityEngine;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
 /// <summary>
 /// Singleton to hold game data and handle player sign in.
@@ -48,18 +46,12 @@ public class GameData : Singleton<GameData>
     /// <summary>
     /// Load the next scene and cache data.
     /// </summary>
-    /// <param name="levelData">Data to save for the next scene.</param>
     /// <param name="nextScene">Name of next scene.</param>
+    /// <param name="load">Should the Loading Screen be loaded first?</param>
+    /// <param name="levelData">Data to save for the next scene.</param>
     public static void LoadLevel(string nextScene, bool load = false, Dictionary<string, object> levelData = null)
     {
-        if (levelData == null)
-        {
-            Main.levelData = new Dictionary<string, object>();
-        }
-        else
-        {
-            Main.levelData = levelData;
-        }
+        Main.levelData = levelData ?? new Dictionary<string, object>();
         Main.previousScene = Application.loadedLevelName;
         Main.nextScene = nextScene;
 

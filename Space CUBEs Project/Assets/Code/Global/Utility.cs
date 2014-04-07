@@ -1,7 +1,6 @@
 ﻿// Steve Yeager
 // 1.11.2014
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -59,7 +58,7 @@ public static class Utility
 
     public static Vector3 RotateVector(Vector3 vector, float angle, Vector3 axis)
     {
-        return Utility.RotateVector(vector, Quaternion.AngleAxis(angle, axis));
+        return RotateVector(vector, Quaternion.AngleAxis(angle, axis));
     }
 
     #endregion
@@ -74,7 +73,7 @@ public static class Utility
 
         for (int i = 0; i < files.Length; i++)
         {
-            UnityEngine.Object obj = UnityEditor.AssetDatabase.LoadAssetAtPath(files[i], typeof(GameObject));
+            Object obj = UnityEditor.AssetDatabase.LoadAssetAtPath(files[i], typeof(GameObject));
             if (obj != null && UnityEditor.PrefabUtility.GetPrefabType(obj) == UnityEditor.PrefabType.Prefab)
             {
                 T comp = (obj as GameObject).GetComponent<T>();
@@ -97,7 +96,7 @@ public static class Utility
 
         for (int i = 0; i < files.Length; i++)
         {
-            UnityEngine.Object obj = UnityEditor.AssetDatabase.LoadAssetAtPath(files[i], typeof(GameObject));
+            Object obj = UnityEditor.AssetDatabase.LoadAssetAtPath(files[i], typeof(GameObject));
             if (obj != null && UnityEditor.PrefabUtility.GetPrefabType(obj) == UnityEditor.PrefabType.Prefab)
             {
                 T comp = (obj as GameObject).GetComponent<T>();
@@ -117,10 +116,11 @@ public static class Utility
     #region NGUI Methods
 
     /// <summary>
-    /// 
+    /// Reposition children in grid.
     /// </summary>
-    /// <param name="grid"></param>
-    /// <param name="scrollBar"></param>
+    /// <param name="grid">Grid to update.</param>
+    /// <param name="scrollBar">Scrollbar to update.</param>
+    /// <param name="setToZero">Should the scroll view be set back to the beginning?</param>
     public static IEnumerator UpdateScrollView(UIGrid grid, UIScrollBar scrollBar, bool setToZero = true)
     {
         yield return new WaitForEndOfFrame();

@@ -2,16 +2,26 @@
 // 1.26.2014
 
 using UnityEngine;
-using System;
 
 namespace Paths
 {
     public class ZigZagPath : Path
     {
+        #region Public Fields
+
         public Vector3 angle = new Vector3(-1f, 1f, 0f);
         public float time = 1.5f;
+
+        #endregion
+
+        #region Private Fields
+
         private float lapTime;
 
+        #endregion
+
+
+        #region Path Overrides
 
         public override Vector3 Direction(float deltaTime)
         {
@@ -22,7 +32,9 @@ namespace Paths
                 angle.y *= -1f;
             }
 
-            return angle.normalized*speed*deltaTime;
+            return angle.normalized * speed * deltaTime;
         }
+
+        #endregion
     }
 }

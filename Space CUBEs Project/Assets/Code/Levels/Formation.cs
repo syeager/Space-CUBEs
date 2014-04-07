@@ -2,9 +2,6 @@
 // 1.12.2014
 
 using UnityEngine;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 public class Formation : MonoBehaviour
@@ -17,7 +14,7 @@ public class Formation : MonoBehaviour
 
     #region Const Fields
 
-    public const string FORMATIONPATH = "Assets/Formations/";
+    public const string FormationPath = "Assets/Formations/";
 
     #endregion
 
@@ -27,7 +24,7 @@ public class Formation : MonoBehaviour
     #if UNITY_EDITOR
     public static Formation[] AllFormations()
     {
-        return Utility.LoadObjects<Formation>(FORMATIONPATH).ToArray();
+        return Utility.LoadObjects<Formation>(FormationPath).ToArray();
     }
     #endif
 

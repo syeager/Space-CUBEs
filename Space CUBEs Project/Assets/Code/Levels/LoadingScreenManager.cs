@@ -1,8 +1,8 @@
 ﻿// Steve Yeager
 // 1.5.2014
 
+using Annotations;
 using UnityEngine;
-using System.Collections;
 using System;
 
 public class LoadingScreenManager : MonoBehaviour
@@ -16,6 +16,7 @@ public class LoadingScreenManager : MonoBehaviour
 
     #region MonoBehaviour Overrides
 
+    [UsedImplicitly]
     private void Awake()
     {
         // set up GUI
@@ -27,6 +28,7 @@ public class LoadingScreenManager : MonoBehaviour
     }
 
 
+    [UsedImplicitly]
     private void Start()
     {
         Application.LoadLevel(GameData.Main.nextScene);

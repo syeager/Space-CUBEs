@@ -1,9 +1,8 @@
 ﻿// Steve Yeager
 // 11.26.2013
 
-using System.Collections.Generic;
+using Annotations;
 using UnityEngine;
-using System.Linq;
 
 public class GameResources : MonoBehaviour
 {
@@ -28,6 +27,7 @@ public class GameResources : MonoBehaviour
 
     #region Unity Overrides
 
+    [UsedImplicitly]
     private void Awake()
     {
         if (Main == null)

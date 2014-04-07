@@ -545,6 +545,7 @@ public class ConstructionGrid : MonoBase
     /// Rotates a CUBE piece by the cursorRotation.
     /// </summary>
     /// <param name="localVector">Piece.</param>
+    /// <param name="reverse">Should the vector be inverted?</param>
     /// <returns>New piece position.</returns>
     private Vector3 RotateVector(Vector3 localVector, bool reverse = false)
     {

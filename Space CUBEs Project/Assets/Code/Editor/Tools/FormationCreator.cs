@@ -128,8 +128,8 @@ public class FormationCreator : EditorWindow
         // delete old
         if (overwrite)
         {
-            Debug.Log("Deleting: " + Formation.FORMATIONPATH + FormationPrefix + oldFormation.name);
-            AssetDatabase.DeleteAsset(Formation.FORMATIONPATH + FormationPrefix + oldFormation.name + ".prefab");
+            Debug.Log("Deleting: " + Formation.FormationPath + FormationPrefix + oldFormation.name);
+            AssetDatabase.DeleteAsset(Formation.FormationPath + FormationPrefix + oldFormation.name + ".prefab");
         }
 
         GameObject savedPrefab = new GameObject(FormationPrefix + formationName, typeof(Formation));
@@ -139,7 +139,7 @@ public class FormationCreator : EditorWindow
         {
             savedPrefab.GetComponent<Formation>().positions[i] = prefab.transform.GetChild(i).localPosition;
         }
-        PrefabUtility.CreatePrefab(Formation.FORMATIONPATH + FormationPrefix + formationName + ".prefab", savedPrefab);
+        PrefabUtility.CreatePrefab(Formation.FormationPath + FormationPrefix + formationName + ".prefab", savedPrefab);
         DestroyImmediate(savedPrefab);
 
         formations = Formation.AllFormations();

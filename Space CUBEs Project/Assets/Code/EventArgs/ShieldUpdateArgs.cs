@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿// Steve Yeager
+// 2.20.2014
+
 using System;
 
 public class ShieldUpdateArgs : EventArgs

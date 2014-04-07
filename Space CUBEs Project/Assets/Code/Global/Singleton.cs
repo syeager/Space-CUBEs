@@ -13,7 +13,6 @@ public class Singleton<T> : MonoBase where T : MonoBehaviour
         if (Main != null)
         {
             Destroy(gameObject);
-            return;
         }
         else
         {

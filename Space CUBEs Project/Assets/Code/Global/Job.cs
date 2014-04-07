@@ -2,7 +2,6 @@
 // 8.18.2013
 // prime31studios
 
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -22,9 +21,9 @@ public class Job
 
     #region Private Fields
 
-    private IEnumerator coroutine;
+    private readonly IEnumerator coroutine;
     private bool killed;
-    private float runtime;
+    private readonly float runtime;
     private Queue<Job> childJobs;
 
     #endregion
@@ -178,6 +177,7 @@ public class Job
     /// Create a new child job.
     /// </summary>
     /// <param name="child">Child method.</param>
+    /// <param name="runtime">How long the child job should run for.</param>
     /// <returns>New child job.</returns>
     public Job CreateChildJob(IEnumerator child, float runtime = 0f)
     {

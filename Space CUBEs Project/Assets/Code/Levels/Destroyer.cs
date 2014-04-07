@@ -1,12 +1,14 @@
 ﻿// Steve Yeager
 // 1.14.2014
 
+using Annotations;
 using UnityEngine;
 
 public class Destroyer : MonoBehaviour
 {
     #region MonoBehaviour Overrides
 
+    [UsedImplicitly]
     private void OnTriggerExit(Collider other)
     {
         ShieldHealth health = other.GetComponent<ShieldHealth>();
@@ -20,7 +22,6 @@ public class Destroyer : MonoBehaviour
         if (po != null)
         {
             po.Disable();
-            return;
         }
     }
 

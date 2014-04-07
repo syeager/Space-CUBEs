@@ -82,7 +82,7 @@ public class GameSettings : Singleton<GameSettings>
 
     private void GetAspectRatio()
     {
-        double ratio = System.Math.Round((float)Screen.width / (float)Screen.height, 2);
+        double ratio = System.Math.Round(Screen.width / (float)Screen.height, 2);
 
         if (ratio >= 1.7)
         {

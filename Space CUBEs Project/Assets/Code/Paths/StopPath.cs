@@ -2,19 +2,28 @@
 // 3.10.2014
 
 using UnityEngine;
-using System;
 
 namespace Paths
 {
     public class StopPath : Path
     {
+        #region Public Fields
+
         public Vector3[] stops;
         public float[] delays;
+
+        #endregion
+
+        #region Private Fields
 
         private int cursor;
         private Vector3 target;
         private float delayTimer = -1f;
 
+        #endregion
+
+
+        #region Path Overrides
 
         public override void Initialize(Transform transform)
         {
@@ -39,10 +48,12 @@ namespace Paths
             }
             else
             {
-                Vector3 move = (stops[cursor] - target).normalized*speed*deltaTime;
+                Vector3 move = (stops[cursor] - target).normalized * speed * deltaTime;
                 target += move;
                 return move;
             }
         }
+
+        #endregion
     }
 }

@@ -1,9 +1,8 @@
 ﻿// Steve Yeager
 // 1.15.2014
 
+using Annotations;
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 
 /// <summary>
 /// Manager for the Main Menu.
@@ -19,22 +18,19 @@ public class MainMenuManager : MonoBehaviour
 
     #region MonoBehaviour Overrides
 
+    [UsedImplicitly]
     private void Update()
     {
 #if UNITY_EDITOR
-
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             GameData.LoadLevel("Debug Menu");
         }
-
 #else
-
         if (Input.touchCount > 0 && Input.GetTouch(0).tapCount == 2 && debugTouchRect.Contains(Input.GetTouch(0).position))
         {
             GameData.LoadLevel("Debug Menu");
         }
-
 #endif
     }
 

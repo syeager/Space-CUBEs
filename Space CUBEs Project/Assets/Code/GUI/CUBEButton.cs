@@ -2,9 +2,10 @@
 // 1.20.2014
 
 using UnityEngine;
-using System.Collections;
 
-// CUBE button in store to select which CUBE is highlighted.
+/// <summary>
+/// CUBE button in store to select which CUBE is highlighted.
+/// </summary>
 public class CUBEButton : MonoBehaviour
 {
     #region Public Fields
