@@ -171,12 +171,6 @@ public class ConstructionGrid : MonoBase
 
     #endregion
 
-    #region Events
-
-    public EventHandler<BuildFinishedArgs> BuildFinishedEvent;
-
-    #endregion
-
 
     #region MonoBehaviour Overrides
 
@@ -267,7 +261,7 @@ public class ConstructionGrid : MonoBase
         ship.transform.position = transform.position + Vector3.up * (size / 2f - 0.5f);
 
         // set up weapons
-        weapons = new Weapon[Player.WEAPONLIMIT];
+        weapons = new Weapon[Player.Weaponlimit];
 
         // create grid center
         Center = (Instantiate(Center_Prefab, ship.transform.position, Quaternion.identity) as GameObject).transform;
@@ -612,64 +606,12 @@ public class ConstructionGrid : MonoBase
     }
 
 
-    [Obsolete("Move to a new class.")]
-    public IEnumerator Build(string build, int buildSize, Vector3 startPosition, Vector3 startRotation, float maxTime)
+    public void Build(string build, int buildSize, Vector3 startPosition, Vector3 startRotation, float maxTime,
+        Action<BuildFinishedArgs> finshedAction)
     {
-        var buildInfo = LoadBuild(build);
-        if (buildInfo == null)
-        {
-            if (BuildFinishedEvent != null)
-            {
-                BuildFinishedEvent(this, new BuildFinishedArgs(null, 0f, 0f, 0f, 0f));
-            }
-            yield break;
-        }
-
-        List<BuildCUBE> pieces = new List<BuildCUBE>();
-        GameObject finishedShip = new GameObject("Player");
-
-        const float minDist = 100f;
-        const float maxDist = 250f;
-        Vector3 halfGrid = Vector3.one * (buildSize / 2f - 1f);
-        Vector3 pivotOffset = new Vector3(-0.5f, -0.5f, -0.5f);
-        finishedShip.transform.position = startPosition;
-        finishedShip.transform.eulerAngles = startRotation;
-        float speed = maxDist / maxTime;
-
-        foreach (var piece in buildInfo.partList)
-        {
-            var cube = (CUBE)GameObject.Instantiate(GameResources.GetCUBE(piece.Key));
-            cube.transform.parent = finishedShip.transform;
-
-            cube.transform.localPosition = piece.Value.position.normalized * UnityEngine.Random.Range(minDist, maxDist);
-            cube.transform.localPosition = Quaternion.Euler(UnityEngine.Random.Range(0, 360), UnityEngine.Random.Range(0, 360), UnityEngine.Random.Range(0, 360)) * cube.transform.localPosition;
-            cube.transform.localEulerAngles = piece.Value.rotation;
-
-            if (piece.Value.weaponMap != -1)
-            {
-                cube.GetComponent<Weapon>().index = piece.Value.weaponMap;
-            }
-
-            cube.GetComponent<ColorVertices>().Bake(piece.Value.colors);
-
-            pieces.Add(new BuildCUBE(cube.transform, piece.Value.position - halfGrid + Utility.RotateVector(pivotOffset, Quaternion.Euler(piece.Value.rotation)), speed));
-        }
-
-        float time = maxTime;
-        while (time > 0f)
-        {
-            foreach (var piece in pieces)
-            {
-                piece.Update(deltaTime);
-            }
-            time -= deltaTime;
-            yield return null;
-        }
-
-        if (BuildFinishedEvent != null)
-        {
-            BuildFinishedEvent(this, new BuildFinishedArgs(finishedShip, buildInfo.health, buildInfo.shield, buildInfo.speed, buildInfo.damage));
-        }
+        GameObject showShip = new GameObject("Player");
+        StartCoroutine(showShip.AddComponent<ShowBuild>()
+            .Build(LoadBuild(build), buildSize, startPosition, startRotation, maxTime, finshedAction));
     }
 
     #endregion
@@ -703,7 +645,7 @@ public class ConstructionGrid : MonoBase
         currentBuild.Clear();
 
         // new weapons array according to player.WEAPONLIMIT
-        weapons = new Weapon[Player.WEAPONLIMIT];
+        weapons = new Weapon[Player.Weaponlimit];
     }
 
 

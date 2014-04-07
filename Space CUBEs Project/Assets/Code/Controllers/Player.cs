@@ -1,10 +1,8 @@
 ﻿// Steve Yeager
 // 11.25.2013
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 
 /// <summary>
@@ -31,21 +29,25 @@ public class Player : Ship
     public float horizontalBounds = 0.05f;
     public float backBounds;
     public float frontBounds;
-    public readonly KeyCode[] WeaponKeys = new KeyCode[]
+
+#if UNITY_STANDALONE
+    public static readonly KeyCode[] WeaponKeys =
     {
         KeyCode.J,
         KeyCode.K,
         KeyCode.L,
         KeyCode.Semicolon,
     };
-    public float swipeNeeded = 10f;
+#else
     private bool barrelRoll;
+    public float swipeNeeded = 10f;
+#endif
 
     #endregion
 
     #region Const Fields
 
-    public const int WEAPONLIMIT = 4;
+    public const int Weaponlimit = 4;
 
     #endregion
 
@@ -84,9 +86,11 @@ public class Player : Ship
         base.Start();
 
         HUD.Initialize(this);
+#if !UNITY_STANDALONE
         HUD.Main.BarrelRollEvent += OnBarrelRoll;
+#endif
 
-        stateMachine.Start(null);
+        stateMachine.Start();
     }
 
     #endregion
@@ -110,12 +114,14 @@ public class Player : Ship
                 break;
             }
 
+#if UNITY_STANDALONE
             // attack
             var weapons = AttackInput();
             if (weapons.Count > 0)
             {
                 Attack(weapons);
             }
+#endif
 
             // move
             myMotor.Move(MovementInput());
@@ -133,7 +139,9 @@ public class Player : Ship
 
     private void BarrelRollingEnter(Dictionary<string, object> info)
     {
+#if !UNITY_STANDALONE
         barrelRoll = false;
+#endif
         collider.enabled = false;
 
         // release all attacks
@@ -155,7 +163,9 @@ public class Player : Ship
     {
         myHealth.invincible = (bool)info["invincible"];
         collider.enabled = true;
+#if !UNITY_STANDALONE
         barrelRoll = false;
+#endif
     }
 
 
@@ -169,29 +179,25 @@ public class Player : Ship
 
     #region Input Methods
 
-    private Vector2 MovementInput()
+    private static Vector2 MovementInput()
     {
-        Vector2 input;
-
-        #if UNITY_STANDALONE
-
-        input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-
-        #else
-
-        input = HUD.Main.joystick.value;
-
-        #endif
-
-        return input;
+#if UNITY_STANDALONE
+        return new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+#else
+        return HUD.Main.joystick.value;
+#endif
     }
 
+    
+#if UNITY_STANDALONE
 
+    /// <summary>
+    /// Get activated weapons.
+    /// </summary>
+    /// <returns>List of weapons and if they were pressed or released.</returns>
     private List<KeyValuePair<int, bool>> AttackInput()
     {
         var weapons = new List<KeyValuePair<int, bool>>();
-
-        #if UNITY_STANDALONE
 
         for (int i = 0; i < WeaponKeys.Length; i++)
         {
@@ -208,23 +214,18 @@ public class Player : Ship
             }
         }
 
-        #else
-
-
-
-        #endif
-
         return weapons;
     }
+#endif
 
 
     private bool BarrelRollInput()
     {
-        #if UNITY_STANDALONE
+#if UNITY_STANDALONE
 
         return Input.GetKeyDown(KeyCode.Space);
 
-        #else
+#else
 
         if (barrelRoll)
         {
@@ -258,6 +259,7 @@ public class Player : Ship
     /// </summary>
     /// <param name="enemy">Enemy type killed.</param>
     /// <param name="points">How many base points the enemy is worth.</param>
+    /// <param name="money">How much money the enemy is worth.</param>
     public void RecieveKill(Enemy.Classes enemy, int points, int money)
     {
         myScore.RecieveScore(points);
@@ -296,11 +298,12 @@ public class Player : Ship
 
     #region Event Handlers
 
-    [Obsolete("Find a better way. Check button status?")]
-    private void OnBarrelRoll(object sender, EventArgs args)
+#if !UNITY_STANDALONE
+    private void OnBarrelRoll(object sender, System.EventArgs args)
     {
         barrelRoll = true;
     }
+#endif
 
     #endregion
 }

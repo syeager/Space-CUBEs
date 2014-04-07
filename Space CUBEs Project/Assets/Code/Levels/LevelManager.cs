@@ -1,10 +1,8 @@
 ﻿// Steve Yeager
 // 12.3.2013
 
-using System.Diagnostics;
 using UnityEngine;
 using System.Collections.Generic;
-using System.Linq;
 using System;
 using Random = UnityEngine.Random;
 
@@ -170,8 +168,7 @@ public class LevelManager : Singleton<LevelManager>
 
     private void CreatePlayer(string build)
     {
-        Grid.BuildFinishedEvent += OnBuildFinished;
-        StartCoroutine(Grid.Build(build, 10, new Vector3(-75f, 0, 0), new Vector3(0f, 90f, 270f), 0.5f));
+        Grid.Build(build, 10, new Vector3(-75f, 0, 0), new Vector3(0f, 90f, 270f), 0.5f, OnBuildFinished);
     }
 
 
@@ -206,15 +203,14 @@ public class LevelManager : Singleton<LevelManager>
 
     #region Event Handlers
 
-    private void OnBuildFinished(object sender, BuildFinishedArgs args)
+    private void OnBuildFinished(BuildFinishedArgs args)
     {
-        Grid.BuildFinishedEvent -= OnBuildFinished;
-
         var buildShip = args.ship.AddComponent<ShipCompactor>();
         player = buildShip.Compact(typeof(Player), true, true) as Player;
         playerTransform = player.transform;
         player.Initialize(args.health, args.shield, args.speed, args.damage);
 
+#if DEBUG
         if (GameSettings.Main.invincible)
         {
             player.GetComponent<ShieldHealth>().invincible = true;
@@ -223,6 +219,10 @@ public class LevelManager : Singleton<LevelManager>
         {
             player.GetComponent<ShieldHealth>().DieEvent += OnPlayerDeath;
         }
+#else
+        player.GetComponent<ShieldHealth>().DieEvent += OnPlayerDeath;
+#endif
+
     }
 
 
