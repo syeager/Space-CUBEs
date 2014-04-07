@@ -3,13 +3,14 @@
 
 using UnityEngine;
 using UnityEditor;
-using System.Collections;
 using System.Reflection;
 using System;
 using System.Linq;
 using System.Collections.Generic;
 
-//
+/// <summary>
+/// Create list of formations for the level to spawn.
+/// </summary>
 public class LevelCreator : EditorWindow
 {
     #region Static Fields
@@ -22,16 +23,16 @@ public class LevelCreator : EditorWindow
 
     #region GUI Fields
 
-    float W;
-    float H;
+    private float W;
+    private float H;
     /// <summary>Total height of the formation sections.</summary>
     float formationTotalHeight;
     /// <summary>Height of top bar.</summary>
-    private float infoHeight = 50f;
-    private float formationHeight = 50f;
-    private float formationWidth = 250f;
+    private const float InfoHeight = 50f;
+    private const float FormationHeight = 50f;
+    private const float FormationWidth = 250f;
     private Vector2 formationScroll;
-    private float enemyHeight = 40f;
+    private const float EnemyHeight = 40f;
 
     #endregion
 
@@ -113,10 +114,10 @@ public class LevelCreator : EditorWindow
 
     private bool InfoBar()
     {
-        GUI.BeginGroup(new Rect(0f, 0f, W, infoHeight), "", "box");
+        GUI.BeginGroup(new Rect(0f, 0f, W, InfoHeight), "", "box");
         {
             // add formation
-            if (GUI.Button(new Rect(10f, infoHeight / 2f - 20f, 80f, 40f), "Add"))
+            if (GUI.Button(new Rect(10f, InfoHeight / 2f - 20f, 80f, 40f), "Add"))
             {
                 AddFormation();
                 return true;
@@ -176,7 +177,7 @@ public class LevelCreator : EditorWindow
 
     private void Formations()
     {
-        formationScroll = GUI.BeginScrollView(new Rect(0f, infoHeight, W, H - infoHeight), formationScroll, new Rect(0f, 0f, W, formationTotalHeight + 10f));
+        formationScroll = GUI.BeginScrollView(new Rect(0f, InfoHeight, W, H - InfoHeight), formationScroll, new Rect(0f, 0f, W, formationTotalHeight + 10f));
         {
             formationTotalHeight = 0f;
             for (int i = 0; i < levelManager.formationGroups.Length; i++)
@@ -192,16 +193,16 @@ public class LevelCreator : EditorWindow
     {
         sLevelManager.Update();
         FormationGroup formationSeg = levelManager.formationGroups[formationIndex];
-        float height = formationHeight;
+        float height = FormationHeight;
 
         // controls
-        GUI.BeginGroup(new Rect(0f, formationTotalHeight, formationWidth, formationHeight), "");
+        GUI.BeginGroup(new Rect(0f, formationTotalHeight, FormationWidth, FormationHeight), "");
         {
-            GUI.Label(new Rect(0, 0, 20f, formationHeight / 2f), (formationIndex + 1).ToString());
+            GUI.Label(new Rect(0, 0, 20f, FormationHeight / 2f), (formationIndex + 1).ToString());
             int prefabIndex = Array.IndexOf(formationPrefabs, formationSeg.formation);
             EditorGUI.BeginChangeCheck();
             {
-                prefabIndex = EditorGUI.Popup(new Rect(22f, 0, formationWidth - 22f, formationHeight / 2f), prefabIndex, formationNames);
+                prefabIndex = EditorGUI.Popup(new Rect(22f, 0, FormationWidth - 22f, FormationHeight / 2f), prefabIndex, formationNames);
             }
             if (EditorGUI.EndChangeCheck())
             {
@@ -209,13 +210,13 @@ public class LevelCreator : EditorWindow
             }
 
             // toggle view
-            if (GUI.Button(new Rect(10f, formationHeight / 2f, 46f, 20f), formationToggles[formationIndex] ? "|" : "O", EditorStyles.miniButtonLeft))
+            if (GUI.Button(new Rect(10f, FormationHeight / 2f, 46f, 20f), formationToggles[formationIndex] ? "|" : "O", EditorStyles.miniButtonLeft))
             {
                 formationToggles[formationIndex] = !formationToggles[formationIndex];
             }
             // move down
             if (formationIndex == sFormationGroups.arraySize-1) GUI.enabled = false;
-            if (GUI.Button(new Rect(56f, formationHeight / 2f, 46f, 20f), "↓", EditorStyles.miniButtonMid))
+            if (GUI.Button(new Rect(56f, FormationHeight / 2f, 46f, 20f), "↓", EditorStyles.miniButtonMid))
             {
                 MoveFormation(formationIndex, formationIndex + 1);
                 return height;
@@ -223,20 +224,20 @@ public class LevelCreator : EditorWindow
             GUI.enabled = true;
             // move up
             if (formationIndex == 0) GUI.enabled = false;
-            if (GUI.Button(new Rect(102f, formationHeight / 2f, 46f, 20f), "↑", EditorStyles.miniButtonMid))
+            if (GUI.Button(new Rect(102f, FormationHeight / 2f, 46f, 20f), "↑", EditorStyles.miniButtonMid))
             {
                 MoveFormation(formationIndex, formationIndex - 1);
                 return height;
             }
             GUI.enabled = true;
             // duplicate
-            if (GUI.Button(new Rect(148f, formationHeight / 2f, 46f, 20f), "+", EditorStyles.miniButtonMid))
+            if (GUI.Button(new Rect(148f, FormationHeight / 2f, 46f, 20f), "+", EditorStyles.miniButtonMid))
             {
                 DuplicateFormation(formationIndex);
                 return height;
             }
             // delete
-            if (GUI.Button(new Rect(194f, formationHeight / 2f, 46f, 20f), "-", EditorStyles.miniButtonRight))
+            if (GUI.Button(new Rect(194f, FormationHeight / 2f, 46f, 20f), "-", EditorStyles.miniButtonRight))
             {
                 DeleteFormation(formationIndex);
                 return height;
@@ -246,29 +247,29 @@ public class LevelCreator : EditorWindow
 
         // data
         SerializedProperty sFormSeg = sFormationGroups.GetArrayElementAtIndex(formationIndex);
-        GUI.BeginGroup(new Rect(formationWidth, formationTotalHeight, W-formationWidth, formationHeight), "");
+        GUI.BeginGroup(new Rect(FormationWidth, formationTotalHeight, W-FormationWidth, FormationHeight), "");
         {
             // needs clearing
             GUI.enabled = formationIndex != 0;
-            EditorGUI.LabelField(new Rect(10f, formationHeight / 2f-10f, 100f, 20f), "Needs Clearing");
+            EditorGUI.LabelField(new Rect(10f, FormationHeight / 2f-10f, 100f, 20f), "Needs Clearing");
             SerializedProperty property = sFormSeg.FindPropertyRelative("needsClearing");
-            EditorGUI.PropertyField(new Rect(110f, formationHeight/2f-8f, 16f, 16f), property, new GUIContent(""));
+            EditorGUI.PropertyField(new Rect(110f, FormationHeight/2f-8f, 16f, 16f), property, new GUIContent(""));
             GUI.enabled = true;
 
             // spawn time
-            EditorGUI.LabelField(new Rect(150f, formationHeight / 2f - 10f, 80f, 20f), "Spawn Time");
+            EditorGUI.LabelField(new Rect(150f, FormationHeight / 2f - 10f, 80f, 20f), "Spawn Time");
             property = sFormSeg.FindPropertyRelative("spawnTime");
-            EditorGUI.PropertyField(new Rect(230f, formationHeight / 2f - 10f, 30f, 20f), property, new GUIContent(""));
+            EditorGUI.PropertyField(new Rect(230f, FormationHeight / 2f - 10f, 30f, 20f), property, new GUIContent(""));
 
             // start position
-            EditorGUI.LabelField(new Rect(280f, formationHeight / 2f - 10f, 50f, 20f), "Position");
+            EditorGUI.LabelField(new Rect(280f, FormationHeight / 2f - 10f, 50f, 20f), "Position");
             property = sFormSeg.FindPropertyRelative("position");
-            EditorGUI.PropertyField(new Rect(330f, formationHeight / 2f - 10f, 150f, 20f), property, new GUIContent(""));
+            EditorGUI.PropertyField(new Rect(330f, FormationHeight / 2f - 10f, 150f, 20f), property, new GUIContent(""));
 
             // start rotation
-            EditorGUI.LabelField(new Rect(500f, formationHeight / 2f - 10f, 50f, 20f), "Rotation");
+            EditorGUI.LabelField(new Rect(500f, FormationHeight / 2f - 10f, 50f, 20f), "Rotation");
             property = sFormSeg.FindPropertyRelative("rotation");
-            EditorGUI.PropertyField(new Rect(555f, formationHeight / 2f - 10f, 40f, 20f), property, new GUIContent(""));
+            EditorGUI.PropertyField(new Rect(555f, FormationHeight / 2f - 10f, 40f, 20f), property, new GUIContent(""));
         }
         GUI.EndGroup();
 
@@ -282,7 +283,7 @@ public class LevelCreator : EditorWindow
             }
         }
 
-        EditorGUI.DrawRect(new Rect(formationWidth, formationTotalHeight, 1f, height), Color.grey);
+        EditorGUI.DrawRect(new Rect(FormationWidth, formationTotalHeight, 1f, height), Color.grey);
         EditorGUI.DrawRect(new Rect(0f, formationTotalHeight+height, W, 1f), Color.grey);
         return height;
     }
@@ -290,13 +291,13 @@ public class LevelCreator : EditorWindow
 
     private float Enemy(int formationIndex, int enemyIndex, float y, SerializedProperty sformationGroup)
     {
-        float height = enemyHeight;
+        float height = EnemyHeight;
 
         // enemy type
         int enemyType = sformationGroup.FindPropertyRelative("enemies").GetArrayElementAtIndex(enemyIndex).intValue;
 
         // number
-        GUI.Label(new Rect(0f, y, 20f, enemyHeight), (enemyIndex + 1).ToString());
+        GUI.Label(new Rect(0f, y, 20f, EnemyHeight), (enemyIndex + 1).ToString());
         // toggle
         GUI.enabled = enemyType != 0;
         enemyToggles[formationIndex][enemyIndex] = GUI.Toggle(new Rect(22f, y, 16f, 16f), enemyToggles[formationIndex][enemyIndex], GUIContent.none);
@@ -321,7 +322,7 @@ public class LevelCreator : EditorWindow
         }
         if (EditorGUI.EndChangeCheck())
         {
-            path.objectReferenceValue = ScriptableObject.CreateInstance(pathTypes[pathIndex]);
+            path.objectReferenceValue = CreateInstance(pathTypes[pathIndex]);
             sLevelManager.ApplyModifiedProperties();
             EditorUtility.UnloadUnusedAssets();
             return height;
@@ -372,12 +373,12 @@ public class LevelCreator : EditorWindow
             for (int i = 0; i < fieldInfos.Length; i++)
             {
                 SerializedProperty pathInfo = pathSO.FindProperty(fieldInfos[i].Name);
-                float pathHeight = enemyHeight * (pathInfo.isExpanded ? pathInfo.CountInProperty() : 1);
+                float pathHeight = EnemyHeight * (pathInfo.isExpanded ? pathInfo.CountInProperty() : 1);
                 if (i % 2 == 0)
                 {
-                    EditorGUI.DrawRect(new Rect(formationWidth, y + height, W - formationWidth, pathHeight), Color.gray);
+                    EditorGUI.DrawRect(new Rect(FormationWidth, y + height, W - FormationWidth, pathHeight), Color.gray);
                 }
-                EditorGUI.PropertyField(new Rect(formationWidth + 10f, y + height, W - formationWidth - 20f, pathHeight), pathSO.FindProperty(fieldInfos[i].Name), true);
+                EditorGUI.PropertyField(new Rect(FormationWidth + 10f, y + height, W - FormationWidth - 20f, pathHeight), pathSO.FindProperty(fieldInfos[i].Name), true);
                 pathSO.ApplyModifiedProperties();
                 height += pathHeight;
             }
@@ -457,7 +458,7 @@ public class LevelCreator : EditorWindow
         {
             paths.InsertArrayElementAtIndex(i);
             // hardcode to StraightPath
-            paths.GetArrayElementAtIndex(i).objectReferenceValue = ScriptableObject.CreateInstance(pathTypes[1]);
+            paths.GetArrayElementAtIndex(i).objectReferenceValue = CreateInstance(pathTypes[1]);
         }
 
         sLevelManager.ApplyModifiedProperties();

@@ -1,9 +1,9 @@
 ﻿// Steve Yeager
 // 1.15.2014
 
+using Annotations;
 using UnityEngine;
 using UnityEditor;
-using System.Xml;
 using System.IO;
 using System.Collections.Generic;
 using System;
@@ -12,34 +12,35 @@ using System.Linq;
 using Types = CUBE.Types;
 using Subsystems = CUBE.Subsystems;
 using Brands = CUBE.Brands;
-using Object = UnityEngine.Object;
 
 /// <summary>
-/// 
+/// Update all CUBE prefabs.
 /// </summary>
 public class CUBEUpdater : EditorWindow
 {
     #region Readonly Fields
 
-    private static readonly Vector2 SIZE = new Vector2(300f, 50f);
-    private static readonly string CUBECSVPATH = Directory.GetParent(Directory.GetCurrentDirectory()) + @"\Data\CUBE List.csv";
-    private static readonly string CUBELISTPATHEDITOR = Application.dataPath + "/Resources/CUBE List.bytes";
-    private const string PREFABPATH = "Assets/Ship/CUBEs/Prefabs/";
-    private const string GAMERESOURCESPATH = "Assets/Global/";
+    private static readonly Vector2 Size = new Vector2(300f, 50f);
+    private static readonly string CUBEPathCSV = Directory.GetParent(Directory.GetCurrentDirectory()) + @"\Data\CUBE List.csv";
+    private static readonly string CUBEListPathEditor = Application.dataPath + "/Resources/CUBE List.bytes";
+    private const string PrefabPath = "Assets/Ship/CUBEs/Prefabs/";
+    private const string GameResourcesPath = "Assets/Global/";
 
     #endregion
 
 
     #region EditorWindow Overrides
 
+    [UsedImplicitly]
     [MenuItem("Tools/CUBE Updater")]
     private static void Init()
     {
-        CUBEUpdater window = (CUBEUpdater)EditorWindow.GetWindow<CUBEUpdater>(true, "CUBE Updater");
-        window.minSize = window.maxSize = SIZE;
+        CUBEUpdater window = GetWindow<CUBEUpdater>(true, "CUBE Updater");
+        window.minSize = window.maxSize = Size;
     }
 
 
+    [UsedImplicitly]
     private void OnGUI()
     {
         GUILayout.FlexibleSpace();
@@ -58,7 +59,7 @@ public class CUBEUpdater : EditorWindow
         List<CUBEInfo> info = new List<CUBEInfo>();
 
         // get data from csv file
-        string[] infoStrips = File.ReadAllText(CUBECSVPATH).Split('\n');
+        string[] infoStrips = File.ReadAllText(CUBEPathCSV).Split('\n');
 
         for (int i = 1; i < infoStrips.Length; i++)
         {
@@ -90,7 +91,7 @@ public class CUBEUpdater : EditorWindow
 
     private static void ToBinary(CUBEInfo[] info)
     {
-        using (BinaryWriter writer = new BinaryWriter(File.Open(CUBELISTPATHEDITOR, FileMode.Create)))
+        using (BinaryWriter writer = new BinaryWriter(File.Open(CUBEListPathEditor, FileMode.Create)))
         {
             foreach (var cube in info)
             {
@@ -117,22 +118,21 @@ public class CUBEUpdater : EditorWindow
     private static void UpdatePrefabs()
     {
         // get all CUBE prefabs
-        var prefabs = Utility.LoadObjects<CUBE>(PREFABPATH).ToArray();
+        var prefabs = Utility.LoadObjects<CUBE>(PrefabPath).ToArray();
 
         CUBEInfo[] info = CUBE.LoadAllCUBEInfo();
 
         // update prefab
-        SerializedObject serializedPrefab;
         for (int i = 0; i < prefabs.Length; i++)
         {
             // set ID
-            serializedPrefab = new SerializedObject(prefabs[i]);
+            SerializedObject serializedPrefab = new SerializedObject(prefabs[i]);
             serializedPrefab.FindProperty("ID").intValue = info.First(c => c.name == prefabs[i].name).ID;
             serializedPrefab.ApplyModifiedProperties();
         }
 
         // get GameResources
-        GameResources gameResources = Utility.LoadObject<GameMaster>(GAMERESOURCESPATH).GetComponentsInChildren<GameResources>(true)[0];
+        GameResources gameResources = Utility.LoadObject<GameMaster>(GameResourcesPath).GetComponentsInChildren<GameResources>(true)[0];
         SerializedObject resources = new SerializedObject(gameResources);
         SerializedProperty resourcesPrefabs = resources.FindProperty("CUBE_Prefabs");
 

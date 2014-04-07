@@ -54,7 +54,7 @@ public class ConstructionGrid : MonoBase
     private Transform Center;
 
     /// <summary>All of the CUBEs currently placed.</summary>
-    private Dictionary<CUBE, CUBEGridInfo> currentBuild = new Dictionary<CUBE, CUBEGridInfo>();
+    private readonly Dictionary<CUBE, CUBEGridInfo> currentBuild = new Dictionary<CUBE, CUBEGridInfo>();
     /// <summary>Parent of all of the CUBEs.</summary>
     private GameObject ship;
 
@@ -731,9 +731,9 @@ public class ConstructionGrid : MonoBase
     {
         this.buildName = buildName;
 #if DEVMODE
-        string path = DEVBUILDSPATH;
+        const string path = DEVBUILDSPATH;
 #else
-        string path = USERBUILDSPATH;
+        const string path = USERBUILDSPATH;
 #endif
         // get buildInfo string from data
         string build = PlayerPrefs.GetString(path + buildName, "NA");
@@ -742,8 +742,7 @@ public class ConstructionGrid : MonoBase
             Log(buildName + " is not in data.", false, Debugger.LogTypes.Data);
             return null;
         }
-        BuildInfo buildInfo = new BuildInfo();
-        buildInfo.partList = new List<KeyValuePair<int, CUBEGridInfo>>();
+        BuildInfo buildInfo = new BuildInfo { partList = new List<KeyValuePair<int, CUBEGridInfo>>() };
 
         string[] data = build.Split(BuildInfo.DATASEP[0]);
 
@@ -935,9 +934,9 @@ public class ConstructionGrid : MonoBase
     public static List<string> BuildNames()
     {
 #if DEVMODE
-        string namePath = ALLDEVBUILDSPATH;
+        const string namePath = ALLDEVBUILDSPATH;
 #else
-        string namePath = ALLUSERBUILDSPATH;
+        const string namePath = ALLUSERBUILDSPATH;
 #endif
 
         List<string> builds = PlayerPrefs.GetString(namePath).Split(BuildInfo.PIECESEP[0]).ToList();
@@ -962,14 +961,12 @@ public class ConstructionGrid : MonoBase
         }
 
         // get paths
-        string dataPath;
-        string namePath;
 #if DEVMODE
-        dataPath = DEVBUILDSPATH;
-        namePath = ALLDEVBUILDSPATH;
+        const string dataPath = DEVBUILDSPATH;
+        const string namePath = ALLDEVBUILDSPATH;
 #else
-        dataPath = USERBUILDSPATH;
-        namePath = ALLUSERBUILDSPATH;
+        const string dataPath = USERBUILDSPATH;
+        const string namePath = ALLUSERBUILDSPATH;
 #endif
         // save data
         PlayerPrefs.SetString(dataPath + buildName, build);
@@ -991,14 +988,12 @@ public class ConstructionGrid : MonoBase
     public static void DeleteBuild(string buildName)
     {
         // get path
-        string dataPath;
-        string namePath;
 #if DEVMODE
-        dataPath = DEVBUILDSPATH + buildName;
-        namePath = ALLDEVBUILDSPATH;
+        string dataPath = DEVBUILDSPATH + buildName;
+        const string namePath = ALLDEVBUILDSPATH;
 #else
-        dataPath = USERBUILDSPATH + buildName;
-        namePath = ALLUSERBUILDSPATH;
+        string dataPath = USERBUILDSPATH + buildName;
+        const string namePath = ALLUSERBUILDSPATH;
 #endif
 
         // remove from list of all builds
@@ -1018,14 +1013,12 @@ public class ConstructionGrid : MonoBase
     public static void RenameBuild(string oldName, string newName)
     {
         // get path
-        string dataPath;
-        string namePath;
 #if DEVMODE
-        dataPath = DEVBUILDSPATH;
-        namePath = ALLDEVBUILDSPATH;
+        const string dataPath = DEVBUILDSPATH;
+        const string namePath = ALLDEVBUILDSPATH;
 #else
-        dataPath = USERBUILDSPATH;
-        namePath = ALLUSERBUILDSPATH;
+        const string dataPath = USERBUILDSPATH;
+        const string namePath = ALLUSERBUILDSPATH;
 #endif
 
         // update list of all builds
