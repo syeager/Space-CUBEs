@@ -36,7 +36,7 @@ public class Player : Ship
         KeyCode.J,
         KeyCode.K,
         KeyCode.L,
-        KeyCode.Semicolon,
+        KeyCode.Semicolon
     };
 #else
     private bool barrelRoll;

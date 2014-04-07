@@ -2,10 +2,11 @@
 // 1.23.2014
 
 using UnityEngine;
-using System.Collections;
 using System;
 
-//
+/// <summary>
+/// 
+/// </summary>
 public class WeaponButton : MonoBehaviour
 {
     #region Public Fields
@@ -43,7 +44,6 @@ public class WeaponButton : MonoBehaviour
 
     public void Initialize(Weapon weapon)
     {
-        this.weapon = weapon;
         GetComponent<ActivateButton>().isEnabled = true;
         number.color = readyColor;
         cooldownOverlay.enabled = false;

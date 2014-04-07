@@ -130,7 +130,6 @@ public abstract class Weapon : MonoBase
     //  delete self
     /// </summary>
     /// <param name="parent"></param>
-    /// <param name="index"></param>
     /// <returns></returns>
     public virtual Weapon Bake(GameObject parent)
     {

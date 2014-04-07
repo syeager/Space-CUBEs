@@ -4,13 +4,14 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+
 using Random = UnityEngine.Random;
 
 public class LevelManager : Singleton<LevelManager>
 {
     #region References
 
-    private ConstructionGrid Grid;
+    private ConstructionGrid grid;
 
     #endregion
 
@@ -29,7 +30,7 @@ public class LevelManager : Singleton<LevelManager>
 
     #region Readonly Fields
 
-    protected readonly Quaternion SPAWNROTATION = Quaternion.Euler(0f, 270f, 90f);
+    protected static readonly Quaternion SpawnRotation = Quaternion.Euler(0f, 270f, 90f);
 
     #endregion
 
@@ -74,7 +75,7 @@ public class LevelManager : Singleton<LevelManager>
         // active enemies
         activeEnemies = new List<Enemy>();
 
-        Grid = ((GameObject)Instantiate(GameResources.Main.ConstructionGrid_Prefab, Vector3.zero, Quaternion.identity)).GetComponent<ConstructionGrid>();
+        grid = ((GameObject)Instantiate(GameResources.Main.ConstructionGrid_Prefab, Vector3.zero, Quaternion.identity)).GetComponent<ConstructionGrid>();
 
         InvokeAction(() => CreatePlayer(GameData.Main.currentBuild), 1f);
     }
@@ -168,7 +169,7 @@ public class LevelManager : Singleton<LevelManager>
 
     private void CreatePlayer(string build)
     {
-        Grid.Build(build, 10, new Vector3(-75f, 0, 0), new Vector3(0f, 90f, 270f), 0.5f, OnBuildFinished);
+        grid.Build(build, 10, new Vector3(-75f, 0, 0), new Vector3(0f, 90f, 270f), 0.5f, OnBuildFinished);
     }
 
 

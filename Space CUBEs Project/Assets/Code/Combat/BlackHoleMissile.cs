@@ -1,8 +1,7 @@
 ﻿// Steve Yeager
-// 
+// 2.202.2014
 
 using UnityEngine;
-using System.Collections;
 
 /// <summary>
 /// 

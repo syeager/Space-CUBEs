@@ -1,6 +1,7 @@
 ﻿// Steve Yeager
 // 4.3.2014
 
+using Annotations;
 using UnityEngine;
 
 /// <summary>
@@ -18,6 +19,7 @@ public class DebugMenuManager : MonoBehaviour
 
     #region MonoBehaviour Overrides
 
+    [UsedImplicitly]
     private void Awake()
     {
         invincibleToggle.value = GameSettings.Main.invincible;

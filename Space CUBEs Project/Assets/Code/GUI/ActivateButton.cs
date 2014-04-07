@@ -2,9 +2,11 @@
 // 12.18.2014
 
 using System;
-using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// Button that sends out event when pressed/released.
+/// </summary>
 public class ActivateButton : UIButton
 {
     #region Public Fields

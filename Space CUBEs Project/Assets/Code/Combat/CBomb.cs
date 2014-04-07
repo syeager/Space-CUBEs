@@ -2,7 +2,6 @@
 // 3.3.2014
 
 using UnityEngine;
-using System.Collections;
 
 /// <summary>
 /// 

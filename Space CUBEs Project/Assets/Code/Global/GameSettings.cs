@@ -1,6 +1,7 @@
 ﻿// Steve Yeager
 // 8.17.2013
 
+using Annotations;
 using UnityEngine;
 
 /// <summary>
@@ -48,6 +49,7 @@ public class GameSettings : Singleton<GameSettings>
 
     #region MonoBehaviour Overrides
 
+    [UsedImplicitly]
     private void Start()
     {
         Load();

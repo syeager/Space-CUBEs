@@ -2,11 +2,10 @@
 // 1.6.2014
 
 using UnityEngine;
-using System.Collections;
 using System;
 
 /// <summary>
-/// 
+/// Hnadles the players money.
 /// </summary>
 [Serializable]
 public class MoneyManager
@@ -19,7 +18,7 @@ public class MoneyManager
 
     #region Const Fields
 
-    private const string MONEYPATH = "Money: ";
+    private const string Moneypath = "Money: ";
 
     #endregion
 
@@ -45,7 +44,7 @@ public class MoneyManager
     public void Save()
     {
         var balance = Balance();
-        PlayerPrefs.SetInt(MONEYPATH, money+balance);
+        PlayerPrefs.SetInt(Moneypath, money+balance);
         money = 0;
     }
 
@@ -59,7 +58,7 @@ public class MoneyManager
     /// <returns>Current balance.</returns>
     public static int Balance()
     {
-        return PlayerPrefs.GetInt(MONEYPATH);
+        return PlayerPrefs.GetInt(Moneypath);
     }
 
 
@@ -70,7 +69,7 @@ public class MoneyManager
     /// <param name="balance">Balance to set.</param>
     public static void SetBalance(int balance)
     {
-        PlayerPrefs.SetInt(MONEYPATH, balance);
+        PlayerPrefs.SetInt(Moneypath, balance);
     }
 
 
@@ -83,7 +82,7 @@ public class MoneyManager
     {
         int balance = Balance();
         balance += amount;
-        PlayerPrefs.SetInt(MONEYPATH, balance);
+        PlayerPrefs.SetInt(Moneypath, balance);
         return balance;
     }
 

@@ -6,7 +6,7 @@ using System.Collections;
 using System;
 
 /// <summary>
-/// 
+/// Hnadles the player's score.
 /// </summary>
 [Serializable]
 public class ScoreManager
@@ -26,7 +26,7 @@ public class ScoreManager
 
     #region Const Fields
 
-    private const string SCOREPATH = "Score";
+    private const string Scorepath = "Score";
 
     #endregion
 

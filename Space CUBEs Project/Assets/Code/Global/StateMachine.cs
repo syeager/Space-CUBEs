@@ -4,7 +4,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 /// <summary>
 /// State Machine to be inherited from other base classes.
@@ -14,8 +13,11 @@ public class StateMachine
 {
     #region Private Fields
 
-    private MonoBase owner;
-
+#if DEBUG
+    /// <summary>MonoBase that this statemachine belongs to. Used for logging.</summary>
+    private readonly MonoBase owner;
+#endif
+    
     #endregion
 
     #region Readonly Fields
@@ -76,7 +78,7 @@ public class StateMachine
     /// <param name="info">Info to pass to the exit and enter states.</param>
     public void SetState(string stateName, Dictionary<string, object> info = null)
     {
-#if LOG
+#if DEBUG
         if (owner.log)
         {
             Debugger.Log(owner.name + ": " + currentState + "→" + stateName, owner, false, Debugger.LogTypes.StateMachines);

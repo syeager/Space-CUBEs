@@ -1,6 +1,7 @@
 ﻿// Steve Yeager
 // 4.3.2014
 
+using Annotations;
 using UnityEngine;
 
 /// <summary>
@@ -18,6 +19,7 @@ public class LevelSelectManager : MonoBehaviour
 
     #region MonoBehaviour Overrides
 
+    [UsedImplicitly]
     private void Awake()
     {
         // register button events
@@ -32,7 +34,7 @@ public class LevelSelectManager : MonoBehaviour
 
     #region Event Handlers
 
-    private void OnLevelSelected(object sender, ActivateButtonArgs args)
+    private static void OnLevelSelected(object sender, ActivateButtonArgs args)
     {
         GameData.LoadLevel(args.value, true);
     }

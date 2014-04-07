@@ -1,9 +1,6 @@
 ﻿// Steve Yeager
 // 3.25.2014
 
-using UnityEngine;
-using System.Collections;
-
 /// <summary>
 /// Send hit information to parent.
 /// </summary>

@@ -2,7 +2,6 @@
 // 1.14.2014
 
 using System;
-using System.Collections;
 using UnityEngine;
 
 public class CBomb_Weapon : Weapon

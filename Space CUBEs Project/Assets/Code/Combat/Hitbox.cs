@@ -1,9 +1,8 @@
 ﻿// Steve Yeager
 // 12.8.2013
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
+using Annotations;
 using UnityEngine;
 
 /// <summary>
@@ -37,6 +36,7 @@ public class Hitbox : MonoBase
 
     #region MonoBehavoiur Overrides
 
+    [UsedImplicitly]
     private void Awake()
     {
         myTransform = transform;

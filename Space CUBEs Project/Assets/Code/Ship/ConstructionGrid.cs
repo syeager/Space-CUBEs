@@ -305,7 +305,7 @@ public class ConstructionGrid : MonoBase
         DeleteCUBE();
 
         // create new CUBE
-        heldCUBE = (CUBE)GameObject.Instantiate(GameResources.GetCUBE(CUBEID));
+        heldCUBE = (CUBE)Instantiate(GameResources.GetCUBE(CUBEID));
         // set materials
         int materialCount = heldCUBE.renderer.materials.Length;
         Material[] alphaMats = new Material[materialCount];
@@ -544,7 +544,7 @@ public class ConstructionGrid : MonoBase
     /// <summary>
     /// Rotates a CUBE piece by the cursorRotation.
     /// </summary>
-    /// <param name="localPostion">Piece.</param>
+    /// <param name="localVector">Piece.</param>
     /// <returns>New piece position.</returns>
     private Vector3 RotateVector(Vector3 localVector, bool reverse = false)
     {
@@ -729,11 +729,10 @@ public class ConstructionGrid : MonoBase
     private BuildInfo LoadBuild(string buildName)
     {
         this.buildName = buildName;
-        string path;
 #if DEVMODE
-        path = DEVBUILDSPATH;
+        string path = DEVBUILDSPATH;
 #else
-        path = USERBUILDSPATH;
+        string path = USERBUILDSPATH;
 #endif
         // get buildInfo string from data
         string build = PlayerPrefs.GetString(path + buildName, "NA");
@@ -934,11 +933,10 @@ public class ConstructionGrid : MonoBase
     /// <returns>All build names.</returns>
     public static List<string> BuildNames()
     {
-        string namePath;
 #if DEVMODE
-        namePath = ALLDEVBUILDSPATH;
+        string namePath = ALLDEVBUILDSPATH;
 #else
-        namePath = ALLUSERBUILDSPATH;
+        string namePath = ALLUSERBUILDSPATH;
 #endif
 
         List<string> builds = PlayerPrefs.GetString(namePath).Split(BuildInfo.PIECESEP[0]).ToList();

@@ -87,23 +87,25 @@ public class Pool
 
     public GameObject Pop()
     {
-        // object ready
-        if (pool.Count > 0)
+        while (true)
         {
-            GameObject go = pool.Pop();
-            go.SetActive(true);
-            return go;
-        }
+            // object ready
+            if (pool.Count > 0)
+            {
+                GameObject go = pool.Pop();
+                go.SetActive(true);
+                return go;
+            }
 
-        // reached hard limit
-        if (hardLimit && poolSize >= limit)
-        {
-            return null;
-        }
+            // reached hard limit
+            if (hardLimit && poolSize >= limit)
+            {
+                return null;
+            }
 
-        // allocate more
-        Allocate(allocateBlock);
-        return Pop();
+            // allocate more
+            Allocate(allocateBlock);
+        }
     }
 
 
@@ -161,13 +163,12 @@ public class Pool
 
         for (int i = 0; i < size; i++)
         {
-            GameObject go = GameObject.Instantiate(prefab.gameObject) as GameObject;
+            GameObject go = Object.Instantiate(prefab.gameObject) as GameObject;
             go.transform.parent = parent;
             go.GetComponent<PoolObject>().Initialize(this);
             pool.Push(go);
             go.SetActive(false);
             poolSize++;
-
         }
     }
 

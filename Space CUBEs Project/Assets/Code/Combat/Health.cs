@@ -125,7 +125,7 @@ public class Health : MonoBase
     /// <summary>
     /// Add to health. Clamped.
     /// </summary>
-    /// <param name="amount">Amount of health added./param>
+    /// <param name="amount">Amount of health added.</param>
     /// <returns>True, if health is 0.</returns>
     public bool ChangeHealth(float amount)
     {

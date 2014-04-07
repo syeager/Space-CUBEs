@@ -2,6 +2,7 @@
 // 8.18.2013
 
 using System;
+using Annotations;
 using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
@@ -49,14 +50,14 @@ public class Debugger : Singleton<Debugger>
 
     #region Private Fields
 
-    private static Queue<KeyValuePair<string, float>> messages = new Queue<KeyValuePair<string, float>>();
+    private static readonly Queue<KeyValuePair<string, float>> Messages = new Queue<KeyValuePair<string, float>>();
     private static bool displayingMessages;
 
     #endregion
 
     #region Const Fields
 
-    private const string LOGPATH = "/Files/Debug Logs/Log_";
+    private const string LogPath = "/Files/Debug Logs/Log_";
 
     #endregion
 
@@ -69,7 +70,7 @@ public class Debugger : Singleton<Debugger>
         string[] logTypes = Enum.GetNames(typeof(LogTypes));
         for (int i = 0; i < logFlags.Length; i++)
         {
-            string path = Application.dataPath + LOGPATH + logTypes[i] + ".txt";
+            string path = Application.dataPath + LogPath + logTypes[i] + ".txt";
             // clear file
             if (overwrite)
             {
@@ -86,6 +87,7 @@ public class Debugger : Singleton<Debugger>
     }
 
 #if UNITY_EDITOR
+    [UsedImplicitly]
     private void Update()
     {
         // reload level
@@ -117,7 +119,7 @@ public class Debugger : Singleton<Debugger>
 #if UNITY_EDITOR
         if (save)
         {
-            using (StreamWriter writer = new StreamWriter(Application.dataPath + LOGPATH + logType + ".txt", true))
+            using (StreamWriter writer = new StreamWriter(Application.dataPath + LogPath + logType + ".txt", true))
             {
                 writer.WriteLine("Time: " + Time.realtimeSinceStartup + "\r\n" + message);
             }
@@ -134,7 +136,7 @@ public class Debugger : Singleton<Debugger>
 #if UNITY_EDITOR
         if (save)
         {
-            using (StreamWriter writer = new StreamWriter(Application.dataPath + LOGPATH + logType + ".txt", true))
+            using (StreamWriter writer = new StreamWriter(Application.dataPath + LogPath + logType + ".txt", true))
             {
                 writer.WriteLine("Time: " + Time.realtimeSinceStartup + "Warning\r\n" + message);
             }
@@ -151,7 +153,7 @@ public class Debugger : Singleton<Debugger>
 #if UNITY_EDITOR
         if (save)
         {
-            using (StreamWriter writer = new StreamWriter(Application.dataPath + LOGPATH + logType + ".txt", true))
+            using (StreamWriter writer = new StreamWriter(Application.dataPath + LogPath + logType + ".txt", true))
             {
                 writer.WriteLine("Time: " + Time.realtimeSinceStartup + "Error\r\n" + message);
             }
@@ -211,7 +213,7 @@ public class Debugger : Singleton<Debugger>
     {
         if (Main.ConsoleLine == null) return;
 
-        messages.Enqueue(new KeyValuePair<string, float>(message, time));
+        Messages.Enqueue(new KeyValuePair<string, float>(message, time));
         if (!displayingMessages)
         {
             Main.StartCoroutine(DisplayConsoleLine());
@@ -222,9 +224,9 @@ public class Debugger : Singleton<Debugger>
     private static IEnumerator DisplayConsoleLine()
     {
         displayingMessages = true;
-        while (messages.Count > 0)
+        while (Messages.Count > 0)
         {
-            var message = messages.Dequeue();
+            var message = Messages.Dequeue();
             Main.ConsoleLine.guiText.text = message.Key;
             yield return new WaitForSeconds(message.Value);
         }

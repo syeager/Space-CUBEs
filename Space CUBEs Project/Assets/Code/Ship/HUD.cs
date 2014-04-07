@@ -76,7 +76,7 @@ public class HUD : Singleton<HUD>
         {
             if (player.myWeapons.weapons[i] != null)
             {
-                HUD.Main.weaponButtons[i].ActivateEvent += player.myWeapons.OnActivate;
+                Main.weaponButtons[i].ActivateEvent += player.myWeapons.OnActivate;
                 Main.weaponButtons[i].GetComponent<WeaponButton>().Initialize(player.myWeapons.weapons[i]);
             }
         }

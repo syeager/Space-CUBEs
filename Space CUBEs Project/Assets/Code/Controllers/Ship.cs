@@ -1,8 +1,8 @@
 ﻿// Steve Yeager
 // 11.25.2013
 
-using System;
 using System.Collections.Generic;
+using Annotations;
 using UnityEngine;
 
 /// <summary>
@@ -53,6 +53,7 @@ public class Ship : MonoBase
     }
 
 
+    [UsedImplicitly]
     private void OnDestroy()
     {
         stateMachine = null;

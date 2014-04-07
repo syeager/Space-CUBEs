@@ -1,9 +1,7 @@
 ﻿// Steve Yeager
-// 
+// 2.20.2014
 
 using UnityEngine;
-using System.Collections;
-using System;
 
 public class PlanetSeed_Weapon : Weapon
 {

@@ -2,10 +2,9 @@
 // 2.22.2014
 
 using UnityEngine;
-using System.Collections;
 
 /// <summary>
-/// 
+/// Button whose color can be freely changed.
 /// </summary>
 public class ColorButton : ActivateButton
 {
@@ -15,18 +14,11 @@ public class ColorButton : ActivateButton
     
     #endregion
 
-    #region Private Fields
-
-    private Color color;
-
-    #endregion
-
 
     #region Public Methods
 
     public void SetColor(Color color)
     {
-        this.color = color;
         swatch.color = color;
     }
 

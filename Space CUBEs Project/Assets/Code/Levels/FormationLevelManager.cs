@@ -41,7 +41,7 @@ public class FormationLevelManager : LevelManager
         }
         else
         {
-            InvokeAction(() => SpawnNextFormation(), 3f);
+            InvokeAction(SpawnNextFormation, 3f);
         }
 #else
         InvokeAction(() => SpawnNextFormation(), 3f);
@@ -99,7 +99,7 @@ public class FormationLevelManager : LevelManager
             if (formationGroups[segmentCursor].enemies[i] == Enemy.Classes.None) continue;
 
             GameObject enemyGO = PoolManager.Pop(enemies[formationGroups[segmentCursor].enemies[i]]);
-            enemyGO.transform.SetPosRot(Utility.RotateVector(formationGroups[segmentCursor].formation.positions[i], Quaternion.AngleAxis(formationGroups[segmentCursor].rotation, Vector3.back)) + formationCenter, SPAWNROTATION);
+            enemyGO.transform.SetPosRot(Utility.RotateVector(formationGroups[segmentCursor].formation.positions[i], Quaternion.AngleAxis(formationGroups[segmentCursor].rotation, Vector3.back)) + formationCenter, SpawnRotation);
             Enemy enemy = enemyGO.GetComponent<Enemy>();
             enemy.GetComponent<Enemy>().stateMachine.Start(new Dictionary<string, object> {{"path", (formationGroups[segmentCursor].paths[i])}});
             enemy.GetComponent<ShieldHealth>().DieEvent += OnEnemyDeath;
@@ -120,7 +120,7 @@ public class FormationLevelManager : LevelManager
             }
             else
             {
-                InvokeAction(() => SpawnNextFormation(), formationGroups[segmentCursor].spawnTime);
+                InvokeAction(SpawnNextFormation, formationGroups[segmentCursor].spawnTime);
             }
         }
     }
@@ -128,8 +128,8 @@ public class FormationLevelManager : LevelManager
 
     private void SpawnBoss()
     {
-        boss = (Instantiate(Boss_Prefab, bossSpawnPosition, SPAWNROTATION) as GameObject).GetComponent<Boss>();
-        boss.GetComponent<ShieldHealth>().DieEvent += (s, a) => { LevelFinished(); };
+        boss = (Instantiate(Boss_Prefab, bossSpawnPosition, SpawnRotation) as GameObject).GetComponent<Boss>();
+        boss.GetComponent<ShieldHealth>().DieEvent += (s, a) => LevelFinished();
         boss.stateMachine.Start();
     }
 
@@ -152,7 +152,7 @@ public class FormationLevelManager : LevelManager
             }
             else
             {
-                InvokeAction(() => SpawnNextFormation(), 3f);
+                InvokeAction(SpawnNextFormation, 3f);
             }
         }
     }

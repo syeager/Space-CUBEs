@@ -1,12 +1,12 @@
 ﻿// Steve Yeager
 // 1.14.2014
 
+
+using UnityEngine;
+
 /// <summary>
 /// Holds all info for a CUBE piece except pieces.
 /// </summary>
-/// 
-using UnityEngine;
-
 public struct CUBEInfo
 {
     // General Stats
