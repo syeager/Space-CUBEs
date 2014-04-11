@@ -1,9 +1,6 @@
 ﻿// Steve Yeager
 // 12.16.2013
 
-using System.Collections.Generic;
-using UnityEngine;
-
 /// <summary>
 /// Base class for all enemies.
 /// </summary>
@@ -21,9 +18,17 @@ public class Enemy : Ship
     {
         None,
         Grunt,
-        Gunner,
-        Tank,
+        Sentry,
+        Guard,
+        Hornet,
+        Kamakazee,
+        Bomber,
+        Elites,
         SwitchBlade,
+        Medic,
+        Hacker,
+        Twins,
+        Instagator
     }
     public Classes enemyClass;
     public int score;

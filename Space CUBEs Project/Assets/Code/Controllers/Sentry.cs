@@ -20,19 +20,32 @@ public class Sentry : Enemy
     public float maxTargetDistance;
 
     /// <summary>Speed flying to target.</summary>
-    public float targetSpeed;
+    public float targetMoveSpeed;
+
+    /// <summary>Distance to Player allowed before Sentry repositions.</summary>
+    public float idleDistanceBuffer;
 
     /// <summary>Speed flying the figure 8.</summary>
-    public float pathSpeed;
+    public float idlingSpeed;
+
+    /// <summary>How fast to rotate towards player.</summary>
+    public float angularSpeed;
+
+    /// <summary>Seconds between firing.</summary>
+    public float attackBuffer;
 
     #endregion
 
     #region Private Fields
 
     /// <summary>Min target distance away from player.</summary>
-    public float targetdistance;
+    private float targetDistance;
 
-    private FigureEight path;
+    /// <summary>Path to fly when within attacking distance.</summary>
+    private FigureEight attackPath;
+
+    /// <summary>Cached Player transform.</summary>
+    private Transform player;
 
     #endregion
 
@@ -40,7 +53,7 @@ public class Sentry : Enemy
 
     private const string SpawningState = "Spawning";
     private const string MovingState = "Moving";
-    private const string IdlingState = "Idling";
+    private const string AttackingState = "Attacking";
 
     #endregion
 
@@ -55,7 +68,10 @@ public class Sentry : Enemy
         stateMachine = new StateMachine(this, SpawningState);
         stateMachine.CreateState(SpawningState, SpawnEnter, info => { });
         stateMachine.CreateState(MovingState, info => stateMachine.SetUpdate(MovingUpdate()), info => { });
+        stateMachine.CreateState(AttackingState, AttackingEnter, info => { });
         stateMachine.CreateState(DyingState, DieEnter, info => { });
+
+        player = LevelManager.Main.playerTransform;
     }
 
     #endregion
@@ -64,13 +80,13 @@ public class Sentry : Enemy
 
     private void SpawnEnter(Dictionary<string, object> info)
     {
-        path = new FigureEight { speed = pathSpeed };
-        path.Initialize(myTransform);
+        attackPath = ScriptableObject.CreateInstance(typeof (FigureEight)) as FigureEight;
+        attackPath.Initialize(myTransform, idlingSpeed);
 
         myHealth.Initialize();
 
         // decide target distance
-        targetdistance = Random.Range(minTargetDistance, maxTargetDistance);
+        targetDistance = Random.Range(minTargetDistance, maxTargetDistance);
 
         stateMachine.SetState(MovingState);
     }
@@ -80,19 +96,44 @@ public class Sentry : Enemy
     {
         while (true)
         {
-            // move
-            myMotor.Move((LevelManager.Main.playerTransform.position-myTransform.position).normalized*targetSpeed);
+            Vector3 targetPosition = player.position;
+
+            // update transform
+            Rotate();
+            myMotor.Move(myTransform.forward * targetMoveSpeed * Time.deltaTime);
+
+            // enter attacking
+            if (Vector3.Distance(targetPosition, myTransform.position) <= targetDistance)
+            {
+                stateMachine.SetState(AttackingState);
+                yield break;
+            }
+
             yield return null;
         }
     }
 
 
-    private IEnumerator IdlingUpdate()
+    private void AttackingEnter(Dictionary<string, object> obj)
+    {
+        StartCoroutine(Fire());
+        stateMachine.SetUpdate(AttackingUpdate());
+    }
+
+
+    private IEnumerator AttackingUpdate()
     {
         while (true)
         {
-            // move
-            myMotor.Move(path.Direction(deltaTime));
+            if (Vector3.Distance(player.position, myTransform.position) > idleDistanceBuffer + targetDistance)
+            {
+                stateMachine.SetState(MovingState);
+                yield break;
+            }
+
+            // idle
+            Rotate();
+            myMotor.Move(attackPath.Direction(deltaTime));
             yield return null;
         }
     }
@@ -100,9 +141,34 @@ public class Sentry : Enemy
 
     private void DieEnter(Dictionary<string, object> info)
     {
-        // send hitinfo to player
-
+        StopAllCoroutines();
         poolObject.Disable();
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    /// <summary>
+    /// Rotate to face player.
+    /// </summary>
+    private void Rotate()
+    {
+        myTransform.rotation = Quaternion.Slerp(myTransform.rotation,
+                                                Quaternion.LookRotation(player.position - myTransform.position, Vector3.back),
+                                                angularSpeed*Time.deltaTime);
+    }
+
+
+    private IEnumerator Fire()
+    {
+        WaitForSeconds wait = new WaitForSeconds(attackBuffer);
+        while (true)
+        {
+            yield return wait;
+
+            myWeapons.Activate(0, true);
+        }
     }
 
     #endregion

@@ -10,8 +10,8 @@ namespace Paths
     {
         #region Public Fields
 
-        public float amplitude = 0.5f;
-        public float frequency = 1f;
+        public float frequencyX = 2f;
+        public float frequencyY = 1f;
 
         #endregion
 
@@ -24,15 +24,20 @@ namespace Paths
         #region Const Fields
 
         private const float Offset = (float)Math.PI/2;
+        
 
         #endregion
 
 
         #region Path Overrides
 
-        public override void Initialize(Transform transform)
+        public void Initialize(Transform transform, float speed, float frequencyX = 2f, float frequencyY = 1f)
         {
             base.Initialize(transform);
+
+            this.speed = speed;
+            this.frequencyX = frequencyX;
+            this.frequencyY = frequencyY;
 
             time = Offset;
         }
@@ -41,7 +46,7 @@ namespace Paths
         public override Vector3 Direction(float deltaTime)
         {
             time += deltaTime;
-            return new Vector3((float)Math.Cos(2f * time), (float)Math.Sin(time), 0f) * speed * deltaTime;
+            return myTransform.TransformDirection(new Vector3((float)Math.Cos(frequencyX * time), 0f, (float)Math.Sin(frequencyY * time)) * speed * deltaTime);
         }
 
         #endregion
