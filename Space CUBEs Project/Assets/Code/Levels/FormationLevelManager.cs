@@ -21,7 +21,7 @@ public class FormationLevelManager : LevelManager
 
     #region Boss Fields
 
-    public GameObject Boss_Prefab;
+    public GameObject bossPrefab;
     private Boss boss;
     public Vector3 bossSpawnPosition;
 
@@ -98,9 +98,9 @@ public class FormationLevelManager : LevelManager
         {
             if (formationGroups[segmentCursor].enemies[i] == Enemy.Classes.None) continue;
 
-            GameObject enemyGO = PoolManager.Pop(enemies[formationGroups[segmentCursor].enemies[i]]);
-            enemyGO.transform.SetPosRot(Utility.RotateVector(formationGroups[segmentCursor].formation.positions[i], Quaternion.AngleAxis(formationGroups[segmentCursor].rotation, Vector3.back)) + formationCenter, SpawnRotation);
-            Enemy enemy = enemyGO.GetComponent<Enemy>();
+            GameObject enemyObject = PoolManager.Pop(enemies[formationGroups[segmentCursor].enemies[i]]);
+            enemyObject.transform.SetPosRot(Utility.RotateVector(formationGroups[segmentCursor].formation.positions[i], Quaternion.AngleAxis(formationGroups[segmentCursor].rotation, Vector3.back)) + formationCenter, SpawnRotation);
+            Enemy enemy = enemyObject.GetComponent<Enemy>();
             enemy.GetComponent<Enemy>().stateMachine.Start(new Dictionary<string, object> {{"path", (formationGroups[segmentCursor].paths[i])}});
             enemy.GetComponent<ShieldHealth>().DieEvent += OnEnemyDeath;
             activeEnemies.Add(enemy);
@@ -128,7 +128,7 @@ public class FormationLevelManager : LevelManager
 
     private void SpawnBoss()
     {
-        boss = (Instantiate(Boss_Prefab, bossSpawnPosition, SpawnRotation) as GameObject).GetComponent<Boss>();
+        boss = (Instantiate(bossPrefab, bossSpawnPosition, SpawnRotation) as GameObject).GetComponent<Boss>();
         boss.GetComponent<ShieldHealth>().DieEvent += (s, a) => LevelFinished();
         boss.stateMachine.Start();
     }

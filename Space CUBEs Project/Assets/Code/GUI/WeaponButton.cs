@@ -1,6 +1,7 @@
 ﻿// Steve Yeager
 // 1.23.2014
 
+using Annotations;
 using UnityEngine;
 using System;
 
@@ -33,6 +34,7 @@ public class WeaponButton : MonoBehaviour
 
     #region MonoBehaviour Overrides
 
+    [UsedImplicitly]
     private void Awake()
     {
         Disable();
@@ -67,14 +69,14 @@ public class WeaponButton : MonoBehaviour
     private void OnPowerUpdate(object sender, ValueArgs args)
     {
         // full power
-        if ((float)args.value >= Weapon.FULLPOWER)
+        if ((float)args.value >= Weapon.FullPower)
         {
             number.color = readyColor;
             cooldownOverlay.enabled = false;
         }
         else
         {
-            cooldownOverlay.fillAmount = 1-(float)args.value / Weapon.FULLPOWER;
+            cooldownOverlay.fillAmount = 1-(float)args.value / Weapon.FullPower;
         }
     }
 

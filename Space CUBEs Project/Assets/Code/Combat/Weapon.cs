@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections;
+using Annotations;
 using UnityEngine;
 
 public abstract class Weapon : MonoBase
@@ -30,7 +31,7 @@ public abstract class Weapon : MonoBase
 
     #region Const Fields
 
-    public const float FULLPOWER = 100f;
+    public const float FullPower = 100f;
 
     #endregion
 
@@ -51,6 +52,7 @@ public abstract class Weapon : MonoBase
 
     #region MonoBehaviours
 
+    [UsedImplicitly]
     private void Awake()
     {
         // get references
@@ -75,9 +77,9 @@ public abstract class Weapon : MonoBase
             }
             yield return null;
         }
-        while (power < FULLPOWER);
+        while (power < FullPower);
 
-        power = FULLPOWER;
+        power = FullPower;
         canActivate = true;
     }
 
@@ -93,7 +95,7 @@ public abstract class Weapon : MonoBase
 
     protected IEnumerator Charge()
     {
-        while (power < FULLPOWER)
+        while (power < FullPower)
         {
             power += cooldownSpeed * deltaTime;
             if (PowerUpdateEvent != null)
@@ -103,7 +105,7 @@ public abstract class Weapon : MonoBase
             yield return null;
         }
 
-        power = FULLPOWER;
+        power = FullPower;
     }
 
     #endregion
@@ -114,7 +116,7 @@ public abstract class Weapon : MonoBase
     {
         myTransform = transform;
         myShip = sender;
-        power = FULLPOWER;
+        power = FullPower;
     }
 
 

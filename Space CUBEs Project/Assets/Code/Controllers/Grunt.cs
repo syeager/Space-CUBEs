@@ -78,8 +78,6 @@ public class Grunt : Enemy
 
     private void DieEnter(Dictionary<string, object> info)
     {
-        // send hitinfo to player
-
         attackCycle.Kill();
         poolObject.Disable();
     }

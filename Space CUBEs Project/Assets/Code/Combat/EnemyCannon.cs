@@ -10,11 +10,10 @@ public class EnemyCannon : Weapon
 {
     #region Public Fields
     
-    public GameObject Bullet_Prefab;
+    public GameObject bulletPrefab;
     public float speed;
     public float damage;
     public Vector3 offset;
-    public float life;
     
     #endregion
 
@@ -36,7 +35,7 @@ public class EnemyCannon : Weapon
     private void Fire()
     {
         Vector3 position = myTransform.position + myTransform.TransformDirection(offset);
-        PoolManager.Pop(Bullet_Prefab, position, myTransform.rotation, life).
+        PoolManager.Pop(bulletPrefab, position, myTransform.rotation).
             GetComponent<Hitbox>().Initialize(myShip, damage, (LevelManager.Main.playerTransform.position - position).normalized*speed);
     }
 
