@@ -111,7 +111,7 @@ public class Debugger : Singleton<Debugger>
 
     #region Log/Warning/Error Methods
 
-    [System.Diagnostics.Conditional("LOG")]
+    [System.Diagnostics.Conditional("DEBUG")]
     public static void Log(object message, Object context = null, bool save = true, LogTypes logType = LogTypes.Default)
     {
         if (Main.logFlags[(int)logType]) Debug.Log((Main.showTime ? Time.time + " " : "") + message, context);
@@ -128,7 +128,7 @@ public class Debugger : Singleton<Debugger>
     }
 
 
-    [System.Diagnostics.Conditional("LOG")]
+    [System.Diagnostics.Conditional("DEBUG")]
     public static void LogWarning(object message, Object context = null, bool save = true, LogTypes logType = LogTypes.Default)
     {
         if (Main.logFlags[(int)logType]) Debug.LogWarning((Main.showTime ? Time.time + " " : "") + message, context);
@@ -145,7 +145,7 @@ public class Debugger : Singleton<Debugger>
     }
 
 
-    [System.Diagnostics.Conditional("LOG")]
+    [System.Diagnostics.Conditional("DEBUG")]
     public static void LogError(object message, Object context = null, bool save = true, LogTypes logType = LogTypes.Default)
     {
         if (Main.logFlags[(int)logType]) Debug.LogError((Main.showTime ? Time.time + " " : "") + message, context);
@@ -162,7 +162,7 @@ public class Debugger : Singleton<Debugger>
     }
 
 
-    [System.Diagnostics.Conditional("LOG")]
+    [System.Diagnostics.Conditional("DEBUG")]
     public static void LogList(IEnumerable list, string header = "", Object context = null, LogTypes logType = LogTypes.Default)
     {
         if (!Main.logFlags[(int)logType]) return;
@@ -186,7 +186,7 @@ public class Debugger : Singleton<Debugger>
     }
 
 
-    [System.Diagnostics.Conditional("LOG")]
+    [System.Diagnostics.Conditional("DEBUG")]
     public static void LogFields(object context, string name, bool includePrivate = false, LogTypes logType = LogTypes.Default)
     {
         if (!Main.logFlags[(int)logType]) return;
@@ -208,7 +208,7 @@ public class Debugger : Singleton<Debugger>
 
     #region ConsoleLine Messages
 
-    [System.Diagnostics.Conditional("LOG")]
+    [System.Diagnostics.Conditional("DEBUG")]
     public static void LogConsoleLine(string message, float time = 0f)
     {
         if (Main.ConsoleLine == null) return;

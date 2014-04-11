@@ -23,7 +23,7 @@ public class MonoBase : MonoBehaviour
 
     #region Log Methods
 
-    [Conditional("LOG")]
+    [Conditional("DEBUG")]
     protected void Log(object message, bool save = true, Debugger.LogTypes logType = Debugger.LogTypes.Default)
     {
         if (log)
@@ -33,7 +33,7 @@ public class MonoBase : MonoBehaviour
     }
 
 
-    [Conditional("WARNING")]
+    [Conditional("DEBUG")]
     protected void LogWarning(object message, bool save = true, Debugger.LogTypes logType = Debugger.LogTypes.Default)
     {
         if (log)
@@ -43,7 +43,7 @@ public class MonoBase : MonoBehaviour
     }
 
 
-    [Conditional("ERROR")]
+    [Conditional("DEBUG")]
     protected void LogError(object message, bool save = true, Debugger.LogTypes logType = Debugger.LogTypes.Default)
     {
         if (log)
