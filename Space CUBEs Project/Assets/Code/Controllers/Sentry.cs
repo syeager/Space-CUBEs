@@ -70,8 +70,6 @@ public class Sentry : Enemy
         stateMachine.CreateState(MovingState, info => stateMachine.SetUpdate(MovingUpdate()), info => { });
         stateMachine.CreateState(AttackingState, AttackingEnter, info => { });
         stateMachine.CreateState(DyingState, DieEnter, info => { });
-
-        player = LevelManager.Main.playerTransform;
     }
 
     #endregion
@@ -80,7 +78,9 @@ public class Sentry : Enemy
 
     private void SpawnEnter(Dictionary<string, object> info)
     {
-        attackPath = ScriptableObject.CreateInstance(typeof (FigureEight)) as FigureEight;
+        player = LevelManager.Main.playerTransform;
+
+        attackPath = ScriptableObject.CreateInstance(typeof(FigureEight)) as FigureEight;
         attackPath.Initialize(myTransform, idlingSpeed);
 
         myHealth.Initialize();
