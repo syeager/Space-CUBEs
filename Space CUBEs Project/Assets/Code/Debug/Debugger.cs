@@ -187,6 +187,30 @@ public class Debugger : Singleton<Debugger>
 
 
     [System.Diagnostics.Conditional("DEBUG")]
+    public static void LogDict<TKey, TValue>(Dictionary<TKey, TValue> dictionary, string header = "", Object context = null, LogTypes logType = LogTypes.Default)
+    {
+        if (!Main.logFlags[(int)logType]) return;
+
+        if (header != "")
+        {
+            Debug.Log(header + '\n', context);
+        }
+
+        int count = 0;
+        foreach (var item in dictionary)
+        {
+            Debug.Log(count + ": " + item.Key + ", " + item.Value, context);
+            count++;
+        }
+
+        if (count == 0)
+        {
+            Debug.Log("Empty");
+        }
+    }
+
+
+    [System.Diagnostics.Conditional("DEBUG")]
     public static void LogFields(object context, string name, bool includePrivate = false, LogTypes logType = LogTypes.Default)
     {
         if (!Main.logFlags[(int)logType]) return;
