@@ -22,6 +22,12 @@ namespace Paths
 
         #endregion
 
+        #region Const Fields
+
+        private const float DistanceBuffer = 0.5f;
+        
+        #endregion
+
 
         #region Path Overrides
 
@@ -35,10 +41,17 @@ namespace Paths
 
         public override Vector3 Direction(float deltaTime)
         {
-            if (Vector3.Distance(myTransform.position, stops[cursor]) <= 0.5f)
+            if (cursor >= stops.Length) return Vector3.zero;
+
+            if (Vector3.Distance(myTransform.position, stops[cursor]) <= DistanceBuffer)
             {
                 delayTimer = delays[cursor];
                 cursor++;
+
+                if (cursor >= stops.Length)
+                {
+                    return Vector3.zero;
+                }
             }
 
             if (delayTimer > 0f)
