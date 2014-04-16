@@ -61,7 +61,7 @@ public class LevelCreator : EditorWindow
     [MenuItem("Tools/Level Creator %l")]
     public static void Init()
     {
-        LevelCreator window = (LevelCreator)GetWindow<LevelCreator>("Level Creator");
+        LevelCreator window = GetWindow<LevelCreator>("Level Creator");
 
         window.sLevelManager = new SerializedObject(levelManager);
         window.sFormationGroups = window.sLevelManager.FindProperty("formationGroups");
@@ -458,7 +458,7 @@ public class LevelCreator : EditorWindow
         {
             paths.InsertArrayElementAtIndex(i);
             // hardcode to StraightPath
-            paths.GetArrayElementAtIndex(i).objectReferenceValue = CreateInstance(pathTypes[1]);
+            paths.GetArrayElementAtIndex(i).objectReferenceValue = CreateInstance(pathTypes[2]);
         }
 
         sLevelManager.ApplyModifiedProperties();
