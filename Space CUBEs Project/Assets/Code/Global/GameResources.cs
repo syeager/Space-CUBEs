@@ -1,17 +1,13 @@
 ﻿// Steve Yeager
 // 11.26.2013
 
-using Annotations;
 using UnityEngine;
 
-public class GameResources : MonoBehaviour
+/// <summary>
+/// Holds 
+/// </summary>
+public class GameResources : Singleton<GameResources>
 {
-    #region References
-
-    public static GameResources Main;
-
-    #endregion
-
     #region Public Fields
 
     public CUBE[] CUBE_Prefabs;
@@ -21,22 +17,10 @@ public class GameResources : MonoBehaviour
     public Material ShieldHit_Mat;
     public Material HealthHit_Mat;
     public GameObject Player_TR;
+    public GameObject player_Prefab;
 
     #endregion
 
-
-    #region Unity Overrides
-
-    [UsedImplicitly]
-    private void Awake()
-    {
-        if (Main == null)
-        {
-            Main = this;
-        }
-    }
-
-    #endregion
 
     #region Static Methods
 

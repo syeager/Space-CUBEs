@@ -10,6 +10,12 @@ using UnityEngine;
 /// </summary>
 public class Player : Ship
 {
+    #region References
+
+    public GameObject trailRenderer;
+
+    #endregion
+
     #region Public Fields
 
     public ScoreManager myScore;
@@ -65,12 +71,9 @@ public class Player : Ship
         myMoney = new MoneyManager();
 
         // effects
-        if (GameSettings.Main.trailRenderer)
+        if (!GameSettings.Main.trailRenderer)
         {
-            Transform trail = (Instantiate(GameResources.Main.Player_TR) as GameObject).transform;
-            trail.parent = myTransform;
-            trail.localPosition = Vector3.zero;
-            trail.localRotation = Quaternion.identity;
+            Destroy(trailRenderer);
         }
 
         // create states

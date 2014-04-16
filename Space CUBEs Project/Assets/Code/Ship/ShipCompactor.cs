@@ -1,12 +1,12 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Diagnostics;
+﻿// Steve Yeager
+// 4.15.2014
+// TODO: Clean and break up.
+using UnityEngine;
 using System.Collections.Generic;
 using System;
-using System.Linq;
 
 /// <summary>
-/// 
+/// Combines ship mesh and adds appropriate components.
 /// </summary>
 public class ShipCompactor : MonoBehaviour
 {
@@ -20,12 +20,9 @@ public class ShipCompactor : MonoBehaviour
 
     #region Public Methods
 
-    public Ship Compact(Type shipType, bool player, bool cleanUnused, params Type[] components)
+    public Ship Compact(bool cleanUnused, params Type[] components)
     {
         List<Weapon> weapons = new List<Weapon>();
-
-        gameObject.AddComponent<MeshFilter>();
-        gameObject.AddComponent<MeshRenderer>();
 
         MeshFilter[] meshFilters = GetComponentsInChildren<MeshFilter>();
         List<CombineInstance> combine = new List<CombineInstance>();
@@ -76,21 +73,14 @@ public class ShipCompactor : MonoBehaviour
         }
 
         // add ship
-        Ship ship = gameObject.AddComponent(shipType.ToString()) as Ship;
-        // back weapons
+        Ship ship = GetComponent<Ship>();
+        // bake weapons
         ship.myWeapons.Bake(weapons);
         // add collider
         var box = ship.gameObject.AddComponent<BoxCollider>();
-        if (player)
-        {
-            box.size = new Vector3(box.size.x * PlayerCollider, 10f, box.size.z * PlayerCollider);
-        }
-        else
-        {
-            box.size = new Vector3(box.size.x * EnemyCollider, 10f, box.size.z * EnemyCollider);
-            BoxCollider boxCollider = ship.gameObject.AddComponent<BoxCollider>();
-            boxCollider.size = new Vector3(box.size.x * EnemyCollider, boxCollider.size.y * EnemyCollider, box.size.z * EnemyCollider);
-        }
+
+        box.size = new Vector3(box.size.x * PlayerCollider, 10f, box.size.z * PlayerCollider);
+
         box.isTrigger = true;
         // add rigidbody
         var body = ship.gameObject.AddComponent<Rigidbody>();
@@ -105,13 +95,6 @@ public class ShipCompactor : MonoBehaviour
 
         Destroy(this);
         return ship;
-    }
-
-
-    //
-    public Ship Compact(bool player, params Type[] components)
-    {
-        return Compact(typeof(Ship), player, false, components);
     }
 
     #endregion

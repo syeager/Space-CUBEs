@@ -126,6 +126,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 1
   timeScale: 1
+  currentBuild: Test Build
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -156,7 +157,7 @@ MonoBehaviour:
   ConsoleLine_Prefab: {fileID: 100000, guid: 1abf603ef50833b4ba9818e64b0f75db, type: 2}
   showTime: 1
   overwrite: 1
-  logFlags: 0100000000
+  logFlags: 0100000100
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -171,6 +172,7 @@ MonoBehaviour:
   log: 1
   timeScale: 1
   invincible: 0
+  jumpToBoss: 0
   volumeSE: 5
   volumeMusic: 0
   joystickSensitivity: .5
@@ -189,6 +191,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dab6b0c12c931b3479d1aee0989713d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  log: 0
+  timeScale: 1
   CUBE_Prefabs:
   - {fileID: 11400000, guid: c90fae0135712ca4aaf1f938bc7888e3, type: 2}
   - {fileID: 11400000, guid: eb6d282238117c144a5a3b10c4675d5b, type: 2}
@@ -319,6 +323,7 @@ MonoBehaviour:
   ShieldHit_Mat: {fileID: 2100000, guid: 71367417f5c929240bcef731c61da6be, type: 2}
   HealthHit_Mat: {fileID: 2100000, guid: 714fd6fe39d4b7e4786c808fbccc8dd9, type: 2}
   Player_TR: {fileID: 100000, guid: 52986c95ddd530342846a11fe85cb87a, type: 2}
+  player_Prefab: {fileID: 100000, guid: c232bd52a71fba443abbde765af943c5, type: 2}
 --- !u!114 &11400010
 MonoBehaviour:
   m_ObjectHideFlags: 1

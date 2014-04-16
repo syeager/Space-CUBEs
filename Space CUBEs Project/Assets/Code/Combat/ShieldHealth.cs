@@ -22,7 +22,7 @@ public class ShieldHealth : Health
     #region Private Fields
 
     private Job rechargeJob;
-    private Material ShieldHit_Mat;
+    private Material shieldHitMat;
 
     #endregion
 
@@ -43,7 +43,7 @@ public class ShieldHealth : Health
 
     protected override void Awake()
     {
-        ShieldHit_Mat = GameResources.Main.ShieldHit_Mat;
+        shieldHitMat = GameResources.Main.ShieldHit_Mat;
         HealthHit_Mat = GameResources.Main.HealthHit_Mat;
         base.Awake();
     }
@@ -66,7 +66,6 @@ public class ShieldHealth : Health
         if (ApplyDamage(-damage))
         {
             Killed(sender);
-            return;
         }
     }
 
@@ -131,7 +130,7 @@ public class ShieldHealth : Health
         }
         else
         {
-            HitMat(ShieldHit_Mat);
+            HitMat(shieldHitMat);
         }
 
         return dead;

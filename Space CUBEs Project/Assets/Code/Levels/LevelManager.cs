@@ -36,8 +36,8 @@ public class LevelManager : Singleton<LevelManager>
 
     #region Static Fields
 
-    private static readonly char[] ranks = { 'F', 'D', 'C', 'B', 'A', 'S' };
-    private static readonly int[] gradeChances = { 50000, 25000, 12500, 6250, 3125 };
+    private static readonly char[] Ranks = { 'F', 'D', 'C', 'B', 'A', 'S' };
+    private static readonly int[] GradeChances = { 50000, 25000, 12500, 6250, 3125 };
 
     #endregion
 
@@ -144,13 +144,13 @@ public class LevelManager : Singleton<LevelManager>
         }
         CUBE.SetInventory(inventory);
         // level rank
-        char rank = ranks[ranks.Length - 1];
+        char rank = Ranks[Ranks.Length - 1];
 
         for (int i = 0; i < rankLimits.Length; i++)
         {
             if (player.myScore.points <= rankLimits[i])
             {
-                rank = ranks[i - 1];
+                rank = Ranks[i - 1];
                 break;
             }
         }
@@ -173,16 +173,16 @@ public class LevelManager : Singleton<LevelManager>
     }
 
 
-    private int[] AwardCUBEs()
+    private static int[] AwardCUBEs()
     {
         // get grades
         int[] grades = new int[5];
         for (int i = 0; i < 5; i++)
         {
-            int rand = Random.Range(0, gradeChances[0]);
+            int rand = Random.Range(0, GradeChances[0]);
             for (int j = 0; j < 5; j++)
             {
-                if (gradeChances[j] <= rand)
+                if (GradeChances[j] <= rand)
                 {
                     grades[i] = j - 1;
                     break;
@@ -207,7 +207,7 @@ public class LevelManager : Singleton<LevelManager>
     private void OnBuildFinished(BuildFinishedArgs args)
     {
         var buildShip = args.ship.AddComponent<ShipCompactor>();
-        player = buildShip.Compact(typeof(Player), true, true) as Player;
+        player = buildShip.Compact(true) as Player;
         playerTransform = player.transform;
         player.Initialize(args.health, args.shield, args.speed, args.damage);
 

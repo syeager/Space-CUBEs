@@ -78,6 +78,16 @@ public class Health : MonoBase
 
     #region Public Methods
 
+    //
+    public void Reset()
+    {
+        if (myRenderer == null) myRenderer = renderer;
+        Normal_Mat = myRenderer.material;
+
+        Initialize();
+    }
+
+
     /// <summary>
     /// Set health to max health.
     /// </summary>

@@ -437,12 +437,11 @@ public class ConstructionGrid : MonoBase
     }
 
 
-    public void Build(string build, int buildSize, Vector3 startPosition, Vector3 startRotation, float maxTime,
-        Action<BuildFinishedArgs> finshedAction)
+    public void Build(string build, int buildSize, Vector3 startPosition, Vector3 startRotation, float maxTime, Action<BuildFinishedArgs> finshedAction)
     {
-        GameObject showShip = new GameObject("Player");
-        StartCoroutine(showShip.AddComponent<ShowBuild>()
-            .Build(LoadBuild(build), buildSize, startPosition, startRotation, maxTime, finshedAction));
+        GameObject showShip = Instantiate(GameResources.Main.player_Prefab) as GameObject;
+        showShip.name = "Player";
+        StartCoroutine(showShip.AddComponent<ShowBuild>().Build(LoadBuild(build), buildSize, startPosition, startRotation, maxTime, finshedAction));
     }
 
     #endregion
@@ -773,6 +772,7 @@ public class ConstructionGrid : MonoBase
     /// <summary>
     /// Compress the ship and save it to a prefab.
     /// </summary>
+    [Obsolete("Not building enemies from CUBEs.", true)]
     private IEnumerator SavePrefab()
     {
         // save weapons
