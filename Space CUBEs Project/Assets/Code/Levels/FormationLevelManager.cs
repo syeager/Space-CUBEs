@@ -101,7 +101,7 @@ public class FormationLevelManager : LevelManager
             GameObject enemyObject = PoolManager.Pop(enemies[formationGroups[segmentCursor].enemies[i]]);
             enemyObject.transform.SetPosRot(Utility.RotateVector(formationGroups[segmentCursor].formation.positions[i], Quaternion.AngleAxis(formationGroups[segmentCursor].rotation, Vector3.back)) + formationCenter, SpawnRotation);
             Enemy enemy = enemyObject.GetComponent<Enemy>();
-            enemy.GetComponent<Enemy>().stateMachine.Start(new Dictionary<string, object> {{"path", (formationGroups[segmentCursor].paths[i])}});
+            enemy.GetComponent<Enemy>().stateMachine.Start(new Dictionary<string, object> { { "path", (formationGroups[segmentCursor].paths[i]) } });
             enemy.GetComponent<ShieldHealth>().DieEvent += OnEnemyDeath;
             activeEnemies.Add(enemy);
         }
