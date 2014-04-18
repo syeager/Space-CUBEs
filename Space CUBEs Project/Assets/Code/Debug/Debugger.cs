@@ -48,10 +48,13 @@ public class Debugger : Singleton<Debugger>
 
     #endregion
 
-    #region Private Fields
+    #region Static Fields
 
     private static readonly Queue<KeyValuePair<string, float>> Messages = new Queue<KeyValuePair<string, float>>();
     private static bool displayingMessages;
+
+    /// <summary>Current marker for Debug.Mark.</summary>
+    private static int marker;
 
     #endregion
 
@@ -226,6 +229,14 @@ public class Debugger : Singleton<Debugger>
             object o = i.GetValue(context);
             Debug.Log(i.Name + ": " + o, (o is Object ? o as Object : null));
         }
+    }
+
+
+    [System.Diagnostics.Conditional("DEBUG")]
+    public static void Mark()
+    {
+        Debug.Log(marker);
+        marker++;
     }
 
     #endregion
