@@ -83,19 +83,6 @@ public class Player : Ship
         stateMachine.CreateState(DyingState, DyingEnter, info => { });
     }
 
-
-    protected override void Start()
-    {
-        base.Start();
-
-        HUD.Initialize(this);
-#if !UNITY_STANDALONE
-        HUD.Main.BarrelRollEvent += OnBarrelRoll;
-#endif
-
-        stateMachine.Start();
-    }
-
     #endregion
 
     #region State Methods
@@ -279,6 +266,13 @@ public class Player : Ship
         myHealth.Initialize(maxHealth, maxShield);
         myMotor.Initialize(speed);
         myWeapons.Initialize(this, damage);
+
+        HUD.Initialize(this);
+#if !UNITY_STANDALONE
+        HUD.Main.BarrelRollEvent += OnBarrelRoll;
+#endif
+
+        stateMachine.Start();
     }
 
     #endregion

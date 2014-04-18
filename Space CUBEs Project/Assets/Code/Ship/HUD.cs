@@ -2,8 +2,6 @@
 // 12.8.2013
 
 using System;
-using System.Collections;
-using System.Diagnostics;
 using UnityEngine;
 
 /// <summary>
