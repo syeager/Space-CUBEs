@@ -23,6 +23,13 @@ namespace Paths
 
         #region Path Overrides
 
+        public override void Initialize(Transform transform)
+        {
+            base.Initialize(transform);
+
+            lapTime += time/2f;
+        }
+
         public override Vector3 Direction(float deltaTime)
         {
             lapTime += deltaTime;
