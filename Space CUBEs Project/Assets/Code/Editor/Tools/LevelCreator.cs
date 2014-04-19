@@ -1,6 +1,7 @@
 ﻿// Steve Yeager
 // 1.26.2014
 
+using Annotations;
 using UnityEngine;
 using UnityEditor;
 using System.Reflection;
@@ -90,12 +91,14 @@ public class LevelCreator : EditorWindow
     }
 
 
+    [UsedImplicitly]
     private void OnDisable()
     {
         EditorUtility.UnloadUnusedAssets();
     }
 
 
+    [UsedImplicitly]
     private void OnGUI()
     {
         if (levelManager == null) return;
@@ -352,6 +355,15 @@ public class LevelCreator : EditorWindow
         if (GUI.Button(new Rect(136f, y + 16f, 50f, 18f), "C↑"))
         {
             CopyEnemy(formationIndex, enemyIndex, enemyIndex - 1);
+            
+            // apply to all above
+            if (Event.current.control)
+            {
+                for (int i = enemyIndex - 2; i >= 0; i--)
+                {
+                    CopyEnemy(formationIndex, enemyIndex, i);
+                }
+            }
         }
         GUI.enabled = true;
 
@@ -360,6 +372,16 @@ public class LevelCreator : EditorWindow
         if (GUI.Button(new Rect(186f, y + 16f, 50f, 18f), "C↓"))
         {
             CopyEnemy(formationIndex, enemyIndex, enemyIndex + 1);
+
+            // apply to all below
+            if (Event.current.control)
+            {
+                int length = sformationGroup.FindPropertyRelative("enemies").arraySize;
+                for (int i = enemyIndex + 2; i < length; i++)
+                {
+                    CopyEnemy(formationIndex, enemyIndex, i);
+                }
+            }
         }
         GUI.enabled = true;
 
