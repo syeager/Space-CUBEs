@@ -25,6 +25,9 @@ public class FormationLevelManager : LevelManager
     private Boss boss;
     public Vector3 bossSpawnPosition;
 
+    /// <summary>Music for boss battle.</summary>
+    public AudioClip bossMusic;
+
     #endregion
 
 
@@ -129,6 +132,9 @@ public class FormationLevelManager : LevelManager
         boss = (Instantiate(bossPrefab, bossSpawnPosition, SpawnRotation) as GameObject).GetComponent<Boss>();
         boss.GetComponent<ShieldHealth>().DieEvent += (s, a) => LevelFinished();
         boss.stateMachine.Start();
+
+        audio.clip = bossMusic;
+        audio.Play();
     }
 
     #endregion
