@@ -85,7 +85,6 @@ public class FormationLevelManager : LevelManager
             if (formationGroups[segmentCursor + 1].needsClearing)
             {
                 clear = true;
-                Log("Formation " + (segmentCursor + 1) + " requires clearing.", true, Debugger.LogTypes.LevelEvents);
             }
         }
 
@@ -113,7 +112,6 @@ public class FormationLevelManager : LevelManager
         // get next segment ready if time
         if (segmentCursor < formationGroups.Length && !clear)
         {
-            Log("Spawn formation " + segmentCursor + " in " + formationGroups[segmentCursor].spawnTime + " seconds.", true, Debugger.LogTypes.LevelEvents);
             if (formationGroups[segmentCursor].spawnTime == 0)
             {
                 SpawnNextFormation();
