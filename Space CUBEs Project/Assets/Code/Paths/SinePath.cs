@@ -1,6 +1,7 @@
 ﻿// Steve Yeager
 // 1.26.2014
 
+using System;
 using UnityEngine;
 
 namespace Paths
@@ -26,7 +27,7 @@ namespace Paths
         public override Vector3 Direction(float deltaTime)
         {
             time += deltaTime;
-            return new Vector3(-1f, Mathf.Sin(time * frequency) * amplitude, 0f) * speed * deltaTime;
+            return new Vector3(-1f, (float)Math.Cos(time * frequency) * amplitude, 0f) * speed * deltaTime;
         }
 
         #endregion
