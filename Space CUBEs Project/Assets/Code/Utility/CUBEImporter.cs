@@ -1,6 +1,7 @@
 ﻿// Steve Yeager
 // 2.19.2014
 
+using Annotations;
 using UnityEngine;
 using System.Diagnostics;
 using Debug = UnityEngine.Debug;
@@ -26,7 +27,8 @@ public class CUBEImporter : MonoBehaviour
     #region MonoBehaviour Overrides
 
 #if UNITY_EDITOR
-    void Start()
+    [UsedImplicitly]
+    private void Start()
     {
         GameObject model = UnityEditor.AssetDatabase.LoadAssetAtPath(meshPath, typeof(GameObject)) as GameObject;
         GameObject prefab = UnityEditor.AssetDatabase.LoadAssetAtPath(prefabPath, typeof(GameObject)) as GameObject;
