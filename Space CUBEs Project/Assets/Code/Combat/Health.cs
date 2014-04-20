@@ -12,6 +12,7 @@ public class Health : MonoBase
 {
     #region References
 
+    public Transform myTransform { get; protected set; }
     public Renderer myRenderer;
 
     #endregion
@@ -59,6 +60,7 @@ public class Health : MonoBase
 
     protected virtual void Awake()
     {
+        myTransform = transform;
         if (myRenderer == null) myRenderer = renderer;
         Normal_Mat = myRenderer.material;
 

@@ -24,11 +24,10 @@ public class SharkMissile : Hitbox
 
     protected override void OnTriggerEnter(Collider other)
     {
-        if (other.transform != target) return;
-
         var oppHealth = other.gameObject.GetComponent<Health>();
-        oppHealth.RecieveHit(sender, damage);
+        if (oppHealth == null || oppHealth.myTransform != target) return;
 
+        oppHealth.RecieveHit(sender, damage);
         Detonate();
     }
 

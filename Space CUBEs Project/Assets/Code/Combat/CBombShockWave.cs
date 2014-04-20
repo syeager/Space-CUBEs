@@ -16,7 +16,10 @@ public class CBombShockWave : Hitbox
 
     protected override void OnTriggerEnter(Collider other)
     {
-        other.rigidbody.AddExplosionForce(strength, myTransform.position, 0f);
+        Rigidbody otherRigidbody = other.rigidbody;
+        if (otherRigidbody == null) return;
+
+        otherRigidbody.AddExplosionForce(strength, myTransform.position, 0f);
     }
 
     #endregion

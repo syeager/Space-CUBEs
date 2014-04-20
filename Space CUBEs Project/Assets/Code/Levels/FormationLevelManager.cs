@@ -102,9 +102,9 @@ public class FormationLevelManager : LevelManager
 
             GameObject enemyObject = PoolManager.Pop(enemies[formationGroups[segmentCursor].enemies[i]]);
             enemyObject.transform.SetPosRot(Utility.RotateVector(formationGroups[segmentCursor].formation.positions[i], Quaternion.AngleAxis(formationGroups[segmentCursor].rotation, Vector3.back)) + formationCenter, SpawnRotation);
-            Enemy enemy = enemyObject.GetComponent<Enemy>();
-            enemy.GetComponent<Enemy>().stateMachine.Start(new Dictionary<string, object> { { "path", (formationGroups[segmentCursor].paths[i]) } });
-            enemy.GetComponent<ShieldHealth>().DieEvent += OnEnemyDeath;
+            Enemy enemy = (Enemy)enemyObject.GetComponent(typeof(Enemy));
+            enemy.stateMachine.Start(new Dictionary<string, object> { { "path", (formationGroups[segmentCursor].paths[i]) } });
+            ((ShieldHealth)enemy.GetComponent(typeof(ShieldHealth))).DieEvent += OnEnemyDeath;
             activeEnemies.Add(enemy);
         }
 
@@ -130,6 +130,7 @@ public class FormationLevelManager : LevelManager
     private void SpawnBoss()
     {
         boss = (Instantiate(bossPrefab, bossSpawnPosition, SpawnRotation) as GameObject).GetComponent<Boss>();
+        activeEnemies.Add(boss);
         boss.GetComponent<ShieldHealth>().DieEvent += (s, a) => LevelFinished();
         boss.stateMachine.Start();
 
@@ -145,7 +146,7 @@ public class FormationLevelManager : LevelManager
     {
         ShieldHealth enemyHealth = sender as ShieldHealth;
         enemyHealth.DieEvent -= OnEnemyDeath;
-        activeEnemies.Remove(enemyHealth.GetComponent<Enemy>());
+        activeEnemies.Remove((Enemy)enemyHealth.GetComponent(typeof(Enemy)));
 
         if (activeEnemies.Count == 0)
         {
