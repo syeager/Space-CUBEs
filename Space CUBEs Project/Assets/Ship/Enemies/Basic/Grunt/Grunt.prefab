@@ -10,18 +10,17 @@ GameObject:
   - 4: {fileID: 400000}
   - 33: {fileID: 3300000}
   - 23: {fileID: 2300000}
-  - 114: {fileID: 11400012}
-  - 114: {fileID: 11400010}
   - 114: {fileID: 11400008}
+  - 114: {fileID: 11400010}
   - 114: {fileID: 11400006}
   - 114: {fileID: 11400004}
   - 54: {fileID: 5400000}
   - 114: {fileID: 11400000}
-  - 114: {fileID: 11400002}
+  - 114: {fileID: 11400012}
   - 65: {fileID: 6500000}
   - 65: {fileID: 6500002}
   m_Layer: 10
-  m_Name: Gunner
+  m_Name: Grunt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34,7 +33,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -528.318665, y: 405.780273, z: -1050.50989}
+  m_LocalPosition: {x: -497.970673, y: 414.365875, z: -1051.38599}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -65,7 +64,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Mesh: {fileID: 4300000, guid: 71d42b5cdea65334cb924d8e9b65b9d7, type: 2}
+  m_Mesh: {fileID: 4300000, guid: 077400fde123f5643a56725b2d2b5bc0, type: 3}
 --- !u!54 &5400000
 Rigidbody:
   m_ObjectHideFlags: 1
@@ -74,7 +73,7 @@ Rigidbody:
   m_GameObject: {fileID: 100000}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 20
+  m_Drag: 10
   m_AngularDrag: .0500000007
   m_UseGravity: 0
   m_IsKinematic: 0
@@ -91,8 +90,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 5.1954937, y: 10, z: 5.2141757}
-  m_Center: {x: .393149018, y: .946920753, z: .528230727}
+  m_Size: {x: 3.30000019, y: 10, z: 3.08244038}
+  m_Center: {x: -.49999994, y: .893311501, z: -.502798796}
 --- !u!65 &6500002
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -103,8 +102,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 4.723176, y: 1.89384174, z: 4.74015951}
-  m_Center: {x: .393149018, y: .946920753, z: .528230727}
+  m_Size: {x: 3, y: 1.786623, z: 2.80221844}
+  m_Center: {x: -.49999994, y: .893311501, z: -.502798796}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -116,28 +115,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a811daa6c14fc348b0608b4c05762ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &11400002
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dec5f53910ad00b4abc79e1d33380bfd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  log: 0
-  timeScale: 1
-  myWeapons: {fileID: 11400008}
-  enemyClass: 2
-  score: 30
-  money: 50
-  minRandomDelay: 5
-  maxRandomDelay: 10
-  repeatingDelay: 5
-  repeatingShots: 3
-  repeatingBuffer: .100000001
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -155,7 +132,7 @@ MonoBehaviour:
   HealthHit_Mat: {fileID: 2100000, guid: 714fd6fe39d4b7e4786c808fbccc8dd9, type: 2}
   healthHitMatTime: .5
   invincible: 0
-  maxHealth: 60
+  maxHealth: 20
   health: 0
   rechargeSpeed: 0
   rechargeDelay: 0
@@ -195,7 +172,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weapons:
-  - {fileID: 11400012}
   - {fileID: 11400010}
   canActivate: 1
 --- !u!114 &11400010
@@ -215,7 +191,7 @@ MonoBehaviour:
   cooldownSpeed: 0
   Laser_Prefab: {fileID: 100000, guid: 023549f1a73033642a26c4403e392f54, type: 2}
   damage: 10
-  laserOffset: {x: 2, y: 1, z: 2}
+  laserOffset: {x: 0, y: 0, z: 0}
   fireRate: 4
   speed: 50
 --- !u!114 &11400012
@@ -226,18 +202,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 338eadfdc1ef901409328689e2f52b4d, type: 3}
+  m_Script: {fileID: 11500000, guid: 93f3fa378aada4e469a1467aa1626c11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 1
+  log: 0
   timeScale: 1
-  name: 
-  cooldownSpeed: 0
-  Laser_Prefab: {fileID: 100000, guid: 023549f1a73033642a26c4403e392f54, type: 2}
-  damage: 10
-  laserOffset: {x: -5.96046448e-08, y: 0, z: 1}
-  fireRate: 4
-  speed: 50
+  myWeapons: {fileID: 11400008}
+  enemyClass: 1
+  score: 10
+  money: 10
+  minAttackDelay: 3
+  maxAttackDelay: 8
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
