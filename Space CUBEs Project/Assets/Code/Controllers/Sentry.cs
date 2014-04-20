@@ -81,7 +81,7 @@ public class Sentry : Enemy
         player = LevelManager.Main.playerTransform;
 
         attackPath = ScriptableObject.CreateInstance(typeof(FigureEight)) as FigureEight;
-        attackPath.Initialize(myTransform, idlingSpeed);
+        attackPath.Initialize(myTransform, idlingSpeed, 2f, 1f);
 
         myHealth.Initialize();
 
