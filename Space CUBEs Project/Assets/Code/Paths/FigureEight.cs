@@ -31,7 +31,7 @@ namespace Paths
 
         #region Path Overrides
 
-        public void Initialize(Transform transform, float speed, float frequencyX = 2f, float frequencyY = 1f)
+        public void Initialize(Transform transform, float speed, float frequencyX, float frequencyY)
         {
             base.Initialize(transform);
 
