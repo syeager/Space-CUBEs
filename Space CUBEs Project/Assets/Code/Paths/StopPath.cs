@@ -9,8 +9,8 @@ namespace Paths
     {
         #region Public Fields
 
-        public Vector3[] stops;
-        public float[] delays;
+        public Vector3[] stops = new Vector3[1];
+        public float[] delays = new float[1];
 
         #endregion
 
