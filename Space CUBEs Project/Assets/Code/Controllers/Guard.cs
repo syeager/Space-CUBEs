@@ -39,7 +39,7 @@ public class Guard : Enemy
         stateMachine = new StateMachine(this, SpawningState);
         stateMachine.CreateState(SpawningState, SpawnEnter, info => { });
         stateMachine.CreateState(MovingState, info => stateMachine.SetUpdate(MovingUpdate()), info => { });
-        stateMachine.CreateState(AttackingState, info => stateMachine.SetUpdate(AttackingUpdate()), info => { });
+        stateMachine.CreateState(AttackingState, AttackEnter, info => { });
         stateMachine.CreateState(DyingState, DyingEnter, info => { });
     }
 
@@ -81,6 +81,13 @@ public class Guard : Enemy
     }
 
 
+    private void AttackEnter(Dictionary<string, object> info)
+    {
+        myMotor.Move(Vector3.zero);
+        stateMachine.SetUpdate(AttackingUpdate());
+    }
+
+
     private IEnumerator AttackingUpdate()
     {
         WaitForSeconds buffer = new WaitForSeconds(attackBuffer);
@@ -99,6 +106,7 @@ public class Guard : Enemy
     private void DyingEnter(Dictionary<string, object> info)
     {
         StopAllCoroutines();
+        myWeapons.Activate(0, false);
         poolObject.Disable();
     }
 

@@ -10,14 +10,13 @@ namespace Paths
         #region Public Fields
 
         public Vector3[] stops = new Vector3[1];
-        public float[] delays = new float[1];
+        public float[] delays = { 1f };
 
         #endregion
 
         #region Private Fields
 
         private int cursor;
-        private Vector3 target;
         private float delayTimer = -1f;
 
         #endregion
@@ -31,27 +30,17 @@ namespace Paths
 
         #region Path Overrides
 
-        public override void Initialize(Transform transform)
-        {
-            base.Initialize(transform);
-
-            target = myTransform.position;
-        }
-
-
         public override Vector3 Direction(float deltaTime)
         {
-            if (cursor >= stops.Length) return Vector3.zero;
+            if (cursor >= stops.Length)
+            {
+                return Vector3.zero;
+            }
 
             if (Vector3.Distance(myTransform.position, stops[cursor]) <= DistanceBuffer)
             {
                 delayTimer = delays[cursor];
                 cursor++;
-
-                if (cursor >= stops.Length)
-                {
-                    return Vector3.zero;
-                }
             }
 
             if (delayTimer > 0f)
@@ -61,8 +50,7 @@ namespace Paths
             }
             else
             {
-                Vector3 move = (stops[cursor] - target).normalized * speed * deltaTime;
-                target += move;
+                Vector3 move = (stops[cursor] - myTransform.position).normalized * speed;
                 return move;
             }
         }

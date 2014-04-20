@@ -43,7 +43,7 @@ namespace Paths
             Vector3 target = center + angularPosition;
             Vector3 move = target - lastTarget;
             lastTarget = target;
-            return move;
+            return move/deltaTime;
         }
 
         #endregion

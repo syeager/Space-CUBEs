@@ -46,7 +46,7 @@ namespace Paths
         public override Vector3 Direction(float deltaTime)
         {
             time += deltaTime;
-            return myTransform.TransformDirection(new Vector3((float)Math.Cos(frequencyX * time), 0f, (float)Math.Sin(frequencyY * time)) * speed * deltaTime);
+            return myTransform.TransformDirection(new Vector3((float)Math.Cos(frequencyX * time), 0f, (float)Math.Sin(frequencyY * time)) * speed);
         }
 
         #endregion

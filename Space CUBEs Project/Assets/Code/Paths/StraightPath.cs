@@ -34,7 +34,7 @@ namespace Paths
 
         public override Vector3 Direction(float deltaTime)
         {
-            return direction * deltaTime;
+            return direction;
         }
 
         #endregion

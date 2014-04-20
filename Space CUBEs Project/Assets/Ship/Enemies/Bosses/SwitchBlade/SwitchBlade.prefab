@@ -1511,13 +1511,13 @@ Rigidbody:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100024}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 100000
   m_Drag: 0
   m_AngularDrag: .0500000007
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 120
   m_CollisionDetection: 0
 --- !u!65 &6500000
 BoxCollider:
@@ -1666,11 +1666,11 @@ MonoBehaviour:
   timeScale: 1
   myWeapons: {fileID: 11400004}
   enemyClass: 4
-  score: 50000
+  score: 12000
   money: 1000
   stages:
-  - 6000
-  - 3000
+  - 8000
+  - 4000
   - 0
   startPosition: {x: 50, y: 0, z: 0}
   stagingTime: 6
@@ -1748,6 +1748,8 @@ MonoBehaviour:
   hasHorizontalBounds: 0
   leftBound: .00999999978
   rightBound: .00999999978
+  inheritedVelocity: {x: 0, y: 0, z: 0}
+  stablization: 0
 --- !u!114 &11400008
 MonoBehaviour:
   m_ObjectHideFlags: 1

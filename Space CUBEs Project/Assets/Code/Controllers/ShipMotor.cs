@@ -1,9 +1,9 @@
 ﻿// Steve Yeager
 // 11.25.2013
 
+using Annotations;
 using UnityEngine;
 using System.Collections;
-using System;
 
 /// <summary>
 /// Controls movement for a ship.
@@ -13,7 +13,8 @@ public class ShipMotor : MonoBase
     #region References
 
     private Transform myTransform;
-    private Camera LevelCamera;
+    private Rigidbody myRigidbody;
+    private Camera levelCamera;
     
     #endregion
 
@@ -42,28 +43,41 @@ public class ShipMotor : MonoBase
     private enum BarrelRollStatuses { Ready, Rolling, Waiting }
     private BarrelRollStatuses barrelRollStatus = BarrelRollStatuses.Ready;
 
+    /// <summary>Velocity to be applied to the ship next step.</summary>
+    private Vector3 velocity;
+
     #endregion
 
     #region Const Fields
 
-    private const float SPEEDMODIFIER = 0.5f;
-    private const float BARRELROLLMODIFIER = 2f;
+    private const float SpeedModifier = 0.8f;
+    private const float Barrelrollmodifier = 1.5f;
 
     #endregion
 
 
     #region Unity Overrides
 
+    [UsedImplicitly]
     private void Awake()
     {
         // get references
         myTransform = transform;
+        myRigidbody = rigidbody;
     }
 
 
+    [UsedImplicitly]
     private void Start()
     {
-        LevelCamera = Camera.main;
+        levelCamera = Camera.main;
+    }
+
+
+    [UsedImplicitly]
+    private void FixedUpdate()
+    {
+        myRigidbody.MovePosition(myRigidbody.position + velocity * Time.deltaTime);
     }
 
     #endregion
@@ -72,8 +86,12 @@ public class ShipMotor : MonoBase
     
     public void Initialize(float speed)
     {
-        this.speed = speed;
-        barrelRollMoveSpeed = BARRELROLLMODIFIER * this.speed;
+        myRigidbody = rigidbody;
+
+        this.speed = speed * SpeedModifier;
+        barrelRollMoveSpeed = Barrelrollmodifier * this.speed;
+
+        enabled = true;
     }
 
 
@@ -83,13 +101,14 @@ public class ShipMotor : MonoBase
         {
             TestBoundaries(ref input);
         }
-        myTransform.Translate(input * speed * deltaTime, Space.World);
+
+        velocity = input * speed;
     }
 
 
     public void Move(Vector3 vector)
     {
-        myTransform.Translate(vector, Space.World);
+        velocity = vector;
     }
 
 
@@ -136,7 +155,7 @@ public class ShipMotor : MonoBase
 
     public void TestBoundaries(ref Vector2 input)
     {
-        Vector3 screenPosition = LevelCamera.WorldToViewportPoint(myTransform.position);
+        Vector3 screenPosition = levelCamera.WorldToViewportPoint(myTransform.position);
 
         // vertical
         if (hasVerticalBounds)

@@ -1,7 +1,6 @@
 ﻿// Steve Yeager
 // 12.8.2013
 
-using System.Collections;
 using Annotations;
 using UnityEngine;
 
@@ -98,7 +97,7 @@ public class Hitbox : MonoBase
     public virtual void Initialize(Ship sender, float damage, Vector3 moveVec)
     {
         Initialize(sender, damage);
-        StartCoroutine(Move(moveVec));
+        rigidbody.velocity = moveVec;
     }
 
 
@@ -112,20 +111,7 @@ public class Hitbox : MonoBase
     public virtual void Initialize(Ship sender, float damage, float time, Vector3 moveVec)
     {
         Initialize(sender, damage, time);
-        StartCoroutine(Move(moveVec));
-    }
-
-    #endregion
-
-    #region Private Methods
-
-    private IEnumerator Move(Vector3 moveVec)
-    {
-        while (true)
-        {
-            myTransform.Translate(moveVec*deltaTime, Space.World);
-            yield return null;
-        }
+        rigidbody.velocity = moveVec;
     }
 
     #endregion

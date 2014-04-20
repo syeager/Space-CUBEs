@@ -1,6 +1,7 @@
 ﻿// Steve Yeager
 // 2.20.2014
 
+using Annotations;
 using UnityEngine;
 using System.Collections;
 
@@ -23,23 +24,27 @@ public class BlackHole : Hitbox
     protected override void OnTriggerStay(Collider other)
     {
         Transform otherTransform = other.transform;
+        Rigidbody otherRigidbody = other.rigidbody;
+        if (otherRigidbody == null) return;
 
         // pull
         Vector3 distance = myTransform.position - otherTransform.position;
-        float pull = ((pullRadius - distance.sqrMagnitude) / pullRadius * pullStrength);
+        float pull = ((pullRadius - distance.sqrMagnitude) / pullRadius) * pullStrength;
 
         // move
-        otherTransform.position -= distance.normalized * pull * deltaTime;
+        otherRigidbody.AddForce(distance.normalized * -pull * Time.deltaTime, ForceMode.Impulse);
+        Debug.DrawRay(otherTransform.position, distance.normalized*-pull);
 
         // damage
         var oppHealth = other.gameObject.GetComponent<Health>();
         if (oppHealth != null)
         {
-            oppHealth.RecieveHit(sender, damage * Mathf.Abs(pull) * deltaTime);
+            oppHealth.RecieveHit(sender, damage * deltaTime);
         }
     }
 
 
+    [UsedImplicitly]
     private void OnDisabled()
     {
         StopAllCoroutines();

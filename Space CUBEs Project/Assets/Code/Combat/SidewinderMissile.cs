@@ -1,6 +1,7 @@
 ﻿// Steve Yeager
 // 3.26.2014
 
+using Annotations;
 using UnityEngine;
 using System.Collections;
 
@@ -9,6 +10,12 @@ using System.Collections;
 /// </summary>
 public class SidewinderMissile : Hitbox
 {
+    #region References
+
+    private Rigidbody myRigidbody;
+
+    #endregion
+
     #region Public Fields
 
     public float allowedDist = 1f;
@@ -27,15 +34,25 @@ public class SidewinderMissile : Hitbox
     private int dummyTargets;
     private Transform target;
     private Vector3 dummyTarget;
+    private Vector3 velocity;
     
     #endregion
 
 
     #region MonoBehaviour Overrides
 
+    [UsedImplicitly]
     private void Start()
     {
+        myRigidbody = rigidbody;
         GetComponent<Health>().DieEvent += OnDieHandler;
+    }
+
+
+    [UsedImplicitly]
+    private void FixedUpdate()
+    {
+        myRigidbody.MovePosition(myRigidbody.position + velocity * Time.deltaTime);
     }
 
     #endregion
@@ -44,7 +61,7 @@ public class SidewinderMissile : Hitbox
 
     public void Initialize(Ship sender, float damage, float speed, float angularSpeed, float homingTime, int dummyTargets, Transform target)
     {
-        Initialize(sender, damage);
+        Initialize(sender, damage, Vector3.zero);
 
         this.speed = speed;
         this.angularSpeed = angularSpeed;
@@ -86,7 +103,8 @@ public class SidewinderMissile : Hitbox
             while (Vector3.Distance(myTransform.position, dummyTarget) > allowedDist)
             {
                 // move
-                myTransform.position += myTransform.forward*speed*Time.deltaTime;
+                //myTransform.position += myTransform.forward*speed*Time.deltaTime;
+                velocity = myTransform.forward * speed;
 
                 // rotate
                 rotationTarget = Quaternion.LookRotation(dummyTarget - myTransform.position, Vector3.back);
@@ -99,16 +117,14 @@ public class SidewinderMissile : Hitbox
             }
         }
 
-        // final target
-        
-
         // homing timer
         float timer = homingTime;
 
         while (true)
         {
             // move
-            myTransform.position += myTransform.forward * speed * Time.deltaTime;
+            //myTransform.position += myTransform.forward * speed * Time.deltaTime;
+            velocity = myTransform.forward * speed;
 
             // rotate
             if (timer > 0f)
