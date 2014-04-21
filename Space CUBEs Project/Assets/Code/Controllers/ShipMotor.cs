@@ -51,7 +51,7 @@ public class ShipMotor : MonoBase
     #region Const Fields
 
     private const float SpeedModifier = 0.8f;
-    private const float Barrelrollmodifier = 1.5f;
+    private const float Barrelrollmodifier = 2f;
 
     #endregion
 
@@ -132,7 +132,7 @@ public class ShipMotor : MonoBase
             // test bounds
             TestBoundaries(ref direction);
             {
-                myTransform.Translate(direction * barrelRollMoveSpeed * deltaTime, Space.World);
+                Move((Vector3)direction * barrelRollMoveSpeed);
             }
 
             myTransform.Rotate(Vector3.back, rollingSpeed * Mathf.Sign(-direction.y) * deltaTime);
@@ -155,7 +155,7 @@ public class ShipMotor : MonoBase
 
     public void TestBoundaries(ref Vector2 input)
     {
-        Vector3 screenPosition = levelCamera.WorldToViewportPoint(myTransform.position);
+        Vector3 screenPosition = levelCamera.WorldToViewportPoint(myTransform.position + (Vector3)input * speed * Time.fixedDeltaTime);
 
         // vertical
         if (hasVerticalBounds)

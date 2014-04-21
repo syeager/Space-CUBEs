@@ -172,7 +172,7 @@ public class Player : Ship
     private static Vector2 MovementInput()
     {
 #if UNITY_STANDALONE
-        return new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        return new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized;
 #else
         return HUD.Main.joystick.value;
 #endif
