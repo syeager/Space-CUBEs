@@ -18,8 +18,10 @@ public class CUBEImporter : MonoBehaviour
 
     #region Private Fields
 
+    #region UNITY_EDITOR
     private string meshPath;
     private string prefabPath;
+    #endregion
 
     #endregion
 
