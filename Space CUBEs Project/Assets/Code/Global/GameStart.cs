@@ -9,7 +9,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Runs all methods needed at game start.
 /// </summary>
-public class GameStart : MonoBehaviour
+public class GameStart : Singleton<GameStart>
 {
     #region Public Fields
 
@@ -35,7 +35,7 @@ public class GameStart : MonoBehaviour
     #region MonoBehaviour Overrides
 
     [UsedImplicitly]
-    private void Awake()
+    private void Start()
     {
         LoadGame();
         UpdateVersions();
@@ -57,7 +57,7 @@ public class GameStart : MonoBehaviour
         int previousVersion = resetVersion ? 0 : PlayerPrefs.GetInt("Build Version");
         while (previousVersion < version)
         {
-            Debugger.Log("GameStart: " + previousVersion, null, true, Debugger.LogTypes.Data);
+            Debugger.Log("GameStart: " + previousVersion, gameObject, true, Debugger.LogTypes.Data);
             StartActions[previousVersion].Invoke();
             previousVersion++;
         }
@@ -68,10 +68,10 @@ public class GameStart : MonoBehaviour
     private static void Version1()
     {
         // initial inventory
-        int CUBECount = CUBE.allCUBES.Length;
+        int count = CUBE.allCUBES.Length;
 
-        int[] inventory = new int[CUBECount];
-        for (int i = 0; i < CUBECount; i++)
+        int[] inventory = new int[count];
+        for (int i = 0; i < count; i++)
         {
             inventory[i] = 100;
         }
