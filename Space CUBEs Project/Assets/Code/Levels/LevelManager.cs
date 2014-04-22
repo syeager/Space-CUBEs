@@ -127,6 +127,8 @@ public class LevelManager : Singleton<LevelManager>
     {
         Log("Level Finished.", true, Debugger.LogTypes.LevelEvents);
 
+        player.GetComponent<Health>().invincible = true;
+
         var data = new Dictionary<string, object>();
         // score
         data.Add("Score", player.myScore.points);
