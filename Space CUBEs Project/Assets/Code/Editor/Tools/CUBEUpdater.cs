@@ -73,15 +73,14 @@ public class CUBEUpdater : EditorWindow
                          (Subsystems)Enum.Parse(typeof(Subsystems), strip[3]),  // subsystem
                          (Brands)Enum.Parse(typeof(Brands), strip[4]),          // brand
                          int.Parse(strip[5]),                                   // grade
-                         int.Parse(strip[6]),                                   // limit
-                         float.Parse(strip[7]),                                 // health
-                         float.Parse(strip[8]),                                 // shield
-                         float.Parse(strip[9]),                                 // speed
-                         float.Parse(strip[10]),                                // damage
-                         Utility.ParseV3(strip[11], ';'),                       // size
-                         int.Parse(strip[12]),                                  // cost
-                         int.Parse(strip[13]),                                  // rarity
-                         int.Parse(strip[14])                                   // price
+                         float.Parse(strip[6]),                                 // health
+                         float.Parse(strip[7]),                                 // shield
+                         float.Parse(strip[8]),                                 // speed
+                         float.Parse(strip[9]),                                 // damage
+                         Utility.ParseV3(strip[10], ';'),                       // size
+                         int.Parse(strip[11]),                                  // cost
+                         int.Parse(strip[12]),                                  // rarity
+                         int.Parse(strip[13])                                   // price
                          ));
         }
 
@@ -101,7 +100,6 @@ public class CUBEUpdater : EditorWindow
                 writer.Write((int)cube.subsystem);  // subsystem
                 writer.Write((int)cube.brand);      // brand
                 writer.Write(cube.grade);           // grade
-                writer.Write(cube.limit);           // limit
                 writer.Write(cube.health);          // health
                 writer.Write(cube.shield);          // shield
                 writer.Write(cube.speed);           // speed

@@ -82,7 +82,6 @@ public class CUBE : MonoBehaviour
                             (Subsystems)reader.ReadInt32(),             // subsystem
                             (Brands)reader.ReadInt32(),                 // brand
                             reader.ReadInt32(),                         // grade
-                            reader.ReadInt32(),                         // limit
                             reader.ReadSingle(),                        // health
                             reader.ReadSingle(),                        // shield
                             reader.ReadSingle(),                        // speed

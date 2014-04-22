@@ -1,7 +1,6 @@
 ﻿// Steve Yeager
 // 1.14.2014
 
-
 using UnityEngine;
 
 /// <summary>
@@ -17,8 +16,6 @@ public struct CUBEInfo
     public readonly CUBE.Subsystems subsystem;
     public readonly CUBE.Brands brand;
     public readonly int grade;
-    // Agmentation Stats
-    public readonly int limit;
     // Combat Stats
     public readonly float health;
     public readonly float shield;
@@ -32,8 +29,7 @@ public struct CUBEInfo
 
 
 
-
-    public CUBEInfo(string name, int id, CUBE.Types type, CUBE.Subsystems subsystem, CUBE.Brands brand, int grade, int limit, float health, float shield, float speed, float damage, Vector3 size, int cost, int rarity, int price)
+    public CUBEInfo(string name, int id, CUBE.Types type, CUBE.Subsystems subsystem, CUBE.Brands brand, int grade, float health, float shield, float speed, float damage, Vector3 size, int cost, int rarity, int price)
     {
         // General Stats
         this.name = name;
@@ -43,8 +39,6 @@ public struct CUBEInfo
         this.subsystem = subsystem;
         this.brand = brand;
         this.grade = grade;
-        // Agmentation Stats
-        this.limit = limit;
         // Combat Stats
         this.health = health;
         this.shield = shield;

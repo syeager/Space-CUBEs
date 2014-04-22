@@ -1,6 +1,7 @@
 ﻿// Steve Yeager
 // 11.26.2013
 
+using Annotations;
 using UnityEngine;
 using UnityEditor;
 using System.Linq;
@@ -14,15 +15,10 @@ public class CUBEEditor : Editor
 
     #endregion
 
-    #region Const Fields
-
-    private const string PREFIX = "CUBE ";
-
-    #endregion
-
 
     #region Editor Overrides
 
+    [UsedImplicitly]
     private void OnEnable()
     {
         if (!Application.isPlaying)
@@ -41,10 +37,7 @@ public class CUBEEditor : Editor
         {
             System();
         }
-        else if (info.type == CUBE.Types.Augmentation)
-        {
-            Augmentation();
-        }
+
         Stats();
     }
 
@@ -64,12 +57,6 @@ public class CUBEEditor : Editor
         EditorGUILayout.LabelField("Subsystem", info.subsystem.ToString());
         EditorGUILayout.LabelField("Brand", info.brand.ToString());
         EditorGUILayout.LabelField("Grade", info.grade.ToString());
-    }
-
-
-    private void Augmentation()
-    {
-        EditorGUILayout.LabelField("Limit", info.limit.ToString());
     }
 
 
