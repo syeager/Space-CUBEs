@@ -18,7 +18,7 @@ public class Ship : MonoBase
     protected Transform myTransform;
     protected ShipMotor myMotor;
     public WeaponManager myWeapons;
-    protected ShieldHealth myHealth;
+    public ShieldHealth myHealth { get; protected set; }
 
     #endregion
 
