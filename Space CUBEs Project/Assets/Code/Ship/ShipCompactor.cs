@@ -22,7 +22,10 @@ public class ShipCompactor : MonoBehaviour
 
     public Ship Compact(bool cleanUnused, params Type[] components)
     {
+        GameObject myGameObject = gameObject;
+
         List<Weapon> weapons = new List<Weapon>();
+        List<Augmentation> augmentations = new List<Augmentation>();
 
         MeshFilter[] meshFilters = GetComponentsInChildren<MeshFilter>();
         List<CombineInstance> combine = new List<CombineInstance>();
@@ -32,7 +35,14 @@ public class ShipCompactor : MonoBehaviour
             var weapon = meshFilters[i].GetComponent<Weapon>();
             if (weapon != null)
             {
-                weapons.Add(weapon.Bake(gameObject));
+                weapons.Add(weapon.Bake(myGameObject));
+            }
+
+            // bake augmentations. save refs for augmentation manager
+            var augmentation = meshFilters[i].GetComponent<Augmentation>();
+            if (augmentation != null)
+            {
+                augmentations.Add(augmentation.Bake(myGameObject));
             }
 
             for (int j = 0; j < meshFilters[i].sharedMesh.subMeshCount; j++)
@@ -73,9 +83,11 @@ public class ShipCompactor : MonoBehaviour
         }
 
         // add ship
-        Ship ship = GetComponent<Ship>();
+        Player ship = GetComponent<Player>();
         // bake weapons
         ship.myWeapons.Bake(weapons);
+        // bake augmentations
+        ship.myAugmentations.Bake(augmentations);
         // add collider
         var box = ship.gameObject.AddComponent<BoxCollider>();
 

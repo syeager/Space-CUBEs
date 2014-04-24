@@ -302,7 +302,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8f81c171d24c3dd4883dc25649e3b5a6, type: 2}
   - {fileID: 11400000, guid: fb316d066bc0bd04f838b16124fb1540, type: 2}
   - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 874fa51637a68c344bdde7847428d685, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 11400000, guid: 2fdb0f7016aaff8418370ec0c6cdcf61, type: 2}
@@ -322,7 +322,6 @@ MonoBehaviour:
   VertexColorLerp_Mat: {fileID: 2100000, guid: 7c7cad9edc388da41a9033670888b17b, type: 2}
   ShieldHit_Mat: {fileID: 2100000, guid: 71367417f5c929240bcef731c61da6be, type: 2}
   HealthHit_Mat: {fileID: 2100000, guid: 714fd6fe39d4b7e4786c808fbccc8dd9, type: 2}
-  Player_TR: {fileID: 0}
   player_Prefab: {fileID: 100000, guid: c232bd52a71fba443abbde765af943c5, type: 2}
 --- !u!114 &11400010
 MonoBehaviour:
@@ -335,6 +334,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9997cc572df21f40a28b4140136f1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  log: 0
+  timeScale: 1
   version: 1
   resetVersion: 0
 --- !u!1001 &100100000

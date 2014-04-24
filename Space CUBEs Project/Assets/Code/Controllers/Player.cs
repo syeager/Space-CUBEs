@@ -13,6 +13,7 @@ public class Player : Ship
     #region References
 
     public GameObject trailRenderer;
+    public AugmentationManager myAugmentations { get; private set; }
 
     #endregion
 
@@ -69,6 +70,7 @@ public class Player : Ship
         gameObject.layer = LayerMask.NameToLayer("Player");
         myScore = new ScoreManager();
         myMoney = new MoneyManager();
+        myAugmentations = GetComponent<AugmentationManager>();
 
         // effects
         if (!GameSettings.Main.trailRenderer)
@@ -266,6 +268,7 @@ public class Player : Ship
         myHealth.Initialize(maxHealth, maxShield);
         myMotor.Initialize(speed);
         myWeapons.Initialize(this, damage);
+        myAugmentations.Initialize(this);
 
         HUD.Initialize(this);
 #if !UNITY_STANDALONE
