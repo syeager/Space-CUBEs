@@ -221,12 +221,6 @@ public class GarageManager : MonoBase
         // load menu
         CreateBuildButtons();
 
-        // selection menu
-        inventory = CUBE.GetInventory();
-        filteredCUBEButtons = new ActivateButton[inventory.Length];
-        leftFilter.ActivateEvent += OnFilterChanged;
-        rightFilter.ActivateEvent += OnFilterChanged;
-
         // nav menu
         foreach (var button in positionButtons)
         {
@@ -268,6 +262,12 @@ public class GarageManager : MonoBase
 
     private void Start()
     {
+        // selection menu
+        inventory = CUBE.GetInventory();
+        filteredCUBEButtons = new ActivateButton[inventory.Length];
+        leftFilter.ActivateEvent += OnFilterChanged;
+        rightFilter.ActivateEvent += OnFilterChanged;
+
         stateMachine.Start(new Dictionary<string, object>());
     }
 
@@ -863,7 +863,7 @@ public class GarageManager : MonoBase
 
     public void Play()
     {
-        GameData.LoadLevel("Deep Space", true, new Dictionary<string, object> { { "Build", GameData.Main.currentBuild } });
+        GameData.LoadLevel("Level Select Menu", true);
     }
 
     #endregion

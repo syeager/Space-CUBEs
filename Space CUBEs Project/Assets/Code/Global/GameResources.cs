@@ -16,7 +16,6 @@ public class GameResources : Singleton<GameResources>
     public Material VertexColorLerp_Mat;
     public Material ShieldHit_Mat;
     public Material HealthHit_Mat;
-    public GameObject Player_TR;
     public GameObject player_Prefab;
 
     #endregion
