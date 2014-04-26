@@ -31,7 +31,7 @@ public class TechMissiles_Weapon : Weapon
     {
         var comp = parent.AddComponent<TechMissiles_Weapon>();
         comp.index = index;
-        comp.cooldownSpeed = cooldownSpeed;
+        comp.cooldownTime = cooldownTime;
         comp.TechMissile_Prefab = TechMissile_Prefab;
         comp.damage = damage;
         comp.launchPositions = new Vector3[8];

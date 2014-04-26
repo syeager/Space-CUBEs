@@ -49,7 +49,7 @@ public class SingularityBlaster : Weapon
     {
         var comp = parent.AddComponent<SingularityBlaster>();
         comp.index = index;
-        comp.cooldownSpeed = cooldownSpeed;
+        comp.cooldownTime = cooldownTime;
         comp.BlackHoleMissile_Prefab = BlackHoleMissile_Prefab;
         comp.missileOffset = missileOffset + myTransform.localPosition;
         comp.damage = damage;

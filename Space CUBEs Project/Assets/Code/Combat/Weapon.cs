@@ -18,8 +18,12 @@ public abstract class Weapon : MonoBase
     #region Public Fields
 
     new public string name;
-    /// <summary>1 per second.</summary>
-    public float cooldownSpeed;
+
+    /// <summary>Time in seconds to completely refill power gauge.</summary>
+    public float cooldownTime;
+
+    /// <summary>Power regenerated every second.</summary>
+    public float cooldownSpeed { get; set; }
 
     #endregion
 
@@ -92,22 +96,6 @@ public abstract class Weapon : MonoBase
         }
     }
 
-
-    protected IEnumerator Charge()
-    {
-        while (power < FullPower)
-        {
-            power += cooldownSpeed * deltaTime;
-            if (PowerUpdateEvent != null)
-            {
-                PowerUpdateEvent(this, new ValueArgs(power));
-            }
-            yield return null;
-        }
-
-        power = FullPower;
-    }
-
     #endregion
 
     #region Virtual Methods
@@ -117,6 +105,7 @@ public abstract class Weapon : MonoBase
         myTransform = transform;
         myShip = sender;
         power = FullPower;
+        cooldownSpeed = FullPower / cooldownTime;
     }
 
 
@@ -144,7 +133,5 @@ public abstract class Weapon : MonoBase
 
     public abstract void Activate(bool pressed, float multiplier);
 
-    #endregion
-
-    
+    #endregion   
 }

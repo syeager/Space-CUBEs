@@ -39,7 +39,7 @@ public class CBomb_Weapon : Weapon
     {
         var comp = parent.AddComponent<CBomb_Weapon>();
         comp.index = index;
-        comp.cooldownSpeed = cooldownSpeed;
+        comp.cooldownTime = cooldownTime;
         comp.CBomb_Prefab = CBomb_Prefab;
         comp.attackOffset = attackOffset + myTransform.localPosition;
         comp.time = time;

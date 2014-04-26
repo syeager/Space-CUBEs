@@ -12,9 +12,9 @@ GameObject:
   - 23: {fileID: 2300000}
   - 114: {fileID: 11400000}
   - 114: {fileID: 11400002}
-  - 114: {fileID: 11400004}
+  - 114: {fileID: 11400006}
   m_Layer: 0
-  m_Name: Giga Laser
+  m_Name: Cooling Gel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,7 +44,6 @@ Renderer:
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
   - {fileID: 2100000, guid: 6d9e17dd27ab6bc4ea90d40a327ec967, type: 2}
-  - {fileID: 2100000, guid: 6d9e17dd27ab6bc4ea90d40a327ec967, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -59,7 +58,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Mesh: {fileID: 4300000, guid: 90dd44004e676a14ba7fede52e980a53, type: 2}
+  m_Mesh: {fileID: 4300000, guid: 7c668765ed734d04499cb5625088f463, type: 2}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -71,7 +70,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 583375bc492680d4abdf998fb25928d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: 101
+  ID: 110
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -83,8 +82,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cddb31ad4dca1141a26c308b5d59954, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colors: 1100000017000000
---- !u!114 &11400004
+  colors: 1d000000
+--- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -92,24 +91,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f95440c9648c0645a1103f00a1a3194, type: 3}
+  m_Script: {fileID: 11500000, guid: 60dd96ae4eab36846abe976dbd9a2606, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 1
-  timeScale: 1
-  name: Giga Laser
-  cooldownTime: 5
-  cooldownSpeed: 20
-  Laser_Prefab: {fileID: 100000, guid: d4a9dc4d55217064490f84257d865896, type: 2}
-  Charge_Prefab: {fileID: 100000, guid: 06610ceb1e4be7c479c10afbef0a802f, type: 2}
-  attackName: Laser Beam
-  attackOffset: {x: 0, y: 0, z: 2}
-  damage: 75
-  chargeSpeed: 4.5
-  chargeTime: .5
-  maxSize: 3.5
-  attackTime: 2
-  maxRange: 200
+  cooldownBoost: 1.5
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

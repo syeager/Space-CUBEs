@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections;
+using Annotations;
 using UnityEngine;
 
 public class GigaLaser_Weapon : Weapon
@@ -55,7 +56,7 @@ public class GigaLaser_Weapon : Weapon
     {
         var comp = parent.AddComponent<GigaLaser_Weapon>();
         comp.index = index;
-        comp.cooldownSpeed = cooldownSpeed;
+        comp.cooldownTime = cooldownTime;
         comp.Laser_Prefab = Laser_Prefab;
         comp.Charge_Prefab = Charge_Prefab;
         comp.attackName = attackName;
@@ -74,6 +75,7 @@ public class GigaLaser_Weapon : Weapon
 
     #region Private Methods
 
+    [UsedImplicitly]
     private IEnumerator Fire(float multiplier)
     {
         // create charge

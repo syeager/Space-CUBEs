@@ -32,7 +32,7 @@ public class PlanetSeed_Weapon : Weapon
     {
         var comp = parent.AddComponent<PlanetSeed_Weapon>();
         comp.index = index;
-        comp.cooldownSpeed = cooldownSpeed;
+        comp.cooldownTime = cooldownTime;
         comp.Star_Prefab = Star_Prefab;
         comp.damage = damage;
         comp.speed = speed;

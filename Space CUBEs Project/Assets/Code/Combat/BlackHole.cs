@@ -33,7 +33,6 @@ public class BlackHole : Hitbox
 
         // move
         otherRigidbody.AddForce(distance.normalized * -pull * Time.deltaTime, ForceMode.Impulse);
-        Debug.DrawRay(otherTransform.position, distance.normalized*-pull);
 
         // damage
         var oppHealth = other.gameObject.GetComponent<Health>();

@@ -53,7 +53,7 @@ public class SharkMissiles_Weapon : Weapon
     {
         var comp = parent.AddComponent<SharkMissiles_Weapon>();
         comp.index = index;
-        comp.cooldownSpeed = cooldownSpeed;
+        comp.cooldownTime = cooldownTime;
         comp.SharkMissile_Prefab = SharkMissile_Prefab;
         comp.missileOffset = missileOffset + myTransform.localPosition;
         comp.missileDelay = missileDelay;

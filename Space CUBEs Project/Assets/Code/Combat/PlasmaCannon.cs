@@ -1,7 +1,6 @@
 ﻿// Steve Yeager
 // 12.01.2013
 
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -12,7 +11,6 @@ public class PlasmaCannon : Weapon
     public GameObject Laser_Prefab;
     public float damage;
     public Vector3 laserOffset;
-    public float fireRate;
     public float speed;
 
     #endregion
@@ -29,6 +27,7 @@ public class PlasmaCannon : Weapon
         else
         {
             StopAllCoroutines();
+            StartCoroutine(Cooldown(true, false));
         }
     }
 
@@ -38,10 +37,9 @@ public class PlasmaCannon : Weapon
         var comp = parent.AddComponent<PlasmaCannon>();
         comp.index = index;
         comp.Laser_Prefab = Laser_Prefab;
-        comp.cooldownSpeed = cooldownSpeed;
+        comp.cooldownTime = cooldownTime;
         comp.damage = damage;
         comp.laserOffset = laserOffset + myTransform.localPosition;
-        comp.fireRate = fireRate;
         comp.speed = speed;
 
         return comp;
@@ -53,14 +51,14 @@ public class PlasmaCannon : Weapon
 
     private IEnumerator Fire(float multiplier)
     {
-        WaitForSeconds time = new WaitForSeconds(1f/fireRate);
         while (true)
         {
             GameObject laser = PoolManager.Pop(Laser_Prefab);
             laser.transform.SetPosRot(myTransform.position + myTransform.TransformDirection(laserOffset), myTransform.rotation);
             laser.GetComponent<Hitbox>().Initialize(myShip, damage * multiplier, myTransform.forward * speed);
 
-            yield return time;
+            Activated();
+            yield return StartCoroutine(Cooldown(true, false));
         }
     }
 
