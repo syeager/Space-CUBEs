@@ -1,6 +1,7 @@
 ﻿// Steve Yeager
 // 11.26.2013
 
+using Annotations;
 using UnityEngine;
 
 public class GameMaster : MonoBehaviour
@@ -11,9 +12,16 @@ public class GameMaster : MonoBehaviour
 
     #endregion
 
+    #region Public Fields
 
-    #region Unity Overrides
+    public int targetFPS = 60;
 
+    #endregion
+
+
+    #region MonoBehaviour Overrides
+
+    [UsedImplicitly]
     private void Awake()
     {
         if (Main == null)
@@ -21,7 +29,7 @@ public class GameMaster : MonoBehaviour
             Main = this;
             DontDestroyOnLoad(gameObject);
 
-            Application.targetFrameRate = 60;
+            Application.targetFrameRate = targetFPS;
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
         }
         else

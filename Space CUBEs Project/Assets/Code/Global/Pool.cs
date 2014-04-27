@@ -1,6 +1,7 @@
 // Steve Yeager
 // 12.10.2013
 
+using System.Linq;
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -12,21 +13,38 @@ public class Pool
 {
     #region Public Fields
 
+    /// <summary>List of inactive gameObjects.</summary>
     public Stack<GameObject> pool = new Stack<GameObject>();
 
+    /// <summary>GameObject to use for this pool.</summary>
     public PoolObject prefab;
+
+    /// <summary>Should the pool instantiate gameObjects when initialized?</summary>
     public int preAllocate;
+
+    /// <summary>How many gameObjects to instantiate if preAllocating.</summary>
     public int allocateBlock = 1;
+
+    /// <summary>Should the pool be limited to a set number?</summary>
     public bool hardLimit;
+
+    /// <summary>How many gameObjects the pool can hold before returning null.</summary>
     public int limit;
+
+    /// <summary>Should this pool be culled by the PoolManager?</summary>
     public bool cull;
+
+    /// <summary>The limit of allowed inactive gameObjects in the pool. All others will be deleted during culling.</summary>
     public int cullLimit;
+
+    /// <summary>Parent to create gameObjects under. Adds any preinstantiated gameObjects to the pool during initialization.</summary>
     public Transform parent;
 
     #endregion
 
     #region Private Fields
 
+    /// <summary>Number of active and inactive gameObjects in the pool.</summary>
     private int poolSize;
 
     #endregion
@@ -34,15 +52,22 @@ public class Pool
 
     #region Constructors
 
+    /// <summary>
+    /// Needed to satisfy Unity. Creates new pool.
+    /// </summary>
     public Pool()
     {
         pool = new Stack<GameObject>();
     }
 
 
+    /// <summary>
+    /// Create pool and cache prefab.
+    /// </summary>
+    /// <param name="prefab"></param>
     public Pool(GameObject prefab)
     {
-        this.prefab = prefab.GetComponent<PoolObject>();
+        this.prefab = prefab.GetComponent(typeof(PoolObject)) as PoolObject;
         pool = new Stack<GameObject>();
     }
 
@@ -50,18 +75,28 @@ public class Pool
 
     #region Public Methods
 
-    public void Initialize()
+    /// <summary>
+    /// Set up pool and instantiate gameObjects as needed.
+    /// </summary>
+    /// <param name="parent">Parent to cache.</param>
+    public void Initialize(Transform parent = null)
     {
         if (parent != null)
         {
-            PoolObject[] children = parent.GetComponentsInChildren<PoolObject>(true);
-            foreach (var child in children)
+            this.parent = parent;
+        }
+
+        // grab all preinitialized gameObjects in parent
+        if (this.parent != null)
+        {
+            Component[] children = this.parent.GetComponentsInChildren(typeof(PoolObject), true);
+            foreach (PoolObject poolObject in children.Select(child => child as PoolObject))
             {
-                child.Initialize(this);
+                poolObject.Initialize(this);
                 poolSize++;
-                if (!child.gameObject.activeSelf)
+                if (!poolObject.gameObject.activeSelf)
                 {
-                    Push(child);
+                    Push(poolObject);
                 }
             }
         }
@@ -78,13 +113,10 @@ public class Pool
     }
 
 
-    public void Initialize(Transform parent)
-    {
-        Initialize();
-        this.parent = parent;
-    }
-
-
+    /// <summary>
+    /// Get the next available gameObject from the pool.
+    /// </summary>
+    /// <returns>Active gameObject from pool.</returns>
     public GameObject Pop()
     {
         while (true)
@@ -109,27 +141,37 @@ public class Pool
     }
 
 
+    /// <summary>
+    /// Get the next available gameObject from the pool and disable after a timer.
+    /// </summary>
+    /// <param name="life">Time in seconds before gameObject is disabled.</param>
+    /// <returns>Active gameObject from pool.</returns>
     public GameObject Pop(float life)
     {
         GameObject go = Pop();
         if (go != null)
         {
-            go.GetComponent<PoolObject>().StartLifeTimer(life);
+            ((PoolObject)go.GetComponent(typeof(PoolObject))).StartLifeTimer(life);
             return go;
         }
-        else
-        {
-            return null;
-        }
+
+        return null;
     }
 
 
+    /// <summary>
+    /// Push gameObject back into the pool.
+    /// </summary>
+    /// <param name="poolObject">GameObject to return to the pool.</param>
     public void Push(PoolObject poolObject)
     {
         pool.Push(poolObject.gameObject);
     }
 
 
+    /// <summary>
+    /// Destroy all gameObjects in pool.
+    /// </summary>
     public void Clear()
     {
         while (pool.Count > 0)
@@ -141,6 +183,9 @@ public class Pool
     }
 
 
+    /// <summary>
+    /// Destroy extra gameObjects.
+    /// </summary>
     public void Cull()
     {
         while (pool.Count > cullLimit)
@@ -154,6 +199,10 @@ public class Pool
 
     #region Private Methods
 
+    /// <summary>
+    /// Create more gameObjects and add them to the pool.
+    /// </summary>
+    /// <param name="size">Amount of gameObjects to create.</param>
     private void Allocate(int size)
     {
         if (hardLimit && poolSize + size > limit)
@@ -165,7 +214,7 @@ public class Pool
         {
             GameObject go = Object.Instantiate(prefab.gameObject) as GameObject;
             go.transform.parent = parent;
-            go.GetComponent<PoolObject>().Initialize(this);
+            ((PoolObject)go.GetComponent(typeof(PoolObject))).Initialize(this);
             pool.Push(go);
             go.SetActive(false);
             poolSize++;

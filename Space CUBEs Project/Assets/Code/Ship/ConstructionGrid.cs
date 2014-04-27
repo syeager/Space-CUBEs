@@ -483,9 +483,9 @@ public class ConstructionGrid : MonoBase
     {
         Vector3 pivotOffset = RotateVector(new Vector3(-0.5f, -0.5f, -0.5f));
         heldCUBE.transform.rotation = cursorRotation;
-        Debugger.Log("cursorWorldPosition: " + cursorWorldPosition, this, true, Debugger.LogTypes.Construction);
-        Debugger.Log("RotateVector(cursorOffset).Round(): " + RotateVector(cursorOffset), this, true, Debugger.LogTypes.Construction);
-        Debugger.Log("pivotOffset: " + pivotOffset, this, true, Debugger.LogTypes.Construction);
+        Debugger.Log("cursorWorldPosition: " + cursorWorldPosition, this, Debugger.LogTypes.Construction);
+        Debugger.Log("RotateVector(cursorOffset).Round(): " + RotateVector(cursorOffset), this, Debugger.LogTypes.Construction);
+        Debugger.Log("pivotOffset: " + pivotOffset, this, Debugger.LogTypes.Construction);
         heldCUBE.transform.position = cursorWorldPosition + RotateVector(cursorOffset).Round() + pivotOffset;
     }
 
@@ -513,25 +513,25 @@ public class ConstructionGrid : MonoBase
                     point = point.Round();
                     if (point.x < 0 || point.x > size - 1)
                     {
-                        Debugger.Log("Doesn't Fit Bounds: " + point, this, true, Debugger.LogTypes.Construction);
+                        Debugger.Log("Doesn't Fit Bounds: " + point, this, Debugger.LogTypes.Construction);
                         return false;
                     }
                     if (point.y < 0 || point.y > size - 1)
                     {
-                        Debugger.Log("Doesn't Fit Bounds: " + point, this, true, Debugger.LogTypes.Construction);
+                        Debugger.Log("Doesn't Fit Bounds: " + point, this, Debugger.LogTypes.Construction);
                         return false;
                     }
                     if (point.z < 0 || point.z > size - 1)
                     {
-                        Debugger.Log("Doesn't Fit Bounds: " + point, this, true, Debugger.LogTypes.Construction);
+                        Debugger.Log("Doesn't Fit Bounds: " + point, this, Debugger.LogTypes.Construction);
                         return false;
                     }
                     if (grid[(int)point.y][(int)point.z][(int)point.x])
                     {
-                        Debugger.Log("Doesn't Fit Taken: " + point, this, true, Debugger.LogTypes.Construction);
+                        Debugger.Log("Doesn't Fit Taken: " + point, this, Debugger.LogTypes.Construction);
                         return false;
                     }
-                    Debugger.Log("Fits: " + point, this, true, Debugger.LogTypes.Construction);
+                    Debugger.Log("Fits: " + point, this, Debugger.LogTypes.Construction);
                 }
             }
         }
@@ -626,7 +626,7 @@ public class ConstructionGrid : MonoBase
                 {
                     Vector3 point = pivot + RotateVector(new Vector3(x, y, z)).Round();
                     point = point.Round();
-                    Debugger.Log("Placing: " + point, this, true, Debugger.LogTypes.Construction);
+                    Debugger.Log("Placing: " + point, this, Debugger.LogTypes.Construction);
                     grid[(int)point.y][(int)point.z][(int)point.x] = heldCUBE;
                 }
             }
@@ -694,7 +694,7 @@ public class ConstructionGrid : MonoBase
                 {
                     Vector3 point = pivot + RotateVector(new Vector3(x, y, z)).Round();
                     point = point.Round();
-                    Debugger.Log("Removing: " + point, this, true, Debugger.LogTypes.Construction);
+                    Debugger.Log("Removing: " + point, this, Debugger.LogTypes.Construction);
                     grid[(int)point.y][(int)point.z][(int)point.x] = null;
                     cells[(int)point.y][(int)point.z][(int)point.x].renderer.material = CellOpen_Mat;
                 }
@@ -957,7 +957,7 @@ public class ConstructionGrid : MonoBase
     {
         if (Application.isPlaying)
         {
-            Debugger.Log("Saving " + buildName + ": " + build, null, false, Debugger.LogTypes.Data);
+            Debugger.Log("Saving " + buildName + ": " + build, null, Debugger.LogTypes.Data, false);
         }
 
         // get paths

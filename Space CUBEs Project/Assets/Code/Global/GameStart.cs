@@ -57,7 +57,7 @@ public class GameStart : Singleton<GameStart>
         int previousVersion = resetVersion ? 0 : PlayerPrefs.GetInt("Build Version");
         while (previousVersion < version)
         {
-            Debugger.Log("GameStart: " + previousVersion, gameObject, true, Debugger.LogTypes.Data);
+            Debugger.Log("GameStart: " + previousVersion, gameObject, Debugger.LogTypes.Data, true);
             StartActions[previousVersion].Invoke();
             previousVersion++;
         }
@@ -87,5 +87,4 @@ public class GameStart : Singleton<GameStart>
     }
 
     #endregion
-
 }

@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class HUDFPS : Singleton<HUDFPS>
 {
-
     // Attach this to a GUIText to make a frames/second indicator.
     //
     // It calculates frames/second over each updateInterval,
@@ -16,6 +14,10 @@ public class HUDFPS : Singleton<HUDFPS>
     // 5.5 frames.
 
     public float updateInterval = 0.5F;
+
+#if UNITY_EDITOR
+    public bool lowBreak = true;
+#endif
 
     private float accum = 0; // FPS accumulated over the interval
     private int frames = 0; // Frames drawn over the interval
@@ -60,6 +62,10 @@ public class HUDFPS : Singleton<HUDFPS>
             else if (fps < 10)
             {
                 guiText.material.color = Color.red;
+
+#if UNITY_EDITOR
+                Debug.Break();
+#endif
             }
             else
             {

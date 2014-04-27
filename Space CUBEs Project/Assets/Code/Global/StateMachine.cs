@@ -13,10 +13,8 @@ public class StateMachine
 {
     #region Private Fields
 
-#if DEBUG
     /// <summary>MonoBase that this statemachine belongs to. Used for logging.</summary>
     private readonly MonoBase owner;
-#endif
     
     #endregion
 
@@ -81,7 +79,7 @@ public class StateMachine
 #if DEBUG
         if (owner.log)
         {
-            Debugger.Log(owner.name + ": " + currentState + "→" + stateName, owner, false, Debugger.LogTypes.StateMachines);
+            Debugger.Log(owner.name + ": " + currentState + "→" + stateName, owner, Debugger.LogTypes.StateMachines, false);
         }
 #endif
 

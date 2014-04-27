@@ -97,7 +97,7 @@ public class CUBE : MonoBehaviour
 
         if (Application.isPlaying)
         {
-            Debugger.Log("CUBE info loaded from binary.", null, true, Debugger.LogTypes.Data);
+            Debugger.Log("CUBE info loaded from binary.", null, Debugger.LogTypes.Data);
         }
 
         // filter into graded

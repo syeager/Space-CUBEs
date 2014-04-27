@@ -6,6 +6,7 @@ using System.Collections;
 using System.Diagnostics;
 using UnityEngine;
 
+// TODO: Look into this class.
 public class MonoBase : MonoBehaviour
 {
     #region Public Fields
@@ -28,7 +29,7 @@ public class MonoBase : MonoBehaviour
     {
         if (log)
         {
-            Debugger.Log(message, gameObject, save, logType);
+            Debugger.Log(message, gameObject, logType, save);
         }
     }
 
@@ -38,7 +39,7 @@ public class MonoBase : MonoBehaviour
     {
         if (log)
         {
-            Debugger.LogWarning(message, gameObject, save, logType);
+            Debugger.LogWarning(message, gameObject, logType, save);
         }
     }
 
@@ -48,7 +49,7 @@ public class MonoBase : MonoBehaviour
     {
         if (log)
         {
-            Debugger.LogError(message, gameObject, save, logType);
+            Debugger.LogError(message, gameObject, logType, save);
         }
     }
 
