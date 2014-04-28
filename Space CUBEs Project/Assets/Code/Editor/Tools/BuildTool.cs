@@ -15,7 +15,15 @@ public class BuildTool : EditorWindow
     private int minor;
     private int patch;
 
+    private bool targetPC = true;
+
     private bool first = true;
+
+    #endregion
+
+    #region Const Fields
+
+    private const string BuildPath = "D:/Documents/GitHub/Space-CUBEs/Builds/PreAlpha/";
 
     #endregion
 
@@ -25,20 +33,22 @@ public class BuildTool : EditorWindow
     [UsedImplicitly]
     private void OnGUI()
     {
-        GUI.SetNextControlName("Major");
         major = EditorGUILayout.IntField("Major", major);
         minor = EditorGUILayout.IntField("Minor", minor);
+        GUI.SetNextControlName("Version");
         patch = EditorGUILayout.IntField("Patch", patch);
+
+        targetPC = EditorGUILayout.Toggle("Return to PC", targetPC);
 
         if (GUILayout.Button("Build"))
         {
-            Build(String.Format("{0}.{1}.{2}", major, minor, patch));
+            Build(String.Format("{0}.{1}.{2}", major, minor, patch), targetPC);
             Close();
         }
 
         if (first)
         {
-            GUI.FocusControl("Major");
+            GUI.FocusControl("Version");
             first = false;
             string[] versionSegments = PlayerSettings.bundleVersion.Split('.');
             major = int.Parse(versionSegments[0]);
@@ -60,7 +70,7 @@ public class BuildTool : EditorWindow
             string version = PlayerSettings.bundleVersion;
             string[] versionSegments = version.Split('.');
             int lastVersion = int.Parse(versionSegments[2]) + 1;
-            Build(versionSegments[0] + "." + versionSegments[1] + "." + lastVersion);
+            Build(versionSegments[0] + "." + versionSegments[1] + "." + lastVersion, true);
         }
     }
 
@@ -73,16 +83,19 @@ public class BuildTool : EditorWindow
     }
 
 
-    private static void Build(string version)
+    private static void Build(string version, bool pc)
     {
-        string oldVersion = PlayerSettings.bundleVersion;
         PlayerSettings.bundleVersion = version;
-        string path = EditorUserBuildSettings.GetBuildLocation(BuildTarget.Android).Replace(oldVersion, version);
 
         BuildPipeline.BuildPlayer(EditorBuildSettings.scenes.Where(s => s.enabled).Select(s => s.path).ToArray(),
-                                  path,
+                                  BuildPath + PlayerSettings.productName + " " + version,
                                   BuildTarget.Android,
                                   BuildOptions.ShowBuiltPlayer);
+
+        if (pc && EditorUserBuildSettings.activeBuildTarget != BuildTarget.StandaloneWindows)
+        {
+            EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTarget.StandaloneWindows);
+        }
     }
 
     #endregion

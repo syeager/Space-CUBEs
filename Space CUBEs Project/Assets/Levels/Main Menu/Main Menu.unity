@@ -343,6 +343,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 1
   timeScale: 1
+  logWarning: 0
   currentBuild: Test Build
 --- !u!4 &548195071
 Transform:
@@ -402,6 +403,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 0
   timeScale: 1
+  logWarning: 0
   version: 1
   resetVersion: 0
 --- !u!114 &615620030
@@ -418,6 +420,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 1
   timeScale: 1
+  logWarning: 0
   fps: {fileID: 692330401}
   fpsPrefab: {fileID: 100000, guid: ede73768352859c47b0ceadd2ebf76fa, type: 2}
   consoleLine: {fileID: 0}
@@ -425,6 +428,7 @@ MonoBehaviour:
   showTime: 1
   logSaving: 2
   logFlags: 0101010101
+  lowBreak: 1
 --- !u!114 &615620031
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -478,10 +482,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f5c9741c4dba0741a287cd0177b0581, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 0
-  timeScale: 1
-  updateInterval: .5
-  lowBreak: 1
 --- !u!132 &692330403
 GUIText:
   m_ObjectHideFlags: 0
@@ -1016,6 +1016,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 0
   timeScale: 1
+  logWarning: 0
   CUBE_Prefabs:
   - {fileID: 11400000, guid: c90fae0135712ca4aaf1f938bc7888e3, type: 2}
   - {fileID: 11400000, guid: eb6d282238117c144a5a3b10c4675d5b, type: 2}
@@ -1620,6 +1621,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 1
   timeScale: 1
+  logWarning: 0
   invincible: 0
   jumpToBoss: 0
   volumeSE: 5

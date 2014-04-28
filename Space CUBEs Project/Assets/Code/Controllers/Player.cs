@@ -37,7 +37,6 @@ public class Player : Ship
     public float backBounds;
     public float frontBounds;
 
-#if UNITY_STANDALONE
     public static readonly KeyCode[] WeaponKeys =
     {
         KeyCode.J,
@@ -45,10 +44,8 @@ public class Player : Ship
         KeyCode.L,
         KeyCode.Semicolon
     };
-#else
     private bool barrelRoll;
     public float swipeNeeded = 10f;
-#endif
 
     #endregion
 
