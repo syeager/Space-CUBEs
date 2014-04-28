@@ -61,7 +61,7 @@ public class GigaLaser_Weapon : Weapon
         comp.Charge_Prefab = Charge_Prefab;
         comp.attackName = attackName;
         comp.damage = damage;
-        comp.attackOffset = attackOffset+transform.localPosition;
+        comp.attackOffset = attackOffset + transform.localPosition;
         comp.chargeSpeed = chargeSpeed;
         comp.chargeTime = chargeTime;
         comp.maxSize = maxSize;
@@ -83,25 +83,25 @@ public class GigaLaser_Weapon : Weapon
         charge.parent = myTransform;
         charge.SetPosRot(myTransform.position + myTransform.TransformDirection(attackOffset), myTransform.rotation);
         charge.localScale = Vector3.one;
-        
+
         // increase charge
         float timer = chargeTime;
         while (timer > 0f)
         {
             timer -= deltaTime;
-            charge.localScale += Vector3.one*chargeSpeed*deltaTime;
+            charge.localScale += Vector3.one * chargeSpeed * deltaTime;
             yield return null;
         }
-        Destroy(charge.gameObject);
+        charge.GetComponent<PoolObject>().Disable();
 
         // fire
         laser = PoolManager.Pop(Laser_Prefab).transform;
         laser.parent = myTransform;
         laser.SetPosRot(myTransform.position + myTransform.TransformDirection(attackOffset), myTransform.rotation);
-        laser.GetComponent<Hitbox>().Initialize(myShip, damage*multiplier);
+        laser.GetComponent<Hitbox>().Initialize(myShip, damage * multiplier);
         while (power > 0f)
         {
-            power -= FullPower/attackTime*deltaTime;
+            power -= FullPower / attackTime * deltaTime;
             float size = maxSize * power / FullPower;
             if (Physics.Raycast(laser.position, myTransform.forward, out rayInfo, maxRange) && rayInfo.collider.GetComponent<Health>() != null)
             {
@@ -120,11 +120,11 @@ public class GigaLaser_Weapon : Weapon
 
     private void EndAttack()
     {
-        if (charge != null)
+        if (charge.gameObject.activeSelf)
         {
             charge.GetComponent<PoolObject>().Disable();
         }
-        else if (laser != null)
+        else if (laser.gameObject.activeSelf)
         {
             laser.GetComponent<PoolObject>().Disable();
         }
