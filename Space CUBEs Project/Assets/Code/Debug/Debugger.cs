@@ -60,6 +60,24 @@ public class Debugger : Singleton<Debugger>
         Construction = 4,
     }
 
+#if UNITY_EDITOR
+    /// <summary>Should the Editor pause if below 10 FPS?</summary>
+    public bool lowBreak = true;
+#endif
+
+    #endregion
+
+    #region Private Fields
+
+    /// <summary>Time in seconds accumulated over current FPS interval.</summary>
+    private float accum;
+
+    /// <summary>Number of frames drawn in the current interval.</summary>
+    private int frames;
+
+    /// <summary>Time in seconds left in the current interval.</summary>
+    private float timeleft = UpdateInterval;
+
     #endregion
 
     #region Static Fields
@@ -85,6 +103,9 @@ public class Debugger : Singleton<Debugger>
     #region Const Fields
 
     private const string FileExt = ".txt";
+
+    /// <summary>Time in seconds to get average FPS.</summary>
+    private const float UpdateInterval = 0.5f;
 
     #endregion
 
@@ -119,6 +140,34 @@ public class Debugger : Singleton<Debugger>
         }
     }
 #endif
+
+
+    [UsedImplicitly]
+    private void Update()
+    {
+        if (fps == null) return;
+
+        timeleft -= Time.deltaTime;
+        accum += Time.timeScale / Time.deltaTime;
+        ++frames;
+
+        if (timeleft <= 0.0)
+        {
+            float average = accum / frames;
+            fps.GetComponent<HUDFPS>().UpdateFPS(average);
+
+#if UNITY_EDITOR
+            if (lowBreak && average < 10)
+            {
+                Debug.Break();
+            }
+#endif
+
+            timeleft = UpdateInterval;
+            accum = 0f;
+            frames = 0;
+        }
+    }
 
 
     /// <summary>
