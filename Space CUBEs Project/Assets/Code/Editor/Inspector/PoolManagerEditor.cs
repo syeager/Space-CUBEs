@@ -165,7 +165,7 @@ public class PoolManagerEditor : Creator<PoolManager>
     private void DropAreaGUI()
     {
         Event evt = Event.current;
-        Rect dropArea = GUILayoutUtility.GetRect(0.0f, 50.0f, GUILayout.ExpandWidth(true));
+        Rect dropArea = GUILayoutUtility.GetRect(0f, 50f, GUILayout.ExpandWidth(true));
         GUI.Box(dropArea, "Add Pool Object");
 
         switch (evt.type)

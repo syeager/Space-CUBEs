@@ -92,7 +92,7 @@ public class Debugger : Singleton<Debugger>
 
     #region Readonly Fields
 
-    // TODO: Move file to resources folder to work on builds?
+    /// <summary>Path for log files.</summary>
     private static readonly string LogPath = Application.dataPath + "/Files/Debug Logs/Log_";
 
     /// <summary>Messages queued up for the ConsoleLine and their time in seconds to be displayed.</summary>
@@ -102,6 +102,7 @@ public class Debugger : Singleton<Debugger>
 
     #region Const Fields
 
+    /// <summary>File extention for log files.</summary>
     private const string FileExt = ".txt";
 
     /// <summary>Time in seconds to get average FPS.</summary>
