@@ -3005,10 +3005,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f5c9741c4dba0741a287cd0177b0581, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 0
-  timeScale: 1
-  updateInterval: .5
-  lowBreak: 1
 --- !u!132 &309146680
 GUIText:
   m_ObjectHideFlags: 0
@@ -5571,6 +5567,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 1
   timeScale: 1
+  logWarning: 0
   enemyPrefabs:
   - {fileID: 100000, guid: e6ee90c6d98d0a449b1727cb1c1a0511, type: 2}
   - {fileID: 100006, guid: 65f3431ac18f52e439d1dcfd33584236, type: 2}
@@ -5812,6 +5809,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 1
   timeScale: 1
+  logWarning: 0
   cull: 1
   cullDelay: 10
   poolList:
@@ -6342,7 +6340,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 686265113}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -501.358154, y: -288.136902, z: 0}
+  m_LocalPosition: {x: -500.772614, y: -287.800354, z: 0}
   m_LocalScale: {x: 1.00007999, y: 1.00007999, z: 1.00007999}
   m_Children:
   - {fileID: 1701126472}
@@ -7311,6 +7309,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 1
   timeScale: 1
+  logWarning: 0
   fps: {fileID: 309146678}
   fpsPrefab: {fileID: 100000, guid: ede73768352859c47b0ceadd2ebf76fa, type: 2}
   consoleLine: {fileID: 0}
@@ -7318,6 +7317,7 @@ MonoBehaviour:
   showTime: 1
   logSaving: 2
   logFlags: 0101010101
+  lowBreak: 1
 --- !u!114 &824695456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7332,6 +7332,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 1
   timeScale: 1
+  logWarning: 0
   currentBuild: Test Build
 --- !u!114 &824695457
 MonoBehaviour:
@@ -7374,6 +7375,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 1
   timeScale: 1
+  logWarning: 0
   invincible: 0
   jumpToBoss: 0
   volumeSE: 5
@@ -7397,6 +7399,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 0
   timeScale: 1
+  logWarning: 0
   CUBE_Prefabs:
   - {fileID: 11400000, guid: c90fae0135712ca4aaf1f938bc7888e3, type: 2}
   - {fileID: 11400000, guid: eb6d282238117c144a5a3b10c4675d5b, type: 2}
@@ -7541,6 +7544,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 0
   timeScale: 1
+  logWarning: 0
   version: 1
   resetVersion: 0
 --- !u!114 &824695462
@@ -8517,6 +8521,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 1
   timeScale: 1
+  logWarning: 0
   multX: {fileID: 623203559}
   multipliers:
   - {fileID: 946439829}
@@ -9870,7 +9875,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1160269902}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -134.27179, y: -289.937744, z: 0}
+  m_LocalPosition: {x: -134.11496, y: -289.599121, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 921408840}
@@ -9903,7 +9908,7 @@ MonoBehaviour:
     absolute: 0
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 566
+  mWidth: 565
   mHeight: 140
   mDepth: 13
   autoResizeBoxCollider: 0
@@ -11041,7 +11046,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1347304326}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -133.695496, y: -299.302185, z: 0}
+  m_LocalPosition: {x: -133.539352, y: -298.952637, z: 0}
   m_LocalScale: {x: 1.00007999, y: 1.00007999, z: 1.00007999}
   m_Children: []
   m_Father: {fileID: 921408840}
@@ -11074,7 +11079,7 @@ MonoBehaviour:
     absolute: 0
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 498
+  mWidth: 497
   mHeight: 122
   mDepth: 13
   autoResizeBoxCollider: 0
@@ -11523,7 +11528,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1425579257}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 363.05246, y: -288.136902, z: 0}
+  m_LocalPosition: {x: 362.628448, y: -287.800354, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1695574997}
@@ -11811,7 +11816,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1459924920}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -288.136902, z: 0}
+  m_LocalPosition: {x: 0, y: -287.800354, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 921408840}
@@ -11844,7 +11849,7 @@ MonoBehaviour:
     absolute: 0
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 1153
+  mWidth: 1151
   mHeight: 144
   mDepth: 0
   autoResizeBoxCollider: 0
@@ -13144,6 +13149,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 0
   timeScale: 1
+  logWarning: 0
 --- !u!4 &1630941667
 Transform:
   m_ObjectHideFlags: 0

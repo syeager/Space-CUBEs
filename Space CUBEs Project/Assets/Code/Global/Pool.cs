@@ -13,9 +13,6 @@ public class Pool
 {
     #region Public Fields
 
-    /// <summary>List of inactive gameObjects.</summary>
-    public Stack<GameObject> pool = new Stack<GameObject>();
-
     /// <summary>GameObject to use for this pool.</summary>
     public PoolObject prefab;
 
@@ -43,6 +40,9 @@ public class Pool
     #endregion
 
     #region Private Fields
+
+    /// <summary>List of inactive gameObjects.</summary>
+    private readonly Stack<GameObject> pool = new Stack<GameObject>();
 
     /// <summary>Number of active and inactive gameObjects in the pool.</summary>
     private int poolSize;
