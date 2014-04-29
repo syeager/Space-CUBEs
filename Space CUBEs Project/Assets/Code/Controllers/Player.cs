@@ -1,6 +1,7 @@
 ﻿// Steve Yeager
 // 11.25.2013
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -52,6 +53,12 @@ public class Player : Ship
     #region Const Fields
 
     public const int Weaponlimit = 4;
+
+    #endregion
+
+    #region Events
+
+    public EventHandler<KillRecievedArgs> KillRecievedEvent;
 
     #endregion
 
@@ -249,11 +256,14 @@ public class Player : Ship
     /// <param name="enemy">Enemy type killed.</param>
     /// <param name="points">How many base points the enemy is worth.</param>
     /// <param name="money">How much money the enemy is worth.</param>
-    public void RecieveKill(Enemy.Classes enemy, int points, int money)
+    /// <param name="enemyHealthMax"></param>
+    public void RecieveKill(Enemy.Classes enemy, int points, int money, float enemyHealthMax)
     {
         myScore.RecieveScore(points);
         myScore.IncreaseMultiplier();
         myMoney.Collect(money);
+
+        KillRecievedEvent.Fire(this, new KillRecievedArgs(enemy, points, money, enemyHealthMax));
     }
 
 

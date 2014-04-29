@@ -137,6 +137,18 @@ public class ShieldHealth : Health
     }
 
 
+    public void IncreaseHealth(float amount)
+    {
+        float extra = maxHealth - health;
+        
+        ChangeHealth(amount - extra);
+        if (extra > 0f)
+        {
+            ChangeShield(extra);
+        }
+    }
+
+
     public void Trash()
     {
         Killed(null);

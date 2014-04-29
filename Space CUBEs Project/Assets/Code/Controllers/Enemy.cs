@@ -73,7 +73,7 @@ public class Enemy : Ship
         Player player = args.killer as Player;
         if (player != null)
         {
-            player.RecieveKill(enemyClass, score, money);
+            player.RecieveKill(enemyClass, score, money, myHealth.maxHealth);
         }
 
         Destroy(path);
