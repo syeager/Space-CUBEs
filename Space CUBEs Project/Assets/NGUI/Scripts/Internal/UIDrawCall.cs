@@ -674,8 +674,8 @@ public class UIDrawCall : MonoBehaviour
 		if (mInactiveList.size > 0)
 		{
 			UIDrawCall dc = mInactiveList.Pop();
-			if (name != null) dc.name = name;
-			NGUITools.SetActive(dc.gameObject, true);
+			if (dc != null && name != null) dc.name = name;
+			if (dc != null) NGUITools.SetActive(dc.gameObject, true);
 			return dc;
 		}
 
@@ -723,7 +723,7 @@ public class UIDrawCall : MonoBehaviour
 		for (int i = mInactiveList.size; i > 0; )
 		{
 			UIDrawCall dc = mInactiveList[--i];
-			NGUITools.DestroyImmediate(dc.gameObject);
+			if (dc != null) NGUITools.DestroyImmediate(dc.gameObject);
 		}
 		mInactiveList.Clear();
 	}
