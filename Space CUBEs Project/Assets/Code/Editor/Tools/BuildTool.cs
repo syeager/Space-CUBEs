@@ -2,6 +2,7 @@
 // 4.27.2014
 
 using System;
+using System.IO;
 using System.Linq;
 using Annotations;
 using UnityEditor;
@@ -24,6 +25,7 @@ public class BuildTool : EditorWindow
     #region Const Fields
 
     private const string BuildPath = "D:/Documents/GitHub/Space-CUBEs/Builds/PreAlpha/";
+    private const string NewestBuildPath = "D:/Documents/Google Drive/Space CUBEs/Builds/";
 
     #endregion
 
@@ -87,11 +89,22 @@ public class BuildTool : EditorWindow
     {
         PlayerSettings.bundleVersion = version;
 
+        // build
+        string buildPath = BuildPath + PlayerSettings.productName + " " + version;
         BuildPipeline.BuildPlayer(EditorBuildSettings.scenes.Where(s => s.enabled).Select(s => s.path).ToArray(),
-                                  BuildPath + PlayerSettings.productName + " " + version,
+                                  buildPath,
                                   BuildTarget.Android,
                                   BuildOptions.ShowBuiltPlayer);
 
+        // move to Drive
+        DirectoryInfo directory = new DirectoryInfo(NewestBuildPath);
+        foreach (FileInfo file in directory.GetFiles())
+        {
+            file.Delete();
+        }
+        File.Copy(buildPath, NewestBuildPath + PlayerSettings.productName + " " + version);
+
+        // return to PC
         if (pc && EditorUserBuildSettings.activeBuildTarget != BuildTarget.StandaloneWindows)
         {
             EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTarget.StandaloneWindows);
