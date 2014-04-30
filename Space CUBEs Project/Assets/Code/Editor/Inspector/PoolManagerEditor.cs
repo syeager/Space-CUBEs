@@ -185,7 +185,12 @@ public class PoolManagerEditor : Creator<PoolManager>
                     {
                         if (dragged is GameObject && ((GameObject) dragged).GetComponent<PoolObject>())
                         {
+                            Debug.Log("Added: " + dragged.name);
                             AddPool(poolList.arraySize, dragged as GameObject);
+                        }
+                        else
+                        {
+                            Debug.Log("Ignored: " + dragged.name);
                         }
                     }
                 }
