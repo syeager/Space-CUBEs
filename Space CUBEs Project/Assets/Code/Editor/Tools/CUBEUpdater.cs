@@ -1,7 +1,6 @@
 ﻿// Steve Yeager
 // 1.15.2014
 
-using Annotations;
 using UnityEngine;
 using UnityEditor;
 using System.IO;
@@ -20,7 +19,6 @@ public class CUBEUpdater : EditorWindow
 {
     #region Readonly Fields
 
-    private static readonly Vector2 Size = new Vector2(300f, 50f);
     private static readonly string CUBEPathCSV = Directory.GetParent(Directory.GetCurrentDirectory()) + @"\Data\CUBE List.csv";
     private static readonly string CUBEListPathEditor = Application.dataPath + "/Resources/CUBE List.bytes";
     private const string PrefabPath = "Assets/Ship/CUBEs/Prefabs/";
@@ -31,23 +29,13 @@ public class CUBEUpdater : EditorWindow
 
     #region EditorWindow Overrides
 
-    [UsedImplicitly]
-    [MenuItem("Tools/CUBE Updater")]
-    private static void Init()
+    [MenuItem("Tools/CUBE Updater &u")]
+    public static void Update()
     {
-        CUBEUpdater window = GetWindow<CUBEUpdater>(true, "CUBE Updater");
-        window.minSize = window.maxSize = Size;
-    }
-
-
-    [UsedImplicitly]
-    private void OnGUI()
-    {
-        GUILayout.FlexibleSpace();
-        if (GUILayout.Button("Update"))
-        {
-            Update();
-        }
+        DateTime startTime = DateTime.Now;
+        ToBinary(CSVToCUBEInfo());
+        UpdatePrefabs();
+        Debug.Log("CUBE list updated successfully. " + (DateTime.Now - startTime).TotalSeconds);
     }
 
     #endregion
@@ -148,15 +136,6 @@ public class CUBEUpdater : EditorWindow
             resourcesPrefabs.GetArrayElementAtIndex(i).objectReferenceValue = prefab.Length > 0 ? prefab[0].gameObject : null;
         }
         resources.ApplyModifiedProperties();
-    }
-
-
-    public static void Update()
-    {
-        DateTime startTime = DateTime.Now;
-        ToBinary(CSVToCUBEInfo());
-        UpdatePrefabs();
-        Debug.Log("CUBE list updated successfully. " + (DateTime.Now - startTime).TotalSeconds);
     }
 
     #endregion
