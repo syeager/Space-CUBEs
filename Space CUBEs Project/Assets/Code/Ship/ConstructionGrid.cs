@@ -214,7 +214,7 @@ public class ConstructionGrid : MonoBase
         ship.transform.position = transform.position + Vector3.up * (size / 2f - 0.5f);
 
         // set up weapons
-        weapons = new Weapon[Player.Weaponlimit];
+        weapons = new Weapon[BuildStats.WeaponExpansions[BuildStats.WeaponExpansions.Length - 1]];
 
         // create grid center
         Center = (Instantiate(Center_Prefab, ship.transform.position, Quaternion.identity) as GameObject).transform;
@@ -475,7 +475,7 @@ public class ConstructionGrid : MonoBase
         currentBuild.Clear();
 
         // new weapons array according to player.WEAPONLIMIT
-        weapons = new Weapon[Player.Weaponlimit];
+        weapons = new Weapon[BuildStats.WeaponExpansions[BuildStats.WeaponExpansions.Length - 1]];
     }
 
 

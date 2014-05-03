@@ -54,6 +54,17 @@ public struct CUBEInfo
 
     public override string ToString()
     {
-        return ID + ": " + name;
+        switch (type)
+        {
+            case CUBE.Types.System:
+                return string.Format("{0}: {1} - {2} | {3} | {4} - {5} | {6} | {7} | {8}",
+                                     ID, name, subsystem, brand, grade, size, cost, rarity, price);
+            case CUBE.Types.Weapon:
+                return string.Format("{0}: {1} - {2} | {3} | {4} | {5} - {6} | {7} | {8} | {9}",
+                                      ID, name, health, shield, speed, damage, size, cost, rarity, price);
+            default:
+                return string.Format("{0}: {1} - {2} | {3} | {4} | {5}",
+                                      ID, name, size, cost, rarity, price);
+        }
     }
 }

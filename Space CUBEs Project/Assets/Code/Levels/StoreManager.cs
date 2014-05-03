@@ -1,11 +1,10 @@
 ﻿// Steve Yeager
 // 1.15.2014
 
+using System.Collections;
 using UnityEngine;
-using System.Collections.Generic;
 using System.Linq;
 using System;
-using System.Collections;
 
 /// <summary>
 /// Manager for the Store.
@@ -15,10 +14,8 @@ public class StoreManager : MonoBehaviour
     #region Public Fields
 
     public ActivateButton filterLeft;
-    public UILabel filter;
+    public UILabel filterLabel;
     public ActivateButton filterRight;
-    public Transform Grid;
-    public UIScrollBar scrollBar;
     public GameObject Button_Prefab;
     public UILabel bank;
     public UILabel selectedCUBE;
@@ -27,10 +24,15 @@ public class StoreManager : MonoBehaviour
     public UILabel buyPrice;
     public UIButton sellButton;
     public UIButton buyButton;
+
     public UILabel health;
     public UILabel shield;
     public UILabel speed;
+    public UILabel damage;
+
     public Transform showcase;
+
+    public GameObject[] selections;
 
     #endregion
 
@@ -38,24 +40,50 @@ public class StoreManager : MonoBehaviour
 
     private int[] inventory;
     private int index;
-    private CUBE.Types filterType;
-    private bool allTypes = true;
     private Transform showcaseCUBE;
-    private Dictionary<CUBE.Types, List<CUBEInfo>> filterLists;
-    private ActivateButton[] activeButtons;
+
+    /// <summary>Current filtered item index.</summary>
+    private int filter;
+
+    private ScrollviewButton[][] itemButtons;
+
+    private UIGrid[] grids;
+    private UIScrollView[] scrollViews;
+    private UIScrollBar[] scrollBars;
+
+    #endregion
+
+    #region Static Fields
+
+    private static readonly string[] Items =
+    {
+        "System",
+        "Hull",
+        "Weapon",
+        "Augmentation",
+        "Core",
+        "W Expansion",
+        "A Expansion"
+    };
+
     #endregion
 
 
     #region MonoBehaviour Overrides
 
-    private void Awake()
+    private void Start()
     {
         inventory = CUBE.GetInventory();
-        activeButtons = new ActivateButton[inventory.Length];
-        filterLists = new Dictionary<CUBE.Types,List<CUBEInfo>>();
-        for (int i = 0; i < Enum.GetNames(typeof(CUBE.Types)).Length; i++)
+
+        // get references
+        grids = new UIGrid[selections.Length];
+        scrollViews = new UIScrollView[selections.Length];
+        scrollBars = new UIScrollBar[selections.Length];
+        for (int i = 0; i < selections.Length; i++)
         {
-            filterLists.Add((CUBE.Types)i, CUBE.allCUBES.Where(c => c.type == (CUBE.Types)i).ToList());
+            grids[i] = selections[i].GetComponentInChildren(typeof(UIGrid)) as UIGrid;
+            scrollViews[i] = selections[i].GetComponentInChildren(typeof(UIScrollView)) as UIScrollView;
+            scrollBars[i] = selections[i].GetComponentInChildren(typeof(UIScrollBar)) as UIScrollBar;
         }
 
         // reset GUI
@@ -66,7 +94,9 @@ public class StoreManager : MonoBehaviour
         sellButton.isEnabled = false;
         buyButton.isEnabled = false;
 
-        AllFilters();
+        CreateItemButtons();
+        ChangeFilter(0);
+        StartCoroutine(InitScrollViews());
 
         // register events
         filterLeft.ActivateEvent += OnFilterMoved;
@@ -81,10 +111,9 @@ public class StoreManager : MonoBehaviour
     {
         inventory[index]--;
         CUBE.SetInventory(inventory);
-        int balance = MoneyManager.Transaction(CUBE.allCUBES[index].price/2);
+        int balance = MoneyManager.Transaction(CUBE.allCUBES[index].price / 2);
         bank.text = String.Format("${0:#,###0}", balance);
         count.text = "You have: " + inventory[index];
-        activeButtons[index].GetComponent<CUBEButton>().label.text = CUBE.allCUBES[index].name + " x " + inventory[index];
 
         UpdateShopButtons();
     }
@@ -97,18 +126,23 @@ public class StoreManager : MonoBehaviour
         int balance = MoneyManager.Transaction(-CUBE.allCUBES[index].price);
         bank.text = String.Format("${0:#,###0}", balance);
         count.text = "You have: " + inventory[index];
-        activeButtons[index].GetComponent<CUBEButton>().label.text = CUBE.allCUBES[index].name + " x " + inventory[index];
 
         UpdateShopButtons();
     }
 
 
+    /// <summary>
+    /// Load Garage Level.
+    /// </summary>
     public void LoadGarage()
     {
         GameData.LoadLevel("Garage");
     }
 
 
+    /// <summary>
+    /// Load Main Menu Level.
+    /// </summary>
     public void LoadMainMenu()
     {
         GameData.LoadLevel("Main Menu");
@@ -118,6 +152,9 @@ public class StoreManager : MonoBehaviour
 
     #region Private Methods
 
+    /// <summary>
+    /// Set buy and sell buttons to appropriate states for selected item.
+    /// </summary>
     private void UpdateShopButtons()
     {
         sellButton.isEnabled = inventory[index] > 0;
@@ -125,76 +162,113 @@ public class StoreManager : MonoBehaviour
     }
 
 
-    private void ChangeFilter(CUBE.Types type)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="index"></param>
+    private void ChangeFilter(int index)
     {
-        allTypes = false;
-        ClearActiveButtons();
-        foreach (var cube in filterLists[type])
-        {
-            CreateCUBEButton(cube);
-        }
-        filter.text = type.ToString();
-        StartCoroutine(UpdateScrollView());
+        selections[this.index].SetActive(false);
 
-        if ((int)filterType == Enum.GetNames(typeof(CUBE.Types)).Length - 1)
+        this.index = Mathf.Clamp(index, 0, Items.Length-1);
+
+        selections[this.index].SetActive(true);
+        filterLabel.text = Items[this.index];
+        filterLeft.isEnabled = this.index != 0;
+        filterRight.isEnabled = this.index != Items.Length - 1;
+    }
+
+
+    /// <summary>
+    /// Creates all buttons for buyable items and catagorizes them.
+    /// </summary>
+    private void CreateItemButtons()
+    {
+        itemButtons = new ScrollviewButton[Items.Length][];
+        CUBEInfo[] cubeInfo;
+
+        // system
+        cubeInfo = CUBE.allCUBES.Where(c => c.type == CUBE.Types.System).ToArray();
+        itemButtons[0] = new ScrollviewButton[cubeInfo.Length];
+        for (int i = 0; i < cubeInfo.Length; i++)
         {
-            filterRight.isEnabled = false;
+            ScrollviewButton button = (Instantiate(Button_Prefab) as GameObject).GetComponent(typeof(ScrollviewButton)) as ScrollviewButton;
+            button.GetComponent<ScrollviewButton>().Initialize(cubeInfo[i].name, cubeInfo[i].name + "\nx " + inventory[cubeInfo[i].ID], cubeInfo[i].ID.ToString(), grids[0].transform, scrollViews[0]);
+            button.ActivateEvent += OnCUBEButtonSelected;
+            itemButtons[0][i] = button;
+        }
+        // hull
+        cubeInfo = CUBE.allCUBES.Where(c => c.type == CUBE.Types.Hull).ToArray();
+        itemButtons[1] = new ScrollviewButton[cubeInfo.Length];
+        for (int i = 0; i < cubeInfo.Length; i++)
+        {
+            ScrollviewButton button = (Instantiate(Button_Prefab) as GameObject).GetComponent(typeof(ScrollviewButton)) as ScrollviewButton;
+            button.GetComponent<ScrollviewButton>().Initialize(cubeInfo[i].name, cubeInfo[i].name + "\nx " + inventory[cubeInfo[i].ID], cubeInfo[i].ID.ToString(), grids[1].transform, scrollViews[1]);
+            button.ActivateEvent += OnCUBEButtonSelected;
+            itemButtons[1][i] = button;
+        }
+        // weapon
+        cubeInfo = CUBE.allCUBES.Where(c => c.type == CUBE.Types.Weapon).ToArray();
+        itemButtons[2] = new ScrollviewButton[cubeInfo.Length];
+        for (int i = 0; i < cubeInfo.Length; i++)
+        {
+            ScrollviewButton button = (Instantiate(Button_Prefab) as GameObject).GetComponent(typeof(ScrollviewButton)) as ScrollviewButton;
+            button.GetComponent<ScrollviewButton>().Initialize(cubeInfo[i].name, cubeInfo[i].name + "\nx " + inventory[cubeInfo[i].ID], cubeInfo[i].ID.ToString(), grids[2].transform, scrollViews[2]);
+            button.ActivateEvent += OnCUBEButtonSelected;
+            itemButtons[2][i] = button;
+        }
+        // augmentation
+        cubeInfo = CUBE.allCUBES.Where(c => c.type == CUBE.Types.Augmentation).ToArray();
+        itemButtons[3] = new ScrollviewButton[cubeInfo.Length];
+        for (int i = 0; i < cubeInfo.Length; i++)
+        {
+            ScrollviewButton button = (Instantiate(Button_Prefab) as GameObject).GetComponent(typeof(ScrollviewButton)) as ScrollviewButton;
+            button.GetComponent<ScrollviewButton>().Initialize(cubeInfo[i].name, cubeInfo[i].name + "\nx " + inventory[cubeInfo[i].ID], cubeInfo[i].ID.ToString(), grids[3].transform, scrollViews[3]);
+            button.ActivateEvent += OnCUBEButtonSelected;
+            itemButtons[3][i] = button;
+        }
+        // core
+        itemButtons[4] = new ScrollviewButton[BuildStats.CoreCapacities.Length];
+        for (int i = 0; i < itemButtons[4].Length; i++)
+        {
+            ScrollviewButton button = (Instantiate(Button_Prefab) as GameObject).GetComponent(typeof(ScrollviewButton)) as ScrollviewButton;
+            button.GetComponent<ScrollviewButton>().Initialize("Core " + BuildStats.CoreCapacities[i], "Core " + BuildStats.CoreCapacities[i], BuildStats.CoreCapacities[i].ToString(), grids[4].transform, scrollViews[4]);
+            button.ActivateEvent += OnExpansionButtonSelected;
+            itemButtons[4][i] = button;
+        }
+        // weapon expansion
+        itemButtons[5] = new ScrollviewButton[BuildStats.WeaponExpansions.Length];
+        for (int i = 0; i < itemButtons[5].Length; i++)
+        {
+            ScrollviewButton button = (Instantiate(Button_Prefab) as GameObject).GetComponent(typeof(ScrollviewButton)) as ScrollviewButton;
+            button.GetComponent<ScrollviewButton>().Initialize("Core " + BuildStats.WeaponExpansions[i], "W Expansion " + BuildStats.WeaponExpansions[i], BuildStats.WeaponExpansions[i].ToString(), grids[5].transform, scrollViews[5]);
+            button.ActivateEvent += OnExpansionButtonSelected;
+            itemButtons[5][i] = button;
+        }
+        // augmentation expansion
+        itemButtons[6] = new ScrollviewButton[BuildStats.AugmentationExpansions.Length];
+        for (int i = 0; i < itemButtons[6].Length; i++)
+        {
+            ScrollviewButton button = (Instantiate(Button_Prefab) as GameObject).GetComponent(typeof(ScrollviewButton)) as ScrollviewButton;
+            button.GetComponent<ScrollviewButton>().Initialize("Core " + BuildStats.AugmentationExpansions[i], "A Expansion " + BuildStats.AugmentationExpansions[i], BuildStats.AugmentationExpansions[i].ToString(), grids[6].transform, scrollViews[6]);
+            button.ActivateEvent += OnExpansionButtonSelected;
+            itemButtons[6][i] = button;
         }
     }
 
 
-    private void AllFilters()
+    private IEnumerator InitScrollViews()
     {
-        allTypes = true;
-        filterLeft.isEnabled = false;
-        filterRight.isEnabled = true;
-
-        ClearActiveButtons();
-        foreach (var cube in CUBE.allCUBES)
+        for (int i = 0; i < selections.Length; i++)
         {
-            CreateCUBEButton(cube);
+            StartCoroutine(Utility.UpdateScrollView((UIGrid)grids[i].GetComponent(typeof(UIGrid)), scrollBars[i], scrollViews[i]));
         }
-        filter.text = "All CUBEs";
-        StartCoroutine(UpdateScrollView());
-    }
 
-
-    private IEnumerator UpdateScrollView()
-    {
         yield return new WaitForEndOfFrame();
-        Grid.GetComponent<UIGrid>().Reposition();
-        scrollBar.value = 0f;
-        scrollBar.ForceUpdate();
-    }
 
-
-    private void CreateCUBEButton(CUBEInfo info)
-    {
-        ActivateButton button = (Instantiate(Button_Prefab) as GameObject).GetComponent <ActivateButton>();
-        button.transform.parent = Grid;
-        button.transform.localScale = Vector3.one;
-        button.name = info.name;
-        button.GetComponent<CUBEButton>().label.text = button.name + " x " + inventory[info.ID];
-        button.value = info.ID.ToString();
-        button.ActivateEvent += OnIndexChanged;
-        activeButtons[info.ID] = button;
-    }
-
-
-    private void DeleteCUBEButton(int i)
-    {
-        activeButtons[i].ActivateEvent -= OnIndexChanged;
-        Destroy(activeButtons[i].gameObject);
-    }
-
-
-    private void ClearActiveButtons()
-    {
-        foreach (var button in activeButtons)
+        for (int i = 1; i < selections.Length; i++)
         {
-            if (button == null) continue;
-            button.ActivateEvent -= OnIndexChanged;
-            Destroy(button.gameObject);
+            selections[i].SetActive(false);
         }
     }
 
@@ -206,52 +280,24 @@ public class StoreManager : MonoBehaviour
     {
         if (!args.isPressed) return;
 
-        // left
-        if (args.value == "left")
-        {
-            filterRight.isEnabled = true;
-            // all
-            if ((int)filterType == 0)
-            {
-                AllFilters();
-            }
-            else
-            {
-                filterType = (CUBE.Types)((int)filterType - 1);
-                ChangeFilter(filterType);
-            }
-        }
-        // right
-        else
-        {
-            filterLeft.isEnabled = true;
-            // all
-            if (allTypes)
-            {
-                ChangeFilter(filterType);
-            }
-            else
-            {
-                filterType = (CUBE.Types)((int)filterType + 1);
-                ChangeFilter(filterType);
-            }
-        }
+        ChangeFilter(index + int.Parse(args.value));
     }
 
 
-    private void OnIndexChanged(object sender, ActivateButtonArgs args)
+    private void OnCUBEButtonSelected(object sender, ActivateButtonArgs args)
     {
         if (!args.isPressed) return;
 
         // selected CUBE
-        index = int.Parse(args.value);
-        CUBEInfo info = CUBE.allCUBES[index];
+        int selected = int.Parse(args.value);
+        CUBEInfo info = CUBE.allCUBES[selected];
+        if (info.price == 0) return;
         selectedCUBE.text = info.name;
-        count.text = "You have: " + inventory[index];
+        count.text = "x" + inventory[selected];
 
         // prices
-        sellPrice.text = "+$" + (info.price / 2f).ToString();
-        buyPrice.text = "-$" + info.price.ToString();
+        sellPrice.text = "+$" + (info.price / 2f);
+        buyPrice.text = "-$" + info.price;
 
         // enable buttons
         UpdateShopButtons();
@@ -263,11 +309,17 @@ public class StoreManager : MonoBehaviour
 
         // showcase
         if (showcaseCUBE != null) Destroy(showcaseCUBE.gameObject);
-        showcaseCUBE = ((GameObject)Instantiate(GameResources.GetCUBE(index).gameObject)).transform;
+        showcaseCUBE = ((GameObject)Instantiate(GameResources.GetCUBE(selected).gameObject)).transform;
         showcaseCUBE.parent = showcase;
         showcaseCUBE.localScale = Vector3.one;
         showcaseCUBE.localRotation = Quaternion.identity;
         showcaseCUBE.localPosition = -showcaseCUBE.GetComponent<MeshFilter>().mesh.bounds.center;
+    }
+
+
+    private void OnExpansionButtonSelected(object sender, ActivateButtonArgs args)
+    {
+
     }
 
     #endregion

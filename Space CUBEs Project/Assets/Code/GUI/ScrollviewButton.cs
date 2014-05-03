@@ -17,11 +17,12 @@ public class ScrollviewButton : ActivateButton
 
     #region Public Methods
 
-    public void Initialize(string name, string label, string value, Transform parent, UIScrollView scrollView = null)
+    public void Initialize(string name, string label, string value, Transform parent, UIScrollView scrollView)
     {
         this.name = name;
         this.label.text = label;
         this.value = value;
+        dragScrollView.scrollView = scrollView;
         transform.parent = parent;
         transform.localPosition = Vector3.zero;
         transform.localScale = Vector3.one;

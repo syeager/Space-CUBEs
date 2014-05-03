@@ -25,12 +25,13 @@ public class ActivateButtonEditor : UIButtonEditor
         if (EditorGUI.EndChangeCheck())
         {
             button.isEnabled = toggled;
-            button.UpdateColor(toggled, true);
+            //button.UpdateColor(toggled, true);
         }
 
         base.OnInspectorGUI();
 
         EditorGUILayout.PropertyField(serializedObject.FindProperty("value"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("label"));
 
         serializedObject.ApplyModifiedProperties();
     }

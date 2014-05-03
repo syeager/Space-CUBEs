@@ -10,12 +10,14 @@ public class VampireDrive : Augmentation
 {
     #region Public Fields
 
+    /// <summary>Percentage of health retained from the enemy killed.</summary>
     public float absorbtion;
 
     #endregion
 
     #region Private Fields
 
+    /// <summary>Player's health component.</summary>
     private ShieldHealth health;
 
     #endregion

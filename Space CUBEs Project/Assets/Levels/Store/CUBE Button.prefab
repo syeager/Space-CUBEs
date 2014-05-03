@@ -42,7 +42,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -208, y: -35, z: 0}
+  m_LocalPosition: {x: -42, y: 112, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400002}
@@ -68,7 +68,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 400, y: 80, z: 0}
+  m_Size: {x: 252, y: 100, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &11400000
 MonoBehaviour:
@@ -99,10 +99,10 @@ MonoBehaviour:
     absolute: 20
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 400
-  mHeight: 80
+  mWidth: 252
+  mHeight: 100
   mDepth: 0
-  autoResizeBoxCollider: 1
+  autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   mAtlas: {fileID: 11400000, guid: 603488284951f9c4cbaf11f175695661, type: 2}
   mSpriteName: Button
@@ -119,7 +119,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9f55dda850a055419f1ce30f53a6b8e, type: 3}
+  m_Script: {fileID: 11500000, guid: dc2b865d6781bc34eb75e976013dcb35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   tweenTarget: {fileID: 100000}
@@ -129,8 +129,9 @@ MonoBehaviour:
   disabledColor: {r: .5, g: .5, b: .5, a: 1}
   onClick: []
   activatedColor: {r: 0, g: 0, b: 0, a: 0}
-  label: {fileID: 0}
-  value: 1
+  label: {fileID: 11400004}
+  value: 
+  dragScrollView: {fileID: 11400006}
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -160,7 +161,7 @@ MonoBehaviour:
     absolute: 0
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 55
+  mWidth: 54
   mHeight: 20
   mDepth: 1
   autoResizeBoxCollider: 0
@@ -170,7 +171,7 @@ MonoBehaviour:
   mFont: {fileID: 0}
   mText: CUBE
   mFontSize: 20
-  mFontStyle: 1
+  mFontStyle: 0
   mEncoding: 0
   mMaxLineCount: 0
   mEffectStyle: 2
@@ -197,10 +198,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 215921de54f4ae34b87acf75751eae74, type: 3}
+  m_Script: {fileID: 11500000, guid: f02842fa4878db54f9587ff4de7d9f2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  label: {fileID: 11400004}
+  scrollView: {fileID: 0}
+  draggablePanel: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

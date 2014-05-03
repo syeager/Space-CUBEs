@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2013 Tasharen Entertainment
+// Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 #if UNITY_FLASH || UNITY_WP8 || UNITY_METRO
@@ -24,13 +24,6 @@ public class UIPanel : UIRect
 
 	static public BetterList<UIPanel> list = new BetterList<UIPanel>();
 
-	public enum DebugInfo
-	{
-		None,
-		Gizmos,
-		Geometry,
-	}
-
 	public enum RenderQueue
 	{
 		Automatic,
@@ -38,13 +31,13 @@ public class UIPanel : UIRect
 		Explicit,
 	}
 
-	public delegate void OnChangeDelegate ();
+	public delegate void OnGeometryUpdated ();
 
 	/// <summary>
-	/// Notification triggered when something changes within the panel.
+	/// Notification triggered when the panel's geometry get rebuilt. It's mainly here for debugging purposes.
 	/// </summary>
 
-	public OnChangeDelegate onChange;
+	public OnGeometryUpdated onGeometryUpdated;
 
 	/// <summary>
 	/// Whether this panel will show up in the panel tool (set this to 'false' for dynamically created temporary panels)
@@ -79,6 +72,13 @@ public class UIPanel : UIRect
 	public bool alwaysOnScreen = false;
 
 	/// <summary>
+	/// By default, non-clipped panels use the camera's bounds, and the panel's position has no effect.
+	/// If you want the panel's position to actually be used with anchors, set this field to 'true'.
+	/// </summary>
+
+	public bool anchorOffset = false;
+
+	/// <summary>
 	/// By default all panels manage render queues of their draw calls themselves by incrementing them
 	/// so that the geometry is drawn in the proper order. You can alter this behaviour.
 	/// </summary>
@@ -93,10 +93,40 @@ public class UIPanel : UIRect
 	public int startingRenderQueue = 3000;
 
 	/// <summary>
+	/// List of widgets managed by this panel. Do not attempt to modify this list yourself.
+	/// </summary>
+
+	[System.NonSerialized]
+	public BetterList<UIWidget> widgets = new BetterList<UIWidget>();
+
+	/// <summary>
+	/// List of draw calls created by this panel. Do not attempt to modify this list yourself.
+	/// </summary>
+
+	[System.NonSerialized]
+	public BetterList<UIDrawCall> drawCalls = new BetterList<UIDrawCall>();
+
+	/// <summary>
 	/// Matrix that will transform the specified world coordinates to relative-to-panel coordinates.
 	/// </summary>
 
-	[HideInInspector] public Matrix4x4 worldToLocal = Matrix4x4.identity;
+	[System.NonSerialized]
+	public Matrix4x4 worldToLocal = Matrix4x4.identity;
+
+	/// <summary>
+	/// Cached clip range passed to the draw call's shader.
+	/// </summary>
+
+	[System.NonSerialized]
+	public Vector4 drawCallClipRange = new Vector4(0f, 0f, 1f, 1f);
+
+	public delegate void OnClippingMoved (UIPanel panel);
+
+	/// <summary>
+	/// Event callback that's triggered when the panel's clip region gets moved.
+	/// </summary>
+
+	public OnClippingMoved onClipMove;
 
 	// Panel's alpha (affects the alpha of all widgets)
 	[HideInInspector][SerializeField] float mAlpha = 1f;
@@ -106,29 +136,28 @@ public class UIPanel : UIRect
 	[HideInInspector][SerializeField] Vector4 mClipRange = new Vector4(0f, 0f, 300f, 200f);
 	[HideInInspector][SerializeField] Vector2 mClipSoftness = new Vector2(4f, 4f);
 	[HideInInspector][SerializeField] int mDepth = 0;
-
+#if !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_1 && !UNITY_4_2
+	[HideInInspector][SerializeField] int mSortingOrder = 0;
+#endif
 	// Whether a full rebuild of geometry buffers is required
-	static bool mRebuild = false;
-
-	// Cached in order to reduce memory allocations
-	static BetterList<Vector3> mVerts = new BetterList<Vector3>();
-	static BetterList<Vector3> mNorms = new BetterList<Vector3>();
-	static BetterList<Vector4> mTans = new BetterList<Vector4>();
-	static BetterList<Vector2> mUvs = new BetterList<Vector2>();
-	static BetterList<Color32> mCols = new BetterList<Color32>();
+	bool mRebuild = false;
+	bool mResized = false;
 
 	Camera mCam;
+	[SerializeField] Vector2 mClipOffset = Vector2.zero;
+
 	float mCullTime = 0f;
 	float mUpdateTime = 0f;
 	int mMatrixFrame = -1;
+	int mAlphaFrameID = 0;
 	int mLayer = -1;
-	Vector2 mClipOffset = Vector2.zero;
 
 	// Values used for visibility checks
 	static float[] mTemp = new float[4];
 	Vector2 mMin = Vector2.zero;
 	Vector2 mMax = Vector2.zero;
 	bool mHalfPixelOffset = false;
+	bool mSortWidgets = false;
 
 	/// <summary>
 	/// Helper property that returns the first unused depth value.
@@ -146,6 +175,12 @@ public class UIPanel : UIRect
 	}
 
 	/// <summary>
+	/// Whether the rectangle can be anchored.
+	/// </summary>
+
+	public override bool canBeAnchored { get { return mClipping != UIDrawCall.Clipping.None; } }
+
+	/// <summary>
 	/// Panel's alpha affects everything drawn by the panel.
 	/// </summary>
 
@@ -161,22 +196,11 @@ public class UIPanel : UIRect
 
 			if (mAlpha != val)
 			{
+				mAlphaFrameID = -1;
+				mResized = true;
 				mAlpha = val;
 				SetDirty();
 			}
-		}
-	}
-
-	/// <summary>
-	/// Final alpha, taking all parent panels into consideration.
-	/// </summary>
-
-	public override float finalAlpha
-	{
-		get
-		{
-			UIRect pt = parent;
-			return (pt != null) ? pt.finalAlpha * mAlpha : mAlpha;
 		}
 	}
 
@@ -195,20 +219,38 @@ public class UIPanel : UIRect
 			if (mDepth != value)
 			{
 				mDepth = value;
-				mRebuild = true;
-
-				UIDrawCall.SetDirty();
-
-				for (int i = 0; i < UIWidget.list.size; ++i)
-					UIWidget.list[i].Invalidate(false);
 #if UNITY_EDITOR
-				UnityEditor.EditorUtility.SetDirty(this);
+				NGUITools.SetDirty(this);
 #endif
 				list.Sort(CompareFunc);
-				UIWidget.list.Sort(UIWidget.CompareFunc);
 			}
 		}
 	}
+
+#if !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_1 && !UNITY_4_2
+	/// <summary>
+	/// Sorting order value for the panel's draw calls, to be used with Unity's 2D system.
+	/// </summary>
+
+	public int sortingOrder
+	{
+		get
+		{
+			return mSortingOrder;
+		}
+		set
+		{
+			if (mSortingOrder != value)
+			{
+				mSortingOrder = value;
+#if UNITY_EDITOR
+				NGUITools.SetDirty(this);
+#endif
+				UpdateDrawCalls();
+			}
+		}
+	}
+#endif
 
 	/// <summary>
 	/// Function that can be used to depth-sort panels.
@@ -268,12 +310,6 @@ public class UIPanel : UIRect
 	}
 
 	/// <summary>
-	/// Number of draw calls produced by this panel.
-	/// </summary>
-
-	public int drawCallCount { get { return UIDrawCall.Count(this); } }
-
-	/// <summary>
 	/// Clipping method used by all draw calls.
 	/// </summary>
 
@@ -287,14 +323,58 @@ public class UIPanel : UIRect
 		{
 			if (mClipping != value)
 			{
+				mResized = true;
 				mClipping = value;
 				mMatrixFrame = -1;
 #if UNITY_EDITOR
-				if (!Application.isPlaying) UIDrawCall.Update(this);
+				if (!Application.isPlaying) UpdateDrawCalls();
 #endif
 			}
 		}
 	}
+
+	UIPanel mParentPanel = null;
+
+	/// <summary>
+	/// Reference to the parent panel, if any.
+	/// </summary>
+
+	public UIPanel parentPanel { get { return mParentPanel; } }
+
+	/// <summary>
+	/// Number of times the panel's contents get clipped.
+	/// </summary>
+
+	public int clipCount
+	{
+		get
+		{
+			int count = 0;
+			UIPanel p = this;
+
+			while (p != null)
+			{
+				if (p.mClipping == UIDrawCall.Clipping.SoftClip) ++count;
+				p = p.mParentPanel;
+			}
+			return count;
+		}
+	}
+
+	/// <summary>
+	/// Whether the panel will actually perform clipping of children.
+	/// </summary>
+
+	public bool hasClipping { get { return mClipping == UIDrawCall.Clipping.SoftClip; } }
+
+	/// <summary>
+	/// Whether the panel will actually perform clipping of children.
+	/// </summary>
+
+	public bool hasCumulativeClipping { get { return clipCount != 0; } }
+
+	[System.Obsolete("Use 'hasClipping' or 'hasCumulativeClipping' instead")]
+	public bool clipsChildren { get { return hasCumulativeClipping; } }
 
 	/// <summary>
 	/// Clipping area offset used to make it possible to move clipped panels (scroll views) efficiently.
@@ -313,11 +393,15 @@ public class UIPanel : UIRect
 			if (Mathf.Abs(mClipOffset.x - value.x) > 0.001f ||
 				Mathf.Abs(mClipOffset.y - value.y) > 0.001f)
 			{
+				mResized = true;
 				mCullTime = (mCullTime == 0f) ? 0.001f : RealTime.time + 0.15f;
 				mClipOffset = value;
 				mMatrixFrame = -1;
+
+				// Call the event delegate
+				if (onClipMove != null) onClipMove(this);
 #if UNITY_EDITOR
-				if (!Application.isPlaying) UIDrawCall.Update(this);
+				if (!Application.isPlaying) UpdateDrawCalls();
 #endif
 			}
 		}
@@ -359,18 +443,23 @@ public class UIPanel : UIRect
 				Mathf.Abs(mClipRange.z - value.z) > 0.001f ||
 				Mathf.Abs(mClipRange.w - value.w) > 0.001f)
 			{
+				mResized = true;
 				mCullTime = (mCullTime == 0f) ? 0.001f : RealTime.time + 0.15f;
 				mClipRange = value;
 				mMatrixFrame = -1;
+
+				UIScrollView sv = GetComponent<UIScrollView>();
+				if (sv != null) sv.UpdatePosition();
+				if (onClipMove != null) onClipMove(this);
 #if UNITY_EDITOR
-				if (!Application.isPlaying) UIDrawCall.Update(this);
+				if (!Application.isPlaying) UpdateDrawCalls();
 #endif
 			}
 		}
 	}
 
 	/// <summary>
-	/// Final clipping region after the offset has been taken into consideration.
+	/// Final clipping region after the offset has been taken into consideration. XY = center, ZW = size.
 	/// </summary>
 
 	public Vector4 finalClipRegion
@@ -403,7 +492,7 @@ public class UIPanel : UIRect
 			{
 				mClipSoftness = value;
 #if UNITY_EDITOR
-				if (!Application.isPlaying) UIDrawCall.Update(this);
+				if (!Application.isPlaying) UpdateDrawCalls();
 #endif
 			}
 		}
@@ -519,45 +608,101 @@ public class UIPanel : UIRect
 
 	public override Vector3[] GetSides (Transform relativeTo)
 	{
-		Vector2 size = GetViewSize();
-
-		Vector2 cr = (mClipping != UIDrawCall.Clipping.None) ? (Vector2)mClipRange + mClipOffset : Vector2.zero;
-		float x0 = cr.x - 0.5f * size.x;
-		float y0 = cr.y - 0.5f * size.y;
-		float x1 = x0 + size.x;
-		float y1 = y0 + size.y;
-		float cx = (x0 + x1) * 0.5f;
-		float cy = (y0 + y1) * 0.5f;
-
-		Transform trans = cachedTransform;
-		Matrix4x4 mat = trans.localToWorldMatrix;
-		
-		// Non-clipped panels use the screen's dimensions, so they need to ignore the position
-		if (mClipping == UIDrawCall.Clipping.None)
+		if (mClipping != UIDrawCall.Clipping.None || anchorOffset)
 		{
-			mat[12] = 0f;
-			mat[13] = 0f;
-			mat[14] = 0f;
+			Vector2 size = GetViewSize();
+			Vector2 cr = (mClipping != UIDrawCall.Clipping.None) ? (Vector2)mClipRange + mClipOffset : Vector2.zero;
+
+			float x0 = cr.x - 0.5f * size.x;
+			float y0 = cr.y - 0.5f * size.y;
+			float x1 = x0 + size.x;
+			float y1 = y0 + size.y;
+			float cx = (x0 + x1) * 0.5f;
+			float cy = (y0 + y1) * 0.5f;
+
+			Matrix4x4 mat = cachedTransform.localToWorldMatrix;
+
+			mCorners[0] = mat.MultiplyPoint3x4(new Vector3(x0, cy));
+			mCorners[1] = mat.MultiplyPoint3x4(new Vector3(cx, y1));
+			mCorners[2] = mat.MultiplyPoint3x4(new Vector3(x1, cy));
+			mCorners[3] = mat.MultiplyPoint3x4(new Vector3(cx, y0));
+
+			if (relativeTo != null)
+			{
+				for (int i = 0; i < 4; ++i)
+					mCorners[i] = relativeTo.InverseTransformPoint(mCorners[i]);
+			}
+			return mCorners;
 		}
+		return base.GetSides(relativeTo);
+	}
 
-		mCorners[0] = mat.MultiplyPoint3x4(new Vector3(x0, cy));
-		mCorners[1] = mat.MultiplyPoint3x4(new Vector3(cx, y1));
-		mCorners[2] = mat.MultiplyPoint3x4(new Vector3(x1, cy));
-		mCorners[3] = mat.MultiplyPoint3x4(new Vector3(cx, y0));
+	/// <summary>
+	/// Invalidating the panel should reset its alpha.
+	/// </summary>
 
-		if (relativeTo != null)
+	public override void Invalidate (bool includeChildren)
+	{
+		mAlphaFrameID = -1;
+		base.Invalidate(includeChildren);
+	}
+
+	/// <summary>
+	/// Widget's final alpha, after taking the panel's alpha into account.
+	/// </summary>
+
+	public override float CalculateFinalAlpha (int frameID)
+	{
+		if (mAlphaFrameID != frameID)
 		{
-			for (int i = 0; i < 4; ++i)
-				mCorners[i] = relativeTo.InverseTransformPoint(mCorners[i]);
+			mAlphaFrameID = frameID;
+			UIRect pt = parent;
+			finalAlpha = (parent != null) ? pt.CalculateFinalAlpha(frameID) * mAlpha : mAlpha;
 		}
-		return mCorners;
+		return finalAlpha;
+	}
+
+	/// <summary>
+	/// Set the panel's rectangle.
+	/// </summary>
+
+	public override void SetRect (float x, float y, float width, float height)
+	{
+		int finalWidth = Mathf.FloorToInt(width + 0.5f);
+		int finalHeight = Mathf.FloorToInt(height + 0.5f);
+
+		finalWidth = ((finalWidth >> 1) << 1);
+		finalHeight = ((finalHeight >> 1) << 1);
+
+		Transform t = cachedTransform;
+		Vector3 pos = t.localPosition;
+		pos.x = Mathf.Floor(x + 0.5f);
+		pos.y = Mathf.Floor(y + 0.5f);
+
+		if (finalWidth < 2) finalWidth = 2;
+		if (finalHeight < 2) finalHeight = 2;
+
+		baseClipRegion = new Vector4(pos.x, pos.y, finalWidth, finalHeight);
+
+		if (isAnchored)
+		{
+			t = t.parent;
+
+			if (leftAnchor.target) leftAnchor.SetHorizontal(t, x);
+			if (rightAnchor.target) rightAnchor.SetHorizontal(t, x + width);
+			if (bottomAnchor.target) bottomAnchor.SetVertical(t, y);
+			if (topAnchor.target) topAnchor.SetVertical(t, y + height);
+#if UNITY_EDITOR
+			NGUITools.SetDirty(this);
+#endif
+		}
 	}
 
 	/// <summary>
 	/// Returns whether the specified rectangle is visible by the panel. The coordinates must be in world space.
 	/// </summary>
 
-	bool IsVisible (Vector3 a, Vector3 b, Vector3 c, Vector3 d)
+	public bool IsVisible (Vector3 a, Vector3 b, Vector3 c, Vector3 d)
 	{
 		UpdateTransformMatrix();
 
@@ -587,6 +732,7 @@ public class UIPanel : UIRect
 		if (maxY < mMin.y) return false;
 		if (minX > mMax.x) return false;
 		if (minY > mMax.y) return false;
+
 		return true;
 	}
 
@@ -597,7 +743,9 @@ public class UIPanel : UIRect
 	public bool IsVisible (Vector3 worldPos)
 	{
 		if (mAlpha < 0.001f) return false;
-		if (mClipping == UIDrawCall.Clipping.None) return true;
+		if (mClipping == UIDrawCall.Clipping.None ||
+			mClipping == UIDrawCall.Clipping.ConstrainButDontClip) return true;
+
 		UpdateTransformMatrix();
 
 		Vector3 pos = worldToLocal.MultiplyPoint3x4(worldPos);
@@ -614,26 +762,50 @@ public class UIPanel : UIRect
 
 	public bool IsVisible (UIWidget w)
 	{
+		if ((mClipping == UIDrawCall.Clipping.None || mClipping == UIDrawCall.Clipping.ConstrainButDontClip) && !w.hideIfOffScreen)
+		{
+			if (mParentPanel == null || clipCount == 0) return true;
+		}
+
+		UIPanel p = this;
 		Vector3[] corners = w.worldCorners;
-		return IsVisible(corners[0], corners[1], corners[2], corners[3]);
+
+		while (p != null)
+		{
+			if (!IsVisible(corners[0], corners[1], corners[2], corners[3])) return false;
+			p = p.mParentPanel;
+		}
+		return true;
+	}
+
+	/// <summary>
+	/// Whether the specified widget is going to be affected by this panel in any way.
+	/// </summary>
+
+	public bool Affects (UIWidget w)
+	{
+		if (w == null) return false;
+
+		UIPanel expected = w.panel;
+		if (expected == null) return false;
+
+		UIPanel p = this;
+
+		while (p != null)
+		{
+			if (p == expected) return true;
+			if (!p.hasCumulativeClipping) return false;
+			p = p.mParentPanel;
+		}
+		return false;
 	}
 
 	/// <summary>
 	/// Causes all draw calls to be re-created on the next update.
 	/// </summary>
 
-	static public void RebuildAllDrawCalls (bool sort) { mRebuild = true; }
-
-#if UNITY_EDITOR
-	
-	/// <summary>
-	/// Context menu option to force-refresh the panel, just in case.
-	/// </summary>
-
 	[ContextMenu("Force Refresh")]
-	void ForceRefresh () { mRebuild = true; }
-
-#endif
+	public void RebuildAllDrawCalls () { mRebuild = true; }
 
 	/// <summary>
 	/// Invalidate the panel's draw calls, forcing them to be rebuilt on the next update.
@@ -642,7 +814,8 @@ public class UIPanel : UIRect
 
 	public void SetDirty ()
 	{
-		UIDrawCall.SetDirty(this);
+		for (int i = 0; i < drawCalls.size; ++i)
+			drawCalls.buffer[i].isDirty = true;
 		Invalidate(true);
 	}
 
@@ -665,6 +838,28 @@ public class UIPanel : UIRect
 	}
 
 	/// <summary>
+	/// Remember the parent panel, if any.
+	/// </summary>
+
+	protected override void OnEnable ()
+	{
+		base.OnEnable();
+		Transform parent = cachedTransform.parent;
+		mParentPanel = (parent != null) ? NGUITools.FindInParents<UIPanel>(parent.gameObject) : null;
+	}
+
+	/// <summary>
+	/// Find the parent panel, if we have one.
+	/// </summary>
+
+	public override void ParentHasChanged ()
+	{
+		base.ParentHasChanged();
+		Transform parent = cachedTransform.parent;
+		mParentPanel = (parent != null) ? NGUITools.FindInParents<UIPanel>(parent.gameObject) : null;
+	}
+
+	/// <summary>
 	/// Layer is used to ensure that if it changes, widgets get moved as well.
 	/// </summary>
 
@@ -679,9 +874,9 @@ public class UIPanel : UIRect
 	/// Mark all widgets as having been changed so the draw calls get re-created.
 	/// </summary>
 
-	protected override void OnEnable ()
+	protected override void OnInit ()
 	{
-		base.OnEnable();
+		base.OnInit();
 
 		// Apparently having a rigidbody helps
 		if (rigidbody == null)
@@ -692,6 +887,9 @@ public class UIPanel : UIRect
 		}
 
 		mRebuild = true;
+		mAlphaFrameID = -1;
+		mMatrixFrame = -1;
+
 		list.Add(this);
 		list.Sort(CompareFunc);
 	}
@@ -702,9 +900,23 @@ public class UIPanel : UIRect
 
 	protected override void OnDisable ()
 	{
-		UIDrawCall.Destroy(this);
+		for (int i = 0; i < drawCalls.size; ++i)
+		{
+			UIDrawCall dc = drawCalls.buffer[i];
+			if (dc != null) UIDrawCall.Destroy(dc);
+		}
+		
+		drawCalls.Clear();
 		list.Remove(this);
-		if (list.size == 0) UIDrawCall.ReleaseAll();
+
+		mAlphaFrameID = -1;
+		mMatrixFrame = -1;
+		
+		if (list.size == 0)
+		{
+			UIDrawCall.ReleaseAll();
+			mUpdateFrame = -1;
+		}
 		base.OnDisable();
 	}
 
@@ -755,9 +967,10 @@ public class UIPanel : UIRect
 			leftAnchor.target == rightAnchor.target &&
 			leftAnchor.target == topAnchor.target)
 		{
-			if (leftAnchor.rect != null)
+			Vector3[] sides = leftAnchor.GetSides(parent);
+
+			if (sides != null)
 			{
-				Vector3[] sides = leftAnchor.rect.GetSides(parent);
 				lt = NGUIMath.Lerp(sides[0].x, sides[2].x, leftAnchor.relative) + leftAnchor.absolute;
 				rt = NGUIMath.Lerp(sides[0].x, sides[2].x, rightAnchor.relative) + rightAnchor.absolute;
 				bt = NGUIMath.Lerp(sides[3].y, sides[1].y, bottomAnchor.relative) + bottomAnchor.absolute;
@@ -778,9 +991,10 @@ public class UIPanel : UIRect
 			// Left anchor point
 			if (leftAnchor.target)
 			{
-				if (leftAnchor.rect != null)
+				Vector3[] sides = leftAnchor.GetSides(parent);
+
+				if (sides != null)
 				{
-					Vector3[] sides = leftAnchor.rect.GetSides(parent);
 					lt = NGUIMath.Lerp(sides[0].x, sides[2].x, leftAnchor.relative) + leftAnchor.absolute;
 				}
 				else
@@ -793,9 +1007,10 @@ public class UIPanel : UIRect
 			// Right anchor point
 			if (rightAnchor.target)
 			{
-				if (rightAnchor.rect != null)
+				Vector3[] sides = rightAnchor.GetSides(parent);
+
+				if (sides != null)
 				{
-					Vector3[] sides = rightAnchor.rect.GetSides(parent);
 					rt = NGUIMath.Lerp(sides[0].x, sides[2].x, rightAnchor.relative) + rightAnchor.absolute;
 				}
 				else
@@ -808,9 +1023,10 @@ public class UIPanel : UIRect
 			// Bottom anchor point
 			if (bottomAnchor.target)
 			{
-				if (bottomAnchor.rect != null)
+				Vector3[] sides = bottomAnchor.GetSides(parent);
+
+				if (sides != null)
 				{
-					Vector3[] sides = bottomAnchor.rect.GetSides(parent);
 					bt = NGUIMath.Lerp(sides[3].y, sides[1].y, bottomAnchor.relative) + bottomAnchor.absolute;
 				}
 				else
@@ -823,9 +1039,10 @@ public class UIPanel : UIRect
 			// Top anchor point
 			if (topAnchor.target)
 			{
-				if (topAnchor.rect != null)
+				Vector3[] sides = topAnchor.GetSides(parent);
+
+				if (sides != null)
 				{
-					Vector3[] sides = topAnchor.rect.GetSides(parent);
 					tt = NGUIMath.Lerp(sides[3].y, sides[1].y, topAnchor.relative) + topAnchor.absolute;
 				}
 				else
@@ -858,49 +1075,284 @@ public class UIPanel : UIRect
 		baseClipRegion = new Vector4(newX, newY, w, h);
 	}
 
+	static int mUpdateFrame = -1;
+
 	/// <summary>
-	/// Main update function
+	/// Update all panels and draw calls.
 	/// </summary>
 
 	void LateUpdate ()
 	{
-		// Only the very first panel should be doing the update logic
-		if (list[0] != this) return;
-
-		// Update all panels
-		for (int i = 0; i < list.size; ++i)
+		if (mUpdateFrame != Time.frameCount)
 		{
-			UIPanel panel = list[i];
-			panel.mUpdateTime = RealTime.time;
-			panel.UpdateTransformMatrix();
-			panel.UpdateLayers();
-			panel.UpdateWidgets();
+			mUpdateFrame = Time.frameCount;
+
+			// Update each panel in order
+			for (int i = 0; i < list.size; ++i)
+				list[i].UpdateSelf();
+
+			int rq = 3000;
+
+			// Update all draw calls, making them draw in the right order
+			for (int i = 0; i < list.size; ++i)
+			{
+				UIPanel p = list.buffer[i];
+
+				if (p.renderQueue == RenderQueue.Automatic)
+				{
+					p.startingRenderQueue = rq;
+					p.UpdateDrawCalls();
+					rq += p.drawCalls.size;
+				}
+				else if (p.renderQueue == RenderQueue.StartAt)
+				{
+					p.UpdateDrawCalls();
+					if (p.drawCalls.size != 0)
+						rq = Mathf.Max(rq, p.startingRenderQueue + p.drawCalls.size);
+				}
+				else // Explicit
+				{
+					p.UpdateDrawCalls();
+					if (p.drawCalls.size != 0)
+						rq = Mathf.Max(rq, p.startingRenderQueue + 1);
+				}
+			}
 		}
+	}
+
+	/// <summary>
+	/// Update the panel, all of its widgets and draw calls.
+	/// </summary>
+
+	void UpdateSelf ()
+	{
+		mUpdateTime = RealTime.time;
+
+		UpdateTransformMatrix();
+		UpdateLayers();
+		UpdateWidgets();
 
 		if (mRebuild)
 		{
-			Fill();
+			mRebuild = false;
+			FillAllDrawCalls();
 		}
 		else
 		{
-			BetterList<UIDrawCall> dcs = UIDrawCall.activeList;
-
-			for (int i = 0; i < dcs.size; )
+			for (int i = 0; i < drawCalls.size; )
 			{
-				UIDrawCall dc = dcs.buffer[i];
+				UIDrawCall dc = drawCalls.buffer[i];
 
-				if (dc.isDirty && !Fill(dc))
+				if (dc.isDirty && !FillDrawCall(dc))
 				{
 					UIDrawCall.Destroy(dc);
+					drawCalls.RemoveAt(i);
 					continue;
 				}
 				++i;
 			}
 		}
+	}
 
-		// Update the clipping rects
-		for (int i = 0; i < list.size; ++i) UIDrawCall.Update(list[i]);
-		mRebuild = false;
+	/// <summary>
+	/// Immediately sort all child widgets.
+	/// </summary>
+
+	public void SortWidgets ()
+	{
+		mSortWidgets = false;
+		widgets.Sort(UIWidget.PanelCompareFunc);
+	}
+
+	/// <summary>
+	/// Fill the geometry fully, processing all widgets and re-creating all draw calls.
+	/// </summary>
+
+	void FillAllDrawCalls ()
+	{
+		for (int i = 0; i < drawCalls.size; ++i)
+			UIDrawCall.Destroy(drawCalls.buffer[i]);
+		drawCalls.Clear();
+
+		Material mat = null;
+		Texture tex = null;
+		Shader sdr = null;
+		UIDrawCall dc = null;
+
+		if (mSortWidgets) SortWidgets();
+
+		for (int i = 0; i < widgets.size; ++i)
+		{
+			UIWidget w = widgets.buffer[i];
+
+			if (w.isVisible && w.hasVertices)
+			{
+				Material mt = w.material;
+				Texture tx = w.mainTexture;
+				Shader sd = w.shader;
+
+				if (mat != mt || tex != tx || sdr != sd)
+				{
+					if (dc != null && dc.verts.size != 0)
+					{
+						drawCalls.Add(dc);
+						dc.UpdateGeometry();
+						dc = null;
+					}
+
+					mat = mt;
+					tex = tx;
+					sdr = sd;
+				}
+
+				if (mat != null || sdr != null || tex != null)
+				{
+					if (dc == null)
+					{
+						dc = UIDrawCall.Create(this, mat, tex, sdr);
+						dc.depthStart = w.depth;
+						dc.depthEnd = dc.depthStart;
+						dc.panel = this;
+					}
+					else
+					{
+						int rd = w.depth;
+						if (rd < dc.depthStart) dc.depthStart = rd;
+						if (rd > dc.depthEnd) dc.depthEnd = rd;
+					}
+
+					w.drawCall = dc;
+
+					if (generateNormals) w.WriteToBuffers(dc.verts, dc.uvs, dc.cols, dc.norms, dc.tans);
+					else w.WriteToBuffers(dc.verts, dc.uvs, dc.cols, null, null);
+				}
+			}
+			else w.drawCall = null;
+		}
+
+		if (dc != null && dc.verts.size != 0)
+		{
+			drawCalls.Add(dc);
+			dc.UpdateGeometry();
+		}
+	}
+
+	/// <summary>
+	/// Fill the geometry for the specified draw call.
+	/// </summary>
+
+	bool FillDrawCall (UIDrawCall dc)
+	{
+		if (dc != null)
+		{
+			dc.isDirty = false;
+
+			for (int i = 0; i < widgets.size; )
+			{
+				UIWidget w = widgets[i];
+
+				if (w == null)
+				{
+#if UNITY_EDITOR
+					Debug.LogError("This should never happen");
+#endif
+					widgets.RemoveAt(i);
+					continue;
+				}
+
+				if (w.drawCall == dc)
+				{
+					if (w.isVisible && w.hasVertices)
+					{
+						if (generateNormals) w.WriteToBuffers(dc.verts, dc.uvs, dc.cols, dc.norms, dc.tans);
+						else w.WriteToBuffers(dc.verts, dc.uvs, dc.cols, null, null);
+					}
+					else w.drawCall = null;
+				}
+				++i;
+			}
+
+			if (dc.verts.size != 0)
+			{
+				dc.UpdateGeometry();
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/// <summary>
+	/// Update all draw calls associated with the panel.
+	/// </summary>
+
+	void UpdateDrawCalls ()
+	{
+		Transform trans = cachedTransform;
+		bool isUI = usedForUI;
+
+		if (clipping != UIDrawCall.Clipping.None)
+		{
+			drawCallClipRange = finalClipRegion;
+			drawCallClipRange.z *= 0.5f;
+			drawCallClipRange.w *= 0.5f;
+		}
+		else drawCallClipRange = Vector4.zero;
+
+		// Legacy functionality
+		if (drawCallClipRange.z == 0f) drawCallClipRange.z = Screen.width * 0.5f;
+		if (drawCallClipRange.w == 0f) drawCallClipRange.w = Screen.height * 0.5f;
+
+		// DirectX 9 half-pixel offset
+		if (halfPixelOffset)
+		{
+			drawCallClipRange.x -= 0.5f;
+			drawCallClipRange.y += 0.5f;
+		}
+
+		Vector3 pos;
+
+		// We want the position to always be on even pixels so that the
+		// panel's contents always appear pixel-perfect.
+		if (isUI)
+		{
+			Transform parent = cachedTransform.parent;
+			pos = cachedTransform.localPosition;
+
+			if (parent != null)
+			{
+				float x = Mathf.Round(pos.x);
+				float y = Mathf.Round(pos.y);
+
+				drawCallClipRange.x += pos.x - x;
+				drawCallClipRange.y += pos.y - y;
+
+				pos.x = x;
+				pos.y = y;
+				pos = parent.TransformPoint(pos);
+			}
+			pos += drawCallOffset;
+		}
+		else pos = trans.position;
+
+		Quaternion rot = trans.rotation;
+		Vector3 scale = trans.lossyScale;
+
+		for (int i = 0; i < drawCalls.size; ++i)
+		{
+			UIDrawCall dc = drawCalls.buffer[i];
+
+			Transform t = dc.cachedTransform;
+			t.position = pos;
+			t.rotation = rot;
+			t.localScale = scale;
+
+			dc.renderQueue = (renderQueue == RenderQueue.Explicit) ? startingRenderQueue : startingRenderQueue + i;
+			dc.alwaysOnScreen = alwaysOnScreen &&
+				(mClipping == UIDrawCall.Clipping.None || mClipping == UIDrawCall.Clipping.ConstrainButDontClip);
+#if !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_1 && !UNITY_4_2
+			dc.sortingOrder = mSortingOrder;
+#endif
+		}
 	}
 
 	/// <summary>
@@ -916,9 +1368,13 @@ public class UIPanel : UIRect
 			UICamera uic = UICamera.FindCameraForLayer(mLayer);
 			mCam = (uic != null) ? uic.cachedCamera : NGUITools.FindCameraForLayer(mLayer);
 			NGUITools.SetChildLayer(cachedTransform, mLayer);
-			UIDrawCall.UpdateLayer(this);
+
+			for (int i = 0; i < drawCalls.size; ++i)
+				drawCalls.buffer[i].gameObject.layer = mLayer;
 		}
 	}
+
+	bool mForced = false;
 
 	/// <summary>
 	/// Update all of the widgets belonging to this panel.
@@ -933,10 +1389,18 @@ public class UIPanel : UIRect
 #endif
 		bool changed = false;
 
-		// Update all widgets
-		for (int i = 0, imax = UIWidget.list.size; i < imax; ++i)
+		if (mForced != forceVisible)
 		{
-			UIWidget w = UIWidget.list[i];
+			mForced = forceVisible;
+			mResized = true;
+		}
+
+		bool clipped = hasCumulativeClipping;
+
+		// Update all widgets
+		for (int i = 0, imax = widgets.size; i < imax; ++i)
+		{
+			UIWidget w = widgets.buffer[i];
 
 			// If the widget is visible, update it
 			if (w.panel == this && w.enabled)
@@ -976,32 +1440,40 @@ public class UIPanel : UIRect
 					}
 				}
 #endif
-				bool vis = forceVisible ||
-					(mClipping == UIDrawCall.Clipping.None && !w.hideIfOffScreen) ||
-					(w.cumulativeAlpha > 0.001f && IsVisible(w));
+				int frame = Time.frameCount;
 
-				if (!w.UpdateGeometry(vis)) continue;
-
-				changed = true;
-				
-				if (!mRebuild)
+				// First update the widget's transform
+				if (w.UpdateTransform(frame) || mResized)
 				{
-					if (w.drawCall != null)
+					// Only proceed to checking the widget's visibility if it actually moved
+					bool vis = forceVisible || (w.CalculateCumulativeAlpha(frame) > 0.001f);
+					w.UpdateVisibility(vis, forceVisible || ((clipped || w.hideIfOffScreen) ? IsVisible(w) : true));
+				}
+				
+				// Update the widget's geometry if necessary
+				if (w.UpdateGeometry(frame))
+				{
+					changed = true;
+
+					if (!mRebuild)
 					{
-						w.drawCall.isDirty = true;
-					}
-					else
-					{
-						// Find an existing draw call, if possible
-						w.drawCall = InsertWidget(w);
-						if (w.drawCall == null) mRebuild = true;
+						if (w.drawCall != null)
+						{
+							w.drawCall.isDirty = true;
+						}
+						else
+						{
+							// Find an existing draw call, if possible
+							FindDrawCall(w);
+						}
 					}
 				}
 			}
 		}
 
 		// Inform the changed event listeners
-		if (changed && onChange != null) onChange();
+		if (changed && onGeometryUpdated != null) onGeometryUpdated();
+		mResized = false;
 	}
 
 	/// <summary>
@@ -1010,21 +1482,17 @@ public class UIPanel : UIRect
 	/// because draw call creation is a delayed operation.
 	/// </summary>
 
-	static public UIDrawCall InsertWidget (UIWidget w)
+	public UIDrawCall FindDrawCall (UIWidget w)
 	{
-		UIPanel p = w.panel;
-		if (p == null) return null;
 		Material mat = w.material;
 		Texture tex = w.mainTexture;
-		int depth = w.raycastDepth;
-		BetterList<UIDrawCall> dcs = UIDrawCall.activeList;
+		int depth = w.depth;
 
-		for (int i = 0; i < dcs.size; ++i)
+		for (int i = 0; i < drawCalls.size; ++i)
 		{
-			UIDrawCall dc = dcs.buffer[i];
-			if (dc.manager != p) continue;
-			int dcStart = (i == 0) ? int.MinValue : dcs.buffer[i - 1].depthEnd + 1;
-			int dcEnd = (i + 1 == dcs.size) ? int.MaxValue : dcs.buffer[i + 1].depthStart - 1;
+			UIDrawCall dc = drawCalls.buffer[i];
+			int dcStart = (i == 0) ? int.MinValue : drawCalls.buffer[i - 1].depthEnd + 1;
+			int dcEnd = (i + 1 == drawCalls.size) ? int.MaxValue : drawCalls.buffer[i + 1].depthStart - 1;
 
 			if (dcStart <= depth && dcEnd >= depth)
 			{
@@ -1033,7 +1501,7 @@ public class UIPanel : UIRect
 					if (w.isVisible)
 					{
 						w.drawCall = dc;
-						dc.isDirty = true;
+						if (w.hasVertices) dc.isDirty = true;
 						return dc;
 					}
 				}
@@ -1046,14 +1514,45 @@ public class UIPanel : UIRect
 	}
 
 	/// <summary>
+	/// Make the following widget be managed by the panel.
+	/// </summary>
+
+	public void AddWidget (UIWidget w)
+	{
+		if (widgets.size == 0)
+		{
+			widgets.Add(w);
+		}
+		else if (mSortWidgets)
+		{
+			widgets.Add(w);
+			SortWidgets();
+		}
+		else if (UIWidget.PanelCompareFunc(w, widgets[0]) == -1)
+		{
+			widgets.Insert(0, w);
+		}
+		else
+		{
+			for (int i = widgets.size; i > 0; )
+			{
+				if (UIWidget.PanelCompareFunc(w, widgets[--i]) == -1) continue;
+				widgets.Insert(i+1, w);
+				break;
+			}
+		}
+		FindDrawCall(w);
+	}
+
+	/// <summary>
 	/// Remove the widget from its current draw call, invalidating everything as needed.
 	/// </summary>
 
-	static public void RemoveWidget (UIWidget w)
+	public void RemoveWidget (UIWidget w)
 	{
-		if (w.drawCall != null)
+		if (widgets.Remove(w) && w.drawCall != null)
 		{
-			int depth = w.raycastDepth;
+			int depth = w.depth;
 			if (depth == w.drawCall.depthStart || depth == w.drawCall.depthEnd)
 				mRebuild = true;
 
@@ -1106,7 +1605,7 @@ public class UIPanel : UIRect
 	{
 		Vector3 offset = CalculateConstrainOffset(targetBounds.min, targetBounds.max);
 
-		if (offset.magnitude > 0f)
+		if (offset.sqrMagnitude > 0f)
 		{
 			if (immediate)
 			{
@@ -1167,142 +1666,6 @@ public class UIPanel : UIRect
 	}
 
 	/// <summary>
-	/// Fill the geometry fully, processing all widgets and re-creating all draw calls.
-	/// </summary>
-
-	static public void Fill ()
-	{
-		UIDrawCall.ClearAll();
-
-		int index = 0;
-		UIPanel pan = null;
-		Material mat = null;
-		Texture tex = null;
-		Shader sdr = null;
-		UIDrawCall dc = null;
-
-		for (int i = 0; i < UIWidget.list.size; )
-		{
-			UIWidget w = UIWidget.list[i];
-
-			if (w == null)
-			{
-				UIWidget.list.RemoveAt(i);
-				continue;
-			}
-
-			if (w.isVisible)
-			{
-				UIPanel pn = w.panel;
-				Material mt = w.material;
-				Texture tx = w.mainTexture;
-				Shader sd = w.shader;
-
-				if (pan != pn || mat != mt || tex != tx || sdr != sd)
-				{
-					if (pan != null && mVerts.size != 0)
-					{
-						pan.SubmitDrawCall(dc);
-						dc = null;
-					}
-
-					pan = pn;
-					mat = mt;
-					tex = tx;
-					sdr = sd;
-				}
-
-				if (pan != null && (mat != null || sdr != null || tex != null))
-				{
-					if (dc == null)
-					{
-						dc = UIDrawCall.Create(index++, pan, mat, tex, sdr);
-						dc.depthStart = w.raycastDepth;
-						dc.depthEnd = dc.depthStart;
-						dc.panel = pan;
-					}
-					else
-					{
-						int rd = w.raycastDepth;
-						if (rd < dc.depthStart) dc.depthStart = rd;
-						if (rd > dc.depthEnd) dc.depthEnd = rd;
-					}
-
-					w.drawCall = dc;
-
-					if (pan.generateNormals) w.WriteToBuffers(mVerts, mUvs, mCols, mNorms, mTans);
-					else w.WriteToBuffers(mVerts, mUvs, mCols, null, null);
-				}
-			}
-			else w.drawCall = null;
-			++i;
-		}
-		if (mVerts.size != 0) pan.SubmitDrawCall(dc);
-	}
-
-	/// <summary>
-	/// Submit the draw call using the current geometry.
-	/// </summary>
-
-	void SubmitDrawCall (UIDrawCall dc)
-	{
-		dc.clipping = clipping;
-		dc.alwaysOnScreen = alwaysOnScreen && (clipping == UIDrawCall.Clipping.None || clipping == UIDrawCall.Clipping.ConstrainButDontClip);
-		dc.Set(mVerts, generateNormals ? mNorms : null, generateNormals ? mTans : null, mUvs, mCols);
-		mVerts.Clear();
-		mNorms.Clear();
-		mTans.Clear();
-		mUvs.Clear();
-		mCols.Clear();
-	}
-
-	/// <summary>
-	/// Fill the geometry for the specified draw call.
-	/// </summary>
-
-	static bool Fill (UIDrawCall dc)
-	{
-		if (dc != null)
-		{
-			dc.isDirty = false;
-
-			for (int i = 0; i < UIWidget.list.size; )
-			{
-				UIWidget w = UIWidget.list[i];
-
-				if (w == null)
-				{
-					UIWidget.list.RemoveAt(i);
-					continue;
-				}
-
-				if (w.drawCall == dc)
-				{
-					if (w.isVisible)
-					{
-						if (dc.manager.generateNormals) w.WriteToBuffers(mVerts, mUvs, mCols, mNorms, mTans);
-						else w.WriteToBuffers(mVerts, mUvs, mCols, null, null);
-					}
-					else w.drawCall = null;
-				}
-				++i;
-			}
-
-			if (mVerts.size != 0)
-			{
-				dc.Set(mVerts, dc.manager.generateNormals ? mNorms : null, dc.manager.generateNormals ? mTans : null, mUvs, mCols);
-				mVerts.Clear();
-				mNorms.Clear();
-				mTans.Clear();
-				mUvs.Clear();
-				mCols.Clear();
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/// <summary>
 	/// Get the size of the game window in pixels.
 	/// </summary>
 
@@ -1345,7 +1708,9 @@ public class UIPanel : UIRect
 
 #if UNITY_EDITOR
 
+	static int mSizeFrame = -1;
 	static System.Reflection.MethodInfo s_GetSizeOfMainGameView;
+	static Vector2 mGameSize = Vector2.one;
 
 	/// <summary>
 	/// Major hax to get the size of the game view window.
@@ -1353,16 +1718,21 @@ public class UIPanel : UIRect
 
 	static public Vector2 GetMainGameViewSize ()
 	{
-		//if (Application.isPlaying)
-		//	return new Vector2(Screen.width, Screen.height);
+		int frame = Time.frameCount;
 
-		if (s_GetSizeOfMainGameView == null)
+		if (mSizeFrame != frame)
 		{
-			System.Type type = System.Type.GetType("UnityEditor.GameView,UnityEditor");
-			s_GetSizeOfMainGameView = type.GetMethod("GetSizeOfMainGameView",
-				System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+			mSizeFrame = frame;
+
+			if (s_GetSizeOfMainGameView == null)
+			{
+				System.Type type = System.Type.GetType("UnityEditor.GameView,UnityEditor");
+				s_GetSizeOfMainGameView = type.GetMethod("GetSizeOfMainGameView",
+					System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+			}
+			mGameSize = (Vector2)s_GetSizeOfMainGameView.Invoke(null, null);
 		}
-		return (Vector2)s_GetSizeOfMainGameView.Invoke(null, null);
+		return mGameSize;
 	}
 
 	/// <summary>

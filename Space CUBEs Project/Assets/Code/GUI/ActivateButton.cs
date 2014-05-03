@@ -2,6 +2,7 @@
 // 12.18.2014
 
 using System;
+using System.ComponentModel;
 using UnityEngine;
 
 /// <summary>
@@ -74,6 +75,12 @@ public class ActivateButton : UIButton
         {
             TweenColor.Begin(tweenTarget, 0f, color);
         }
+    }
+
+
+    public void SetText(string text)
+    {
+        label.text = text;
     }
 
     #endregion

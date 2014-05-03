@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2013 Tasharen Entertainment
+// Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -177,6 +177,18 @@ public class NGUISettings
 		set { SetColor("NGUI Color", value); }
 	}
 
+	static public Color foregroundColor
+	{
+		get { return GetColor("NGUI FG Color", Color.white); }
+		set { SetColor("NGUI FG Color", value); }
+	}
+
+	static public Color backgroundColor
+	{
+		get { return GetColor("NGUI BG Color", Color.black); }
+		set { SetColor("NGUI BG Color", value); }
+	}
+
 	static public ColorMode colorMode
 	{
 		get { return GetEnum("NGUI Color Mode", ColorMode.Blue); }
@@ -282,6 +294,12 @@ public class NGUISettings
 		set { SetEnum("NGUI Font Style", value); }
 	}
 
+	static public Font dynamicFont
+	{
+		get { return Get<Font>("NGUI Dynamic Font", null); }
+		set { Set("NGUI Dynamic Font", value); }
+	}
+
 	static public UILabel.Overflow overflowStyle
 	{
 		get { return GetEnum("NGUI Overflow", UILabel.Overflow.ShrinkContent); }
@@ -340,6 +358,24 @@ public class NGUISettings
 	{
 		get { return GetBool("NGUI Guides", false); }
 		set { SetBool("NGUI Guides", value); }
+	}
+
+	static public string charsToInclude
+	{
+		get { return GetString("NGUI Chars", ""); }
+		set { SetString("NGUI Chars", value); }
+	}
+
+	static public string pathToFreeType
+	{
+		get
+		{
+			string path = Application.dataPath;
+			if (Application.platform == RuntimePlatform.WindowsEditor) path += "/NGUI/Editor/FreeType.dll";
+			else path += "/NGUI/Editor/FreeType.dylib";
+			return GetString("NGUI FreeType", path);
+		}
+		set { SetString("NGUI FreeType", value); }
 	}
 #endregion
 
@@ -459,7 +495,7 @@ public class NGUISettings
 		SetColor("Widget Color", widget.color);
 		SetEnum("Widget Pivot", widget.pivot);
 
-		if (widget is UIWidget) CopySprite(widget as UISprite);
+		if (widget is UISprite) CopySprite(widget as UISprite);
 		else if (widget is UILabel) CopyLabel(widget as UILabel);
 	}
 
@@ -492,8 +528,12 @@ public class NGUISettings
 		SetString("Atlas", NGUIEditorTools.ObjectToGUID(sp.atlas));
 		SetString("Sprite", sp.spriteName);
 		SetEnum("Sprite Type", sp.type);
+		SetEnum("Left Type", sp.leftType);
+		SetEnum("Right Type", sp.rightType);
+		SetEnum("Top Type", sp.topType);
+		SetEnum("Bottom Type", sp.bottomType);
+		SetEnum("Center Type", sp.centerType);
 		SetFloat("Fill", sp.fillAmount);
-		SetBool("FCenter", sp.fillCenter);
 		SetEnum("FDir", sp.fillDirection);
 	}
 
@@ -529,8 +569,12 @@ public class NGUISettings
 		if (fully) sp.atlas = NGUIEditorTools.GUIDToObject<UIAtlas>(GetString("Atlas", null));
 		sp.spriteName = GetString("Sprite", sp.spriteName);
 		sp.type = GetEnum<UISprite.Type>("Sprite Type", sp.type);
+		sp.leftType = GetEnum<UISprite.AdvancedType>("Left Type", UISprite.AdvancedType.Sliced);
+		sp.rightType = GetEnum<UISprite.AdvancedType>("Right Type", UISprite.AdvancedType.Sliced);
+		sp.topType = GetEnum<UISprite.AdvancedType>("Top Type", UISprite.AdvancedType.Sliced);
+		sp.bottomType = GetEnum<UISprite.AdvancedType>("Bottom Type", UISprite.AdvancedType.Sliced);
+		sp.centerType = GetEnum<UISprite.AdvancedType>("Center Type", UISprite.AdvancedType.Sliced);
 		sp.fillAmount = GetFloat("Fill", sp.fillAmount);
-		sp.fillCenter = GetBool("FCenter", sp.fillCenter);
 		sp.fillDirection = GetEnum<UISprite.FillDirection>("FDir", sp.fillDirection);
 	}
 
