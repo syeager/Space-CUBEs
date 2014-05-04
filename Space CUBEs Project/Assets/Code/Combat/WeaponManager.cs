@@ -4,8 +4,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using System.Diagnostics;
-using System;
 
 /// <summary>
 /// Activates weapons on Ship.
@@ -21,7 +19,7 @@ public class WeaponManager : MonoBehaviour
 
     #region Private Fields
 
-    private float damageMultiplier;
+    public float damageMultiplier { get; private set; }
 
     #endregion
 

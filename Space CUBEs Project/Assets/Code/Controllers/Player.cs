@@ -59,6 +59,7 @@ public class Player : Ship
     #region Events
 
     public EventHandler<KillRecievedArgs> KillRecievedEvent;
+    public EventHandler<ValueArgs> BarrelRollEvent;
 
     #endregion
 
@@ -145,6 +146,8 @@ public class Player : Ship
 
         stateMachine.SetUpdate(BarrelRollingUpdate(MovementInput(), myHealth.invincible));
         myHealth.invincible = true;
+
+        BarrelRollEvent.Fire(this, new ValueArgs(true));
     }
 
 
@@ -162,6 +165,8 @@ public class Player : Ship
 #if !UNITY_STANDALONE
         barrelRoll = false;
 #endif
+
+        BarrelRollEvent.Fire(this, new ValueArgs(false));
     }
 
 
