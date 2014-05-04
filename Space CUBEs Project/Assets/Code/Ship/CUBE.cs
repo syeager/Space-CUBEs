@@ -14,10 +14,10 @@ public class CUBE : MonoBehaviour
 
     public enum Types
     {
-        Augmentation,
-        Hull,
         System,
+        Hull,
         Weapon,
+        Augmentation,
     }
     public enum Subsystems
     {
