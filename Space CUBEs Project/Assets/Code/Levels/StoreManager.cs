@@ -291,7 +291,7 @@ public class StoreManager : MonoBehaviour
         // selected CUBE
         int selected = int.Parse(args.value);
         CUBEInfo info = CUBE.allCUBES[selected];
-        if (info.price == 0) return;
+        if (GameResources.GetCUBE(info.ID) == null) return;
         selectedCUBE.text = info.name;
         count.text = "x" + inventory[selected];
 
