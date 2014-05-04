@@ -38,6 +38,8 @@ public class GameStart : Singleton<GameStart>
     protected override void Awake()
     {
         base.Awake();
+        if (!enabled) return;
+
         LoadGame();
         UpdateVersions();
     }

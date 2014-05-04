@@ -21,6 +21,7 @@ public class Singleton<T> : MonoBase where T : MonoBehaviour
             {
                 Debugger.LogWarning("Multiple instances of " + typeof(T).Name);
             }
+            enabled = false;
             Destroy(gameObject);
         }
         else
