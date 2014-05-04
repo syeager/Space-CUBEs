@@ -120,11 +120,11 @@ public class GigaLaser_Weapon : Weapon
 
     private void EndAttack()
     {
-        if (charge.gameObject.activeSelf)
+        if (charge != null && charge.gameObject.activeSelf)
         {
             charge.GetComponent<PoolObject>().Disable();
         }
-        else if (laser.gameObject.activeSelf)
+        else if (laser != null && laser.gameObject.activeSelf)
         {
             laser.GetComponent<PoolObject>().Disable();
         }
