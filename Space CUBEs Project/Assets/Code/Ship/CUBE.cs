@@ -114,7 +114,7 @@ public class CUBE : MonoBehaviour
     public static int[] GetInventory()
     {
         string[] data = PlayerPrefs.GetString(INVENTORYPATH, "").Replace(" ", "").Split(CUBESEP);
-        int[] inventory = new int[CUBE.allCUBES.Length];
+        int[] inventory = new int[allCUBES.Length];
 
         if (data.Length != 1)
         {

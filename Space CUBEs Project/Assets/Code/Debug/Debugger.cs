@@ -117,9 +117,10 @@ public class Debugger : Singleton<Debugger>
     /// <summary>
     /// Set up log files.
     /// </summary>
-    [UsedImplicitly]
-    private void Start()
+    protected override void Awake()
     {
+        base.Awake();
+
         if (logSaving == LogSaving.DontSave) return;
 
         LogPath = Application.dataPath + LogPath;

@@ -35,8 +35,9 @@ public class GameStart : Singleton<GameStart>
     #region MonoBehaviour Overrides
 
     [UsedImplicitly]
-    private void Start()
+    protected override void Awake()
     {
+        base.Awake();
         LoadGame();
         UpdateVersions();
     }
