@@ -82,6 +82,9 @@ public class Debugger : Singleton<Debugger>
 
     #region Static Fields
 
+    /// <summary>Path for log files.</summary>
+    private static string LogPath = "/Files/Debug Logs/Log_";
+    
     /// <summary>Are messages currently being displayed to the ConsoleLine?</summary>
     private static bool displayingMessages;
 
@@ -91,9 +94,6 @@ public class Debugger : Singleton<Debugger>
     #endregion
 
     #region Readonly Fields
-
-    /// <summary>Path for log files.</summary>
-    private static readonly string LogPath = Application.dataPath + "/Files/Debug Logs/Log_";
 
     /// <summary>Messages queued up for the ConsoleLine and their time in seconds to be displayed.</summary>
     private static readonly Queue<KeyValuePair<string, float>> Messages = new Queue<KeyValuePair<string, float>>();
@@ -121,6 +121,8 @@ public class Debugger : Singleton<Debugger>
     private void Start()
     {
         if (logSaving == LogSaving.DontSave) return;
+
+        LogPath = Application.dataPath + LogPath;
 
         string[] logTypes = Enum.GetNames(typeof(LogTypes));
         for (int i = 0; i < logFlags.Length; i++)
