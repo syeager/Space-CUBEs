@@ -120,25 +120,11 @@ public static class Utility
     /// </summary>
     /// <param name="grid">Grid to update.</param>
     /// <param name="scrollBar">Scrollbar to update.</param>
-    /// <param name="setToZero">Should the scroll view be set back to the beginning?</param>
-    public static IEnumerator UpdateScrollView(UIGrid grid, UIScrollBar scrollBar, bool setToZero = true)
-    {
-        grid.Reposition();
-        yield return new WaitForEndOfFrame();
-
-        if (setToZero)
-        {
-            scrollBar.value = 0f;
-            scrollBar.ForceUpdate();
-        }
-    }
-
-
+    ///  <param name="scrollView">ScrollView to update.</param>
     public static IEnumerator UpdateScrollView(UIGrid grid, UIScrollBar scrollBar, UIScrollView scrollView)
     {
         grid.Reposition();
         yield return new WaitForEndOfFrame();
-
         
         scrollView.UpdateScrollbars();
         scrollBar.value = 0f;
