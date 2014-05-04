@@ -30,6 +30,16 @@ public class LevelSelectManager : MonoBehaviour
         }
     }
 
+
+    [UsedImplicitly]
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            GameData.LoadLevel("Main Menu");
+        }
+    }
+
     #endregion
 
     #region Event Handlers
