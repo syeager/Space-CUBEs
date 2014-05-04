@@ -107,7 +107,7 @@ public class BuildTool : EditorWindow
         BuildPipeline.BuildPlayer(EditorBuildSettings.scenes.Where(s => s.enabled).Select(s => s.path).ToArray(),
                                   buildPath,
                                   BuildTarget.Android,
-                                  BuildOptions.None);
+                                  BuildOptions.ShowBuiltPlayer);
 
         // move to Drive
         DirectoryInfo directory = new DirectoryInfo(NewestBuildPath);
