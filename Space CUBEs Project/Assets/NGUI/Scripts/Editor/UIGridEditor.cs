@@ -12,4 +12,22 @@ using UnityEditor;
 public class UIGridEditor : UIWidgetContainerEditor
 {
 }
+#else
+using UnityEngine;
+using UnityEditor;
+
+[CanEditMultipleObjects]
+[CustomEditor(typeof(UIGrid))]
+public class UIGridEditor : UIWidgetContainerEditor
+{
+    public override void OnInspectorGUI()
+    {
+        DrawDefaultInspector();
+
+        if (GUILayout.Button("Reposition"))
+        {
+            (target as UIGrid).Reposition();
+        }
+    }
+}
 #endif
