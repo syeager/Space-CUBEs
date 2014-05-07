@@ -13,6 +13,7 @@ public static class ListExtension
     /// <param name="count"></param>
     public static void Initialize<T>(this List<T> list, T value, int count)
     {
+        list.Clear();
         for (int i = 0; i < count; i++)
         {
             list.Add(value);
