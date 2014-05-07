@@ -17,7 +17,7 @@ public class Debugger : Singleton<Debugger>
 {
     #region References
 
-    public GameObject fps;
+    public HUDFPS fps;
     public GameObject fpsPrefab;
     public GameObject consoleLine;
     public GameObject consoleLinePrefab;
@@ -83,7 +83,7 @@ public class Debugger : Singleton<Debugger>
     #region Static Fields
 
     /// <summary>Path for log files.</summary>
-    private static string LogPath = "/Files/Debug Logs/Log_";
+    private static string logPath = "/Files/Debug Logs/Log_";
     
     /// <summary>Are messages currently being displayed to the ConsoleLine?</summary>
     private static bool displayingMessages;
@@ -125,12 +125,12 @@ public class Debugger : Singleton<Debugger>
 
         if (logSaving == LogSaving.DontSave) return;
 
-        LogPath = Application.dataPath + LogPath;
+        logPath = Application.dataPath + logPath;
 
         string[] logTypes = Enum.GetNames(typeof(LogTypes));
         for (int i = 0; i < logFlags.Length; i++)
         {
-            string path = LogPath + logTypes[i] + FileExt;
+            string path = logPath + logTypes[i] + FileExt;
             // clear file
             if (logSaving == LogSaving.SaveAndClear)
             {
@@ -160,7 +160,7 @@ public class Debugger : Singleton<Debugger>
         if (timeleft <= 0.0)
         {
             float average = accum / frames;
-            fps.GetComponent<HUDFPS>().UpdateFPS(average);
+            fps.UpdateFPS(average);
 
 #if UNITY_EDITOR
             if (lowBreak && average < 10)
@@ -184,7 +184,7 @@ public class Debugger : Singleton<Debugger>
     {
         if (fps != null)
         {
-            Destroy(fps);
+            Destroy(fps.gameObject);
         }
     }
 
@@ -207,7 +207,7 @@ public class Debugger : Singleton<Debugger>
 #if UNITY_EDITOR
         if (save && Main.logSaving != LogSaving.DontSave)
         {
-            using (StreamWriter writer = new StreamWriter(LogPath + logType + FileExt, true))
+            using (StreamWriter writer = new StreamWriter(logPath + logType + FileExt, true))
             {
                 writer.WriteLine("[{0}] Log\r\n {1}", Time.realtimeSinceStartup, message);
             }
@@ -231,7 +231,7 @@ public class Debugger : Singleton<Debugger>
 #if UNITY_EDITOR
         if (save && Main.logSaving != LogSaving.DontSave)
         {
-            using (StreamWriter writer = new StreamWriter(LogPath + logType + FileExt, true))
+            using (StreamWriter writer = new StreamWriter(logPath + logType + FileExt, true))
             {
                 writer.WriteLine("[{0}] Warning\r\n {1}", Time.realtimeSinceStartup, message);
             }
@@ -254,7 +254,7 @@ public class Debugger : Singleton<Debugger>
 #if UNITY_EDITOR
         if (save && Main.logSaving != LogSaving.DontSave)
         {
-            using (StreamWriter writer = new StreamWriter(LogPath + logType + FileExt, true))
+            using (StreamWriter writer = new StreamWriter(logPath + logType + FileExt, true))
             {
                 writer.WriteLine("[{0}] Error\r\n {1}", Time.realtimeSinceStartup, message);
             }
@@ -277,7 +277,7 @@ public class Debugger : Singleton<Debugger>
 #if UNITY_EDITOR
         if (save && Main.logSaving != LogSaving.DontSave)
         {
-            using (StreamWriter writer = new StreamWriter(LogPath + logType + FileExt, true))
+            using (StreamWriter writer = new StreamWriter(logPath + logType + FileExt, true))
             {
                 writer.WriteLine("[{0}] Exception\r\n {1}", Time.realtimeSinceStartup, exception);
             }

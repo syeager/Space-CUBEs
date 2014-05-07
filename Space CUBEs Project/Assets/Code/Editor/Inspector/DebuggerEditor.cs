@@ -72,13 +72,13 @@ public class DebuggerEditor : Editor
         {
             if (fps.objectReferenceValue == null)
             {
-                fps.objectReferenceValue = Instantiate(fpsPrefab.objectReferenceValue, new Vector3(0.99f, 0.99f, 0f), Quaternion.identity);
+                fps.objectReferenceValue = (Instantiate(fpsPrefab.objectReferenceValue, new Vector3(0.99f, 0.99f, 0f), Quaternion.identity) as GameObject).GetComponent<HUDFPS>();
                 fps.objectReferenceValue.name = FPSName;
                 Debug.Log("FPS created.", fps.objectReferenceValue);
             }
             else
             {
-                DestroyImmediate(fps.objectReferenceValue);
+                DestroyImmediate((fps.objectReferenceValue as HUDFPS).gameObject);
                 fps.objectReferenceValue = null;
             }
         }
