@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System;
+using Annotations;
 using UnityEngine;
 using System.Collections;
 using System.Linq;
@@ -43,14 +44,7 @@ public class GarageManager : MonoBase
     public UIGrid loadGrid;
     public GameObject BuildButton_Prefab;
 
-    public UIScrollView selectionScrollView;
-    public UIScrollBar selectionScrollBar;
-    public UIGrid selectionGrid;
     public GameObject CUBESelectionButton_Prefab;
-
-    public ActivateButton leftFilter;
-    public UILabel filterLabel;
-    public ActivateButton rightFilter;
 
     public UILabel CUBEName;
     public UILabel CUBEHealth;
@@ -73,7 +67,6 @@ public class GarageManager : MonoBase
     private Transform cameraTarget;
 
     private bool menuOpen;
-    private Types CUBEFilter;
 
     private int weaponIndex = -1;
 
@@ -84,7 +77,6 @@ public class GarageManager : MonoBase
 
     private bool selectedBuild;
 
-    private ActivateButton[] filteredCUBEButtons;
     private CUBEInfo currentCUBE;
 
     #endregion
@@ -137,6 +129,19 @@ public class GarageManager : MonoBase
 
     public GameObject renamePanel;
     public UIInput renameInput;
+
+    #endregion
+
+    #region Selection Fields
+
+    private int selectionIndex;
+    public ActivateButton leftFilter;
+    public UILabel filterLabel;
+    public ActivateButton rightFilter;
+    public GameObject[] selections;
+    private UIGrid[] selectionGrids;
+    private UIScrollView[] selectionScrollViews;
+    private UIScrollBar[] selectionScrollBars;
 
     #endregion
 
@@ -193,6 +198,7 @@ public class GarageManager : MonoBase
 
     #region Unity Overrides
 
+    [UsedImplicitly]
     private void Awake()
     {
         // create states
@@ -209,16 +215,11 @@ public class GarageManager : MonoBase
         // load colors
         colors = CUBE.LoadColors();
 
-        // set to load menu
-        menuPanels[0].SetActive(true);
-        menuPanels[1].SetActive(false);
-        menuPanels[2].SetActive(false);
-        menuPanels[3].SetActive(false);
-        menuPanels[4].SetActive(false);
-        infoPanel.SetActive(false);
-        mainCamera.camera.rect = new Rect(0f, 0f, 1f, 1f);
+        SelectInit();
 
         // load menu
+        
+
         CreateBuildButtons();
 
         // nav menu
@@ -260,18 +261,14 @@ public class GarageManager : MonoBase
     }
 
 
+    [UsedImplicitly]
     private void Start()
     {
-        // selection menu
-        inventory = CUBE.GetInventory();
-        filteredCUBEButtons = new ActivateButton[inventory.Length];
-        leftFilter.ActivateEvent += OnFilterChanged;
-        rightFilter.ActivateEvent += OnFilterChanged;
-
         stateMachine.Start(new Dictionary<string, object>());
     }
 
 
+    [UsedImplicitly]
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -769,7 +766,7 @@ public class GarageManager : MonoBase
             button.ActivateEvent += OnBuildChosen;
         }
 
-        StartCoroutine(Utility.UpdateScrollView(loadGrid, loadScrollBar));
+        StartCoroutine(Utility.UpdateScrollView(loadGrid, loadScrollBar, loadScrollView));
     }
 
 
@@ -809,7 +806,7 @@ public class GarageManager : MonoBase
         Destroy(button.gameObject);
 
         // reload grid
-        StartCoroutine(Utility.UpdateScrollView(loadGrid, loadScrollBar, false));
+        StartCoroutine(Utility.UpdateScrollView(loadGrid, loadScrollBar, loadScrollView));
 
         GameData.Main.currentBuild = ConstructionGrid.BuildNames()[0];
     }
@@ -870,6 +867,32 @@ public class GarageManager : MonoBase
 
     #region Selection Menu Methods
 
+    private void SelectInit()
+    {
+        inventory = CUBE.GetInventory();
+
+        foreach (GameObject selection in selections)
+        {
+            selection.SetActive(true);
+        } 
+
+        selectionGrids = new UIGrid[selections.Length];
+        selectionScrollViews = new UIScrollView[selections.Length];
+        selectionScrollBars = new UIScrollBar[selections.Length];
+        for (int i = 0; i < selections.Length; i++)
+        {
+            selectionGrids[i] = selections[i].GetComponentInChildren(typeof(UIGrid)) as UIGrid;
+            selectionScrollViews[i] = selections[i].GetComponentInChildren(typeof(UIScrollView)) as UIScrollView;
+            selectionScrollBars[i] = selections[i].GetComponentInChildren(typeof(UIScrollBar)) as UIScrollBar;
+        }
+
+        leftFilter.ActivateEvent += OnFilterChanged;
+        rightFilter.ActivateEvent += OnFilterChanged;
+
+        StartCoroutine(CreateItemButtons());
+    }
+
+
     private void SelectEnter(Dictionary<string, object> info)
     {
 #if UNITY_ANDROID
@@ -879,7 +902,8 @@ public class GarageManager : MonoBase
         mainCamera.camera.rect = new Rect(0.25f, 0f, 1f, 1f);
         menuPanels[1].SetActive(true);
         infoPanel.SetActive(true);
-        FilterCUBEs(CUBEFilter, true);
+
+        FilterCUBEs(selectionIndex);
 
         stateMachine.SetUpdate(SelectUpdate());
         StartCoroutine("SaveConfirmation");
@@ -932,50 +956,54 @@ public class GarageManager : MonoBase
     /// <summary>
     /// 
     /// </summary>
-    private void FilterCUBEs(Types cubeType, bool force = false)
+    private void FilterCUBEs(int index)
     {
-        if (CUBEFilter == cubeType && !force) return;
+        selections[selectionIndex].SetActive(false);
+        selectionIndex = Mathf.Clamp(index, 0, selections.Length - 1);
+        selections[selectionIndex].SetActive(true);
+        selectionScrollViews[selectionIndex].UpdateScrollbars();
 
-        // cache
-        CUBEFilter = cubeType;
+        // toggle filter buttons
+        leftFilter.isEnabled = selectionIndex > 0;
+        rightFilter.isEnabled = selectionIndex < selections.Length-1;
 
-        // delete current buttons
-        foreach (var button in filteredCUBEButtons)
-        {
-            if (button == null) continue;
-            button.ActivateEvent -= OnCUBESelected;
-            Destroy(button.gameObject);
-        }
-
-        // create buttons
-        foreach (var cube in CUBE.allCUBES)
-        {
-            if (cube.type == CUBEFilter)
-            {
-                CreateCUBEButton(cube.ID);
-            }
-        }
-        StartCoroutine(Utility.UpdateScrollView(selectionGrid, selectionScrollBar));
-
-        // set filters
-        leftFilter.isEnabled = (int)CUBEFilter > 0;
-        rightFilter.isEnabled = (int)CUBEFilter < Enum.GetNames(typeof(Types)).Length - 1;
-        filterLabel.text = CUBEFilter.ToString();
+        filterLabel.text = Enum.GetNames(typeof(Types))[selectionIndex];
     }
 
 
     /// <summary>
-    /// 
+    /// Create buttons in Selection Menu for all CUBEs.
     /// </summary>
-    /// <param name="ID"></param>
-    private void CreateCUBEButton(int ID)
+    private IEnumerator CreateItemButtons()
     {
-        CUBEInfo info = CUBE.allCUBES[ID];
-        ScrollviewButton button = (Instantiate(CUBESelectionButton_Prefab) as GameObject).GetComponent<ScrollviewButton>();
-        button.Initialize(ID.ToString(), info.name + "\n" + inventory[ID], ID.ToString(), selectionGrid.transform, selectionScrollView);
-        button.ActivateEvent += OnCUBESelected;
-        button.isEnabled = GameResources.GetCUBE(ID) != null;
-        filteredCUBEButtons[info.ID] = button;
+        menuPanels[0].SetActive(true);
+        menuPanels[1].SetActive(false);
+        menuPanels[2].SetActive(false);
+        menuPanels[3].SetActive(false);
+        menuPanels[4].SetActive(false);
+        infoPanel.SetActive(false);
+        mainCamera.camera.rect = new Rect(0f, 0f, 1f, 1f); 
+
+        string[] names = Enum.GetNames(typeof(Types));
+        foreach (var info in CUBE.allCUBES)
+        {
+            int index = Array.IndexOf(names, info.type.ToString());
+            ScrollviewButton button = (Instantiate(CUBESelectionButton_Prefab) as GameObject).GetComponent(typeof(ScrollviewButton)) as ScrollviewButton;
+            button.Initialize(info.ID.ToString(), info.name + "\n" + inventory[info.ID], info.ID.ToString(), selectionGrids[index].transform, selectionScrollViews[index]);
+            button.ActivateEvent += OnCUBESelected;
+        }
+
+        for (int i = 0; i < selectionScrollViews.Length; i++)
+        {
+            StartCoroutine(Utility.UpdateScrollView(selectionGrids[i], selectionScrollBars[i], selectionScrollViews[i]));
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        foreach (GameObject selection in selections)
+        {
+            selection.SetActive(false);
+        }
     }
 
 
@@ -988,7 +1016,10 @@ public class GarageManager : MonoBase
     {
         if (!args.isPressed) return;
 
-        SetCurrentCUBE(int.Parse(args.value));
+        if (GameResources.GetCUBE(int.Parse(args.value)) != null)
+        {
+            SetCurrentCUBE(int.Parse(args.value));
+        }
     }
 
 
@@ -1001,9 +1032,7 @@ public class GarageManager : MonoBase
     {
         if (!args.isPressed) return;
 
-        int direction = int.Parse(args.value);
-        int filter = Mathf.Clamp((int)CUBEFilter + direction, 0, Enum.GetNames(typeof(Types)).Length);
-        FilterCUBEs((Types)filter);
+        FilterCUBEs(selectionIndex + int.Parse(args.value));
     }
 
 
