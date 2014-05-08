@@ -78,6 +78,7 @@ public class ShipMotor : MonoBase
     private void FixedUpdate()
     {
         myRigidbody.MovePosition(myRigidbody.position + velocity * Time.deltaTime);
+        velocity = Vector3.zero;
     }
 
     #endregion
@@ -109,6 +110,15 @@ public class ShipMotor : MonoBase
     public void Move(Vector3 vector)
     {
         velocity = vector;
+    }
+
+
+    /// <summary>
+    /// Sets velocity to zero.
+    /// </summary>
+    public void Stop()
+    {
+        velocity = Vector3.zero;
     }
 
 
