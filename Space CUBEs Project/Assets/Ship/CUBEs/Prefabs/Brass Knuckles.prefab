@@ -12,7 +12,6 @@ GameObject:
   - 23: {fileID: 2300000}
   - 114: {fileID: 11400000}
   - 114: {fileID: 11400002}
-  - 114: {fileID: 11400004}
   m_Layer: 0
   m_Name: Brass Knuckles
   m_TagString: Untagged
@@ -45,7 +44,6 @@ Renderer:
   m_Materials:
   - {fileID: 2100000, guid: 6d9e17dd27ab6bc4ea90d40a327ec967, type: 2}
   - {fileID: 2100000, guid: 6d9e17dd27ab6bc4ea90d40a327ec967, type: 2}
-  - {fileID: 2100000, guid: 6d9e17dd27ab6bc4ea90d40a327ec967, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -60,7 +58,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Mesh: {fileID: 4300000, guid: b288d0a43a7b5b34c97165ab796bcf31, type: 2}
+  m_Mesh: {fileID: 4300000, guid: d8da932389cbdb84788ed661c712529d, type: 2}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -72,7 +70,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 583375bc492680d4abdf998fb25928d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: 107
+  ID: -1
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -84,19 +82,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cddb31ad4dca1141a26c308b5d59954, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colors: 1b000000000000001f000000
---- !u!114 &11400004
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6cc915cbccc51cf4a9908b97faa96f64, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 10
+  colors: 1d00000001000000
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
