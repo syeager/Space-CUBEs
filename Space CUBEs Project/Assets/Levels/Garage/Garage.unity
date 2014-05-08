@@ -6619,12 +6619,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movement: 0
   dragEffect: 2
-  restrictWithinPanel: 0
+  restrictWithinPanel: 1
   disableDragIfFits: 0
   smoothDragStart: 1
   iOSDragEmulation: 1
   scrollWheelFactor: -2
-  momentumAmount: 100
+  momentumAmount: 35
   horizontalScrollBar: {fileID: 1623552104}
   verticalScrollBar: {fileID: 0}
   showScrollBars: 0
@@ -6677,7 +6677,7 @@ MonoBehaviour:
   updateAnchors: 1
   showInPanelTool: 0
   generateNormals: 0
-  widgetsAreStatic: 1
+  widgetsAreStatic: 0
   cullWhileDragging: 0
   alwaysOnScreen: 0
   anchorOffset: 0
