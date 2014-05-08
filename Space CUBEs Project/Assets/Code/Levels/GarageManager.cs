@@ -217,11 +217,6 @@ public class GarageManager : MonoBase
 
         SelectInit();
 
-        // load menu
-        
-
-        CreateBuildButtons();
-
         // nav menu
         foreach (var button in positionButtons)
         {
@@ -701,6 +696,7 @@ public class GarageManager : MonoBase
         mainCamera.camera.rect = new Rect(0f, 0f, 1f, 1f);
         menuPanels[0].SetActive(true);
         CreateBuildButtons();
+        StartCoroutine(Utility.UpdateScrollView(loadGrid, loadScrollBar, loadScrollView));
         loadGrid.GetComponent<UICenterOnChild>().CenterOn(loadGrid.transform.GetChild(0));
 
         stateMachine.SetUpdate(LoadUpdate());
@@ -750,10 +746,10 @@ public class GarageManager : MonoBase
     {
         // clear
         ActivateButton[] buttons = loadGrid.GetComponentsInChildren<ActivateButton>();
-        for (int i = 0; i < buttons.Length; i++)
+        foreach (ActivateButton button in buttons)
         {
-            buttons[i].ActivateEvent -= OnBuildChosen;
-            Destroy(buttons[i].gameObject);
+            button.ActivateEvent -= OnBuildChosen;
+            Destroy(button.gameObject);
         }
 
         // create
@@ -765,8 +761,6 @@ public class GarageManager : MonoBase
             button.Initialize(i.ToString(), buildNames[i], buildNames[i], loadGrid.transform, loadScrollView);
             button.ActivateEvent += OnBuildChosen;
         }
-
-        StartCoroutine(Utility.UpdateScrollView(loadGrid, loadScrollBar, loadScrollView));
     }
 
 
@@ -958,6 +952,7 @@ public class GarageManager : MonoBase
     /// </summary>
     private void FilterCUBEs(int index)
     {
+        // active selection
         selections[selectionIndex].SetActive(false);
         selectionIndex = Mathf.Clamp(index, 0, selections.Length - 1);
         selections[selectionIndex].SetActive(true);
@@ -967,6 +962,7 @@ public class GarageManager : MonoBase
         leftFilter.isEnabled = selectionIndex > 0;
         rightFilter.isEnabled = selectionIndex < selections.Length-1;
 
+        // set filter
         filterLabel.text = Enum.GetNames(typeof(Types))[selectionIndex];
     }
 
