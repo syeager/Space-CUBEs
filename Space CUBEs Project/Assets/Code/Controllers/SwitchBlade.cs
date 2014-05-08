@@ -1,6 +1,7 @@
 ﻿// Steve Yeager
 // 3.25.2014
 
+using System.Xml.Serialization;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
@@ -56,6 +57,7 @@ public class SwitchBlade : Boss
     #region Stage 3
 
     public float deathLaserTime;
+    public float deathLaserChargeTime;
 
     #endregion
 
@@ -70,7 +72,7 @@ public class SwitchBlade : Boss
         stateMachine = new StateMachine(this, EnteringState);
         stateMachine.CreateState(EnteringState, EnteringEnter, EnteringExit);
         stateMachine.CreateState(StagingState, StagingEnter, StagingExit);
-        stateMachine.CreateState(Stage1State, Stage1Enter, i => { });
+        stateMachine.CreateState(Stage1State, Stage1Enter, Stage1Exit);
         stateMachine.CreateState(Stage2State, Stage2Enter, Stage2Exit);
         stateMachine.CreateState(Stage3State, Stage3Enter, i => { });
         stateMachine.CreateState(DyingState, DyingEnter, i => { });
@@ -259,27 +261,23 @@ public class SwitchBlade : Boss
     {
         // death laser
         myWeapons.Activate(6, true);
-        yield return new WaitForSeconds(deathLaserTime);
+        yield return StartCoroutine(FireDeathLaser());
         myWeapons.Activate(6, false);
 
         while (true)
         {
             // sides
-            yield return StartCoroutine(FireSideWeapons(true));
+            int cycles = Random.Range(1, 3);
+            for (int i = 0; i < cycles; i++)
+            {
+                yield return StartCoroutine(FireSideWeapons(true));
+            }
 
             // top
             yield return StartCoroutine(FirePattern(true));
 
-            // sides
-            yield return StartCoroutine(FireSideWeapons(true));
-
-            // all
-            myWeapons.Activate(6, true);
-            StartCoroutine(FireSideWeapons(false));
-            yield return new WaitForSeconds(deathLaserTime);
-
-            myWeapons.Activate(6, false);
-            yield return new WaitForSeconds(stage1SwitchTime);
+            // death laser
+            yield return StartCoroutine(FireDeathLaser());
         }
     }
 
@@ -390,6 +388,24 @@ public class SwitchBlade : Boss
             myWeapons.Activate(5, false);
             yield return deactivated;
         }
+    }
+
+
+    private IEnumerator FireDeathLaser()
+    {
+        // open
+        moveJob.Pause();
+        myWeapons.weapons[6].gameObject.SetActive(true);
+        yield return new WaitForSeconds(deathLaserChargeTime);
+
+        // fire
+        myWeapons.Activate(6, true);
+        yield return new WaitForSeconds(deathLaserTime);
+
+        // close
+        myWeapons.Activate(6, false);
+        myWeapons.weapons[6].gameObject.SetActive(false);
+        moveJob.UnPause();
     }
 
 

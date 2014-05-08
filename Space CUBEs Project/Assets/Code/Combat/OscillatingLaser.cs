@@ -33,6 +33,7 @@ public class OscillatingLaser : Weapon
     {
         if (pressed)
         {
+            gameObject.SetActive(true); // TODO: should always be active before calling
             StartCoroutine(Fire());
         }
         else
