@@ -10,14 +10,15 @@ using UnityEngine;
 public class MainMenuManager : MonoBehaviour
 {
     #region Public Fields
-
+#if DEBUG
     public Rect debugTouchRect;
-
+#endif
     #endregion
 
 
     #region MonoBehaviour Overrides
 
+#if DEBUG
     [UsedImplicitly]
     private void Update()
     {
@@ -33,6 +34,7 @@ public class MainMenuManager : MonoBehaviour
         }
 #endif
     }
+#endif
 
     #endregion
 

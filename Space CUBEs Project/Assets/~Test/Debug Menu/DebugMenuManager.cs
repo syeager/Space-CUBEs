@@ -9,7 +9,6 @@ using UnityEngine;
 /// </summary>
 public class DebugMenuManager : MonoBehaviour
 {
-#if DEBUG
     #region Public Fields
 
     public UIToggle invincibleToggle;
@@ -49,5 +48,4 @@ public class DebugMenuManager : MonoBehaviour
     }
 
     #endregion
-#endif
 }

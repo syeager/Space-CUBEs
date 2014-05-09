@@ -306,6 +306,7 @@ public class StoreManager : MonoBehaviour
         health.text = info.health.ToString();
         shield.text = info.shield.ToString();
         speed.text = info.speed.ToString();
+        damage.text = info.damage.ToString();
 
         // showcase
         if (showcaseCUBE != null) Destroy(showcaseCUBE.gameObject);
