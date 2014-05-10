@@ -25,7 +25,7 @@ public class AugmentationManager : MonoBehaviour
     /// <param name="augmentations">Augmentations to save.</param>
     public void Bake(List<Augmentation> augmentations)
     {
-        this.augmentations = augmentations.ToArray();    
+        this.augmentations = augmentations.ToArray();
     }
 
 
@@ -37,10 +37,7 @@ public class AugmentationManager : MonoBehaviour
     {
         foreach (var augmentation in augmentations)
         {
-            if (augmentation != null)
-            {
-                augmentation.Initialize(player);
-            }
+            augmentation.Initialize(player);
         }
     }
 

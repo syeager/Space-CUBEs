@@ -11,7 +11,7 @@ public class VampireDrive : Augmentation
     #region Public Fields
 
     /// <summary>Percentage of health retained from the enemy killed.</summary>
-    public float absorbtion;
+    public float absorbtion = 0.10f;
 
     #endregion
 

@@ -11,7 +11,7 @@ public class CoolingGel : Augmentation
     #region Public Fields
 
     /// <summary>Multiplies weapon's cooldown speed.</summary>
-    public float cooldownBoost;
+    public float cooldownBoost = 1.25f;
     
     #endregion
 

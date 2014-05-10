@@ -1,7 +1,7 @@
 ﻿// Steve Yeager
 // 5.3.2014
 
-using System;
+using Annotations;
 using UnityEngine;
 
 /// <summary>
@@ -11,7 +11,7 @@ public class BrassKnuckles : Augmentation
 {
     #region Public Fields
 
-    public float damage;
+    public float damage = 10f;
     
     #endregion
 
@@ -35,7 +35,7 @@ public class BrassKnuckles : Augmentation
 
     public override Augmentation Bake(GameObject player)
     {
-        BrassKnuckles comp = player.AddComponent(typeof(BrassKnuckles)) as BrassKnuckles;
+        BrassKnuckles comp = (BrassKnuckles)player.AddComponent(typeof(BrassKnuckles));
         comp.damage = damage;
 
         return comp;
@@ -45,11 +45,12 @@ public class BrassKnuckles : Augmentation
 
     #region MonoBehaviour Overrides
 
+    [UsedImplicitly]
     private void OnTriggerEnter(Collider other)
     {
         if (!dealingDamage) return;
 
-        Health enemyHealth = other.GetComponent(typeof(Health)) as Health;
+        Health enemyHealth = (Health)other.GetComponent(typeof(Health));
         if (enemyHealth != null)
         {
             enemyHealth.RecieveHit(ship, damage * multiplier);

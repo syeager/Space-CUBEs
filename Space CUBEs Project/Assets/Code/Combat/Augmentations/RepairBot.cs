@@ -12,10 +12,10 @@ public class RepairBot : Augmentation
     #region Public Fields
 
     /// <summary>How long to delay regen in seconds.</summary>
-    public float delay;
+    public float delay = 2f;
 
     /// <summary>Health/s to regen.</summary>
-    public float regenSpeed;
+    public float regenSpeed = 5f;
     
     #endregion
 
