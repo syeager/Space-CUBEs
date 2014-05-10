@@ -10,20 +10,13 @@ using System.Collections;
 public class OscillatingLaser : Weapon
 {
     #region Public Fields
-    
-    public GameObject Laser_Prefab;
-    public Vector3 laserOffset;
+
+    public Transform laser;
     public int cycles;
     public float speed;
     public float time;
     public float damage;
     
-    #endregion
-
-    #region Private Fields
-
-    private Transform laser;
-
     #endregion
 
 
@@ -33,16 +26,13 @@ public class OscillatingLaser : Weapon
     {
         if (pressed)
         {
-            gameObject.SetActive(true); // TODO: should always be active before calling
+            //gameObject.SetActive(true); // TODO: should always be active before calling
             StartCoroutine(Fire());
         }
         else
         {
             StopAllCoroutines();
-            if (laser != null)
-            {
-                laser.GetComponent<PoolObject>().Disable();
-            }
+            laser.gameObject.SetActive(false);
         }
     }
 
@@ -52,9 +42,10 @@ public class OscillatingLaser : Weapon
 
     private IEnumerator Fire()
     {
-        laser = PoolManager.Pop(Laser_Prefab, myTransform.position + myTransform.TransformDirection(laserOffset), myTransform.rotation).transform;
-        laser.parent = myTransform;
-        laser.GetComponent<Hitbox>().Initialize(myShip, damage);
+        // reset laser
+        laser.rotation = myTransform.rotation;
+        laser.gameObject.SetActive(true);
+        ((Hitbox)laser.GetComponent(typeof(Hitbox))).Initialize(myShip, damage);
 
         float direction = 1f;
         float cycleTime = time/cycles;
@@ -87,7 +78,7 @@ public class OscillatingLaser : Weapon
             direction *= -1f;
         }
 
-        laser.GetComponent<PoolObject>().Disable();
+        ((PoolObject)laser.GetComponent(typeof(PoolObject))).Disable();
     }
 
     #endregion

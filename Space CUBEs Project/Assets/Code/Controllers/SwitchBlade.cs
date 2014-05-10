@@ -1,10 +1,11 @@
 ﻿// Steve Yeager
 // 3.25.2014
 
-using System.Xml.Serialization;
+using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Random = UnityEngine.Random;
 
 /// <summary>
 /// AI for first boss.
@@ -72,7 +73,7 @@ public class SwitchBlade : Boss
         stateMachine = new StateMachine(this, EnteringState);
         stateMachine.CreateState(EnteringState, EnteringEnter, EnteringExit);
         stateMachine.CreateState(StagingState, StagingEnter, StagingExit);
-        stateMachine.CreateState(Stage1State, Stage1Enter, Stage1Exit);
+        stateMachine.CreateState(Stage1State, Stage1Enter, i => { });
         stateMachine.CreateState(Stage2State, Stage2Enter, Stage2Exit);
         stateMachine.CreateState(Stage3State, Stage3Enter, i => { });
         stateMachine.CreateState(DyingState, DyingEnter, i => { });
@@ -136,19 +137,12 @@ public class SwitchBlade : Boss
         while (timer > 0f)
         {
             timer -= Time.deltaTime;
-            myTransform.localScale += Vector3.one * Mathf.Sin(timer * stagingSpeed) * stagingSize * Time.deltaTime;
+            myTransform.localScale += Vector3.one * (float)Math.Sin(timer * stagingSpeed) * stagingSize * Time.deltaTime;
             yield return null;
         }
         myTransform.localScale = Vector3.one;
 
-        if (stage == 2)
-        {
-            stateMachine.SetState(Stage2State);
-        }
-        else
-        {
-            stateMachine.SetState(Stage3State);
-        }
+        stateMachine.SetState(stage == 2 ? Stage2State : Stage3State);
     }
 
 
@@ -194,16 +188,6 @@ public class SwitchBlade : Boss
             StartCoroutine(FirePattern(true));
             StartCoroutine(FireSideWeapons(false));
             yield return new WaitForSeconds(bulletEmitterTime + stage1SwitchTime);
-        }
-    }
-
-
-    private void Stage1Exit(Dictionary<string, object> info)
-    {
-        for (int i = 0; i < 5; i++)
-        {
-            myWeapons.Activate(i, false);
-            myWeapons.weapons[i].gameObject.SetActive(false);
         }
     }
 
@@ -260,9 +244,7 @@ public class SwitchBlade : Boss
     private IEnumerator Stage3Update()
     {
         // death laser
-        myWeapons.Activate(6, true);
         yield return StartCoroutine(FireDeathLaser());
-        myWeapons.Activate(6, false);
 
         while (true)
         {
@@ -339,9 +321,9 @@ public class SwitchBlade : Boss
         {
             moveJob.Pause();
         }
+        yield return new WaitForSeconds(stage1SwitchTime);
         myWeapons.weapons[weapon1].gameObject.SetActive(false);
         myWeapons.weapons[weapon2].gameObject.SetActive(false);
-        yield return new WaitForSeconds(stage1SwitchTime);
         if (controlMovement)
         {
             moveJob.UnPause();
@@ -405,6 +387,7 @@ public class SwitchBlade : Boss
         // close
         myWeapons.Activate(6, false);
         myWeapons.weapons[6].gameObject.SetActive(false);
+        yield return new WaitForSeconds(stage1SwitchTime);
         moveJob.UnPause();
     }
 
