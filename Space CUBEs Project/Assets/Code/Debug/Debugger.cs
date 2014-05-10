@@ -193,6 +193,18 @@ public class Debugger : Singleton<Debugger>
     #region Static Methods
 
     /// <summary>
+    /// Displays a log message to the console. Doesn't use Singleton.
+    /// </summary>
+    /// <param name="message">Message to be displayed.</param>
+    /// <param name="context">Unity Object to highlight in the Hierarchy.</param>
+    [System.Diagnostics.Conditional("DEBUG")]
+    public static void Print(object message, Object context = null)
+    {
+        Debug.Log(message, context);
+    }
+
+
+    /// <summary>
     /// Displays a log message to the Console.
     /// </summary>
     /// <param name="message">Message to be displayed.</param>
