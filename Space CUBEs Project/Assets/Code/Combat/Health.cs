@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections;
+using Annotations;
 using UnityEngine;
 
 /// <summary>
@@ -68,6 +69,7 @@ public class Health : MonoBase
     }
 
 
+    [UsedImplicitly]
     private void OnDestroy()
     {
         if (changeMat != null)
