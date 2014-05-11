@@ -230,7 +230,7 @@ public class Debugger : Singleton<Debugger>
         }
         else
         {
-            Debug.Log(string.Format("[{0}] {1}", DateTime.Now.TimeOfDay, message), context);
+            Debug.Log(string.Format("[{0}] {1}", DateTime.Now.ToShortTimeString(), message), context);
         }
 
 #if UNITY_EDITOR
@@ -264,7 +264,7 @@ public class Debugger : Singleton<Debugger>
         }
         else
         {
-            Debug.LogWarning(string.Format("[{0}] {1}", DateTime.Now.TimeOfDay, message), context);
+            Debug.LogWarning(string.Format("[{0}] {1}", DateTime.Now.ToShortTimeString(), message), context);
         }
 
 #if UNITY_EDITOR
@@ -294,7 +294,7 @@ public class Debugger : Singleton<Debugger>
         }
         else
         {
-            Debug.LogError(string.Format("[{0}] {1}", DateTime.Now.TimeOfDay, message), context);
+            Debug.LogError(string.Format("[{0}] {1}", DateTime.Now.ToShortTimeString(), message), context);
         }
 
 #if UNITY_EDITOR
@@ -352,7 +352,7 @@ public class Debugger : Singleton<Debugger>
         }
         else
         {
-            Debug.Log(string.Format("[{0}] {1}\n", DateTime.Now.TimeOfDay, header), context);
+            Debug.Log(string.Format("[{0}] {1}\n", DateTime.Now.ToShortTimeString(), header), context);
         }
         
         int count = 0;
@@ -387,7 +387,7 @@ public class Debugger : Singleton<Debugger>
         }
         else
         {
-            Debug.Log(string.Format("[{0}] {1}\n", DateTime.Now.TimeOfDay, header), context);
+            Debug.Log(string.Format("[{0}] {1}\n", DateTime.Now.ToShortTimeString(), header), context);
         }
 
         int count = 0;
@@ -437,7 +437,7 @@ public class Debugger : Singleton<Debugger>
         }
         else
         {
-            Debug.Log(string.Format("[{0}] {1}\n", DateTime.Now.TimeOfDay, header), unityContext);
+            Debug.Log(string.Format("[{0}] {1}\n", DateTime.Now.ToShortTimeString(), header), unityContext);
         }
 
         Type type = context.GetType();
