@@ -48,6 +48,7 @@ public class Debugger : Singleton<Debugger>
         true,    // LevelEvents
         true,    // StateMachines
         true,    // Construction
+        true,    // Performance
     };
 
     /// <summary>Catagorization for logging. Can be added to but need to update logFlags as well.</summary>
@@ -58,11 +59,15 @@ public class Debugger : Singleton<Debugger>
         LevelEvents = 2,
         StateMachines = 3,
         Construction = 4,
+        Performance = 5,
     }
 
 #if UNITY_EDITOR
-    /// <summary>Should the Editor pause if below 10 FPS?</summary>
+    /// <summary>Should the Editor pause if at a low FPS?</summary>
     public bool lowBreak = true;
+
+    /// <summary>Lowest FPS allowed before pausing.</summary>
+    public float lowFPS;
 #endif
 
     #endregion
@@ -162,12 +167,14 @@ public class Debugger : Singleton<Debugger>
             float average = accum / frames;
             fps.UpdateFPS(average);
 
-#if UNITY_EDITOR
-            if (lowBreak && average < 10)
+            if (lowBreak && average < lowFPS)
             {
+#if UNITY_EDITOR09
                 Debug.Break();
-            }
+#else
+                LogError(string.Format("FPS below {0}", lowFPS), null, LogTypes.Performance);
 #endif
+            }
 
             timeleft = UpdateInterval;
             accum = 0f;
@@ -214,10 +221,20 @@ public class Debugger : Singleton<Debugger>
     [System.Diagnostics.Conditional("DEBUG")]
     public static void Log(object message, Object context = null, LogTypes logType = LogTypes.Default, bool save = true)
     {
-        if (Main.logFlags[(int)logType]) Debug.Log((Main.showTime ? "[" + Time.realtimeSinceStartup + "] " : "") + message, context);
+        if (Application.isPlaying)
+        {
+            if (Main.logFlags[(int)logType])
+            {
+                Debug.Log((Main.showTime ? "[" + Time.realtimeSinceStartup + "] " : "") + message, context);
+            }
+        }
+        else
+        {
+            Debug.Log(string.Format("[{0}] {1}", DateTime.Now.TimeOfDay, message), context);
+        }
 
 #if UNITY_EDITOR
-        if (save && Main.logSaving != LogSaving.DontSave)
+        if (Application.isPlaying && save && Main.logSaving != LogSaving.DontSave)
         {
             using (StreamWriter writer = new StreamWriter(logPath + logType + FileExt, true))
             {
@@ -238,10 +255,20 @@ public class Debugger : Singleton<Debugger>
     [System.Diagnostics.Conditional("DEBUG")]
     public static void LogWarning(object message, Object context = null, LogTypes logType = LogTypes.Default, bool save = true)
     {
-        if (Main.logFlags[(int)logType]) Debug.LogWarning((Main.showTime ? "[" + Time.realtimeSinceStartup + "] " : "") + message, context);
+        if (Application.isPlaying)
+        {
+            if (Main.logFlags[(int)logType])
+            {
+                Debug.LogWarning((Main.showTime ? "[" + Time.realtimeSinceStartup + "] " : "") + message, context);
+            }
+        }
+        else
+        {
+            Debug.LogWarning(string.Format("[{0}] {1}", DateTime.Now.TimeOfDay, message), context);
+        }
 
 #if UNITY_EDITOR
-        if (save && Main.logSaving != LogSaving.DontSave)
+        if (Application.isPlaying && save && Main.logSaving != LogSaving.DontSave)
         {
             using (StreamWriter writer = new StreamWriter(logPath + logType + FileExt, true))
             {
@@ -261,10 +288,17 @@ public class Debugger : Singleton<Debugger>
     /// <param name="save">Should this message be saved to a log file?</param>
     public static void LogError(object message, Object context = null, LogTypes logType = LogTypes.Default, bool save = true)
     {
-        Debug.LogError((Main.showTime ? "[" + Time.realtimeSinceStartup + "] " : "") + message, context);
+        if (Application.isPlaying)
+        {
+            Debug.LogError((Main.showTime ? "[" + Time.realtimeSinceStartup + "] " : "") + message, context);
+        }
+        else
+        {
+            Debug.LogError(string.Format("[{0}] {1}", DateTime.Now.TimeOfDay, message), context);
+        }
 
 #if UNITY_EDITOR
-        if (save && Main.logSaving != LogSaving.DontSave)
+        if (Application.isPlaying && save && Main.logSaving != LogSaving.DontSave)
         {
             using (StreamWriter writer = new StreamWriter(logPath + logType + FileExt, true))
             {
@@ -282,7 +316,7 @@ public class Debugger : Singleton<Debugger>
     /// <param name="context">Unity Object to highlight in the Hierarchy.</param>
     /// <param name="logType">Used for catagorizing the message.</param>
     /// <param name="save">Should this message be saved to a log file?</param>
-    public static void LogException(Exception exception, Object context = null, LogTypes logType = LogTypes.Default, bool save = true)
+    public static Exception LogException(Exception exception, Object context = null, LogTypes logType = LogTypes.Default, bool save = true)
     {
         Debug.LogException(exception, context);
 
@@ -295,6 +329,8 @@ public class Debugger : Singleton<Debugger>
             }
         }
 #endif
+
+        return exception;
     }
 
 
@@ -308,23 +344,27 @@ public class Debugger : Singleton<Debugger>
     [System.Diagnostics.Conditional("DEBUG")]
     public static void LogList(IEnumerable list, string header = "", Object context = null, LogTypes logType = LogTypes.Default)
     {
-        if (!Main.logFlags[(int)logType]) return;
-
-        if (header != "")
+        if (Application.isPlaying)
         {
-            Debug.Log(header + '\n', context);
-        }
+            if (Main.logFlags[(int)logType]) return;
 
+            Debug.Log((Main.showTime ? "[" + Time.realtimeSinceStartup + "] " : "") + header + '\n', context);
+        }
+        else
+        {
+            Debug.Log(string.Format("[{0}] {1}\n", DateTime.Now.TimeOfDay, header), context);
+        }
+        
         int count = 0;
         foreach (var item in list)
         {
-            Debug.Log(count + ": " + item, context);
+            Debug.Log(count + ": " + item, item is Object ? (Object)item : context);
             count++;
         }
 
         if (count == 0)
         {
-            Debug.Log("Empty");
+            Debug.Log("Empty", context);
         }
     }
 
@@ -339,23 +379,40 @@ public class Debugger : Singleton<Debugger>
     [System.Diagnostics.Conditional("DEBUG")]
     public static void LogDict<TKey, TValue>(Dictionary<TKey, TValue> dictionary, string header = "", Object context = null, LogTypes logType = LogTypes.Default)
     {
-        if (!Main.logFlags[(int)logType]) return;
-
-        if (header != "")
+        if (Application.isPlaying)
         {
-            Debug.Log(header + '\n', context);
+            if (Main.logFlags[(int)logType]) return;
+
+            Debug.Log((Main.showTime ? "[" + Time.realtimeSinceStartup + "] " : "") + header + '\n', context);
+        }
+        else
+        {
+            Debug.Log(string.Format("[{0}] {1}\n", DateTime.Now.TimeOfDay, header), context);
         }
 
         int count = 0;
         foreach (var item in dictionary)
         {
-            Debug.Log(count + ": " + item.Key + ", " + item.Value, context);
+            Object itemContext;
+            if (item.Key is Object)
+            {
+                itemContext = item.Key as Object;
+            }
+            else if (item.Value is Object)
+            {
+                itemContext = item.Value as Object;
+            }
+            else
+            {
+                itemContext = context;
+            }
+            Debug.Log(count + ": " + item.Key + ", " + item.Value, itemContext);
             count++;
         }
 
         if (count == 0)
         {
-            Debug.Log("Empty");
+            Debug.Log("Empty", context);
         }
     }
 
@@ -364,24 +421,34 @@ public class Debugger : Singleton<Debugger>
     /// Display an instance's fields to the Console.
     /// </summary>
     /// <param name="context">Unity Object to highlight in the Hierarchy.</param>
-    /// <param name="name">Displayed before the instance's fields. Used for reference.</param>
+    /// <param name="header">Message to display before the list.</param>
     /// <param name="includePrivate">Should private members be shown as well?</param>
     /// <param name="logType">Will only display this message if this LogType is checked as active.</param>
     [System.Diagnostics.Conditional("DEBUG")]
-    public static void LogFields(object context, string name, bool includePrivate = false, LogTypes logType = LogTypes.Default)
+    public static void LogFields(object context, string header, bool includePrivate = false, LogTypes logType = LogTypes.Default)
     {
-        if (!Main.logFlags[(int)logType]) return;
+        Object unityContext = context as Object;
+       
+        if (Application.isPlaying)
+        {
+            if (Main.logFlags[(int)logType]) return;
+
+            Debug.Log((Main.showTime ? "[" + Time.realtimeSinceStartup + "] " : "") + header + '\n', unityContext);
+        }
+        else
+        {
+            Debug.Log(string.Format("[{0}] {1}\n", DateTime.Now.TimeOfDay, header), unityContext);
+        }
 
         Type type = context.GetType();
         System.Reflection.BindingFlags flags = System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance;
         if (includePrivate) flags |= System.Reflection.BindingFlags.NonPublic;
         System.Reflection.FieldInfo[] info = type.GetFields(flags);
 
-        Debug.Log(name, (context is Object ? context as Object : null));
         foreach (var i in info)
         {
             object o = i.GetValue(context);
-            Debug.Log(i.Name + ": " + o, (o is Object ? o as Object : null));
+            Debug.Log(i.Name + ": " + o, o is Object ? o as Object : unityContext);
         }
     }
 
