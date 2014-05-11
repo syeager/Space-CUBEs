@@ -1,6 +1,7 @@
 ﻿// Steve Yeager
 // 3.25.2014
 
+using Annotations;
 using UnityEngine;
 using System.Collections;
 
@@ -11,7 +12,7 @@ public class OscillatingLaser : Weapon
 {
     #region Public Fields
 
-    public Transform laser;
+    public GameObject laser;
     public int cycles;
     public float speed;
     public float time;
@@ -19,6 +20,21 @@ public class OscillatingLaser : Weapon
     
     #endregion
 
+    #region Private Fields
+
+    private Quaternion startRotation;
+
+    #endregion
+
+    #region MonoBehaviour Overrides
+
+    [UsedImplicitly]
+    private void Start()
+    {
+        startRotation = myTransform.rotation;
+    }
+
+    #endregion
 
     #region Weapon Overrides
 
@@ -26,13 +42,13 @@ public class OscillatingLaser : Weapon
     {
         if (pressed)
         {
-            //gameObject.SetActive(true); // TODO: should always be active before calling
             StartCoroutine(Fire());
         }
         else
         {
             StopAllCoroutines();
-            laser.gameObject.SetActive(false);
+            laser.SetActive(false);
+            myTransform.rotation = startRotation;
         }
     }
 
@@ -43,8 +59,7 @@ public class OscillatingLaser : Weapon
     private IEnumerator Fire()
     {
         // reset laser
-        laser.rotation = myTransform.rotation;
-        laser.gameObject.SetActive(true);
+        laser.SetActive(true);
         ((Hitbox)laser.GetComponent(typeof(Hitbox))).Initialize(myShip, damage);
 
         float direction = 1f;
@@ -56,7 +71,7 @@ public class OscillatingLaser : Weapon
         {
             timer -= Time.deltaTime;
 
-            laser.Rotate(Vector3.back, direction * speed * Time.deltaTime, Space.World);
+            myTransform.Rotate(Vector3.back, direction * speed * Time.deltaTime, Space.World);
 
             yield return null;
         }
@@ -70,7 +85,7 @@ public class OscillatingLaser : Weapon
             {
                 timer -= Time.deltaTime;
 
-                laser.Rotate(Vector3.back, direction * speed * Time.deltaTime, Space.World);
+                myTransform.Rotate(Vector3.back, direction * speed * Time.deltaTime, Space.World);
 
                 yield return null;
             }
