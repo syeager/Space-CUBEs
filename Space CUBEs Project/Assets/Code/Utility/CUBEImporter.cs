@@ -1,6 +1,7 @@
 ﻿// Steve Yeager
 // 2.19.2014
 
+using System.Linq;
 using Annotations;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
@@ -17,10 +18,10 @@ public class CUBEImporter : MonoBehaviour
 
     #region Private Fields
 
-    #region UNITY_EDITOR
+#if UNITY_EDITOR
     private string meshPath;
     private string prefabPath;
-    #endregion
+#endif
 
     #endregion
 
@@ -53,12 +54,18 @@ public class CUBEImporter : MonoBehaviour
         Mesh mesh = new Mesh();
         mesh.CombineMeshes(combine.ToArray(), false);
         mesh.Optimize();
-        //mesh.uv = null; // -1KB
 
         // prefab
         string path = meshPath.Substring(0, meshPath.Length - 10) + "_Mesh.asset";
         UnityEditor.AssetDatabase.CreateAsset(mesh, path);
         prefab.GetComponent<MeshFilter>().sharedMesh = (Mesh)UnityEditor.AssetDatabase.LoadAssetAtPath(path, typeof(Mesh));
+        
+        // labels
+        List<string> labels = UnityEditor.AssetDatabase.GetLabels(prefab).ToList();
+        labels.Add("CUBE");
+        labels.Add(CUBE.allCUBES.First(c => c.name == name).type.ToString());
+        UnityEditor.AssetDatabase.SetLabels(prefab, labels.ToArray());
+
 
         // materials
         int materialCount = meshFilters.Length;
@@ -73,7 +80,7 @@ public class CUBEImporter : MonoBehaviour
         // delete model
         UnityEditor.AssetDatabase.DeleteAsset(meshPath);       
 
-        Debug.Log("Imported " + name);
+        Debugger.Log("Imported " + name);
 
         // delete self
         Resources.UnloadUnusedAssets();
