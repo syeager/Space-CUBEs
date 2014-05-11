@@ -12,6 +12,7 @@ using System.Threading;
 using Annotations;
 using UnityEditor;
 using UnityEngine;
+using Profiler = LittleByte.Debug.Profiler;
 
 public class BuildTool : EditorWindow
 {
@@ -80,7 +81,7 @@ public class BuildTool : EditorWindow
     [UsedImplicitly]
     private static void QuickBuild()
     {
-        using (var timer = new SpeedTimer("Built Player"))
+        using (var timer = new Profiler("Built Player"))
         {
             string version = PlayerSettings.bundleVersion;
             string[] versionSegments = version.Split('.');

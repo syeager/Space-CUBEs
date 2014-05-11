@@ -2,7 +2,7 @@
 // 
 
 using UnityEngine;
-using System.Collections;
+using Profiler = LittleByte.Debug.Profiler;
 
 //
 public class MASTERTEST : MonoBehaviour
@@ -13,13 +13,13 @@ public class MASTERTEST : MonoBehaviour
 
     void Awake()
     {
-        using (var timer = new SpeedTimer("generic"))
+        using (var timer = new Profiler("generic"))
         {
             for (int i = 0; i < tests; i++)
                 myTransform = GetComponent<Transform>();
         }
 
-        using (var timer = new SpeedTimer("type"))
+        using (var timer = new Profiler("type"))
         {
             for (int i = 0; i < tests; i++)
                 myTransform = ((Transform)GetComponent(typeof(Transform)));

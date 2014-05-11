@@ -11,6 +11,7 @@ using System.Linq;
 using Types = CUBE.Types;
 using Subsystems = CUBE.Subsystems;
 using Brands = CUBE.Brands;
+using Profiler = LittleByte.Debug.Profiler;
 
 /// <summary>
 /// Update all CUBE prefabs.
@@ -32,10 +33,11 @@ public class CUBEUpdater : EditorWindow
     [MenuItem("Tools/CUBE Updater &u")]
     public static void Update()
     {
-        DateTime startTime = DateTime.Now;
-        ToBinary(CSVToCUBEInfo());
-        UpdatePrefabs();
-        Debug.Log("CUBE list updated successfully. " + (DateTime.Now - startTime).TotalSeconds);
+        using (var timer = new Profiler("CUBE list updated successfully."))
+        {
+            ToBinary(CSVToCUBEInfo());
+            UpdatePrefabs();
+        }
     }
 
     #endregion
