@@ -13,7 +13,7 @@ GameObject:
   - 114: {fileID: 11400000}
   - 114: {fileID: 11400002}
   m_Layer: 0
-  m_Name: Vita Engine IV
+  m_Name: Aegis PowerCore III
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,6 +44,7 @@ Renderer:
   m_Materials:
   - {fileID: 2100000, guid: 6d9e17dd27ab6bc4ea90d40a327ec967, type: 2}
   - {fileID: 2100000, guid: 6d9e17dd27ab6bc4ea90d40a327ec967, type: 2}
+  - {fileID: 2100000, guid: 6d9e17dd27ab6bc4ea90d40a327ec967, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -58,7 +59,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Mesh: {fileID: 4300000, guid: 3a4771660b4752841924dab0e2406e72, type: 2}
+  m_Mesh: {fileID: 4300000, guid: 451b853381a14a44fbc4121a5060895f, type: 2}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -70,7 +71,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 583375bc492680d4abdf998fb25928d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: 28
+  ID: 52
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -82,7 +83,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cddb31ad4dca1141a26c308b5d59954, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colors: 0000000000000000
+  colors: 000000000000000000000000
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
