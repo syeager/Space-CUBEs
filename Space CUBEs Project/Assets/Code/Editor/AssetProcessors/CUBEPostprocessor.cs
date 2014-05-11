@@ -1,9 +1,9 @@
 ﻿// Steve Yeager
 // 1.30.2014
 
+using Annotations;
 using UnityEngine;
 using UnityEditor;
-using System.Collections;
 
 /// <summary>
 /// 
@@ -12,19 +12,19 @@ public class CUBEPostprocessor : AssetPostprocessor
 {
     #region Const Fields
 
-    private const string MESHPATH = "Assets/Ship/CUBEs/Meshes/";
-    private const string MATERIALPATH = MESHPATH + "Materials";
-    private const string VERTEXCOLORPATH = "Assets/Ship/CUBEs/Materials/VertexColor_Mat.mat";
-    private const string PREFABPATH = "Assets/Ship/CUBEs/Prefabs/";
+    private const string MeshPath = "Assets/Ship/CUBEs/Meshes/";
+    private const string VertexColorPath = "Assets/Ship/CUBEs/Materials/VertexColor_Mat.mat";
+    private const string PrefabPath = "Assets/Ship/CUBEs/Prefabs/";
 
     #endregion
 
 
     #region AssetPostprocessor Overrides
 
+    [UsedImplicitly]
     private void OnPreprocessModel()
     {
-        if (!assetPath.Contains(MESHPATH)) return;
+        if (!assetPath.Contains(MeshPath)) return;
         
         ModelImporter importer = assetImporter as ModelImporter;
 
@@ -42,9 +42,10 @@ public class CUBEPostprocessor : AssetPostprocessor
     }
 
 
+    [UsedImplicitly]
     private void OnPostprocessModel(GameObject gameObject)
     {
-        if (!assetPath.Contains(MESHPATH)) return;
+        if (!assetPath.Contains(MeshPath)) return;
 
         // create prefab
         string prefabName = gameObject.name.Replace('_', ' ').Remove(gameObject.name.Length - 6);
@@ -54,10 +55,9 @@ public class CUBEPostprocessor : AssetPostprocessor
         go.renderer.castShadows = false;
         go.renderer.receiveShadows = false;
 
-        string prefabPath = PREFABPATH + prefabName + ".prefab";
+        string prefabPath = PrefabPath + prefabName + ".prefab";
         GameObject prefab = PrefabUtility.CreatePrefab(prefabPath, go);
         prefab.AddComponent<CUBE>();
-        // add weapon
 
         var cube = go.AddComponent<CUBEImporter>();
         cube.Create(assetPath, prefabPath);
@@ -66,9 +66,10 @@ public class CUBEPostprocessor : AssetPostprocessor
     }
 
 
+    [UsedImplicitly]
     private Material OnAssignMaterialModel(Material material, Renderer renderer)
     {
-        return (Material)AssetDatabase.LoadAssetAtPath(VERTEXCOLORPATH, typeof(Material));
+        return (Material)AssetDatabase.LoadAssetAtPath(VertexColorPath, typeof(Material));
     }
 
     #endregion
