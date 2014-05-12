@@ -151,5 +151,20 @@ public class CUBE : MonoBehaviour
         return CUBE.colors;
     }
 
+
+    public static CUBEInfo GetInfo(string cubeName)
+    {
+#if UNITY_EDITOR
+        if (allCUBES == null)
+        {
+            LoadAllCUBEInfo();
+        }
+#endif
+
+// ReSharper disable AssignNullToNotNullAttribute
+        return allCUBES.First(c => c.name == cubeName);
+// ReSharper restore AssignNullToNotNullAttribute
+    }
+
     #endregion
 }

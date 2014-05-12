@@ -3,6 +3,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 /// <summary>
@@ -66,9 +67,9 @@ public static class Utility
     #region Editor Methods
 
 #if UNITY_EDITOR
-    public static IEnumerable<T> LoadObjects<T>(string path) where T : Component
+    public static IEnumerable<T> LoadObjects<T>(string path, bool recursive) where T : Component
     {
-        string[] files = System.IO.Directory.GetFiles(path);
+        string[] files = recursive ? Directory.GetFiles(path, "*.*", SearchOption.AllDirectories) : Directory.GetFiles(path);
         List<T> objects = new List<T>();
 
         for (int i = 0; i < files.Length; i++)

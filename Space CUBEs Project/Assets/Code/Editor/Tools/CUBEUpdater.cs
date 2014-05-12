@@ -106,7 +106,7 @@ public class CUBEUpdater : EditorWindow
     private static void UpdatePrefabs()
     {
         // get all CUBE prefabs
-        var prefabs = Utility.LoadObjects<CUBE>(PrefabPath).ToArray();
+        var prefabs = Utility.LoadObjects<CUBE>(PrefabPath, true).ToArray();
 
         CUBEInfo[] info = CUBE.LoadAllCUBEInfo();
 

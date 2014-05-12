@@ -63,9 +63,8 @@ public class CUBEImporter : MonoBehaviour
         // labels
         List<string> labels = UnityEditor.AssetDatabase.GetLabels(prefab).ToList();
         labels.Add("CUBE");
-        labels.Add(CUBE.allCUBES.First(c => c.name == name).type.ToString());
+        labels.Add(CUBE.GetInfo(name).type.ToString());
         UnityEditor.AssetDatabase.SetLabels(prefab, labels.ToArray());
-
 
         // materials
         int materialCount = meshFilters.Length;

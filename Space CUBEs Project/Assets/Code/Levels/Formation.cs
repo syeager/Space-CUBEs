@@ -24,7 +24,7 @@ public class Formation : MonoBehaviour
     #if UNITY_EDITOR
     public static Formation[] AllFormations()
     {
-        return Utility.LoadObjects<Formation>(FormationPath).ToArray();
+        return Utility.LoadObjects<Formation>(FormationPath, false).ToArray();
     }
     #endif
 

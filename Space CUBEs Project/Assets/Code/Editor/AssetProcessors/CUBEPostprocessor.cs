@@ -55,7 +55,7 @@ public class CUBEPostprocessor : AssetPostprocessor
         go.renderer.castShadows = false;
         go.renderer.receiveShadows = false;
 
-        string prefabPath = PrefabPath + prefabName + ".prefab";
+        string prefabPath = string.Format("{0}{1}/{2}.prefab", PrefabPath, CUBE.GetInfo(prefabName).type, prefabName);
         GameObject prefab = PrefabUtility.CreatePrefab(prefabPath, go);
         prefab.AddComponent<CUBE>();
 
