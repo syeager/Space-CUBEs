@@ -12,9 +12,8 @@ GameObject:
   - 23: {fileID: 2300000}
   - 114: {fileID: 11400000}
   - 114: {fileID: 11400002}
-  - 114: {fileID: 11400004}
   m_Layer: 0
-  m_Name: Singularity Blaster
+  m_Name: Aegis Engine V
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,7 +44,6 @@ Renderer:
   m_Materials:
   - {fileID: 2100000, guid: 6d9e17dd27ab6bc4ea90d40a327ec967, type: 2}
   - {fileID: 2100000, guid: 6d9e17dd27ab6bc4ea90d40a327ec967, type: 2}
-  - {fileID: 2100000, guid: 6d9e17dd27ab6bc4ea90d40a327ec967, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -60,7 +58,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Mesh: {fileID: 4300000, guid: 3df46f228ad75684fa15af5505996c35, type: 2}
+  m_Mesh: {fileID: 4300000, guid: f0148652382218a4da987d0fc5f5a56a, type: 2}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -72,7 +70,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 583375bc492680d4abdf998fb25928d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: 103
+  ID: 49
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -84,29 +82,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cddb31ad4dca1141a26c308b5d59954, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colors: 190000001e00000015000000
---- !u!114 &11400004
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c03bb0ea66dfcab4290f01cb7268227c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  log: 1
-  timeScale: 1
-  name: Singularity Blaster
-  cooldownTime: 7
-  cooldownSpeed: 15
-  BlackHoleMissile_Prefab: {fileID: 100000, guid: cb0c0bb4d7f6fd24eba059d786abcba6,
-    type: 2}
-  missileOffset: {x: 0, y: 0, z: 1}
-  damage: 5
-  missileTime: 10
-  missileSpeed: 45
+  colors: 0000000000000000
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

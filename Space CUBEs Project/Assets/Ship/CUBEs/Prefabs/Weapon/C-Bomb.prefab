@@ -14,7 +14,7 @@ GameObject:
   - 114: {fileID: 11400002}
   - 114: {fileID: 11400004}
   m_Layer: 0
-  m_Name: Plasma Cannon
+  m_Name: C-Bomb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -59,7 +59,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Mesh: {fileID: 4300000, guid: b3dc7835f8c8f004ab3ef5442c518d3c, type: 2}
+  m_Mesh: {fileID: 4300000, guid: c8f098316451c244cbb5ef2a0afbcff2, type: 2}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -71,7 +71,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 583375bc492680d4abdf998fb25928d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: 100
+  ID: 102
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -83,7 +83,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cddb31ad4dca1141a26c308b5d59954, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colors: 140000001d000000
+  colors: 0000000002000000
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -92,18 +92,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 338eadfdc1ef901409328689e2f52b4d, type: 3}
+  m_Script: {fileID: 11500000, guid: 25402cdb9c0120c418c1bea9fc31a508, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   log: 1
   timeScale: 1
-  name: Plasma Cannon
-  cooldownTime: .100000001
-  cooldownSpeed: 0
-  Laser_Prefab: {fileID: 100000, guid: 5a19f2fa1cd2e0347ba232995a185ac1, type: 2}
-  damage: 10
-  laserOffset: {x: 0, y: 0, z: 1}
-  speed: 67
+  name: C-Bomb
+  cooldownTime: 5
+  CBomb_Prefab: {fileID: 100000, guid: 1292c63f16b9eff4fba7c1b2785b131c, type: 2}
+  attackOffset: {x: 0, y: 0, z: 1}
+  time: 4
+  speed: 40
+  damage: 100
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
