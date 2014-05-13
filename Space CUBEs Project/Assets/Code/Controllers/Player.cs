@@ -4,6 +4,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Annotations;
 using UnityEngine;
 
 /// <summary>
@@ -38,13 +39,7 @@ public class Player : Ship
     public float backBounds;
     public float frontBounds;
 
-    public static readonly KeyCode[] WeaponKeys =
-    {
-        KeyCode.J,
-        KeyCode.K,
-        KeyCode.L,
-        KeyCode.Semicolon
-    };
+    private const string WeaponInput = "Weapon";
     private bool barrelRoll;
     public float swipeNeeded = 10f;
 
@@ -76,6 +71,11 @@ public class Player : Ship
         myScore = new ScoreManager();
         myMoney = new MoneyManager();
         myAugmentations = GetComponent<AugmentationManager>();
+
+        // PC
+#if UNITY_STANDALONE
+        barrelRoll = true;
+#endif
 
         // effects
         if (!GameSettings.Main.trailRenderer)
@@ -200,15 +200,17 @@ public class Player : Ship
     {
         var weapons = new List<KeyValuePair<int, bool>>();
 
-        for (int i = 0; i < WeaponKeys.Length; i++)
+        for (int i = 0; i < Weaponlimit; i++)
         {
             if (myWeapons.CanActivate(i))
             {
-                if (Input.GetKeyDown(WeaponKeys[i]))
+                string input = WeaponInput + i;
+                
+                if (Input.GetButtonDown(input))
                 {
                     weapons.Add(new KeyValuePair<int, bool>(i, true));
                 }
-                else if (Input.GetKeyUp(WeaponKeys[i]))
+                else if (Input.GetButtonUp(input))
                 {
                     weapons.Add(new KeyValuePair<int, bool>(i, false));
                 }
@@ -224,7 +226,14 @@ public class Player : Ship
     {
 #if UNITY_STANDALONE
 
-        return Input.GetKeyDown(KeyCode.Space);
+        if (!barrelRoll) return false;
+        bool result = Input.GetAxis("BarrelRoll") >= 0.5f;
+        if (result)
+        {
+            barrelRoll = false;
+            StartCoroutine(BarrelRollReleased());
+        }
+        return result;
 
 #else
 
@@ -249,6 +258,15 @@ public class Player : Ship
         return false;
 
         #endif
+    }
+
+
+    private IEnumerator BarrelRollReleased()
+    {
+        while (Input.GetAxis("BarrelRoll") >= 0.5f) yield return null;
+        
+        barrelRoll = true;
+        CancelInvoke("BarrelRollReleased");
     }
 
     #endregion
