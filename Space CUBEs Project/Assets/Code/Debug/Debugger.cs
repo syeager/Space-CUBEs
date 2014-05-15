@@ -457,10 +457,11 @@ public class Debugger : Singleton<Debugger>
     /// Updates an internal counter and displays current value to the Console.
     /// </summary>
     /// <param name="message">Message to display next to the counter.</param>
+    /// <param name="context">Unity Object to highlight in the Hierarchy.</param>
     [System.Diagnostics.Conditional("DEBUG")]
-    public static void Mark(string message = "")
+    public static void Mark(string message = "", Object context = null)
     {
-        Debug.Log(String.Format("{0} {1}", marker, message));
+        Debug.Log(String.Format("{0} {1}", marker, message), context);
         marker++;
     }
 
