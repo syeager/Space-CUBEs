@@ -268,7 +268,7 @@ public class GarageManager : MonoBase
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            stateMachine.SetState(LOADSTATE, null);
+            stateMachine.SetState(LOADSTATE);
         }
     }
 
@@ -915,7 +915,10 @@ public class GarageManager : MonoBase
         {
             // update camera
             UpdateCamera();
-            CameraMovementEdit();
+            if (UICamera.selectedObject != shipName.gameObject)
+            {
+                CameraMovementEdit();
+            }
 
             // change menu
             int dir = MenuSwipe();
@@ -1087,7 +1090,10 @@ public class GarageManager : MonoBase
         {
             // update camera
             UpdateCamera();
-            CameraMovementEdit();
+            if (UICamera.selectedObject != shipName.gameObject)
+            {
+                CameraMovementEdit();
+            }
 
             // detect swipe
             int dir = MenuSwipe();
@@ -1247,7 +1253,10 @@ public class GarageManager : MonoBase
         {
             // update camera
             UpdateCamera();
-            CameraMovementEdit();
+            if (UICamera.selectedObject != shipName.gameObject)
+            {
+                CameraMovementEdit();
+            }
 
             // detect swipe
             int dir = MenuSwipe();
@@ -1519,7 +1528,10 @@ public class GarageManager : MonoBase
         {
             // update camera
             UpdateCamera();
-            CameraMovementEdit();
+            if (UICamera.selectedObject != shipName.gameObject)
+            {
+                CameraMovementEdit();
+            }
 
             // change menu
             int dir = MenuSwipe();
