@@ -4,12 +4,12 @@
 using System.Linq;
 using Annotations;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 using System.Collections.Generic;
 
 [ExecuteInEditMode]
 public class CUBEImporter : MonoBehaviour
 {
+   #if UNITY_EDITOR
     #region Public Fields
 
     public Material VertexColor_Mat;
@@ -18,17 +18,14 @@ public class CUBEImporter : MonoBehaviour
 
     #region Private Fields
 
-#if UNITY_EDITOR
     private string meshPath;
     private string prefabPath;
-#endif
 
     #endregion
 
 
     #region MonoBehaviour Overrides
 
-#if UNITY_EDITOR
     [UsedImplicitly]
     private void Start()
     {
@@ -85,8 +82,6 @@ public class CUBEImporter : MonoBehaviour
         Resources.UnloadUnusedAssets();
         DestroyImmediate(gameObject);
     }
-#endif
-
 
     #endregion
 
@@ -99,4 +94,5 @@ public class CUBEImporter : MonoBehaviour
     }
 
     #endregion
+#endif
 }
