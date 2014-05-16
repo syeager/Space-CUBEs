@@ -46,10 +46,23 @@ public class Ship : MonoBase
         myHealth = GetComponent<ShieldHealth>() ?? gameObject.AddComponent<ShieldHealth>();
     }
 
+
     protected virtual void Start()
     {
         // register events
         myHealth.DieEvent += OnDie;
+    }
+
+
+    protected virtual void OnEnable()
+    {
+        LevelManager.PausedEvent += OnPause;
+    }
+
+
+    protected virtual void OnDisable()
+    {
+        LevelManager.PausedEvent -= OnPause;
     }
 
 
@@ -68,6 +81,15 @@ public class Ship : MonoBase
         if (stateMachine.currentState != DyingState)
         {
             stateMachine.SetState(DyingState, new Dictionary<string, object> { { "sender", sender } });
+        }
+    }
+
+
+    private void OnPause(object sender, PauseArgs args)
+    {
+        if (stateMachine.update != null)
+        {
+            stateMachine.update.Pause(args.paused);
         }
     }
 

@@ -47,11 +47,14 @@ public class LevelManager : Singleton<LevelManager>
     public Player player { get; protected set; }
     public Transform playerTransform { get; protected set; }
 
+    public static bool paused { get; private set; }
+
     #endregion
 
     #region Events
 
     public EventHandler LevelFinishedEvent;
+    public static EventHandler<PauseArgs> PausedEvent;
 
     #endregion
 
@@ -117,6 +120,30 @@ public class LevelManager : Singleton<LevelManager>
             UnityEditor.EditorApplication.isPaused = true;
         }
 #endif
+    }
+
+    #endregion
+
+    #region Static Methods
+
+    private bool firstPause = true;
+    public void TogglePause()
+    {
+        if (firstPause)
+        {
+            firstPause = false;
+            return;
+        }
+        Pause(!paused);
+    }
+
+
+    public static void Pause(bool pause)
+    {
+        Debugger.Log("Level " + (pause ? "Paused" : "Unpaused"), Main, Debugger.LogTypes.LevelEvents);
+        paused = pause;
+        PausedEvent.Fire(Main, new PauseArgs(paused));
+        Time.timeScale = paused ? 0f : 1f;
     }
 
     #endregion

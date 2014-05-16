@@ -116,7 +116,7 @@ public class SwitchBlade : Boss
     private void StagingEnter(Dictionary<string, object> info)
     {
         myHealth.invincible = true;
-        moveJob.Pause();
+        moveJob.Pause(true);
 
         for (int i = 0; i < myWeapons.weapons.Length; i++)
         {
@@ -149,7 +149,7 @@ public class SwitchBlade : Boss
     private void StagingExit(Dictionary<string, object> info)
     {
         myHealth.invincible = false;
-        moveJob.UnPause();
+        moveJob.Pause(false);
 
         stateMachine.SetUpdate(StagingUpdate());
     }
@@ -230,14 +230,14 @@ public class SwitchBlade : Boss
 
     private void Stage2Exit(Dictionary<string, object> info)
     {
-        shieldJob.Pause();
+        shieldJob.Pause(true);
     }
 
 
     private void Stage3Enter(Dictionary<string, object> info)
     {
         stateMachine.SetUpdate(Stage3Update());
-        shieldJob.UnPause();
+        shieldJob.Pause(false);
     }
 
 
@@ -299,7 +299,7 @@ public class SwitchBlade : Boss
         // open
         if (controlMovement)
         {
-            moveJob.Pause();
+            moveJob.Pause(true);
         }
         myWeapons.weapons[weapon1].gameObject.SetActive(true);
         myWeapons.weapons[weapon2].gameObject.SetActive(true);
@@ -308,7 +308,7 @@ public class SwitchBlade : Boss
         // fire
         if (controlMovement)
         {
-            moveJob.UnPause();
+            moveJob.Pause(false);
         }
         myWeapons.Activate(weapon1, true);
         myWeapons.Activate(weapon2, true);
@@ -319,14 +319,14 @@ public class SwitchBlade : Boss
         // close
         if (controlMovement)
         {
-            moveJob.Pause();
+            moveJob.Pause(true);
         }
         yield return new WaitForSeconds(stage1SwitchTime);
         myWeapons.weapons[weapon1].gameObject.SetActive(false);
         myWeapons.weapons[weapon2].gameObject.SetActive(false);
         if (controlMovement)
         {
-            moveJob.UnPause();
+            moveJob.Pause(false);
         }
     }
 
@@ -336,7 +336,7 @@ public class SwitchBlade : Boss
         // open
         if (controlMovement)
         {
-            moveJob.Pause();
+            moveJob.Pause(true);
         }
         myWeapons.weapons[4].gameObject.SetActive(true);
         yield return new WaitForSeconds(stage1SwitchTime);
@@ -350,7 +350,7 @@ public class SwitchBlade : Boss
         yield return new WaitForSeconds(stage1SwitchTime);
         if (controlMovement)
         {
-            moveJob.UnPause();
+            moveJob.Pause(false);
         }
     }
 
@@ -376,7 +376,7 @@ public class SwitchBlade : Boss
     private IEnumerator FireDeathLaser()
     {
         // open
-        moveJob.Pause();
+        moveJob.Pause(true);
         myWeapons.weapons[6].gameObject.SetActive(true);
         yield return new WaitForSeconds(deathLaserChargeTime);
 
@@ -388,7 +388,7 @@ public class SwitchBlade : Boss
         myWeapons.Activate(6, false);
         myWeapons.weapons[6].gameObject.SetActive(false);
         yield return new WaitForSeconds(stage1SwitchTime);
-        moveJob.UnPause();
+        moveJob.Pause(false);
     }
 
 

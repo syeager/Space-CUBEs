@@ -72,18 +72,9 @@ public class Job
     /// <summary>
     /// Pause the job.
     /// </summary>
-    public void Pause()
+    public void Pause(bool pause)
     {
-        paused = true;
-    }
-
-
-    /// <summary>
-    /// Unpause the job.
-    /// </summary>
-    public void UnPause()
-    {
-        paused = false;
+        paused = pause;
     }
 
 
