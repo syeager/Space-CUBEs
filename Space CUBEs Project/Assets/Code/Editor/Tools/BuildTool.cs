@@ -81,7 +81,9 @@ public class BuildTool : EditorWindow
     [UsedImplicitly]
     private static void QuickBuild()
     {
+// ReSharper disable UnusedVariable
         using (var timer = new Profiler("Built Player"))
+// ReSharper restore UnusedVariable
         {
             string version = PlayerSettings.bundleVersion;
             string[] versionSegments = version.Split('.');
@@ -101,6 +103,7 @@ public class BuildTool : EditorWindow
 
     private static void Build(string version, bool pc, bool email)
     {
+        Debugger.Print("Building: " + version);
         PlayerSettings.bundleVersion = version;
 
         // build
@@ -136,7 +139,7 @@ public class BuildTool : EditorWindow
 
     public static void SendEmail(object info)
     {
-        Debug.Log("sending mail...");
+        Debugger.Print("sending mail...");
 
         string build = (string)(info as Dictionary<string, object>)["build"];
         string buildPath = (string)(info as Dictionary<string, object>)["buildPath"];
@@ -144,7 +147,7 @@ public class BuildTool : EditorWindow
         MailAddress toAddress = new MailAddress(EmailWilliams);
         string subject = build;
 
-        SmtpClient smtp = new SmtpClient()
+        SmtpClient smtp = new SmtpClient
         {
             Host = "smtp.gmail.com",
             Port = 587,
@@ -173,15 +176,15 @@ public class BuildTool : EditorWindow
             {
                 if (args.Cancelled)
                 {
-                    Debug.LogError("Build Email Cancelled.");
+                    Debugger.LogError("Build Email Cancelled.");
                 }
                 else if (args.Error != null)
                 {
-                    Debug.LogException(args.Error);
+                    Debugger.LogException(args.Error);
                 }
                 else
                 {
-                    Debug.Log("Build Email Sent");
+                    Debugger.Log("Build Email Sent");
                 }
             };
             smtp.Send(message);
