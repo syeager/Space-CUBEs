@@ -344,7 +344,7 @@ public class Debugger : Singleton<Debugger>
     {
         if (Application.isPlaying)
         {
-            if (Main.logFlags[(int)logType]) return;
+            if (!Main.logFlags[(int)logType]) return;
 
             Debug.Log((Main.showTime ? "[" + Time.realtimeSinceStartup + "] " : "") + header + '\n', context);
         }
@@ -379,7 +379,7 @@ public class Debugger : Singleton<Debugger>
     {
         if (Application.isPlaying)
         {
-            if (Main.logFlags[(int)logType]) return;
+            if (!Main.logFlags[(int)logType]) return;
 
             Debug.Log((Main.showTime ? "[" + Time.realtimeSinceStartup + "] " : "") + header + '\n', context);
         }
@@ -429,7 +429,7 @@ public class Debugger : Singleton<Debugger>
        
         if (Application.isPlaying)
         {
-            if (Main.logFlags[(int)logType]) return;
+            if (!Main.logFlags[(int)logType]) return;
 
             Debug.Log((Main.showTime ? "[" + Time.realtimeSinceStartup + "] " : "") + header + '\n', unityContext);
         }
