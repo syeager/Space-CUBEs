@@ -62,13 +62,11 @@ public class Debugger : Singleton<Debugger>
         Performance = 5,
     }
 
-#if UNITY_EDITOR
     /// <summary>Should the Editor pause if at a low FPS?</summary>
     public bool lowBreak = true;
 
     /// <summary>Lowest FPS allowed before pausing.</summary>
     public float lowFPS;
-#endif
 
     #endregion
 
@@ -169,7 +167,7 @@ public class Debugger : Singleton<Debugger>
 
             if (lowBreak && average < lowFPS)
             {
-#if UNITY_EDITOR09
+#if UNITY_EDITOR
                 Debug.Break();
 #else
                 LogError(string.Format("FPS below {0}", lowFPS), null, LogTypes.Performance);
