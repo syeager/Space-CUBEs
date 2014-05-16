@@ -2,12 +2,12 @@
 // 4.3.2014
 
 using UnityEditor;
-using UnityEngine;
 
 /// <summary>
-/// 
+/// Editor for ActivateButton.
 /// </summary>
-[CustomEditor(typeof(ActivateButton))]
+[CanEditMultipleObjects]
+[CustomEditor(typeof(ActivateButton), true)]
 public class ActivateButtonEditor : UIButtonEditor
 {
     #region Editor Overrides
@@ -17,15 +17,14 @@ public class ActivateButtonEditor : UIButtonEditor
         serializedObject.Update();
 
         ActivateButton button = (target as ActivateButton);
-        bool toggled = false;
+        bool toggled;
         EditorGUI.BeginChangeCheck();
         {
             toggled = EditorGUILayout.Toggle("Enabled", button.isEnabled);
         }
         if (EditorGUI.EndChangeCheck())
         {
-            button.isEnabled = toggled;
-            //button.UpdateColor(toggled, true);
+            button.Toggle(toggled);
         }
 
         base.OnInspectorGUI();

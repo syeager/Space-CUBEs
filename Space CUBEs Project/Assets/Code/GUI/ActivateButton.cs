@@ -2,7 +2,7 @@
 // 12.18.2014
 
 using System;
-using System.ComponentModel;
+using Annotations;
 using UnityEngine;
 
 /// <summary>
@@ -22,9 +22,20 @@ public class ActivateButton : UIButton
     #region Private Fields
 
     private bool activated;
+    private UIKeyNavigation keyNavigation;
 
     #endregion
 
+
+    #region MonoBehaviour Overrides
+
+    [UsedImplicitly]
+    private void Awake()
+    {
+        keyNavigation = (UIKeyNavigation)GetComponent(typeof(UIKeyNavigation));
+    }
+
+    #endregion
 
     #region UIButton Overrides
 
@@ -81,6 +92,16 @@ public class ActivateButton : UIButton
     public void SetText(string text)
     {
         label.text = text;
+    }
+
+
+    public void Toggle(bool on)
+    {
+        isEnabled = on;
+        if (keyNavigation != null)
+        {
+            keyNavigation.enabled = on;
+        }
     }
 
     #endregion
