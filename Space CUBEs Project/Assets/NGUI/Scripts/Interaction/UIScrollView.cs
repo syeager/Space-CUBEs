@@ -365,7 +365,7 @@ public class UIScrollView : MonoBehaviour
 		if (!horizontal) constraint.x = 0f;
 		if (!vertical) constraint.y = 0f;
 
-		if (constraint.sqrMagnitude > 1f)
+		if (constraint.sqrMagnitude > 0.1f)
 		{
 			if (!instant && dragEffect == DragEffect.MomentumAndSpring)
 			{
@@ -635,7 +635,7 @@ public class UIScrollView : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Move the scroll view by the specified amount.
+	/// Move the scroll view by the specified local space amount.
 	/// </summary>
 
 	public virtual void MoveRelative (Vector3 relative)
@@ -651,7 +651,7 @@ public class UIScrollView : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Move the scroll view by the specified amount.
+	/// Move the scroll view by the specified world space amount.
 	/// </summary>
 
 	public void MoveAbsolute (Vector3 absolute)
@@ -780,7 +780,7 @@ public class UIScrollView : MonoBehaviour
 				// Move the scroll view
 				if (!iOSDragEmulation || dragEffect != DragEffect.MomentumAndSpring)
 				{
-					MoveAbsolute(offset);	
+					MoveAbsolute(offset);
 				}
 				else
 				{
