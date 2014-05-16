@@ -1,11 +1,10 @@
 ﻿// Steve Yeager
-// 
+// 5.15.2014
 
 using UnityEngine;
-using System.Collections;
 
 /// <summary>
-/// 
+/// Override to stop startOnSelected for Mobile.
 /// </summary>
 public class KeyNav : UIKeyNavigation
 {
