@@ -465,6 +465,27 @@ public class Debugger : Singleton<Debugger>
 
 
     /// <summary>
+    /// Checks if context is null.
+    /// </summary>
+    /// <param name="context">object to check.</param>
+    /// <param name="message">Optional message to log.</param>
+    /// <returns>True, if null.</returns>
+    public static bool NullCheck(object context, string message = "")
+    {
+        if (context == null)
+        {
+            Debug.Log("Null: " + message);
+            return true;
+        }
+        else
+        {
+            Debug.Log("Not Null: " + (message == "" ? context.GetType().Name : message));
+            return false;
+        }
+    }
+
+
+    /// <summary>
     /// Display message to the ConsoleLine.
     /// </summary>
     /// <param name="message">Message to display.</param>
