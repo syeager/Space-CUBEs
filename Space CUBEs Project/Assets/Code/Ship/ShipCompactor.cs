@@ -13,8 +13,6 @@ public class ShipCompactor : MonoBehaviour
     #region Const Fields
 
     private const float PlayerCollider = 0.9f;
-    [Obsolete("Don't create enemies from CUBEs anymore.")]
-    public const float EnemyCollider = 1.1f;
 
     #endregion
 
@@ -95,10 +93,6 @@ public class ShipCompactor : MonoBehaviour
         box.size = box.size * PlayerCollider;
 
         box.isTrigger = true;
-        // add rigidbody
-        var body = ship.gameObject.AddComponent<Rigidbody>();
-        body.useGravity = false;
-        body.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionZ;
 
         // add extra components
         foreach (var comp in components)
