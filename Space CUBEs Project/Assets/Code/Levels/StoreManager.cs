@@ -2,6 +2,7 @@
 // 1.15.2014
 
 using System.Collections;
+using Annotations;
 using UnityEngine;
 using System.Linq;
 using System;
@@ -71,6 +72,7 @@ public class StoreManager : MonoBehaviour
 
     #region MonoBehaviour Overrides
 
+    [UsedImplicitly]
     private void Start()
     {
         inventory = CUBE.GetInventory();
