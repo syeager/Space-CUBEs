@@ -29,6 +29,7 @@ public class StateMachine
     #region Properties
 
     public string currentState { get; private set; }
+    public string previousState { get; private set; }
     public Job update { get; private set; }
 
     #endregion
@@ -84,11 +85,7 @@ public class StateMachine
 #endif
 
         // save previous state
-        if (info == null)
-        {
-            info = new Dictionary<string, object>();
-        }
-        info.Add("previous state", currentState);
+        previousState = currentState;
 
         if (update != null)
         {
@@ -116,10 +113,10 @@ public class StateMachine
     /// <param name="info">Info to pass to state enter method.</param>
     public void Start(Dictionary<string, object> info = null)
     {
-#if LOG
+#if DEBUG
         if (owner.log)
         {
-            Debugger.Log(owner.name + ": Initial State = " + initialState, owner, false, Debugger.LogTypes.StateMachines);
+            Debugger.Log(owner.name + ": Initial State = " + initialState, owner, Debugger.LogTypes.StateMachines, false);
         }
 #endif
 
@@ -131,6 +128,7 @@ public class StateMachine
 
         // enter state
         currentState = initialState;
+        previousState = initialState;
         enterMethods[currentState](info);
     }
 
