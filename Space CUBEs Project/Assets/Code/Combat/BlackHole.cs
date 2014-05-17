@@ -6,13 +6,12 @@ using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// 
+/// Sucks ships and other objects into its center while dealing damage.
 /// </summary>
 public class BlackHole : Hitbox
 {
     #region Public Fields
     
-    public float pullRadius;
     public float pullStrength;
     public float spinSpeed;
     
@@ -23,19 +22,17 @@ public class BlackHole : Hitbox
 
     protected override void OnTriggerStay(Collider other)
     {
-        Transform otherTransform = other.transform;
         Rigidbody otherRigidbody = other.rigidbody;
         if (otherRigidbody == null) return;
 
         // pull
-        Vector3 distance = myTransform.position - otherTransform.position;
-        float pull = ((pullRadius - distance.sqrMagnitude) / pullRadius) * pullStrength;
+        Vector3 distance = myTransform.position - otherRigidbody.position;
 
         // move
-        otherRigidbody.AddForce(distance.normalized * -pull * Time.deltaTime, ForceMode.Impulse);
+        otherRigidbody.AddForce(distance.normalized * pullStrength * deltaTime, ForceMode.Impulse);
 
         // damage
-        var oppHealth = other.gameObject.GetComponent<Health>();
+        var oppHealth = other.gameObject.GetComponent(typeof(Health)) as Health;
         if (oppHealth != null)
         {
             oppHealth.RecieveHit(sender, damage * deltaTime);
