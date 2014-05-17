@@ -34,7 +34,7 @@ namespace LittleByte.Debug
         public void Dispose()
         {
             stopwatch.Stop();
-            Debugger.Log(string.Format("Profiled {0}: {1:0.00}ms", message, stopwatch.ElapsedMilliseconds), null, Debugger.LogTypes.Performance);
+            Debugger.Print(string.Format("Profiled {0}: {1:0.00}ms", message, stopwatch.ElapsedMilliseconds));
         }
 
         #endregion
