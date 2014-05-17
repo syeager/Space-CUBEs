@@ -84,7 +84,7 @@ public class FormationLevelManager : LevelManager
         // completed
         if (segmentCursor >= formationGroups.Length)
         {
-            Log("Level Complete", true, Debugger.LogTypes.LevelEvents);
+            Log("Level Complete", Debugger.LogTypes.LevelEvents);
             return;
         }
 
@@ -116,7 +116,7 @@ public class FormationLevelManager : LevelManager
         }
 
         // increase segmentCursor
-        Log("Formation " + segmentCursor + " spawned.", true, Debugger.LogTypes.LevelEvents);
+        Log("Formation " + segmentCursor + " spawned.", Debugger.LogTypes.LevelEvents);
         segmentCursor++;
 
         // get next segment ready if time
@@ -156,7 +156,7 @@ public class FormationLevelManager : LevelManager
         activeEnemies.Remove((Enemy)enemyHealth.GetComponent(typeof(Enemy)));
         if (activeEnemies.Count == 0)
         {
-            Log("Formation " + (segmentCursor - 1) + " cleared.", true, Debugger.LogTypes.LevelEvents);
+            Log("Formation " + (segmentCursor - 1) + " cleared.", Debugger.LogTypes.LevelEvents);
             if (lastSegment)
             {
                 SpawnBoss();

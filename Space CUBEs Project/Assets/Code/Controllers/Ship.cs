@@ -56,13 +56,13 @@ public class Ship : MonoBase
 
     protected virtual void OnEnable()
     {
-        LevelManager.PausedEvent += OnPause;
+        GameTime.PausedEvent += OnPause;
     }
 
 
     protected virtual void OnDisable()
     {
-        LevelManager.PausedEvent -= OnPause;
+        GameTime.PausedEvent -= OnPause;
     }
 
 

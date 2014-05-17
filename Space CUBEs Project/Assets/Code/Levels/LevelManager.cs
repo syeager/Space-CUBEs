@@ -1,6 +1,7 @@
 ﻿// Steve Yeager
 // 12.3.2013
 
+using Annotations;
 using UnityEngine;
 using System.Collections.Generic;
 using System;
@@ -47,14 +48,11 @@ public class LevelManager : Singleton<LevelManager>
     public Player player { get; protected set; }
     public Transform playerTransform { get; protected set; }
 
-    public static bool paused { get; private set; }
-
     #endregion
 
     #region Events
 
     public EventHandler LevelFinishedEvent;
-    public static EventHandler<PauseArgs> PausedEvent;
 
     #endregion
 
@@ -68,13 +66,16 @@ public class LevelManager : Singleton<LevelManager>
         enemies = new Dictionary<Enemy.Classes, GameObject>();
         foreach (var enemy in enemyPrefabs)
         {
-            enemies.Add(enemy.GetComponent<Enemy>().enemyClass, enemy);
+            enemies.Add(((Enemy)enemy.GetComponent(typeof(Enemy))).enemyClass, enemy);
         }
     }
 
 
     protected virtual void Start()
     {
+        // register events
+        GameTime.PausedEvent += OnPause;
+
         // active enemies
         activeEnemies = new List<Enemy>();
 
@@ -105,21 +106,28 @@ public class LevelManager : Singleton<LevelManager>
         // time controls
         if (Input.GetKey(KeyCode.UpArrow))
         {
-            Time.timeScale += 1f * Time.deltaTime;
+            GameTime.timeScale += 1f * GameTime.deltaTime;
         }
         if (Input.GetKey(KeyCode.DownArrow))
         {
-            Time.timeScale = Mathf.Clamp(Time.timeScale - 0.5f * Time.deltaTime, 0f, 5f);
+            GameTime.timeScale = Mathf.Clamp(GameTime.timeScale - 0.5f * GameTime.deltaTime, 0f, 5f);
         }
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            Time.timeScale = 1f;
+            GameTime.timeScale = 1f;
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             UnityEditor.EditorApplication.isPaused = true;
         }
 #endif
+    }
+
+
+    [UsedImplicitly]
+    private void OnDestroy()
+    {
+        GameTime.PausedEvent -= OnPause;
     }
 
     #endregion
@@ -134,25 +142,7 @@ public class LevelManager : Singleton<LevelManager>
             firstPause = false;
             return;
         }
-        Pause(!paused);
-    }
-
-
-    public static void Pause(bool pause)
-    {
-        Debugger.Log("Level " + (pause ? "Paused" : "Unpaused"), Main, Debugger.LogTypes.LevelEvents);
-        paused = pause;
-        PausedEvent.Fire(Main, new PauseArgs(paused));
-        Time.timeScale = paused ? 0f : 1f;
-
-        if (paused)
-        {
-            Main.audio.Pause();
-        }
-        else
-        {
-            Main.audio.Play();
-        }
+        GameTime.TogglePause(this);
     }
 
     #endregion
@@ -161,7 +151,7 @@ public class LevelManager : Singleton<LevelManager>
 
     protected void LevelFinished()
     {
-        Log("Level Finished.", true, Debugger.LogTypes.LevelEvents);
+        Log("Level Finished.", Debugger.LogTypes.LevelEvents);
 
         player.GetComponent<Health>().invincible = true;
 
@@ -268,6 +258,19 @@ public class LevelManager : Singleton<LevelManager>
     private void OnPlayerDeath(object sender, DieArgs args)
     {
         LevelFinished();
+    }
+
+
+    protected virtual void OnPause(object sender, PauseArgs args)
+    {
+        if (args.paused)
+        {
+            audio.Pause();
+        }
+        else
+        {
+            audio.Play();
+        }
     }
 
     #endregion
