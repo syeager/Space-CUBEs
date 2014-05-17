@@ -1,8 +1,6 @@
 ﻿// Steve Yeager
 // 3.25.2014
 
-using UnityEngine;
-using System.Collections;
 using System;
 
 /// <summary>

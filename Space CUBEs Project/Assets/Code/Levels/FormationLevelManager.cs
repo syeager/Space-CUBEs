@@ -9,6 +9,7 @@ public class FormationLevelManager : LevelManager
     #region Public Fields
 
     public FormationGroup[] formationGroups;
+    public int levelIndex;
 
     #endregion
 
@@ -58,6 +59,11 @@ public class FormationLevelManager : LevelManager
 
         if (Input.GetKeyDown(KeyCode.Keypad1))
         {
+            if (boss != null)
+            {
+                boss.GetComponent<Health>().Trash();
+                return;
+            }
             segmentCursor = 100000;
             while (activeEnemies.Count > 0)
             {
@@ -132,7 +138,7 @@ public class FormationLevelManager : LevelManager
     {
         boss = (Instantiate(bossPrefab, bossSpawnPosition, SpawnRotation) as GameObject).GetComponent<Boss>();
         activeEnemies.Add(boss);
-        boss.GetComponent<ShieldHealth>().DieEvent += (s, a) => LevelFinished();
+        boss.GetComponent<ShieldHealth>().DieEvent += OnBossDeath;
         boss.stateMachine.Start();
 
         audio.clip = bossMusic;
@@ -160,6 +166,17 @@ public class FormationLevelManager : LevelManager
                 InvokeAction(SpawnNextFormation, 3f);
             }
         }
+    }
+
+
+    private void OnBossDeath(object sender, DieArgs args)
+    {
+        if (levelIndex >= PlayerPrefs.GetInt(LevelSelectManager.UnlockedLevelsPath))
+        {
+            PlayerPrefs.SetInt(LevelSelectManager.UnlockedLevelsPath, levelIndex + 1);
+        }
+        
+        LevelFinished();
     }
 
     #endregion

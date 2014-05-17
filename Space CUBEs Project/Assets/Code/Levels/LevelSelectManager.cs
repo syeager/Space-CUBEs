@@ -16,17 +16,24 @@ public class LevelSelectManager : MonoBehaviour
 
     #endregion
 
+    #region Const Fields
+
+    public const string UnlockedLevelsPath = "Unlocked Levels";
+
+    #endregion
+
 
     #region MonoBehaviour Overrides
 
     [UsedImplicitly]
-    private void Awake()
+    private void Start()
     {
         // register button events
+        int unlocked = PlayerPrefs.GetInt(UnlockedLevelsPath);
         for (int i = 0; i < levelButtons.Length; i++)
         {
             levelButtons[i].ActivateEvent += OnLevelSelected;
-            levelButtons[i].isEnabled = !(i > 0);
+            levelButtons[i].Toggle(!(i > unlocked));
         }
     }
 

@@ -394,7 +394,10 @@ public class SwitchBlade : Boss
 
     private void DyingEnter(Dictionary<string, object> info)
     {
-        moveJob.Kill();
+        if (moveJob != null)
+        {
+            moveJob.Kill();
+        }
         Destroy(gameObject);
     }
 
