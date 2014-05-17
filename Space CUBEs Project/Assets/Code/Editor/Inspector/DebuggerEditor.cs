@@ -18,6 +18,8 @@ public class DebuggerEditor : Editor
     private SerializedProperty logFlags;
     private SerializedProperty fps;
     private SerializedProperty fpsPrefab;
+    private SerializedProperty fpsWarning;
+    private SerializedProperty lowFPS;
     private SerializedProperty consoleLine;
     private SerializedProperty consoleLinePrefab;
 
@@ -43,6 +45,8 @@ public class DebuggerEditor : Editor
         logFlags = serializedObject.FindProperty("logFlags");
         fps = serializedObject.FindProperty("fps");
         fpsPrefab = serializedObject.FindProperty("fpsPrefab");
+        fpsWarning = serializedObject.FindProperty("fpsWarning");
+        lowFPS = serializedObject.FindProperty("lowFPS");
         consoleLine = serializedObject.FindProperty("consoleLine");
         consoleLinePrefab = serializedObject.FindProperty("consoleLinePrefab");
     }
@@ -68,19 +72,34 @@ public class DebuggerEditor : Editor
 
     private void FPS()
     {
+        // FPS GUI
         if (GUILayout.Button((myDebugger.fps == null ? "Show" : "Hide") + " FPS"))
         {
             if (fps.objectReferenceValue == null)
             {
                 fps.objectReferenceValue = (Instantiate(fpsPrefab.objectReferenceValue, new Vector3(0.99f, 0.99f, 0f), Quaternion.identity) as GameObject).GetComponent<HUDFPS>();
                 fps.objectReferenceValue.name = FPSName;
-                Debug.Log("FPS created.", fps.objectReferenceValue);
+                Debugger.Log("FPS created.", fps.objectReferenceValue);
             }
             else
             {
                 DestroyImmediate((fps.objectReferenceValue as HUDFPS).gameObject);
                 fps.objectReferenceValue = null;
             }
+        }
+
+        // target FPS
+        int targetFPS = EditorGUILayout.IntSlider("Target FPS", GameTime.targetFPS, GameTime.MinFPS, GameTime.MaxFPS);
+        if (targetFPS != GameTime.targetFPS)
+        {
+            GameTime.CapFPS(targetFPS);
+        }
+
+        // FPS warning
+        EditorGUILayout.PropertyField(fpsWarning, new GUIContent("FPS Warning"));
+        if (fpsWarning.boolValue)
+        {
+            lowFPS.intValue = EditorGUILayout.IntSlider("Low FPS", lowFPS.intValue, 1, GameTime.targetFPS);
         }
     }
 
@@ -93,7 +112,7 @@ public class DebuggerEditor : Editor
             {
                 consoleLine.objectReferenceValue = Instantiate(consoleLinePrefab.objectReferenceValue, new Vector3(0.5f, 0.01f, 0f), Quaternion.identity);
                 consoleLine.objectReferenceValue.name = ConsoleLineName;
-                Debug.Log("ConsoleLine created.", consoleLine.objectReferenceValue);
+                Debugger.Log("ConsoleLine created.", consoleLine.objectReferenceValue);
             }
             else
             {

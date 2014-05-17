@@ -63,10 +63,10 @@ public class Debugger : Singleton<Debugger>
     }
 
     /// <summary>Should the Editor pause if at a low FPS?</summary>
-    public bool lowBreak = true;
+    public bool fpsWarning = true;
 
     /// <summary>Lowest FPS allowed before pausing.</summary>
-    public float lowFPS;
+    public int lowFPS;
 
     #endregion
 
@@ -165,7 +165,7 @@ public class Debugger : Singleton<Debugger>
             float average = accum / frames;
             fps.UpdateFPS(average);
 
-            if (lowBreak && average < lowFPS)
+            if (fpsWarning && average < lowFPS)
             {
 #if UNITY_EDITOR
                 Debug.Break();
