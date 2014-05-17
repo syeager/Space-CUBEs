@@ -148,12 +148,6 @@ public class ShieldHealth : Health
         }
     }
 
-
-    public void Trash()
-    {
-        Killed(null);
-    }
-
     #endregion
 
     #region Private Methods

@@ -82,6 +82,12 @@ public class Health : MonoBase
 
     #region Public Methods
 
+    public void Trash()
+    {
+        Killed(null);
+    }
+
+
     //
     public void Reset()
     {
@@ -188,10 +194,7 @@ public class Health : MonoBase
     /// <param name="sender">Ship that killed this ship. Null if trashed.</param>
     protected virtual void Killed(Ship sender)
     {
-        if (DieEvent != null)
-        {
-            DieEvent(this, new DieArgs(sender));
-        }
+        DieEvent.Fire(this, new DieArgs(sender));
         myRenderer.material = Normal_Mat;
     }
 
