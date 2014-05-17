@@ -738,7 +738,7 @@ public class ConstructionGrid : MonoBase
         string build = PlayerPrefs.GetString(path + buildName, "NA");
         if (build == "NA")
         {
-            Log(buildName + " is not in data.", false, Debugger.LogTypes.Data);
+            Log(buildName + " is not in data.", Debugger.LogTypes.Data, false);
             return null;
         }
         BuildInfo buildInfo = new BuildInfo { partList = new List<KeyValuePair<int, CUBEGridInfo>>() };
@@ -766,48 +766,6 @@ public class ConstructionGrid : MonoBase
         }
 
         return buildInfo;
-    }
-
-
-    /// <summary>
-    /// Compress the ship and save it to a prefab.
-    /// </summary>
-    [Obsolete("Not building enemies from CUBEs.", true)]
-    private IEnumerator SavePrefab()
-    {
-        // save weapons
-        for (int i = 0; i < weapons.Length; i++)
-        {
-            if (weapons[i] != null)
-            {
-                weapons[i].index = i;
-            }
-        }
-
-        // create one mesh
-        var compactor = ship.AddComponent<ShipCompactor>();
-        var compShip = compactor.Compact(false, typeof(PoolObject));
-        compShip.gameObject.layer = LayerMask.NameToLayer("Enemy");
-
-        yield return new WaitForEndOfFrame();
-#if UNITY_EDITOR
-        UnityEditor.AssetDatabase.CreateAsset(compShip.GetComponent<MeshFilter>().mesh, ENEMYMESHPATH + buildName + "_Mesh.asset");
-        if (!File.Exists(Application.dataPath + "/Ship/Characters/" + buildName + ".prefab"))
-        {
-            UnityEditor.PrefabUtility.CreatePrefab(ENEMYPREFABPATH + buildName + ".prefab", compShip.gameObject);
-        }
-        else
-        {
-            Mesh mesh = UnityEditor.AssetDatabase.LoadAssetAtPath(ENEMYPREFABPATH + buildName + "_Mesh.asset", typeof(Mesh)) as Mesh;
-            GameObject enemy = UnityEditor.AssetDatabase.LoadAssetAtPath(ENEMYPREFABPATH + buildName + ".prefab", typeof(GameObject)) as GameObject;
-            enemy.GetComponent<MeshFilter>().sharedMesh = mesh;
-            DestroyImmediate(enemy.GetComponent<BoxCollider>(), true);
-            yield return null;
-            BoxCollider box = enemy.AddComponent<BoxCollider>();
-            box.isTrigger = true;
-            box.size = new Vector3(box.size.x * ShipCompactor.EnemyCollider, 10f, box.size.z * ShipCompactor.EnemyCollider);
-        }
-#endif
     }
 
 

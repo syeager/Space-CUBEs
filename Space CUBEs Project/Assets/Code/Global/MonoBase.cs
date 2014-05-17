@@ -18,14 +18,14 @@ public class MonoBase : MonoBehaviour
 
     #region Properties
 
-    public float deltaTime { get { return Time.deltaTime * timeScale; } }
+    public float deltaTime { get { return GameTime.deltaTime * timeScale; } }
 
     #endregion
 
     #region Log Methods
 
     [Conditional("DEBUG")]
-    protected void Log(object message, bool save = true, Debugger.LogTypes logType = Debugger.LogTypes.Default)
+    protected void Log(object message, Debugger.LogTypes logType = Debugger.LogTypes.Default, bool save = true)
     {
         if (log)
         {
@@ -35,7 +35,7 @@ public class MonoBase : MonoBehaviour
 
 
     [Conditional("DEBUG")]
-    protected void LogWarning(object message, bool save = true, Debugger.LogTypes logType = Debugger.LogTypes.Default)
+    protected void LogWarning(object message, Debugger.LogTypes logType = Debugger.LogTypes.Default, bool save = true)
     {
         if (log)
         {
@@ -44,8 +44,7 @@ public class MonoBase : MonoBehaviour
     }
 
 
-    [Conditional("DEBUG")]
-    protected void LogError(object message, bool save = true, Debugger.LogTypes logType = Debugger.LogTypes.Default)
+    protected void LogError(object message, Debugger.LogTypes logType = Debugger.LogTypes.Default, bool save = true)
     {
         if (log)
         {
