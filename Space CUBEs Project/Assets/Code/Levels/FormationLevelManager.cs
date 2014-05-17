@@ -58,12 +58,13 @@ public class FormationLevelManager : LevelManager
 
         if (Input.GetKeyDown(KeyCode.Keypad1))
         {
-            lastSegment = true;
             segmentCursor = 100000;
             while (activeEnemies.Count > 0)
             {
-                activeEnemies[0].GetComponent<ShieldHealth>().Trash();
+                if (activeEnemies[0] == null) continue;
+                ((Health)activeEnemies[0].GetComponent(typeof(Health))).Trash();
             }
+            SpawnBoss();
         }
     }
 #endif
@@ -147,7 +148,6 @@ public class FormationLevelManager : LevelManager
         ShieldHealth enemyHealth = sender as ShieldHealth;
         enemyHealth.DieEvent -= OnEnemyDeath;
         activeEnemies.Remove((Enemy)enemyHealth.GetComponent(typeof(Enemy)));
-
         if (activeEnemies.Count == 0)
         {
             Log("Formation " + (segmentCursor - 1) + " cleared.", true, Debugger.LogTypes.LevelEvents);
