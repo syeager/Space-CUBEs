@@ -12,12 +12,6 @@ public class GameMaster : MonoBehaviour
 
     #endregion
 
-    #region Public Fields
-
-    public int targetFPS = 60;
-
-    #endregion
-
 
     #region MonoBehaviour Overrides
 
@@ -29,7 +23,6 @@ public class GameMaster : MonoBehaviour
             Main = this;
             DontDestroyOnLoad(gameObject);
 
-            Application.targetFrameRate = targetFPS;
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
         }
         else

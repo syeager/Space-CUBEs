@@ -40,6 +40,7 @@ public class GameStart : Singleton<GameStart>
         base.Awake();
         if (!enabled) return;
 
+        GameTime.Initialize();
         LoadGame();
         UpdateVersions();
     }
