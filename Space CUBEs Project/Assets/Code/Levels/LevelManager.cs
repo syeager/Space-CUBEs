@@ -144,6 +144,15 @@ public class LevelManager : Singleton<LevelManager>
         paused = pause;
         PausedEvent.Fire(Main, new PauseArgs(paused));
         Time.timeScale = paused ? 0f : 1f;
+
+        if (paused)
+        {
+            Main.audio.Pause();
+        }
+        else
+        {
+            Main.audio.Play();
+        }
     }
 
     #endregion
