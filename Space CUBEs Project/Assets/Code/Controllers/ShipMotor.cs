@@ -77,7 +77,7 @@ public class ShipMotor : MonoBase
     [UsedImplicitly]
     private void FixedUpdate()
     {
-        myRigidbody.MovePosition(myRigidbody.position + velocity * Time.deltaTime);
+        myRigidbody.MovePosition(myRigidbody.position + velocity * deltaTime);
         velocity = Vector3.zero;
     }
 
