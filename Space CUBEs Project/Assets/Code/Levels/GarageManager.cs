@@ -90,12 +90,12 @@ public class GarageManager : MonoBase
     #region State Fields
 
     private StateMachine stateMachine;
-    private const string LOADSTATE = "Load";
-    private const string SELECTSTATE = "Select";
-    private const string NAVSTATE = "Nav";
-    private const string WEAPONSTATE = "Weapon";
-    private const string PAINTSTATE = "Paint";
-    private const string OBSERVESTATE = "Observe";
+    private const string LoadState = "Load";
+    private const string SelectState = "Select";
+    private const string NavState = "Nav";
+    private const string WeaponState = "Weapon";
+    private const string PaintState = "Paint";
+    private const string ObserveState = "Observe";
 
     #endregion
 
@@ -202,12 +202,12 @@ public class GarageManager : MonoBase
     private void Awake()
     {
         // create states
-        stateMachine = new StateMachine(this, LOADSTATE);
-        stateMachine.CreateState(LOADSTATE, LoadEnter, LoadExit);
-        stateMachine.CreateState(SELECTSTATE, SelectEnter, SelectExit);
-        stateMachine.CreateState(NAVSTATE, NavEnter, NavExit);
-        stateMachine.CreateState(PAINTSTATE, PaintEnter, PaintExit);
-        stateMachine.CreateState(WEAPONSTATE, WeaponEnter, WeaponExit);
+        stateMachine = new StateMachine(this, LoadState);
+        stateMachine.CreateState(LoadState, LoadEnter, LoadExit);
+        stateMachine.CreateState(SelectState, SelectEnter, SelectExit);
+        stateMachine.CreateState(NavState, NavEnter, NavExit);
+        stateMachine.CreateState(PaintState, PaintEnter, PaintExit);
+        stateMachine.CreateState(WeaponState, WeaponEnter, WeaponExit);
 
         cameraTarget = new GameObject("Camera Target").transform;
         StartCoroutine(ResettingCamera());
@@ -259,7 +259,8 @@ public class GarageManager : MonoBase
     [UsedImplicitly]
     private void Start()
     {
-        stateMachine.Start(new Dictionary<string, object>());
+        stateMachine.Start();
+        //stateMachine.SetState(LoadState);
     }
 
 
@@ -268,7 +269,7 @@ public class GarageManager : MonoBase
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            stateMachine.SetState(LOADSTATE);
+            stateMachine.SetState(stateMachine.previousState);
         }
     }
 
@@ -297,38 +298,38 @@ public class GarageManager : MonoBase
         {
             switch (stateMachine.currentState)
             {
-                case LOADSTATE:
-                    stateMachine.SetState(SELECTSTATE);
+                case LoadState:
+                    stateMachine.SetState(SelectState);
                     break;
-                case SELECTSTATE:
-                    stateMachine.SetState(NAVSTATE);
+                case SelectState:
+                    stateMachine.SetState(NavState);
                     break;
-                case NAVSTATE:
-                    stateMachine.SetState(PAINTSTATE);
+                case NavState:
+                    stateMachine.SetState(PaintState);
                     break;
-                case PAINTSTATE:
-                    stateMachine.SetState(WEAPONSTATE);
+                case PaintState:
+                    stateMachine.SetState(WeaponState);
                     break;
             }
 
             menuNavButtons[0].isEnabled = true;
-            menuNavButtons[1].isEnabled = stateMachine.currentState != WEAPONSTATE;
+            menuNavButtons[1].isEnabled = stateMachine.currentState != WeaponState;
         }
         else
         {
             switch (stateMachine.currentState)
             {
-                case SELECTSTATE:
-                    stateMachine.SetState(LOADSTATE);
+                case SelectState:
+                    stateMachine.SetState(LoadState);
                     break;
-                case NAVSTATE:
-                    stateMachine.SetState(SELECTSTATE);
+                case NavState:
+                    stateMachine.SetState(SelectState);
                     break;
-                case PAINTSTATE:
-                    stateMachine.SetState(NAVSTATE);
+                case PaintState:
+                    stateMachine.SetState(NavState);
                     break;
-                case WEAPONSTATE:
-                    stateMachine.SetState(PAINTSTATE);
+                case WeaponState:
+                    stateMachine.SetState(PaintState);
                     break;
             }
 
@@ -695,9 +696,7 @@ public class GarageManager : MonoBase
     {
         mainCamera.camera.rect = new Rect(0f, 0f, 1f, 1f);
         menuPanels[0].SetActive(true);
-        CreateBuildButtons();
-        StartCoroutine(Utility.UpdateScrollView(loadGrid, loadScrollBar, loadScrollView));
-        loadGrid.GetComponent<UICenterOnChild>().CenterOn(loadGrid.transform.GetChild(0));
+        StartCoroutine(CreateBuildButtons());
 
         stateMachine.SetUpdate(LoadUpdate());
     }
@@ -711,7 +710,7 @@ public class GarageManager : MonoBase
             {
                 if (MenuSwipe() == 1)
                 {
-                    stateMachine.SetState(SELECTSTATE, new Dictionary<string, object>());
+                    stateMachine.SetState(SelectState);
                 }
             }
             yield return null;
@@ -721,6 +720,14 @@ public class GarageManager : MonoBase
 
     private void LoadExit(Dictionary<string, object> info)
     {
+        // clear
+        ActivateButton[] buttons = loadGrid.GetComponentsInChildren<ActivateButton>();
+        foreach (ActivateButton button in buttons)
+        {
+            button.ActivateEvent -= OnBuildChosen;
+            Destroy(button.gameObject);
+        }
+
         menuPanels[0].SetActive(false);
     }
 
@@ -742,16 +749,8 @@ public class GarageManager : MonoBase
     /// <summary>
     /// Create all of the buttons for the builds in the load menu.
     /// </summary>
-    private void CreateBuildButtons()
+    private IEnumerator CreateBuildButtons()
     {
-        // clear
-        ActivateButton[] buttons = loadGrid.GetComponentsInChildren<ActivateButton>();
-        foreach (ActivateButton button in buttons)
-        {
-            button.ActivateEvent -= OnBuildChosen;
-            Destroy(button.gameObject);
-        }
-
         // create
         string[] buildNames = ConstructionGrid.BuildNames().ToArray();
         if (buildNames.Length > 0) GameData.Main.currentBuild = buildNames[0];
@@ -761,6 +760,13 @@ public class GarageManager : MonoBase
             button.Initialize(i.ToString(), buildNames[i], buildNames[i], loadGrid.transform, loadScrollView);
             button.ActivateEvent += OnBuildChosen;
         }
+        
+        yield return StartCoroutine(Utility.UpdateScrollView(loadGrid, loadScrollBar, loadScrollView));
+
+        UICenterOnChild centerOnChild = (UICenterOnChild)loadGrid.GetComponent(typeof(UICenterOnChild));
+        centerOnChild.Recenter();
+        centerOnChild.CenterOn(loadGrid.transform.GetChild(0));
+
     }
 
 
@@ -839,7 +845,7 @@ public class GarageManager : MonoBase
         }
         Grid.CreateBuild(GameData.Main.currentBuild);
         shipName.value = Grid.buildName;
-        stateMachine.SetState(SELECTSTATE, new Dictionary<string, object>());
+        stateMachine.SetState(SelectState, new Dictionary<string, object>());
         selectedBuild = true;
     }
 
@@ -847,7 +853,7 @@ public class GarageManager : MonoBase
     public void NewBuild()
     {
         CreateGrid();
-        stateMachine.SetState(SELECTSTATE, new Dictionary<string, object>());
+        stateMachine.SetState(SelectState, new Dictionary<string, object>());
         selectedBuild = true;
     }
 
@@ -924,11 +930,11 @@ public class GarageManager : MonoBase
             int dir = MenuSwipe();
             if (dir == -1)
             {
-                stateMachine.SetState(LOADSTATE, new Dictionary<string, object>());
+                stateMachine.SetState(LoadState);
             }
             else if (dir == 1)
             {
-                stateMachine.SetState(NAVSTATE, new Dictionary<string, object>());
+                stateMachine.SetState(NavState);
             }
 
             // reset camera
@@ -1039,7 +1045,7 @@ public class GarageManager : MonoBase
     {
         if (args.isPressed) return;
 
-        stateMachine.SetState(NAVSTATE, new Dictionary<string, object>());
+        stateMachine.SetState(NavState);
     }
 
 
@@ -1099,11 +1105,11 @@ public class GarageManager : MonoBase
             int dir = MenuSwipe();
             if (dir == -1)
             {
-                stateMachine.SetState(SELECTSTATE, new Dictionary<string, object>());
+                stateMachine.SetState(SelectState);
             }
             else if (dir == 1)
             {
-                stateMachine.SetState(PAINTSTATE, new Dictionary<string, object>());
+                stateMachine.SetState(PaintState);
             }
 
             // update position and rotation
@@ -1262,11 +1268,11 @@ public class GarageManager : MonoBase
             int dir = MenuSwipe();
             if (dir == -1)
             {
-                stateMachine.SetState(NAVSTATE, new Dictionary<string, object>());
+                stateMachine.SetState(NavState);
             }
             else if (dir == 1)
             {
-                stateMachine.SetState(WEAPONSTATE, new Dictionary<string, object>());
+                stateMachine.SetState(WeaponState);
             }
 
             // update position and rotation
@@ -1537,11 +1543,7 @@ public class GarageManager : MonoBase
             int dir = MenuSwipe();
             if (dir == -1)
             {
-                stateMachine.SetState(PAINTSTATE, new Dictionary<string, object>());
-            }
-            else if (dir == 1)
-            {
-                //stateMachine.SetState(PAINTSTATE, new Dictionary<string, object>());
+                stateMachine.SetState(PaintState);
             }
 
             // update ship stats
