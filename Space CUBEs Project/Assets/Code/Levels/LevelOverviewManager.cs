@@ -1,6 +1,7 @@
 ﻿// Steve Yeager
 // 1.5.2013
 
+using Annotations;
 using UnityEngine;
 using System.Collections;
 using System;
@@ -20,6 +21,7 @@ public class LevelOverviewManager : MonoBehaviour
 
     public float scoreSpeed;
     public float moneySpeed;
+    public ActivateButton[] navButtons;
 
     #endregion
 
@@ -35,13 +37,21 @@ public class LevelOverviewManager : MonoBehaviour
 
     #region MonoBehaviour Methods
 
+    [UsedImplicitly]
     private void Start()
     {
         state = States.Score;
         StartCoroutine(Roundups(state));
+
+        // register events
+        foreach (ActivateButton button in navButtons)
+        {
+            button.ActivateEvent += (sender, args) => GameData.LoadLevel(args.value);
+        }
     }
 
 
+    [UsedImplicitly]
     private void Update()
     {
 #if UNITY_EDITOR
