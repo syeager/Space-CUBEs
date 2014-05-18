@@ -15,6 +15,7 @@ public class OptionsMenuManager : MonoBase
     public UISlider joystickYBuffer;
     public UISlider joystickDeadzone;
     public UIToggle trailRenderer;
+    public ActivateButton[] fpsToggles;
 
     #endregion
 
@@ -28,6 +29,11 @@ public class OptionsMenuManager : MonoBase
         joystickYBuffer.value = GameSettings.Main.joystickYBuffer;
         joystickDeadzone.value = GameSettings.Main.joystickDeadzone;
         trailRenderer.value = GameSettings.Main.trailRenderer;
+
+        foreach (ActivateButton button in fpsToggles)
+        {
+            button.GetComponent<UIToggle>().value = int.Parse(button.value) == GameTime.targetFPS;
+        }
     }
 
     #endregion
@@ -44,6 +50,12 @@ public class OptionsMenuManager : MonoBase
     {
         Save();
         GameData.LoadLevel("Main Menu");
+    }
+
+
+    public void SetFPS(string value)
+    {
+        GameTime.CapFPS(int.Parse(value));
     }
 
     #endregion
