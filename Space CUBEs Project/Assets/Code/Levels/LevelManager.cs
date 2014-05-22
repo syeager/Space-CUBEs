@@ -18,6 +18,9 @@ public class LevelManager : Singleton<LevelManager>
 
     #region Public Fields
 
+    /// <summary>Pause Menu.</summary>
+    public GameObject pauseMenu;
+
     public GameObject[] enemyPrefabs;
     public int[] rankLimits = new int[6];
 
@@ -89,7 +92,7 @@ public class LevelManager : Singleton<LevelManager>
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            SceneManager.LoadScene("Main Menu", true);
+            GameTime.Pause(true);
         }
 
 #if UNITY_EDITOR
@@ -271,6 +274,30 @@ public class LevelManager : Singleton<LevelManager>
         {
             audio.Play();
         }
+
+        pauseMenu.SetActive(args.paused);
+    }
+
+    #endregion
+
+    #region Button Handlers
+
+    /// <summary>
+    /// Loads the Main Menu scene.
+    /// </summary>
+    public void LoadMainMenu()
+    {
+        SceneManager.LoadScene("Main Menu", true);
+    }
+
+
+    /// <summary>
+    /// Restart the current level.
+    /// </summary>
+    public void RestartLevel()
+    {
+        GameTime.Pause(false);
+        SceneManager.ReloadScene();
     }
 
     #endregion
