@@ -25,7 +25,7 @@ public class MainMenuManager : MonoBehaviour
 #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            GameData.LoadLevel("Debug Menu");
+            SceneManager.LoadScene("Debug Menu");
         }
 #else
         if (Input.touchCount > 0 && Input.GetTouch(0).tapCount == 2 && debugTouchRect.Contains(Input.GetTouch(0).position))
@@ -42,25 +42,25 @@ public class MainMenuManager : MonoBehaviour
 
     public void LoadPlay()
     {
-        GameData.LoadLevel("Level Select Menu");
+        SceneManager.LoadScene("Level Select Menu");
     }
 
 
     public void LoadGarage()
     {
-        GameData.LoadLevel("Garage");
+        SceneManager.LoadScene("Garage");
     }
 
 
     public void LoadStore()
     {
-        GameData.LoadLevel("Store");
+        SceneManager.LoadScene("Store");
     }
 
 
     public void LoadOptions()
     {
-        GameData.LoadLevel("Options Menu");
+        SceneManager.LoadScene("Options Menu");
     }
 
     #endregion

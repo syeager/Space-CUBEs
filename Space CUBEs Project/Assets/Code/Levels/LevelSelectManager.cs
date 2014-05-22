@@ -43,7 +43,7 @@ public class LevelSelectManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            GameData.LoadLevel("Main Menu");
+            SceneManager.LoadScene("Main Menu");
         }
     }
 
@@ -53,7 +53,7 @@ public class LevelSelectManager : MonoBehaviour
 
     private static void OnLevelSelected(object sender, ActivateButtonArgs args)
     {
-        GameData.LoadLevel(args.value, true);
+        SceneManager.LoadScene(args.value, true);
     }
 
     #endregion

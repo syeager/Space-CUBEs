@@ -138,7 +138,7 @@ public class StoreManager : MonoBehaviour
     /// </summary>
     public void LoadGarage()
     {
-        GameData.LoadLevel("Garage");
+        SceneManager.LoadScene("Garage");
     }
 
 
@@ -147,7 +147,7 @@ public class StoreManager : MonoBehaviour
     /// </summary>
     public void LoadMainMenu()
     {
-        GameData.LoadLevel("Main Menu");
+        SceneManager.LoadScene("Main Menu");
     }
 
     #endregion

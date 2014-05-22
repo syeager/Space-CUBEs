@@ -46,7 +46,7 @@ public class LevelOverviewManager : MonoBehaviour
         // register events
         foreach (ActivateButton button in navButtons)
         {
-            button.ActivateEvent += (sender, args) => GameData.LoadLevel(args.value);
+            button.ActivateEvent += (sender, args) => SceneManager.LoadScene(args.value);
         }
     }
 
@@ -73,7 +73,7 @@ public class LevelOverviewManager : MonoBehaviour
 
     public void LoadGarage()
     {
-        GameData.LoadLevel("Garage");
+        SceneManager.LoadScene("Garage");
     }
 
     #endregion
@@ -84,22 +84,22 @@ public class LevelOverviewManager : MonoBehaviour
     {
         //if (start == States.Score)
         {
-            yield return StartCoroutine(RoundupScore((int)GameData.Main.levelData["Score"]));
+            yield return StartCoroutine(RoundupScore((int)SceneManager.Main.levelData["Score"]));
             state = States.Money;
         }
         //if (start == States.Money)
         {
-            yield return StartCoroutine(RoundupMoney((int)GameData.Main.levelData["Money"]));
+            yield return StartCoroutine(RoundupMoney((int)SceneManager.Main.levelData["Money"]));
             state = States.Rank;
         }
         //if (start == States.Rank)
         {
-            yield return StartCoroutine(RoundupRank((char)GameData.Main.levelData["Rank"]));
+            yield return StartCoroutine(RoundupRank((char)SceneManager.Main.levelData["Rank"]));
             state = States.Awards;
         }
         //if (start == States.Awards)
         {
-            yield return StartCoroutine(RoundupAwards((int[])GameData.Main.levelData["Awards"]));
+            yield return StartCoroutine(RoundupAwards((int[])SceneManager.Main.levelData["Awards"]));
             state = States.Done;
         }
     }
@@ -162,16 +162,16 @@ public class LevelOverviewManager : MonoBehaviour
         //switch (state)
         //{
         //    case States.Score:
-                Score.text = String.Format("Score: {0:#,###0}", Mathf.RoundToInt((int)GameData.Main.levelData["Score"]));
+                Score.text = String.Format("Score: {0:#,###0}", Mathf.RoundToInt((int)SceneManager.Main.levelData["Score"]));
             //    break;
             //case States.Money:
-                Money.text = String.Format("Money: {0:#,###0}", Mathf.RoundToInt((int)GameData.Main.levelData["Money"]));
+                Money.text = String.Format("Money: {0:#,###0}", Mathf.RoundToInt((int)SceneManager.Main.levelData["Money"]));
             //    break;
             //case States.Rank:
-                Rank.text = "Rank: " + ((char)GameData.Main.levelData["Rank"]).ToString();
+                Rank.text = "Rank: " + ((char)SceneManager.Main.levelData["Rank"]).ToString();
             //    break;
             //case States.Awards:
-                int[] IDs = (int[])GameData.Main.levelData["Awards"];
+                int[] IDs = (int[])SceneManager.Main.levelData["Awards"];
                 for (int i = 0; i < IDs.Length; i++)
                 {
                     string grade = " ";

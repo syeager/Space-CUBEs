@@ -20,7 +20,7 @@ public class LoadingScreenManager : MonoBehaviour
     private void Awake()
     {
         // set up GUI
-        levelToLoad.text = GameData.Main.nextScene + "...";
+        levelToLoad.text = SceneManager.Main.nextScene + "...";
 
         // clean
         Resources.UnloadUnusedAssets();
@@ -31,7 +31,7 @@ public class LoadingScreenManager : MonoBehaviour
     [UsedImplicitly]
     private void Start()
     {
-        Application.LoadLevel(GameData.Main.nextScene);
+        Application.LoadLevel(SceneManager.Main.nextScene);
     }
 
     #endregion

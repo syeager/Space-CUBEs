@@ -81,7 +81,7 @@ public class LevelManager : Singleton<LevelManager>
 
         grid = ((GameObject)Instantiate(GameResources.Main.ConstructionGrid_Prefab, Vector3.zero, Quaternion.identity)).GetComponent<ConstructionGrid>();
 
-        InvokeAction(() => CreatePlayer(GameData.Main.currentBuild), 1f);
+        InvokeAction(() => CreatePlayer(SceneManager.Main.currentBuild), 1f);
     }
 
 
@@ -89,7 +89,7 @@ public class LevelManager : Singleton<LevelManager>
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            GameData.LoadLevel("Main Menu", true);
+            SceneManager.LoadScene("Main Menu", true);
         }
 
 #if UNITY_EDITOR
@@ -183,7 +183,7 @@ public class LevelManager : Singleton<LevelManager>
             }
         }
         data.Add("Rank", rank);
-        InvokeAction(() => GameData.LoadLevel("Level Overview", true, data), 2f);
+        InvokeAction(() => SceneManager.LoadScene("Level Overview", true, data), 2f);
 
         if (LevelFinishedEvent != null)
         {

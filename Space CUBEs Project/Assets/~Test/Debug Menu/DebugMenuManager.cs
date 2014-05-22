@@ -44,7 +44,7 @@ public class DebugMenuManager : MonoBehaviour
 
     public void MainMenu()
     {
-        GameData.LoadLevel("Main Menu");
+        SceneManager.LoadScene("Main Menu");
     }
 
     #endregion

@@ -49,7 +49,7 @@ public class OptionsMenuManager : MonoBase
     public void LoadMainMenu()
     {
         Save();
-        GameData.LoadLevel("Main Menu");
+        SceneManager.LoadScene("Main Menu");
     }
 
 

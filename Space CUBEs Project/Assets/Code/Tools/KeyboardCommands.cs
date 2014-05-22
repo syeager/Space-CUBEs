@@ -17,7 +17,7 @@ public class KeyboardCommands : MonoBehaviour
         // reload level
         if (Input.GetKeyUp(KeyCode.Keypad9))
         {
-            GameData.ReloadLevel();
+            SceneManager.ReloadScene();
         }
 
         // clear console

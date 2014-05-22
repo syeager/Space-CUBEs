@@ -5,20 +5,14 @@ using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
-/// Singleton to hold game data and handle player sign in.
+/// Singleton to transition between scenes.
 /// </summary>
-public class GameData : Singleton<GameData>
+public class SceneManager : Singleton<SceneManager>
 {
     #region Loading Fields
 
     public string previousScene { get; private set; }
     public string nextScene { get; private set; }
-
-    #endregion
-
-    #region Pause Fields
-
-    public bool paused { get; private set; }
 
     #endregion
 
@@ -48,10 +42,10 @@ public class GameData : Singleton<GameData>
     /// </summary>
     /// <param name="nextScene">Name of next scene.</param>
     /// <param name="load">Should the Loading Screen be loaded first?</param>
-    /// <param name="levelData">Data to save for the next scene.</param>
-    public static void LoadLevel(string nextScene, bool load = false, Dictionary<string, object> levelData = null)
+    /// <param name="sceneData">Data to save for the next scene.</param>
+    public static void LoadScene(string nextScene, bool load = false, Dictionary<string, object> sceneData = null)
     {
-        Main.levelData = levelData ?? new Dictionary<string, object>();
+        Main.levelData = sceneData ?? new Dictionary<string, object>();
         Main.previousScene = Application.loadedLevelName;
         Main.nextScene = nextScene;
 
@@ -61,13 +55,13 @@ public class GameData : Singleton<GameData>
 
     /// <summary>
     /// Reloads the current scene without the Loading Screen.
-    /// <param name="levelData">Data to save for the next scene.</param>
+    /// <param name="sceneData">Data to save for the next scene.</param>
     /// </summary>
-    public static void ReloadLevel(Dictionary<string, object> levelData = null)
+    public static void ReloadScene(Dictionary<string, object> sceneData = null)
     {
-        if (levelData != null)
+        if (sceneData != null)
         {
-            Main.levelData = levelData;
+            Main.levelData = sceneData;
         }
         Application.LoadLevel(Application.loadedLevel);
     }
