@@ -201,11 +201,11 @@ public class Debugger : Singleton<Debugger>
     /// Displays a log message to the console. Doesn't use Singleton.
     /// </summary>
     /// <param name="message">Message to be displayed.</param>
-    /// <param name="context">Unity Object to highlight in the Hierarchy.</param>
+    /// <param name="args">Arguments for string.Format.</param>
     [System.Diagnostics.Conditional("DEBUG")]
-    public static void Print(object message, Object context = null)
+    public static void Print(string message, params object[] args)
     {
-        Debug.Log(message, context);
+        Debug.Log(string.Format(message, args));
     }
 
 
@@ -319,7 +319,7 @@ public class Debugger : Singleton<Debugger>
         Debug.LogException(exception, context);
 
 #if UNITY_EDITOR
-        if (save && Main.logSaving != LogSaving.DontSave)
+        if (Application.isPlaying && save && Main.logSaving != LogSaving.DontSave)
         {
             using (StreamWriter writer = new StreamWriter(logPath + logType + FileExt, true))
             {
