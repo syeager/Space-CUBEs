@@ -30,7 +30,7 @@ public class MainMenuManager : MonoBehaviour
 #else
         if (Input.touchCount > 0 && Input.GetTouch(0).tapCount == 2 && debugTouchRect.Contains(Input.GetTouch(0).position))
         {
-            GameData.LoadLevel("Debug Menu");
+            SceneManager.LoadScene("Debug Menu");
         }
 #endif
     }
