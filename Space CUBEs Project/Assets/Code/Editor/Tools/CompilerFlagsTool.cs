@@ -22,7 +22,7 @@ public class CompilerFlagsTool : EditorWindow
     private static List<bool> flagsStatuses;
 
     /// <summary>New flag being added.</summary>
-    private static string newString;
+    private static string newString = "";
 
     #endregion
 
@@ -43,7 +43,6 @@ public class CompilerFlagsTool : EditorWindow
     private static void Init()
     {
         GetWindow<CompilerFlagsTool>("Compiler Flags");
-        GetFlags();
     }
 
 
@@ -62,6 +61,9 @@ public class CompilerFlagsTool : EditorWindow
         {
             GetFlags();
         }
+
+        // force focus
+        EditorGUI.FocusTextInControl("NewFlag");
 
         // flags
         for (int i = 0; i < flagNames.Count; i++)
@@ -86,10 +88,15 @@ public class CompilerFlagsTool : EditorWindow
         GUILayout.Space(10f);
         GUILayout.BeginHorizontal();
         {
+            GUI.SetNextControlName("NewFlag");
             newString = EditorGUILayout.TextField(newString);
-            if (GUILayout.Button("Add"))
+            if (GUILayout.Button("Add") || (Event.current.isKey && Event.current.keyCode == KeyCode.Return))
             {
-                AddFlag();
+                if (!string.IsNullOrEmpty(newString) && !flagNames.Contains(newString))
+                {
+                    AddFlag();
+                    Repaint();
+                }
             }
         }
         GUILayout.EndHorizontal();
