@@ -97,7 +97,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 111320692}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -322, y: 31.5041351, z: 0}
+  m_LocalPosition: {x: -322, y: 32.2372589, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 910345205}
@@ -275,7 +275,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 418840058}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 263, y: 75.5041351, z: 0}
+  m_LocalPosition: {x: 263, y: 76.2372589, z: 0}
   m_LocalScale: {x: 1.00004196, y: 1.00004196, z: 1.00004196}
   m_Children:
   - {fileID: 2089874931}
@@ -356,7 +356,7 @@ GameObject:
   - 4: {fileID: 433361973}
   - 114: {fileID: 433361974}
   m_Layer: 0
-  m_Name: GameData
+  m_Name: SceneManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -382,7 +382,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 433361972}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1e8a7edb674f82419d1c54602d84506, type: 3}
+  m_Script: {fileID: 11500000, guid: 6bc2885fc505400499f13b1beaf74129, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   log: 1
@@ -411,7 +411,7 @@ Transform:
   m_PrefabParentObject: {fileID: 400004, guid: aeed59aee1ea3714da2eb46ccb6175bd, type: 2}
   m_PrefabInternal: {fileID: 1414188079}
   m_GameObject: {fileID: 461183168}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -.428198785, y: -.48876363, z: .299594402, w: -.698569357}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children: []
@@ -431,7 +431,7 @@ MonoBehaviour:
   log: 1
   timeScale: 1
   logWarning: 0
-  invincible: 0
+  invincible: 1
   jumpToBoss: 0
   volumeSE: 5
   volumeMusic: 0
@@ -754,7 +754,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 937557801}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -322, y: -56.4958649, z: 0}
+  m_LocalPosition: {x: -322, y: -55.7627411, z: 0}
   m_LocalScale: {x: 1.00006497, y: 1.00006497, z: 1.00006497}
   m_Children: []
   m_Father: {fileID: 910345205}
@@ -843,7 +843,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 962101638}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -322, y: -12.4958649, z: 0}
+  m_LocalPosition: {x: -322, y: -11.7627411, z: 0}
   m_LocalScale: {x: 1.00006497, y: 1.00006497, z: 1.00006497}
   m_Children: []
   m_Father: {fileID: 910345205}
@@ -982,7 +982,7 @@ MonoBehaviour:
   onClick: []
   activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
-  value: Bridge
+  value: Main Menu
 --- !u!65 &1064870111
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1032,19 +1032,19 @@ MonoBehaviour:
   hideIfOffScreen: 0
   keepAspectRatio: 0
   aspectRatio: 2.38297868
-  mAtlas: {fileID: 11400000, guid: 603488284951f9c4cbaf11f175695661, type: 2}
-  mSpriteName: Button
   mType: 1
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
-  mFillCenter: 1
   centerType: 1
   leftType: 1
   rightType: 1
   bottomType: 1
   topType: 1
+  mAtlas: {fileID: 11400000, guid: 603488284951f9c4cbaf11f175695661, type: 2}
+  mSpriteName: Button
+  mFillCenter: 1
 --- !u!1 &1266145415
 GameObject:
   m_ObjectHideFlags: 0
@@ -1168,19 +1168,19 @@ MonoBehaviour:
   hideIfOffScreen: 0
   keepAspectRatio: 0
   aspectRatio: 2.38297868
-  mAtlas: {fileID: 11400000, guid: 603488284951f9c4cbaf11f175695661, type: 2}
-  mSpriteName: Button
   mType: 1
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
-  mFillCenter: 1
   centerType: 1
   leftType: 1
   rightType: 1
   bottomType: 1
   topType: 1
+  mAtlas: {fileID: 11400000, guid: 603488284951f9c4cbaf11f175695661, type: 2}
+  mSpriteName: Button
+  mFillCenter: 1
 --- !u!1 &1288981752
 GameObject:
   m_ObjectHideFlags: 0
@@ -1279,19 +1279,19 @@ MonoBehaviour:
   hideIfOffScreen: 0
   keepAspectRatio: 0
   aspectRatio: 2.38297868
-  mAtlas: {fileID: 11400000, guid: 603488284951f9c4cbaf11f175695661, type: 2}
-  mSpriteName: Button
   mType: 1
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
-  mFillCenter: 1
   centerType: 1
   leftType: 1
   rightType: 1
   bottomType: 1
   topType: 1
+  mAtlas: {fileID: 11400000, guid: 603488284951f9c4cbaf11f175695661, type: 2}
+  mSpriteName: Button
+  mFillCenter: 1
 --- !u!114 &1288981757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1384,8 +1384,8 @@ MonoBehaviour:
   showTime: 1
   logSaving: 2
   logFlags: 010101010101
-  lowBreak: 1
-  lowFPS: 0
+  fpsWarning: 1
+  lowFPS: 20
 --- !u!114 &1299332181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1415,7 +1415,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba5258ed892420d43ac1cff2c207fa38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetFPS: 60
 --- !u!1 &1328992017
 GameObject:
   m_ObjectHideFlags: 0
@@ -1528,7 +1527,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1402321590}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 345.00827, z: 0}
+  m_LocalPosition: {x: 0, y: 346.474518, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 910345205}
