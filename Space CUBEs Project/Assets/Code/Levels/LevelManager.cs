@@ -287,6 +287,7 @@ public class LevelManager : Singleton<LevelManager>
     /// </summary>
     public void LoadMainMenu()
     {
+        GameTime.Pause(false);
         SceneManager.LoadScene("Main Menu", true);
     }
 
