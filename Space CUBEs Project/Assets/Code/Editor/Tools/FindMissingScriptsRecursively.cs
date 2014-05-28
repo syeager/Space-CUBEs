@@ -1,14 +1,32 @@
-﻿using UnityEngine;
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.04.01
+// Edited: 2014.05.27
+
 using UnityEditor;
+using UnityEngine;
+
+/// <summary>
+/// Find all missing scripts on a selection of GameObjects.
+/// </summary>
 public class FindMissingScriptsRecursively : EditorWindow
 {
-    static int go_count = 0, components_count = 0, missing_count = 0;
+    #region Static Fields
 
-    [MenuItem("Window/FindMissingScriptsRecursively")]
+    private static int gameObjectCount;
+    private static int componentsCount;
+    private static int missingCount;
+
+    #endregion
+
+    #region EditorWindow Overrides
+
+    [MenuItem("Tools/FindMissingScriptsRecursively", false, 151)]
     public static void ShowWindow()
     {
-        EditorWindow.GetWindow(typeof(FindMissingScriptsRecursively));
+        GetWindow(typeof(FindMissingScriptsRecursively));
     }
+
 
     public void OnGUI()
     {
@@ -17,29 +35,51 @@ public class FindMissingScriptsRecursively : EditorWindow
             FindInSelected();
         }
     }
-    private static void FindInSelected()
+
+    #endregion
+
+    #region Public Methods
+
+    public static void FindInAll()
     {
-        GameObject[] go = Selection.gameObjects;
-        go_count = 0;
-        components_count = 0;
-        missing_count = 0;
+        GameObject[] go = FindObjectsOfType<GameObject>();
+        gameObjectCount = 0;
+        componentsCount = 0;
+        missingCount = 0;
         foreach (GameObject g in go)
         {
             FindInGO(g);
         }
-        Debug.Log(string.Format("Searched {0} GameObjects, {1} components, found {2} missing", go_count, components_count, missing_count));
+
+        Debugger.Print("Searched {0} GameObjects, {1} components, found {2} missing", gameObjectCount, componentsCount, missingCount);
     }
 
-    private static void FindInGO(GameObject g)
+
+    public static void FindInSelected()
     {
-        go_count++;
+        GameObject[] go = Selection.gameObjects;
+        gameObjectCount = 0;
+        componentsCount = 0;
+        missingCount = 0;
+        foreach (GameObject g in go)
+        {
+            FindInGO(g);
+        }
+
+        Debugger.Print("Searched {0} GameObjects, {1} components, found {2} missing", gameObjectCount, componentsCount, missingCount);
+    }
+
+
+    public static void FindInGO(GameObject g)
+    {
+        gameObjectCount++;
         Component[] components = g.GetComponents<Component>();
         for (int i = 0; i < components.Length; i++)
         {
-            components_count++;
+            componentsCount++;
             if (components[i] == null)
             {
-                missing_count++;
+                missingCount++;
                 string s = g.name;
                 Transform t = g.transform;
                 while (t.parent != null)
@@ -47,14 +87,17 @@ public class FindMissingScriptsRecursively : EditorWindow
                     s = t.parent.name + "/" + s;
                     t = t.parent;
                 }
-                Debug.Log(s + " has an empty script attached in position: " + i, g);
+
+                Debugger.Break(s + " has an empty script attached in position: " + i, g);
             }
         }
+
         // Now recurse through each child GO (if there are any):
         foreach (Transform childT in g.transform)
         {
-            //Debug.Log("Searching " + childT.name  + " " );
             FindInGO(childT.gameObject);
         }
     }
+
+    #endregion
 }
