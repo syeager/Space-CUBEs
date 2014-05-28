@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 1.15.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.01.15
+// Edited: 2014.05.27
 
 using Annotations;
 using UnityEngine;
@@ -10,11 +12,12 @@ using UnityEngine;
 public class MainMenuManager : MonoBehaviour
 {
     #region Public Fields
+
 #if DEBUG
     public Rect debugTouchRect;
 #endif
-    #endregion
 
+    #endregion
 
     #region MonoBehaviour Overrides
 
@@ -61,6 +64,19 @@ public class MainMenuManager : MonoBehaviour
     public void LoadOptions()
     {
         SceneManager.LoadScene("Options Menu");
+    }
+
+
+    /// <summary>
+    /// Exit game.
+    /// </summary>
+    public void QuitGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 
     #endregion

@@ -81,7 +81,7 @@ public class BuildTool : EditorWindow
 
     #region Private Methods
 
-    [MenuItem("CONTEXT/Build Quick &b")]
+    [MenuItem("Tools/Quick Build &B", false, 52)]
     [UsedImplicitly]
     private static void QuickBuild()
     {
@@ -97,7 +97,7 @@ public class BuildTool : EditorWindow
     }
 
 
-    [MenuItem("Tools/Build %&b", false, 51)]
+    [MenuItem("Tools/Build %&B", false, 51)]
     [UsedImplicitly]
     private static void OpenBuildEditor()
     {
