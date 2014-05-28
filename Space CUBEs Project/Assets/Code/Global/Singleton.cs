@@ -1,17 +1,33 @@
-﻿// Steve Yeager
-// 12.3.2013
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2013.12.03
+// Edited: 2014.05.27
 
 using UnityEngine;
 
 /// <summary>
-/// 
+/// Generic Singleton base class.
 /// </summary>
-/// <typeparam name="T"></typeparam>
+/// <typeparam name="T">Class that wants to be a singleton.</typeparam>
 public class Singleton<T> : MonoBase where T : MonoBehaviour
 {
-    public static T Main { get; protected set; }
+    #region Public Fields
+
+    /// <summary>Should a warning be logged if there are multiple occurences of singleton.</summary>
     public bool logWarning;
 
+    #endregion
+    
+    #region Static Fields
+
+    // ReSharper disable InconsistentNaming
+    /// <summary>Singleton instance of class.</summary>
+    public static T Main { get; protected set; }
+    // ReSharper restore InconsistentNaming
+
+    #endregion
+
+    #region MonoBehaviour Overrides
 
     protected virtual void Awake()
     {
@@ -29,4 +45,6 @@ public class Singleton<T> : MonoBase where T : MonoBehaviour
             Main = GetComponent<T>();
         }
     }
+
+    #endregion
 }

@@ -125,6 +125,7 @@ public class Debugger : Singleton<Debugger>
         base.Awake();
 
         if (!enabled) return;
+        DontDestroyOnLoad(gameObject);
 
         if (logSaving == LogSaving.DontSave) return;
 
