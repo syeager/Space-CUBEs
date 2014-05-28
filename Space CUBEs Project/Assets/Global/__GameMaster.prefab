@@ -10,7 +10,6 @@ GameObject:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400002}
   - 114: {fileID: 11400010}
-  - 114: {fileID: 11400004}
   - 114: {fileID: 11400012}
   m_Layer: 0
   m_Name: __GameMaster
@@ -140,29 +139,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba5258ed892420d43ac1cff2c207fa38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &11400004
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd532088234b3c1489d098decb38d5c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  log: 1
-  timeScale: 1
-  logWarning: 0
-  fps: {fileID: 0}
-  fpsPrefab: {fileID: 100000, guid: ede73768352859c47b0ceadd2ebf76fa, type: 2}
-  consoleLine: {fileID: 0}
-  consoleLinePrefab: {fileID: 100000, guid: 1abf603ef50833b4ba9818e64b0f75db, type: 2}
-  showTime: 1
-  logSaving: 2
-  logFlags: 010101010101
-  fpsWarning: 1
-  lowFPS: 20
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1

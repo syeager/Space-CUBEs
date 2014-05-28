@@ -178,7 +178,7 @@ MonoBehaviour:
   log: 1
   timeScale: 1
   name: 
-  cooldownSpeed: 0
+  cooldownTime: 0
   amp: 5
   speed: 4
 --- !u!114 &10612795
@@ -315,7 +315,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.00000048, y: 1, z: 1.00000048}
+  m_Size: {x: 1.00000048, y: 100, z: 1.00000048}
   m_Center: {x: 2.38418579e-07, y: 0, z: 0}
 --- !u!54 &15967082
 Rigidbody:
@@ -325,13 +325,13 @@ Rigidbody:
   m_PrefabInternal: {fileID: 1322425295}
   m_GameObject: {fileID: 15967077}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: .0500000007
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 120
   m_CollisionDetection: 0
 --- !u!23 &15967083
 Renderer:
@@ -462,7 +462,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.00000048, y: 1, z: 1.00000048}
+  m_Size: {x: 1.00000048, y: 100, z: 1.00000048}
   m_Center: {x: 2.38418579e-07, y: 0, z: 0}
 --- !u!54 &38989478
 Rigidbody:
@@ -472,13 +472,13 @@ Rigidbody:
   m_PrefabInternal: {fileID: 1576454211}
   m_GameObject: {fileID: 38989473}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: .0500000007
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 120
   m_CollisionDetection: 0
 --- !u!23 &38989479
 Renderer:
@@ -789,7 +789,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.00000048, y: 1, z: 1.00000048}
+  m_Size: {x: 1.00000048, y: 100, z: 1.00000048}
   m_Center: {x: 2.38418579e-07, y: 0, z: 0}
 --- !u!54 &130277291
 Rigidbody:
@@ -799,13 +799,13 @@ Rigidbody:
   m_PrefabInternal: {fileID: 1076354835}
   m_GameObject: {fileID: 130277286}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: .0500000007
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 120
   m_CollisionDetection: 0
 --- !u!23 &130277292
 Renderer:
@@ -1116,7 +1116,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.00000048, y: 1, z: 1.00000048}
+  m_Size: {x: 1.00000048, y: 100, z: 1.00000048}
   m_Center: {x: 2.38418579e-07, y: 0, z: 0}
 --- !u!54 &255922875
 Rigidbody:
@@ -1126,13 +1126,13 @@ Rigidbody:
   m_PrefabInternal: {fileID: 1688103607}
   m_GameObject: {fileID: 255922871}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: .0500000007
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 120
   m_CollisionDetection: 0
 --- !u!23 &255922876
 Renderer:
@@ -1426,6 +1426,7 @@ MonoBehaviour:
   shieldTime: 20
   shieldBuffer: 5
   deathLaserTime: 0
+  deathLaserChargeTime: 0
 --- !u!114 &326859890
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1776,7 +1777,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.00000048, y: 1, z: 1.00000048}
+  m_Size: {x: 1.00000048, y: 100, z: 1.00000048}
   m_Center: {x: 2.38418579e-07, y: 0, z: 0}
 --- !u!54 &422089768
 Rigidbody:
@@ -1786,13 +1787,13 @@ Rigidbody:
   m_PrefabInternal: {fileID: 987202138}
   m_GameObject: {fileID: 422089764}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: .0500000007
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 120
   m_CollisionDetection: 0
 --- !u!23 &422089769
 Renderer:
@@ -1871,7 +1872,7 @@ MonoBehaviour:
   log: 1
   timeScale: 1
   name: 
-  cooldownSpeed: 0
+  cooldownTime: 0
   Missile_Prefab: {fileID: 100002, guid: d489c3f61a7c36d4abdcc9e6b6319f47, type: 2}
   missilePositions:
   - {x: -2, y: 0, z: 0}
@@ -2203,6 +2204,7 @@ MonoBehaviour:
     target: {fileID: 1363906080}
     relative: 1
     absolute: 0
+  updateAnchors: 1
   mColor: {r: 1, g: 0, b: 0, a: .784313738}
   mPivot: 4
   mWidth: 149
@@ -2210,13 +2212,21 @@ MonoBehaviour:
   mDepth: 7
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
-  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
-  mSpriteName: weaponBtnCooldown
-  mFillCenter: 1
+  keepAspectRatio: 0
+  aspectRatio: 2.06944442
   mType: 3
   mFillDirection: 1
   mFillAmount: 1
   mInvert: 0
+  mFlip: 0
+  centerType: 1
+  leftType: 1
+  rightType: 1
+  bottomType: 1
+  topType: 1
+  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
+  mSpriteName: weaponBtnCooldown
+  mFillCenter: 1
 --- !u!1 &455911498
 GameObject:
   m_ObjectHideFlags: 0
@@ -2364,7 +2374,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.00000048, y: 1, z: 1.00000048}
+  m_Size: {x: 1.00000048, y: 100, z: 1.00000048}
   m_Center: {x: 2.38418579e-07, y: 0, z: 0}
 --- !u!54 &473515898
 Rigidbody:
@@ -2374,13 +2384,13 @@ Rigidbody:
   m_PrefabInternal: {fileID: 1215293823}
   m_GameObject: {fileID: 473515893}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: .0500000007
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 120
   m_CollisionDetection: 0
 --- !u!23 &473515899
 Renderer:
@@ -2570,9 +2580,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f5c9741c4dba0741a287cd0177b0581, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 1
-  timeScale: 1
-  updateInterval: .5
 --- !u!132 &523432971
 GUIText:
   m_ObjectHideFlags: 0
@@ -3063,7 +3070,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.00000048, y: 1, z: 1.00000048}
+  m_Size: {x: 1.00000048, y: 100, z: 1.00000048}
   m_Center: {x: 2.38418579e-07, y: 0, z: 0}
 --- !u!54 &587028137
 Rigidbody:
@@ -3073,13 +3080,13 @@ Rigidbody:
   m_PrefabInternal: {fileID: 2052835605}
   m_GameObject: {fileID: 587028132}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: .0500000007
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 120
   m_CollisionDetection: 0
 --- !u!23 &587028138
 Renderer:
@@ -3272,7 +3279,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.00000048, y: 1, z: 1.00000048}
+  m_Size: {x: 1.00000048, y: 100, z: 1.00000048}
   m_Center: {x: 2.38418579e-07, y: 0, z: 0}
 --- !u!54 &595561220
 Rigidbody:
@@ -3282,13 +3289,13 @@ Rigidbody:
   m_PrefabInternal: {fileID: 1925350128}
   m_GameObject: {fileID: 595561215}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: .0500000007
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 120
   m_CollisionDetection: 0
 --- !u!23 &595561221
 Renderer:
@@ -3342,7 +3349,7 @@ Transform:
   m_PrefabParentObject: {fileID: 400004, guid: aeed59aee1ea3714da2eb46ccb6175bd, type: 2}
   m_PrefabInternal: {fileID: 1743252973}
   m_GameObject: {fileID: 601560626}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -.428198785, y: -.48876363, z: .299594402, w: -.698569357}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children: []
@@ -3416,6 +3423,7 @@ MonoBehaviour:
     target: {fileID: 0}
     relative: 1
     absolute: 0
+  updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mWidth: 50
@@ -3423,13 +3431,21 @@ MonoBehaviour:
   mDepth: 14
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
-  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
-  mSpriteName: multiplierX
-  mFillCenter: 1
+  keepAspectRatio: 0
+  aspectRatio: 1
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
+  mFlip: 0
+  centerType: 1
+  leftType: 1
+  rightType: 1
+  bottomType: 1
+  topType: 1
+  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
+  mSpriteName: multiplierX
+  mFillCenter: 1
 --- !u!114 &633961889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3502,12 +3518,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 1
   timeScale: 1
+  logWarning: 0
+  pauseMenu: {fileID: 0}
   enemyPrefabs:
   - {fileID: 100000, guid: e6ee90c6d98d0a449b1727cb1c1a0511, type: 2}
   - {fileID: 100000, guid: 97b1c7596f24e3e468225c91a9926532, type: 2}
   - {fileID: 100000, guid: 5b677b0216e46a3479c2c2c8ed6331b1, type: 2}
   rankLimits: ffffffffe8030000d0070000a00f0000401f0000803e0000
-  testBuild: Test Build
   formationGroups:
   - formation: {fileID: 11400000, guid: 751c02be967f91448a87b780c464c093, type: 2}
     position: {x: 100, y: 0, z: 0}
@@ -3843,8 +3860,10 @@ MonoBehaviour:
     - {fileID: 231268274}
     needsClearing: 0
     spawnTime: 3
-  Boss_Prefab: {fileID: 100024, guid: 718f7b31517d6a242a530a3f4905aecd, type: 2}
+  levelIndex: 0
+  bossPrefab: {fileID: 0}
   bossSpawnPosition: {x: 125, y: 0, z: 0}
+  bossMusic: {fileID: 0}
 --- !u!4 &643404111
 Transform:
   m_ObjectHideFlags: 0
@@ -3869,6 +3888,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 1
   timeScale: 1
+  logWarning: 0
   cull: 1
   cullDelay: 10
   poolList:
@@ -3880,7 +3900,7 @@ MonoBehaviour:
     cull: 1
     cullLimit: 15
     parent: {fileID: 351614524}
-  - prefab: {fileID: 11400000, guid: 97b1c7596f24e3e468225c91a9926532, type: 2}
+  - prefab: {fileID: 0}
     preAllocate: 10
     allocateBlock: 5
     hardLimit: 0
@@ -3888,7 +3908,7 @@ MonoBehaviour:
     cull: 1
     cullLimit: 15
     parent: {fileID: 1615264243}
-  - prefab: {fileID: 11400000, guid: 5b677b0216e46a3479c2c2c8ed6331b1, type: 2}
+  - prefab: {fileID: 0}
     preAllocate: 5
     allocateBlock: 2
     hardLimit: 0
@@ -4089,7 +4109,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.00000048, y: 1, z: 1.00000048}
+  m_Size: {x: 1.00000048, y: 100, z: 1.00000048}
   m_Center: {x: 2.38418579e-07, y: 0, z: 0}
 --- !u!54 &672086732
 Rigidbody:
@@ -4099,13 +4119,13 @@ Rigidbody:
   m_PrefabInternal: {fileID: 1782157389}
   m_GameObject: {fileID: 672086727}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: .0500000007
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 120
   m_CollisionDetection: 0
 --- !u!23 &672086733
 Renderer:
@@ -4226,6 +4246,7 @@ MonoBehaviour:
     target: {fileID: 921408840}
     relative: .200000003
     absolute: 0
+  updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mWidth: 150
@@ -4233,6 +4254,8 @@ MonoBehaviour:
   mDepth: 10
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
+  keepAspectRatio: 0
+  aspectRatio: 1.04166663
 --- !u!65 &686265117
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4302,19 +4325,23 @@ MonoBehaviour:
     target: {fileID: 0}
     relative: 1
     absolute: 0
+  updateAnchors: 1
   mColor: {r: 1, g: 0, b: 0, a: 1}
   mPivot: 4
-  mWidth: 17
+  mWidth: 18
   mHeight: 30
   mDepth: 8
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
+  keepAspectRatio: 0
+  aspectRatio: .600000024
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   mFont: {fileID: 0}
   mText: 4
   mFontSize: 30
   mFontStyle: 0
+  mAlignment: 0
   mEncoding: 0
   mMaxLineCount: 0
   mEffectStyle: 2
@@ -4507,7 +4534,7 @@ MonoBehaviour:
   log: 1
   timeScale: 1
   name: 
-  cooldownSpeed: 0
+  cooldownTime: 0
   Missile_Prefab: {fileID: 100002, guid: d489c3f61a7c36d4abdcc9e6b6319f47, type: 2}
   missilePositions:
   - {x: -2, y: 0, z: 0}
@@ -4662,8 +4689,8 @@ GameObject:
   m_Component:
   - 4: {fileID: 824695458}
   - 114: {fileID: 824695457}
-  - 114: {fileID: 824695455}
   - 114: {fileID: 824695461}
+  - 114: {fileID: 824695455}
   m_Layer: 0
   m_Name: __GameMaster
   m_TagString: Untagged
@@ -4674,24 +4701,15 @@ GameObject:
 --- !u!114 &824695455
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400004, guid: aeed59aee1ea3714da2eb46ccb6175bd,
+  m_PrefabParentObject: {fileID: 11400012, guid: aeed59aee1ea3714da2eb46ccb6175bd,
     type: 2}
   m_PrefabInternal: {fileID: 1743252973}
   m_GameObject: {fileID: 824695454}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd532088234b3c1489d098decb38d5c3, type: 3}
+  m_Script: {fileID: 11500000, guid: b32fd8b6b34e20f46a0168dd34944ddd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 1
-  timeScale: 1
-  FPS: {fileID: 523432969}
-  FPS_Prefab: {fileID: 100000, guid: ede73768352859c47b0ceadd2ebf76fa, type: 2}
-  ConsoleLine: {fileID: 0}
-  ConsoleLine_Prefab: {fileID: 100000, guid: 1abf603ef50833b4ba9818e64b0f75db, type: 2}
-  showTime: 1
-  overwrite: 1
-  logFlags: 0100000100
 --- !u!114 &824695456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4701,11 +4719,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1741049704}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1e8a7edb674f82419d1c54602d84506, type: 3}
+  m_Script: {fileID: 11500000, guid: 6bc2885fc505400499f13b1beaf74129, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   log: 1
   timeScale: 1
+  logWarning: 0
+  currentBuild: Test Build
 --- !u!114 &824695457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4746,7 +4766,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 1
   timeScale: 1
-  invincible: 0
+  logWarning: 0
+  invincible: 1
   jumpToBoss: 0
   volumeSE: 5
   volumeMusic: 0
@@ -4767,6 +4788,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dab6b0c12c931b3479d1aee0989713d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  log: 0
+  timeScale: 1
+  logWarning: 0
   CUBE_Prefabs:
   - {fileID: 11400000, guid: c90fae0135712ca4aaf1f938bc7888e3, type: 2}
   - {fileID: 11400000, guid: eb6d282238117c144a5a3b10c4675d5b, type: 2}
@@ -4788,46 +4812,46 @@ MonoBehaviour:
   - {fileID: 11400000, guid: aed0d672d60efb3439d60deb85c51b27, type: 2}
   - {fileID: 11400000, guid: 8ac5f77505ea7f742bb6f8a4b8415d0d, type: 2}
   - {fileID: 11400000, guid: 777446fa01c8e714392afa2efac8d582, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: eaad1ae2bdf130c4ba71693b166ae257, type: 2}
+  - {fileID: 11400000, guid: 663cdacc087782b43b0573735a0837ab, type: 2}
+  - {fileID: 11400000, guid: ff780c9a70cf49d4a99dc8d27568ce99, type: 2}
+  - {fileID: 11400000, guid: 223fab4d1dbb1d2478ff1db9f71a2e82, type: 2}
+  - {fileID: 11400000, guid: b865982626b510044882638779cddd77, type: 2}
+  - {fileID: 11400000, guid: 930a2e7e40fd60543be2bb4064c15773, type: 2}
+  - {fileID: 11400000, guid: 9f3fdef8018128e4593787a6b88c7a87, type: 2}
+  - {fileID: 11400000, guid: 03c98dd6ad6e5404bb4b4cd3223d9b87, type: 2}
+  - {fileID: 11400000, guid: d13778015a320b94baf014d6794b166a, type: 2}
+  - {fileID: 11400000, guid: ae03e36501b20044ea8665f76c9dc57d, type: 2}
+  - {fileID: 11400000, guid: ef743453fa2d34d46ac1e52756cce053, type: 2}
+  - {fileID: 11400000, guid: 198c100e47464df419b1b98c0d641c2c, type: 2}
+  - {fileID: 11400000, guid: 1b06944f54c7a1a43a195be0187b8390, type: 2}
+  - {fileID: 11400000, guid: 9cecfb00977081e4c8af1d1290fc7e8a, type: 2}
+  - {fileID: 11400000, guid: 009998ad8933dc841ad13733437e3812, type: 2}
+  - {fileID: 11400000, guid: b01143eb741cdbf4ba95ad8d6b1a5400, type: 2}
+  - {fileID: 11400000, guid: f4e00ee032a763a4b80d9c5960bda2ce, type: 2}
+  - {fileID: 11400000, guid: 08ff89464921a0447abdcac8048fc2de, type: 2}
+  - {fileID: 11400000, guid: a8f83dda7c97b1649b25b142ea50de83, type: 2}
+  - {fileID: 11400000, guid: 1cefe32ba0514794c87229fb4d156084, type: 2}
+  - {fileID: 11400000, guid: 762ea969a6a2be14bb941d80513b6621, type: 2}
+  - {fileID: 11400000, guid: a217b24f83f05e84fa11d5c7dfa72863, type: 2}
+  - {fileID: 11400000, guid: 7faabe98d89152d4a86eca96eb6d29fa, type: 2}
+  - {fileID: 11400000, guid: 2676b1fdf38562a44a689c9d5165a337, type: 2}
+  - {fileID: 11400000, guid: 0769c0bf4d23e624ab2e6c2342b16995, type: 2}
+  - {fileID: 11400000, guid: ee8d2f0c0cbbb9742bc6030f93e31e78, type: 2}
+  - {fileID: 11400000, guid: d16d4a4fd79ba724790ce0131e2b3947, type: 2}
+  - {fileID: 11400000, guid: 559f415667618ac4c86785d3e1c1cf2f, type: 2}
+  - {fileID: 11400000, guid: 9e4a131fc44961145bf6940811e4d455, type: 2}
+  - {fileID: 11400000, guid: 255155052b2437b4490699bbf62c6fd6, type: 2}
+  - {fileID: 11400000, guid: 3e9e43ccdbf3d7d478d773f02beda668, type: 2}
+  - {fileID: 11400000, guid: dbe3e13d4e2c7db4a82c93e2baf4cc94, type: 2}
+  - {fileID: 11400000, guid: 7d597b350fcfba44b810bc7601eee5d4, type: 2}
+  - {fileID: 11400000, guid: 7efadfe1a102c8747968fd7e56b9f946, type: 2}
+  - {fileID: 11400000, guid: bb62205c107df1e468d314f0c6c22024, type: 2}
+  - {fileID: 11400000, guid: 76f2adffe0226c646b66f5ca508a7ec9, type: 2}
+  - {fileID: 11400000, guid: 901a359327c9bdf4c91093ed6ce5091a, type: 2}
+  - {fileID: 11400000, guid: 53a0aee1886e6f049840bde903fce843, type: 2}
+  - {fileID: 11400000, guid: 69a9b423f4ad3e241a0384c0f0b8a4a1, type: 2}
+  - {fileID: 11400000, guid: 26758a43a54cb304e82d47f7f9aff656, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -4875,10 +4899,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8399cca516e50ce459f774c9e9c5cfcc, type: 2}
   - {fileID: 11400000, guid: 8f81c171d24c3dd4883dc25649e3b5a6, type: 2}
   - {fileID: 11400000, guid: fb316d066bc0bd04f838b16124fb1540, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 7b6207fd1604e7d438fdabf84666af61, type: 2}
+  - {fileID: 11400000, guid: 874fa51637a68c344bdde7847428d685, type: 2}
+  - {fileID: 11400000, guid: 7ca237d19f5fde541892cbe2604b389a, type: 2}
+  - {fileID: 11400000, guid: 33a9713e5de284a4baf3b8d88f4fc797, type: 2}
   - {fileID: 11400000, guid: 2fdb0f7016aaff8418370ec0c6cdcf61, type: 2}
   - {fileID: 11400000, guid: 04db7dc84af4dcc45bb108c4b0b1fadd, type: 2}
   - {fileID: 11400000, guid: 6570f46a4e0c9db4bb44f7882ef40f94, type: 2}
@@ -4896,7 +4920,7 @@ MonoBehaviour:
   VertexColorLerp_Mat: {fileID: 2100000, guid: 7c7cad9edc388da41a9033670888b17b, type: 2}
   ShieldHit_Mat: {fileID: 2100000, guid: 71367417f5c929240bcef731c61da6be, type: 2}
   HealthHit_Mat: {fileID: 2100000, guid: 714fd6fe39d4b7e4786c808fbccc8dd9, type: 2}
-  Player_TR: {fileID: 100000, guid: 52986c95ddd530342846a11fe85cb87a, type: 2}
+  player_Prefab: {fileID: 100000, guid: c232bd52a71fba443abbde765af943c5, type: 2}
 --- !u!114 &824695461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4909,6 +4933,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9997cc572df21f40a28b4140136f1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  log: 0
+  timeScale: 1
+  logWarning: 0
   version: 1
   resetVersion: 0
 --- !u!114 &827127596
@@ -4993,6 +5020,7 @@ MonoBehaviour:
     target: {fileID: 0}
     relative: 1
     absolute: 0
+  updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mWidth: 40
@@ -5000,13 +5028,21 @@ MonoBehaviour:
   mDepth: 17
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
-  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
-  mSpriteName: multiplier0
-  mFillCenter: 1
+  keepAspectRatio: 0
+  aspectRatio: .571428597
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
+  mFlip: 0
+  centerType: 1
+  leftType: 1
+  rightType: 1
+  bottomType: 1
+  topType: 1
+  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
+  mSpriteName: multiplier0
+  mFillCenter: 1
 --- !u!1 &836543235
 GameObject:
   m_ObjectHideFlags: 0
@@ -5078,7 +5114,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.00000048, y: 1, z: 1.00000048}
+  m_Size: {x: 1.00000048, y: 100, z: 1.00000048}
   m_Center: {x: 2.38418579e-07, y: 0, z: 0}
 --- !u!54 &836543240
 Rigidbody:
@@ -5088,13 +5124,13 @@ Rigidbody:
   m_PrefabInternal: {fileID: 967475985}
   m_GameObject: {fileID: 836543235}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: .0500000007
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 120
   m_CollisionDetection: 0
 --- !u!23 &836543241
 Renderer:
@@ -5243,8 +5279,13 @@ MonoBehaviour:
   tweenTarget: {fileID: 844111788}
   hover: {r: .882352948, g: .784313738, b: .588235319, a: 1}
   pressed: {r: .717647076, g: .639215708, b: .482352942, a: 1}
-  duration: .200000003
   disabledColor: {r: .5, g: .5, b: .5, a: 1}
+  duration: .200000003
+  dragHighlight: 0
+  hoverSprite: 
+  pressedSprite: 
+  disabledSprite: 
+  pixelSnap: 0
   onClick: []
   activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
@@ -5288,6 +5329,7 @@ MonoBehaviour:
     target: {fileID: 1425579258}
     relative: .5
     absolute: 0
+  updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mWidth: 149
@@ -5295,13 +5337,21 @@ MonoBehaviour:
   mDepth: 6
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
-  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
-  mSpriteName: weaponBtn
-  mFillCenter: 1
+  keepAspectRatio: 0
+  aspectRatio: 2.06944442
   mType: 1
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
+  mFlip: 0
+  centerType: 1
+  leftType: 1
+  rightType: 1
+  bottomType: 1
+  topType: 1
+  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
+  mSpriteName: weaponBtn
+  mFillCenter: 1
 --- !u!1001 &856001048
 Prefab:
   m_ObjectHideFlags: 0
@@ -5400,6 +5450,7 @@ MonoBehaviour:
     target: {fileID: 1063339092}
     relative: 1
     absolute: 0
+  updateAnchors: 1
   mColor: {r: 1, g: 0, b: 0, a: .784313738}
   mPivot: 4
   mWidth: 149
@@ -5407,13 +5458,21 @@ MonoBehaviour:
   mDepth: 7
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
-  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
-  mSpriteName: weaponBtnCooldown
-  mFillCenter: 1
+  keepAspectRatio: 0
+  aspectRatio: 2.06944442
   mType: 3
   mFillDirection: 1
   mFillAmount: 1
   mInvert: 0
+  mFlip: 0
+  centerType: 1
+  leftType: 1
+  rightType: 1
+  bottomType: 1
+  topType: 1
+  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
+  mSpriteName: weaponBtnCooldown
+  mFillCenter: 1
 --- !u!114 &871676530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5553,19 +5612,23 @@ MonoBehaviour:
     target: {fileID: 0}
     relative: 1
     absolute: 0
+  updateAnchors: 1
   mColor: {r: .0344827175, g: 1, b: 0, a: 1}
   mPivot: 4
-  mWidth: 17
+  mWidth: 18
   mHeight: 30
   mDepth: 8
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
+  keepAspectRatio: 0
+  aspectRatio: .600000024
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   mFont: {fileID: 0}
   mText: 2
   mFontSize: 30
   mFontStyle: 0
+  mAlignment: 0
   mEncoding: 0
   mMaxLineCount: 0
   mEffectStyle: 2
@@ -5808,35 +5871,22 @@ MonoBehaviour:
     target: {fileID: 0}
     relative: 1
     absolute: 0
+  updateAnchors: 1
   showInPanelTool: 1
   generateNormals: 0
   widgetsAreStatic: 0
   cullWhileDragging: 0
   alwaysOnScreen: 1
+  anchorOffset: 0
   renderQueue: 0
   startingRenderQueue: 3000
-  worldToLocal:
-    e00: 360
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 360
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 360
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 1
   mAlpha: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 300, w: 200}
   mClipSoftness: {x: 4, y: 4}
   mDepth: 0
+  mSortingOrder: 0
+  mClipOffset: {x: 0, y: 0}
 --- !u!114 &921408843
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5852,6 +5902,8 @@ MonoBehaviour:
   manualHeight: 720
   minimumHeight: 320
   maximumHeight: 1536
+  adjustByDPI: 0
+  shrinkPortraitUI: 0
 --- !u!114 &921408844
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5865,6 +5917,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 1
   timeScale: 1
+  logWarning: 0
   multX: {fileID: 623203559}
   multipliers:
   - {fileID: 946439829}
@@ -5881,6 +5934,46 @@ MonoBehaviour:
   HealthBar: {fileID: 1347304328}
   Points: {fileID: 1809178611}
   bossHealth: {fileID: 1243583003}
+--- !u!1001 &922938130
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 400000, guid: 45c62a3fc8a9231409c29375e8f213d8, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 45c62a3fc8a9231409c29375e8f213d8, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 45c62a3fc8a9231409c29375e8f213d8, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 45c62a3fc8a9231409c29375e8f213d8, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 45c62a3fc8a9231409c29375e8f213d8, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 45c62a3fc8a9231409c29375e8f213d8, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 45c62a3fc8a9231409c29375e8f213d8, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 45c62a3fc8a9231409c29375e8f213d8, type: 2}
+  m_RootGameObject: {fileID: 2038748363}
+  m_IsPrefabParent: 0
+  m_IsExploded: 1
 --- !u!114 &924332962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5978,6 +6071,7 @@ MonoBehaviour:
     target: {fileID: 0}
     relative: 1
     absolute: 0
+  updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mWidth: 40
@@ -5985,13 +6079,21 @@ MonoBehaviour:
   mDepth: 17
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
-  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
-  mSpriteName: multiplier0
-  mFillCenter: 1
+  keepAspectRatio: 0
+  aspectRatio: .571428597
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
+  mFlip: 0
+  centerType: 1
+  leftType: 1
+  rightType: 1
+  bottomType: 1
+  topType: 1
+  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
+  mSpriteName: multiplier0
+  mFillCenter: 1
 --- !u!4 &946439830
 Transform:
   m_ObjectHideFlags: 0
@@ -6427,8 +6529,13 @@ MonoBehaviour:
   tweenTarget: {fileID: 1063339091}
   hover: {r: .882352948, g: .784313738, b: .588235319, a: 1}
   pressed: {r: .717647076, g: .639215708, b: .482352942, a: 1}
-  duration: .200000003
   disabledColor: {r: .5, g: .5, b: .5, a: 1}
+  duration: .200000003
+  dragHighlight: 0
+  hoverSprite: 
+  pressedSprite: 
+  disabledSprite: 
+  pixelSnap: 0
   onClick: []
   activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
@@ -6472,6 +6579,7 @@ MonoBehaviour:
     target: {fileID: 1425579258}
     relative: 1
     absolute: 0
+  updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mWidth: 149
@@ -6479,13 +6587,21 @@ MonoBehaviour:
   mDepth: 6
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
-  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
-  mSpriteName: weaponBtn
-  mFillCenter: 1
+  keepAspectRatio: 0
+  aspectRatio: 2.06944442
   mType: 1
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
+  mFlip: 0
+  centerType: 1
+  leftType: 1
+  rightType: 1
+  bottomType: 1
+  topType: 1
+  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
+  mSpriteName: weaponBtn
+  mFillCenter: 1
 --- !u!1 &1072624788
 GameObject:
   m_ObjectHideFlags: 0
@@ -6688,7 +6804,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.00000048, y: 1, z: 1.00000048}
+  m_Size: {x: 1.00000048, y: 100, z: 1.00000048}
   m_Center: {x: 2.38418579e-07, y: 0, z: 0}
 --- !u!54 &1129193092
 Rigidbody:
@@ -6698,13 +6814,13 @@ Rigidbody:
   m_PrefabInternal: {fileID: 564962117}
   m_GameObject: {fileID: 1129193087}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: .0500000007
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 120
   m_CollisionDetection: 0
 --- !u!23 &1129193093
 Renderer:
@@ -6784,9 +6900,8 @@ MonoBehaviour:
   log: 1
   timeScale: 1
   name: 
-  cooldownSpeed: 0
-  Laser_Prefab: {fileID: 100000, guid: d4b340ef18bd331478c2fd0ec9ba9bfd, type: 2}
-  laserOffset: {x: 0, y: 0, z: 2}
+  cooldownTime: 0
+  laser: {fileID: 0}
   cycles: 2
   speed: 4
   time: 5
@@ -6922,19 +7037,23 @@ MonoBehaviour:
     target: {fileID: 0}
     relative: 1
     absolute: 0
+  updateAnchors: 1
   mColor: {r: 0, g: 1, b: 0, a: 1}
   mPivot: 4
-  mWidth: 17
+  mWidth: 18
   mHeight: 30
   mDepth: 8
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
+  keepAspectRatio: 0
+  aspectRatio: .600000024
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   mFont: {fileID: 0}
   mText: 3
   mFontSize: 30
   mFontStyle: 0
+  mAlignment: 0
   mEncoding: 0
   mMaxLineCount: 0
   mEffectStyle: 2
@@ -7062,6 +7181,7 @@ MonoBehaviour:
     target: {fileID: 921408840}
     relative: .194999993
     absolute: 0
+  updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mWidth: 566
@@ -7069,13 +7189,21 @@ MonoBehaviour:
   mDepth: 13
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
-  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
-  mSpriteName: shieldBar
-  mFillCenter: 1
+  keepAspectRatio: 0
+  aspectRatio: 4.04285717
   mType: 3
   mFillDirection: 3
   mFillAmount: 1
   mInvert: 0
+  mFlip: 0
+  centerType: 1
+  leftType: 1
+  rightType: 1
+  bottomType: 1
+  topType: 1
+  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
+  mSpriteName: shieldBar
+  mFillCenter: 1
 --- !u!114 &1181456088
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7332,6 +7460,7 @@ MonoBehaviour:
     target: {fileID: 0}
     relative: 1
     absolute: 0
+  updateAnchors: 1
   mColor: {r: 1, g: 0, b: 0, a: 1}
   mPivot: 4
   mWidth: 15
@@ -7339,13 +7468,21 @@ MonoBehaviour:
   mDepth: 21
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
-  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
-  mSpriteName: weaponBtnCooldown
-  mFillCenter: 1
+  keepAspectRatio: 0
+  aspectRatio: 1
   mType: 3
   mFillDirection: 1
   mFillAmount: 1
   mInvert: 0
+  mFlip: 0
+  centerType: 1
+  leftType: 1
+  rightType: 1
+  bottomType: 1
+  topType: 1
+  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
+  mSpriteName: weaponBtnCooldown
+  mFillCenter: 1
 --- !u!114 &1273804267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7748,6 +7885,7 @@ MonoBehaviour:
     target: {fileID: 921408840}
     relative: .169
     absolute: 0
+  updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mWidth: 498
@@ -7755,13 +7893,21 @@ MonoBehaviour:
   mDepth: 13
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
-  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
-  mSpriteName: healthBar
-  mFillCenter: 1
+  keepAspectRatio: 0
+  aspectRatio: 4.08196735
   mType: 3
   mFillDirection: 3
   mFillAmount: 1
   mInvert: 0
+  mFlip: 0
+  centerType: 1
+  leftType: 1
+  rightType: 1
+  bottomType: 1
+  topType: 1
+  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
+  mSpriteName: healthBar
+  mFillCenter: 1
 --- !u!1 &1360644362
 GameObject:
   m_ObjectHideFlags: 0
@@ -7808,12 +7954,13 @@ MonoBehaviour:
   log: 0
   timeScale: 1
   name: 
-  cooldownSpeed: 0
+  cooldownTime: 0
   Bullet_Prefab: {fileID: 100000, guid: 023549f1a73033642a26c4403e392f54, type: 2}
   number: 10
   speed: 30
   damage: 10
   offset: {x: 0, y: 0, z: 0}
+  startAngle: 0
 --- !u!114 &1360644365
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7829,12 +7976,13 @@ MonoBehaviour:
   log: 0
   timeScale: 1
   name: 
-  cooldownSpeed: 0
+  cooldownTime: 0
   Bullet_Prefab: {fileID: 100000, guid: 023549f1a73033642a26c4403e392f54, type: 2}
   number: 20
   speed: 30
   damage: 10
   offset: {x: 0, y: 0, z: 0}
+  startAngle: 0
 --- !u!114 &1360644366
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7850,7 +7998,7 @@ MonoBehaviour:
   log: 0
   timeScale: 1
   name: 
-  cooldownSpeed: 0
+  cooldownTime: 0
   weapons:
   - {fileID: 1360644365}
   - {fileID: 1360644364}
@@ -7960,8 +8108,13 @@ MonoBehaviour:
   tweenTarget: {fileID: 1363906079}
   hover: {r: .882352948, g: .784313738, b: .588235319, a: 1}
   pressed: {r: .717647076, g: .639215708, b: .482352942, a: 1}
-  duration: .200000003
   disabledColor: {r: .5, g: .5, b: .5, a: 1}
+  duration: .200000003
+  dragHighlight: 0
+  hoverSprite: 
+  pressedSprite: 
+  disabledSprite: 
+  pixelSnap: 0
   onClick: []
   activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
@@ -8005,6 +8158,7 @@ MonoBehaviour:
     target: {fileID: 1425579258}
     relative: .5
     absolute: 0
+  updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mWidth: 149
@@ -8012,13 +8166,21 @@ MonoBehaviour:
   mDepth: 6
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
-  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
-  mSpriteName: weaponBtn
-  mFillCenter: 1
+  keepAspectRatio: 0
+  aspectRatio: 2.06944442
   mType: 1
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
+  mFlip: 0
+  centerType: 1
+  leftType: 1
+  rightType: 1
+  bottomType: 1
+  topType: 1
+  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
+  mSpriteName: weaponBtn
+  mFillCenter: 1
 --- !u!114 &1370139690
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8238,6 +8400,7 @@ MonoBehaviour:
     target: {fileID: 921408840}
     relative: .200000003
     absolute: 0
+  updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mWidth: 426
@@ -8245,6 +8408,8 @@ MonoBehaviour:
   mDepth: 5
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
+  keepAspectRatio: 0
+  aspectRatio: 2.95833325
 --- !u!1 &1425911521
 GameObject:
   m_ObjectHideFlags: 0
@@ -8316,7 +8481,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.00000048, y: 1, z: 1.00000048}
+  m_Size: {x: 1.00000048, y: 100, z: 1.00000048}
   m_Center: {x: 2.38418579e-07, y: 0, z: 0}
 --- !u!54 &1425911526
 Rigidbody:
@@ -8326,13 +8491,13 @@ Rigidbody:
   m_PrefabInternal: {fileID: 557670409}
   m_GameObject: {fileID: 1425911521}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: .0500000007
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 120
   m_CollisionDetection: 0
 --- !u!23 &1425911527
 Renderer:
@@ -8448,6 +8613,7 @@ MonoBehaviour:
     target: {fileID: 921408840}
     relative: .200000003
     absolute: 0
+  updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mWidth: 1152
@@ -8455,13 +8621,21 @@ MonoBehaviour:
   mDepth: 0
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
-  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
-  mSpriteName: hudBG
-  mFillCenter: 1
+  keepAspectRatio: 0
+  aspectRatio: 8
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
+  mFlip: 0
+  centerType: 1
+  leftType: 1
+  rightType: 1
+  bottomType: 1
+  topType: 1
+  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
+  mSpriteName: hudBG
+  mFillCenter: 1
 --- !u!114 &1467353534
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8644,8 +8818,13 @@ MonoBehaviour:
   tweenTarget: {fileID: 1522588396}
   hover: {r: .882352948, g: .784313738, b: .588235319, a: 1}
   pressed: {r: .717647076, g: .639215708, b: .482352942, a: 1}
-  duration: .200000003
   disabledColor: {r: .5, g: .5, b: .5, a: 1}
+  duration: .200000003
+  dragHighlight: 0
+  hoverSprite: 
+  pressedSprite: 
+  disabledSprite: 
+  pixelSnap: 0
   onClick: []
   activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
@@ -8689,6 +8868,7 @@ MonoBehaviour:
     target: {fileID: 1425579258}
     relative: 1
     absolute: 0
+  updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mWidth: 149
@@ -8696,13 +8876,21 @@ MonoBehaviour:
   mDepth: 6
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
-  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
-  mSpriteName: weaponBtn
-  mFillCenter: 1
+  keepAspectRatio: 0
+  aspectRatio: 2.06944442
   mType: 1
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
+  mFlip: 0
+  centerType: 1
+  leftType: 1
+  rightType: 1
+  bottomType: 1
+  topType: 1
+  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
+  mSpriteName: weaponBtn
+  mFillCenter: 1
 --- !u!114 &1525361950
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8866,6 +9054,7 @@ MonoBehaviour:
     target: {fileID: 0}
     relative: 1
     absolute: 0
+  updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mWidth: 40
@@ -8873,13 +9062,21 @@ MonoBehaviour:
   mDepth: 17
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
-  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
-  mSpriteName: multiplier0
-  mFillCenter: 1
+  keepAspectRatio: 0
+  aspectRatio: .571428597
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
+  mFlip: 0
+  centerType: 1
+  leftType: 1
+  rightType: 1
+  bottomType: 1
+  topType: 1
+  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
+  mSpriteName: multiplier0
+  mFillCenter: 1
 --- !u!1 &1543072210
 GameObject:
   m_ObjectHideFlags: 0
@@ -9107,7 +9304,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.00000048, y: 1, z: 1.00000048}
+  m_Size: {x: 1.00000048, y: 100, z: 1.00000048}
   m_Center: {x: 2.38418579e-07, y: 0, z: 0}
 --- !u!54 &1580955133
 Rigidbody:
@@ -9117,13 +9314,13 @@ Rigidbody:
   m_PrefabInternal: {fileID: 135613483}
   m_GameObject: {fileID: 1580955128}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: .0500000007
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 120
   m_CollisionDetection: 0
 --- !u!23 &1580955134
 Renderer:
@@ -9336,6 +9533,7 @@ MonoBehaviour:
     target: {fileID: 1522588397}
     relative: 1
     absolute: 0
+  updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: .784313738}
   mPivot: 4
   mWidth: 149
@@ -9343,13 +9541,21 @@ MonoBehaviour:
   mDepth: 7
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
-  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
-  mSpriteName: weaponBtnCooldown
-  mFillCenter: 1
+  keepAspectRatio: 0
+  aspectRatio: 2.06944442
   mType: 3
   mFillDirection: 1
   mFillAmount: 1
   mInvert: 0
+  mFlip: 0
+  centerType: 1
+  leftType: 1
+  rightType: 1
+  bottomType: 1
+  topType: 1
+  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
+  mSpriteName: weaponBtnCooldown
+  mFillCenter: 1
 --- !u!1 &1630941665
 GameObject:
   m_ObjectHideFlags: 0
@@ -9380,6 +9586,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 1
   timeScale: 1
+  logWarning: 0
 --- !u!4 &1630941667
 Transform:
   m_ObjectHideFlags: 0
@@ -9532,7 +9739,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.00000048, y: 1, z: 1.00000048}
+  m_Size: {x: 1.00000048, y: 100, z: 1.00000048}
   m_Center: {x: 2.38418579e-07, y: 0, z: 0}
 --- !u!54 &1652042476
 Rigidbody:
@@ -9542,13 +9749,13 @@ Rigidbody:
   m_PrefabInternal: {fileID: 1785065569}
   m_GameObject: {fileID: 1652042471}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: .0500000007
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 120
   m_CollisionDetection: 0
 --- !u!23 &1652042477
 Renderer:
@@ -9727,7 +9934,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.00000048, y: 1, z: 1.00000048}
+  m_Size: {x: 1.00000048, y: 100, z: 1.00000048}
   m_Center: {x: 2.38418579e-07, y: 0, z: 0}
 --- !u!54 &1667228366
 Rigidbody:
@@ -9737,13 +9944,13 @@ Rigidbody:
   m_PrefabInternal: {fileID: 1595495382}
   m_GameObject: {fileID: 1667228361}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: .0500000007
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 120
   m_CollisionDetection: 0
 --- !u!23 &1667228367
 Renderer:
@@ -9889,8 +10096,13 @@ MonoBehaviour:
   tweenTarget: {fileID: 1695574996}
   hover: {r: .882352948, g: .784313738, b: .588235319, a: 1}
   pressed: {r: .717647076, g: .639215708, b: .482352942, a: 1}
-  duration: .200000003
   disabledColor: {r: .5, g: .5, b: .5, a: 1}
+  duration: .200000003
+  dragHighlight: 0
+  hoverSprite: 
+  pressedSprite: 
+  disabledSprite: 
+  pixelSnap: 0
   onClick: []
   activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
@@ -9934,6 +10146,7 @@ MonoBehaviour:
     target: {fileID: 1425579258}
     relative: 1
     absolute: 0
+  updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mWidth: 128
@@ -9941,13 +10154,21 @@ MonoBehaviour:
   mDepth: 8
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
-  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
-  mSpriteName: barrelRollBtn
-  mFillCenter: 1
+  keepAspectRatio: 0
+  aspectRatio: .888888896
   mType: 1
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
+  mFlip: 0
+  centerType: 1
+  leftType: 1
+  rightType: 1
+  bottomType: 1
+  topType: 1
+  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
+  mSpriteName: barrelRollBtn
+  mFillCenter: 1
 --- !u!1 &1701126471
 GameObject:
   m_ObjectHideFlags: 0
@@ -10002,6 +10223,7 @@ MonoBehaviour:
     target: {fileID: 686265114}
     relative: 1
     absolute: 0
+  updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mWidth: 150
@@ -10009,13 +10231,21 @@ MonoBehaviour:
   mDepth: 20
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
-  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
-  mSpriteName: joystick
-  mFillCenter: 1
+  keepAspectRatio: 0
+  aspectRatio: 1.04166663
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
+  mFlip: 0
+  centerType: 1
+  leftType: 1
+  rightType: 1
+  bottomType: 1
+  topType: 1
+  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
+  mSpriteName: joystick
+  mFillCenter: 1
 --- !u!1001 &1707796872
 Prefab:
   m_ObjectHideFlags: 0
@@ -10174,7 +10404,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.00000048, y: 1, z: 1.00000048}
+  m_Size: {x: 1.00000048, y: 100, z: 1.00000048}
   m_Center: {x: 2.38418579e-07, y: 0, z: 0}
 --- !u!54 &1728594557
 Rigidbody:
@@ -10184,13 +10414,13 @@ Rigidbody:
   m_PrefabInternal: {fileID: 1707796872}
   m_GameObject: {fileID: 1728594552}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: .0500000007
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 120
   m_CollisionDetection: 0
 --- !u!23 &1728594558
 Renderer:
@@ -10260,7 +10490,7 @@ GameObject:
   - 4: {fileID: 1741049705}
   - 114: {fileID: 824695456}
   m_Layer: 0
-  m_Name: GameData
+  m_Name: SceneManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10394,19 +10624,23 @@ MonoBehaviour:
     target: {fileID: 0}
     relative: 1
     absolute: 0
+  updateAnchors: 1
   mColor: {r: 0, g: 1, b: 0, a: 1}
   mPivot: 4
-  mWidth: 17
+  mWidth: 18
   mHeight: 30
   mDepth: 8
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
+  keepAspectRatio: 0
+  aspectRatio: .600000024
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   mFont: {fileID: 0}
   mText: 1
   mFontSize: 30
   mFontStyle: 0
+  mAlignment: 0
   mEncoding: 0
   mMaxLineCount: 0
   mEffectStyle: 2
@@ -10473,9 +10707,8 @@ MonoBehaviour:
   log: 1
   timeScale: 1
   name: 
-  cooldownSpeed: 0
-  Laser_Prefab: {fileID: 100000, guid: d4b340ef18bd331478c2fd0ec9ba9bfd, type: 2}
-  laserOffset: {x: 0, y: 0, z: 2}
+  cooldownTime: 0
+  laser: {fileID: 0}
   cycles: 2
   speed: 4
   time: 5
@@ -10785,6 +11018,7 @@ MonoBehaviour:
     target: {fileID: 0}
     relative: 1
     absolute: 0
+  updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 5
   mWidth: 407
@@ -10792,12 +11026,15 @@ MonoBehaviour:
   mDepth: 15
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
+  keepAspectRatio: 0
+  aspectRatio: 9.69047642
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
   mFont: {fileID: 0}
   mText: 0
   mFontSize: 30
   mFontStyle: 1
+  mAlignment: 0
   mEncoding: 0
   mMaxLineCount: 0
   mEffectStyle: 1
@@ -10870,6 +11107,7 @@ MonoBehaviour:
     target: {fileID: 844111789}
     relative: 1
     absolute: 0
+  updateAnchors: 1
   mColor: {r: 1, g: 0, b: 0, a: .784313738}
   mPivot: 4
   mWidth: 149
@@ -10877,13 +11115,21 @@ MonoBehaviour:
   mDepth: 7
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
-  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
-  mSpriteName: weaponBtnCooldown
-  mFillCenter: 1
+  keepAspectRatio: 0
+  aspectRatio: 2.06944442
   mType: 3
   mFillDirection: 1
   mFillAmount: 1
   mInvert: 0
+  mFlip: 0
+  centerType: 1
+  leftType: 1
+  rightType: 1
+  bottomType: 1
+  topType: 1
+  mAtlas: {fileID: 11400000, guid: a5d8769cd809bbd44b3e2a33d69eebc0, type: 2}
+  mSpriteName: weaponBtnCooldown
+  mFillCenter: 1
 --- !u!114 &1830708908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10956,6 +11202,7 @@ MonoBehaviour:
     target: {fileID: 0}
     relative: 1
     absolute: 0
+  updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mWidth: 196
@@ -10963,6 +11210,8 @@ MonoBehaviour:
   mDepth: 16
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
+  keepAspectRatio: 0
+  aspectRatio: 2.57894731
 --- !u!114 &1849089624
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11006,7 +11255,7 @@ GameObject:
   - 114: {fileID: 1850645106}
   - 114: {fileID: 1850645105}
   m_Layer: 0
-  m_Name: Giga Laser Beam
+  m_Name: Death Laser Beam
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11076,7 +11325,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: .0500000007
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -11488,7 +11737,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.00000048, y: 1, z: 1.00000048}
+  m_Size: {x: 1.00000048, y: 100, z: 1.00000048}
   m_Center: {x: 2.38418579e-07, y: 0, z: 0}
 --- !u!54 &1928810345
 Rigidbody:
@@ -11498,13 +11747,13 @@ Rigidbody:
   m_PrefabInternal: {fileID: 557367393}
   m_GameObject: {fileID: 1928810340}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: .0500000007
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 120
   m_CollisionDetection: 0
 --- !u!23 &1928810346
 Renderer:
@@ -11650,7 +11899,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.00000048, y: 1, z: 1.00000048}
+  m_Size: {x: 1.00000048, y: 100, z: 1.00000048}
   m_Center: {x: 2.38418579e-07, y: 0, z: 0}
 --- !u!54 &1973698514
 Rigidbody:
@@ -11660,13 +11909,13 @@ Rigidbody:
   m_PrefabInternal: {fileID: 2131550811}
   m_GameObject: {fileID: 1973698509}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: .0500000007
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 120
   m_CollisionDetection: 0
 --- !u!23 &1973698515
 Renderer:
@@ -11769,7 +12018,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.00000048, y: 1, z: 1.00000048}
+  m_Size: {x: 1.00000048, y: 100, z: 1.00000048}
   m_Center: {x: 2.38418579e-07, y: 0, z: 0}
 --- !u!54 &1986870600
 Rigidbody:
@@ -11779,13 +12028,13 @@ Rigidbody:
   m_PrefabInternal: {fileID: 487012636}
   m_GameObject: {fileID: 1986870595}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: .0500000007
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 120
   m_CollisionDetection: 0
 --- !u!23 &1986870601
 Renderer:
@@ -11859,6 +12108,57 @@ MonoBehaviour:
   speed: 15
   amplitude: .5
   frequency: 1
+--- !u!1 &2038748363
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100000, guid: 45c62a3fc8a9231409c29375e8f213d8, type: 2}
+  m_PrefabInternal: {fileID: 922938130}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 2038748365}
+  - 114: {fileID: 2038748364}
+  m_Layer: 0
+  m_Name: ___Debugger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2038748364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400000, guid: 45c62a3fc8a9231409c29375e8f213d8,
+    type: 2}
+  m_PrefabInternal: {fileID: 922938130}
+  m_GameObject: {fileID: 2038748363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd532088234b3c1489d098decb38d5c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  log: 0
+  timeScale: 1
+  logWarning: 0
+  fps: {fileID: 0}
+  fpsPrefab: {fileID: 0}
+  consoleLine: {fileID: 0}
+  consoleLinePrefab: {fileID: 0}
+  showTime: 1
+  logSaving: 1
+  logFlags: 010101000001
+  fpsWarning: 1
+  lowFPS: 20
+--- !u!4 &2038748365
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400000, guid: 45c62a3fc8a9231409c29375e8f213d8, type: 2}
+  m_PrefabInternal: {fileID: 922938130}
+  m_GameObject: {fileID: 2038748363}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
 --- !u!114 &2038834729
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12089,7 +12389,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.00000048, y: 1, z: 1.00000048}
+  m_Size: {x: 1.00000048, y: 100, z: 1.00000048}
   m_Center: {x: 2.38418579e-07, y: 0, z: 0}
 --- !u!54 &2063085552
 Rigidbody:
@@ -12099,13 +12399,13 @@ Rigidbody:
   m_PrefabInternal: {fileID: 2070646856}
   m_GameObject: {fileID: 2063085547}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: .0500000007
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 120
   m_CollisionDetection: 0
 --- !u!23 &2063085553
 Renderer:
