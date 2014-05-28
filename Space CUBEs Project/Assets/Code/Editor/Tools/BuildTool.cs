@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 4.27.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.04.27
+// Edited: 2014.05.23
 
 using System;
 using System.Collections.Generic;
@@ -14,6 +16,9 @@ using UnityEditor;
 using UnityEngine;
 using Profiler = LittleByte.Debug.Profiler;
 
+/// <summary>
+/// Sets version number, builds to Android, and returns to PC.
+/// </summary>
 public class BuildTool : EditorWindow
 {
     #region Private Fields
@@ -41,7 +46,6 @@ public class BuildTool : EditorWindow
     private const string EmailPassword = "Yeager_7";
 
     #endregion
-
 
     #region EditorWindow Overrides
 
@@ -77,7 +81,7 @@ public class BuildTool : EditorWindow
 
     #region Private Methods
 
-    [MenuItem("Tools/Build Quick &b")]
+    [MenuItem("CONTEXT/Build Quick &b")]
     [UsedImplicitly]
     private static void QuickBuild()
     {
@@ -93,7 +97,7 @@ public class BuildTool : EditorWindow
     }
 
 
-    [MenuItem("Tools/Build %&b")]
+    [MenuItem("Tools/Build %&b", false, 51)]
     [UsedImplicitly]
     private static void OpenBuildEditor()
     {
@@ -109,12 +113,12 @@ public class BuildTool : EditorWindow
         // build
         string buildPath = BuildPath + PlayerSettings.productName + " " + version + APK;
         BuildPipeline.BuildPlayer(EditorBuildSettings.scenes.Where(s => s.enabled).Select(s => s.path).ToArray(),
-                                  buildPath,
-                                  BuildTarget.Android,
-                                  BuildOptions.ShowBuiltPlayer);
+            buildPath,
+            BuildTarget.Android,
+            BuildOptions.ShowBuiltPlayer);
 
         // move to Drive
-        DirectoryInfo directory = new DirectoryInfo(NewestBuildPath);
+        var directory = new DirectoryInfo(NewestBuildPath);
         foreach (FileInfo file in directory.GetFiles())
         {
             file.Delete();
@@ -124,8 +128,8 @@ public class BuildTool : EditorWindow
         // email
         if (email)
         {
-            Thread thread = new Thread(SendEmail);
-            thread.Start(new Dictionary<string, object> { { "build", PlayerSettings.productName + " " + version }, { "buildPath", buildPath } });
+            var thread = new Thread(SendEmail);
+            thread.Start(new Dictionary<string, object> {{"build", PlayerSettings.productName + " " + version}, {"buildPath", buildPath}});
             thread.Join();
         }
 
@@ -141,13 +145,13 @@ public class BuildTool : EditorWindow
     {
         Debugger.Print("sending mail...");
 
-        string build = (string)(info as Dictionary<string, object>)["build"];
-        string buildPath = (string)(info as Dictionary<string, object>)["buildPath"];
-        MailAddress fromAddress = new MailAddress(EmailYeager);
-        MailAddress toAddress = new MailAddress(EmailWilliams);
+        var build = (string)(info as Dictionary<string, object>)["build"];
+        var buildPath = (string)(info as Dictionary<string, object>)["buildPath"];
+        var fromAddress = new MailAddress(EmailYeager);
+        var toAddress = new MailAddress(EmailWilliams);
         string subject = build;
 
-        SmtpClient smtp = new SmtpClient
+        var smtp = new SmtpClient
         {
             Host = "smtp.gmail.com",
             Port = 587,
@@ -158,10 +162,10 @@ public class BuildTool : EditorWindow
 
         ServicePointManager.ServerCertificateValidationCallback = (s, certificate, chain, sslPolicyErrors) => true;
 
-        using (MailMessage message = new MailMessage(fromAddress, toAddress) { Subject = subject, IsBodyHtml = true })
+        using (var message = new MailMessage(fromAddress, toAddress) {Subject = subject, IsBodyHtml = true})
         {
             // Create the file attachment for this e-mail message.
-            Attachment data = new Attachment(buildPath, MediaTypeNames.Application.Octet);
+            var data = new Attachment(buildPath, MediaTypeNames.Application.Octet);
 
             // Add time stamp information for the file.
             ContentDisposition disposition = data.ContentDisposition;

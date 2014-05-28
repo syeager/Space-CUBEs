@@ -1,13 +1,15 @@
-﻿// Steve Yeager
-// 1.26.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.01.26
+// Edited: 2014.05.23
 
-using Annotations;
-using UnityEngine;
-using UnityEditor;
-using System.Reflection;
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using Annotations;
+using UnityEditor;
+using UnityEngine;
 
 /// <summary>
 /// Create list of formations for the level to spawn.
@@ -24,12 +26,15 @@ public class LevelCreator : EditorWindow
 
     #region GUI Fields
 
-    private float W;
-    private float H;
+    private float w;
+    private float h;
+
     /// <summary>Total height of the formation sections.</summary>
-    float formationTotalHeight;
+    private float formationTotalHeight;
+
     /// <summary>Height of top bar.</summary>
     private const float InfoHeight = 50f;
+
     private const float FormationHeight = 50f;
     private const float FormationWidth = 250f;
     private Vector2 formationScroll;
@@ -39,8 +44,8 @@ public class LevelCreator : EditorWindow
 
     #region Editor Fields
 
-    SerializedObject sLevelManager;
-    SerializedProperty sFormationGroups;
+    private SerializedObject sLevelManager;
+    private SerializedProperty sFormationGroups;
     private List<bool> formationToggles;
     private List<bool[]> enemyToggles;
     private static Formation[] formationPrefabs;
@@ -48,10 +53,9 @@ public class LevelCreator : EditorWindow
 
     #endregion
 
-
     #region EditorWindow Overrides
 
-    [MenuItem("Tools/Level Creator %l", true)]
+    [MenuItem("CUBEs/Level Creator %l", true, 51)]
     public static bool Validate()
     {
         levelManager = FindObjectOfType<FormationLevelManager>();
@@ -59,14 +63,14 @@ public class LevelCreator : EditorWindow
     }
 
 
-    [MenuItem("Tools/Level Creator %l")]
+    [MenuItem("CUBEs/Level Creator %l", false, 51)]
     public static void Init()
     {
-        LevelCreator window = GetWindow<LevelCreator>("Level Creator");
+        var window = GetWindow<LevelCreator>("Level Creator");
 
         window.sLevelManager = new SerializedObject(levelManager);
         window.sFormationGroups = window.sLevelManager.FindProperty("formationGroups");
-        
+
         // formation toggles
         window.formationToggles = new List<bool>(levelManager.formationGroups.Length);
         for (int i = 0; i < levelManager.formationGroups.Length; i++)
@@ -104,8 +108,8 @@ public class LevelCreator : EditorWindow
         if (levelManager == null) return;
 
         //return;
-        W = Screen.width;
-        H = Screen.height;
+        w = Screen.width;
+        h = Screen.height;
 
         if (InfoBar()) return;
         Formations();
@@ -117,7 +121,7 @@ public class LevelCreator : EditorWindow
 
     private bool InfoBar()
     {
-        GUI.BeginGroup(new Rect(0f, 0f, W, InfoHeight), "", "box");
+        GUI.BeginGroup(new Rect(0f, 0f, w, InfoHeight), "", "box");
         {
             // add formation
             if (GUI.Button(new Rect(10f, InfoHeight / 2f - 20f, 80f, 40f), "Add"))
@@ -180,7 +184,7 @@ public class LevelCreator : EditorWindow
 
     private void Formations()
     {
-        formationScroll = GUI.BeginScrollView(new Rect(0f, InfoHeight, W, H - InfoHeight), formationScroll, new Rect(0f, 0f, W, formationTotalHeight + 10f));
+        formationScroll = GUI.BeginScrollView(new Rect(0f, InfoHeight, w, h - InfoHeight), formationScroll, new Rect(0f, 0f, w, formationTotalHeight + 10f));
         {
             formationTotalHeight = 0f;
             for (int i = 0; i < levelManager.formationGroups.Length; i++)
@@ -218,7 +222,7 @@ public class LevelCreator : EditorWindow
                 formationToggles[formationIndex] = !formationToggles[formationIndex];
             }
             // move down
-            if (formationIndex == sFormationGroups.arraySize-1) GUI.enabled = false;
+            if (formationIndex == sFormationGroups.arraySize - 1) GUI.enabled = false;
             if (GUI.Button(new Rect(56f, FormationHeight / 2f, 46f, 20f), "↓", EditorStyles.miniButtonMid))
             {
                 MoveFormation(formationIndex, formationIndex + 1);
@@ -250,13 +254,13 @@ public class LevelCreator : EditorWindow
 
         // data
         SerializedProperty sFormSeg = sFormationGroups.GetArrayElementAtIndex(formationIndex);
-        GUI.BeginGroup(new Rect(FormationWidth, formationTotalHeight, W-FormationWidth, FormationHeight), "");
+        GUI.BeginGroup(new Rect(FormationWidth, formationTotalHeight, w - FormationWidth, FormationHeight), "");
         {
             // needs clearing
             GUI.enabled = formationIndex != 0;
-            EditorGUI.LabelField(new Rect(10f, FormationHeight / 2f-10f, 100f, 20f), "Needs Clearing");
+            EditorGUI.LabelField(new Rect(10f, FormationHeight / 2f - 10f, 100f, 20f), "Needs Clearing");
             SerializedProperty property = sFormSeg.FindPropertyRelative("needsClearing");
-            EditorGUI.PropertyField(new Rect(110f, FormationHeight/2f-8f, 16f, 16f), property, new GUIContent(""));
+            EditorGUI.PropertyField(new Rect(110f, FormationHeight / 2f - 8f, 16f, 16f), property, new GUIContent(""));
             GUI.enabled = true;
 
             // spawn time
@@ -287,7 +291,7 @@ public class LevelCreator : EditorWindow
         }
 
         EditorGUI.DrawRect(new Rect(FormationWidth, formationTotalHeight, 1f, height), Color.grey);
-        EditorGUI.DrawRect(new Rect(0f, formationTotalHeight+height, W, 1f), Color.grey);
+        EditorGUI.DrawRect(new Rect(0f, formationTotalHeight + height, w, 1f), Color.grey);
         return height;
     }
 
@@ -334,15 +338,15 @@ public class LevelCreator : EditorWindow
 
         // move up
         GUI.enabled = enemyIndex > 0;
-        if (GUI.Button(new Rect(36f, y+16f, 50f, 18f), "↑"))
+        if (GUI.Button(new Rect(36f, y + 16f, 50f, 18f), "↑"))
         {
-            MoveEnemy(formationIndex, enemyIndex, enemyIndex-1);
+            MoveEnemy(formationIndex, enemyIndex, enemyIndex - 1);
             return height;
         }
         GUI.enabled = true;
 
         // move down
-        GUI.enabled = enemyIndex < sformationGroup.FindPropertyRelative("enemies").arraySize-1;
+        GUI.enabled = enemyIndex < sformationGroup.FindPropertyRelative("enemies").arraySize - 1;
         if (GUI.Button(new Rect(86f, y + 16f, 50f, 18f), "↓"))
         {
             MoveEnemy(formationIndex, enemyIndex, enemyIndex + 1);
@@ -355,7 +359,7 @@ public class LevelCreator : EditorWindow
         if (GUI.Button(new Rect(136f, y + 16f, 50f, 18f), "C↑"))
         {
             CopyEnemy(formationIndex, enemyIndex, enemyIndex - 1);
-            
+
             // apply to all above
             if (Event.current.control)
             {
@@ -390,18 +394,18 @@ public class LevelCreator : EditorWindow
         {
             // get params through reflection
             FieldInfo[] fieldInfos = pathType.GetFields();
-            SerializedObject pathSO = new SerializedObject(levelManager.formationGroups[formationIndex].paths[enemyIndex]);
+            var serializedObject = new SerializedObject(levelManager.formationGroups[formationIndex].paths[enemyIndex]);
             // display params
             for (int i = 0; i < fieldInfos.Length; i++)
             {
-                SerializedProperty pathInfo = pathSO.FindProperty(fieldInfos[i].Name);
+                SerializedProperty pathInfo = serializedObject.FindProperty(fieldInfos[i].Name);
                 float pathHeight = EnemyHeight * (pathInfo.isExpanded ? pathInfo.CountInProperty() : 1);
                 if (i % 2 == 0)
                 {
-                    EditorGUI.DrawRect(new Rect(FormationWidth, y + height, W - FormationWidth, pathHeight), Color.gray);
+                    EditorGUI.DrawRect(new Rect(FormationWidth, y + height, w - FormationWidth, pathHeight), Color.gray);
                 }
-                EditorGUI.PropertyField(new Rect(FormationWidth + 10f, y + height, W - FormationWidth - 20f, pathHeight), pathSO.FindProperty(fieldInfos[i].Name), true);
-                pathSO.ApplyModifiedProperties();
+                EditorGUI.PropertyField(new Rect(FormationWidth + 10f, y + height, w - FormationWidth - 20f, pathHeight), serializedObject.FindProperty(fieldInfos[i].Name), true);
+                serializedObject.ApplyModifiedProperties();
                 height += pathHeight;
             }
         }
@@ -434,8 +438,8 @@ public class LevelCreator : EditorWindow
             paths.GetArrayElementAtIndex(i).objectReferenceValue = Instantiate(paths.GetArrayElementAtIndex(i).objectReferenceValue);
         }
 
-        formationToggles.Insert(formationIndex+1, true);
-        enemyToggles.Insert(formationIndex+1, (bool[])enemyToggles[formationIndex].Clone());
+        formationToggles.Insert(formationIndex + 1, true);
+        enemyToggles.Insert(formationIndex + 1, (bool[])enemyToggles[formationIndex].Clone());
 
         sLevelManager.ApplyModifiedProperties();
     }
@@ -460,7 +464,7 @@ public class LevelCreator : EditorWindow
     {
         SerializedProperty sFormationGroup = sFormationGroups.GetArrayElementAtIndex(formationIndex);
 
-        int enemyCount  = formationPrefabs[prefabIndex].positions.Length;
+        int enemyCount = formationPrefabs[prefabIndex].positions.Length;
 
         // formation
         sFormationGroup.FindPropertyRelative("formation").objectReferenceValue = formationPrefabs[prefabIndex];
@@ -524,11 +528,11 @@ public class LevelCreator : EditorWindow
     {
         // enemy type
         sFormationGroups.GetArrayElementAtIndex(formation).FindPropertyRelative("enemies").GetArrayElementAtIndex(dest).intValue =
-        sFormationGroups.GetArrayElementAtIndex(formation).FindPropertyRelative("enemies").GetArrayElementAtIndex(index).intValue;
+            sFormationGroups.GetArrayElementAtIndex(formation).FindPropertyRelative("enemies").GetArrayElementAtIndex(index).intValue;
 
         // path
         sFormationGroups.GetArrayElementAtIndex(formation).FindPropertyRelative("paths").GetArrayElementAtIndex(dest).objectReferenceValue =
-        Instantiate(levelManager.formationGroups[formation].paths[index]);
+            Instantiate(levelManager.formationGroups[formation].paths[index]);
 
         sLevelManager.ApplyModifiedProperties();
     }

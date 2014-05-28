@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 5.19.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.05.19
+// Edited: 2014.05.23
 
 using System;
 using System.Collections;
@@ -12,7 +14,7 @@ using UnityEditor;
 using UnityEngine;
 
 /// <summary>
-/// 
+/// Uses Reflection to display editable GUI fields for all SaveData.
 /// </summary>
 public class SaveDataEditor : EditorWindow
 {
@@ -45,7 +47,7 @@ public class SaveDataEditor : EditorWindow
     #region Editor Overrides
 
     [UsedImplicitly]
-    [MenuItem("Tools/Save Data Editor")]
+    [MenuItem("Tools/Save Data Editor", false, 100)]
     private static void Init()
     {
         window = GetWindow<SaveDataEditor>("Save Data");
@@ -189,9 +191,9 @@ public class SaveDataEditor : EditorWindow
         // list
         if (data is IEnumerable)
         {
-            IEnumerable list = data as IEnumerable;
+            var list = data as IEnumerable;
             int i = 0;
-            foreach (var child in list)
+            foreach (object child in list)
             {
                 DrawObject(i.ToString(), child);
                 i++;
@@ -200,7 +202,7 @@ public class SaveDataEditor : EditorWindow
         else
         {
             FieldInfo[] fieldInfo = type.GetFields(BindingFlags.Static);
-            foreach (var info in fieldInfo)
+            foreach (FieldInfo info in fieldInfo)
             {
                 if (EditorTypes.Contains(info.FieldType))
                 {

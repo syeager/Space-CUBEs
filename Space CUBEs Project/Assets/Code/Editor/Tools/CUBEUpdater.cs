@@ -7,7 +7,6 @@ using System.IO;
 using System.Collections.Generic;
 using System;
 using System.Linq;
-
 using Types = CUBE.Types;
 using Subsystems = CUBE.Subsystems;
 using Brands = CUBE.Brands;
@@ -27,10 +26,9 @@ public class CUBEUpdater : EditorWindow
 
     #endregion
 
-
     #region EditorWindow Overrides
 
-    [MenuItem("Tools/CUBE Updater &u")]
+    [MenuItem("CUBEs/CUBE Updater &u", false, 0)]
     public static void Update()
     {
         using (var timer = new Profiler("CUBE list updated successfully."))
@@ -57,21 +55,21 @@ public class CUBEUpdater : EditorWindow
             string[] strip = infoStrips[i].Split(',');
 
             info.Add(new CUBEInfo(
-                         strip[0],                                              // name
-                         int.Parse(strip[1]),                                   // ID
-                         (Types)Enum.Parse(typeof(Types), strip[2]),            // type
-                         (Subsystems)Enum.Parse(typeof(Subsystems), strip[3]),  // subsystem
-                         (Brands)Enum.Parse(typeof(Brands), strip[4]),          // brand
-                         int.Parse(strip[5]),                                   // grade
-                         float.Parse(strip[6]),                                 // health
-                         float.Parse(strip[7]),                                 // shield
-                         float.Parse(strip[8]),                                 // speed
-                         float.Parse(strip[9]),                                 // damage
-                         Utility.ParseV3(strip[10], ';'),                       // size
-                         int.Parse(strip[11]),                                  // cost
-                         int.Parse(strip[12]),                                  // rarity
-                         int.Parse(strip[13])                                   // price
-                         ));
+                strip[0], // name
+                int.Parse(strip[1]), // ID
+                (Types)Enum.Parse(typeof(Types), strip[2]), // type
+                (Subsystems)Enum.Parse(typeof(Subsystems), strip[3]), // subsystem
+                (Brands)Enum.Parse(typeof(Brands), strip[4]), // brand
+                int.Parse(strip[5]), // grade
+                float.Parse(strip[6]), // health
+                float.Parse(strip[7]), // shield
+                float.Parse(strip[8]), // speed
+                float.Parse(strip[9]), // damage
+                Utility.ParseV3(strip[10], ';'), // size
+                int.Parse(strip[11]), // cost
+                int.Parse(strip[12]), // rarity
+                int.Parse(strip[13]) // price
+                ));
         }
 
         return info.ToArray();
@@ -84,20 +82,20 @@ public class CUBEUpdater : EditorWindow
         {
             foreach (var cube in info)
             {
-                writer.Write(cube.name);            // name
-                writer.Write(cube.ID);              // ID
-                writer.Write((int)cube.type);       // type
-                writer.Write((int)cube.subsystem);  // subsystem
-                writer.Write((int)cube.brand);      // brand
-                writer.Write(cube.grade);           // grade
-                writer.Write(cube.health);          // health
-                writer.Write(cube.shield);          // shield
-                writer.Write(cube.speed);           // speed
-                writer.Write(cube.damage);          // damage
+                writer.Write(cube.name); // name
+                writer.Write(cube.ID); // ID
+                writer.Write((int)cube.type); // type
+                writer.Write((int)cube.subsystem); // subsystem
+                writer.Write((int)cube.brand); // brand
+                writer.Write(cube.grade); // grade
+                writer.Write(cube.health); // health
+                writer.Write(cube.shield); // shield
+                writer.Write(cube.speed); // speed
+                writer.Write(cube.damage); // damage
                 writer.Write(cube.size.ToString()); // size
-                writer.Write(cube.cost);            // cost
-                writer.Write(cube.rarity);          // rarity
-                writer.Write(cube.price);           // price
+                writer.Write(cube.cost); // cost
+                writer.Write(cube.rarity); // rarity
+                writer.Write(cube.price); // price
             }
         }
     }

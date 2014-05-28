@@ -1,11 +1,12 @@
-﻿// Steve Yeager
-// 1.12.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.01.12
+// Edited: 2014.05.22
 
-using UnityEditor;
-using System.IO;
-using UnityEngine;
 using System.Linq;
-using System.Collections.Generic;
+using Annotations;
+using UnityEditor;
+using UnityEngine;
 
 public class FormationCreator : EditorWindow
 {
@@ -25,21 +26,23 @@ public class FormationCreator : EditorWindow
 
     #endregion
 
-
     #region EditorWindow Overrides
 
-    [MenuItem("Tools/Formation Creator %#l")]
+    [UsedImplicitly]
+    [MenuItem("CUBEs/Formation Creator %#l", false, 50)]
     private static void Init()
     {
-        EditorWindow.GetWindow(typeof(FormationCreator), true, "Formation Creator");
+        GetWindow(typeof(FormationCreator), true, "Formation Creator");
     }
 
-
+    
+    [UsedImplicitly]
     private void OnEnable()
     {
         formations = Formation.AllFormations();
     }
 
+    [UsedImplicitly]
 
     private void OnDisable()
     {
@@ -47,6 +50,7 @@ public class FormationCreator : EditorWindow
     }
 
 
+    [UsedImplicitly]
     private void OnGUI()
     {
         // load or create
@@ -56,22 +60,22 @@ public class FormationCreator : EditorWindow
             if (GUILayout.Button("New Formation"))
             {
                 prefab = new GameObject("___Formation", typeof(Formation));
-                var placeholder = (GameObject)GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                var placeholder = GameObject.CreatePrimitive(PrimitiveType.Sphere);
                 placeholder.transform.parent = prefab.transform;
                 placeholder.transform.localPosition = Vector3.zero;
             }
             // load
-            foreach (var formation in formations)
+            foreach (Formation formation in formations)
             {
                 if (GUILayout.Button(formation.name))
                 {
                     prefab = new GameObject("___Formation", typeof(Formation));
-                    formationName = formation.name.Substring(FormationPrefix.Length, formation.name.Length-FormationPrefix.Length);
-                    foreach (var position in formation.positions)
+                    formationName = formation.name.Substring(FormationPrefix.Length, formation.name.Length - FormationPrefix.Length);
+                    foreach (Vector3 pos in formation.positions)
                     {
-                        var placeholder = (GameObject)GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                        var placeholder = GameObject.CreatePrimitive(PrimitiveType.Sphere);
                         placeholder.transform.parent = prefab.transform;
-                        placeholder.transform.localPosition = position;
+                        placeholder.transform.localPosition = pos;
                     }
                 }
             }
@@ -132,7 +136,7 @@ public class FormationCreator : EditorWindow
             AssetDatabase.DeleteAsset(Formation.FormationPath + FormationPrefix + oldFormation.name + ".prefab");
         }
 
-        GameObject savedPrefab = new GameObject(FormationPrefix + formationName, typeof(Formation));
+        var savedPrefab = new GameObject(FormationPrefix + formationName, typeof(Formation));
         var formationComp = savedPrefab.GetComponent<Formation>();
         formationComp.positions = new Vector3[prefab.transform.childCount];
         for (int i = 0; i < formationComp.positions.Length; i++)

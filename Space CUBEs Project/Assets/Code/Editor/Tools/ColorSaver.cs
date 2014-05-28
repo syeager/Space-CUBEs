@@ -1,14 +1,17 @@
-﻿// Steve Yeager
-// 2.23.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.02.23
+// Edited: 2014.05.23
 
-using UnityEngine;
-using System.Collections;
-using UnityEditor;
-using System.IO;
 using System.Diagnostics;
+using System.IO;
+using Annotations;
+using UnityEditor;
+using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 /// <summary>
-/// 
+/// Save current color pallet.
 /// </summary>
 public class ColorSaver : EditorWindow
 {
@@ -20,50 +23,50 @@ public class ColorSaver : EditorWindow
 
     #region Readonly Fields
 
-    private static readonly Vector2 SIZE = new Vector2(300f, 50f);    
-    
+    private static readonly Vector2 Size = new Vector2(300f, 50f);
+
     #endregion
 
     #region Const Fields
 
-    private const string COLORSELECTOR = "Color Selector";
-    private static readonly string COLORLISTPATHEDITOR = Application.dataPath + "/Resources/" + CUBE.COLORLIST + ".bytes";
+    private const string ColorSelector = "Color Selector";
+    private static readonly string ColorListPathEditor = Application.dataPath + "/Resources/" + CUBE.COLORLIST + ".bytes";
 
     #endregion
 
-
     #region EditorWindow Overrides
 
-    [MenuItem("Tools/Save Colors", true)]
+    [MenuItem("CUBEs/Save Colors", true, 1)]
     public static bool Validate()
     {
-        return EditorApplication.currentScene == "Assets/Levels/Garage.unity";
+        return EditorApplication.currentScene.Contains("Garage");
     }
 
 
-    [MenuItem("Tools/Save Colors")]
+    [MenuItem("CUBEs/Save Colors", false, 1)]
     public static void Init()
     {
-        ColorSaver window = (ColorSaver)EditorWindow.GetWindow<ColorSaver>(true, "Save Colors");
-        window.minSize = window.maxSize = SIZE;
+        var window = GetWindow<ColorSaver>(true, "Save Colors");
+        window.minSize = window.maxSize = Size;
 
-        grid = GameObject.Find(COLORSELECTOR).GetComponentInChildren<UIGrid>();
+        grid = GameObject.Find(ColorSelector).GetComponentInChildren<UIGrid>();
         if (grid == null)
         {
-            UnityEngine.Debug.LogError("Grid not found!");
+            Debug.LogError("Grid not found!");
         }
     }
 
 
+    [UsedImplicitly]
     private void OnGUI()
     {
         GUILayout.FlexibleSpace();
         if (GUILayout.Button("Save Colors"))
         {
-            Stopwatch watch = new Stopwatch();
+            var watch = new Stopwatch();
             watch.Start();
             SaveColors();
-            UnityEngine.Debug.Log("Colors saved in: " + watch.ElapsedMilliseconds + " ms");
+            Debug.Log("Colors saved in: " + watch.ElapsedMilliseconds + " ms");
         }
     }
 
@@ -74,7 +77,7 @@ public class ColorSaver : EditorWindow
     public static void SaveColors()
     {
         UISprite[] sprites = grid.GetComponentsInChildren<UISprite>(true);
-        Color[] colors = new Color[sprites.Length];
+        var colors = new Color[sprites.Length];
 
         for (int i = 0; i < sprites.Length; i++)
         {
@@ -82,9 +85,9 @@ public class ColorSaver : EditorWindow
             sprites[i].GetComponent<ActivateButton>().value = i.ToString();
         }
 
-        using (BinaryWriter writer = new BinaryWriter(File.Open(COLORLISTPATHEDITOR, FileMode.Create)))
+        using (var writer = new BinaryWriter(File.Open(ColorListPathEditor, FileMode.Create)))
         {
-            foreach (var color in colors)
+            foreach (Color color in colors)
             {
                 writer.Write(color.ToString());
             }

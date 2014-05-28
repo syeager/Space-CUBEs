@@ -2,12 +2,12 @@
 // 4.27.2014
 
 using System.Collections.Generic;
-using System.Linq;
+using Annotations;
 using UnityEditor;
 using UnityEngine;
 
 /// <summary>
-/// 
+/// Creator/Editor for PoolManager class.
 /// </summary>
 [CustomEditor(typeof(PoolManager))]
 public class PoolManagerEditor : Creator<PoolManager>
@@ -32,12 +32,11 @@ public class PoolManagerEditor : Creator<PoolManager>
     private bool poolListToggle;
     private List<bool> poolToggles;
 
-        #endregion
-
+    #endregion
 
     #region Creator Methods
 
-    [MenuItem("GameObject/Singletons/Pool Manager")]
+    [MenuItem("GameObject/Singletons/Pool Manager", false, 3)]
     public static void Create()
     {
         Create(PrefabName, PrefabPath, true);
@@ -47,6 +46,7 @@ public class PoolManagerEditor : Creator<PoolManager>
 
     #region Editor Overrides
 
+    [UsedImplicitly]
     private void OnEnable()
     {
         cull = serializedObject.FindProperty("cull");
@@ -141,7 +141,7 @@ public class PoolManagerEditor : Creator<PoolManager>
         if (poolToggles[index])
         {
             EditorGUI.indentLevel++;
-            
+
             EditorGUILayout.PropertyField(prefab);
             EditorGUILayout.PropertyField(preAllocate);
             EditorGUILayout.PropertyField(allocateBlock);
@@ -183,7 +183,7 @@ public class PoolManagerEditor : Creator<PoolManager>
 
                     foreach (Object dragged in DragAndDrop.objectReferences)
                     {
-                        if (dragged is GameObject && ((GameObject) dragged).GetComponent<PoolObject>())
+                        if (dragged is GameObject && ((GameObject)dragged).GetComponent<PoolObject>())
                         {
                             Debug.Log("Added: " + dragged.name);
                             AddPool(poolList.arraySize, dragged as GameObject);

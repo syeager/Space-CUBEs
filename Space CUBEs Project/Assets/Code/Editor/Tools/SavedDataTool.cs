@@ -1,15 +1,17 @@
-﻿// Steve Yeager
-// 1.15.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve
+// Created: 2014.01.15
+// Edited: 2014.05.23
 
-using UnityEngine;
-using System.Collections;
-using UnityEditor;
 using System;
 using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
 
 /// <summary>
 /// Edit saved data.
 /// </summary>
+[Obsolete]
 public class SavedDataTool : EditorWindow
 {
     #region GUI Fields
@@ -20,6 +22,7 @@ public class SavedDataTool : EditorWindow
         Inventory,
         Builds,
     }
+
     private static Menus menu;
 
     #endregion
@@ -41,17 +44,15 @@ public class SavedDataTool : EditorWindow
 
     #region Build Fields
 
-    private static List<string> builds; 
+    private static List<string> builds;
 
     #endregion
 
-
     #region EditorWindow
 
-    [MenuItem("Tools/Saved Data Tool")]
     private static void Init()
     {
-        EditorWindow.GetWindow<SavedDataTool>(false, "Saved Data Tool");
+        GetWindow<SavedDataTool>(false, "Saved Data Tool");
         bank = MoneyManager.Balance();
         info = CUBE.LoadAllCUBEInfo();
         inventory = CUBE.GetInventory();

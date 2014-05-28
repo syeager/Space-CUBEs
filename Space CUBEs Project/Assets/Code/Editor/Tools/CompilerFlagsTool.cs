@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 5.22.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.05.22
+// Edited: 2014.05.23
 
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +41,7 @@ public class CompilerFlagsTool : EditorWindow
     #region Editor Overrides
 
     [UsedImplicitly]
-    [MenuItem("Tools/Compiler Flags &C")]
+    [MenuItem("Tools/Compiler Flags &C", false, 50)]
     private static void Init()
     {
         GetWindow<CompilerFlagsTool>("Compiler Flags");
@@ -152,7 +154,7 @@ public class CompilerFlagsTool : EditorWindow
     /// </summary>
     private static void SetFlags()
     {
-        StringBuilder flags = new StringBuilder();
+        var flags = new StringBuilder();
         for (int i = 0; i < flagNames.Count; i++)
         {
             flags.Append(flagNames[i]);

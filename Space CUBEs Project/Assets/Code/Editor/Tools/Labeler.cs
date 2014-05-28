@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 5.11.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.05.11
+// Edited: 2014.05.23
 
 using System;
 using System.Collections.Generic;
@@ -35,15 +37,14 @@ public class Labeler : EditorWindow
 
     #endregion
 
-
     #region EditorWindow Overrides
 
     [UsedImplicitly]
-    [MenuItem("Tools/Manage Labels &L")]
+    [MenuItem("Tools/Manage Labels &L", false, 150)]
     [MenuItem("Assets/Manage Labels &L")]
     private static void Init()
     {
-        Labeler window = GetWindow<Labeler>("Labeler");
+        var window = GetWindow<Labeler>("Labeler");
 
         objects = Selection.gameObjects.Where(go => PrefabUtility.GetPrefabType(go) == PrefabType.Prefab).ToArray();
         window.labels = EditorPrefs.GetString(LabelPath).Split(LabelSep, StringSplitOptions.RemoveEmptyEntries).ToList();
@@ -74,7 +75,7 @@ public class Labeler : EditorWindow
                     GUILayout.Label(obj.name, GUILayout.Width(150f));
 
                     // labels
-                    foreach (var label in AssetDatabase.GetLabels(obj))
+                    foreach (string label in AssetDatabase.GetLabels(obj))
                     {
                         if (GUILayout.Button(label, EditorStyles.miniButtonMid, GUILayout.Width(80f)))
                         {
@@ -83,7 +84,7 @@ public class Labeler : EditorWindow
                             {
                                 CreateLabel(label);
                             }
-                            // remove
+                                // remove
                             else if (Event.current.button == 1)
                             {
                                 RemoveLabel(obj, label);
@@ -133,7 +134,6 @@ public class Labeler : EditorWindow
         if (Event.current.isKey && Event.current.keyCode == KeyCode.Return && GUI.GetNameOfFocusedControl() == "New Label")
         {
             CreateLabel(newLabel);
-            return;
         }
     }
 
