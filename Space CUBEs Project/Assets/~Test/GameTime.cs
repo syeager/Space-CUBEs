@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 5.17.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.05.17
+// Edited: 2014.05.27
 
 using System;
 using UnityEngine;
@@ -44,7 +46,29 @@ public static class GameTime
     }
 
     /// <summary>FPS cap. FrameRate won't exceed but isn't guaranteed to reach.</summary>
-    public static int targetFPS { get; set; }
+    private static int _targetFPS;
+
+    /// <summary>FPS cap. FrameRate won't exceed but isn't guaranteed to reach.</summary>
+    public static int targetFPS
+    {
+#if UNITY_EDITOR
+        get { return Application.isPlaying ? _targetFPS : UnityEditor.EditorPrefs.GetInt(TargetFPSPath); }
+        set
+        {
+            if (Application.isPlaying)
+            {
+                _targetFPS = value;
+            }
+            else
+            {
+                UnityEditor.EditorPrefs.SetInt(TargetFPSPath, value);
+            }
+        }
+#else
+        get { return _targetFPS; }
+        set { _targetFPS = value; }
+#endif
+    }
 
     /// <summary>Is the game paused?</summary>
     public static bool paused { get; private set; }
@@ -70,7 +94,6 @@ public static class GameTime
     public static EventHandler<PauseArgs> PausedEvent;
 
     #endregion
-
 
     #region Public Methods
 

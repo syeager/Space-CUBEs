@@ -66,7 +66,7 @@ public class Debugger : Singleton<Debugger>
     public bool fpsWarning = true;
 
     /// <summary>Lowest FPS allowed before pausing.</summary>
-    public int lowFPS;
+    public int lowFPS = 20;
 
     #endregion
 

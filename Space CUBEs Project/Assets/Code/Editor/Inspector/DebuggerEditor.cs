@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 8.18.2013
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2013.12.01
+// Edited: 2014.05.27
 
 using System;
 using Annotations;
@@ -7,7 +9,7 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(Debugger))]
-public class DebuggerEditor : Editor
+public class DebuggerEditor : Creator<Debugger>
 {
     #region Private Fields
 
@@ -32,6 +34,15 @@ public class DebuggerEditor : Editor
 
     #endregion
 
+    #region Creator Methods
+
+    [MenuItem("GameObject/Singletons/Debugger", false, 3)]
+    public static void Create()
+    {
+        Create("___Debugger");
+    }
+
+    #endregion
 
     #region Editor Overrides
 
@@ -86,13 +97,6 @@ public class DebuggerEditor : Editor
                 DestroyImmediate((fps.objectReferenceValue as HUDFPS).gameObject);
                 fps.objectReferenceValue = null;
             }
-        }
-
-        // target FPS
-        int targetFPS = EditorGUILayout.IntSlider("Target FPS", GameTime.targetFPS, GameTime.MinFPS, GameTime.MaxFPS);
-        if (targetFPS != GameTime.targetFPS)
-        {
-            GameTime.CapFPS(targetFPS);
         }
 
         // FPS warning

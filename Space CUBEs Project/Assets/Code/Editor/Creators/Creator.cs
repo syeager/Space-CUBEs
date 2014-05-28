@@ -1,5 +1,7 @@
-// Steve Yeager
-// 4.27.2014
+// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.04.27
+// Edited: 2014.05.27
 
 using UnityEditor;
 using UnityEngine;
@@ -12,11 +14,10 @@ public class Creator<T> : Editor where T : MonoBehaviour
 {
     #region Const Fields
 
-    private const string Path = "Assets/Prefabs/Common/";
+    private const string Path = "Assets/Global/";
     private const string Postfix = ".prefab";
 
     #endregion
-
 
     #region Static Methods
 
@@ -40,10 +41,10 @@ public class Creator<T> : Editor where T : MonoBehaviour
         }
         else
         {
-            GameObject prefab = AssetDatabase.LoadAssetAtPath(path + prefabName + Postfix, typeof(GameObject)) as GameObject;
-            GameObject created = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
+            var prefab = AssetDatabase.LoadAssetAtPath(path + prefabName + Postfix, typeof(GameObject)) as GameObject;
+            var created = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
 
-            if (Selection.activeObject != null)
+            if (Selection.activeGameObject != null)
             {
                 created.transform.parent = Selection.activeTransform;
                 created.layer = Selection.activeGameObject.layer;
