@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 12.8.2013
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2013.12.09
+// Edited: 2014.05.27
 
 using Annotations;
 using UnityEngine;
@@ -32,6 +34,12 @@ public class Hitbox : MonoBase
 
     #endregion
 
+    #region Readonly Fields
+
+    private static readonly int PlayerLayer = LayerMask.NameToLayer("PlayerWeapon");
+    private static readonly int EnemyLayer = LayerMask.NameToLayer("EnemyWeapon");
+
+    #endregion
 
     #region MonoBehavoiur Overrides
 
@@ -47,7 +55,7 @@ public class Hitbox : MonoBase
     {
         if (continuous || disabled) return;
 
-        var oppHealth = other.gameObject.GetComponent<Health>();
+        var oppHealth = other.gameObject.GetComponent(typeof(Health)) as Health;
         if (oppHealth != null)
         {
             // send damage
@@ -71,7 +79,7 @@ public class Hitbox : MonoBase
     {
         if (!continuous) return;
 
-        var oppHealth = other.gameObject.GetComponent<Health>();
+        var oppHealth = other.gameObject.GetComponent(typeof(Health)) as Health;
         if (oppHealth != null)
         {
             oppHealth.RecieveHit(sender, damage * deltaTime);
@@ -89,7 +97,7 @@ public class Hitbox : MonoBase
         this.sender = sender;
         this.damage = damage;
 
-        gameObject.layer = sender.gameObject.layer;
+        gameObject.layer = sender.CompareTag("Player") ? PlayerLayer : EnemyLayer;
         hitCount = 0;
     }
 

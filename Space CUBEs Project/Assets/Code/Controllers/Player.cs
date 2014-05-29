@@ -66,8 +66,6 @@ public class Player : Ship
         base.Awake();
 
         // setup
-        tag = "Player";
-        gameObject.layer = LayerMask.NameToLayer("Player");
         myScore = new ScoreManager();
         myMoney = new MoneyManager();
         myAugmentations = GetComponent<AugmentationManager>();

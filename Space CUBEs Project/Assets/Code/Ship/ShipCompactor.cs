@@ -88,11 +88,9 @@ public class ShipCompactor : MonoBehaviour
         // bake augmentations
         ship.myAugmentations.Bake(augmentations);
         // add collider
-        var box = ship.gameObject.AddComponent<BoxCollider>();
-
+        var box = (BoxCollider)ship.gameObject.AddComponent(typeof(BoxCollider));
         box.size = box.size * PlayerCollider;
-
-        box.isTrigger = true;
+        box.isTrigger = false;
 
         // add extra components
         foreach (var comp in components)
