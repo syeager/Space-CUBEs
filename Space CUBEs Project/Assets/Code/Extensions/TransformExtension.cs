@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 12.11.2013
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2013.12.12
+// Edited: 2014.05.28
 
 using UnityEngine;
 
@@ -23,5 +25,26 @@ public static class TransformExtension
     {
         transform.position = new Vector3(x, y, z);
         transform.rotation = Quaternion.Euler(rotX, rotY, rotZ);
+    }
+
+
+    public static void Reset(this Transform transform, bool resetScale = true)
+    {
+        transform.position = Vector3.zero;
+        transform.rotation = Quaternion.identity;
+        if (resetScale)
+        {
+            transform.localScale = Vector3.one;
+        }
+    }
+
+    public static void ResetLocal(this Transform transform, bool resetScale = true)
+    {
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
+        if (resetScale)
+        {
+            transform.localScale = Vector3.one;
+        }
     }
 }
