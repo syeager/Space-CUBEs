@@ -9,7 +9,7 @@ using UnityEditor;
 /// Sets target FPS.
 /// </summary>
 [CustomEditor(typeof(GameMaster))]
-public class GameMasterEditor : Editor
+public class GameMasterEditor : Creator<GameMaster>
 {
     #region Editor Overrides
 
@@ -25,6 +25,16 @@ public class GameMasterEditor : Editor
 
         serializedObject.ApplyModifiedProperties();
     }
+
+    #endregion
+
+    #region Creator Overrides
+
+    [MenuItem("GameObject/Singletons/Game Master", false, 4)]
+    public static void Create()
+    {
+        Create("__GameMaster");
+    } 
 
     #endregion
 }
