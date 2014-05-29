@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 1.26.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.01.29
+// Edited: 2014.05.28
 
 using UnityEngine;
 
@@ -23,7 +25,6 @@ namespace Paths
 
         #endregion
 
-
         #region Path Overrides
 
         public override void Initialize(Transform transform)
@@ -38,12 +39,14 @@ namespace Paths
 
         public override Vector3 Direction(float deltaTime)
         {
+            if (deltaTime <= 0.01f) return Vector3.zero;
+
             center += direction * deltaTime;
             angularPosition = Utility.RotateVector(angularPosition, Quaternion.AngleAxis(angularSpeed, Vector3.back));
             Vector3 target = center + angularPosition;
             Vector3 move = target - lastTarget;
             lastTarget = target;
-            return move/deltaTime;
+            return move / deltaTime;
         }
 
         #endregion
