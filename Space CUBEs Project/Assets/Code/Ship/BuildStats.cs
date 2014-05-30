@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 4.28.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.04.28
+// Edited: 2014.05.29
 
 using UnityEngine;
 
@@ -10,9 +12,12 @@ public static class BuildStats
 {
     #region Readonly Fields
 
-    public static readonly int[] CoreCapacities = { 100, 200, 300, 400, 500 };
-    public static readonly int[] WeaponExpansions = { 1, 2, 3, 4 };
-    public static readonly int[] AugmentationExpansions = { 1, 2, 3, 4 };
+    public static readonly int[] CoreCapacities = {200, 400, 800, 1600, 3200};
+    public static readonly int[] CorePrices = {0, 1000, 2000, 4000, 8000};
+    public static readonly int[] WeaponExpansions = {1, 2, 3, 4};
+    public static readonly int[] WeaponPrices = {0, 1000, 2000, 3000};
+    public static readonly int[] AugmentationExpansions = {1, 2, 3, 4};
+    public static readonly int[] AugmentationPrices = {100, 1000, 2000, 3000};
 
     #endregion
 
@@ -24,43 +29,96 @@ public static class BuildStats
 
     #endregion
 
-
     #region Public Methods
 
-    public static int GetCoreCapacity()
+    /// <summary>
+    /// Get current core capacity level from data.
+    /// </summary>
+    /// <returns>0 based index corresponding to core level.</returns>
+    public static int GetCoreLevel()
     {
-        return CoreCapacities[PlayerPrefs.GetInt(CoreCapacityPath)];
+        return PlayerPrefs.GetInt(CoreCapacityPath);
     }
 
 
-    public static void SetCoreCapacity(int coreCapacity)
+    /// <summary>
+    /// Save the core capacity to data.
+    /// </summary>
+    /// <param name="coreCapacity">0 based index corresponding to core level.</param>
+    public static void SetCoreLevel(int coreCapacity)
     {
         PlayerPrefs.SetInt(CoreCapacityPath, coreCapacity);
     }
 
 
-    public static int GetWeaponExpansion()
+    /// <summary>
+    /// Get current core capacity from data.
+    /// </summary>
+    /// <returns>Core capacity points.</returns>
+    public static int GetCoreCapacity()
     {
-        return WeaponExpansions[PlayerPrefs.GetInt(WeaponExpansionPath)];
+        return CoreCapacities[GetCoreLevel()];
     }
 
 
-    public static void SetWeaponExpansion(int weaponExpansion)
+    /// <summary>
+    /// Get current weapon expansion level from data.
+    /// </summary>
+    /// <returns>0 based index corresponding to weapon level.</returns>
+    public static int GetWeaponLevel()
+    {
+        return PlayerPrefs.GetInt(WeaponExpansionPath);
+    }
+
+
+    /// <summary>
+    /// Save the weapon expansion to data.
+    /// </summary>
+    /// <param name="weaponExpansion">0 based index corresponding to weapon level.</param>
+    public static void SetWeaponLevel(int weaponExpansion)
     {
         PlayerPrefs.SetInt(WeaponExpansionPath, weaponExpansion);
     }
 
 
-    public static int GetAugmentationExpansion()
+    /// <summary>
+    /// Get current weapon expansion from data.
+    /// </summary>
+    /// <returns>Weapon expansion points.</returns>
+    public static int GetWeaponExpansion()
     {
-        return AugmentationExpansions[PlayerPrefs.GetInt(AugmentationExpansionPath)];
+        return WeaponExpansions[GetWeaponLevel()];
     }
 
 
-    public static void SetAugmentationExpansion(int augmentationExpansion)
+    /// <summary>
+    /// Get current augmentation expansion level from data.
+    /// </summary>
+    /// <returns>0 based index corresponding to augmentation level.</returns>
+    public static int GetAugmentationLevel()
+    {
+        return PlayerPrefs.GetInt(AugmentationExpansionPath);
+    }
+
+
+    /// <summary>
+    /// Save the augmentation expansion to data.
+    /// </summary>
+    /// <param name="augmentationExpansion">0 based index corresponding to augmentation level.</param>
+    public static void SetAugmentationLevel(int augmentationExpansion)
     {
         PlayerPrefs.SetInt(AugmentationExpansionPath, augmentationExpansion);
     }
-    
+
+
+    /// <summary>
+    /// Get current augmentation expansion from data.
+    /// </summary>
+    /// <returns>Augmentation expansion points.</returns>
+    public static int GetAugmentationExpansion()
+    {
+        return AugmentationExpansions[GetAugmentationLevel()];
+    }
+
     #endregion
 }

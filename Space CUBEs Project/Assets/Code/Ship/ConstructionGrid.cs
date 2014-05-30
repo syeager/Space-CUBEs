@@ -1,14 +1,15 @@
-﻿// Steve Yeager
-// 11.26.2013
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2013.11.26
+// Edited: 2014.05.28
 
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using Annotations;
 using UnityEngine;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Collections;
-using System.Text;
 
 public class ConstructionGrid : MonoBase
 {
@@ -16,12 +17,16 @@ public class ConstructionGrid : MonoBase
 
     /// <summary>Used to show center of the grid.</summary>
     public GameObject Center_Prefab;
+
     /// <summary>GameObject representations of the grid's cells.</summary>
     public GameObject Cell_Prefab;
+
     /// <summary>Cell colorIndex when cursor is in cell.</summary>
     public Material CellCursor_Mat;
+
     /// <summary>Cell colorIndex when cell is included in the cursor bounds.</summary>
     public Material CellCursorBounds_Mat;
+
     /// <summary>Cell colorIndex when nothing is in cell.</summary>
     public Material CellOpen_Mat;
 
@@ -48,40 +53,49 @@ public class ConstructionGrid : MonoBase
 
     /// <summary>Matrix with cells that hold references to the CUBE that currently occupies them.</summary>
     private CUBE[][][] grid;
+
     /// <summary>Matrix that holds references to all of the cell gameObjects.</summary>
     private GameObject[][][] cells;
+
     /// <summary>Center of the grid.</summary>
     private Transform Center;
 
     /// <summary>All of the CUBEs currently placed.</summary>
     private readonly Dictionary<CUBE, CUBEGridInfo> currentBuild = new Dictionary<CUBE, CUBEGridInfo>();
+
     /// <summary>Parent of all of the CUBEs.</summary>
     private GameObject ship;
 
     /// <summary>Offset from cursor to held CUBE's pivotOffset.</summary>
     private Vector3 cursorOffset;
+
     /// <summary>Current viewAxis being looked through. Affects grid rotation.</summary>
     private Vector3 viewAxis;
+
+    /// <summary>Total core points allowed.</summary>
+    private int corePointsMax;
+
+    /// <summary>Core points remaining.</summary>
+    public int corePointsAvailable { get; private set; }
 
     #endregion
 
     #region Const Fields
 
     /// <summary>Level of alpha to set CUBE materials if above current layer.</summary>
-    private const float NEARALPHA = 0.5f;
+    private const float NearAlpha = 0.5f;
 
     /// <summary>Prefix for path to user created ships in PlayerPrefs.</summary>
-    private const string USERBUILDSPATH = "UserBuild: ";
+    private const string UserBuildsPath = "UserBuild: ";
+
     /// <summary>Path to all user build names.</summary>
-    private const string ALLUSERBUILDSPATH = "AllUserBuilds";
+    private const string AllUserBuildsPath = "AllUserBuilds";
+
     /// <summary>Prefix for path to dev created ships in PlayerPrefs.</summary>
-    private const string DEVBUILDSPATH = "DevBuild: ";
+    private const string DevBuildsPath = "DevBuild: ";
+
     /// <summary>Path to all dev build names.</summary>
-    private const string ALLDEVBUILDSPATH = "AllDevBuilds";
-    /// <summary>Path to the folder with the enemy combined meshes.</summary>
-    private const string ENEMYMESHPATH = "Assets/Ship/Characters/";
-    /// <summary>Path to the folder with the enemy prefabs.</summary>
-    private const string ENEMYPREFABPATH = "Assets/Ship/Characters/";
+    private const string AllDevBuildsPath = "AllDevBuilds";
 
     #endregion
 
@@ -89,8 +103,13 @@ public class ConstructionGrid : MonoBase
 
     /// <summary>Size of each dimension of the grid.</summary>
     public int size { get; private set; }
+
     /// <summary>Position of the center of the grid.</summary>
-    public Vector3 center { get { return Center.position; } }
+    public Vector3 center
+    {
+        get { return Center.position; }
+    }
+
     /// <summary>Cursor's worldposition based on current viewAxis.</summary>
     public Vector3 layer
     {
@@ -114,41 +133,46 @@ public class ConstructionGrid : MonoBase
 
     /// <summary>Position of the cursor in the grid.</summary>
     public Vector3 cursor { get; private set; }
+
     /// <summary>Rotation of the cursor.</summary>
     public Quaternion cursorRotation { get; private set; }
+
     /// <summary>World position of the cell that is occupied by the cursor</summary>
     private Vector3 cursorWorldPosition
     {
-        get
-        {
-            return cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].transform.position;
-        }
+        get { return cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].transform.position; }
     }
+
     /// <summary>Current status of the cursor.</summary>
     public CursorStatuses cursorStatus { get; private set; }
+
     /// <summary>Current CUBE being held.</summary>
     public CUBE heldCUBE { get; private set; }
+
     /// <summary>CUBE being hovered over.</summary>
     public CUBE hoveredCUBE
     {
-        get
-        {
-            return grid[(int)cursor.y][(int)cursor.z][(int)cursor.x];
-        }
+        get { return grid[(int)cursor.y][(int)cursor.z][(int)cursor.x]; }
     }
+
     /// <summary>CUBEInfo of currently held CUBE.</summary>
     public CUBEInfo heldInfo { get; private set; }
+
     /// <summary>Weapon slots for the ship.</summary>
     public Weapon[] weapons { get; private set; }
 
     /// <summary>Current health of the ship.</summary>
     public float shipHealth { get; private set; }
+
     /// <summary>Current shield of the ship.</summary>
     public float shipShield { get; private set; }
+
     /// <summary>Current speed of the ship.</summary>
     public float shipSpeed { get; private set; }
+
     /// <summary>Current damage of the ship.</summary>
     public float shipDamage { get; private set; }
+
     /// <summary>Current weapon count of the ship.</summary>
     public int shipWeapons { get; private set; }
 
@@ -156,7 +180,6 @@ public class ConstructionGrid : MonoBase
     public int[] inventory { get; private set; }
 
     #endregion
-
 
     #region Public Methods
 
@@ -176,7 +199,7 @@ public class ConstructionGrid : MonoBase
         this.size = size;
         grid = new CUBE[size][][];
         cells = new GameObject[size][][];
-        Vector3 cursorPosition = new Vector3(-size / 2f + 0.5f, 0f, -size / 2f + 0.5f);
+        var cursorPosition = new Vector3(-size / 2f + 0.5f, 0f, -size / 2f + 0.5f);
 
         // create grid and cells
         for (int i = 0; i < size; i++)
@@ -212,6 +235,10 @@ public class ConstructionGrid : MonoBase
             ship = new GameObject("Ship");
         }
         ship.transform.position = transform.position + Vector3.up * (size / 2f - 0.5f);
+
+        // build points
+        corePointsMax = BuildStats.GetCoreCapacity();
+        corePointsAvailable = corePointsMax;
 
         // set up weapons
         weapons = new Weapon[BuildStats.WeaponExpansions[BuildStats.WeaponExpansions.Length - 1]];
@@ -261,7 +288,7 @@ public class ConstructionGrid : MonoBase
 
         // reset last cell to open colorIndex
         cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].renderer.material = CellOpen_Mat;
-        cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].transform.localScale = Vector3.one*cellSize;
+        cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].transform.localScale = Vector3.one * cellSize;
 
         // contain new position within grid
         if (cursor.x + vector.x < 0 || cursor.x + vector.x > size - 1) vector.x = 0;
@@ -280,12 +307,12 @@ public class ConstructionGrid : MonoBase
             heldCUBE.transform.position += vector;
             cursorStatus = CursorStatuses.Holding;
         }
-        // set status to hover
+            // set status to hover
         else if (grid[(int)cursor.y][(int)cursor.z][(int)cursor.x] != null)
         {
             cursorStatus = CursorStatuses.Hover;
         }
-        // set status to none
+            // set status to none
         else
         {
             cursorStatus = CursorStatuses.None;
@@ -308,7 +335,7 @@ public class ConstructionGrid : MonoBase
         heldCUBE = (CUBE)Instantiate(GameResources.GetCUBE(CUBEID));
         // set materials
         int materialCount = heldCUBE.renderer.materials.Length;
-        Material[] alphaMats = new Material[materialCount];
+        var alphaMats = new Material[materialCount];
         for (int i = 0; i < materialCount; i++)
         {
             alphaMats[i] = new Material(GameResources.Main.VertexColorLerp_Mat);
@@ -317,7 +344,7 @@ public class ConstructionGrid : MonoBase
         heldCUBE.GetComponent<ColorVertices>().Bake();
         // blink
         StartBlink(heldCUBE.renderer);
-        
+
         // reset cursorOffset when creating new type of CUBE
         if (heldInfo.ID != CUBEID)
         {
@@ -328,7 +355,7 @@ public class ConstructionGrid : MonoBase
         heldInfo = CUBE.allCUBES[heldCUBE.ID];
 
         // set rotation and position
-        PositionCUBE(); 
+        PositionCUBE();
 
         // update status
         cursorStatus = CursorStatuses.Holding;
@@ -346,7 +373,7 @@ public class ConstructionGrid : MonoBase
         {
             PlaceCUBE(loadAnother);
         }
-        // pick up CUBE if possible
+            // pick up CUBE if possible
         else if (grid[(int)cursor.y][(int)cursor.z][(int)cursor.x] != null)
         {
             PickupCUBE(grid[(int)cursor.y][(int)cursor.z][(int)cursor.x]);
@@ -439,7 +466,7 @@ public class ConstructionGrid : MonoBase
 
     public void Build(string build, int buildSize, Vector3 startPosition, Vector3 startRotation, float maxTime, Action<BuildFinishedArgs> finshedAction)
     {
-        GameObject showShip = Instantiate(GameResources.Main.player_Prefab) as GameObject;
+        var showShip = Instantiate(GameResources.Main.player_Prefab) as GameObject;
         showShip.name = "Player";
         StartCoroutine(showShip.AddComponent<ShowBuild>().Build(LoadBuild(build), buildSize, startPosition, startRotation, maxTime, finshedAction));
     }
@@ -548,7 +575,7 @@ public class ConstructionGrid : MonoBase
     /// <returns>New piece position.</returns>
     private Vector3 RotateVector(Vector3 localVector, bool reverse = false)
     {
-        Matrix4x4 rot = new Matrix4x4();
+        var rot = new Matrix4x4();
         rot.SetTRS(Vector3.zero, reverse ? Quaternion.Inverse(cursorRotation) : cursorRotation, Vector3.one);
         return rot.MultiplyVector(localVector);
     }
@@ -582,6 +609,16 @@ public class ConstructionGrid : MonoBase
     {
         if (heldCUBE == null) return false;
         if (!Fits()) return false;
+
+        // build points
+        if (heldInfo.cost <= corePointsAvailable)
+        {
+            corePointsAvailable -= heldInfo.cost;
+        }
+        else
+        {
+            return false;
+        }
 
         // update inventory
         if (inventory[heldCUBE.ID] > 0)
@@ -677,7 +714,7 @@ public class ConstructionGrid : MonoBase
     /// <param name="cube"></param>
     private void RemoveCUBE(CUBE cube)
     {
-        // get pivotOffset and rotation 
+        // get pivotOffset and rotation
         cursorRotation = Quaternion.Euler(currentBuild[cube].rotation);
         cursorOffset = currentBuild[cube].position - cursor;
         Vector3 pivot = cursor + cursorOffset.Round();
@@ -716,6 +753,7 @@ public class ConstructionGrid : MonoBase
         shipShield -= cubeInfo.shield;
         shipSpeed -= cubeInfo.speed;
         shipDamage -= cubeInfo.damage;
+        corePointsAvailable += cubeInfo.cost;
 
         cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].renderer.material = CellCursor_Mat;
     }
@@ -732,7 +770,7 @@ public class ConstructionGrid : MonoBase
 #if DEVMODE
         const string path = DEVBUILDSPATH;
 #else
-        const string path = USERBUILDSPATH;
+        const string path = UserBuildsPath;
 #endif
         // get buildInfo string from data
         string build = PlayerPrefs.GetString(path + buildName, "NA");
@@ -741,7 +779,7 @@ public class ConstructionGrid : MonoBase
             Log(buildName + " is not in data.", Debugger.LogTypes.Data, false);
             return null;
         }
-        BuildInfo buildInfo = new BuildInfo { partList = new List<KeyValuePair<int, CUBEGridInfo>>() };
+        var buildInfo = new BuildInfo {partList = new List<KeyValuePair<int, CUBEGridInfo>>()};
 
         string[] data = build.Split(BuildInfo.DATASEP[0]);
 
@@ -753,16 +791,16 @@ public class ConstructionGrid : MonoBase
         buildInfo.damage = float.Parse(data[4]);
 
         // pieces
-        for (int i = 5; i < data.Length-1; i++)
+        for (int i = 5; i < data.Length - 1; i++)
         {
             string[] info = data[i].Split(BuildInfo.PIECESEP[0]);
-            int[] colors = info[4].Substring(0, info[4].Length-1).Split(BuildInfo.COLORSEP[0]).Select(c => int.Parse(c)).ToArray();
-            buildInfo.partList.Add(new KeyValuePair<int,CUBEGridInfo>(int.Parse(info[0]),
-                                                                      new CUBEGridInfo(
-                                                                          Utility.ParseV3(info[1]),
-                                                                          Utility.ParseV3(info[2]),
-                                                                          int.Parse(info[3]),
-                                                                          colors)));
+            int[] colors = info[4].Substring(0, info[4].Length - 1).Split(BuildInfo.COLORSEP[0]).Select(s => int.Parse(s)).ToArray();
+            buildInfo.partList.Add(new KeyValuePair<int, CUBEGridInfo>(int.Parse(info[0]),
+                new CUBEGridInfo(
+                    Utility.ParseV3(info[1]),
+                    Utility.ParseV3(info[2]),
+                    int.Parse(info[3]),
+                    colors)));
         }
 
         return buildInfo;
@@ -774,7 +812,7 @@ public class ConstructionGrid : MonoBase
     /// </summary>
     private string CreateBuildInfoString()
     {
-        StringBuilder build = new StringBuilder();
+        var build = new StringBuilder();
 
         // stats
         build.Append(buildName);
@@ -804,9 +842,9 @@ public class ConstructionGrid : MonoBase
             build.Append(piece.Value.weaponMap);
             build.Append(BuildInfo.PIECESEP);
             // colors
-            for (int i = 0; i < piece.Value.colors.Length; i++)
+            foreach (int color in piece.Value.colors)
             {
-                build.Append(piece.Value.colors[i]);
+                build.Append(color);
                 build.Append(BuildInfo.COLORSEP);
             }
             build.Append(BuildInfo.DATASEP);
@@ -824,7 +862,7 @@ public class ConstructionGrid : MonoBase
         SaveBuild(buildName, CreateBuildInfoString());
 
 #if DEVMODE
-        // compact and prefab ship
+    // compact and prefab ship
         StartCoroutine(SavePrefab());
 #endif
     }
@@ -844,7 +882,7 @@ public class ConstructionGrid : MonoBase
             {
                 for (int x = 0; x < grid.Length; x++)
                 {
-                    Vector3 c = new Vector3(x, y, z);
+                    var c = new Vector3(x, y, z);
                     Vector3 cLayer = new Vector3(viewAxis.x * c.x, viewAxis.y * c.y, viewAxis.z * c.z).Round();
                     if (cLayer == cursorLayer && (grid[y][z][x] == null || cursor == c))
                     {
@@ -864,19 +902,19 @@ public class ConstructionGrid : MonoBase
         // update CUBEs
         foreach (var cube in currentBuild)
         {
-            Vector3 cPosition = new Vector3(cube.Value.position.x * viewAxis.x, cube.Value.position.y * viewAxis.y, cube.Value.position.z*viewAxis.z).Round();
+            Vector3 cPosition = new Vector3(cube.Value.position.x * viewAxis.x, cube.Value.position.y * viewAxis.y, cube.Value.position.z * viewAxis.z).Round();
             Vector3 difference = cPosition - cursorLayer;
 
-            if (difference.normalized*direction == viewAxisNorm)
+            if (difference.normalized * direction == viewAxisNorm)
             {
-                foreach (var mat in cube.Key.renderer.materials)
+                foreach (Material mat in cube.Key.renderer.materials)
                 {
-                    mat.SetFloat("_Alpha", NEARALPHA);
+                    mat.SetFloat("_Alpha", NearAlpha);
                 }
             }
             else
             {
-                foreach (var mat in cube.Key.renderer.materials) mat.SetFloat("_Alpha", 1f);
+                foreach (Material mat in cube.Key.renderer.materials) mat.SetFloat("_Alpha", 1f);
             }
         }
     }
@@ -894,7 +932,7 @@ public class ConstructionGrid : MonoBase
 #if DEVMODE
         const string namePath = ALLDEVBUILDSPATH;
 #else
-        const string namePath = ALLUSERBUILDSPATH;
+        const string namePath = AllUserBuildsPath;
 #endif
 
         List<string> builds = PlayerPrefs.GetString(namePath).Split(BuildInfo.PIECESEP[0]).ToList();
@@ -923,8 +961,8 @@ public class ConstructionGrid : MonoBase
         const string dataPath = DEVBUILDSPATH;
         const string namePath = ALLDEVBUILDSPATH;
 #else
-        const string dataPath = USERBUILDSPATH;
-        const string namePath = ALLUSERBUILDSPATH;
+        const string dataPath = UserBuildsPath;
+        const string namePath = AllUserBuildsPath;
 #endif
         // save data
         PlayerPrefs.SetString(dataPath + buildName, build);
@@ -935,7 +973,6 @@ public class ConstructionGrid : MonoBase
             buildNames.Add(buildName);
             PlayerPrefs.SetString(namePath, string.Join(BuildInfo.PIECESEP, buildNames.ToArray()));
         }
-        
     }
 
 
@@ -950,8 +987,8 @@ public class ConstructionGrid : MonoBase
         string dataPath = DEVBUILDSPATH + buildName;
         const string namePath = ALLDEVBUILDSPATH;
 #else
-        string dataPath = USERBUILDSPATH + buildName;
-        const string namePath = ALLUSERBUILDSPATH;
+        string dataPath = UserBuildsPath + buildName;
+        const string namePath = AllUserBuildsPath;
 #endif
 
         // remove from list of all builds
@@ -975,8 +1012,8 @@ public class ConstructionGrid : MonoBase
         const string dataPath = DEVBUILDSPATH;
         const string namePath = ALLDEVBUILDSPATH;
 #else
-        const string dataPath = USERBUILDSPATH;
-        const string namePath = ALLUSERBUILDSPATH;
+        const string dataPath = UserBuildsPath;
+        const string namePath = AllUserBuildsPath;
 #endif
 
         // update list of all builds
@@ -997,9 +1034,9 @@ public class ConstructionGrid : MonoBase
 
     private void StartBlink(Renderer target)
     {
-        for (int i = 0; i < target.sharedMaterials.Length; i++)
+        foreach (Material material in target.sharedMaterials)
         {
-            target.sharedMaterials[i].color = blinkColor;
+            material.color = blinkColor;
         }
         StartCoroutine("Blinking", target);
     }
@@ -1013,9 +1050,9 @@ public class ConstructionGrid : MonoBase
         {
             timer += Time.deltaTime / blinkTime;
 
-            for (int i = 0; i < target.sharedMaterials.Length; i++)
+            foreach (Material material in target.sharedMaterials)
             {
-                target.sharedMaterials[i].SetFloat("_Mix", timer);
+                material.SetFloat("_Mix", timer);
             }
 
             yield return null;
@@ -1026,9 +1063,9 @@ public class ConstructionGrid : MonoBase
         {
             timer += Time.deltaTime / blinkTime;
 
-            for (int i = 0; i < target.sharedMaterials.Length; i++)
+            foreach (Material material in target.sharedMaterials)
             {
-                target.sharedMaterials[i].SetFloat("_Mix", 1 - timer);
+                material.SetFloat("_Mix", 1 - timer);
             }
 
             yield return null;
@@ -1042,9 +1079,9 @@ public class ConstructionGrid : MonoBase
     {
         StopCoroutine("Blinking");
 
-        for (int i = 0; i < target.sharedMaterials.Length; i++)
+        foreach (Material material in target.sharedMaterials)
         {
-            target.sharedMaterials[i].SetFloat("_Mix", 0f);
+            material.SetFloat("_Mix", 0f);
         }
     }
 

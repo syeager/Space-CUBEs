@@ -1,15 +1,14 @@
-﻿// Steve Yeager
-// 11.26.2013
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2013.11.26
+// Edited: 2014.05.28
 
-using System.Collections.Generic;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Annotations;
 using UnityEngine;
-using System.Collections;
-using System.Linq;
-
-using Types = CUBE.Types;
-using CursorStatuses = ConstructionGrid.CursorStatuses;
 
 public class GarageManager : MonoBase
 {
@@ -22,7 +21,7 @@ public class GarageManager : MonoBase
 
     #region Public Fields
 
-    private const int gridSize = 10;
+    private const int GridSize = 10;
 
     public float cameraSpeed;
     public float zoomSpeed;
@@ -110,6 +109,7 @@ public class GarageManager : MonoBase
         new Vector3(0, 0, 1),
         new Vector3(0, 0, -1)
     };
+
     private readonly Vector3[] cameraRotations =
     {
         new Vector3(90, 0, 0),
@@ -120,8 +120,8 @@ public class GarageManager : MonoBase
         new Vector3(0, 0, 0)
     };
 
-    private readonly Rect InfoPanelRect = new Rect(0f, 0f, 1f, 0.125f);
-    private readonly Rect NavMenuButtonsRect = new Rect(0.86f, 0.9f, 0.14f, 0.1f);
+    private readonly static Rect InfoPanelRect = new Rect(0f, 0f, 1f, 0.125f);
+    private readonly static Rect NavMenuButtonsRect = new Rect(0.86f, 0.9f, 0.14f, 0.1f);
 
     #endregion
 
@@ -193,8 +193,10 @@ public class GarageManager : MonoBase
 
     public ActivateButton[] menuNavButtons = new ActivateButton[2];
 
-    #endregion
+    /// <summary>Label to display build points remaining.</summary>
+    public UILabel corePointsLabel;
 
+    #endregion
 
     #region Unity Overrides
 
@@ -218,26 +220,26 @@ public class GarageManager : MonoBase
         SelectInit();
 
         // nav menu
-        foreach (var button in positionButtons)
+        foreach (ActivateButton button in positionButtons)
         {
             button.ActivateEvent += OnPositionButtonPressed;
         }
-        foreach (var button in rotationButtons)
+        foreach (ActivateButton button in rotationButtons)
         {
             button.ActivateEvent += OnRotationButtonPressed;
         }
 
         // paint menu
-        var paints = paintGrid.GetComponentsInChildren<ActivateButton>(true);
-        foreach (var paint in paints)
+        ActivateButton[] paints = paintGrid.GetComponentsInChildren<ActivateButton>(true);
+        foreach (ActivateButton paint in paints)
         {
             paint.ActivateEvent += OnColorSelected;
         }
-        foreach (var piece in pieces)
+        foreach (ActivateButton piece in pieces)
         {
             piece.ActivateEvent += OnPieceSelected;
         }
-        foreach (var button in paintPositionButtons)
+        foreach (ActivateButton button in paintPositionButtons)
         {
             button.ActivateEvent += OnPaintPositionButtonPressed;
         }
@@ -249,7 +251,7 @@ public class GarageManager : MonoBase
         secondaryColor = int.Parse(paints[1].value);
 
         // info panel
-        foreach (var button in menuNavButtons)
+        foreach (ActivateButton button in menuNavButtons)
         {
             button.ActivateEvent += ChangeMenu;
         }
@@ -428,9 +430,8 @@ public class GarageManager : MonoBase
             {
                 Grid.RotateCursor(-cameraTarget.up);
             }
-
         }
-        // rotate camera
+            // rotate camera
         else if (Input.GetKey(KeyCode.LeftControl))
         {
             if (Input.GetKeyDown(KeyCode.RightArrow))
@@ -450,7 +451,7 @@ public class GarageManager : MonoBase
                 RotateCamera(Vector3.down);
             }
         }
-        // change layer
+            // change layer
         else
         {
             if (Input.GetKeyDown(KeyCode.UpArrow))
@@ -479,12 +480,14 @@ public class GarageManager : MonoBase
         if (Input.GetKeyUp(KeyCode.Space))
         {
             Grid.CursorAction(true);
+            corePointsLabel.text = Grid.corePointsAvailable.ToString();
         }
 
         // delete
         if (Input.GetKeyUp(KeyCode.Delete))
         {
             Grid.DeleteCUBE();
+            corePointsLabel.text = Grid.corePointsAvailable.ToString();
         }
 
         // build
@@ -613,13 +616,13 @@ public class GarageManager : MonoBase
             CameraZoom(direction);
             yield return null;
         }
-
     }
 
     #endregion
 
     #region Mobile Methods
 
+    [UsedImplicitly]
     private IEnumerator Swipe(Touch startTouch)
     {
         float timer = swipeTime;
@@ -642,19 +645,19 @@ public class GarageManager : MonoBase
                     yield break;
                 }
                 // left
-                else if (vector.x >= swipeDist)
+                if (vector.x >= swipeDist)
                 {
                     RotateCamera(Vector3.left);
                     yield break;
                 }
                 // up
-                else if (vector.y <= -swipeDist)
+                if (vector.y <= -swipeDist)
                 {
                     RotateCamera(Vector3.up);
                     yield break;
                 }
                 // down
-                else if (vector.y >= swipeDist)
+                if (vector.y >= swipeDist)
                 {
                     RotateCamera(Vector3.down);
                     yield break;
@@ -666,6 +669,7 @@ public class GarageManager : MonoBase
     }
 
 
+    [UsedImplicitly]
     private IEnumerator Pinch()
     {
         Touch touchA = Input.GetTouch(0);
@@ -737,7 +741,7 @@ public class GarageManager : MonoBase
     /// </summary>
     private void CreateGrid()
     {
-        Grid.CreateGrid(gridSize);
+        Grid.CreateGrid(GridSize);
 
         // position camera
         Grid.RotateGrid(Vector3.up);
@@ -756,17 +760,16 @@ public class GarageManager : MonoBase
         if (buildNames.Length > 0) SceneManager.Main.currentBuild = buildNames[0];
         for (int i = 0; i < buildNames.Length; i++)
         {
-            ScrollviewButton button = (Instantiate(BuildButton_Prefab) as GameObject).GetComponent<ScrollviewButton>();
+            var button = (Instantiate(BuildButton_Prefab) as GameObject).GetComponent<ScrollviewButton>();
             button.Initialize(i.ToString(), buildNames[i], buildNames[i], loadGrid.transform, loadScrollView);
             button.ActivateEvent += OnBuildChosen;
         }
-        
+
         yield return StartCoroutine(Utility.UpdateScrollView(loadGrid, loadScrollBar, loadScrollView));
 
-        UICenterOnChild centerOnChild = (UICenterOnChild)loadGrid.GetComponent(typeof(UICenterOnChild));
+        var centerOnChild = (UICenterOnChild)loadGrid.GetComponent(typeof(UICenterOnChild));
         centerOnChild.Recenter();
         centerOnChild.CenterOn(loadGrid.transform.GetChild(0));
-
     }
 
 
@@ -845,6 +848,7 @@ public class GarageManager : MonoBase
         }
         Grid.CreateBuild(SceneManager.Main.currentBuild);
         shipName.value = Grid.buildName;
+        corePointsLabel.text = Grid.corePointsAvailable.ToString();
         stateMachine.SetState(SelectState, new Dictionary<string, object>());
         selectedBuild = true;
     }
@@ -853,6 +857,7 @@ public class GarageManager : MonoBase
     public void NewBuild()
     {
         CreateGrid();
+        corePointsLabel.text = Grid.corePointsAvailable.ToString();
         stateMachine.SetState(SelectState, new Dictionary<string, object>());
         selectedBuild = true;
     }
@@ -874,7 +879,7 @@ public class GarageManager : MonoBase
         foreach (GameObject selection in selections)
         {
             selection.SetActive(true);
-        } 
+        }
 
         selectionGrids = new UIGrid[selections.Length];
         selectionScrollViews = new UIScrollView[selections.Length];
@@ -969,10 +974,10 @@ public class GarageManager : MonoBase
 
         // toggle filter buttons
         leftFilter.isEnabled = selectionIndex > 0;
-        rightFilter.isEnabled = selectionIndex < selections.Length-1;
+        rightFilter.isEnabled = selectionIndex < selections.Length - 1;
 
         // set filter
-        filterLabel.text = Enum.GetNames(typeof(Types))[selectionIndex];
+        filterLabel.text = Enum.GetNames(typeof(CUBE.Types))[selectionIndex];
     }
 
 
@@ -987,13 +992,13 @@ public class GarageManager : MonoBase
         menuPanels[3].SetActive(false);
         menuPanels[4].SetActive(false);
         infoPanel.SetActive(false);
-        mainCamera.camera.rect = new Rect(0f, 0f, 1f, 1f); 
+        mainCamera.camera.rect = new Rect(0f, 0f, 1f, 1f);
 
-        string[] names = Enum.GetNames(typeof(Types));
-        foreach (var info in CUBE.allCUBES)
+        string[] names = Enum.GetNames(typeof(CUBE.Types));
+        foreach (CUBEInfo info in CUBE.allCUBES)
         {
             int index = Array.IndexOf(names, info.type.ToString());
-            ScrollviewButton button = (Instantiate(CUBESelectionButton_Prefab) as GameObject).GetComponent(typeof(ScrollviewButton)) as ScrollviewButton;
+            var button = (Instantiate(CUBESelectionButton_Prefab) as GameObject).GetComponent(typeof(ScrollviewButton)) as ScrollviewButton;
             button.Initialize(info.ID.ToString(), info.name + "\n" + inventory[info.ID], info.ID.ToString(), selectionGrids[index].transform, selectionScrollViews[index]);
             button.ActivateEvent += OnCUBESelected;
         }
@@ -1117,11 +1122,11 @@ public class GarageManager : MonoBase
             rotationLabel.text = "Rotation " + Grid.cursorRotation.eulerAngles.ToString("0");
 
             // update delete button
-            if (Grid.cursorStatus == CursorStatuses.Holding && !actionButton1.isEnabled)
+            if (Grid.cursorStatus == ConstructionGrid.CursorStatuses.Holding && !actionButton1.isEnabled)
             {
                 actionButton1.isEnabled = true;
             }
-            else if (Grid.cursorStatus != CursorStatuses.Holding && actionButton1.isEnabled)
+            else if (Grid.cursorStatus != ConstructionGrid.CursorStatuses.Holding && actionButton1.isEnabled)
             {
                 actionButton1.isEnabled = false;
             }
@@ -1129,15 +1134,15 @@ public class GarageManager : MonoBase
             // update action button
             switch (Grid.cursorStatus)
             {
-                case CursorStatuses.Holding:
+                case ConstructionGrid.CursorStatuses.Holding:
                     actionButton2.label.text = "Place";
                     actionButton2.isEnabled = true;
                     break;
-                case CursorStatuses.Hover:
+                case ConstructionGrid.CursorStatuses.Hover:
                     actionButton2.label.text = "Pickup";
                     actionButton2.isEnabled = true;
                     break;
-                case CursorStatuses.None:
+                case ConstructionGrid.CursorStatuses.None:
                     actionButton2.label.text = "---";
                     actionButton2.isEnabled = false;
                     break;
@@ -1227,6 +1232,7 @@ public class GarageManager : MonoBase
     {
         if (!args.isPressed) return;
         Grid.CursorAction(true);
+        corePointsLabel.text = Grid.corePointsAvailable.ToString();
     }
 
     #endregion
@@ -1330,7 +1336,7 @@ public class GarageManager : MonoBase
 
     private void UpdatePieces()
     {
-        if (Grid.cursorStatus == CursorStatuses.Hover)
+        if (Grid.cursorStatus == ConstructionGrid.CursorStatuses.Hover)
         {
             // enable copy to's
             copyPrimary.isEnabled = true;
@@ -1379,7 +1385,7 @@ public class GarageManager : MonoBase
             actionButton2.isEnabled = false;
 
             // disable pieces
-            foreach (var piece in pieces)
+            foreach (ActivateButton piece in pieces)
             {
                 piece.Activate(false);
                 piece.isEnabled = false;
@@ -1480,7 +1486,6 @@ public class GarageManager : MonoBase
         selectSecondary.SetColor(CUBE.colors[secondaryColor]);
     }
 
-
     #endregion
 
     #region Weapon Menu Methods
@@ -1511,7 +1516,7 @@ public class GarageManager : MonoBase
         }
 
         // nav buttons
-        foreach (var button in weaponNavButtons)
+        foreach (ActivateButton button in weaponNavButtons)
         {
             button.isEnabled = false;
             button.ActivateEvent += OnWeaponNavButton;
@@ -1592,7 +1597,7 @@ public class GarageManager : MonoBase
         }
 
         // nav buttons
-        foreach (var button in weaponNavButtons)
+        foreach (ActivateButton button in weaponNavButtons)
         {
             button.ActivateEvent -= OnWeaponNavButton;
         }
@@ -1609,7 +1614,7 @@ public class GarageManager : MonoBase
         if (weaponIndex == index)
         {
             weaponButtons[index].Activate(false);
-            foreach (var button in weaponNavButtons)
+            foreach (ActivateButton button in weaponNavButtons)
             {
                 button.isEnabled = false;
             }
@@ -1623,7 +1628,7 @@ public class GarageManager : MonoBase
             {
                 weaponButtons[weaponIndex].Activate(false);
             }
-            foreach (var button in weaponNavButtons)
+            foreach (ActivateButton button in weaponNavButtons)
             {
                 button.isEnabled = true;
             }
@@ -1662,6 +1667,7 @@ public class GarageManager : MonoBase
 
     #region Save Methods
 
+    [UsedImplicitly]
     private IEnumerator SaveConfirmation()
     {
 #if UNITY_STANDALONE
