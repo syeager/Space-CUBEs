@@ -22,7 +22,7 @@ public class UITexture : UIBasicSprite
 	[HideInInspector][SerializeField] Shader mShader;
 	[HideInInspector][SerializeField] Vector4 mBorder = Vector4.zero;
 
-	int mPMA = -1;
+	[System.NonSerialized] int mPMA = -1;
 
 	/// <summary>
 	/// Texture used by the UITexture. You can set it directly, without the need to specify a material.
@@ -32,7 +32,9 @@ public class UITexture : UIBasicSprite
 	{
 		get
 		{
-			return mTexture;
+			if (mTexture != null) return mTexture;
+			if (mMat != null) return mMat.mainTexture;
+			return null;
 		}
 		set
 		{
@@ -40,6 +42,7 @@ public class UITexture : UIBasicSprite
 			{
 				RemoveFromPanel();
 				mTexture = value;
+				mPMA = -1;
 				MarkAsChanged();
 			}
 		}

@@ -8,8 +8,11 @@ using UnityEditor;
 
 public static class NGUIContextMenu
 {
-	[MenuItem("Help/NGUI Documentation")]
+	[MenuItem("Help/NGUI Documentation (v.3.6.1)")]
 	static void ShowHelp0 (MenuCommand command) { NGUIHelp.Show(); }
+
+	[MenuItem("Help/NGUI Support Forum")]
+	static void ShowHelp01 (MenuCommand command) { Application.OpenURL("http://www.tasharen.com/forum/index.php?board=1.0"); }
 
 	[MenuItem("CONTEXT/UIWidget/Copy Widget")]
 	static void CopyStyle (MenuCommand command) { NGUISettings.CopyWidget(command.context as UIWidget); }
@@ -331,7 +334,7 @@ public static class NGUIContextMenu
 					NGUIContextMenu.AddSeparator("Attach/");
 				}
 			}
-			else if (target.collider == null)
+			else if (target.collider == null && target.GetComponent<Collider2D>() == null)
 			{
 				AddItem("Attach/Box Collider", false, AttachCollider, null);
 				NGUIContextMenu.AddSeparator("Attach/");
@@ -349,7 +352,7 @@ public static class NGUIContextMenu
 				}
 			}
 
-			if (target.collider != null)
+			if (target.collider != null || target.GetComponent<Collider2D>() != null)
 			{
 				if (scrollView != null)
 				{

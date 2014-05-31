@@ -859,12 +859,11 @@ public class UIPanel : UIRect
 	}
 
 	/// <summary>
-	/// Remember the parent panel, if any.
+	/// Find the parent panel, if we have one.
 	/// </summary>
 
-	protected override void OnEnable ()
+	void FindParent ()
 	{
-		base.OnEnable();
 		Transform parent = cachedTransform.parent;
 		mParentPanel = (parent != null) ? NGUITools.FindInParents<UIPanel>(parent.gameObject) : null;
 	}
@@ -876,8 +875,7 @@ public class UIPanel : UIRect
 	public override void ParentHasChanged ()
 	{
 		base.ParentHasChanged();
-		Transform parent = cachedTransform.parent;
-		mParentPanel = (parent != null) ? NGUITools.FindInParents<UIPanel>(parent.gameObject) : null;
+		FindParent();
 	}
 
 	/// <summary>
@@ -907,6 +905,7 @@ public class UIPanel : UIRect
 			rb.useGravity = false;
 		}
 
+		FindParent();
 		mRebuild = true;
 		mAlphaFrameID = -1;
 		mMatrixFrame = -1;
@@ -1086,8 +1085,8 @@ public class UIPanel : UIRect
 		float w = rt - lt;
 		float h = tt - bt;
 
-		float minx = Mathf.Max(20f, mClipSoftness.x);
-		float miny = Mathf.Max(20f, mClipSoftness.y);
+		float minx = Mathf.Max(2f, mClipSoftness.x);
+		float miny = Mathf.Max(2f, mClipSoftness.y);
 
 		if (w < minx) w = minx;
 		if (h < miny) h = miny;

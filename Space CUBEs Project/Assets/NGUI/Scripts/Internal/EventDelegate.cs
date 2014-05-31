@@ -11,10 +11,6 @@
 using System.Reflection;
 #endif
 
-#if NETFX_CORE
-using System.Linq;
-#endif
-
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -227,34 +223,22 @@ public class EventDelegate
 	/// </summary>
 
 #if REFLECTION_SUPPORT
-	#if !UNITY_EDITOR && UNITY_WP8
-		static string GetMethodName (Callback callback)
-		{
-			System.Delegate d = callback as System.Delegate;
-			return d.Method.Name;
-		}
+ #if !UNITY_EDITOR && NETFX_CORE
+	static string GetMethodName (Callback callback)
+	{
+		System.Delegate d = callback as System.Delegate;
+		return d.GetMethodInfo().Name;
+	}
 
-		static bool IsValid (Callback callback)
-		{
-			System.Delegate d = callback as System.Delegate;
-			return d != null && d.Method != null;
-		}
-	#elif !UNITY_EDITOR && UNITY_METRO
-		static string GetMethodName (Callback callback)
-		{
-			System.Delegate d = callback as System.Delegate;
-			return d.GetMethodInfo().Name;
-		}
-
-		static bool IsValid (Callback callback)
-		{
-			System.Delegate d = callback as System.Delegate;
-			return d != null && d.GetMethodInfo() != null;
-		}
-	#else
-		static string GetMethodName (Callback callback) { return callback.Method.Name; }
-		static bool IsValid (Callback callback) { return callback != null && callback.Method != null; }
-	#endif
+	static bool IsValid (Callback callback)
+	{
+		System.Delegate d = callback as System.Delegate;
+		return d != null && d.GetMethodInfo() != null;
+	}
+ #else
+	static string GetMethodName (Callback callback) { return callback.Method.Name; }
+	static bool IsValid (Callback callback) { return callback != null && callback.Method != null; }
+ #endif
 #else
 	static bool IsValid (Callback callback) { return callback != null; }
 #endif
@@ -358,14 +342,24 @@ public class EventDelegate
 				try
 				{
 #if NETFX_CORE
-					// we can't use this since we don't seem to have the correct parameter type list yet
-					// mMethod = type.GetRuntimeMethod(mMethodName, (from p in mParameters select p.type).ToArray());
+					IEnumerable<MethodInfo> methods = type.GetRuntimeMethods();
 
-					mMethod = (from m in type.GetRuntimeMethods() where m.Name == mMethodName && !m.IsStatic select m).FirstOrDefault();
+					foreach (MethodInfo mi in methods)
+					{
+						if (mi.Name == mMethodName)
+						{
+							mMethod = mi;
+							break;
+						}
+					}
 #else
 					for (mMethod = null; ; )
 					{
-						mMethod = type.GetMethod(mMethodName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+#if UNITY_WP8
+						mMethod = type.GetMethod(mMethodName);
+#else
+						mMethod = type.GetMethod(mMethodName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+#endif
 						if (mMethod != null) break;
 						type = type.BaseType;
 						if (type == null) break;
@@ -498,8 +492,13 @@ public class EventDelegate
 				}
 				catch (System.ArgumentException ex)
 				{
-					string msg = ex.Message;
-					msg += "\nExpected: ";
+					string msg = "Error calling ";
+
+					if (mTarget == null) msg += mMethod.Name;
+					else msg += mTarget.GetType() + "." + mMethod.Name;
+					
+					msg += ": " + ex.Message;
+					msg += "\n  Expected: ";
 
 					ParameterInfo[] pis = mMethod.GetParameters();
 
@@ -514,7 +513,7 @@ public class EventDelegate
 							msg += ", " + pis[i].ParameterType;
 					}
 
-					msg += "\nGot: ";
+					msg += "\n  Received: ";
 
 					if (mParameters.Length == 0)
 					{
@@ -569,8 +568,8 @@ public class EventDelegate
 			int period = typeName.LastIndexOf('.');
 			if (period > 0) typeName = typeName.Substring(period + 1);
 
-			if (!string.IsNullOrEmpty(methodName)) return typeName + "." + methodName;
-			else return typeName + ".[delegate]";
+			if (!string.IsNullOrEmpty(methodName)) return typeName + "/" + methodName;
+			else return typeName + "/[delegate]";
 		}
 		return mRawDelegate ? "[delegate]" : null;
 	}
