@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.01.16
-// Edited: 2014.05.29
+// Edited: 2014.05.31
 
 using System;
 using System.Collections;
@@ -211,6 +211,11 @@ public class StoreManager : MonoBehaviour
                 buyButton.isEnabled = index == BuildStats.GetWeaponLevel() + 1 &&
                                       MoneyManager.Balance() >= BuildStats.WeaponPrices[BuildStats.GetWeaponLevel()];
                 break;
+            case ItemTypes.Augmentation:
+                sellButton.isEnabled = false;
+                buyButton.isEnabled = index == BuildStats.GetAugmentationLevel() + 1 &&
+                                      MoneyManager.Balance() >= BuildStats.AugmentationPrices[BuildStats.GetAugmentationLevel()];
+                break;
         }
     }
 
@@ -266,7 +271,7 @@ public class StoreManager : MonoBehaviour
         for (int i = 0; i < cubeInfo.Length; i++)
         {
             var button = (Instantiate(Button_Prefab) as GameObject).GetComponent(typeof(ScrollviewButton)) as ScrollviewButton;
-            button.GetComponent<ScrollviewButton>().Initialize(cubeInfo[i].name, cubeInfo[i].name + "\nx " + inventory[cubeInfo[i].ID], cubeInfo[i].ID.ToString(), grids[2].transform, scrollViews[2]);
+            ((ScrollviewButton)button.GetComponent(typeof(ScrollviewButton))).Initialize(cubeInfo[i].name, cubeInfo[i].name + "\nx " + inventory[cubeInfo[i].ID], cubeInfo[i].ID.ToString(), grids[2].transform, scrollViews[2]);
             button.ActivateEvent += OnCUBEButtonSelected;
             itemButtons[2][i] = button;
         }
@@ -276,7 +281,7 @@ public class StoreManager : MonoBehaviour
         for (int i = 0; i < cubeInfo.Length; i++)
         {
             var button = (Instantiate(Button_Prefab) as GameObject).GetComponent(typeof(ScrollviewButton)) as ScrollviewButton;
-            button.GetComponent<ScrollviewButton>().Initialize(cubeInfo[i].name, cubeInfo[i].name + "\nx " + inventory[cubeInfo[i].ID], cubeInfo[i].ID.ToString(), grids[3].transform, scrollViews[3]);
+            ((ScrollviewButton)button.GetComponent(typeof(ScrollviewButton))).Initialize(cubeInfo[i].name, cubeInfo[i].name + "\nx " + inventory[cubeInfo[i].ID], cubeInfo[i].ID.ToString(), grids[3].transform, scrollViews[3]);
             button.ActivateEvent += OnCUBEButtonSelected;
             itemButtons[3][i] = button;
         }
@@ -286,7 +291,7 @@ public class StoreManager : MonoBehaviour
         for (int i = 0; i < itemButtons[4].Length; i++)
         {
             var button = (Instantiate(Button_Prefab) as GameObject).GetComponent(typeof(ScrollviewButton)) as ScrollviewButton;
-            button.GetComponent<ScrollviewButton>()
+            ((ScrollviewButton)button.GetComponent(typeof(ScrollviewButton)))
                 .Initialize("Core " + i, "Core " + (i + 1), i.ToString(), grids[4].transform, scrollViews[4]);
             button.ActivateEvent += OnCoreButtonSelected;
             itemButtons[4][i] = button;
@@ -296,8 +301,8 @@ public class StoreManager : MonoBehaviour
         for (int i = 0; i < itemButtons[5].Length; i++)
         {
             var button = (Instantiate(Button_Prefab) as GameObject).GetComponent(typeof(ScrollviewButton)) as ScrollviewButton;
-            button.GetComponent<ScrollviewButton>()
-                .Initialize("W Expansion " + i, "Weapon Ext " + (i + 1), i.ToString(), grids[5].transform, scrollViews[5]);
+            ((ScrollviewButton)button.GetComponent(typeof(ScrollviewButton)))
+                .Initialize("Weapon Ext " + i, "Weapon Ext " + (i + 1), i.ToString(), grids[5].transform, scrollViews[5]);
             button.ActivateEvent += OnWeaponButtonSelected;
             itemButtons[5][i] = button;
         }
@@ -306,9 +311,8 @@ public class StoreManager : MonoBehaviour
         for (int i = 0; i < itemButtons[6].Length; i++)
         {
             var button = (Instantiate(Button_Prefab) as GameObject).GetComponent(typeof(ScrollviewButton)) as ScrollviewButton;
-            button.GetComponent<ScrollviewButton>()
-                .Initialize("Core " + BuildStats.AugmentationExpansions[i], "A Expansion " + BuildStats.AugmentationExpansions[i], i.ToString(), grids[6].transform,
-                    scrollViews[6]);
+            ((ScrollviewButton)button.GetComponent(typeof(ScrollviewButton)))
+                .Initialize("Augmentation Ext " + i, "Augmentation Ext " + (i + 1), i.ToString(), grids[6].transform, scrollViews[6]);
             button.ActivateEvent += OnAugmentationButtonSelected;
             itemButtons[6][i] = button;
         }
@@ -432,6 +436,20 @@ public class StoreManager : MonoBehaviour
 
     private void OnAugmentationButtonSelected(object sender, ActivateButtonArgs args)
     {
+        currentItemType = ItemTypes.Augmentation;
+        int level = int.Parse(args.value);
+
+        // showcase
+        count.text = BuildStats.GetAugmentationLevel() >= level ? "Own" : "Don't Own";
+        UpdateShowCase(GameObject.CreatePrimitive(PrimitiveType.Cylinder));
+
+        // prices
+        int price = BuildStats.AugmentationPrices[level];
+        sellPrice.text = string.Empty;
+        buyPrice.text = "-$" + price;
+
+        // buttons
+        UpdateShopButtons(level);
     }
 
     #endregion

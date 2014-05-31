@@ -1,9 +1,11 @@
-﻿// Steve Yeager
-// 4.15.2014
-// TODO: Clean and break up.
-using UnityEngine;
-using System.Collections.Generic;
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2013.12.19
+// Edited: 2014.05.31
+
 using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// Combines ship mesh and adds appropriate components.
@@ -16,29 +18,28 @@ public class ShipCompactor : MonoBehaviour
 
     #endregion
 
-
     #region Public Methods
 
     public Ship Compact(bool cleanUnused, params Type[] components)
     {
         GameObject myGameObject = gameObject;
 
-        List<Weapon> weapons = new List<Weapon>();
-        List<Augmentation> augmentations = new List<Augmentation>();
+        var weapons = new List<Weapon>();
+        var augmentations = new List<Augmentation>();
 
         MeshFilter[] meshFilters = GetComponentsInChildren<MeshFilter>();
-        List<CombineInstance> combine = new List<CombineInstance>();
+        var combine = new List<CombineInstance>();
         for (int i = 1; i < meshFilters.Length; i++)
         {
             // bake weapons. save refs for weapon manager
             var weapon = (Weapon)meshFilters[i].GetComponent(typeof(Weapon));
             if (weapon != null)
             {
-                weapons.Add(weapon.Bake(myGameObject)); // TODO: only bake used weapons
+                weapons.Add(weapon.Bake(myGameObject));
             }
 
             // bake augmentations. save refs for augmentation manager
-            var augmentation = meshFilters[i].GetComponent<Augmentation>();
+            var augmentation = meshFilters[i].GetComponent(typeof(Augmentation)) as Augmentation;
             if (augmentation != null)
             {
                 augmentations.Add(augmentation.Bake(myGameObject));
@@ -46,8 +47,8 @@ public class ShipCompactor : MonoBehaviour
 
             for (int j = 0; j < meshFilters[i].sharedMesh.subMeshCount; j++)
             {
-                var child = meshFilters[i].transform;
-                CombineInstance combineInstance = new CombineInstance
+                Transform child = meshFilters[i].transform;
+                var combineInstance = new CombineInstance
                 {
                     mesh = meshFilters[i].sharedMesh,
                     subMeshIndex = j,
@@ -59,7 +60,7 @@ public class ShipCompactor : MonoBehaviour
             Destroy(meshFilters[i].gameObject);
         }
 
-        Mesh mesh = new Mesh {name = "Player_Mesh"};
+        var mesh = new Mesh {name = "Player_Mesh"};
         mesh.CombineMeshes(combine.ToArray());
         mesh.Optimize();
 
@@ -83,7 +84,7 @@ public class ShipCompactor : MonoBehaviour
         }
 
         // add ship
-        Player ship = (Player)GetComponent(typeof(Player));
+        var ship = (Player)GetComponent(typeof(Player));
         // bake weapons
         ship.myWeapons.Bake(weapons);
         // bake augmentations
@@ -94,7 +95,7 @@ public class ShipCompactor : MonoBehaviour
         box.isTrigger = false;
 
         // add extra components
-        foreach (var comp in components)
+        foreach (Type comp in components)
         {
             ship.gameObject.AddComponent(comp.ToString());
         }

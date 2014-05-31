@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2013.11.26
-// Edited: 2014.05.28
+// Edited: 2014.05.31
 
 using System;
 using System.Collections;
@@ -120,8 +120,8 @@ public class GarageManager : MonoBase
         new Vector3(0, 0, 0)
     };
 
-    private readonly static Rect InfoPanelRect = new Rect(0f, 0f, 1f, 0.125f);
-    private readonly static Rect NavMenuButtonsRect = new Rect(0.86f, 0.9f, 0.14f, 0.1f);
+    private static readonly Rect InfoPanelRect = new Rect(0f, 0f, 1f, 0.125f);
+    private static readonly Rect NavMenuButtonsRect = new Rect(0.86f, 0.9f, 0.14f, 0.1f);
 
     #endregion
 
@@ -272,7 +272,6 @@ public class GarageManager : MonoBase
     private void Start()
     {
         stateMachine.Start();
-        //stateMachine.SetState(LoadState);
     }
 
 
@@ -751,7 +750,7 @@ public class GarageManager : MonoBase
     /// </summary>
     private void CreateGrid()
     {
-        Grid.CreateGrid(GridSize, BuildStats.GetWeaponExpansion());
+        Grid.CreateGrid(GridSize, BuildStats.GetWeaponExpansion(), BuildStats.GetAugmentationExpansion());
 
         // position camera
         Grid.RotateGrid(Vector3.up);
@@ -867,6 +866,7 @@ public class GarageManager : MonoBase
     public void NewBuild()
     {
         CreateGrid();
+        shipName.value = "Custom";
         corePointsLabel.text = Grid.corePointsAvailable.ToString();
         stateMachine.SetState(SelectState, new Dictionary<string, object>());
         selectedBuild = true;

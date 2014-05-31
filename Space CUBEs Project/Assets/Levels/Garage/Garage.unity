@@ -7931,7 +7931,7 @@ MonoBehaviour:
   inputType: 0
   onReturnKey: 0
   keyboardType: 0
-  validation: 5
+  validation: 4
   characterLimit: 15
   savedAs: 
   selectOnTab: {fileID: 0}
@@ -7940,7 +7940,7 @@ MonoBehaviour:
   selectionColor: {r: 1, g: .874509811, b: .552941203, a: .5}
   onSubmit: []
   onChange: []
-  mValue: Custom 1
+  mValue: Custom
 --- !u!65 &698365426
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8563,7 +8563,7 @@ MonoBehaviour:
   consoleLine: {fileID: 0}
   consoleLinePrefab: {fileID: 100000, guid: 1abf603ef50833b4ba9818e64b0f75db, type: 2}
   showTime: 1
-  logSaving: 2
+  logSaving: 1
   logFlags: 010101000001
   fpsWarning: 1
   lowFPS: 20
@@ -21695,6 +21695,10 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 45c62a3fc8a9231409c29375e8f213d8, type: 2}
       propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 45c62a3fc8a9231409c29375e8f213d8, type: 2}
+      propertyPath: logSaving
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

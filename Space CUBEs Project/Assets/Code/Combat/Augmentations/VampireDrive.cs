@@ -35,6 +35,7 @@ public class VampireDrive : Augmentation
     public override Augmentation Bake(GameObject player)
     {
         VampireDrive comp = player.AddComponent(typeof (VampireDrive)) as VampireDrive;
+        comp.index = index;
         comp.absorbtion = absorbtion;
 
         return comp;

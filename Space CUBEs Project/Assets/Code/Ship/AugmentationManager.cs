@@ -1,7 +1,10 @@
-﻿// Steve Yeager
-// 4.23.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.04.23
+// Edited: 2014.05.31
 
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -16,16 +19,21 @@ public class AugmentationManager : MonoBehaviour
 
     #endregion
 
-
     #region Public Methods
 
     /// <summary>
     /// Add all augmentations.
     /// </summary>
-    /// <param name="augmentations">Augmentations to save.</param>
-    public void Bake(List<Augmentation> augmentations)
+    /// <param name="augmentationList">Augmentations to save.</param>
+    public void Bake(List<Augmentation> augmentationList)
     {
-        this.augmentations = augmentations.ToArray();
+        augmentations = new Augmentation[BuildStats.ExpansionLimit];
+        int augmentationLimit = BuildStats.GetAugmentationExpansion();
+
+        foreach (Augmentation augmentation in augmentationList.Where(augmentation => augmentation.index < augmentationLimit))
+        {
+            augmentations[augmentation.index] = augmentation;
+        }
     }
 
 
@@ -35,7 +43,7 @@ public class AugmentationManager : MonoBehaviour
     /// <param name="player">Player to pass to each augmentation.</param>
     public void Initialize(Player player)
     {
-        foreach (var augmentation in augmentations)
+        foreach (Augmentation augmentation in augmentations.Where(augmentation => augmentation != null))
         {
             augmentation.Initialize(player);
         }

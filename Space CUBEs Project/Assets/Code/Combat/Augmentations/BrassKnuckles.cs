@@ -36,6 +36,7 @@ public class BrassKnuckles : Augmentation
     public override Augmentation Bake(GameObject player)
     {
         BrassKnuckles comp = (BrassKnuckles)player.AddComponent(typeof(BrassKnuckles));
+        comp.index = index;
         comp.damage = damage;
 
         return comp;

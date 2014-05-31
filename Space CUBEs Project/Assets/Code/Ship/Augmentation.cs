@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 4.15.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.04.15
+// Edited: 2014.05.31
 
 using UnityEngine;
 
@@ -8,6 +10,12 @@ using UnityEngine;
 /// </summary>
 public abstract class Augmentation : MonoBehaviour
 {
+    #region Properties
+
+    public int index { get; set; }
+
+    #endregion
+
     #region Abstract Methods
 
     public abstract void Initialize(Player player);

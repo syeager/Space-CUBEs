@@ -51,6 +51,11 @@ public class ShowBuild : MonoBehaviour
                 ((Weapon)cube.GetComponent(typeof(Weapon))).index = piece.Value.weaponMap;
             }
 
+            if (piece.Value.augmentationMap != -1)
+            {
+                ((Augmentation)cube.GetComponent(typeof(Augmentation))).index = piece.Value.augmentationMap;
+            }
+
             ((ColorVertices)cube.GetComponent(typeof(ColorVertices))).Bake(piece.Value.colors);
 
             pieces.Add(new BuildCUBE(cube.transform, piece.Value.position - halfGrid + Utility.RotateVector(pivotOffset, Quaternion.Euler(piece.Value.rotation)), speed));

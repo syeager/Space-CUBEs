@@ -33,6 +33,7 @@ public class CoolingGel : Augmentation
     public override Augmentation Bake(GameObject player)
     {
         CoolingGel comp = player.AddComponent<CoolingGel>();
+        comp.index = index;
         comp.cooldownBoost = cooldownBoost;
 
         return comp;

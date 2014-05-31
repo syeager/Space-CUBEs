@@ -38,6 +38,7 @@ public class RepairBot : Augmentation
     public override Augmentation Bake(GameObject player)
     {
         RepairBot comp = player.AddComponent<RepairBot>();
+        comp.index = index;
         comp.delay = delay;
         comp.regenSpeed = regenSpeed;
 

@@ -81,6 +81,9 @@ public class ConstructionGrid : MonoBase
     /// <summary>Available weapon slots.</summary>
     private int weaponSlots;
 
+    /// <summary>Available augmentation slots.</summary>
+    private int augmentationSlots;
+
     #endregion
 
     #region Const Fields
@@ -93,12 +96,6 @@ public class ConstructionGrid : MonoBase
 
     /// <summary>Path to all user build names.</summary>
     private const string AllUserBuildsPath = "AllUserBuilds";
-
-    /// <summary>Prefix for path to dev created ships in PlayerPrefs.</summary>
-    private const string DevBuildsPath = "DevBuild: ";
-
-    /// <summary>Path to all dev build names.</summary>
-    private const string AllDevBuildsPath = "AllDevBuilds";
 
     #endregion
 
@@ -162,7 +159,10 @@ public class ConstructionGrid : MonoBase
     public CUBEInfo heldInfo { get; private set; }
 
     /// <summary>Weapon slots for the ship.</summary>
-    public Weapon[] weapons { get; private set; }
+    public List<Weapon> weapons { get; private set; }
+
+    /// <summary>Augmentation slots for the ship.</summary>
+    public List<Augmentation> augmentations { get; private set; }
 
     /// <summary>Current health of the ship.</summary>
     public float shipHealth { get; private set; }
@@ -190,8 +190,9 @@ public class ConstructionGrid : MonoBase
     /// Create and initialize grid, cells, ship, and cursor.
     /// </summary>
     /// <param name="size">Size of the grid's dimensions.</param>
-    /// <param name="weaponCount">How many weapon expansions allowed.</param>
-    public void CreateGrid(int size, int weaponCount)
+    /// <param name="weaponCount">How many weapons allowed.</param>
+    /// <param name="augmentationCount">How many augmentations alloed.</param>
+    public void CreateGrid(int size, int weaponCount, int augmentationCount)
     {
         // get player inventory
         inventory = CUBE.GetInventory();
@@ -246,7 +247,13 @@ public class ConstructionGrid : MonoBase
 
         // set up weapons
         weaponSlots = weaponCount;
-        weapons = new Weapon[weaponCount];
+        weapons = new List<Weapon>(weaponCount);
+        weapons.Initialize(null, weaponCount);
+
+        // set up augmentations
+        augmentationSlots = augmentationCount;
+        augmentations = new List<Augmentation>(augmentationCount);
+        augmentations.Initialize(null, augmentationCount);
 
         // create grid center
         Center = (Instantiate(Center_Prefab, ship.transform.position, Quaternion.identity) as GameObject).transform;
@@ -424,9 +431,9 @@ public class ConstructionGrid : MonoBase
             // create CUBE
             CreateCUBE(piece.Key);
             // colors
-            heldCUBE.GetComponent<ColorVertices>().Bake(piece.Value.colors);
+            ((ColorVertices)heldCUBE.GetComponent(typeof(ColorVertices))).Bake(piece.Value.colors);
             // place
-            PlaceCUBE(piece.Value.weaponMap);
+            PlaceCUBE(piece.Value.weaponMap, piece.Value.augmentationMap);
         }
         cursor = position;
     }
@@ -443,7 +450,7 @@ public class ConstructionGrid : MonoBase
 
         // get new slot index and return if out of bounds
         int newSlot = index + direction;
-        if (newSlot >= weapons.Length || newSlot < 0) return index;
+        if (newSlot >= weapons.Count || newSlot < 0) return index;
 
         // cache weapon
         Weapon saved = weapons[index];
@@ -506,8 +513,8 @@ public class ConstructionGrid : MonoBase
         }
         currentBuild.Clear();
 
-        // new weapons array according to player.WEAPONLIMIT
-        weapons = new Weapon[weaponSlots];
+        weapons.Initialize(null, weaponSlots);
+        augmentations.Initialize(null, augmentationSlots);
     }
 
 
@@ -609,8 +616,9 @@ public class ConstructionGrid : MonoBase
     /// Place held CUBE into the build.
     /// </summary>
     /// <param name="weaponIndex">Index of the weapon.</param>
+    /// <param name="augmentationIndex">Index of the augmentation.</param>
     /// <returns>True, if the CUBE was successfully placed.</returns>
-    private bool PlaceCUBE(int weaponIndex = -1)
+    private bool PlaceCUBE(int weaponIndex = -1, int augmentationIndex = -1)
     {
         if (heldCUBE == null) return false;
         if (!Fits()) return false;
@@ -638,20 +646,69 @@ public class ConstructionGrid : MonoBase
         // add to weapons if applicable
         if (heldInfo.type == CUBE.Types.Weapon)
         {
-            if (weaponIndex != -1 && weaponIndex < weaponSlots)
+            if (weaponIndex == -1)
             {
-                weapons[weaponIndex] = (Weapon)heldCUBE.GetComponent(typeof(Weapon));
-            }
-            else if (weaponIndex == -1)
-            {
-                // find next open weapon slot if there is one
-                for (int i = 0; i < weapons.Length; i++)
+                // is there an open slot?
+                for (int i = 0; i < weapons.Count; i++)
                 {
-                    if (weapons[i] == null)
-                    {
-                        weaponIndex = i;
-                        break;
-                    }
+                    if (weapons[i] != null) continue;
+                    
+                    weapons[i] = (Weapon)heldCUBE.GetComponent(typeof(Weapon));
+                    weaponIndex = i;
+                    break;
+                }
+
+                // add as extra
+                if (weaponIndex == -1)
+                {
+                    weapons.Add((Weapon)heldCUBE.GetComponent(typeof(Weapon)));
+                    weaponIndex = weapons.Count - 1;
+                }
+            }
+            else
+            {
+                if (weaponIndex >= weapons.Count)
+                {
+                    weapons.Add((Weapon)heldCUBE.GetComponent(typeof(Weapon)));
+                }
+                else
+                {
+                    weapons[weaponIndex] = (Weapon)heldCUBE.GetComponent(typeof(Weapon));
+                }
+            }
+        }
+
+        // add to augmentations if applicable
+        if (heldInfo.type == CUBE.Types.Augmentation)
+        {
+            if (augmentationIndex == -1)
+            {
+                // is there an open slot?
+                for (int i = 0; i < augmentations.Count; i++)
+                {
+                    if (augmentations[i] != null) continue;
+
+                    augmentations[i] = (Augmentation)heldCUBE.GetComponent(typeof(Augmentation));
+                    augmentationIndex = i;
+                    break;
+                }
+
+                // add as extra
+                if (augmentationIndex == -1)
+                {
+                    augmentations.Add((Augmentation)heldCUBE.GetComponent(typeof(Augmentation)));
+                    augmentationIndex = augmentations.Count - 1;
+                }
+            }
+            else
+            {
+                if (augmentationIndex >= augmentations.Count)
+                {
+                    augmentations.Add((Augmentation)heldCUBE.GetComponent(typeof(Augmentation)));
+                }
+                else
+                {
+                    augmentations[augmentationIndex] = (Augmentation)heldCUBE.GetComponent(typeof(Augmentation));
                 }
             }
         }
@@ -659,7 +716,7 @@ public class ConstructionGrid : MonoBase
         Vector3 pivot = cursor + RotateVector(cursorOffset).Round();
 
         // add to build
-        currentBuild.Add(heldCUBE, new CUBEGridInfo(pivot, cursorRotation.eulerAngles, weaponIndex, heldCUBE.GetComponent<ColorVertices>().colors));
+        currentBuild.Add(heldCUBE, new CUBEGridInfo(pivot, cursorRotation.eulerAngles, weaponIndex, augmentationIndex, ((ColorVertices)heldCUBE.GetComponent(typeof(ColorVertices))).colors));
 
         // add all of the CUBE's bounds to the grid
         Vector3 bounds = heldInfo.size;
@@ -701,13 +758,14 @@ public class ConstructionGrid : MonoBase
     /// </summary>
     /// <param name="loadAnother">Should another of the same CUBE be created after the current one is placed?</param>
     /// <param name="weaponIndex">Index of the weapon.</param>
+    /// <param name="augmentationIndex">Index of the augmentation.</param>
     /// <returns>True, if the CUBE was successfully placed.</returns>
-    private bool PlaceCUBE(bool loadAnother, int weaponIndex = -1)
+    private bool PlaceCUBE(bool loadAnother, int weaponIndex = -1, int augmentationIndex = -1)
     {
         if (heldCUBE == null) return false;
 
         int id = heldCUBE.ID;
-        if (PlaceCUBE(weaponIndex) && loadAnother)
+        if (PlaceCUBE(weaponIndex, augmentationIndex) && loadAnother)
         {
             CreateCUBE(id);
             return true;
@@ -749,7 +807,29 @@ public class ConstructionGrid : MonoBase
         // remove weapon if applicable
         if (heldInfo.type == CUBE.Types.Weapon && weapons.Contains(heldCUBE.GetComponent<Weapon>()))
         {
-            weapons[Array.IndexOf(weapons, heldCUBE.GetComponent<Weapon>())] = null;
+            int index = ((Weapon)heldCUBE.GetComponent(typeof(Weapon))).index;
+            if (index < weaponSlots)
+            {
+                weapons[index] = null;
+            }
+            else
+            {
+                weapons.RemoveAt(index);
+            }
+        }
+
+        // remove augmentation if applicable
+        if (heldInfo.type == CUBE.Types.Augmentation && augmentations.Contains(heldCUBE.GetComponent<Augmentation>()))
+        {
+            int index = ((Augmentation)heldCUBE.GetComponent(typeof(Augmentation))).index;
+            if (index < augmentationSlots)
+            {
+                augmentations[index] = null;
+            }
+            else
+            {
+                augmentations.RemoveAt(index);
+            }
         }
 
         // remove CUBE from current build
@@ -775,11 +855,9 @@ public class ConstructionGrid : MonoBase
     private BuildInfo LoadBuild(string buildName)
     {
         this.buildName = buildName;
-#if DEVMODE
-        const string path = DEVBUILDSPATH;
-#else
+
         const string path = UserBuildsPath;
-#endif
+
         // get buildInfo string from data
         string build = PlayerPrefs.GetString(path + buildName, "NA");
         if (build == "NA")
@@ -787,9 +865,10 @@ public class ConstructionGrid : MonoBase
             Log(buildName + " is not in data.", Debugger.LogTypes.Data, false);
             return null;
         }
-        var buildInfo = new BuildInfo {partList = new List<KeyValuePair<int, CUBEGridInfo>>()};
+        Debugger.Log("Loading: " + build, null, Debugger.LogTypes.Data);
+        var buildInfo = new BuildInfo { partList = new List<KeyValuePair<int, CUBEGridInfo>>() };
 
-        string[] data = build.Split(BuildInfo.DATASEP[0]);
+        string[] data = build.Split(BuildInfo.DataSep[0]);
 
         // stats
         buildInfo.name = data[0];
@@ -801,13 +880,14 @@ public class ConstructionGrid : MonoBase
         // pieces
         for (int i = 5; i < data.Length - 1; i++)
         {
-            string[] info = data[i].Split(BuildInfo.PIECESEP[0]);
-            int[] colors = info[4].Substring(0, info[4].Length - 1).Split(BuildInfo.COLORSEP[0]).Select(s => int.Parse(s)).ToArray();
+            string[] info = data[i].Split(BuildInfo.PieceSep[0]);
+            int[] colors = info[5].Substring(0, info[5].Length - 1).Split(BuildInfo.ColorSep[0]).Select(s => int.Parse(s)).ToArray();
             buildInfo.partList.Add(new KeyValuePair<int, CUBEGridInfo>(int.Parse(info[0]),
                 new CUBEGridInfo(
                     Utility.ParseV3(info[1]),
                     Utility.ParseV3(info[2]),
                     int.Parse(info[3]),
+                    int.Parse(info[4]),
                     colors)));
         }
 
@@ -824,38 +904,41 @@ public class ConstructionGrid : MonoBase
 
         // stats
         build.Append(buildName);
-        build.Append(BuildInfo.DATASEP);
+        build.Append(BuildInfo.DataSep);
         build.Append(shipHealth);
-        build.Append(BuildInfo.DATASEP);
+        build.Append(BuildInfo.DataSep);
         build.Append(shipShield);
-        build.Append(BuildInfo.DATASEP);
+        build.Append(BuildInfo.DataSep);
         build.Append(shipSpeed);
-        build.Append(BuildInfo.DATASEP);
+        build.Append(BuildInfo.DataSep);
         build.Append(shipDamage);
-        build.Append(BuildInfo.DATASEP);
+        build.Append(BuildInfo.DataSep);
 
         // pieces
         foreach (var piece in currentBuild)
         {
             // ID
             build.Append(piece.Key.ID);
-            build.Append(BuildInfo.PIECESEP);
+            build.Append(BuildInfo.PieceSep);
             // positon
             build.Append(piece.Value.position);
-            build.Append(BuildInfo.PIECESEP);
+            build.Append(BuildInfo.PieceSep);
             // rotation
             build.Append(piece.Value.rotation);
-            build.Append(BuildInfo.PIECESEP);
+            build.Append(BuildInfo.PieceSep);
             // weapon map
             build.Append(piece.Value.weaponMap);
-            build.Append(BuildInfo.PIECESEP);
+            build.Append(BuildInfo.PieceSep);
+            // augmentation map
+            build.Append(piece.Value.augmentationMap);
+            build.Append(BuildInfo.PieceSep);
             // colors
             foreach (int color in piece.Value.colors)
             {
                 build.Append(color);
-                build.Append(BuildInfo.COLORSEP);
+                build.Append(BuildInfo.ColorSep);
             }
-            build.Append(BuildInfo.DATASEP);
+            build.Append(BuildInfo.DataSep);
         }
 
         return build.ToString();
@@ -868,11 +951,6 @@ public class ConstructionGrid : MonoBase
     public void SaveBuild()
     {
         SaveBuild(buildName, CreateBuildInfoString());
-
-#if DEVMODE
-    // compact and prefab ship
-        StartCoroutine(SavePrefab());
-#endif
     }
 
 
@@ -943,7 +1021,7 @@ public class ConstructionGrid : MonoBase
         const string namePath = AllUserBuildsPath;
 #endif
 
-        List<string> builds = PlayerPrefs.GetString(namePath).Split(BuildInfo.PIECESEP[0]).ToList();
+        List<string> builds = PlayerPrefs.GetString(namePath).Split(BuildInfo.PieceSep[0]).ToList();
         if (builds[0] == "")
         {
             builds.RemoveAt(0);
@@ -959,19 +1037,12 @@ public class ConstructionGrid : MonoBase
     /// <param name="build">BuildInfo string to save.</param>
     public static void SaveBuild(string buildName, string build)
     {
-        if (Application.isPlaying)
-        {
-            Debugger.Log("Saving " + buildName + ": " + build, null, Debugger.LogTypes.Data, false);
-        }
+        Debugger.Log("Saving " + buildName + ": " + build, null, Debugger.LogTypes.Data);
 
         // get paths
-#if DEVMODE
-        const string dataPath = DEVBUILDSPATH;
-        const string namePath = ALLDEVBUILDSPATH;
-#else
         const string dataPath = UserBuildsPath;
         const string namePath = AllUserBuildsPath;
-#endif
+
         // save data
         PlayerPrefs.SetString(dataPath + buildName, build);
         // save build name
@@ -979,7 +1050,7 @@ public class ConstructionGrid : MonoBase
         if (!buildNames.Contains(buildName))
         {
             buildNames.Add(buildName);
-            PlayerPrefs.SetString(namePath, string.Join(BuildInfo.PIECESEP, buildNames.ToArray()));
+            PlayerPrefs.SetString(namePath, string.Join(BuildInfo.PieceSep, buildNames.ToArray()));
         }
     }
 
@@ -991,17 +1062,12 @@ public class ConstructionGrid : MonoBase
     public static void DeleteBuild(string buildName)
     {
         // get path
-#if DEVMODE
-        string dataPath = DEVBUILDSPATH + buildName;
-        const string namePath = ALLDEVBUILDSPATH;
-#else
         string dataPath = UserBuildsPath + buildName;
         const string namePath = AllUserBuildsPath;
-#endif
 
         // remove from list of all builds
-        string[] builds = PlayerPrefs.GetString(namePath).Split(BuildInfo.PIECESEP[0]).Where(b => b != buildName && !string.IsNullOrEmpty(b)).ToArray();
-        PlayerPrefs.SetString(namePath, string.Join(BuildInfo.PIECESEP, builds));
+        string[] builds = PlayerPrefs.GetString(namePath).Split(BuildInfo.PieceSep[0]).Where(b => b != buildName && !string.IsNullOrEmpty(b)).ToArray();
+        PlayerPrefs.SetString(namePath, string.Join(BuildInfo.PieceSep, builds));
 
         // remove build data
         PlayerPrefs.DeleteKey(dataPath);
@@ -1016,19 +1082,14 @@ public class ConstructionGrid : MonoBase
     public static void RenameBuild(string oldName, string newName)
     {
         // get path
-#if DEVMODE
-        const string dataPath = DEVBUILDSPATH;
-        const string namePath = ALLDEVBUILDSPATH;
-#else
         const string dataPath = UserBuildsPath;
         const string namePath = AllUserBuildsPath;
-#endif
 
         // update list of all builds
-        string[] builds = PlayerPrefs.GetString(namePath).Split(BuildInfo.PIECESEP[0]);
+        string[] builds = PlayerPrefs.GetString(namePath).Split(BuildInfo.PieceSep[0]);
         int index = Array.IndexOf(builds, oldName);
         builds[index] = newName;
-        PlayerPrefs.SetString(namePath, string.Join(BuildInfo.PIECESEP, builds));
+        PlayerPrefs.SetString(namePath, string.Join(BuildInfo.PieceSep, builds));
 
         // update build data
         string buildInfo = PlayerPrefs.GetString(dataPath + oldName);
