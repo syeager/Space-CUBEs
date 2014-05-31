@@ -1,10 +1,13 @@
-﻿// Steve Yeager
-// 4.6.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.04.06
+// Edited: 2014.05.30
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Collections;
+using Random = UnityEngine.Random;
 
 /// <summary>
 /// Builds the player's ship from parts overtime.
@@ -24,12 +27,12 @@ public class ShowBuild : MonoBehaviour
     /// <param name="finishedAction">Method to call when completed.</param>
     public IEnumerator Build(BuildInfo buildInfo, int buildSize, Vector3 startPosition, Vector3 startRotation, float maxTime, Action<BuildFinishedArgs> finishedAction)
     {
-        List<BuildCUBE> pieces = new List<BuildCUBE>();
+        var pieces = new List<BuildCUBE>();
 
         const float minDist = 100f;
         const float maxDist = 250f;
         Vector3 halfGrid = Vector3.one * (buildSize / 2f - 1f);
-        Vector3 pivotOffset = new Vector3(-0.5f, -0.5f, -0.5f);
+        var pivotOffset = new Vector3(-0.5f, -0.5f, -0.5f);
         transform.position = startPosition;
         transform.eulerAngles = startRotation;
         float speed = maxDist / maxTime;
@@ -39,16 +42,16 @@ public class ShowBuild : MonoBehaviour
             var cube = (CUBE)Instantiate(GameResources.GetCUBE(piece.Key));
             cube.transform.parent = transform;
 
-            cube.transform.localPosition = piece.Value.position.normalized * UnityEngine.Random.Range(minDist, maxDist);
-            cube.transform.localPosition = Quaternion.Euler(UnityEngine.Random.Range(0, 360), UnityEngine.Random.Range(0, 360), UnityEngine.Random.Range(0, 360)) * cube.transform.localPosition;
+            cube.transform.localPosition = piece.Value.position.normalized * Random.Range(minDist, maxDist);
+            cube.transform.localPosition = Quaternion.Euler(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360)) * cube.transform.localPosition;
             cube.transform.localEulerAngles = piece.Value.rotation;
 
             if (piece.Value.weaponMap != -1)
             {
-                cube.GetComponent<Weapon>().index = piece.Value.weaponMap;
+                ((Weapon)cube.GetComponent(typeof(Weapon))).index = piece.Value.weaponMap;
             }
 
-            cube.GetComponent<ColorVertices>().Bake(piece.Value.colors);
+            ((ColorVertices)cube.GetComponent(typeof(ColorVertices))).Bake(piece.Value.colors);
 
             pieces.Add(new BuildCUBE(cube.transform, piece.Value.position - halfGrid + Utility.RotateVector(pivotOffset, Quaternion.Euler(piece.Value.rotation)), speed));
         }
@@ -56,7 +59,7 @@ public class ShowBuild : MonoBehaviour
         float time = maxTime;
         while (time > 0f)
         {
-            foreach (var piece in pieces)
+            foreach (BuildCUBE piece in pieces)
             {
                 piece.Update(Time.deltaTime);
             }

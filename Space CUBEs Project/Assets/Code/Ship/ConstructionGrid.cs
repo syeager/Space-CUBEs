@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2013.11.26
-// Edited: 2014.05.28
+// Edited: 2014.05.31
 
 using System;
 using System.Collections;
@@ -77,6 +77,9 @@ public class ConstructionGrid : MonoBase
 
     /// <summary>Core points remaining.</summary>
     public int corePointsAvailable { get; private set; }
+
+    /// <summary>Available weapon slots.</summary>
+    private int weaponSlots;
 
     #endregion
 
@@ -187,7 +190,8 @@ public class ConstructionGrid : MonoBase
     /// Create and initialize grid, cells, ship, and cursor.
     /// </summary>
     /// <param name="size">Size of the grid's dimensions.</param>
-    public void CreateGrid(int size)
+    /// <param name="weaponCount">How many weapon expansions allowed.</param>
+    public void CreateGrid(int size, int weaponCount)
     {
         // get player inventory
         inventory = CUBE.GetInventory();
@@ -241,7 +245,8 @@ public class ConstructionGrid : MonoBase
         corePointsAvailable = corePointsMax;
 
         // set up weapons
-        weapons = new Weapon[BuildStats.WeaponExpansions[BuildStats.WeaponExpansions.Length - 1]];
+        weaponSlots = weaponCount;
+        weapons = new Weapon[weaponCount];
 
         // create grid center
         Center = (Instantiate(Center_Prefab, ship.transform.position, Quaternion.identity) as GameObject).transform;
@@ -466,7 +471,7 @@ public class ConstructionGrid : MonoBase
 
     public void Build(string build, int buildSize, Vector3 startPosition, Vector3 startRotation, float maxTime, Action<BuildFinishedArgs> finshedAction)
     {
-        var showShip = Instantiate(GameResources.Main.player_Prefab) as GameObject;
+        var showShip = (GameObject)Instantiate(GameResources.Main.player_Prefab);
         showShip.name = "Player";
         StartCoroutine(showShip.AddComponent<ShowBuild>().Build(LoadBuild(build), buildSize, startPosition, startRotation, maxTime, finshedAction));
     }
@@ -502,7 +507,7 @@ public class ConstructionGrid : MonoBase
         currentBuild.Clear();
 
         // new weapons array according to player.WEAPONLIMIT
-        weapons = new Weapon[BuildStats.WeaponExpansions[BuildStats.WeaponExpansions.Length - 1]];
+        weapons = new Weapon[weaponSlots];
     }
 
 
@@ -631,21 +636,24 @@ public class ConstructionGrid : MonoBase
         }
 
         // add to weapons if applicable
-        if (weaponIndex == -1 && heldInfo.type == CUBE.Types.Weapon)
+        if (heldInfo.type == CUBE.Types.Weapon)
         {
-            // find next open weapon slot if there is one
-            for (int i = 0; i < weapons.Length; i++)
+            if (weaponIndex != -1 && weaponIndex < weaponSlots)
             {
-                if (weapons[i] == null)
+                weapons[weaponIndex] = (Weapon)heldCUBE.GetComponent(typeof(Weapon));
+            }
+            else if (weaponIndex == -1)
+            {
+                // find next open weapon slot if there is one
+                for (int i = 0; i < weapons.Length; i++)
                 {
-                    weaponIndex = i;
-                    break;
+                    if (weapons[i] == null)
+                    {
+                        weaponIndex = i;
+                        break;
+                    }
                 }
             }
-        }
-        if (weaponIndex != -1)
-        {
-            weapons[weaponIndex] = heldCUBE.GetComponent<Weapon>();
         }
 
         Vector3 pivot = cursor + RotateVector(cursorOffset).Round();

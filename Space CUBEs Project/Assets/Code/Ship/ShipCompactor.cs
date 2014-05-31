@@ -31,10 +31,10 @@ public class ShipCompactor : MonoBehaviour
         for (int i = 1; i < meshFilters.Length; i++)
         {
             // bake weapons. save refs for weapon manager
-            var weapon = meshFilters[i].GetComponent<Weapon>();
+            var weapon = (Weapon)meshFilters[i].GetComponent(typeof(Weapon));
             if (weapon != null)
             {
-                weapons.Add(weapon.Bake(myGameObject));
+                weapons.Add(weapon.Bake(myGameObject)); // TODO: only bake used weapons
             }
 
             // bake augmentations. save refs for augmentation manager
@@ -59,13 +59,14 @@ public class ShipCompactor : MonoBehaviour
             Destroy(meshFilters[i].gameObject);
         }
 
-        transform.GetComponent<MeshFilter>().mesh = new Mesh();
-        transform.GetComponent<MeshFilter>().mesh.CombineMeshes(combine.ToArray());
-        transform.GetComponent<MeshFilter>().mesh.Optimize();
+        Mesh mesh = new Mesh {name = "Player_Mesh"};
+        mesh.CombineMeshes(combine.ToArray());
+        mesh.Optimize();
+
+        ((MeshFilter)GetComponent(typeof(MeshFilter))).mesh = mesh;
         transform.renderer.sharedMaterial = GameResources.Main.VertexColor_Mat;
 
         // center mesh
-        Mesh mesh = GetComponent<MeshFilter>().mesh;
         Vector3 center = mesh.bounds.center;
         transform.position = renderer.bounds.center;
         Vector3[] vertices = mesh.vertices;
@@ -82,7 +83,7 @@ public class ShipCompactor : MonoBehaviour
         }
 
         // add ship
-        Player ship = GetComponent<Player>();
+        Player ship = (Player)GetComponent(typeof(Player));
         // bake weapons
         ship.myWeapons.Bake(weapons);
         // bake augmentations

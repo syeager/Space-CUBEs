@@ -1,7 +1,10 @@
-﻿// Steve Yeager
-// 12.8.2013
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2013.12.08
+// Edited: 2014.05.31
 
 using System;
+using Annotations;
 using UnityEngine;
 
 /// <summary>
@@ -36,14 +39,14 @@ public class HUD : Singleton<HUD>
 
     #endregion
 
-
     #region MonoBehaviour Overrides
 
+    [UsedImplicitly]
     private void Start()
     {
         // multiplier
         multX.SetActive(false);
-        foreach (var mult in multipliers)
+        foreach (UISprite mult in multipliers)
         {
             mult.gameObject.SetActive(false);
         }
@@ -66,16 +69,16 @@ public class HUD : Singleton<HUD>
         Main.barrelRoll.ActivateEvent += Main.OnBarrelRoll;
 
         // initialize weapon icons
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < BuildStats.ExpansionLimit; i++)
         {
-            Main.weaponButtons[i].GetComponent<WeaponButton>().Disable();
+            ((WeaponButton)Main.weaponButtons[i].GetComponent(typeof(WeaponButton))).Disable();
         }
         for (int i = 0; i < player.myWeapons.weapons.Length; i++)
         {
             if (player.myWeapons.weapons[i] != null)
             {
                 Main.weaponButtons[i].ActivateEvent += player.myWeapons.OnActivate;
-                Main.weaponButtons[i].GetComponent<WeaponButton>().Initialize(player.myWeapons.weapons[i]);
+                ((WeaponButton)Main.weaponButtons[i].GetComponent(typeof(WeaponButton))).Initialize(player.myWeapons.weapons[i]);
             }
         }
     }
@@ -107,7 +110,7 @@ public class HUD : Singleton<HUD>
         if (args.multiplier == 1)
         {
             multX.SetActive(false);
-            foreach (var mult in multipliers)
+            foreach (UISprite mult in multipliers)
             {
                 mult.gameObject.SetActive(false);
             }
@@ -119,7 +122,7 @@ public class HUD : Singleton<HUD>
             for (int i = 0; i < multiplier.Length; i++)
             {
                 multipliers[i].gameObject.SetActive(true);
-                multipliers[i].spriteName = "multiplier"+multiplier[i];
+                multipliers[i].spriteName = "multiplier" + multiplier[i];
             }
         }
     }

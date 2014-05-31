@@ -27,6 +27,9 @@ public static class BuildStats
     private const string WeaponExpansionPath = "Weapon Expansion";
     private const string AugmentationExpansionPath = "Augmentation Expansion";
 
+    /// <summary>Total possible weapon and augmentation expansions.</summary>
+    public const int ExpansionLimit = 4;
+
     #endregion
 
     #region Public Methods

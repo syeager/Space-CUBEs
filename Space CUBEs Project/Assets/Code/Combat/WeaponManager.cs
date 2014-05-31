@@ -1,9 +1,11 @@
-﻿// Steve Yeager
-// 12.4.2013
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2013.12.04
+// Edited: 2014.05.31
 
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
+using UnityEngine;
 
 /// <summary>
 /// Activates weapons on Ship.
@@ -31,17 +33,10 @@ public class WeaponManager : MonoBehaviour
     /// <param name="weaponList">Weapons to add by their index.</param>
     public void Bake(List<Weapon> weaponList)
     {
-        if (weaponList == null || weaponList.Count == 0)
-        {
-            weapons = new Weapon[0];
-        }
-        else
-        {
-            int max = weaponList.Max(w => w.index);
-            weapons = new Weapon[max+1];
-        }
+        weapons = new Weapon[BuildStats.ExpansionLimit];
+        int weaponLimit = BuildStats.GetWeaponExpansion();
 
-        foreach (var weapon in weaponList)
+        foreach (Weapon weapon in weaponList.Where(weapon => weapon.index < weaponLimit))
         {
             weapons[weapon.index] = weapon;
         }
@@ -55,7 +50,7 @@ public class WeaponManager : MonoBehaviour
     /// <param name="damageStat">Ship's damage stat. Used to create the damage multiplier. 1+damageStat/100.</param>
     public void Initialize(Ship sender, float damageStat)
     {
-        damageMultiplier = 1 + damageStat/100;
+        damageMultiplier = 1 + damageStat / 100;
 
         for (int i = 0; i < weapons.Length; i++)
         {
@@ -107,7 +102,7 @@ public class WeaponManager : MonoBehaviour
     /// <param name="isPressed"></param>
     public void ActivateAll(bool isPressed)
     {
-        foreach (var weapon in weapons)
+        foreach (Weapon weapon in weapons)
         {
             if (weapon == null) continue;
 

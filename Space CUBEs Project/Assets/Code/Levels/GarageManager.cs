@@ -179,6 +179,9 @@ public class GarageManager : MonoBase
     public ActivateButton[] weaponButtons;
     public ActivateButton[] weaponNavButtons;
 
+    /// <summary>Weapon expansions available.</summary>
+    private int weaponExpansions;
+
     #endregion
 
     #region Save Fields
@@ -249,6 +252,13 @@ public class GarageManager : MonoBase
         selectSecondary.ActivateEvent += OpenColorSelector;
         primaryColor = int.Parse(paints[0].value);
         secondaryColor = int.Parse(paints[1].value);
+
+        // weapon menu
+        weaponExpansions = BuildStats.GetWeaponExpansion();
+        for (int i = weaponExpansions; i < BuildStats.WeaponExpansions[BuildStats.WeaponExpansions.Length - 1]; i++)
+        {
+            weaponButtons[i].gameObject.SetActive(false);
+        }
 
         // info panel
         foreach (ActivateButton button in menuNavButtons)
@@ -741,7 +751,7 @@ public class GarageManager : MonoBase
     /// </summary>
     private void CreateGrid()
     {
-        Grid.CreateGrid(GridSize);
+        Grid.CreateGrid(GridSize, BuildStats.GetWeaponExpansion());
 
         // position camera
         Grid.RotateGrid(Vector3.up);
@@ -1502,7 +1512,7 @@ public class GarageManager : MonoBase
         infoPanel.SetActive(true);
 
         // weapon buttons
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < weaponExpansions; i++)
         {
             if (Grid.weapons[i] == null)
             {
@@ -1555,12 +1565,12 @@ public class GarageManager : MonoBase
             UpdateInfoPanel();
 
             // update weapon buttons
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < weaponExpansions; i++)
             {
                 if (Grid.weapons[i] == null)
                 {
                     weaponButtons[i].isEnabled = false;
-                    weaponButtons[i].label.text = "Weapon " + i;
+                    weaponButtons[i].label.text = "Weapon " + (i + 1);
                 }
                 else
                 {

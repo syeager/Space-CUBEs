@@ -152,9 +152,18 @@ public class StoreManager : MonoBehaviour
                 UpdateShopButtons(itemIndex);
                 break;
             case ItemTypes.Core:
+                balance = MoneyManager.Transaction(-BuildStats.CorePrices[BuildStats.GetCoreLevel()]);
                 BuildStats.SetCoreLevel(BuildStats.GetCoreLevel() + 1);
-                balance = MoneyManager.Transaction(-CUBE.allCUBES[itemIndex].price);
                 bank.text = String.Format("${0:#,###0}", balance);
+                count.text = "Own";
+                UpdateShopButtons(BuildStats.GetCoreLevel());
+                break;
+            case ItemTypes.Weapon:
+                balance = MoneyManager.Transaction(-BuildStats.WeaponPrices[BuildStats.GetWeaponLevel()]);
+                BuildStats.SetWeaponLevel(BuildStats.GetWeaponLevel() + 1);
+                bank.text = String.Format("${0:#,###0}", balance);
+                count.text = "Own";
+                UpdateShopButtons(BuildStats.GetWeaponLevel());
                 break;
         }
     }
@@ -196,7 +205,11 @@ public class StoreManager : MonoBehaviour
                 sellButton.isEnabled = false;
                 buyButton.isEnabled = index == BuildStats.GetCoreLevel() + 1 &&
                                       MoneyManager.Balance() >= BuildStats.CorePrices[BuildStats.GetCoreLevel()];
-                count.text = "Own";
+                break;
+            case ItemTypes.Weapon:
+                sellButton.isEnabled = false;
+                buyButton.isEnabled = index == BuildStats.GetWeaponLevel() + 1 &&
+                                      MoneyManager.Balance() >= BuildStats.WeaponPrices[BuildStats.GetWeaponLevel()];
                 break;
         }
     }
@@ -274,7 +287,7 @@ public class StoreManager : MonoBehaviour
         {
             var button = (Instantiate(Button_Prefab) as GameObject).GetComponent(typeof(ScrollviewButton)) as ScrollviewButton;
             button.GetComponent<ScrollviewButton>()
-                .Initialize("Core " + (i + 1), "Core " + (i + 1), i.ToString(), grids[4].transform, scrollViews[4]);
+                .Initialize("Core " + i, "Core " + (i + 1), i.ToString(), grids[4].transform, scrollViews[4]);
             button.ActivateEvent += OnCoreButtonSelected;
             itemButtons[4][i] = button;
         }
@@ -284,7 +297,7 @@ public class StoreManager : MonoBehaviour
         {
             var button = (Instantiate(Button_Prefab) as GameObject).GetComponent(typeof(ScrollviewButton)) as ScrollviewButton;
             button.GetComponent<ScrollviewButton>()
-                .Initialize("Core " + BuildStats.WeaponExpansions[i], "W Expansion " + BuildStats.WeaponExpansions[i], i.ToString(), grids[5].transform, scrollViews[5]);
+                .Initialize("W Expansion " + i, "Weapon Ext " + (i + 1), i.ToString(), grids[5].transform, scrollViews[5]);
             button.ActivateEvent += OnWeaponButtonSelected;
             itemButtons[5][i] = button;
         }
@@ -400,6 +413,20 @@ public class StoreManager : MonoBehaviour
 
     private void OnWeaponButtonSelected(object sender, ActivateButtonArgs args)
     {
+        currentItemType = ItemTypes.Weapon;
+        int level = int.Parse(args.value);
+
+        // showcase
+        count.text = BuildStats.GetWeaponLevel() >= level ? "Own" : "Don't Own";
+        UpdateShowCase(GameObject.CreatePrimitive(PrimitiveType.Capsule));
+
+        // prices
+        int price = BuildStats.WeaponPrices[level];
+        sellPrice.text = string.Empty;
+        buyPrice.text = "-$" + price;
+
+        // buttons
+        UpdateShopButtons(level);
     }
 
 
