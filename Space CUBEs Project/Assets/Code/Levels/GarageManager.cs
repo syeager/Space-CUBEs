@@ -1308,6 +1308,7 @@ public class GarageManager : MonoBase
             // update position and rotation
             paintPostionLabel.text = "Position " + (Grid.cursor + Vector3.one).ToString("0");
 
+            UpdatePieces();
             UpdateInfoPanel();
 
             // reset camera
