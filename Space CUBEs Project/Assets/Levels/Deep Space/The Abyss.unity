@@ -237,8 +237,8 @@ GameObject:
   - 23: {fileID: 15967083}
   - 54: {fileID: 15967082}
   - 65: {fileID: 15967081}
-  - 114: {fileID: 15967080}
   - 114: {fileID: 15967079}
+  - 114: {fileID: 15967080}
   m_Layer: 0
   m_Name: Plasma Laser Enemy
   m_TagString: Untagged
@@ -278,13 +278,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 15967077}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61fba774f7c4a0941b28a5a49dd9db55, type: 3}
+  m_Script: {fileID: 11500000, guid: d95eed0b38d50634581be707a5d1ff4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 1
+  log: 0
   timeScale: 1
   continuous: 0
   hitNumber: 1
+  pullSpeed: 1
 --- !u!65 &15967081
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -623,8 +624,8 @@ GameObject:
   - 23: {fileID: 38989479}
   - 54: {fileID: 38989478}
   - 65: {fileID: 38989477}
-  - 114: {fileID: 38989476}
   - 114: {fileID: 38989475}
+  - 114: {fileID: 38989476}
   m_Layer: 0
   m_Name: Plasma Laser Enemy
   m_TagString: Untagged
@@ -664,13 +665,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 38989473}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61fba774f7c4a0941b28a5a49dd9db55, type: 3}
+  m_Script: {fileID: 11500000, guid: d95eed0b38d50634581be707a5d1ff4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 1
+  log: 0
   timeScale: 1
   continuous: 0
   hitNumber: 1
+  pullSpeed: 1
 --- !u!65 &38989477
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1429,8 +1431,8 @@ GameObject:
   - 23: {fileID: 130277292}
   - 54: {fileID: 130277291}
   - 65: {fileID: 130277290}
-  - 114: {fileID: 130277289}
   - 114: {fileID: 130277288}
+  - 114: {fileID: 130277289}
   m_Layer: 0
   m_Name: Plasma Laser Enemy
   m_TagString: Untagged
@@ -1470,13 +1472,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 130277286}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61fba774f7c4a0941b28a5a49dd9db55, type: 3}
+  m_Script: {fileID: 11500000, guid: d95eed0b38d50634581be707a5d1ff4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 1
+  log: 0
   timeScale: 1
   continuous: 0
   hitNumber: 1
+  pullSpeed: 1
 --- !u!65 &130277290
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2321,8 +2324,8 @@ GameObject:
   - 23: {fileID: 255922876}
   - 54: {fileID: 255922875}
   - 65: {fileID: 255922874}
-  - 114: {fileID: 255922873}
   - 114: {fileID: 255922872}
+  - 114: {fileID: 255922873}
   m_Layer: 0
   m_Name: Plasma Laser Enemy
   m_TagString: Untagged
@@ -2351,13 +2354,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 255922871}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61fba774f7c4a0941b28a5a49dd9db55, type: 3}
+  m_Script: {fileID: 11500000, guid: d95eed0b38d50634581be707a5d1ff4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 1
+  log: 0
   timeScale: 1
   continuous: 0
   hitNumber: 1
+  pullSpeed: 1
 --- !u!65 &255922874
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3208,8 +3212,8 @@ GameObject:
   - 23: {fileID: 422089769}
   - 54: {fileID: 422089768}
   - 65: {fileID: 422089767}
-  - 114: {fileID: 422089766}
   - 114: {fileID: 422089765}
+  - 114: {fileID: 422089766}
   m_Layer: 0
   m_Name: Plasma Laser Enemy
   m_TagString: Untagged
@@ -3238,13 +3242,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 422089764}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61fba774f7c4a0941b28a5a49dd9db55, type: 3}
+  m_Script: {fileID: 11500000, guid: d95eed0b38d50634581be707a5d1ff4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 1
+  log: 0
   timeScale: 1
   continuous: 0
   hitNumber: 1
+  pullSpeed: 1
 --- !u!65 &422089767
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3508,8 +3513,8 @@ GameObject:
   - 23: {fileID: 473515899}
   - 54: {fileID: 473515898}
   - 65: {fileID: 473515897}
-  - 114: {fileID: 473515896}
   - 114: {fileID: 473515895}
+  - 114: {fileID: 473515896}
   m_Layer: 0
   m_Name: Plasma Laser Enemy
   m_TagString: Untagged
@@ -3549,13 +3554,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 473515893}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61fba774f7c4a0941b28a5a49dd9db55, type: 3}
+  m_Script: {fileID: 11500000, guid: d95eed0b38d50634581be707a5d1ff4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 1
+  log: 0
   timeScale: 1
   continuous: 0
   hitNumber: 1
+  pullSpeed: 1
 --- !u!65 &473515897
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5047,8 +5053,8 @@ GameObject:
   - 23: {fileID: 587028138}
   - 54: {fileID: 587028137}
   - 65: {fileID: 587028136}
-  - 114: {fileID: 587028135}
   - 114: {fileID: 587028134}
+  - 114: {fileID: 587028135}
   m_Layer: 0
   m_Name: Plasma Laser Enemy
   m_TagString: Untagged
@@ -5088,13 +5094,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 587028132}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61fba774f7c4a0941b28a5a49dd9db55, type: 3}
+  m_Script: {fileID: 11500000, guid: d95eed0b38d50634581be707a5d1ff4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 1
+  log: 0
   timeScale: 1
   continuous: 0
   hitNumber: 1
+  pullSpeed: 1
 --- !u!65 &587028136
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5166,8 +5173,8 @@ GameObject:
   - 23: {fileID: 595561221}
   - 54: {fileID: 595561220}
   - 65: {fileID: 595561219}
-  - 114: {fileID: 595561218}
   - 114: {fileID: 595561217}
+  - 114: {fileID: 595561218}
   m_Layer: 0
   m_Name: Plasma Laser Enemy
   m_TagString: Untagged
@@ -5207,13 +5214,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 595561215}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61fba774f7c4a0941b28a5a49dd9db55, type: 3}
+  m_Script: {fileID: 11500000, guid: d95eed0b38d50634581be707a5d1ff4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 1
+  log: 0
   timeScale: 1
   continuous: 0
   hitNumber: 1
+  pullSpeed: 1
 --- !u!65 &595561219
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6547,8 +6555,8 @@ GameObject:
   - 23: {fileID: 672086733}
   - 54: {fileID: 672086732}
   - 65: {fileID: 672086731}
-  - 114: {fileID: 672086730}
   - 114: {fileID: 672086729}
+  - 114: {fileID: 672086730}
   m_Layer: 0
   m_Name: Plasma Laser Enemy
   m_TagString: Untagged
@@ -6588,13 +6596,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 672086727}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61fba774f7c4a0941b28a5a49dd9db55, type: 3}
+  m_Script: {fileID: 11500000, guid: d95eed0b38d50634581be707a5d1ff4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 1
+  log: 0
   timeScale: 1
   continuous: 0
   hitNumber: 1
+  pullSpeed: 1
 --- !u!65 &672086731
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7218,26 +7227,26 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1580955129}
-  - {fileID: 1986870596}
-  - {fileID: 1928810341}
   - {fileID: 1425911522}
-  - {fileID: 1129193088}
-  - {fileID: 836543236}
-  - {fileID: 422089771}
-  - {fileID: 130277287}
-  - {fileID: 473515894}
   - {fileID: 15967078}
-  - {fileID: 38989474}
-  - {fileID: 1667228362}
+  - {fileID: 130277287}
+  - {fileID: 1928810341}
   - {fileID: 255922878}
-  - {fileID: 1728594553}
-  - {fileID: 672086728}
   - {fileID: 1652042472}
+  - {fileID: 1728594553}
+  - {fileID: 836543236}
   - {fileID: 595561216}
-  - {fileID: 587028133}
-  - {fileID: 2063085548}
   - {fileID: 1973698510}
+  - {fileID: 1580955129}
+  - {fileID: 422089771}
+  - {fileID: 2063085548}
+  - {fileID: 587028133}
+  - {fileID: 672086728}
+  - {fileID: 1986870596}
+  - {fileID: 38989474}
+  - {fileID: 1129193088}
+  - {fileID: 473515894}
+  - {fileID: 1667228362}
   m_Father: {fileID: 643404111}
 --- !u!114 &715917131
 MonoBehaviour:
@@ -7770,7 +7779,7 @@ MonoBehaviour:
   log: 1
   timeScale: 1
   logWarning: 0
-  currentBuild: 
+  currentBuild: Berserker
 --- !u!114 &824695457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8134,8 +8143,8 @@ GameObject:
   - 23: {fileID: 836543241}
   - 54: {fileID: 836543240}
   - 65: {fileID: 836543239}
-  - 114: {fileID: 836543238}
   - 114: {fileID: 836543237}
+  - 114: {fileID: 836543238}
   m_Layer: 0
   m_Name: Plasma Laser Enemy
   m_TagString: Untagged
@@ -8175,13 +8184,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 836543235}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61fba774f7c4a0941b28a5a49dd9db55, type: 3}
+  m_Script: {fileID: 11500000, guid: d95eed0b38d50634581be707a5d1ff4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 1
+  log: 0
   timeScale: 1
   continuous: 0
   hitNumber: 1
+  pullSpeed: 1
 --- !u!65 &836543239
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10146,8 +10156,8 @@ GameObject:
   - 23: {fileID: 1129193093}
   - 54: {fileID: 1129193092}
   - 65: {fileID: 1129193091}
-  - 114: {fileID: 1129193090}
   - 114: {fileID: 1129193089}
+  - 114: {fileID: 1129193090}
   m_Layer: 0
   m_Name: Plasma Laser Enemy
   m_TagString: Untagged
@@ -10187,13 +10197,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1129193087}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61fba774f7c4a0941b28a5a49dd9db55, type: 3}
+  m_Script: {fileID: 11500000, guid: d95eed0b38d50634581be707a5d1ff4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 1
+  log: 0
   timeScale: 1
   continuous: 0
   hitNumber: 1
+  pullSpeed: 1
 --- !u!65 &1129193091
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12358,8 +12369,8 @@ GameObject:
   - 23: {fileID: 1425911527}
   - 54: {fileID: 1425911526}
   - 65: {fileID: 1425911525}
-  - 114: {fileID: 1425911524}
   - 114: {fileID: 1425911523}
+  - 114: {fileID: 1425911524}
   m_Layer: 0
   m_Name: Plasma Laser Enemy
   m_TagString: Untagged
@@ -12399,13 +12410,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1425911521}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61fba774f7c4a0941b28a5a49dd9db55, type: 3}
+  m_Script: {fileID: 11500000, guid: d95eed0b38d50634581be707a5d1ff4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 1
+  log: 0
   timeScale: 1
   continuous: 0
   hitNumber: 1
+  pullSpeed: 1
 --- !u!65 &1425911525
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13780,8 +13792,8 @@ GameObject:
   - 23: {fileID: 1580955134}
   - 54: {fileID: 1580955133}
   - 65: {fileID: 1580955132}
-  - 114: {fileID: 1580955131}
   - 114: {fileID: 1580955130}
+  - 114: {fileID: 1580955131}
   m_Layer: 0
   m_Name: Plasma Laser Enemy
   m_TagString: Untagged
@@ -13821,13 +13833,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1580955128}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61fba774f7c4a0941b28a5a49dd9db55, type: 3}
+  m_Script: {fileID: 11500000, guid: d95eed0b38d50634581be707a5d1ff4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 1
+  log: 0
   timeScale: 1
   continuous: 0
   hitNumber: 1
+  pullSpeed: 1
 --- !u!65 &1580955132
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14318,8 +14331,8 @@ GameObject:
   - 23: {fileID: 1652042477}
   - 54: {fileID: 1652042476}
   - 65: {fileID: 1652042475}
-  - 114: {fileID: 1652042474}
   - 114: {fileID: 1652042473}
+  - 114: {fileID: 1652042474}
   m_Layer: 0
   m_Name: Plasma Laser Enemy
   m_TagString: Untagged
@@ -14359,13 +14372,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1652042471}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61fba774f7c4a0941b28a5a49dd9db55, type: 3}
+  m_Script: {fileID: 11500000, guid: d95eed0b38d50634581be707a5d1ff4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 1
+  log: 0
   timeScale: 1
   continuous: 0
   hitNumber: 1
+  pullSpeed: 1
 --- !u!65 &1652042475
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14452,8 +14466,8 @@ GameObject:
   - 23: {fileID: 1667228367}
   - 54: {fileID: 1667228366}
   - 65: {fileID: 1667228365}
-  - 114: {fileID: 1667228364}
   - 114: {fileID: 1667228363}
+  - 114: {fileID: 1667228364}
   m_Layer: 0
   m_Name: Plasma Laser Enemy
   m_TagString: Untagged
@@ -14493,13 +14507,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1667228361}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61fba774f7c4a0941b28a5a49dd9db55, type: 3}
+  m_Script: {fileID: 11500000, guid: d95eed0b38d50634581be707a5d1ff4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 1
+  log: 0
   timeScale: 1
   continuous: 0
   hitNumber: 1
+  pullSpeed: 1
 --- !u!65 &1667228365
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14968,8 +14983,8 @@ GameObject:
   - 23: {fileID: 1728594558}
   - 54: {fileID: 1728594557}
   - 65: {fileID: 1728594556}
-  - 114: {fileID: 1728594555}
   - 114: {fileID: 1728594554}
+  - 114: {fileID: 1728594555}
   m_Layer: 0
   m_Name: Plasma Laser Enemy
   m_TagString: Untagged
@@ -15009,13 +15024,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1728594552}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61fba774f7c4a0941b28a5a49dd9db55, type: 3}
+  m_Script: {fileID: 11500000, guid: d95eed0b38d50634581be707a5d1ff4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 1
+  log: 0
   timeScale: 1
   continuous: 0
   hitNumber: 1
+  pullSpeed: 1
 --- !u!65 &1728594556
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -16766,8 +16782,8 @@ GameObject:
   - 23: {fileID: 1928810346}
   - 54: {fileID: 1928810345}
   - 65: {fileID: 1928810344}
-  - 114: {fileID: 1928810343}
   - 114: {fileID: 1928810342}
+  - 114: {fileID: 1928810343}
   m_Layer: 0
   m_Name: Plasma Laser Enemy
   m_TagString: Untagged
@@ -16807,13 +16823,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1928810340}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61fba774f7c4a0941b28a5a49dd9db55, type: 3}
+  m_Script: {fileID: 11500000, guid: d95eed0b38d50634581be707a5d1ff4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 1
+  log: 0
   timeScale: 1
   continuous: 0
   hitNumber: 1
+  pullSpeed: 1
 --- !u!65 &1928810344
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -16921,6 +16938,10 @@ Prefab:
     - target: {fileID: 400000, guid: aeed59aee1ea3714da2eb46ccb6175bd, type: 2}
       propertyPath: m_LocalRotation.w
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: aeed59aee1ea3714da2eb46ccb6175bd, type: 2}
+      propertyPath: currentBuild
+      value: Berserker
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: aeed59aee1ea3714da2eb46ccb6175bd, type: 2}
@@ -17039,8 +17060,8 @@ GameObject:
   - 23: {fileID: 1973698515}
   - 54: {fileID: 1973698514}
   - 65: {fileID: 1973698513}
-  - 114: {fileID: 1973698512}
   - 114: {fileID: 1973698511}
+  - 114: {fileID: 1973698512}
   m_Layer: 0
   m_Name: Plasma Laser Enemy
   m_TagString: Untagged
@@ -17080,13 +17101,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1973698509}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61fba774f7c4a0941b28a5a49dd9db55, type: 3}
+  m_Script: {fileID: 11500000, guid: d95eed0b38d50634581be707a5d1ff4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 1
+  log: 0
   timeScale: 1
   continuous: 0
   hitNumber: 1
+  pullSpeed: 1
 --- !u!65 &1973698513
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -17158,8 +17180,8 @@ GameObject:
   - 23: {fileID: 1986870601}
   - 54: {fileID: 1986870600}
   - 65: {fileID: 1986870599}
-  - 114: {fileID: 1986870598}
   - 114: {fileID: 1986870597}
+  - 114: {fileID: 1986870598}
   m_Layer: 0
   m_Name: Plasma Laser Enemy
   m_TagString: Untagged
@@ -17199,13 +17221,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1986870595}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61fba774f7c4a0941b28a5a49dd9db55, type: 3}
+  m_Script: {fileID: 11500000, guid: d95eed0b38d50634581be707a5d1ff4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 1
+  log: 0
   timeScale: 1
   continuous: 0
   hitNumber: 1
+  pullSpeed: 1
 --- !u!65 &1986870599
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -17657,8 +17680,8 @@ GameObject:
   - 23: {fileID: 2063085553}
   - 54: {fileID: 2063085552}
   - 65: {fileID: 2063085551}
-  - 114: {fileID: 2063085550}
   - 114: {fileID: 2063085549}
+  - 114: {fileID: 2063085550}
   m_Layer: 0
   m_Name: Plasma Laser Enemy
   m_TagString: Untagged
@@ -17698,13 +17721,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 2063085547}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61fba774f7c4a0941b28a5a49dd9db55, type: 3}
+  m_Script: {fileID: 11500000, guid: d95eed0b38d50634581be707a5d1ff4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 1
+  log: 0
   timeScale: 1
   continuous: 0
   hitNumber: 1
+  pullSpeed: 1
 --- !u!65 &2063085551
 BoxCollider:
   m_ObjectHideFlags: 0

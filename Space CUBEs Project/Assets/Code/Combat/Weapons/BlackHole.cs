@@ -1,9 +1,11 @@
-﻿// Steve Yeager
-// 2.20.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.02.20
+// Edited: 2014.06.01
 
+using System.Collections;
 using Annotations;
 using UnityEngine;
-using System.Collections;
 
 /// <summary>
 /// Sucks ships and other objects into its center while dealing damage.
@@ -11,12 +13,11 @@ using System.Collections;
 public class BlackHole : Hitbox
 {
     #region Public Fields
-    
+
     public float pullStrength;
     public float spinSpeed;
-    
-    #endregion
 
+    #endregion
 
     #region MonoBehaviour Overrides
 
@@ -29,7 +30,15 @@ public class BlackHole : Hitbox
         Vector3 distance = myTransform.position - otherRigidbody.position;
 
         // move
-        otherRigidbody.AddForce(distance.normalized * pullStrength * deltaTime, ForceMode.Impulse);
+        var listener = other.GetComponent(typeof(IBlackHoleListener)) as IBlackHoleListener;
+        if (listener != null)
+        {
+            listener.Interact(myTransform.position, distance.normalized * pullStrength);
+        }
+        else
+        {
+            otherRigidbody.AddForce(distance.normalized * pullStrength * deltaTime, ForceMode.Impulse);
+        }
 
         // damage
         var oppHealth = other.gameObject.GetComponent(typeof(Health)) as Health;
@@ -65,10 +74,10 @@ public class BlackHole : Hitbox
     {
         while (true)
         {
-            myTransform.Rotate(Vector3.back, spinSpeed*deltaTime, Space.World);
+            myTransform.Rotate(Vector3.back, spinSpeed * deltaTime, Space.World);
             yield return null;
         }
     }
-    
+
     #endregion
 }
