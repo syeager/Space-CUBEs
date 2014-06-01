@@ -28,7 +28,6 @@ GameObject:
   - 65: {fileID: 6500000}
   - 114: {fileID: 11400004}
   - 114: {fileID: 11400006}
-  - 114: {fileID: 11400008}
   m_Layer: 8
   m_Name: CUBE Selection Button
   m_TagString: Untagged
@@ -172,19 +171,19 @@ MonoBehaviour:
   hideIfOffScreen: 0
   keepAspectRatio: 0
   aspectRatio: 1
-  mAtlas: {fileID: 11400000, guid: 603488284951f9c4cbaf11f175695661, type: 2}
-  mSpriteName: Button
   mType: 1
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
   mFlip: 0
-  mFillCenter: 1
   centerType: 1
   leftType: 1
   rightType: 1
   bottomType: 1
   topType: 1
+  mAtlas: {fileID: 11400000, guid: 603488284951f9c4cbaf11f175695661, type: 2}
+  mSpriteName: Button
+  mFillCenter: 1
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -205,6 +204,9 @@ MonoBehaviour:
   hoverSprite: 
   pressedSprite: 
   disabledSprite: 
+  hoverSprite2D: {fileID: 0}
+  pressedSprite2D: {fileID: 0}
+  disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick: []
   activatedColor: {r: 0, g: 0, b: 0, a: 0}
@@ -224,24 +226,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scrollView: {fileID: 0}
   draggablePanel: {fileID: 0}
---- !u!114 &11400008
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100002}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 643ea4bc79b55444d974ddbd31a6cd5d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  constraint: 0
-  onUp: {fileID: 0}
-  onDown: {fileID: 0}
-  onLeft: {fileID: 0}
-  onRight: {fileID: 0}
-  onClick: {fileID: 0}
-  startsSelected: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
