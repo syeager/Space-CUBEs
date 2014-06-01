@@ -194,6 +194,22 @@ public class ConstructionGrid : MonoBase
     /// <param name="augmentationCount">How many augmentations alloed.</param>
     public void CreateGrid(int size, int weaponCount, int augmentationCount)
     {
+        // clear any previous data
+        Clear();
+        if (cells != null)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    for (int k = 0; k < size; k++)
+                    {
+                        Destroy(cells[i][j][k]);
+                    }
+                }
+            }
+        }
+
         // get player inventory
         inventory = CUBE.GetInventory();
 
@@ -493,6 +509,13 @@ public class ConstructionGrid : MonoBase
     private void Clear()
     {
         if (grid == null) return;
+
+        if (heldCUBE)
+        {
+            StopBlink(heldCUBE.renderer);
+            Destroy(heldCUBE.gameObject);
+            heldCUBE = null;
+        }
 
         // create grid and set all cells to null
         for (int i = 0; i < size; i++)
@@ -884,7 +907,7 @@ public class ConstructionGrid : MonoBase
             return null;
         }
         Debugger.Log("Loading: " + build, null, Debugger.LogTypes.Data);
-        var buildInfo = new BuildInfo { partList = new List<KeyValuePair<int, CUBEGridInfo>>() };
+        var buildInfo = new BuildInfo {partList = new List<KeyValuePair<int, CUBEGridInfo>>()};
 
         string[] data = build.Split(BuildInfo.DataSep[0]);
 
@@ -1028,16 +1051,12 @@ public class ConstructionGrid : MonoBase
     #region Static Methods
 
     /// <summary>
-    /// Get all build names. User vs Dev.
+    /// Get all build names.
     /// </summary>
     /// <returns>All build names.</returns>
     public static List<string> BuildNames()
     {
-#if DEVMODE
-        const string namePath = ALLDEVBUILDSPATH;
-#else
         const string namePath = AllUserBuildsPath;
-#endif
 
         List<string> builds = PlayerPrefs.GetString(namePath).Split(BuildInfo.PieceSep[0]).ToList();
         if (builds[0] == "")
