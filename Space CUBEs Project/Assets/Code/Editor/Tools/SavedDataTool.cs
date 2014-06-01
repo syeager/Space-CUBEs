@@ -50,6 +50,7 @@ public class SavedDataTool : EditorWindow
 
     #region EditorWindow
 
+    [MenuItem("Tools/Saved Data Tool")]
     private static void Init()
     {
         GetWindow<SavedDataTool>(false, "Saved Data Tool");
