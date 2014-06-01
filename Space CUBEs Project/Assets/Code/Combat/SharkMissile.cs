@@ -42,7 +42,7 @@ public class SharkMissile : Hitbox
         this.homingSpeed = homingSpeed;
         target = null;
 
-        gameObject.layer = sender.gameObject.layer;
+        SetLayer(sender);
         collider.enabled = false;
 
         StartCoroutine(Delay(delay, delaySpeed));

@@ -97,7 +97,7 @@ public class Hitbox : MonoBase
         this.sender = sender;
         this.damage = damage;
 
-        gameObject.layer = sender.CompareTag("Player") ? PlayerLayer : EnemyLayer;
+        SetLayer(sender);
         hitCount = 0;
     }
 
@@ -120,6 +120,19 @@ public class Hitbox : MonoBase
     {
         Initialize(sender, damage, time);
         rigidbody.velocity = moveVec;
+    }
+
+    #endregion
+
+    #region Protected Methods
+
+    /// <summary>
+    /// Sets layer to PlayerWeapon or EnemyWeapon.
+    /// </summary>
+    /// <param name="sender">Ship that fired the weapon.</param>
+    protected void SetLayer(Ship sender)
+    {
+        gameObject.layer = sender.CompareTag("Player") ? PlayerLayer : EnemyLayer;
     }
 
     #endregion
