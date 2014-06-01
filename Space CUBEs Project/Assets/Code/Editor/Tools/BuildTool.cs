@@ -28,7 +28,7 @@ public class BuildTool : EditorWindow
     private int patch;
 
     private bool targetPC = true;
-    private bool sendEmail = true;
+    private bool sendEmail = false;
 
     private bool first = true;
 

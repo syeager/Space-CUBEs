@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Annotations;
-using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -130,7 +129,7 @@ public class LevelManager : Singleton<LevelManager>
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            EditorApplication.isPaused = true;
+            UnityEditor.EditorApplication.isPaused = true;
         }
 #endif
     }
