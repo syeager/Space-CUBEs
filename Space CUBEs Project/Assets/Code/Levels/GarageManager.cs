@@ -465,12 +465,12 @@ public class GarageManager : MonoBase
         {
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-                Grid.MoveCursor(Vector3.back);
+                Grid.MoveCursor(cameraTarget.forward);
                 CameraZoom(0f);
             }
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
-                Grid.MoveCursor(Vector3.forward);
+                Grid.MoveCursor(-cameraTarget.forward);
                 CameraZoom(0f);
             }
         }
