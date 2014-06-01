@@ -24,7 +24,7 @@ public class GameStart : Singleton<GameStart>
 
     private static readonly List<Action> StartActions = new List<Action> {Version1};
 
-    private static readonly Dictionary<string, string> DevBuilds = new Dictionary<string, string>
+    public static readonly Dictionary<string, string> DevBuilds = new Dictionary<string, string>
     {
         {
             "Avenger",

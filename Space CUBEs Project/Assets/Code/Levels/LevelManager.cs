@@ -1,11 +1,14 @@
-﻿// Steve Yeager
-// 12.3.2013
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2013.12.03
+// Edited: 2014.05.31
 
-using Annotations;
-using UnityEngine;
-using System.Collections.Generic;
 using System;
-
+using System.Collections.Generic;
+using System.Linq;
+using Annotations;
+using UnityEditor;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class LevelManager : Singleton<LevelManager>
@@ -40,8 +43,8 @@ public class LevelManager : Singleton<LevelManager>
 
     #region Static Fields
 
-    private static readonly char[] Ranks = { 'F', 'D', 'C', 'B', 'A', 'S' };
-    private static readonly int[] GradeChances = { 50000, 25000, 12500, 6250, 3125 };
+    private static readonly char[] Ranks = {'F', 'D', 'C', 'B', 'A', 'S'};
+    private static readonly int[] GradeChances = {50000, 25000, 12500, 6250, 3125};
 
     #endregion
 
@@ -59,7 +62,6 @@ public class LevelManager : Singleton<LevelManager>
 
     #endregion
 
-
     #region Unity Overrides
 
     protected override void Awake()
@@ -67,7 +69,7 @@ public class LevelManager : Singleton<LevelManager>
         base.Awake();
 
         enemies = new Dictionary<Enemy.Classes, GameObject>();
-        foreach (var enemy in enemyPrefabs)
+        foreach (GameObject enemy in enemyPrefabs)
         {
             enemies.Add(((Enemy)enemy.GetComponent(typeof(Enemy))).enemyClass, enemy);
         }
@@ -84,7 +86,14 @@ public class LevelManager : Singleton<LevelManager>
 
         grid = ((GameObject)Instantiate(GameResources.Main.ConstructionGrid_Prefab, Vector3.zero, Quaternion.identity)).GetComponent<ConstructionGrid>();
 
-        InvokeAction(() => CreatePlayer(SceneManager.Main.currentBuild), 1f);
+        string build = SceneManager.Main.currentBuild;
+#if UNITY_EDITOR
+        if (string.IsNullOrEmpty(build))
+        {
+            build = GameStart.DevBuilds.ElementAt(0).Key;
+        }
+#endif
+        InvokeAction(() => CreatePlayer(build), 1f);
     }
 
 
@@ -121,7 +130,7 @@ public class LevelManager : Singleton<LevelManager>
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            UnityEditor.EditorApplication.isPaused = true;
+            EditorApplication.isPaused = true;
         }
 #endif
     }
@@ -138,6 +147,8 @@ public class LevelManager : Singleton<LevelManager>
     #region Static Methods
 
     private bool firstPause = true;
+
+
     public void TogglePause()
     {
         if (firstPause)
@@ -169,7 +180,7 @@ public class LevelManager : Singleton<LevelManager>
         int[] awards = AwardCUBEs();
         data.Add("Awards", awards);
         int[] inventory = CUBE.GetInventory();
-        foreach (var award in awards)
+        foreach (int award in awards)
         {
             inventory[award]++;
         }
@@ -207,7 +218,7 @@ public class LevelManager : Singleton<LevelManager>
     private static int[] AwardCUBEs()
     {
         // get grades
-        int[] grades = new int[5];
+        var grades = new int[5];
         for (int i = 0; i < 5; i++)
         {
             int rand = Random.Range(0, GradeChances[0]);
@@ -222,7 +233,7 @@ public class LevelManager : Singleton<LevelManager>
         }
 
         // get award IDs
-        int[] awards = new int[5];
+        var awards = new int[5];
         for (int i = 0; i < 5; i++)
         {
             awards[i] = CUBE.gradedCUBEs[grades[i]][Random.Range(0, CUBE.gradedCUBEs[grades[i]].Length - 1)];
@@ -254,7 +265,6 @@ public class LevelManager : Singleton<LevelManager>
 #else
         player.GetComponent<ShieldHealth>().DieEvent += OnPlayerDeath;
 #endif
-
     }
 
 
