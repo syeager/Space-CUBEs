@@ -189,6 +189,7 @@ public class GarageManager : MonoBase
     public float saveConfirmationTime = 0.6f;
     public GameObject saveConfirmation;
     public UILabel saveShipName;
+    public GameObject saveButton;
 
     #endregion
 
@@ -280,6 +281,7 @@ public class GarageManager : MonoBase
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            CancelSave();
             stateMachine.SetState(stateMachine.previousState);
         }
     }
@@ -1733,6 +1735,7 @@ public class GarageManager : MonoBase
         saveConfirmation.SetActive(true);
         saveShipName.text = Grid.buildName;
         StopCoroutine("SaveConfirmation");
+        UICamera.selectedObject = saveButton;
     }
 
 
