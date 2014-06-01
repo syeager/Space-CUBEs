@@ -165,6 +165,13 @@ public class StoreManager : MonoBehaviour
                 count.text = "Own";
                 UpdateShopButtons(BuildStats.GetWeaponLevel());
                 break;
+            case ItemTypes.Augmentation:
+                balance = MoneyManager.Transaction(-BuildStats.AugmentationPrices[BuildStats.GetAugmentationLevel()]);
+                BuildStats.SetAugmentationLevel(BuildStats.GetAugmentationLevel() + 1);
+                bank.text = String.Format("${0:#,###0}", balance);
+                count.text = "Own";
+                UpdateShopButtons(BuildStats.GetAugmentationLevel());
+                break;
         }
     }
 
