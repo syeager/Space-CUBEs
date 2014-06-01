@@ -1352,7 +1352,7 @@ public class GarageManager : MonoBase
     {
         if (args.isPressed) return;
 
-        Grid.Paint(pieceSelected, args.value == "action2" ? primaryColor : secondaryColor);
+        Grid.Paint(pieceSelected, args.value == "action1" ? primaryColor : secondaryColor);
     }
 
 
@@ -1366,9 +1366,9 @@ public class GarageManager : MonoBase
 
             // enable paints
             actionButton1.isEnabled = true;
-            SetSecondaryColor(secondaryColor);
-            actionButton2.isEnabled = true;
             SetPrimaryColor(primaryColor);
+            actionButton2.isEnabled = true;
+            SetSecondaryColor(secondaryColor);
 
             // enable pieces
             pieces[pieceSelected].Activate(false);
@@ -1496,7 +1496,7 @@ public class GarageManager : MonoBase
     private void SetPrimaryColor(int colorIndex)
     {
         primaryColor = colorIndex;
-        actionButton2.Activate(CUBE.colors[primaryColor]);
+        actionButton1.Activate(CUBE.colors[primaryColor]);
         selectPrimary.SetColor(CUBE.colors[primaryColor]);
     }
 
@@ -1504,7 +1504,7 @@ public class GarageManager : MonoBase
     private void SetSecondaryColor(int colorIndex)
     {
         secondaryColor = colorIndex;
-        actionButton1.Activate(CUBE.colors[secondaryColor]);
+        actionButton2.Activate(CUBE.colors[secondaryColor]);
         selectSecondary.SetColor(CUBE.colors[secondaryColor]);
     }
 
