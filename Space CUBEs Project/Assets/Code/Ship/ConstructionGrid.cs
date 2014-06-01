@@ -92,7 +92,7 @@ public class ConstructionGrid : MonoBase
     private const float NearAlpha = 0.5f;
 
     /// <summary>Prefix for path to user created ships in PlayerPrefs.</summary>
-    private const string UserBuildsPath = "UserBuild: ";
+    public const string UserBuildsPath = "UserBuild: ";
 
     /// <summary>Path to all user build names.</summary>
     private const string AllUserBuildsPath = "AllUserBuilds";

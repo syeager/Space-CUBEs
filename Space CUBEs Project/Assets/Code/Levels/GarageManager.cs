@@ -866,7 +866,19 @@ public class GarageManager : MonoBase
     public void NewBuild()
     {
         CreateGrid();
-        shipName.value = "Custom";
+
+        const string custom = "Custom";
+        int i = 1;
+        while (true)
+        {
+            if (!PlayerPrefs.HasKey(ConstructionGrid.UserBuildsPath + custom + i))
+            {
+                shipName.value = custom + i;
+                break;
+            }
+            i++;
+        }
+
         corePointsLabel.text = Grid.corePointsAvailable.ToString();
         stateMachine.SetState(SelectState, new Dictionary<string, object>());
         selectedBuild = true;
