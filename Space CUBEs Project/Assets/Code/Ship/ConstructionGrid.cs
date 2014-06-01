@@ -652,7 +652,7 @@ public class ConstructionGrid : MonoBase
                 for (int i = 0; i < weapons.Count; i++)
                 {
                     if (weapons[i] != null) continue;
-                    
+                    Debug.Log("Found open slot");
                     weapons[i] = (Weapon)heldCUBE.GetComponent(typeof(Weapon));
                     weaponIndex = i;
                     break;
@@ -661,6 +661,7 @@ public class ConstructionGrid : MonoBase
                 // add as extra
                 if (weaponIndex == -1)
                 {
+                    Debug.Log("adding extra");
                     weapons.Add((Weapon)heldCUBE.GetComponent(typeof(Weapon)));
                     weaponIndex = weapons.Count - 1;
                 }
@@ -797,7 +798,6 @@ public class ConstructionGrid : MonoBase
                 {
                     Vector3 point = pivot + RotateVector(new Vector3(x, y, z)).Round();
                     point = point.Round();
-                    Debugger.Log("Removing: " + point, this, Debugger.LogTypes.Construction);
                     grid[(int)point.y][(int)point.z][(int)point.x] = null;
                     cells[(int)point.y][(int)point.z][(int)point.x].renderer.material = CellOpen_Mat;
                 }
@@ -805,12 +805,21 @@ public class ConstructionGrid : MonoBase
         }
 
         // remove weapon if applicable
-        if (heldInfo.type == CUBE.Types.Weapon && weapons.Contains(heldCUBE.GetComponent<Weapon>()))
+        if (heldInfo.type == CUBE.Types.Weapon && weapons.Contains(((Weapon)heldCUBE.GetComponent(typeof(Weapon)))))
         {
-            int index = ((Weapon)heldCUBE.GetComponent(typeof(Weapon))).index;
+            int index = currentBuild[heldCUBE].weaponMap;
             if (index < weaponSlots)
             {
-                weapons[index] = null;
+                // replace with extra
+                if (weapons.Count > weaponSlots)
+                {
+                    weapons[index] = weapons[weaponSlots];
+                    weapons.RemoveAt(weaponSlots);
+                }
+                else
+                {
+                    weapons[index] = null;
+                }
             }
             else
             {
@@ -819,12 +828,21 @@ public class ConstructionGrid : MonoBase
         }
 
         // remove augmentation if applicable
-        if (heldInfo.type == CUBE.Types.Augmentation && augmentations.Contains(heldCUBE.GetComponent<Augmentation>()))
+        if (heldInfo.type == CUBE.Types.Augmentation && augmentations.Contains((Augmentation)heldCUBE.GetComponent(typeof(Augmentation))))
         {
-            int index = ((Augmentation)heldCUBE.GetComponent(typeof(Augmentation))).index;
+            int index = currentBuild[heldCUBE].augmentationMap;
             if (index < augmentationSlots)
             {
-                augmentations[index] = null;
+                // replace with extra
+                if (augmentations.Count > augmentationSlots)
+                {
+                    augmentations[index] = augmentations[augmentationSlots];
+                    augmentations.RemoveAt(augmentationSlots);
+                }
+                else
+                {
+                    augmentations[index] = null;
+                }
             }
             else
             {
