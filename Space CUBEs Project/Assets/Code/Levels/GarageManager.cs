@@ -1585,18 +1585,13 @@ public class GarageManager : MonoBase
                 {
                     weaponButtons[i].isEnabled = false;
                     weaponButtons[i].label.text = "Weapon " + (i + 1);
+                    weaponButtons[i].Activate(false);
                 }
                 else
                 {
                     weaponButtons[i].isEnabled = true;
-                    if (i == weaponIndex)
-                    {
-                        weaponButtons[i].label.text = "★ " + Grid.weapons[i].name;
-                    }
-                    else
-                    {
-                        weaponButtons[i].label.text = Grid.weapons[i].name;
-                    }
+                    weaponButtons[i].label.text = Grid.weapons[i].name;
+                    weaponButtons[i].Activate(i == weaponIndex);
                 }
             }
 
