@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2013.12.01
-// Edited: 2014.05.27
+// Edited: 2014.06.01
 
 using System;
 using Annotations;
@@ -24,6 +24,9 @@ public class DebuggerEditor : Creator<Debugger>
     private SerializedProperty lowFPS;
     private SerializedProperty consoleLine;
     private SerializedProperty consoleLinePrefab;
+
+    /// <summary>Is the confirmation options up for deleting?</summary>
+    private bool confirmDelete;
 
     #endregion
 
@@ -129,7 +132,36 @@ public class DebuggerEditor : Creator<Debugger>
 
     private void LoggingOptions()
     {
-        EditorGUILayout.PropertyField(logSaving, new GUIContent("Log Saving"));
+        GUILayout.BeginHorizontal();
+        {
+            EditorGUILayout.PropertyField(logSaving, new GUIContent("Log Saving"));
+
+            if (GUILayout.Button("Clear Logs", EditorStyles.miniButton))
+            {
+                confirmDelete = true;
+            }
+        }
+        GUILayout.EndHorizontal();
+
+        if (confirmDelete)
+        {
+            GUILayout.BeginHorizontal();
+            {
+                if (GUILayout.Button("Delete", EditorStyles.miniButton))
+                {
+                    ((Debugger)target).ClearLogs();
+                    Debugger.Log("All Debug Logs cleared.");
+                    confirmDelete = false;
+                }
+
+                if (GUILayout.Button("Cancel", EditorStyles.miniButton))
+                {
+                    confirmDelete = false;
+                }
+            }
+            GUILayout.EndHorizontal();
+        }
+
         EditorGUILayout.PropertyField(showTime);
     }
 

@@ -1,13 +1,17 @@
-﻿// Steve Yeager
-// 8.18.2013
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2013.12.01
+// Edited: 2014.06.01
 
 using System;
-using UnityEngine;
-using System.IO;
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
 using Annotations;
-
+using UnityEngine;
+using Debug = UnityEngine.Debug;
 using Object = UnityEngine.Object;
 
 /// <summary>
@@ -43,12 +47,12 @@ public class Debugger : Singleton<Debugger>
     /// <summary>Flags for LogTypes. Only checked flags will have their corresponding LogTypes logged.</summary>
     public bool[] logFlags =
     {
-        true,    // Default
-        true,    // Data
-        true,    // LevelEvents
-        true,    // StateMachines
-        true,    // Construction
-        true,    // Performance
+        true, // Default
+        true, // Data
+        true, // LevelEvents
+        true, // StateMachines
+        true, // Construction
+        true, // Performance
     };
 
     /// <summary>Catagorization for logging. Can be added to but need to update logFlags as well.</summary>
@@ -87,7 +91,7 @@ public class Debugger : Singleton<Debugger>
 
     /// <summary>Path for log files.</summary>
     private static string logPath = "/Files/Debug Logs/Log_";
-    
+
     /// <summary>Are messages currently being displayed to the ConsoleLine?</summary>
     private static bool displayingMessages;
 
@@ -112,7 +116,6 @@ public class Debugger : Singleton<Debugger>
     private const float UpdateInterval = 0.5f;
 
     #endregion
-
 
     #region MonoBehaviour Overrides
 
@@ -140,7 +143,7 @@ public class Debugger : Singleton<Debugger>
             {
                 File.WriteAllText(path, String.Empty);
             }
-            // append to file
+                // append to file
             else
             {
                 File.AppendAllText(path, "\r\n");
@@ -196,6 +199,24 @@ public class Debugger : Singleton<Debugger>
 
     #endregion
 
+    #region Public Methods
+
+    /// <summary>
+    /// Clear every log file.
+    /// </summary>
+    public void ClearLogs()
+    {
+        logPath = Application.dataPath + logPath;
+
+        string[] logTypes = Enum.GetNames(typeof(LogTypes));
+        for (int i = 0; i < logFlags.Length; i++)
+        {
+            File.WriteAllText(logPath + logTypes[i] + FileExt, String.Empty);
+        }
+    } 
+
+    #endregion
+
     #region Static Methods
 
     /// <summary>
@@ -215,7 +236,7 @@ public class Debugger : Singleton<Debugger>
     /// </summary>
     /// <param name="message">Message to be displayed.</param>
     /// <param name="args">Arguments for string.Format.</param>
-    [System.Diagnostics.Conditional("DEBUG")]
+    [Conditional("DEBUG")]
     public static void Print(string message, params object[] args)
     {
         Debug.Log(string.Format(message, args));
@@ -229,7 +250,7 @@ public class Debugger : Singleton<Debugger>
     /// <param name="context">Unity Object to highlight in the Hierarchy.</param>
     /// <param name="logType">Will only display this message if this LogType is checked as active.</param>
     /// <param name="save">Should this message be saved to a log file?</param>
-    [System.Diagnostics.Conditional("DEBUG")]
+    [Conditional("DEBUG")]
     public static void Log(object message, Object context = null, LogTypes logType = LogTypes.Default, bool save = true)
     {
         if (Application.isPlaying)
@@ -247,7 +268,7 @@ public class Debugger : Singleton<Debugger>
 #if UNITY_EDITOR
         if (Application.isPlaying && save && Main.logSaving != LogSaving.DontSave)
         {
-            using (StreamWriter writer = new StreamWriter(logPath + logType + FileExt, true))
+            using (var writer = new StreamWriter(logPath + logType + FileExt, true))
             {
                 writer.WriteLine("[{0}] Log\r\n {1}", Time.realtimeSinceStartup, message);
             }
@@ -263,7 +284,7 @@ public class Debugger : Singleton<Debugger>
     /// <param name="context">Unity Object to highlight in the Hierarchy.</param>
     /// <param name="logType">Will only display this message if this LogType is checked as active.</param>
     /// <param name="save">Should this message be saved to a log file?</param>
-    [System.Diagnostics.Conditional("DEBUG")]
+    [Conditional("DEBUG")]
     public static void LogWarning(object message, Object context = null, LogTypes logType = LogTypes.Default, bool save = true)
     {
         if (Application.isPlaying)
@@ -281,7 +302,7 @@ public class Debugger : Singleton<Debugger>
 #if UNITY_EDITOR
         if (Application.isPlaying && save && Main.logSaving != LogSaving.DontSave)
         {
-            using (StreamWriter writer = new StreamWriter(logPath + logType + FileExt, true))
+            using (var writer = new StreamWriter(logPath + logType + FileExt, true))
             {
                 writer.WriteLine("[{0}] Warning\r\n {1}", Time.realtimeSinceStartup, message);
             }
@@ -311,7 +332,7 @@ public class Debugger : Singleton<Debugger>
 #if UNITY_EDITOR
         if (Application.isPlaying && save && Main.logSaving != LogSaving.DontSave)
         {
-            using (StreamWriter writer = new StreamWriter(logPath + logType + FileExt, true))
+            using (var writer = new StreamWriter(logPath + logType + FileExt, true))
             {
                 writer.WriteLine("[{0}] Error\r\n {1}", Time.realtimeSinceStartup, message);
             }
@@ -334,7 +355,7 @@ public class Debugger : Singleton<Debugger>
 #if UNITY_EDITOR
         if (Application.isPlaying && save && Main.logSaving != LogSaving.DontSave)
         {
-            using (StreamWriter writer = new StreamWriter(logPath + logType + FileExt, true))
+            using (var writer = new StreamWriter(logPath + logType + FileExt, true))
             {
                 writer.WriteLine("[{0}] Exception\r\n {1}", Time.realtimeSinceStartup, exception);
             }
@@ -352,7 +373,7 @@ public class Debugger : Singleton<Debugger>
     /// <param name="header">Message to display before the list.</param>
     /// <param name="context">Unity Object to highlight in the Hierarchy.</param>
     /// <param name="logType">Will only display this message if this LogType is checked as active.</param>
-    [System.Diagnostics.Conditional("DEBUG")]
+    [Conditional("DEBUG")]
     public static void LogList(IEnumerable list, string header = "", Object context = null, LogTypes logType = LogTypes.Default)
     {
         if (Application.isPlaying)
@@ -365,9 +386,9 @@ public class Debugger : Singleton<Debugger>
         {
             Debug.Log(string.Format("[{0}] {1}\n", DateTime.Now.ToShortTimeString(), header), context);
         }
-        
+
         int count = 0;
-        foreach (var item in list)
+        foreach (object item in list)
         {
             Debug.Log(count + ": " + item, item is Object ? (Object)item : context);
             count++;
@@ -387,7 +408,7 @@ public class Debugger : Singleton<Debugger>
     /// <param name="header">Message to display before the list.</param>
     /// <param name="context">Unity Object to highlight in the Hierarchy.</param>
     /// <param name="logType">Will only display this message if this LogType is checked as active.</param>
-    [System.Diagnostics.Conditional("DEBUG")]
+    [Conditional("DEBUG")]
     public static void LogDict<TKey, TValue>(Dictionary<TKey, TValue> dictionary, string header = "", Object context = null, LogTypes logType = LogTypes.Default)
     {
         if (Application.isPlaying)
@@ -435,11 +456,11 @@ public class Debugger : Singleton<Debugger>
     /// <param name="header">Message to display before the list.</param>
     /// <param name="includePrivate">Should private members be shown as well?</param>
     /// <param name="logType">Will only display this message if this LogType is checked as active.</param>
-    [System.Diagnostics.Conditional("DEBUG")]
+    [Conditional("DEBUG")]
     public static void LogFields(object context, string header, bool includePrivate = false, LogTypes logType = LogTypes.Default)
     {
-        Object unityContext = context as Object;
-       
+        var unityContext = context as Object;
+
         if (Application.isPlaying)
         {
             if (!Main.logFlags[(int)logType]) return;
@@ -452,11 +473,11 @@ public class Debugger : Singleton<Debugger>
         }
 
         Type type = context.GetType();
-        System.Reflection.BindingFlags flags = System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance;
-        if (includePrivate) flags |= System.Reflection.BindingFlags.NonPublic;
-        System.Reflection.FieldInfo[] info = type.GetFields(flags);
+        BindingFlags flags = BindingFlags.Public | BindingFlags.Instance;
+        if (includePrivate) flags |= BindingFlags.NonPublic;
+        FieldInfo[] info = type.GetFields(flags);
 
-        foreach (var i in info)
+        foreach (FieldInfo i in info)
         {
             object o = i.GetValue(context);
             Debug.Log(i.Name + ": " + o, o is Object ? o as Object : unityContext);
@@ -469,7 +490,7 @@ public class Debugger : Singleton<Debugger>
     /// </summary>
     /// <param name="message">Message to display next to the counter.</param>
     /// <param name="context">Unity Object to highlight in the Hierarchy.</param>
-    [System.Diagnostics.Conditional("DEBUG")]
+    [Conditional("DEBUG")]
     public static void Mark(string message = "", Object context = null)
     {
         Debug.Log(String.Format("{0} {1}", marker, message), context);
@@ -503,7 +524,7 @@ public class Debugger : Singleton<Debugger>
     /// </summary>
     /// <param name="message">Message to display.</param>
     /// <param name="time">Time in seconds to display the message for. 0s is for one frame.</param>
-    [System.Diagnostics.Conditional("DEBUG")]
+    [Conditional("DEBUG")]
     public static void LogConsoleLine(string message, float time = 0f)
     {
         if (Main.consoleLine == null) return;
@@ -524,7 +545,7 @@ public class Debugger : Singleton<Debugger>
         displayingMessages = true;
         while (Messages.Count > 0)
         {
-            var message = Messages.Dequeue();
+            KeyValuePair<string, float> message = Messages.Dequeue();
             Main.consoleLine.guiText.text = message.Key;
             yield return new WaitForSeconds(message.Value);
         }
