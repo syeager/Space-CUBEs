@@ -5,6 +5,7 @@
 
 using Annotations;
 using UnityEngine;
+using System.Linq;
 
 /// <summary>
 /// Manager for the Main Menu.
@@ -45,6 +46,7 @@ public class MainMenuManager : MonoBehaviour
 
     public void LoadPlay()
     {
+        SceneManager.Main.currentBuild = GameStart.DevBuilds.ElementAt(0).Key;
         SceneManager.LoadScene("Level Select Menu");
     }
 
