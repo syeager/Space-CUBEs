@@ -43,6 +43,7 @@ public class PlasmaLaser : Hitbox, IBlackHoleListener
     [UsedImplicitly]
     private void FixedUpdate()
     {
+        myRigidbody.velocity = Vector3.zero;
         myRigidbody.MovePosition(myTransform.forward * speed * deltaTime + myRigidbody.position);
     }
 
