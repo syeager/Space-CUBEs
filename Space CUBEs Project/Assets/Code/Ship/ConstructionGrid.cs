@@ -15,6 +15,9 @@ public class ConstructionGrid : MonoBase
 {
     #region Public Fields
 
+    /// <summary>Material given to CUBEs.</summary>
+    public Material cubeMat;
+
     /// <summary>Used to show center of the grid.</summary>
     public GameObject Center_Prefab;
 
@@ -192,8 +195,19 @@ public class ConstructionGrid : MonoBase
     /// <param name="size">Size of the grid's dimensions.</param>
     /// <param name="weaponCount">How many weapons allowed.</param>
     /// <param name="augmentationCount">How many augmentations alloed.</param>
-    public void CreateGrid(int size, int weaponCount, int augmentationCount)
+    /// <param name="cubeMaterial">Material to apply to new CUBEs.</param>
+    public void CreateGrid(int size, int weaponCount, int augmentationCount, Material cubeMaterial = null)
     {
+        // cache material
+        if (cubeMaterial != null)
+        {
+            cubeMat = cubeMaterial;
+        }
+        else if (cubeMat == null)
+        {
+            cubeMat = GameResources.Main.VertexColorLerp_Mat;
+        }
+
         // clear any previous data
         Clear();
         if (cells != null)
@@ -366,7 +380,7 @@ public class ConstructionGrid : MonoBase
         var alphaMats = new Material[materialCount];
         for (int i = 0; i < materialCount; i++)
         {
-            alphaMats[i] = new Material(GameResources.Main.VertexColorLerp_Mat);
+            alphaMats[i] = new Material(cubeMat);
         }
         heldCUBE.renderer.materials = alphaMats;
         heldCUBE.GetComponent<ColorVertices>().Bake();
