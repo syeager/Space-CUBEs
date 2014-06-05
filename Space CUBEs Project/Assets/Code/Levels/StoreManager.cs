@@ -409,6 +409,7 @@ public class StoreManager : MonoBehaviour
         int level = int.Parse(args.value);
 
         // showcase
+        selectedCUBE.text = "Ship Core Lv " + (level + 1);
         count.text = BuildStats.GetCoreLevel() >= level ? "Own" : "Don't Own";
         UpdateShowCase(GameObject.CreatePrimitive(PrimitiveType.Cube));
 
@@ -428,6 +429,7 @@ public class StoreManager : MonoBehaviour
         int level = int.Parse(args.value);
 
         // showcase
+        selectedCUBE.text = "Weapon Expansion Lv " + (level + 1);
         count.text = BuildStats.GetWeaponLevel() >= level ? "Own" : "Don't Own";
         UpdateShowCase(GameObject.CreatePrimitive(PrimitiveType.Capsule));
 
@@ -447,6 +449,7 @@ public class StoreManager : MonoBehaviour
         int level = int.Parse(args.value);
 
         // showcase
+        selectedCUBE.text = "Augmentation Expansion Lv " + (level + 1);
         count.text = BuildStats.GetAugmentationLevel() >= level ? "Own" : "Don't Own";
         UpdateShowCase(GameObject.CreatePrimitive(PrimitiveType.Cylinder));
 
