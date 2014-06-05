@@ -1,6 +1,9 @@
-﻿// Steve Yeager
-// 2.17.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.02.17
+// Edited: 2014.06.04
 
+using LittleByte.Data;
 using UnityEngine;
 
 /// <summary>
@@ -18,7 +21,6 @@ public class OptionsMenuManager : MonoBase
     public ActivateButton[] fpsToggles;
 
     #endregion
-
 
     #region MonoBehaviour Overrides
 
@@ -43,6 +45,8 @@ public class OptionsMenuManager : MonoBase
     public void GameReset()
     {
         PlayerPrefs.DeleteAll();
+        SaveData.DeleteAll();
+        GameStart.Main.UpdateVersions(true);
     }
 
 
