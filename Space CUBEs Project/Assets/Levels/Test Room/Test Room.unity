@@ -102,17 +102,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tests: 0
-  save: 0
-  load: 0
-  file: 
-  keyVector3: 
-  testVector3: {x: 0, y: 0, z: 0}
-  keyString: 
-  testString: 
-  keyInt: 
-  testInt: 0
-  keyPerson: 
-  testPerson: []
+  position: {x: 0, y: 0, z: 0}
+  myTransform: {fileID: 0}
+  label: {fileID: 0}
+  testList: 000000000b000000410000002904000012000000
 --- !u!4 &1399922991
 Transform:
   m_ObjectHideFlags: 0
@@ -133,6 +126,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1498930269}
   - 114: {fileID: 1498930268}
+  - 114: {fileID: 1498930270}
   m_Layer: 0
   m_Name: ___Debugger
   m_TagString: Untagged
@@ -156,11 +150,11 @@ MonoBehaviour:
   timeScale: 1
   logWarning: 0
   fps: {fileID: 0}
-  fpsPrefab: {fileID: 0}
+  fpsPrefab: {fileID: 100000, guid: ede73768352859c47b0ceadd2ebf76fa, type: 2}
   consoleLine: {fileID: 0}
-  consoleLinePrefab: {fileID: 0}
+  consoleLinePrefab: {fileID: 100000, guid: 1abf603ef50833b4ba9818e64b0f75db, type: 2}
   showTime: 1
-  logSaving: 1
+  logSaving: 2
   logFlags: 010101000001
   fpsWarning: 1
   lowFPS: 20
@@ -175,6 +169,18 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+--- !u!114 &1498930270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400002, guid: 45c62a3fc8a9231409c29375e8f213d8,
+    type: 2}
+  m_PrefabInternal: {fileID: 1508342470}
+  m_GameObject: {fileID: 1498930267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32fd8b6b34e20f46a0168dd34944ddd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1508342470
 Prefab:
   m_ObjectHideFlags: 0
