@@ -423,7 +423,7 @@ MonoBehaviour:
   log: 1
   timeScale: 1
   logWarning: 0
-  invincible: 1
+  invincible: 0
   jumpToBoss: 0
   volumeSE: 5
   volumeMusic: 0
@@ -474,7 +474,7 @@ MonoBehaviour:
   log: 1
   timeScale: 1
   logWarning: 0
-  currentBuild: Test Build
+  currentBuild: 
 --- !u!1001 &1171155001
 Prefab:
   m_ObjectHideFlags: 0
@@ -846,7 +846,6 @@ GameObject:
   - 4: {fileID: 1491913278}
   - 114: {fileID: 1491913277}
   - 114: {fileID: 1491913276}
-  - 114: {fileID: 1491913274}
   m_Layer: 0
   m_Name: __GameMaster
   m_TagString: Untagged
@@ -854,18 +853,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1491913274
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400012, guid: aeed59aee1ea3714da2eb46ccb6175bd,
-    type: 2}
-  m_PrefabInternal: {fileID: 1171155001}
-  m_GameObject: {fileID: 1491913273}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b32fd8b6b34e20f46a0168dd34944ddd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1491913276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1168,6 +1155,9 @@ MonoBehaviour:
   hoverSprite: 
   pressedSprite: 
   disabledSprite: 
+  hoverSprite2D: {fileID: 0}
+  pressedSprite2D: {fileID: 0}
+  disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick:
   - mTarget: {fileID: 235189257}
@@ -1245,6 +1235,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1802487230}
   - 114: {fileID: 1802487229}
+  - 114: {fileID: 1802487231}
   m_Layer: 0
   m_Name: ___Debugger
   m_TagString: Untagged
@@ -1268,11 +1259,11 @@ MonoBehaviour:
   timeScale: 1
   logWarning: 0
   fps: {fileID: 0}
-  fpsPrefab: {fileID: 0}
+  fpsPrefab: {fileID: 100000, guid: ede73768352859c47b0ceadd2ebf76fa, type: 2}
   consoleLine: {fileID: 0}
-  consoleLinePrefab: {fileID: 0}
+  consoleLinePrefab: {fileID: 100000, guid: 1abf603ef50833b4ba9818e64b0f75db, type: 2}
   showTime: 1
-  logSaving: 1
+  logSaving: 2
   logFlags: 010101000001
   fpsWarning: 1
   lowFPS: 20
@@ -1287,6 +1278,18 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+--- !u!114 &1802487231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400002, guid: 45c62a3fc8a9231409c29375e8f213d8,
+    type: 2}
+  m_PrefabInternal: {fileID: 1333936724}
+  m_GameObject: {fileID: 1802487228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32fd8b6b34e20f46a0168dd34944ddd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1815056419
 GameObject:
   m_ObjectHideFlags: 0

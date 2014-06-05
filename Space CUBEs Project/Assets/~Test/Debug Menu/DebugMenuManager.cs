@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 4.3.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.04.03
+// Edited: 2014.06.02
 
 using Annotations;
 using UnityEngine;
@@ -13,14 +15,13 @@ public class DebugMenuManager : MonoBehaviour
 
     public UIToggle invincibleToggle;
     public UIToggle jumpToBossToggle;
-    
-    #endregion
 
+    #endregion
 
     #region MonoBehaviour Overrides
 
     [UsedImplicitly]
-    private void Awake()
+    private void Start()
     {
         invincibleToggle.value = GameSettings.Main.invincible;
         jumpToBossToggle.value = GameSettings.Main.jumpToBoss;
