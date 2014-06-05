@@ -174,7 +174,7 @@ public class LevelManager : Singleton<LevelManager>
         // save score
         // money
         data.Add("Money", player.myMoney.money);
-        MoneyManager.Transaction(player.myMoney.money);
+        player.myMoney.Save();
         // awards
         int[] awards = AwardCUBEs();
         data.Add("Awards", awards);

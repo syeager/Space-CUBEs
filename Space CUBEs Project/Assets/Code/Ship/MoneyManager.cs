@@ -1,8 +1,10 @@
-﻿// Steve Yeager
-// 1.6.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.01.10
+// Edited: 2014.06.04
 
-using UnityEngine;
 using System;
+using LittleByte.Data;
 
 /// <summary>
 /// Hnadles the players money.
@@ -18,7 +20,9 @@ public class MoneyManager
 
     #region Const Fields
 
-    private const string Moneypath = "Money: ";
+    private const string MoneyKey = "Money";
+    private const string BankFile = "Bank";
+    private const int BankStart = 100000;
 
     #endregion
 
@@ -28,23 +32,26 @@ public class MoneyManager
 
     #endregion
 
-
     #region Public Methods
 
+    /// <summary>
+    /// Add money to the local cache.
+    /// </summary>
+    /// <param name="amount">Amount to add.</param>
     public void Collect(int amount)
     {
         money += amount;
-        if (CashUpdateEvent != null)
-        {
-            CashUpdateEvent(this, new CashUpdateArgs(money));
-        }
+        CashUpdateEvent.Fire(this, new CashUpdateArgs(money));
     }
 
 
+    /// <summary>
+    /// Pushes cached money to the bank in saved data.
+    /// </summary>
     public void Save()
     {
-        var balance = Balance();
-        PlayerPrefs.SetInt(Moneypath, money+balance);
+        int balance = Balance();
+        SaveData.Save(MoneyKey, money + balance, BankFile);
         money = 0;
     }
 
@@ -58,18 +65,7 @@ public class MoneyManager
     /// <returns>Current balance.</returns>
     public static int Balance()
     {
-        return PlayerPrefs.GetInt(Moneypath);
-    }
-
-
-    /// <summary>
-    /// Sets balance.
-    /// </summary>
-    /// <remarks>Only use in Editor.</remarks>
-    /// <param name="balance">Balance to set.</param>
-    public static void SetBalance(int balance)
-    {
-        PlayerPrefs.SetInt(Moneypath, balance);
+        return SaveData.Load(MoneyKey, BankFile, BankStart);
     }
 
 
@@ -82,7 +78,7 @@ public class MoneyManager
     {
         int balance = Balance();
         balance += amount;
-        PlayerPrefs.SetInt(Moneypath, balance);
+        SaveData.Save(MoneyKey, balance, BankFile);
         return balance;
     }
 
