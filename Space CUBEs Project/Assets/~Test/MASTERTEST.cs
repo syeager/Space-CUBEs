@@ -1,8 +1,11 @@
-﻿// Steve Yeager
-// 
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.01.14
+// Edited: 2014.06.02
 
+using System.Collections.Generic;
+using LittleByte.Data;
 using UnityEngine;
-using Profiler = LittleByte.Debug.Profiler;
 
 //
 public class MASTERTEST : MonoBehaviour
@@ -10,19 +13,27 @@ public class MASTERTEST : MonoBehaviour
     public int tests;
     public Vector3 position;
     public Transform myTransform;
+    public UILabel label;
+    public List<int> testList; 
 
-    void Awake()
+    private void Awake()
     {
-        using (var timer = new Profiler("generic"))
-        {
-            for (int i = 0; i < tests; i++)
-                myTransform = GetComponent<Transform>();
-        }
+        //position = SaveData.Load<Vector3>("Test Position", "Default", Vector3.one);
+        //label.text = "Test: " + position;
+        //SaveData.Save("Test Position", position + Vector3.one);
 
-        using (var timer = new Profiler("type"))
-        {
-            for (int i = 0; i < tests; i++)
-                myTransform = ((Transform)GetComponent(typeof(Transform)));
-        }
+
+        testList = SaveData.Load<List<int>>("list", "Test");
+        //using (var profiler = new LittleByte.Debug.Profiler("Saving"))
+        //{
+        //    SaveData.Save("list", testList, "Test");
+        //    Debug.Log(SaveData.DeleteKey("list", "Test"));
+        //    SaveData.Save("test", position, "Test");    
+        //}
+
+
+        //Debug.Log(SaveData.DeleteFile("Test"));
+        //Debug.Log(SaveData.DeleteFile("Test"));
+        //SaveData.DeleteFile("Default");
     }
 }
