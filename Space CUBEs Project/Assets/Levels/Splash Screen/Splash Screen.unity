@@ -380,6 +380,10 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 45c62a3fc8a9231409c29375e8f213d8, type: 2}
+      propertyPath: consoleLine
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 45c62a3fc8a9231409c29375e8f213d8, type: 2}
   m_RootGameObject: {fileID: 2049877047}
@@ -472,7 +476,7 @@ MonoBehaviour:
   log: 1
   timeScale: 1
   logWarning: 0
-  currentBuild: Test Build
+  currentBuild: 
 --- !u!1 &1052402766
 GameObject:
   m_ObjectHideFlags: 0
@@ -813,7 +817,6 @@ GameObject:
   - 4: {fileID: 1807856740}
   - 114: {fileID: 1807856739}
   - 114: {fileID: 1807856738}
-  - 114: {fileID: 1807856737}
   m_Layer: 0
   m_Name: __GameMaster
   m_TagString: Untagged
@@ -821,18 +824,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1807856737
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400012, guid: aeed59aee1ea3714da2eb46ccb6175bd,
-    type: 2}
-  m_PrefabInternal: {fileID: 1906718613}
-  m_GameObject: {fileID: 1807856736}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b32fd8b6b34e20f46a0168dd34944ddd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1807856738
 MonoBehaviour:
   m_ObjectHideFlags: 0
