@@ -1,13 +1,12 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.05.19
-// Edited: 2014.05.23
+// Edited: 2014.06.04
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Annotations;
 using LittleByte.Data;
 using UnityEditor;
@@ -27,10 +26,9 @@ public class SaveDataEditor : EditorWindow
     private static readonly Type[] EditorTypes =
     {
         typeof(int),
+        typeof(float),
         typeof(string),
-        typeof(Vector2),
         typeof(Vector3),
-        typeof(Vector4),
     };
 
     #endregion
@@ -56,14 +54,18 @@ public class SaveDataEditor : EditorWindow
 
 
     [UsedImplicitly]
-    private void OnGUI()
+    private void Update()
     {
         if (allData == null || allData.Length == 0)
         {
-            GUILayout.Label("Loading...");
-            return;
+            ReloadAll();
         }
+    }
 
+
+    [UsedImplicitly]
+    private void OnGUI()
+    {
         GUILayout.BeginHorizontal();
         {
             autoRefresh = EditorGUILayout.Toggle("Auto Refresh", autoRefresh);
@@ -101,7 +103,6 @@ public class SaveDataEditor : EditorWindow
 
         for (int i = 0; i < allData.Length; i++)
         {
-            Debugger.Print("Loading " + files[i] + "...");
             allData[i] = SaveData.LoadFileData(files[i]);
         }
     }
@@ -110,6 +111,20 @@ public class SaveDataEditor : EditorWindow
     private static void Reload(string file)
     {
         allData[Array.IndexOf(files, file)] = SaveData.LoadFileData(file);
+    }
+
+
+    private void Save()
+    {
+        SaveData.FileSavedEvent -= OnFileSaved;
+
+        string[] keys = allData[openFile].Keys.ToArray();
+        foreach (string key in keys)
+        {
+            SaveData.Save(key, allData[openFile][key], files[openFile]);
+        }
+
+        SaveData.FileSavedEvent += OnFileSaved;
     }
 
 
@@ -126,31 +141,15 @@ public class SaveDataEditor : EditorWindow
             string[] keys = allData[openFile].Keys.ToArray();
             foreach (string key in keys)
             {
-                object newData = DrawData(key, allData[openFile][key]);
-                if (newData != allData[openFile][key])
-                {
-                    allData[openFile][key] = newData;
-                    // TODO: mark dirty
-                }
+                allData[openFile][key] = DrawData(key, allData[openFile][key]);
             }
         }
         EditorGUILayout.EndScrollView();
     }
 
 
-    private void Save()
+    private static object DrawData(string key, object data)
     {
-        string[] keys = allData[openFile].Keys.ToArray();
-        foreach (string key in keys)
-        {
-            SaveData.Save(key, allData[openFile][key], files[openFile]);
-        }
-    }
-
-
-    private object DrawData(string key, object data)
-    {
-        //Debugger.Print("Key: {0}, Type: {1}", key, data.GetType().Name);
         if (EditorTypes.Contains(data.GetType()))
         {
             return DrawUnity(key, data);
@@ -160,13 +159,17 @@ public class SaveDataEditor : EditorWindow
     }
 
 
-    private object DrawUnity(string key, object data)
+    private static object DrawUnity(string key, object data)
     {
         Type type = data.GetType();
 
         if (type == typeof(int))
         {
             return EditorGUILayout.IntField(key, (int)data);
+        }
+        if (type == typeof(float))
+        {
+            return EditorGUILayout.FloatField(key, (float)data);
         }
         if (type == typeof(string))
         {
@@ -181,52 +184,55 @@ public class SaveDataEditor : EditorWindow
     }
 
 
-    private object DrawObject(string key, object data)
+    private static object DrawObject(string key, object data)
     {
-        Type type = data.GetType();
-
         EditorGUILayout.Foldout(true, key);
         EditorGUI.indentLevel++;
 
         // list
-        if (data is IEnumerable)
+        if (data is IList)
         {
-            var list = data as IEnumerable;
-            int i = 0;
-            foreach (object child in list)
+            var list = data as IList;
+            for (int i = 0; i < list.Count; i++)
             {
-                DrawObject(i.ToString(), child);
-                i++;
-            }
-        }
-        else
-        {
-            FieldInfo[] fieldInfo = type.GetFields(BindingFlags.Static);
-            foreach (FieldInfo info in fieldInfo)
-            {
-                if (EditorTypes.Contains(info.FieldType))
+                if (EditorTypes.Contains(list[i].GetType())) // TODO: move testing type outside for loop
                 {
-                    info.SetValue(data, DrawUnity(info.Name, info.GetValue(data)));
+                    list[i] = DrawUnity(i.ToString(), list[i]);
                 }
                 else
                 {
-                    DrawObject(info.Name, info.GetValue(data));
+                    DrawObject(i.ToString(), list[i]);
                 }
             }
-
-            //PropertyInfo[] propertyInfo = type.GetProperties();
-            //foreach (var info in propertyInfo)
-            //{
-            //    if (EditorTypes.Contains(info.PropertyType))
-            //    {
-            //        info.SetValue(data, DrawUnity(info.Name, info.GetValue(data, null)), null);
-            //    }
-            //    else
-            //    {
-            //        return DrawObject(info.Name, info.GetValue(data, null));
-            //    }
-            //}
         }
+        //else
+        //{
+        //    FieldInfo[] fieldInfo = type.GetFields();
+        //    foreach (FieldInfo info in fieldInfo)
+        //    {
+        //        if (EditorTypes.Contains(info.FieldType))
+        //        {
+        //            info.SetValue(data, DrawUnity(info.Name, info.GetValue(data)));
+        //        }
+        //        else
+        //        {
+        //            DrawObject(info.Name, info.GetValue(data));
+        //        }
+        //    }
+
+        //    //PropertyInfo[] propertyInfo = type.GetProperties();
+        //    //foreach (var info in propertyInfo)
+        //    //{
+        //    //    if (EditorTypes.Contains(info.PropertyType))
+        //    //    {
+        //    //        info.SetValue(data, DrawUnity(info.Name, info.GetValue(data, null)), null);
+        //    //    }
+        //    //    else
+        //    //    {
+        //    //        return DrawObject(info.Name, info.GetValue(data, null));
+        //    //    }
+        //    //}
+        //}
 
         EditorGUI.indentLevel--;
 
@@ -246,11 +252,4 @@ public class SaveDataEditor : EditorWindow
     }
 
     #endregion
-}
-
-
-[Serializable]
-public class SObject : ScriptableObject
-{
-    [SerializeField] public object obj;
 }

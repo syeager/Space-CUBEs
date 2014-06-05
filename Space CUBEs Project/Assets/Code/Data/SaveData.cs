@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 5.18.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.05.18
+// Edited: 2014.06.03
 
 using System;
 using System.Collections.Generic;
@@ -25,12 +27,14 @@ namespace LittleByte.Data
         {
             {typeof(Vector2), (o) => new SDVector2((Vector2)o)},
             {typeof(Vector3), (o) => new SDVector3((Vector3)o)},
+            {typeof(Vector4), (o) => new SDVector4((Vector4)o)},
         };
 
         private static readonly Dictionary<Type, Func<object, object>> SDTypes = new Dictionary<Type, Func<object, object>>()
         {
             {typeof(SDVector2), (o) => ((SDVector2)o).ToVector2()},
             {typeof(SDVector3), (o) => ((SDVector3)o).ToVector3()},
+            {typeof(SDVector4), (o) => ((SDVector4)o).ToVector4()},
         };
 
         #endregion
@@ -42,28 +46,42 @@ namespace LittleByte.Data
 
         #endregion
 
-#if UNITY_EDITOR
-
         #region Events
 
         public static EventHandler<ValueArgs> FileSavedEvent;
 
         #endregion
 
-#endif
-
         #region Initialization Methods
 
         /// <summary>
-        /// 
+        /// Set up save data at the beginning of the game.
         /// </summary>
-        public static void Initialize()
+        public static void Initialize(params string[] files)
         {
-            GameMaster.QuitEvent -= OnQuit;
-            GameMaster.QuitEvent += OnQuit;
+            //GameMaster.QuitEvent -= OnQuit;
+            //GameMaster.QuitEvent += OnQuit;
 
-            Close();
-            Files.Clear();
+            //if (!Directory.Exists(DataPath))
+            //{
+            //    Directory.CreateDirectory(DataPath);
+            //}
+
+            //Close();
+            //Files.Clear();
+
+            // touch files already created
+            string[] createdFiles = GetFiles();
+            foreach (var file in createdFiles)
+            {
+                GetFileStream(file);
+            }
+
+            // create files
+            foreach (var file in files)
+            {
+                GetFileStream(file);
+            }
         }
 
         #endregion
@@ -71,22 +89,20 @@ namespace LittleByte.Data
         #region Public Methods
 
         /// <summary>
-        /// 
+        /// Save value to data.
         /// </summary>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        /// <param name="file"></param>
+        /// <param name="key">Unique key in the file associated with the value.</param>
+        /// <param name="value">Value to save.</param>
+        /// <param name="file">File to save in. Default = "Default"</param>
         public static void Save(string key, object value, string file = DefaultFile)
         {
             // get all data in file
             Dictionary<string, object> data = LoadFileData(file);
+            File.WriteAllText(DataPath + file + FilePostfix, string.Empty);
 
             bool found = false;
-#if UNITY_EDITOR
-            using (BinaryWriter writer = new BinaryWriter(GetFileStream(file)))
-#else
-            BinaryWriter writer = new BinaryWriter(GetFileStream(file));
-#endif
+
+            using (var writer = new BinaryWriter(GetFileStream(file)))
             {
                 foreach (var entry in data)
                 {
@@ -109,27 +125,21 @@ namespace LittleByte.Data
                 }
             }
 
-#if UNITY_EDITOR
             FileSavedEvent.Fire(value, new ValueArgs(file));
-#endif
         }
 
 
         /// <summary>
-        /// 
+        /// Load saved data.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <param name="file"></param>
-        /// <param name="defaultValue"></param>
-        /// <returns></returns>
+        /// <typeparam name="T">Value type.</typeparam>
+        /// <param name="key">Unique key in the file associated with the value.</param>
+        /// <param name="file">File to load from. Default = "Default"</param>
+        /// <param name="defaultValue">Default value to return if key is not found. Default = default(T)</param>
+        /// <returns>Value from data if found or default value.</returns>
         public static T Load<T>(string key, string file = DefaultFile, T defaultValue = default(T))
         {
-#if UNITY_EDITOR
-            using (BinaryReader reader = new BinaryReader(GetFileStream(file)))
-#else
-            BinaryReader reader = new BinaryReader(GetFileStream(file));
-#endif
+            using (var reader = new BinaryReader(GetFileStream(file)))
             {
                 while (reader.BaseStream.Position != reader.BaseStream.Length)
                 {
@@ -140,7 +150,7 @@ namespace LittleByte.Data
                         int size = reader.ReadInt32();
                         // get value
                         byte[] bytes = reader.ReadBytes(size);
-                        using (MemoryStream stream = new MemoryStream(bytes))
+                        using (var stream = new MemoryStream(bytes))
                         {
                             object obj = Formatter.Deserialize(stream);
 
@@ -161,28 +171,23 @@ namespace LittleByte.Data
                         reader.ReadBytes(size);
                     }
                 }
-                //reader.Close();
 
                 // not found
-                return default(T);
+                return defaultValue;
             }
         }
 
 
         /// <summary>
-        /// 
+        /// Loads all data in a file.
         /// </summary>
-        /// <param name="file"></param>
-        /// <returns></returns>
+        /// <param name="file">File to load data from.</param>
+        /// <returns>Collection of keys and their saved data.</returns>
         public static Dictionary<string, object> LoadFileData(string file)
         {
-            Dictionary<string, object> data = new Dictionary<string, object>();
+            var data = new Dictionary<string, object>();
 
-#if UNITY_EDITOR
-            using (BinaryReader reader = new BinaryReader(GetFileStream(file)))
-#else
-            BinaryReader reader = new BinaryReader(GetFileStream(file));
-#endif
+            using (var reader = new BinaryReader(GetFileStream(file)))
             {
                 while (reader.BaseStream.Position != reader.BaseStream.Length)
                 {
@@ -192,7 +197,7 @@ namespace LittleByte.Data
                     int size = reader.ReadInt32();
                     // get value
                     byte[] bytes = reader.ReadBytes(size);
-                    using (MemoryStream stream = new MemoryStream(bytes))
+                    using (var stream = new MemoryStream(bytes))
                     {
                         object value = Formatter.Deserialize(stream);
 
@@ -206,7 +211,6 @@ namespace LittleByte.Data
                     }
                 }
             }
-            //reader.Close();
 
             return data;
         }
@@ -219,6 +223,68 @@ namespace LittleByte.Data
         public static string[] GetFiles()
         {
             return Directory.GetFiles(DataPath, "*.dat").Select(f => f.Remove(0, DataPath.Length).Replace(FilePostfix, "")).ToArray();
+        }
+
+
+        /// <summary>
+        /// Delete a specific key in a file.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public static bool DeleteKey(string key, string file = "Default")
+        {
+            // get all data in file
+            Dictionary<string, object> data = LoadFileData(file);
+            File.WriteAllText(DataPath + file + FilePostfix, string.Empty);
+
+            bool found = false;
+
+            using (var writer = new BinaryWriter(GetFileStream(file)))
+            {
+                foreach (var entry in data)
+                {
+                    // found key
+                    if (string.Equals(key, entry.Key))
+                    {
+                        found = true;
+                    }
+                    else
+                    {
+                        Write(entry.Key, entry.Value, writer);
+                    }
+                }
+            }
+
+            return found;
+        }
+
+
+        /// <summary>
+        /// Delete a whole data file.
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public static bool DeleteFile(string file)
+        {
+            string path = DataPath + file + FilePostfix;
+            if (!File.Exists(path))
+            {
+                return false;
+            }
+
+            File.Delete(path);
+            return true;
+        }
+
+
+        /// <summary>
+        /// Delete all data files.
+        /// </summary>
+        public static void DeleteAll()
+        {
+            Directory.Delete(DataPath, true);
+            Directory.CreateDirectory(DataPath);
         }
 
         #endregion
@@ -244,7 +310,7 @@ namespace LittleByte.Data
 
             // serialize
             byte[] bytes;
-            using (MemoryStream serializeStream = new MemoryStream())
+            using (var serializeStream = new MemoryStream())
             {
                 Formatter.Serialize(serializeStream, value);
                 bytes = serializeStream.ToArray();
@@ -265,20 +331,7 @@ namespace LittleByte.Data
         /// <returns></returns>
         private static FileStream GetFileStream(string file)
         {
-#if !UNITY_EDITOR
-            FileStream fileStream;
-            if (Files.TryGetValue(file, out fileStream))
-            {
-                fileStream.Position = 0;
-                return fileStream;
-            }
-#endif
-
-            FileStream stream = new FileStream(DataPath + file + FilePostfix, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
-#if !UNITY_EDITOR
-            Files.Add(file, stream);
-#endif
-            return stream;
+            return new FileStream(DataPath + file + FilePostfix, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite, 8, FileOptions.RandomAccess);
         }
 
 
@@ -318,11 +371,13 @@ public struct SDVector2
 {
     public float x, y;
 
+
     public SDVector2(Vector2 vector2)
     {
         x = vector2.x;
         y = vector2.y;
     }
+
 
     public Vector2 ToVector2()
     {
@@ -335,6 +390,7 @@ public struct SDVector3
 {
     public float x, y, z;
 
+
     public SDVector3(Vector3 vector3)
     {
         x = vector3.x;
@@ -342,9 +398,31 @@ public struct SDVector3
         z = vector3.z;
     }
 
+
     public Vector3 ToVector3()
     {
         return new Vector3(x, y, z);
+    }
+}
+
+[Serializable]
+public struct SDVector4
+{
+    public float x, y, z, w;
+
+
+    public SDVector4(Vector4 vector4)
+    {
+        x = vector4.x;
+        y = vector4.y;
+        z = vector4.z;
+        w = vector4.w;
+    }
+
+
+    public Vector4 ToVector4()
+    {
+        return new Vector4(x, y, z, w);
     }
 }
 
