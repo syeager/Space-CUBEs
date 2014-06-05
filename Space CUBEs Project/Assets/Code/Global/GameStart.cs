@@ -48,8 +48,24 @@ public class GameStart : Singleton<GameStart>
 
         GameTime.Initialize();
         LoadGame();
-        UpdateVersions();
+        UpdateVersions(resetVersion);
     }
+
+    #endregion
+
+    #region Public Methods
+
+    public void UpdateVersions(bool reset)
+    {
+        int previousVersion = reset ? 0 : PlayerPrefs.GetInt("Build Version");
+        while (previousVersion < version)
+        {
+            Debugger.Log("GameStart: " + previousVersion, gameObject, Debugger.LogTypes.Data, true);
+            StartActions[previousVersion].Invoke();
+            previousVersion++;
+        }
+        PlayerPrefs.SetInt("Build Version", version);
+    } 
 
     #endregion
 
@@ -58,19 +74,6 @@ public class GameStart : Singleton<GameStart>
     private static void LoadGame()
     {
         CUBE.LoadAllCUBEInfo();
-    }
-
-
-    private void UpdateVersions()
-    {
-        int previousVersion = resetVersion ? 0 : PlayerPrefs.GetInt("Build Version");
-        while (previousVersion < version)
-        {
-            Debugger.Log("GameStart: " + previousVersion, gameObject, Debugger.LogTypes.Data, true);
-            StartActions[previousVersion].Invoke();
-            previousVersion++;
-        }
-        PlayerPrefs.SetInt("Build Version", version);
     }
 
 
@@ -86,9 +89,6 @@ public class GameStart : Singleton<GameStart>
         }
 
         CUBE.SetInventory(inventory);
-
-        // initial bank
-        MoneyManager.SetBalance(10000);
 
         // default ship build
         foreach (var build in DevBuilds)
