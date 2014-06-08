@@ -121,16 +121,6 @@ public class StoreManager : MonoBehaviour
         filterRight.ActivateEvent += OnFilterMoved;
     }
 
-
-    public int balance;
-
-
-    void Update()
-    {
-        balance = MoneyManager.Balance();
-        Debug.Log(balance);
-    }
-
     #endregion
 
     #region Button Methods
