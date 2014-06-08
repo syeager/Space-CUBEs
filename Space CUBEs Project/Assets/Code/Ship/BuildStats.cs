@@ -3,6 +3,7 @@
 // Created: 2014.04.28
 // Edited: 2014.05.29
 
+using LittleByte.Data;
 using UnityEngine;
 
 /// <summary>
@@ -23,6 +24,7 @@ public static class BuildStats
 
     #region Const Fields
 
+    private const string ItemsFile = @"Items\";
     private const string CoreCapacityPath = "Core Capacity";
     private const string WeaponExpansionPath = "Weapon Expansion";
     private const string AugmentationExpansionPath = "Augmentation Expansion";
@@ -40,7 +42,7 @@ public static class BuildStats
     /// <returns>0 based index corresponding to core level.</returns>
     public static int GetCoreLevel()
     {
-        return PlayerPrefs.GetInt(CoreCapacityPath);
+        return SaveData.Load<int>(CoreCapacityPath);
     }
 
 
@@ -50,7 +52,7 @@ public static class BuildStats
     /// <param name="coreCapacity">0 based index corresponding to core level.</param>
     public static void SetCoreLevel(int coreCapacity)
     {
-        PlayerPrefs.SetInt(CoreCapacityPath, coreCapacity);
+        SaveData.Save(CoreCapacityPath, coreCapacity, ItemsFile);
     }
 
 
@@ -70,7 +72,7 @@ public static class BuildStats
     /// <returns>0 based index corresponding to weapon level.</returns>
     public static int GetWeaponLevel()
     {
-        return PlayerPrefs.GetInt(WeaponExpansionPath);
+        return SaveData.Load<int>(WeaponExpansionPath);
     }
 
 
@@ -80,7 +82,7 @@ public static class BuildStats
     /// <param name="weaponExpansion">0 based index corresponding to weapon level.</param>
     public static void SetWeaponLevel(int weaponExpansion)
     {
-        PlayerPrefs.SetInt(WeaponExpansionPath, weaponExpansion);
+        SaveData.Save(WeaponExpansionPath, weaponExpansion, ItemsFile);
     }
 
 
@@ -100,7 +102,7 @@ public static class BuildStats
     /// <returns>0 based index corresponding to augmentation level.</returns>
     public static int GetAugmentationLevel()
     {
-        return PlayerPrefs.GetInt(AugmentationExpansionPath);
+        return SaveData.Load<int>(AugmentationExpansionPath);
     }
 
 
@@ -110,7 +112,7 @@ public static class BuildStats
     /// <param name="augmentationExpansion">0 based index corresponding to augmentation level.</param>
     public static void SetAugmentationLevel(int augmentationExpansion)
     {
-        PlayerPrefs.SetInt(AugmentationExpansionPath, augmentationExpansion);
+        SaveData.Save(AugmentationExpansionPath, augmentationExpansion, ItemsFile);
     }
 
 

@@ -1,39 +1,106 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.01.14
-// Edited: 2014.06.02
+// Edited: 2014.06.07
 
 using System.Collections.Generic;
+using GameSaveData;
 using LittleByte.Data;
 using UnityEngine;
+using Profiler = LittleByte.Debug.Profiler;
 
 //
 public class MASTERTEST : MonoBehaviour
 {
+    public bool save;
+    public bool load;
+    public bool delete;
+
     public int tests;
-    public Vector3 position;
+    public SVector3 position;
+    public int health;
     public Transform myTransform;
     public UILabel label;
-    public List<int> testList; 
+    public List<int> testList;
+    public BuildInfo buildInfo;
+    public ConstructionGrid grid;
 
-    private void Awake()
+    private const string TestFolder = @"Tests\";
+
+
+    private void Start()
     {
-        //position = SaveData.Load<Vector3>("Test Position", "Default", Vector3.one);
-        //label.text = "Test: " + position;
-        //SaveData.Save("Test Position", position + Vector3.one);
+        using (var profiler = new Profiler("Saving PB"))
+        {
+            for (int i = 0; i < tests; i++)
+            {
+                SaveData.Save("health", health, TestFolder);
+            }
+        }
+
+        using (var profiler = new Profiler("Loading PB"))
+        {
+            for (int i = 0; i < tests; i++)
+            {
+                health = SaveData.Load<int>("health", TestFolder);
+            }
+        }
 
 
-        testList = SaveData.Load<List<int>>("list", "Test");
-        //using (var profiler = new LittleByte.Debug.Profiler("Saving"))
-        //{
-        //    SaveData.Save("list", testList, "Test");
-        //    Debug.Log(SaveData.DeleteKey("list", "Test"));
-        //    SaveData.Save("test", position, "Test");    
-        //}
+        using (var profiler = new Profiler("Saving PP"))
+        {
+            for (int i = 0; i < tests; i++)
+            {
+                PlayerPrefs.SetInt("health", health);
+            }
+        }
+
+        using (var profiler = new Profiler("Loading PP"))
+        {
+            for (int i = 0; i < tests; i++)
+            {
+                health = PlayerPrefs.GetInt("health");
+            }
+        }
+    }
 
 
-        //Debug.Log(SaveData.DeleteFile("Test"));
-        //Debug.Log(SaveData.DeleteFile("Test"));
-        //SaveData.DeleteFile("Default");
+    private void Update()
+    {
+        if (save)
+        {
+            save = false;
+            Save();
+        }
+
+        if (load)
+        {
+            load = false;
+            Load();
+        }
+
+        if (delete)
+        {
+            delete = false;
+            Delete();
+        }
+    }
+
+
+    private void Delete()
+    {
+        SaveData.Delete("Number List", @"Bank\");
+    }
+
+
+    private void Load()
+    {
+        tests = SaveData.Load("Test", @"Default\", 10);
+    }
+
+
+    private void Save()
+    {
+        
     }
 }

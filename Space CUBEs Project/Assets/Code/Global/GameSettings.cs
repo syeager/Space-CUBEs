@@ -1,8 +1,10 @@
-﻿// Steve Yeager
-// 8.17.2013
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2013.12.03
+// Edited: 2014.06.07
 
 using Annotations;
-using UnityEngine;
+using LittleByte.Data;
 
 /// <summary>
 /// Singleton to hold all game settings.
@@ -13,19 +15,6 @@ public class GameSettings : Singleton<GameSettings>
 
     public bool invincible;
     public bool jumpToBoss;
-
-    #endregion
-
-    #region Volume Fields
-
-    public float volumeSE;
-    public float volumeMusic;
-
-    #endregion
-
-    #region Screen Fields
-
-    public static Vector2 aspectRatio { get; private set; }
 
     #endregion
 
@@ -44,6 +33,12 @@ public class GameSettings : Singleton<GameSettings>
 
     #endregion
 
+    #region Const Fields
+
+    /// <summary>Data folder of setting files.</summary>
+    public const string SettingsFile = @"Settings\";
+
+    #endregion
 
     #region MonoBehaviour Overrides
 
@@ -59,10 +54,10 @@ public class GameSettings : Singleton<GameSettings>
 
     public static void Save()
     {
-        PlayerPrefs.SetFloat("Joystick Sensitivity", Main.joystickSensitivity);
-        PlayerPrefs.SetFloat("Joystick xBuffer", Main.joystickXBuffer);
-        PlayerPrefs.SetFloat("Joystick yBuffer", Main.joystickYBuffer);
-        PlayerPrefs.SetFloat("Joystick Deadzone", Main.joystickDeadzone);
+        SaveData.Save("Joystick Sensitivity", Main.joystickSensitivity, SettingsFile);
+        SaveData.Save("Joystick xBuffer", Main.joystickSensitivity, SettingsFile);
+        SaveData.Save("Joystick yBuffer", Main.joystickSensitivity, SettingsFile);
+        SaveData.Save("Joystick Deadzone", Main.joystickSensitivity, SettingsFile);
     }
 
     #endregion
@@ -71,25 +66,10 @@ public class GameSettings : Singleton<GameSettings>
 
     private void Load()
     {
-        joystickSensitivity = PlayerPrefs.GetFloat("Joystick Sensitivity", 0.5f);
-        joystickXBuffer = PlayerPrefs.GetFloat("Joystick xBuffer", 0.05f);
-        joystickYBuffer = PlayerPrefs.GetFloat("Joystick yBuffer", 0.05f);
-        joystickDeadzone = PlayerPrefs.GetFloat("Joystick Deadzone", 0.3f);
-    }
-
-
-    private void GetAspectRatio()
-    {
-        double ratio = System.Math.Round(Screen.width / (float)Screen.height, 2);
-
-        if (ratio >= 1.7)
-        {
-            aspectRatio = new Vector2(16f, 9f);
-        }
-        else if (ratio >= 1.6)
-        {
-            aspectRatio = new Vector2(16f, 10f);
-        }
+        joystickSensitivity = SaveData.Load("Joystick Sensitivity", SettingsFile, 0.35f);
+        joystickSensitivity = SaveData.Load("Joystick xBuffer", SettingsFile, 0.5f);
+        joystickSensitivity = SaveData.Load("Joystick yBuffer", SettingsFile, 0.5f);
+        joystickSensitivity = SaveData.Load("Joystick Deadzone", SettingsFile, 0.25f);
     }
 
     #endregion

@@ -20,8 +20,8 @@ public class MoneyManager
 
     #region Const Fields
 
-    private const string MoneyKey = "Money";
-    private const string BankFile = "Bank";
+    private const string MoneyFile = "Money";
+    private const string BankFolder = @"Bank\";
     private const int BankStart = 100000;
 
     #endregion
@@ -51,7 +51,7 @@ public class MoneyManager
     public void Save()
     {
         int balance = Balance();
-        SaveData.Save(MoneyKey, money + balance, BankFile);
+        SaveData.Save(MoneyFile, money + balance, BankFolder);
         money = 0;
     }
 
@@ -65,7 +65,7 @@ public class MoneyManager
     /// <returns>Current balance.</returns>
     public static int Balance()
     {
-        return SaveData.Load(MoneyKey, BankFile, BankStart);
+        return SaveData.Load(MoneyFile, BankFolder, BankStart);
     }
 
 
@@ -78,7 +78,7 @@ public class MoneyManager
     {
         int balance = Balance();
         balance += amount;
-        SaveData.Save(MoneyKey, balance, BankFile);
+        SaveData.Save(MoneyFile, balance, BankFolder);
         return balance;
     }
 

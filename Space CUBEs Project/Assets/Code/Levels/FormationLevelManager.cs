@@ -2,6 +2,7 @@
 // 1.12.2014
 
 using System.Collections.Generic;
+using LittleByte.Data;
 using UnityEngine;
 
 public class FormationLevelManager : LevelManager
@@ -171,9 +172,9 @@ public class FormationLevelManager : LevelManager
 
     private void OnBossDeath(object sender, DieArgs args)
     {
-        if (levelIndex >= PlayerPrefs.GetInt(LevelSelectManager.UnlockedLevelsPath))
+        if (levelIndex >= SaveData.Load<int>(LevelSelectManager.UnlockedLevelsKey, "Level"))
         {
-            PlayerPrefs.SetInt(LevelSelectManager.UnlockedLevelsPath, levelIndex + 1);
+            SaveData.Save(LevelSelectManager.UnlockedLevelsKey, levelIndex + 1, @"Level\");
         }
         
         LevelFinished();

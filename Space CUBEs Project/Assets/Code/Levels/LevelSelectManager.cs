@@ -1,7 +1,10 @@
-﻿// Steve Yeager
-// 4.3.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.04.03
+// Edited: 2014.06.04
 
 using Annotations;
+using LittleByte.Data;
 using UnityEngine;
 
 /// <summary>
@@ -18,10 +21,9 @@ public class LevelSelectManager : MonoBehaviour
 
     #region Const Fields
 
-    public const string UnlockedLevelsPath = "Unlocked Levels";
+    public const string UnlockedLevelsKey = "Unlocked Levels";
 
     #endregion
-
 
     #region MonoBehaviour Overrides
 
@@ -29,7 +31,7 @@ public class LevelSelectManager : MonoBehaviour
     private void Start()
     {
         // register button events
-        int unlocked = PlayerPrefs.GetInt(UnlockedLevelsPath);
+        int unlocked = SaveData.Load<int>(UnlockedLevelsKey, "Level");;
         for (int i = 0; i < levelButtons.Length; i++)
         {
             levelButtons[i].ActivateEvent += OnLevelSelected;

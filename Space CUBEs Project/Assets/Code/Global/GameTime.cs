@@ -1,9 +1,10 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.05.17
-// Edited: 2014.05.27
+// Edited: 2014.06.04
 
 using System;
+using LittleByte.Data;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -52,7 +53,7 @@ public static class GameTime
     public static int targetFPS
     {
 #if UNITY_EDITOR
-        get { return Application.isPlaying ? _targetFPS : UnityEditor.EditorPrefs.GetInt(TargetFPSPath); }
+        get { return Application.isPlaying ? _targetFPS : UnityEditor.EditorPrefs.GetInt(TargetFPSKey); }
         set
         {
             if (Application.isPlaying)
@@ -61,7 +62,7 @@ public static class GameTime
             }
             else
             {
-                UnityEditor.EditorPrefs.SetInt(TargetFPSPath, value);
+                UnityEditor.EditorPrefs.SetInt(TargetFPSKey, value);
             }
         }
 #else
@@ -78,7 +79,7 @@ public static class GameTime
     #region Const Fields
 
     /// <summary>Data path for targetFPS.</summary>
-    private const string TargetFPSPath = "Target FPS";
+    private const string TargetFPSKey = "Target FPS";
 
     /// <summary>Max cap for FPS.</summary>
     public const int MaxFPS = 60;
@@ -103,7 +104,7 @@ public static class GameTime
     public static void Initialize()
     {
         fixedDeltaTime = Time.fixedDeltaTime;
-        CapFPS(PlayerPrefs.GetInt(TargetFPSPath, 60));
+        CapFPS(SaveData.Load(TargetFPSKey, GameSettings.SettingsFile, 60));
     }
 
 
@@ -153,7 +154,7 @@ public static class GameTime
         targetFPS = Mathf.Clamp(targetFPS, MinFPS, MaxFPS);
         GameTime.targetFPS = targetFPS;
         Application.targetFrameRate = targetFPS;
-        PlayerPrefs.SetInt(TargetFPSPath, targetFPS);
+        SaveData.Save(TargetFPSKey, targetFPS, GameSettings.SettingsFile);
     }
 
     #endregion

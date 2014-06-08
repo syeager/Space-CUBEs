@@ -8,6 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Annotations;
+using LittleByte.Data;
 using UnityEngine;
 
 public class GarageManager : MonoBase
@@ -873,7 +874,7 @@ public class GarageManager : MonoBase
         int i = 1;
         while (true)
         {
-            if (!PlayerPrefs.HasKey(ConstructionGrid.UserBuildsPath + custom + i))
+            if (SaveData.Contains(custom + i, ConstructionGrid.BuildsFile))
             {
                 shipName.value = custom + i;
                 break;
@@ -882,7 +883,7 @@ public class GarageManager : MonoBase
         }
 
         corePointsLabel.text = Grid.corePointsAvailable.ToString();
-        stateMachine.SetState(SelectState, new Dictionary<string, object>());
+        stateMachine.SetState(SelectState);
         selectedBuild = true;
     }
 

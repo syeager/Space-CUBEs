@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using Annotations;
+using LittleByte.Data;
 using UnityEngine;
 
 /// <summary>
@@ -57,14 +58,14 @@ public class GameStart : Singleton<GameStart>
 
     public void UpdateVersions(bool reset)
     {
-        int previousVersion = reset ? 0 : PlayerPrefs.GetInt("Build Version");
+        int previousVersion = reset ? 0 : SaveData.Load<int>("Version", @"Build\");
         while (previousVersion < version)
         {
             Debugger.Log("GameStart: " + previousVersion, gameObject, Debugger.LogTypes.Data, true);
             StartActions[previousVersion].Invoke();
             previousVersion++;
         }
-        PlayerPrefs.SetInt("Build Version", version);
+        SaveData.Save("Version", version, @"Build\");
     } 
 
     #endregion

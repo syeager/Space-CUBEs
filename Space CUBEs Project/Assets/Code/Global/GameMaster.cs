@@ -32,7 +32,6 @@ public class GameMaster : MonoBehaviour
             DontDestroyOnLoad(gameObject);
 
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
-            SaveData.Initialize();
         }
         else
         {

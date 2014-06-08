@@ -1,10 +1,13 @@
-﻿// Steve Yeager
-// 11.26.2013
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2013.11.26
+// Edited: 2014.06.06
 
-using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using LittleByte.Data;
+using UnityEngine;
 
 public class CUBE : MonoBehaviour
 {
@@ -19,6 +22,7 @@ public class CUBE : MonoBehaviour
         Weapon,
         Augmentation,
     }
+
     public enum Subsystems
     {
         None,
@@ -27,6 +31,7 @@ public class CUBE : MonoBehaviour
         PowerCore,
         Wing,
     }
+
     public enum Brands
     {
         None,
@@ -51,7 +56,8 @@ public class CUBE : MonoBehaviour
 
     public const string CUBELIST = "CUBE List";
     public const string COLORLIST = "Color List";
-    private const string INVENTORYPATH = "Inventory";
+    private const string InventoryFile = "Inventory";
+    private const string ItemsFolder = @"Items\";
     private const char CUBESEP = '|';
 
     public const string HEALTHICON = "♥";
@@ -61,36 +67,35 @@ public class CUBE : MonoBehaviour
 
     #endregion
 
-
     #region Static Methods
 
     public static CUBEInfo[] LoadAllCUBEInfo()
     {
         // load all CUBEs
-        TextAsset binaryFile = (TextAsset)Resources.Load(CUBELIST);
+        var binaryFile = (TextAsset)Resources.Load(CUBELIST);
         Stream binaryStream = new MemoryStream(binaryFile.bytes);
-        List<CUBEInfo> infoList = new List<CUBEInfo>();
-        using (BinaryReader reader = new BinaryReader(binaryStream))
+        var infoList = new List<CUBEInfo>();
+        using (var reader = new BinaryReader(binaryStream))
         {
             while (reader.BaseStream.Position != reader.BaseStream.Length)
             {
                 infoList.Add(new CUBEInfo
-                        (
-                            reader.ReadString(),                        // name
-                            reader.ReadInt32(),                         // ID
-                            (Types)reader.ReadInt32(),                  // type
-                            (Subsystems)reader.ReadInt32(),             // subsystem
-                            (Brands)reader.ReadInt32(),                 // brand
-                            reader.ReadInt32(),                         // grade
-                            reader.ReadSingle(),                        // health
-                            reader.ReadSingle(),                        // shield
-                            reader.ReadSingle(),                        // speed
-                            reader.ReadSingle(),                        // damage
-                            Utility.ParseV3(reader.ReadString()),       // size
-                            reader.ReadInt32(),                         // cost
-                            reader.ReadInt32(),                         // rarity
-                            reader.ReadInt32()                          // price
-                        ));
+                    (
+                    reader.ReadString(), // name
+                    reader.ReadInt32(), // ID
+                    (Types)reader.ReadInt32(), // type
+                    (Subsystems)reader.ReadInt32(), // subsystem
+                    (Brands)reader.ReadInt32(), // brand
+                    reader.ReadInt32(), // grade
+                    reader.ReadSingle(), // health
+                    reader.ReadSingle(), // shield
+                    reader.ReadSingle(), // speed
+                    reader.ReadSingle(), // damage
+                    Utility.ParseV3(reader.ReadString()), // size
+                    reader.ReadInt32(), // cost
+                    reader.ReadInt32(), // rarity
+                    reader.ReadInt32() // price
+                    ));
             }
         }
         allCUBES = infoList.ToArray();
@@ -113,16 +118,18 @@ public class CUBE : MonoBehaviour
 
     public static int[] GetInventory()
     {
-        string[] data = PlayerPrefs.GetString(INVENTORYPATH, "").Replace(" ", "").Split(CUBESEP);
-        int[] inventory = new int[allCUBES.Length];
+        //string[] data = PlayerPrefs.GetString(INVENTORYPATH, "").Replace(" ", "").Split(CUBESEP); // TODO: replace with int[]?
+        //var inventory = new int[allCUBES.Length];
 
-        if (data.Length != 1)
-        {
-            for (int i = 0; i < data.Length; i++)
-            {
-                inventory[i] = int.Parse(data[i]);
-            }
-        }
+        int[] inventory = SaveData.Load(InventoryFile, ItemsFolder, new int[allCUBES.Length]);
+
+        //if (data.Length != 1)
+        //{
+        //    for (int i = 0; i < data.Length; i++)
+        //    {
+        //        inventory[i] = int.Parse(data[i]);
+        //    }
+        //}
 
         return inventory;
     }
@@ -130,16 +137,17 @@ public class CUBE : MonoBehaviour
 
     public static void SetInventory(int[] inventory)
     {
-        PlayerPrefs.SetString(INVENTORYPATH, string.Join(CUBESEP.ToString(), inventory.Select(c => c.ToString()).ToArray()));
+        SaveData.Save(InventoryFile, inventory, ItemsFolder);
+        //PlayerPrefs.SetString(INVENTORYPATH, string.Join(CUBESEP.ToString(), inventory.Select(c => c.ToString()).ToArray()));
     }
 
 
     public static Color[] LoadColors()
     {
-        TextAsset binaryFile = (TextAsset)Resources.Load(COLORLIST);
+        var binaryFile = (TextAsset)Resources.Load(COLORLIST);
         Stream binaryStream = new MemoryStream(binaryFile.bytes);
-        List<Color> colors = new List<Color>();
-        using (BinaryReader reader = new BinaryReader(binaryStream))
+        var colors = new List<Color>();
+        using (var reader = new BinaryReader(binaryStream))
         {
             while (reader.BaseStream.Position != reader.BaseStream.Length)
             {

@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Annotations;
+using GameSaveData;
+using LittleByte.Data;
 using UnityEngine;
 
 public class ConstructionGrid : MonoBase
@@ -94,11 +96,12 @@ public class ConstructionGrid : MonoBase
     /// <summary>Level of alpha to set CUBE materials if above current layer.</summary>
     private const float NearAlpha = 0.5f;
 
-    /// <summary>Prefix for path to user created ships in PlayerPrefs.</summary>
-    public const string UserBuildsPath = "UserBuild: ";
-
     /// <summary>Path to all user build names.</summary>
+    [Obsolete]
     private const string AllUserBuildsPath = "AllUserBuilds";
+
+    /// <summary>File name for save data that contains all builds.</summary>
+    public const string BuildsFile = @"Builds\";
 
     #endregion
 
@@ -907,14 +910,12 @@ public class ConstructionGrid : MonoBase
     /// </summary>
     /// <param name="buildName">Name of the ship.</param>
     /// <returns>BuildInfo for the ship.</returns>
-    private BuildInfo LoadBuild(string buildName)
+    public BuildInfo LoadBuild(string buildName) // TODO: make private
     {
         this.buildName = buildName;
 
-        const string path = UserBuildsPath;
-
         // get buildInfo string from data
-        string build = PlayerPrefs.GetString(path + buildName, "NA");
+        string build = SaveData.Load(buildName, BuildsFile, "NA");
         if (build == "NA")
         {
             Log(buildName + " is not in data.", Debugger.LogTypes.Data, false);
@@ -1091,11 +1092,10 @@ public class ConstructionGrid : MonoBase
         Debugger.Log("Saving " + buildName + ": " + build, null, Debugger.LogTypes.Data);
 
         // get paths
-        const string dataPath = UserBuildsPath;
         const string namePath = AllUserBuildsPath;
 
         // save data
-        PlayerPrefs.SetString(dataPath + buildName, build);
+        SaveData.Save(buildName, build, BuildsFile);
         // save build name
         List<string> buildNames = BuildNames();
         if (!buildNames.Contains(buildName))
@@ -1113,7 +1113,6 @@ public class ConstructionGrid : MonoBase
     public static void DeleteBuild(string buildName)
     {
         // get path
-        string dataPath = UserBuildsPath + buildName;
         const string namePath = AllUserBuildsPath;
 
         // remove from list of all builds
@@ -1121,7 +1120,7 @@ public class ConstructionGrid : MonoBase
         PlayerPrefs.SetString(namePath, string.Join(BuildInfo.PieceSep, builds));
 
         // remove build data
-        PlayerPrefs.DeleteKey(dataPath);
+        SaveData.Delete(buildName, BuildsFile);
     }
 
 
@@ -1133,7 +1132,6 @@ public class ConstructionGrid : MonoBase
     public static void RenameBuild(string oldName, string newName)
     {
         // get path
-        const string dataPath = UserBuildsPath;
         const string namePath = AllUserBuildsPath;
 
         // update list of all builds
@@ -1143,9 +1141,9 @@ public class ConstructionGrid : MonoBase
         PlayerPrefs.SetString(namePath, string.Join(BuildInfo.PieceSep, builds));
 
         // update build data
-        string buildInfo = PlayerPrefs.GetString(dataPath + oldName);
-        PlayerPrefs.DeleteKey(oldName);
-        PlayerPrefs.SetString(dataPath + newName, buildInfo);
+        string buildInfo = SaveData.Load<string>(oldName, BuildsFile);
+        SaveData.Delete(oldName);
+        SaveData.Save(newName, buildInfo, BuildsFile);
     }
 
     #endregion

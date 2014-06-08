@@ -7,6 +7,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Annotations;
 using LittleByte.Data;
 using UnityEditor;
@@ -103,14 +104,14 @@ public class SaveDataEditor : EditorWindow
 
         for (int i = 0; i < allData.Length; i++)
         {
-            allData[i] = SaveData.LoadFileData(files[i]);
+            //allData[i] = SaveData.LoadFileData(files[i]);
         }
     }
 
 
     private static void Reload(string file)
     {
-        allData[Array.IndexOf(files, file)] = SaveData.LoadFileData(file);
+        //allData[Array.IndexOf(files, file)] = SaveData.LoadFileData(file);
     }
 
 
@@ -189,13 +190,29 @@ public class SaveDataEditor : EditorWindow
         EditorGUILayout.Foldout(true, key);
         EditorGUI.indentLevel++;
 
+        if (data == null)
+        {
+            EditorGUILayout.LabelField("Empty");
+            EditorGUI.indentLevel--;
+            return null;
+        }
+
+        Type type = data.GetType();
+
         // list
-        if (data is IList)
+        if (type.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IList<>))) // TODO: not IList. is generic
         {
             var list = data as IList;
+            Debug.Log(list.Count);
+            // empty
+            if (list.Count == 0)
+            {
+                EditorGUILayout.LabelField("Empty");
+            }
+
             for (int i = 0; i < list.Count; i++)
             {
-                if (EditorTypes.Contains(list[i].GetType())) // TODO: move testing type outside for loop
+                if (EditorTypes.Contains(list[i].GetType()))
                 {
                     list[i] = DrawUnity(i.ToString(), list[i]);
                 }
@@ -205,34 +222,53 @@ public class SaveDataEditor : EditorWindow
                 }
             }
         }
-        //else
+        //else if (data != null && data.GetType() == typeof(KeyValuePair<,>))
         //{
-        //    FieldInfo[] fieldInfo = type.GetFields();
-        //    foreach (FieldInfo info in fieldInfo)
+        //    Debug.Log("haldfj;al");
+        //}
+        //else if (dict != null)
+        //{
+        //    Debug.Log("here");
+        //    foreach (var entry in dict)
         //    {
-        //        if (EditorTypes.Contains(info.FieldType))
+        //        if (EditorTypes.Contains(entry.Value.GetType()))
         //        {
-        //            info.SetValue(data, DrawUnity(info.Name, info.GetValue(data)));
+        //            dict[entry.Key] = DrawUnity(entry.Key.ToString(), entry.Value);
         //        }
         //        else
         //        {
-        //            DrawObject(info.Name, info.GetValue(data));
+        //            DrawObject(entry.Key.ToString(), entry.Value);
         //        }
         //    }
-
-        //    //PropertyInfo[] propertyInfo = type.GetProperties();
-        //    //foreach (var info in propertyInfo)
-        //    //{
-        //    //    if (EditorTypes.Contains(info.PropertyType))
-        //    //    {
-        //    //        info.SetValue(data, DrawUnity(info.Name, info.GetValue(data, null)), null);
-        //    //    }
-        //    //    else
-        //    //    {
-        //    //        return DrawObject(info.Name, info.GetValue(data, null));
-        //    //    }
-        //    //}
         //}
+        else
+        {
+            FieldInfo[] fieldInfo = data.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
+            foreach (FieldInfo info in fieldInfo)
+            {
+                if (EditorTypes.Contains(info.FieldType))
+                {
+                    info.SetValue(data, DrawUnity(info.Name, info.GetValue(data)));
+                }
+                else
+                {
+                    DrawObject(info.Name, info.GetValue(data));
+                }
+            }
+
+            //PropertyInfo[] propertyInfo = type.GetProperties();
+            //foreach (var info in propertyInfo)
+            //{
+            //    if (EditorTypes.Contains(info.PropertyType))
+            //    {
+            //        info.SetValue(data, DrawUnity(info.Name, info.GetValue(data, null)), null);
+            //    }
+            //    else
+            //    {
+            //        return DrawObject(info.Name, info.GetValue(data, null));
+            //    }
+            //}
+        }
 
         EditorGUI.indentLevel--;
 
