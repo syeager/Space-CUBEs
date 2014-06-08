@@ -45,7 +45,6 @@ public class UIInput : MonoBehaviour
 		PhonePad = 5,
 		NamePhonePad = 6,
 		EmailAddress = 7,
-		HiddenInput = 8,
 	}
 
 	public enum OnReturnKey
@@ -92,6 +91,12 @@ public class UIInput : MonoBehaviour
 	/// </summary>
 
 	public KeyboardType keyboardType = KeyboardType.Default;
+
+	/// <summary>
+	/// Whether the input will be hidden on mobile platforms.
+	/// </summary>
+
+	public bool hideInput = false;
 
 	/// <summary>
 	/// What kind of validation to use with the input field's data.
@@ -201,6 +206,18 @@ public class UIInput : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Should the input be hidden?
+	/// </summary>
+
+	public bool inputShouldBeHidden
+	{
+		get
+		{
+			return hideInput && label != null && !label.multiLine;
+		}
+	}
+
 	[System.Obsolete("Use UIInput.value instead")]
 	public string text { get { return this.value; } set { this.value = value; } }
 
@@ -299,7 +316,7 @@ public class UIInput : MonoBehaviour
 		get
 		{
 #if MOBILE
-			if (mKeyboard != null && !TouchScreenKeyboard.hideInput) return value.Length;
+			if (mKeyboard != null && !inputShouldBeHidden) return value.Length;
 #endif
 			return isSelected ? mSelectionEnd : value.Length;
 		}
@@ -308,7 +325,7 @@ public class UIInput : MonoBehaviour
 			if (isSelected)
 			{
 #if MOBILE
-				if (mKeyboard != null && !TouchScreenKeyboard.hideInput) return;
+				if (mKeyboard != null && !inputShouldBeHidden) return;
 #endif
 				mSelectionEnd = value;
 				UpdateLabel();
@@ -325,7 +342,7 @@ public class UIInput : MonoBehaviour
 		get
 		{
 #if MOBILE
-			if (mKeyboard != null && !TouchScreenKeyboard.hideInput) return 0;
+			if (mKeyboard != null && !inputShouldBeHidden) return 0;
 #endif
 			return isSelected ? mSelectionStart : value.Length;
 		}
@@ -334,7 +351,7 @@ public class UIInput : MonoBehaviour
 			if (isSelected)
 			{
 #if MOBILE
-				if (mKeyboard != null && !TouchScreenKeyboard.hideInput) return;
+				if (mKeyboard != null && !inputShouldBeHidden) return;
 #endif
 				mSelectionStart = value;
 				UpdateLabel();
@@ -351,7 +368,7 @@ public class UIInput : MonoBehaviour
 		get
 		{
 #if MOBILE
-			if (mKeyboard != null && !TouchScreenKeyboard.hideInput) return value.Length;
+			if (mKeyboard != null && !inputShouldBeHidden) return value.Length;
 #endif
 			return isSelected ? mSelectionEnd : value.Length;
 		}
@@ -360,7 +377,7 @@ public class UIInput : MonoBehaviour
 			if (isSelected)
 			{
 #if MOBILE
-				if (mKeyboard != null && !TouchScreenKeyboard.hideInput) return;
+				if (mKeyboard != null && !inputShouldBeHidden) return;
 #endif
 				mSelectionEnd = value;
 				UpdateLabel();
@@ -536,10 +553,10 @@ public class UIInput : MonoBehaviour
 					string val;
 					TouchScreenKeyboardType kt;
 
-					if (keyboardType == KeyboardType.HiddenInput)
+					if (inputShouldBeHidden)
 					{
 						TouchScreenKeyboard.hideInput = true;
-						kt = TouchScreenKeyboardType.Default;
+						kt = (TouchScreenKeyboardType)((int)keyboardType);
 						val = "|";
 					}
 					else if (inputType == InputType.Password)
@@ -557,7 +574,7 @@ public class UIInput : MonoBehaviour
 
 					mKeyboard = (inputType == InputType.Password) ?
 						TouchScreenKeyboard.Open(val, kt, false, false, true) :
-						TouchScreenKeyboard.Open(val, kt, inputType == InputType.AutoCorrect, label.multiLine, false, false, defaultText);
+						TouchScreenKeyboard.Open(val, kt, inputType == InputType.AutoCorrect, label.multiLine && !hideInput, false, false, defaultText);
 				}
 				else
 #endif
@@ -580,7 +597,7 @@ public class UIInput : MonoBehaviour
 			{
 				string text = mKeyboard.text;
 
-				if (TouchScreenKeyboard.hideInput)
+				if (inputShouldBeHidden)
 				{
 					if (text != "|")
 					{
@@ -1190,7 +1207,7 @@ public class UIInput : MonoBehaviour
 
 			label.text = processed;
 #if MOBILE
-			if (selected && (mKeyboard == null || TouchScreenKeyboard.hideInput))
+			if (selected && (mKeyboard == null || inputShouldBeHidden))
 #else
 			if (selected)
 #endif
@@ -1397,7 +1414,11 @@ public class UIInput : MonoBehaviour
 
 	public void LoadValue ()
 	{
-		if (!string.IsNullOrEmpty(savedAs) && PlayerPrefs.HasKey(savedAs))
-			value = PlayerPrefs.GetString(savedAs);
+		if (!string.IsNullOrEmpty(savedAs))
+		{
+			string val = mValue.Replace("\\n", "\n");
+			mValue = "";
+			value = PlayerPrefs.HasKey(savedAs) ? PlayerPrefs.GetString(savedAs) : val;
+		}
 	}
 }

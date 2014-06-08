@@ -391,6 +391,9 @@ MonoBehaviour:
   hoverSprite: 
   pressedSprite: 
   disabledSprite: 
+  hoverSprite2D: {fileID: 0}
+  pressedSprite2D: {fileID: 0}
+  disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick:
   - mTarget: {fileID: 517895310}
@@ -557,6 +560,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 262749027}
   - 114: {fileID: 262749026}
+  - 114: {fileID: 262749028}
   m_Layer: 0
   m_Name: ___Debugger
   m_TagString: Untagged
@@ -580,11 +584,11 @@ MonoBehaviour:
   timeScale: 1
   logWarning: 0
   fps: {fileID: 0}
-  fpsPrefab: {fileID: 0}
+  fpsPrefab: {fileID: 100000, guid: ede73768352859c47b0ceadd2ebf76fa, type: 2}
   consoleLine: {fileID: 0}
-  consoleLinePrefab: {fileID: 0}
+  consoleLinePrefab: {fileID: 100000, guid: 1abf603ef50833b4ba9818e64b0f75db, type: 2}
   showTime: 1
-  logSaving: 1
+  logSaving: 2
   logFlags: 010101000001
   fpsWarning: 1
   lowFPS: 20
@@ -599,6 +603,18 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+--- !u!114 &262749028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400002, guid: 45c62a3fc8a9231409c29375e8f213d8,
+    type: 2}
+  m_PrefabInternal: {fileID: 927192778}
+  m_GameObject: {fileID: 262749025}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32fd8b6b34e20f46a0168dd34944ddd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &266800340
 GameObject:
   m_ObjectHideFlags: 0
@@ -966,6 +982,9 @@ MonoBehaviour:
   hoverSprite: 
   pressedSprite: 
   disabledSprite: 
+  hoverSprite2D: {fileID: 0}
+  pressedSprite2D: {fileID: 0}
+  disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick:
   - mTarget: {fileID: 517895310}
@@ -1202,7 +1221,6 @@ GameObject:
   - 4: {fileID: 604466564}
   - 114: {fileID: 604466567}
   - 114: {fileID: 604466565}
-  - 114: {fileID: 604466568}
   m_Layer: 0
   m_Name: __GameMaster
   m_TagString: Untagged
@@ -1251,18 +1269,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ba5258ed892420d43ac1cff2c207fa38, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &604466568
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400012, guid: aeed59aee1ea3714da2eb46ccb6175bd,
-    type: 2}
-  m_PrefabInternal: {fileID: 1868191779}
-  m_GameObject: {fileID: 604466563}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b32fd8b6b34e20f46a0168dd34944ddd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &621813487
@@ -2087,7 +2093,7 @@ MonoBehaviour:
   updateAnchors: 1
   showInPanelTool: 1
   generateNormals: 0
-  widgetsAreStatic: 1
+  widgetsAreStatic: 0
   cullWhileDragging: 0
   alwaysOnScreen: 0
   anchorOffset: 0
@@ -2302,10 +2308,8 @@ MonoBehaviour:
   log: 1
   timeScale: 1
   logWarning: 0
-  invincible: 1
+  invincible: 0
   jumpToBoss: 0
-  volumeSE: 5
-  volumeMusic: 0
   joystickSensitivity: .5
   joystickXBuffer: .0500000007
   joystickYBuffer: .0500000007
@@ -2652,7 +2656,7 @@ MonoBehaviour:
   log: 1
   timeScale: 1
   logWarning: 0
-  currentBuild: Test Build
+  currentBuild: 
 --- !u!1 &1292544050
 GameObject:
   m_ObjectHideFlags: 0
@@ -4495,6 +4499,9 @@ MonoBehaviour:
   hoverSprite: 
   pressedSprite: 
   disabledSprite: 
+  hoverSprite2D: {fileID: 0}
+  pressedSprite2D: {fileID: 0}
+  disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick:
   - mTarget: {fileID: 517895310}
@@ -4556,6 +4563,9 @@ MonoBehaviour:
   hoverSprite: 
   pressedSprite: 
   disabledSprite: 
+  hoverSprite2D: {fileID: 0}
+  pressedSprite2D: {fileID: 0}
+  disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick:
   - mTarget: {fileID: 517895310}
@@ -4675,6 +4685,9 @@ MonoBehaviour:
   hoverSprite: 
   pressedSprite: 
   disabledSprite: 
+  hoverSprite2D: {fileID: 0}
+  pressedSprite2D: {fileID: 0}
+  disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick:
   - mTarget: {fileID: 517895310}
