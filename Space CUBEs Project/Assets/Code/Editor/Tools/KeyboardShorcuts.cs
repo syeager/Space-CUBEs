@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.05.22
-// Edited: 2014.05.28
+// Edited: 2014.06.07
 
 using System.Linq;
 using Annotations;
@@ -20,6 +20,19 @@ public class KeyboardShortcuts : EditorWindow
     private static void Redo()
     {
         Undo.PerformRedo();
+    }
+
+    #endregion
+
+    #region Application Shortcuts
+
+    [UsedImplicitly]
+    [MenuItem("Shortcuts/Open Data Folder #%D", false, 1)]
+    private static void OpenDataPath()
+    {
+        string path = Application.persistentDataPath.Replace(@"/", @"\") + @"\";
+        Debug.Log(path);
+        System.Diagnostics.Process.Start("explorer.exe", path);
     }
 
     #endregion
@@ -45,6 +58,7 @@ public class KeyboardShortcuts : EditorWindow
             PrefabUtility.ReplacePrefab(obj, PrefabUtility.GetPrefabParent(obj), ReplacePrefabOptions.ConnectToPrefab);
         }
     }
+
 
     [UsedImplicitly]
     [MenuItem("Shortcuts/Break Prefab &O", false, 51)]
@@ -86,6 +100,7 @@ public class KeyboardShortcuts : EditorWindow
 
         Selection.activeGameObject = created;
     }
+
 
     [UsedImplicitly]
     [MenuItem("Shortcuts/Create Empty Parent &%M", true, 101)]
