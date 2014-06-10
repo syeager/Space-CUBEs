@@ -6,7 +6,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using GameSaveData;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -43,7 +42,7 @@ public class ShowBuild : MonoBehaviour
             var cube = (CUBE)Instantiate(GameResources.GetCUBE(piece.Key));
             cube.transform.parent = transform;
 
-            cube.transform.localPosition = piece.Value.position.Cast().normalized * Random.Range(minDist, maxDist);
+            cube.transform.localPosition = piece.Value.position.normalized * Random.Range(minDist, maxDist);
             cube.transform.localPosition = Quaternion.Euler(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360)) * cube.transform.localPosition;
             cube.transform.localEulerAngles = piece.Value.rotation;
 

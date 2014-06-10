@@ -36,7 +36,9 @@ public class GameSettings : Singleton<GameSettings>
     #region Const Fields
 
     /// <summary>Data folder of setting files.</summary>
-    public const string SettingsFile = @"Settings\";
+    public const string SettingsFolder = @"Settings\";
+
+    public const string InputFolder = SettingsFolder + @"Input\";
 
     #endregion
 
@@ -54,10 +56,10 @@ public class GameSettings : Singleton<GameSettings>
 
     public static void Save()
     {
-        SaveData.Save("Joystick Sensitivity", Main.joystickSensitivity, SettingsFile);
-        SaveData.Save("Joystick xBuffer", Main.joystickSensitivity, SettingsFile);
-        SaveData.Save("Joystick yBuffer", Main.joystickSensitivity, SettingsFile);
-        SaveData.Save("Joystick Deadzone", Main.joystickSensitivity, SettingsFile);
+        SaveData.Save("Joystick Sensitivity", Main.joystickSensitivity, InputFolder);
+        SaveData.Save("Joystick xBuffer", Main.joystickSensitivity, InputFolder);
+        SaveData.Save("Joystick yBuffer", Main.joystickSensitivity, InputFolder);
+        SaveData.Save("Joystick Deadzone", Main.joystickSensitivity, InputFolder);
     }
 
     #endregion
@@ -66,10 +68,10 @@ public class GameSettings : Singleton<GameSettings>
 
     private void Load()
     {
-        joystickSensitivity = SaveData.Load("Joystick Sensitivity", SettingsFile, 0.35f);
-        joystickSensitivity = SaveData.Load("Joystick xBuffer", SettingsFile, 0.5f);
-        joystickSensitivity = SaveData.Load("Joystick yBuffer", SettingsFile, 0.5f);
-        joystickSensitivity = SaveData.Load("Joystick Deadzone", SettingsFile, 0.25f);
+        joystickSensitivity = SaveData.Load("Joystick Sensitivity", InputFolder, 0.35f);
+        joystickSensitivity = SaveData.Load("Joystick xBuffer", InputFolder, 0.5f);
+        joystickSensitivity = SaveData.Load("Joystick yBuffer", InputFolder, 0.5f);
+        joystickSensitivity = SaveData.Load("Joystick Deadzone", InputFolder, 0.25f);
     }
 
     #endregion

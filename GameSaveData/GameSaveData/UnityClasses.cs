@@ -1,7 +1,7 @@
 ﻿// GameSaveData
 // Author: Steve Yeager
 // Created: 2014.06.07
-// Edited: 2014.06.07
+// Edited: 2014.06.09
 
 using System;
 using ProtoBuf;
@@ -9,14 +9,14 @@ using UnityEngine;
 
 namespace GameSaveData
 {
-    public interface IUnity<out T>
+    public interface IUnity
     {
-        T Cast();
+        object Cast();
     }
 
     [ProtoContract]
     [Serializable]
-    public class SVector3 : IUnity<Vector3>
+    public class SVector3 : IUnity
     {
         [ProtoMember(1)]
         public float x;
@@ -54,9 +54,9 @@ namespace GameSaveData
         }
 
 
-        public Vector3 Cast()
+        public object Cast()
         {
-            return this;
+            return (Vector3)this;
         }
     }
 }

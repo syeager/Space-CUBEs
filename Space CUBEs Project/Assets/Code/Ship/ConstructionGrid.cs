@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Annotations;
-using GameSaveData;
 using LittleByte.Data;
 using UnityEngine;
 
@@ -910,7 +909,7 @@ public class ConstructionGrid : MonoBase
     /// </summary>
     /// <param name="buildName">Name of the ship.</param>
     /// <returns>BuildInfo for the ship.</returns>
-    public BuildInfo LoadBuild(string buildName) // TODO: make private
+    private BuildInfo LoadBuild(string buildName) // TODO: make private
     {
         this.buildName = buildName;
 
@@ -918,7 +917,7 @@ public class ConstructionGrid : MonoBase
         string build = SaveData.Load(buildName, BuildsFile, "NA");
         if (build == "NA")
         {
-            Log(buildName + " is not in data.", Debugger.LogTypes.Data, false);
+            Debugger.Log(buildName + " is not in data.", null, Debugger.LogTypes.Data, false);
             return null;
         }
         Debugger.Log("Loading: " + build, null, Debugger.LogTypes.Data);
@@ -1202,6 +1201,53 @@ public class ConstructionGrid : MonoBase
             material.SetFloat("_Mix", 0f);
         }
     }
+
+    #endregion
+
+    #region Static Methods
+
+    /// <summary>
+    /// Get build data from data.
+    /// </summary>
+    /// <param name="buildName">Name of the ship.</param>
+    /// <returns>BuildInfo for the ship.</returns>
+    public static BuildInfo Load(string buildName) // TODO: make private
+    {
+        // get buildInfo string from data
+        string build = SaveData.Load(buildName, BuildsFile, "NA");
+        if (build == "NA")
+        {
+            Debugger.Log(buildName + " is not in data.", null, Debugger.LogTypes.Data, false);
+            return null;
+        }
+        Debugger.Log("Loading: " + build, null, Debugger.LogTypes.Data);
+        var buildInfo = new BuildInfo { partList = new List<KeyValuePair<int, CUBEGridInfo>>() };
+
+        string[] data = build.Split(BuildInfo.DataSep[0]);
+
+        // stats
+        buildInfo.name = data[0];
+        buildInfo.health = float.Parse(data[1]);
+        buildInfo.shield = float.Parse(data[2]);
+        buildInfo.speed = float.Parse(data[3]);
+        buildInfo.damage = float.Parse(data[4]);
+
+        // pieces
+        for (int i = 5; i < data.Length - 1; i++)
+        {
+            string[] info = data[i].Split(BuildInfo.PieceSep[0]);
+            int[] colors = info[5].Substring(0, info[5].Length - 1).Split(BuildInfo.ColorSep[0]).Select(s => int.Parse(s)).ToArray();
+            buildInfo.partList.Add(new KeyValuePair<int, CUBEGridInfo>(int.Parse(info[0]),
+                new CUBEGridInfo(
+                    Utility.ParseV3(info[1]),
+                    Utility.ParseV3(info[2]),
+                    int.Parse(info[3]),
+                    int.Parse(info[4]),
+                    colors)));
+        }
+
+        return buildInfo;
+    } 
 
     #endregion
 }

@@ -172,7 +172,7 @@ public class FormationLevelManager : LevelManager
 
     private void OnBossDeath(object sender, DieArgs args)
     {
-        if (levelIndex >= SaveData.Load<int>(LevelSelectManager.UnlockedLevelsKey, "Level"))
+        if (levelIndex >= SaveData.Load<int>(LevelSelectManager.UnlockedLevelsKey, LevelSelectManager.LevelsFolder))
         {
             SaveData.Save(LevelSelectManager.UnlockedLevelsKey, levelIndex + 1, @"Level\");
         }

@@ -1,15 +1,17 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.05.19
-// Edited: 2014.06.04
+// Edited: 2014.06.09
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using Annotations;
 using LittleByte.Data;
+using UnityClasses;
 using UnityEditor;
 using UnityEngine;
 
@@ -21,16 +23,11 @@ public class SaveDataEditor : EditorWindow
     #region File Fields
 
     private static string[] files;
-    private static Dictionary<string, object>[] allData;
 
-    // TODO: move to another class
-    private static readonly Type[] EditorTypes =
-    {
-        typeof(int),
-        typeof(float),
-        typeof(string),
-        typeof(Vector3),
-    };
+    private static FolderNode rootNode;
+    private static object currentData;
+    private static string currentFile;
+    private static string currentPath;
 
     #endregion
 
@@ -54,20 +51,20 @@ public class SaveDataEditor : EditorWindow
     }
 
 
-    [UsedImplicitly]
-    private void Update()
-    {
-        if (allData == null || allData.Length == 0)
-        {
-            ReloadAll();
-        }
-    }
+    //[UsedImplicitly]
+    //private void Update()
+    //{
+    //    if (allData == null || allData.Length == 0)
+    //    {
+    //        ReloadAll();
+    //    }
+    //}
 
 
     [UsedImplicitly]
     private void OnGUI()
     {
-        GUILayout.BeginHorizontal();
+        GUILayout.BeginHorizontal("box");
         {
             autoRefresh = EditorGUILayout.Toggle("Auto Refresh", autoRefresh);
             GUI.enabled = !autoRefresh;
@@ -80,8 +77,26 @@ public class SaveDataEditor : EditorWindow
         }
         GUILayout.EndHorizontal();
 
-        Files();
-        Values();
+        GUILayout.BeginHorizontal(GUILayout.ExpandHeight(true));
+        {
+            GUILayout.BeginVertical("box", GUILayout.Width(Screen.width * 0.75f - 10f));
+            {
+                if (currentData != null)
+                {
+                    Values();
+                }
+            }
+            GUILayout.EndVertical();
+
+            GUILayout.FlexibleSpace();
+
+            GUILayout.BeginVertical("box", GUILayout.Width(Screen.width * 0.25f));
+            {
+                Files();
+            }
+            GUILayout.EndVertical();
+        }
+        GUILayout.EndHorizontal();
 
         GUILayout.FlexibleSpace();
         if (GUILayout.Button("Save"))
@@ -94,24 +109,53 @@ public class SaveDataEditor : EditorWindow
 
     #region Private Methods
 
+    private static void AddFile(string[] paths, int cursor, FolderNode node)
+    {
+        while (true)
+        {
+            // done
+            if (cursor == paths.Length)
+            {
+                return;
+            }
+
+            FolderNode nextNode = node.GetNode(paths[cursor]);
+
+            // not found
+            if (nextNode == null)
+            {
+                FolderNode newNode = node.Add(paths[cursor]);
+                cursor = cursor + 1;
+                node = newNode;
+            }
+            else
+            {
+                cursor = cursor + 1;
+                node = nextNode;
+            }
+        }
+    }
+
+
     private static void ReloadAll()
     {
         SaveData.FileSavedEvent -= OnFileSaved;
         SaveData.FileSavedEvent += OnFileSaved;
 
         files = SaveData.GetFiles();
-        allData = new Dictionary<string, object>[files.Length];
+        rootNode = new FolderNode {value = "root"};
 
-        for (int i = 0; i < allData.Length; i++)
+        foreach (string file in files)
         {
-            //allData[i] = SaveData.LoadFileData(files[i]);
+            string[] paths = file.Split('\\');
+            AddFile(paths, 0, rootNode);
         }
     }
 
 
-    private static void Reload(string file)
+    private static void Reload(string filePath)
     {
-        //allData[Array.IndexOf(files, file)] = SaveData.LoadFileData(file);
+        currentData = SaveData.LoadFromPath(filePath);
     }
 
 
@@ -119,11 +163,13 @@ public class SaveDataEditor : EditorWindow
     {
         SaveData.FileSavedEvent -= OnFileSaved;
 
-        string[] keys = allData[openFile].Keys.ToArray();
-        foreach (string key in keys)
-        {
-            SaveData.Save(key, allData[openFile][key], files[openFile]);
-        }
+        SaveData.Save(currentFile, currentData, currentPath);
+
+        //string[] keys = allData[openFile].Keys.ToArray();
+        //foreach (string key in keys)
+        //{
+        //    SaveData.Save(key, allData[openFile][key], files[openFile]);
+        //}
 
         SaveData.FileSavedEvent += OnFileSaved;
     }
@@ -131,7 +177,39 @@ public class SaveDataEditor : EditorWindow
 
     private void Files()
     {
-        openFile = GUILayout.SelectionGrid(openFile, files, 10);
+        DrawNode(rootNode);
+    }
+
+
+    private static void DrawNode(FolderNode node)
+    {
+        // no children
+        if (node.children.Count == 0)
+        {
+            GUILayout.BeginHorizontal();
+            {
+                GUILayout.Space((EditorGUI.indentLevel - 1) * 18f);
+                if (GUILayout.Button(node.value))
+                {
+                    currentPath = node.Path();
+                    currentFile = node.value;
+                    currentData = SaveData.LoadFromPath(currentPath + currentFile);
+                }
+            }
+            GUILayout.EndHorizontal();
+            return;
+        }
+
+        if (node != rootNode)
+        {
+            EditorGUILayout.LabelField(node.value, EditorStyles.boldLabel);
+            EditorGUI.indentLevel++;
+        }
+        foreach (FolderNode child in node.children)
+        {
+            DrawNode(child);
+        }
+        EditorGUI.indentLevel--;
     }
 
 
@@ -139,11 +217,7 @@ public class SaveDataEditor : EditorWindow
     {
         valueScrollPosition = EditorGUILayout.BeginScrollView(valueScrollPosition);
         {
-            string[] keys = allData[openFile].Keys.ToArray();
-            foreach (string key in keys)
-            {
-                allData[openFile][key] = DrawData(key, allData[openFile][key]);
-            }
+            currentData = DrawData(currentFile, currentData);
         }
         EditorGUILayout.EndScrollView();
     }
@@ -151,7 +225,7 @@ public class SaveDataEditor : EditorWindow
 
     private static object DrawData(string key, object data)
     {
-        if (EditorTypes.Contains(data.GetType()))
+        if (UnityTypes.IsEditor(currentData))
         {
             return DrawUnity(key, data);
         }
@@ -200,7 +274,7 @@ public class SaveDataEditor : EditorWindow
         Type type = data.GetType();
 
         // list
-        if (type.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IList<>))) // TODO: not IList. is generic
+        if (type.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IList<>)))
         {
             var list = data as IList;
             Debug.Log(list.Count);
@@ -212,7 +286,13 @@ public class SaveDataEditor : EditorWindow
 
             for (int i = 0; i < list.Count; i++)
             {
-                if (EditorTypes.Contains(list[i].GetType()))
+                Debug.Log(list[i]);
+                if (list[i] is IUnityClass)
+                {
+                    IUnityClass item = (IUnityClass)list[i];
+                    list[i] = DrawUnity(i.ToString(), item.Cast());
+                }
+                if (UnityTypes.IsEditor(list[i]))
                 {
                     list[i] = DrawUnity(i.ToString(), list[i]);
                 }
@@ -222,52 +302,39 @@ public class SaveDataEditor : EditorWindow
                 }
             }
         }
-        //else if (data != null && data.GetType() == typeof(KeyValuePair<,>))
-        //{
-        //    Debug.Log("haldfj;al");
-        //}
-        //else if (dict != null)
-        //{
-        //    Debug.Log("here");
-        //    foreach (var entry in dict)
-        //    {
-        //        if (EditorTypes.Contains(entry.Value.GetType()))
-        //        {
-        //            dict[entry.Key] = DrawUnity(entry.Key.ToString(), entry.Value);
-        //        }
-        //        else
-        //        {
-        //            DrawObject(entry.Key.ToString(), entry.Value);
-        //        }
-        //    }
-        //}
+            //else if (data != null && data.GetType() == typeof(KeyValuePair<,>))
+            //{
+            //    Debug.Log("haldfj;al");
+            //}
+            //else if (dict != null)
+            //{
+            //    Debug.Log("here");
+            //    foreach (var entry in dict)
+            //    {
+            //        if (EditorTypes.Contains(entry.Value.GetType()))
+            //        {
+            //            dict[entry.Key] = DrawUnity(entry.Key.ToString(), entry.Value);
+            //        }
+            //        else
+            //        {
+            //            DrawObject(entry.Key.ToString(), entry.Value);
+            //        }
+            //    }
+            //}
         else
         {
             FieldInfo[] fieldInfo = data.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
             foreach (FieldInfo info in fieldInfo)
             {
-                if (EditorTypes.Contains(info.FieldType))
+                if (UnityTypes.IsEditor(info.FieldType))
                 {
                     info.SetValue(data, DrawUnity(info.Name, info.GetValue(data)));
                 }
                 else
                 {
-                    DrawObject(info.Name, info.GetValue(data));
+                    DrawData(info.Name, info.GetValue(data));
                 }
             }
-
-            //PropertyInfo[] propertyInfo = type.GetProperties();
-            //foreach (var info in propertyInfo)
-            //{
-            //    if (EditorTypes.Contains(info.PropertyType))
-            //    {
-            //        info.SetValue(data, DrawUnity(info.Name, info.GetValue(data, null)), null);
-            //    }
-            //    else
-            //    {
-            //        return DrawObject(info.Name, info.GetValue(data, null));
-            //    }
-            //}
         }
 
         EditorGUI.indentLevel--;
@@ -284,8 +351,59 @@ public class SaveDataEditor : EditorWindow
         if (!autoRefresh) return;
 
         Reload(args.value.ToString());
-        window.Repaint();
     }
 
     #endregion
+}
+
+
+public class FolderNode
+{
+    public FolderNode parent;
+    public List<FolderNode> children = new List<FolderNode>();
+    public string value;
+
+
+    public FolderNode Add(string value)
+    {
+        FolderNode child = new FolderNode {value = value, parent = this};
+        children.Add(child);
+        return child;
+    }
+
+
+    public FolderNode GetNode(string value)
+    {
+        return children.FirstOrDefault(child => child.value.Equals(value));
+    }
+
+
+    public string Path()
+    {
+        FolderNode node = this;
+        StringBuilder path = new StringBuilder();
+        List<string> parents = new List<string>();
+
+        while (true)
+        {
+            // root
+            if (node.parent == null)
+            {
+                for (int i = parents.Count - 1; i > 0; i--)
+                {
+                    path.Append(parents[i]);
+
+                    if (i > 0)
+                    {
+                        path.Append('\\');
+                    }
+                }
+
+                return path.ToString();
+            }
+
+            parents.Add(node.value);
+            node = node.parent;
+        }
+    }
 }

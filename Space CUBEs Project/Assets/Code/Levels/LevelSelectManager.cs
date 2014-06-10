@@ -23,6 +23,9 @@ public class LevelSelectManager : MonoBehaviour
 
     public const string UnlockedLevelsKey = "Unlocked Levels";
 
+    /// <summary>Data folder for highscores and unlocked levels.</summary>
+    public const string LevelsFolder = @"Levels\";
+
     #endregion
 
     #region MonoBehaviour Overrides
@@ -31,7 +34,7 @@ public class LevelSelectManager : MonoBehaviour
     private void Start()
     {
         // register button events
-        int unlocked = SaveData.Load<int>(UnlockedLevelsKey, "Level");;
+        int unlocked = SaveData.Load<int>(UnlockedLevelsKey, LevelsFolder); ;
         for (int i = 0; i < levelButtons.Length; i++)
         {
             levelButtons[i].ActivateEvent += OnLevelSelected;

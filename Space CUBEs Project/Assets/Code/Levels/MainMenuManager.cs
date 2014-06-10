@@ -59,7 +59,7 @@ public class MainMenuManager : MonoBehaviour
 
     public void LoadStore()
     {
-        SceneManager.LoadScene("Store");
+        SceneManager.LoadScene("Store", true);
     }
 
 
