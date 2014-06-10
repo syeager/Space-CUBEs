@@ -237,6 +237,8 @@ public class Debugger : Singleton<Debugger>
     /// <param name="message">Message to be displayed.</param>
     /// <param name="args">Arguments for string.Format.</param>
     [Conditional("DEBUG")]
+    [DebuggerHiddenAttribute]
+    [DebuggerStepThrough]
     public static void Print(string message, params object[] args)
     {
         Debug.Log(string.Format(message, args));
@@ -251,6 +253,8 @@ public class Debugger : Singleton<Debugger>
     /// <param name="logType">Will only display this message if this LogType is checked as active.</param>
     /// <param name="save">Should this message be saved to a log file?</param>
     [Conditional("DEBUG")]
+    [DebuggerHiddenAttribute]
+    [DebuggerStepThrough]
     public static void Log(object message, Object context = null, LogTypes logType = LogTypes.Default, bool save = true)
     {
         if (Application.isPlaying)
@@ -285,6 +289,8 @@ public class Debugger : Singleton<Debugger>
     /// <param name="logType">Will only display this message if this LogType is checked as active.</param>
     /// <param name="save">Should this message be saved to a log file?</param>
     [Conditional("DEBUG")]
+    [DebuggerHiddenAttribute]
+    [DebuggerStepThrough]
     public static void LogWarning(object message, Object context = null, LogTypes logType = LogTypes.Default, bool save = true)
     {
         if (Application.isPlaying)
@@ -318,6 +324,8 @@ public class Debugger : Singleton<Debugger>
     /// <param name="context">Unity Object to highlight in the Hierarchy.</param>
     /// <param name="logType">Used for catagorizing the message.</param>
     /// <param name="save">Should this message be saved to a log file?</param>
+    [DebuggerHiddenAttribute]
+    [DebuggerStepThrough]
     public static void LogError(object message, Object context = null, LogTypes logType = LogTypes.Default, bool save = true)
     {
         if (Application.isPlaying)
@@ -348,6 +356,8 @@ public class Debugger : Singleton<Debugger>
     /// <param name="context">Unity Object to highlight in the Hierarchy.</param>
     /// <param name="logType">Used for catagorizing the message.</param>
     /// <param name="save">Should this message be saved to a log file?</param>
+    [DebuggerHiddenAttribute]
+    [DebuggerStepThrough]
     public static Exception LogException(Exception exception, Object context = null, LogTypes logType = LogTypes.Default, bool save = true)
     {
         Debug.LogException(exception, context);
@@ -374,6 +384,8 @@ public class Debugger : Singleton<Debugger>
     /// <param name="context">Unity Object to highlight in the Hierarchy.</param>
     /// <param name="logType">Will only display this message if this LogType is checked as active.</param>
     [Conditional("DEBUG")]
+    [DebuggerHiddenAttribute]
+    [DebuggerStepThrough]
     public static void LogList(IEnumerable list, string header = "", Object context = null, LogTypes logType = LogTypes.Default)
     {
         if (Application.isPlaying)
@@ -409,6 +421,8 @@ public class Debugger : Singleton<Debugger>
     /// <param name="context">Unity Object to highlight in the Hierarchy.</param>
     /// <param name="logType">Will only display this message if this LogType is checked as active.</param>
     [Conditional("DEBUG")]
+    [DebuggerHiddenAttribute]
+    [DebuggerStepThrough]
     public static void LogDict<TKey, TValue>(Dictionary<TKey, TValue> dictionary, string header = "", Object context = null, LogTypes logType = LogTypes.Default)
     {
         if (Application.isPlaying)
@@ -457,6 +471,8 @@ public class Debugger : Singleton<Debugger>
     /// <param name="includePrivate">Should private members be shown as well?</param>
     /// <param name="logType">Will only display this message if this LogType is checked as active.</param>
     [Conditional("DEBUG")]
+    [DebuggerHiddenAttribute]
+    [DebuggerStepThrough]
     public static void LogFields(object context, string header, bool includePrivate = false, LogTypes logType = LogTypes.Default)
     {
         var unityContext = context as Object;
@@ -491,6 +507,8 @@ public class Debugger : Singleton<Debugger>
     /// <param name="message">Message to display next to the counter.</param>
     /// <param name="context">Unity Object to highlight in the Hierarchy.</param>
     [Conditional("DEBUG")]
+    [DebuggerHiddenAttribute]
+    [DebuggerStepThrough]
     public static void Mark(string message = "", Object context = null)
     {
         Debug.Log(String.Format("{0} {1}", marker, message), context);
@@ -504,6 +522,8 @@ public class Debugger : Singleton<Debugger>
     /// <param name="context">object to check.</param>
     /// <param name="message">Optional message to log.</param>
     /// <returns>True, if null.</returns>
+    [DebuggerHiddenAttribute]
+    [DebuggerStepThrough]
     public static bool NullCheck(object context, string message = "")
     {
         if (context == null)
@@ -525,6 +545,8 @@ public class Debugger : Singleton<Debugger>
     /// <param name="message">Message to display.</param>
     /// <param name="time">Time in seconds to display the message for. 0s is for one frame.</param>
     [Conditional("DEBUG")]
+    [DebuggerHiddenAttribute]
+    [DebuggerStepThrough]
     public static void LogConsoleLine(string message, float time = 0f)
     {
         if (Main.consoleLine == null) return;
@@ -540,6 +562,8 @@ public class Debugger : Singleton<Debugger>
     /// <summary>
     /// Displays all messages to ConsoleLine in the order that they were recieved.
     /// </summary>
+    [DebuggerHiddenAttribute]
+    [DebuggerStepThrough]
     private static IEnumerator DisplayConsoleLine()
     {
         displayingMessages = true;
