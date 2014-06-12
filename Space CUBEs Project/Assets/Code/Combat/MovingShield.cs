@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 3.28.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.03.28
+// Edited: 2014.06.11
 
 using UnityEngine;
 using System.Collections;
@@ -10,10 +12,10 @@ using System.Collections;
 public class MovingShield : Weapon
 {
     #region Public Fields
-    
+
     public float amp = 1f;
     public float speed;
-    
+
     #endregion
 
     #region Private Fields
@@ -21,7 +23,6 @@ public class MovingShield : Weapon
     private Vector3 start;
 
     #endregion
-
 
     #region Weapon Overrides
 
@@ -32,7 +33,7 @@ public class MovingShield : Weapon
     }
 
 
-    public override void Activate(bool pressed, float multiplier)
+    public override void Activate(bool pressed, float multiplier, object attackInfo = null)
     {
         if (pressed)
         {

@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 12.01.2013
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2013.12.01
+// Edited: 2014.06.11
 
 using System;
 using System.Collections;
@@ -17,7 +19,7 @@ public abstract class Weapon : MonoBase
 
     #region Public Fields
 
-    new public string name;
+    public new string name;
 
     /// <summary>Time in seconds to completely refill power gauge.</summary>
     public float cooldownTime;
@@ -53,7 +55,6 @@ public abstract class Weapon : MonoBase
 
     #endregion
 
-
     #region MonoBehaviours
 
     [UsedImplicitly]
@@ -80,8 +81,7 @@ public abstract class Weapon : MonoBase
                 PowerUpdateEvent(this, new ValueArgs(power));
             }
             yield return null;
-        }
-        while (power < FullPower);
+        } while (power < FullPower);
 
         power = FullPower;
         canActivate = true;
@@ -131,7 +131,13 @@ public abstract class Weapon : MonoBase
 
     #region Abstract Methods
 
-    public abstract void Activate(bool pressed, float multiplier);
+    /// <summary>
+    /// Activate weapon with extra info.
+    /// </summary>
+    /// <param name="pressed">Is the weapon being pressed?</param>
+    /// <param name="multiplier">Damage multiplier.</param>
+    /// <param name="attackInfo">Data to be passed and converted on the weapon side.</param>
+    public abstract void Activate(bool pressed, float multiplier, object attackInfo = null); 
 
-    #endregion   
+    #endregion
 }

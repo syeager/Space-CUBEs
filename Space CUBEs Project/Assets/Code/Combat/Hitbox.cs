@@ -34,10 +34,10 @@ public class Hitbox : MonoBase
 
     #endregion
 
-    #region Readonly Fields
+    #region Const Fields
 
-    private static readonly int PlayerLayer = LayerMask.NameToLayer("PlayerWeapon");
-    private static readonly int EnemyLayer = LayerMask.NameToLayer("EnemyWeapon");
+    protected const int PlayerLayer = 12;
+    protected const int EnemyLayer = 13;
 
     #endregion
 

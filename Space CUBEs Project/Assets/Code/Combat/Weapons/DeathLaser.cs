@@ -18,7 +18,7 @@ public class DeathLaser : Weapon
 
     #region Weapon Overrides
 
-    public override void Activate(bool pressed, float multiplier)
+    public override void Activate(bool pressed, float multiplier, object attackInfo = null)
     {
         if (pressed)
         {

@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 3.25.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.03.26
+// Edited: 2014.06.11
 
 using Annotations;
 using UnityEngine;
@@ -17,12 +19,19 @@ public class OscillatingLaser : Weapon
     public float speed;
     public float time;
     public float damage;
-    
+
     #endregion
 
     #region Private Fields
 
     private Quaternion startRotation;
+
+    #endregion
+
+    #region Const Fields
+
+    /// <summary>Animation of laser moving into place.</summary>
+    private const string DeployAnim = "SideWeaponDeploy";
 
     #endregion
 
@@ -38,16 +47,19 @@ public class OscillatingLaser : Weapon
 
     #region Weapon Overrides
 
-    public override void Activate(bool pressed, float multiplier)
+    public override void Activate(bool pressed, float multiplier, object attackInfo = null)
     {
         if (pressed)
         {
-            StartCoroutine(Fire());
+            gameObject.SetActive(true);
+            animation.PlayReverse(DeployAnim, false);
+            StartCoroutine(Fire((float)attackInfo));
         }
         else
         {
             StopAllCoroutines();
             laser.SetActive(false);
+            animation.PlayReverse(DeployAnim, true);
             myTransform.rotation = startRotation;
         }
     }
@@ -56,22 +68,27 @@ public class OscillatingLaser : Weapon
 
     #region Private Methods
 
-    private IEnumerator Fire()
+    private IEnumerator Fire(float deployTime)
     {
+        // deploy
+        animation.PlayReverse(DeployAnim, false);
+        yield return new WaitForSeconds(deployTime);
+        animation.Stop();
+
         // reset laser
         laser.SetActive(true);
         ((Hitbox)laser.GetComponent(typeof(Hitbox))).Initialize(myShip, damage);
 
         float direction = 1f;
-        float cycleTime = time/cycles;
+        float cycleTime = time / cycles;
 
         // first
-        float timer = cycleTime/2f;
+        float timer = cycleTime / 2f;
         while (timer > 0f)
         {
-            timer -= Time.deltaTime;
+            timer -= deltaTime;
 
-            myTransform.Rotate(Vector3.back, direction * speed * Time.deltaTime, Space.World);
+            myTransform.Rotate(Vector3.back, direction * speed * deltaTime, Space.World);
 
             yield return null;
         }
@@ -83,9 +100,9 @@ public class OscillatingLaser : Weapon
             timer = cycleTime;
             while (timer > 0f)
             {
-                timer -= Time.deltaTime;
+                timer -= deltaTime;
 
-                myTransform.Rotate(Vector3.back, direction * speed * Time.deltaTime, Space.World);
+                myTransform.Rotate(Vector3.back, direction * speed * deltaTime, Space.World);
 
                 yield return null;
             }

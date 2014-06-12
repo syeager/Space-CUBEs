@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.04.03
-// Edited: 2014.06.04
+// Edited: 2014.06.11
 
 using Annotations;
 using LittleByte.Data;
@@ -34,7 +34,7 @@ public class LevelSelectManager : MonoBehaviour
     private void Start()
     {
         // register button events
-        int unlocked = SaveData.Load<int>(UnlockedLevelsKey, LevelsFolder); ;
+        int unlocked = SaveData.Load<int>(UnlockedLevelsKey, LevelsFolder);
         for (int i = 0; i < levelButtons.Length; i++)
         {
             levelButtons[i].ActivateEvent += OnLevelSelected;

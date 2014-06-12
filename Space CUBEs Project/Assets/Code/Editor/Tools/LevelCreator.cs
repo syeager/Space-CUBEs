@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.01.26
-// Edited: 2014.05.23
+// Edited: 2014.06.10
 
 using System;
 using System.Collections.Generic;
@@ -256,27 +256,41 @@ public class LevelCreator : EditorWindow
         SerializedProperty sFormSeg = sFormationGroups.GetArrayElementAtIndex(formationIndex);
         GUI.BeginGroup(new Rect(FormationWidth, formationTotalHeight, w - FormationWidth, FormationHeight), "");
         {
+            float formationHeight = FormationHeight / 2f - 10f;
+
             // needs clearing
             GUI.enabled = formationIndex != 0;
-            EditorGUI.LabelField(new Rect(10f, FormationHeight / 2f - 10f, 100f, 20f), "Needs Clearing");
+            EditorGUI.LabelField(new Rect(10f, formationHeight, 100f, 20f), "Needs Clearing");
             SerializedProperty property = sFormSeg.FindPropertyRelative("needsClearing");
-            EditorGUI.PropertyField(new Rect(110f, FormationHeight / 2f - 8f, 16f, 16f), property, new GUIContent(""));
+            EditorGUI.PropertyField(new Rect(110f, formationHeight, 16f, 16f), property, GUIContent.none);
             GUI.enabled = true;
 
             // spawn time
-            EditorGUI.LabelField(new Rect(150f, FormationHeight / 2f - 10f, 80f, 20f), "Spawn Time");
+            EditorGUI.LabelField(new Rect(150f, formationHeight, 80f, 20f), "Spawn Time");
             property = sFormSeg.FindPropertyRelative("spawnTime");
-            EditorGUI.PropertyField(new Rect(230f, FormationHeight / 2f - 10f, 30f, 20f), property, new GUIContent(""));
+            EditorGUI.PropertyField(new Rect(230f, formationHeight, 30f, 20f), property, GUIContent.none);
 
             // start position
-            EditorGUI.LabelField(new Rect(280f, FormationHeight / 2f - 10f, 50f, 20f), "Position");
+            EditorGUI.LabelField(new Rect(280f, formationHeight, 50f, 20f), "Position");
             property = sFormSeg.FindPropertyRelative("position");
-            EditorGUI.PropertyField(new Rect(330f, FormationHeight / 2f - 10f, 150f, 20f), property, new GUIContent(""));
+            EditorGUI.PropertyField(new Rect(330f, formationHeight, 150f, 20f), property, GUIContent.none);
+            ;
 
             // start rotation
-            EditorGUI.LabelField(new Rect(500f, FormationHeight / 2f - 10f, 50f, 20f), "Rotation");
+            EditorGUI.LabelField(new Rect(500f, formationHeight, 50f, 20f), "Rotation");
             property = sFormSeg.FindPropertyRelative("rotation");
-            EditorGUI.PropertyField(new Rect(555f, FormationHeight / 2f - 10f, 40f, 20f), property, new GUIContent(""));
+            EditorGUI.PropertyField(new Rect(555f, formationHeight, 40f, 20f), property, GUIContent.none);
+
+            // save
+            if (GUI.Button(new Rect(610f, formationHeight, 50f, 20f), "Save"))
+            {
+                var window = GetWindow<SaveWindow>(true, "Save Formation", true);
+                window.minSize = window.maxSize = new Vector2(300f, 100f);
+            }
+            // load
+            if (GUI.Button(new Rect(660f, formationHeight, 50f, 20f), "Load"))
+            {
+            }
         }
         GUI.EndGroup();
 
@@ -538,4 +552,44 @@ public class LevelCreator : EditorWindow
     }
 
     #endregion
+}
+
+
+public class SaveWindow : EditorWindow
+{
+    private const string SavePath = "";
+    private string saveName = "-----";
+
+
+    private void OnEnable()
+    {
+        Focus();
+    }
+
+
+    private void OnFocus()
+    {
+        GUI.FocusControl("SaveName");
+    }
+
+    private void OnGUI()
+    {
+        GUI.SetNextControlName("SaveName");
+        saveName = EditorGUILayout.TextField("Save", saveName);
+
+        GUILayout.FlexibleSpace();
+        GUILayout.BeginHorizontal();
+        {
+            if (GUILayout.Button("Save"))
+            {
+                Close();
+            }
+
+            if (GUILayout.Button("Cancel"))
+            {
+                Close();
+            }
+        }
+        GUILayout.EndHorizontal();
+    }
 }

@@ -42,7 +42,7 @@ public static class BuildStats
     /// <returns>0 based index corresponding to core level.</returns>
     public static int GetCoreLevel()
     {
-        return SaveData.Load<int>(CoreCapacityPath);
+        return SaveData.Load<int>(CoreCapacityPath, ItemsFile);
     }
 
 
@@ -72,7 +72,7 @@ public static class BuildStats
     /// <returns>0 based index corresponding to weapon level.</returns>
     public static int GetWeaponLevel()
     {
-        return SaveData.Load<int>(WeaponExpansionPath);
+        return SaveData.Load<int>(WeaponExpansionPath, ItemsFile);
     }
 
 
@@ -102,7 +102,7 @@ public static class BuildStats
     /// <returns>0 based index corresponding to augmentation level.</returns>
     public static int GetAugmentationLevel()
     {
-        return SaveData.Load<int>(AugmentationExpansionPath);
+        return SaveData.Load<int>(AugmentationExpansionPath, ItemsFile);
     }
 
 

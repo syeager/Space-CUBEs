@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 3.26.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.03.26
+// Edited: 2014.06.11
 
 using Annotations;
 using UnityEngine;
@@ -18,9 +20,9 @@ public class SidewinderMissile : Hitbox
 
     #region Public Fields
 
-    public float allowedDist = 1f;
-    public float dummyRotation = 45f;
-    public float dummyDistancePercentage = 0.25f;
+    public float allowedDist = 10f;
+    public float dummyRotation = 70f;
+    public float dummyDistancePercentage = 0.4f;
     public float angularAccelerationPercentage = 0.1f;
     public float dummyRotationModifier = 0.5f;
 
@@ -35,9 +37,8 @@ public class SidewinderMissile : Hitbox
     private Transform target;
     private Vector3 dummyTarget;
     private Vector3 velocity;
-    
-    #endregion
 
+    #endregion
 
     #region MonoBehaviour Overrides
 
@@ -52,7 +53,7 @@ public class SidewinderMissile : Hitbox
     [UsedImplicitly]
     private void FixedUpdate()
     {
-        myRigidbody.MovePosition(myRigidbody.position + velocity * Time.deltaTime);
+        myRigidbody.MovePosition(myRigidbody.position + velocity * deltaTime);
     }
 
     #endregion
@@ -103,15 +104,14 @@ public class SidewinderMissile : Hitbox
             while (Vector3.Distance(myTransform.position, dummyTarget) > allowedDist)
             {
                 // move
-                //myTransform.position += myTransform.forward*speed*Time.deltaTime;
                 velocity = myTransform.forward * speed;
 
                 // rotate
                 rotationTarget = Quaternion.LookRotation(dummyTarget - myTransform.position, Vector3.back);
-                myTransform.rotation = Quaternion.Slerp(myTransform.rotation, rotationTarget, rotatingSpeed * Time.deltaTime);
+                myTransform.rotation = Quaternion.Slerp(myTransform.rotation, rotationTarget, rotatingSpeed * deltaTime);
 
                 // increase rotation speed
-                rotatingSpeed += angularSpeed*angularAccelerationPercentage*Time.deltaTime;
+                rotatingSpeed += angularSpeed * angularAccelerationPercentage * deltaTime;
 
                 yield return null;
             }
@@ -123,18 +123,17 @@ public class SidewinderMissile : Hitbox
         while (true)
         {
             // move
-            //myTransform.position += myTransform.forward * speed * Time.deltaTime;
             velocity = myTransform.forward * speed;
 
             // rotate
             if (timer > 0f)
             {
-                timer -= Time.deltaTime;
+                timer -= deltaTime;
 
                 targetPosition = target.position;
-                rotationTarget = Quaternion.LookRotation((targetPosition - myTransform.position).normalized, Vector3.back); // need to find correct rotation. dont think this is right
+                rotationTarget = Quaternion.LookRotation((targetPosition - myTransform.position).normalized, Vector3.back);
             }
-            myTransform.rotation = Quaternion.Slerp(myTransform.rotation, rotationTarget, angularSpeed * Time.deltaTime);
+            myTransform.rotation = Quaternion.Slerp(myTransform.rotation, rotationTarget, angularSpeed * deltaTime);
 
             yield return null;
         }

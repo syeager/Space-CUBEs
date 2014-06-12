@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.03.31
+// Edited: 2014.06.11
 
 using UnityEngine;
 using System.Collections;
@@ -10,12 +12,11 @@ using System.Collections;
 public class WeaponStacker : Weapon
 {
     #region Public Fields
-    
+
     public Weapon[] weapons;
     public float[] delays;
-    
-    #endregion
 
+    #endregion
 
     #region Weapon Overrides
 
@@ -30,7 +31,7 @@ public class WeaponStacker : Weapon
     }
 
 
-    public override void Activate(bool pressed, float multiplier)
+    public override void Activate(bool pressed, float multiplier, object attackInfo = null)
     {
         if (pressed)
         {

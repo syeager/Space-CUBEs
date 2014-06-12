@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 4.14.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.04.14
+// Edited: 2014.06.11
 
 using UnityEngine;
 
@@ -12,12 +14,12 @@ public class GuardLaser : Weapon
 
     public GameObject laser;
     public float damage;
-    
+
     #endregion
 
     #region Weapon Overrides
 
-    public override void Activate(bool pressed, float multiplier)
+    public override void Activate(bool pressed, float multiplier, object attackInfo = null)
     {
         if (pressed)
         {

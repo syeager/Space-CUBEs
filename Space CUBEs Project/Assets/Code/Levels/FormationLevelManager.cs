@@ -174,7 +174,7 @@ public class FormationLevelManager : LevelManager
     {
         if (levelIndex >= SaveData.Load<int>(LevelSelectManager.UnlockedLevelsKey, LevelSelectManager.LevelsFolder))
         {
-            SaveData.Save(LevelSelectManager.UnlockedLevelsKey, levelIndex + 1, @"Level\");
+            SaveData.Save(LevelSelectManager.UnlockedLevelsKey, levelIndex + 1, LevelSelectManager.LevelsFolder);
         }
         
         LevelFinished();

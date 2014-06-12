@@ -87,12 +87,13 @@ public class WeaponManager : MonoBehaviour
     /// </summary>
     /// <param name="weapon">Weapon index.</param>
     /// <param name="isPressed">True, if weapon is pressed and not released.</param>
-    public void Activate(int weapon, bool isPressed)
+    /// <param name="attackInfo">Optional additional info to pass.</param>
+    public void Activate(int weapon, bool isPressed, object attackInfo = null)
     {
         if (weapon >= weapons.Length) return;
         if (weapons[weapon] == null) return;
 
-        weapons[weapon].Activate(isPressed, damageMultiplier);
+        weapons[weapon].Activate(isPressed, damageMultiplier, attackInfo);
     }
 
 
