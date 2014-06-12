@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 3.25.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.03.25
+// Edited: 2014.06.08
 
 using System;
 using UnityEngine;
@@ -12,6 +14,12 @@ using Random = UnityEngine.Random;
 /// </summary>
 public class SwitchBlade : Boss
 {
+    #region References
+
+    private Animation myAnimation;
+
+    #endregion
+
     #region State Fields
 
     private const string EnteringState = "Entering";
@@ -62,12 +70,14 @@ public class SwitchBlade : Boss
 
     #endregion
 
-
     #region MonoBehaviour Overrides
 
     protected override void Awake()
     {
         base.Awake();
+
+        // references
+        myAnimation = animation;
 
         // state machine
         stateMachine = new StateMachine(this, EnteringState);
@@ -301,8 +311,9 @@ public class SwitchBlade : Boss
         {
             moveJob.Pause(true);
         }
-        myWeapons.weapons[weapon1].gameObject.SetActive(true);
-        myWeapons.weapons[weapon2].gameObject.SetActive(true);
+
+        myWeapons.Activate(weapon1, true, stage1SwitchTime);
+        myWeapons.Activate(weapon2, true, stage1SwitchTime);
         yield return new WaitForSeconds(stage1SwitchTime);
 
         // fire
@@ -310,8 +321,6 @@ public class SwitchBlade : Boss
         {
             moveJob.Pause(false);
         }
-        myWeapons.Activate(weapon1, true);
-        myWeapons.Activate(weapon2, true);
         yield return new WaitForSeconds(stage1AttackTime);
         myWeapons.Activate(weapon1, false);
         myWeapons.Activate(weapon2, false);
@@ -322,12 +331,21 @@ public class SwitchBlade : Boss
             moveJob.Pause(true);
         }
         yield return new WaitForSeconds(stage1SwitchTime);
-        myWeapons.weapons[weapon1].gameObject.SetActive(false);
-        myWeapons.weapons[weapon2].gameObject.SetActive(false);
         if (controlMovement)
         {
             moveJob.Pause(false);
         }
+    }
+
+
+    private IEnumerator FireMissiles(bool right)
+    {
+        // deploy
+        myAnimation.Blend(right ? "Missiles_R_Deploy" : "Missiles_L_Deploy");
+        yield return new WaitForSeconds(2f);
+
+        // fire
+        myAnimation.Blend(right ? "Missiles_R_Shoot" : "Missiles_L_Shoot");
     }
 
 
@@ -365,7 +383,7 @@ public class SwitchBlade : Boss
             // activate
             myWeapons.Activate(5, true);
             yield return activated;
- 
+
             // close
             myWeapons.Activate(5, false);
             yield return deactivated;

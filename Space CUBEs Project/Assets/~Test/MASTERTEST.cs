@@ -1,13 +1,14 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.01.14
-// Edited: 2014.06.07
+// Edited: 2014.06.08
 
+using System.Collections;
 using System.Collections.Generic;
 using GameSaveData;
 using LittleByte.Data;
+using UnityClasses;
 using UnityEngine;
-using Profiler = LittleByte.Debug.Profiler;
 
 //
 public class MASTERTEST : MonoBehaviour
@@ -17,51 +18,21 @@ public class MASTERTEST : MonoBehaviour
     public bool delete;
 
     public int tests;
-    public SVector3 position;
+    public Vector3 position;
     public int health;
     public Transform myTransform;
     public UILabel label;
-    public List<int> testList;
+    public List<Vector3> testList;
     public BuildInfo buildInfo;
-    public ConstructionGrid grid;
+    public CUBEGridInfo cubeInfo;
+
 
     private const string TestFolder = @"Tests\";
 
 
     private void Start()
     {
-        using (var profiler = new Profiler("Saving PB"))
-        {
-            for (int i = 0; i < tests; i++)
-            {
-                SaveData.Save("health", health, TestFolder);
-            }
-        }
-
-        using (var profiler = new Profiler("Loading PB"))
-        {
-            for (int i = 0; i < tests; i++)
-            {
-                health = SaveData.Load<int>("health", TestFolder);
-            }
-        }
-
-
-        using (var profiler = new Profiler("Saving PP"))
-        {
-            for (int i = 0; i < tests; i++)
-            {
-                PlayerPrefs.SetInt("health", health);
-            }
-        }
-
-        using (var profiler = new Profiler("Loading PP"))
-        {
-            for (int i = 0; i < tests; i++)
-            {
-                health = PlayerPrefs.GetInt("health");
-            }
-        }
+        buildInfo = ConstructionGrid.Load("Avenger");
     }
 
 
@@ -70,13 +41,19 @@ public class MASTERTEST : MonoBehaviour
         if (save)
         {
             save = false;
-            Save();
+            using (var profiler = new LittleByte.Debug.Profiler("Save"))
+            {
+                for (int i = 0; i < tests; i++) Save();
+            }
         }
 
         if (load)
         {
             load = false;
-            Load();
+            using (var profiler = new LittleByte.Debug.Profiler("Load"))
+            {
+                for (int i = 0; i < tests; i++) Load();
+            }
         }
 
         if (delete)
@@ -89,18 +66,28 @@ public class MASTERTEST : MonoBehaviour
 
     private void Delete()
     {
-        SaveData.Delete("Number List", @"Bank\");
+        //bool test = testList is IList;
     }
 
 
     private void Load()
     {
-        tests = SaveData.Load("Test", @"Default\", 10);
+        //buildInfo = SaveData.Load<BuildInfo>("BuildInfo");
+        //cubeInfo = SaveData.Load<CUBEGridInfo>("CUBEInfo");
+        //position = SaveData.Load<Vector3>("position");
+        testList = SaveData.Load<List<Vector3>>("testList");
+        //health = SaveData.Load<int>("health");
     }
 
 
     private void Save()
     {
-        
+        //SaveData.Save("BuildInfo", buildInfo);
+        //SaveData.Save("CUBEInfo", cubeInfo);
+        //SaveData.Save("position", position);
+        SaveData.Save("testList", testList);
+        //Protobuf.Save("testList", testList);
+        //SaveData.Save("int", 5);
+        //SaveData.Save("health", health);
     }
 }
