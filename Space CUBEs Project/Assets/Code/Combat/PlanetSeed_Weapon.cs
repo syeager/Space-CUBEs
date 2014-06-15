@@ -1,20 +1,22 @@
-﻿// Steve Yeager
-// 2.20.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.02.19
+// Edited: 2014.06.13
 
+using LittleByte.Pools;
 using UnityEngine;
 
 public class PlanetSeed_Weapon : Weapon
 {
     #region Public Fields
-    
-    public GameObject Star_Prefab;
+
+    public PoolObject starPrefab;
     public float damage;
     public float speed;
     public float time;
     public Vector3 attackOffset;
-    
-    #endregion
 
+    #endregion
 
     #region Weapon Overrides
 
@@ -22,7 +24,7 @@ public class PlanetSeed_Weapon : Weapon
     {
         if (!pressed) return;
 
-        PoolManager.Pop(Star_Prefab, myTransform.position + myTransform.TransformDirection(attackOffset), myTransform.rotation).GetComponent<Hitbox>().Initialize(myShip, damage*multiplier, time, myTransform.forward*speed);
+        Prefabs.Pop(starPrefab, myTransform.position + myTransform.TransformDirection(attackOffset), myTransform.rotation).GetComponent<Hitbox>().Initialize(myShip, damage * multiplier, time, myTransform.forward * speed);
         StartCoroutine(Cooldown(true));
         Activated();
     }
@@ -33,7 +35,7 @@ public class PlanetSeed_Weapon : Weapon
         var comp = parent.AddComponent<PlanetSeed_Weapon>();
         comp.index = index;
         comp.cooldownTime = cooldownTime;
-        comp.Star_Prefab = Star_Prefab;
+        comp.starPrefab = starPrefab;
         comp.damage = damage;
         comp.speed = speed;
         comp.time = time;

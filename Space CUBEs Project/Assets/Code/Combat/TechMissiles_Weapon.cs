@@ -1,28 +1,30 @@
-﻿// Steve Yeager
-// 3.9.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.03.09
+// Edited: 2014.06.13
 
+using LittleByte.Pools;
 using UnityEngine;
 using System.Collections;
 
 public class TechMissiles_Weapon : Weapon
 {
     #region Public Fields
-    
-    public GameObject TechMissile_Prefab;
+
+    public PoolObject missilePrefab;
     public float damage;
     public Vector3[] launchPositions = new Vector3[8];
     public float delay;
     public float speed;
-    
-    #endregion
 
+    #endregion
 
     #region Weapon Overrides
 
     public override void Activate(bool pressed, float multiplier, object attackInfo = null)
     {
         if (!pressed) return;
-        
+
         StartCoroutine(Fire(multiplier));
     }
 
@@ -32,7 +34,7 @@ public class TechMissiles_Weapon : Weapon
         var comp = parent.AddComponent<TechMissiles_Weapon>();
         comp.index = index;
         comp.cooldownTime = cooldownTime;
-        comp.TechMissile_Prefab = TechMissile_Prefab;
+        comp.missilePrefab = missilePrefab;
         comp.damage = damage;
         comp.launchPositions = new Vector3[8];
         for (int i = 0; i < 8; i++)
@@ -57,7 +59,7 @@ public class TechMissiles_Weapon : Weapon
 
         for (int i = 0; i < 8; i++)
         {
-            PoolManager.Pop(TechMissile_Prefab, myTransform.TransformPoint(launchPositions[i]), myTransform.rotation).GetComponent<Hitbox>().Initialize(myShip, damage * multiplier, myTransform.forward*speed);
+            Prefabs.Pop(missilePrefab, myTransform.TransformPoint(launchPositions[i]), myTransform.rotation).GetComponent<Hitbox>().Initialize(myShip, damage * multiplier, myTransform.forward * speed);
             yield return wait;
         }
 

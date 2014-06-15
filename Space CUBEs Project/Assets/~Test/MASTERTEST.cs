@@ -1,30 +1,31 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.01.14
-// Edited: 2014.06.08
+// Edited: 2014.06.14
 
 using System.Collections;
 using System.Collections.Generic;
 using GameSaveData;
 using LittleByte.Data;
+using LittleByte.Debug.Attributes;
+using LittleByte.Pools;
 using UnityClasses;
-using UnityEngine;
 
 //
+using UnityEngine;
+
 public class MASTERTEST : MonoBehaviour
 {
     public bool save;
     public bool load;
     public bool delete;
+    public AudioPlayer clip;
 
-    public int tests;
-    public Vector3 position;
-    public int health;
-    public Transform myTransform;
-    public UILabel label;
-    public List<Vector3> testList;
-    public BuildInfo buildInfo;
-    public CUBEGridInfo cubeInfo;
+    [NotNull]
+    public GameObject testGameObject;
+
+    [LittleByte.Debug.Attributes.Range(-5f, 5f)]
+    public int test = -1;
 
 
     private const string TestFolder = @"Tests\";
@@ -32,62 +33,37 @@ public class MASTERTEST : MonoBehaviour
 
     private void Start()
     {
-        buildInfo = ConstructionGrid.Load("Avenger");
+        //AudioManager.AddPlayer(clip);
     }
 
 
     private void Update()
     {
-        if (save)
+        if (Input.GetKeyDown(KeyCode.Return))
         {
-            save = false;
-            using (var profiler = new LittleByte.Debug.Profiler("Save"))
-            {
-                for (int i = 0; i < tests; i++) Save();
-            }
+            AudioManager.Play(clip);
         }
-
-        if (load)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            load = false;
-            using (var profiler = new LittleByte.Debug.Profiler("Load"))
-            {
-                for (int i = 0; i < tests; i++) Load();
-            }
-        }
-
-        if (delete)
-        {
-            delete = false;
-            Delete();
+            Instantiate(testGameObject);
         }
     }
 
 
     private void Delete()
     {
-        //bool test = testList is IList;
+        delete = false;
     }
 
 
     private void Load()
     {
-        //buildInfo = SaveData.Load<BuildInfo>("BuildInfo");
-        //cubeInfo = SaveData.Load<CUBEGridInfo>("CUBEInfo");
-        //position = SaveData.Load<Vector3>("position");
-        testList = SaveData.Load<List<Vector3>>("testList");
-        //health = SaveData.Load<int>("health");
+        load = false;
     }
 
 
     private void Save()
     {
-        //SaveData.Save("BuildInfo", buildInfo);
-        //SaveData.Save("CUBEInfo", cubeInfo);
-        //SaveData.Save("position", position);
-        SaveData.Save("testList", testList);
-        //Protobuf.Save("testList", testList);
-        //SaveData.Save("int", 5);
-        //SaveData.Save("health", health);
+        save = false;
     }
 }

@@ -1,49 +1,77 @@
-﻿// Steve Yeager
-// 5.17.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.05.17
+// Edited: 2014.06.14
 
 using System;
 using UnityEngine;
-using AudioGroups = AudioManager.AudioGroups;
 
-/// <summary>
-/// 
-/// </summary>
-[Obsolete("Use MasterAudio", true)]
-public class AudioPlayer : MonoBehaviour
+namespace LittleByte.Pools
 {
-    #region References
-    
-    public new AudioSource audio;
-    public new Transform transform;
-    
-    #endregion
-
-    #region Private Fields
-
-    private AudioGroups audioGroup;
-    private float volumeScale;
-
-    #endregion
-
-
-    #region Public Methods
-
-    public void PlayClipAtPoint(AudioClip clip, Vector3 position, float volume, float volumeScale)
+    /// <summary>
+    /// 
+    /// </summary>
+    [RequireComponent(typeof(AudioSource))]
+    public class AudioPlayer : PoolObject
     {
-        transform.position = position;
-    }
+        #region References
+
+        [HideInInspector]
+        public AudioSource myAudio;
+        [HideInInspector]
+        public Transform myTransform;
+
+        #endregion
+
+        #region Public Fields
+
+        public AudioManager.Bus bus;         
+
+        #endregion
+
+        #region Private Fields
+
+        private float volumeScale;
+
+        #endregion
+
+        #region Public Methods
+
+        public void PlayClipAtPoint(AudioClip clip, Vector3 position, float volume, float volumeScale)
+        {
+            myTransform.position = position;
+        }
 
 
-    public void Play(AudioClip clip, AudioGroups audioGroup, float volumeScale)
-    {
+        public void Play(float volumeScale, float volume, bool mute)
+        {
+            this.volumeScale = volumeScale;
+            myAudio.mute = mute;
+            myAudio.volume = volumeScale * volume;
+            myAudio.Play();
+            Invoke("Disable", myAudio.clip.length);
+        }
+
+
+        public void SetLevel(float volume)
+        {
+            myAudio.volume = volumeScale * volume;
+        }
+
+
+        public void SetMuted(bool mute)
+        {
+            myAudio.mute = mute;
+        }
+
+
+        public void UpdateVolume(float volume, bool muted)
+        {
+            myAudio.volume = volumeScale * volume;
+            myAudio.mute = muted;
+        }
+
+        #endregion
         
     }
-
-
-    public void SetVolume(float volume)
-    {
-        
-    }
-
-    #endregion
 }

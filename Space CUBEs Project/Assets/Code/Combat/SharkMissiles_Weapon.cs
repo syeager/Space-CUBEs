@@ -1,15 +1,16 @@
-﻿// Steve Yeager
-// 3.4.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.03.05
+// Edited: 2014.06.13
 
+using LittleByte.Pools;
 using UnityEngine;
-using System.Collections;
-using System.Linq;
 
 public class SharkMissiles_Weapon : Weapon
 {
     #region Public Fields
 
-    public GameObject SharkMissile_Prefab;
+    public PoolObject missilePrefab;
     public Vector3 missileOffset = new Vector3(0f, 0f, 1f);
     public float missileDelay = 1f;
     public float missileDelaySpeed;
@@ -23,7 +24,6 @@ public class SharkMissiles_Weapon : Weapon
     private bool firing;
 
     #endregion
-
 
     #region Weapon Overrides
 
@@ -54,7 +54,7 @@ public class SharkMissiles_Weapon : Weapon
         var comp = parent.AddComponent<SharkMissiles_Weapon>();
         comp.index = index;
         comp.cooldownTime = cooldownTime;
-        comp.SharkMissile_Prefab = SharkMissile_Prefab;
+        comp.missilePrefab = missilePrefab;
         comp.missileOffset = missileOffset + myTransform.localPosition;
         comp.missileDelay = missileDelay;
         comp.missileDelaySpeed = missileDelaySpeed;
@@ -71,7 +71,7 @@ public class SharkMissiles_Weapon : Weapon
     private void FireMissile(float multiplier)
     {
         // create missile
-        SharkMissile missile = PoolManager.Pop(SharkMissile_Prefab, myTransform.position + myTransform.TransformDirection(missileOffset), myTransform.rotation).GetComponent<SharkMissile>();
+        SharkMissile missile = Prefabs.Pop(missilePrefab, myTransform.position + myTransform.TransformDirection(missileOffset), myTransform.rotation).GetComponent<SharkMissile>();
 
         // fire missile
         missile.Initialize(myShip, damage * multiplier, missileDelay, missileDelaySpeed, missileHomingSpeed);

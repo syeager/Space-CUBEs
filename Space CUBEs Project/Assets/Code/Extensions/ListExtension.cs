@@ -1,6 +1,8 @@
 ﻿// Steve Yeager
 // 4.27.2014
 
+using System;
+using System.Collections;
 using System.Collections.Generic;
 
 public static class ListExtension
@@ -13,6 +15,7 @@ public static class ListExtension
     /// <param name="count"></param>
     public static void Initialize<T>(this List<T> list, T value, int count)
     {
+        bool test = typeof(ICollection) == typeof(int[]);
         list.Clear();
         for (int i = 0; i < count; i++)
         {
@@ -26,7 +29,7 @@ public static class ListExtension
     /// </summary>
     /// <param name="list"></param>
     /// <param name="value"></param>
-    public static void SetAll<T>(this List<T> list, T value)
+    public static void SetAll<T>(this IList list, T value)
     {
         for (int i = 0; i < list.Count; i++)
         {

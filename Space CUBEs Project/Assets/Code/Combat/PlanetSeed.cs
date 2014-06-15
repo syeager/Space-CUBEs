@@ -1,9 +1,10 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.02.19
-// Edited: 2014.05.28
+// Edited: 2014.06.13
 
 using System.Collections;
+using LittleByte.Pools;
 using UnityEngine;
 
 /// <summary>
@@ -20,7 +21,7 @@ public class PlanetSeed : Hitbox
     public float angularSpeed;
 
     /// <summary>Pieces to break apart into.</summary>
-    public GameObject planetPieces;
+    public PoolObject planetPieces;
 
     /// <summary>Number of pieces to create when destroyed.</summary>
     public int pieceCount;
@@ -111,7 +112,7 @@ public class PlanetSeed : Hitbox
         float angle = 360f / pieceCount;
         for (int i = 0; i < pieceCount; i++)
         {
-            GameObject piece = PoolManager.Pop(planetPieces, myTransform.position, myTransform.rotation, pieceLife);
+            GameObject piece = Prefabs.Pop(planetPieces, myTransform.position, myTransform.rotation, pieceLife);
             piece.transform.localScale = myTransform.localScale;
             ((Hitbox)piece.GetComponent(typeof(Hitbox))).Initialize(this.sender, damage / pieceCount, pieceLife, Utility.RotateVector(myTransform.forward, angle * i, Vector3.back) * pieceSpeed);
         }

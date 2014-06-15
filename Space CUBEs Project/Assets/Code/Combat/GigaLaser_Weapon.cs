@@ -1,17 +1,20 @@
-﻿// Steve Yeager
-// 12.13.2013
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2013.12.13
+// Edited: 2014.06.13
 
 using System;
 using System.Collections;
 using Annotations;
+using LittleByte.Pools;
 using UnityEngine;
 
 public class GigaLaser_Weapon : Weapon
 {
     #region Public Fields
 
-    public GameObject Laser_Prefab;
-    public GameObject Charge_Prefab;
+    public PoolObject laserPrefab;
+    public PoolObject chargePrefab;
     public string attackName;
     public Vector3 attackOffset;
     public float damage;
@@ -30,7 +33,6 @@ public class GigaLaser_Weapon : Weapon
     private RaycastHit rayInfo;
 
     #endregion
-
 
     #region Weapon Overrides
 
@@ -57,8 +59,8 @@ public class GigaLaser_Weapon : Weapon
         var comp = parent.AddComponent<GigaLaser_Weapon>();
         comp.index = index;
         comp.cooldownTime = cooldownTime;
-        comp.Laser_Prefab = Laser_Prefab;
-        comp.Charge_Prefab = Charge_Prefab;
+        comp.laserPrefab = laserPrefab;
+        comp.chargePrefab = chargePrefab;
         comp.attackName = attackName;
         comp.damage = damage;
         comp.attackOffset = attackOffset + transform.localPosition;
@@ -79,7 +81,7 @@ public class GigaLaser_Weapon : Weapon
     private IEnumerator Fire(float multiplier)
     {
         // create charge
-        charge = PoolManager.Pop(Charge_Prefab).transform;
+        charge = Prefabs.Pop(chargePrefab).transform;
         charge.parent = myTransform;
         charge.SetPosRot(myTransform.position + myTransform.TransformDirection(attackOffset), myTransform.rotation);
         charge.localScale = Vector3.one;
@@ -95,7 +97,7 @@ public class GigaLaser_Weapon : Weapon
         charge.GetComponent<PoolObject>().Disable();
 
         // fire
-        laser = PoolManager.Pop(Laser_Prefab).transform;
+        laser = Prefabs.Pop(laserPrefab).transform;
         laser.parent = myTransform;
         laser.SetPosRot(myTransform.position + myTransform.TransformDirection(attackOffset), myTransform.rotation);
         laser.GetComponent<Hitbox>().Initialize(myShip, damage * multiplier);

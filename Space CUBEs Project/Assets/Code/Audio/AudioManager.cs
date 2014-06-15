@@ -1,106 +1,292 @@
-﻿// Steve Yeager
-// 3.26.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.03.26
+// Edited: 2014.06.15
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Annotations;
+using LittleByte.Data;
+using LittleByte.Pools;
 using UnityEngine;
 
 /// <summary>
-/// 
+/// Singleton to play audio.
 /// </summary>
-[Obsolete("Use MasterAudio", true)]
-public class AudioManager :Singleton<AudioManager>
+[Serializable]
+public class AudioManager : Singleton<AudioManager>
 {
     #region Public Fields
 
-    public GameObject audioPrefab;
-
-    #endregion
-
-    #region Static Fields
-
-    public enum AudioGroups
+    /// <summary>Different catagories of audio. Have master controls for each bus.</summary>
+    public enum Bus
     {
         Music,
-        Game,
+        SFX,
         UI
     };
 
-    private static Dictionary<AudioGroups, float> volumes = new Dictionary<AudioGroups, float>
-    {
-        {AudioGroups.Music, 1f},
-        {AudioGroups.Game, 1f},
-        {AudioGroups.UI, 1f}
-    };
+    /// <summary>All active players grouped under their respective bus.</summary>
+    public Dictionary<Bus, HashSet<AudioPlayer>> activePlayers = new Dictionary<Bus, HashSet<AudioPlayer>>();
+
+    /// <summary>Volume that effects all audio.</summary>
+    public Volume MasterVolume { get; private set; }
+
+    /// <summary>Buses and their volume levels.</summary>
+    public Dictionary<Bus, Volume> busVolumes = new Dictionary<Bus, Volume>();
+
+    #endregion
+
+    #region Private Fields
+
+    /// <summary>Pool Manager for AudioPlayers.</summary>
+    [SerializeField]
+    public PoolManager poolManager;
 
     #endregion
 
     #region Const Fields
 
-    public static readonly Dictionary<AudioGroups, string> VolumePaths = new Dictionary<AudioGroups, string>
-    {
-        {AudioGroups.Music, "Music Volume"},
-        {AudioGroups.Game, "Game Volume"},
-        {AudioGroups.UI, "UI Volume"},
-    };
+    private const string VolumeFolder = @"Volume\";
+
+    private const string MasterFile = "MasterVolume";
 
     #endregion
 
-    #region Properties
+    #region MonoBehaviour Overrides
 
-    public static bool muted { get; private set; }
+    [UsedImplicitly]
+    private void Reset()
+    {
+        poolManager = ScriptableObject.CreateInstance<PoolManager>();
+        //Initialize();
+    }
+
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        if (!enabled) return;
+
+        Initialize();
+        poolManager.Initialize();
+    }
 
     #endregion
 
     #region Static Methods
 
-    public static void Initialize()
+    /// <summary>
+    /// 
+    /// </summary>
+    public void Initialize()
     {
-        LoadVolumes();
-    }
+        Load();
 
-
-    public static void LoadVolumes()
-    {
-        foreach (var audioGroup in volumes.Keys)
+        activePlayers = new Dictionary<Bus, HashSet<AudioPlayer>>();
+        foreach (int audioGroup in Enum.GetValues(typeof(Bus)))
         {
-            volumes[audioGroup] = PlayerPrefs.GetFloat(VolumePaths[audioGroup], 1f);
+            activePlayers[(Bus)audioGroup] = new HashSet<AudioPlayer>();
         }
     }
 
 
-    public static void SetVolume(AudioGroups audioGroup, float volume, bool save = true)
+    /// <summary>
+    /// Load all volumes and mute statuses from data.
+    /// </summary>
+    public void Load()
     {
-        if (volume > 0f)
+        MasterVolume = SaveData.Load<Volume>(MasterFile, VolumeFolder, new Volume());
+
+        busVolumes = new Dictionary<Bus, Volume>();
+        foreach (var value in Enum.GetValues(typeof(Bus)))
         {
-            volume = 0f;
+            Bus bus = (Bus)value;
+            busVolumes.Add(bus, SaveData.Load<Volume>(bus.ToString(), VolumeFolder, new Volume()));
         }
-        volumes[audioGroup] = volume;
+    }
 
-        if (save)
+
+    /// <summary>
+    /// Save master volume and bus volumes.
+    /// </summary>
+    public void Save()
+    {
+        SaveData.Save(MasterFile, MasterVolume, VolumeFolder);
+        foreach (var value in Enum.GetValues(typeof(Bus)))
         {
-            PlayerPrefs.SetFloat(VolumePaths[audioGroup], volume);
+            Bus bus = (Bus)value;
+            SaveData.Save(bus.ToString(), busVolumes[bus], VolumeFolder);
         }
     }
 
 
-    public static void Mute(bool mute)
+    /// <summary>
+    /// Set the master volume level.
+    /// </summary>
+    /// <param name="level">New master volume level. 0-1.</param>
+    public void SetMasterLevel(float level)
     {
-        muted = mute;
+        MasterVolume.level = Mathf.Clamp01(level);
+        UpdateActivePlayers();
     }
 
 
-    public static bool ToggleMute()
+    /// <summary>
+    /// Set the master volume mute status.
+    /// </summary>
+    /// <param name="muted">Should the master volume be muted?</param>
+    public void SetMasterMute(bool muted)
     {
-        Mute(!muted);
-        return muted;
+        MasterVolume.muted = muted;
+        UpdateActivePlayers();
     }
 
 
-    public void Play(AudioClip clip, Vector3 position, AudioGroups audioGroup, float volumeScale = 1f)
+    /// <summary>
+    /// Set the volume level for a bus.
+    /// </summary>
+    /// <param name="bus">Bus to update.</param>
+    /// <param name="level">Volume level to give the bus. 0-1.</param>
+    public void SetBusLevel(Bus bus, float level)
     {
-        AudioSource.PlayClipAtPoint(clip, position, muted ? 0f : (volumes[audioGroup] * volumeScale));
+        level = Mathf.Clamp01(level);
+
+        busVolumes[bus].level = level;
+
+        float newVolume = level * MasterVolume.level;
+        foreach (AudioPlayer activePlayer in activePlayers[bus])
+        {
+            activePlayer.SetLevel(newVolume);
+        }
+    }
+
+
+    /// <summary>
+    /// Set the mute status for a bus.
+    /// </summary>
+    /// <param name="bus">Bus to update.</param>
+    /// <param name="muted">Should the bus be muted?</param>
+    public void SetBusMute(Bus bus, bool muted)
+    {
+        busVolumes[bus].muted = muted;
+
+        bool newMuted = muted || MasterVolume;
+        foreach (AudioPlayer activePlayer in activePlayers[bus])
+        {
+            activePlayer.SetMuted(newMuted);
+        }
     }
 
     #endregion
+
+    #region Private Methods
+
+    /// <summary>
+    /// Update all active audio players with current level and mute settings.
+    /// </summary>
+    private void UpdateActivePlayers()
+    {
+        foreach (var value in Enum.GetValues(typeof(Bus)))
+        {
+            Bus bus = (Bus)value;
+            float level = MasterVolume * busVolumes[bus];
+            bool muted = MasterVolume || busVolumes[bus];
+            foreach (var activePlayer in activePlayers[bus])
+            {
+                activePlayer.UpdateVolume(level, muted);
+            }
+        }
+    } 
+
+    #endregion
+
+    #region Play Methods
+
+    public void addPlayer(AudioPlayer audioPlayer)
+    {
+        poolManager.CreatePool(audioPlayer);
+    }
+
+
+    public AudioPlayer play(AudioPlayer audioPlayer, float volumeScale = 1f)
+    {
+        Bus playerGroup = audioPlayer.bus;
+
+        AudioPlayer player = poolManager.Pop(audioPlayer).GetComponent(typeof(AudioPlayer)) as AudioPlayer;
+
+        activePlayers[playerGroup].Add(player);
+        player.DisableEvent += OnAudioDone;
+
+        player.Play(volumeScale, busVolumes[playerGroup] * MasterVolume, busVolumes[playerGroup] || MasterVolume);
+        return player;
+    }
+
+    #endregion
+
+    #region Static Methods
+
+    public static void AddPlayer(AudioPlayer audioPlayer)
+    {
+        Main.addPlayer(audioPlayer);
+    }
+
+
+    public static AudioPlayer Play(AudioPlayer audioPlayer, float volumeScale = 1f)
+    {
+        return Main.play(audioPlayer, volumeScale);
+    }
+
+    #endregion
+
+    #region Event Handlers
+
+    public void OnAudioDone(object sender, EventArgs args)
+    {
+        AudioPlayer player = (AudioPlayer)sender;
+        player.DisableEvent -= OnAudioDone;
+        activePlayers[player.bus].Remove(player);
+    }
+
+    #endregion
+}
+
+[Serializable]
+public class Volume
+{
+    public float level;
+
+    public bool muted;
+
+
+    public Volume()
+    {
+        level = 1f;
+        muted = false;
+    }
+
+
+    public Volume(float level, bool muted)
+    {
+        this.level = level;
+        this.muted = muted;
+    }
+
+
+    public static float operator *(Volume left, Volume right)
+    {
+        return left.level * right.level;
+    }
+
+    public static float operator *(Volume left, float right)
+    {
+        return left.level * right;
+    }
+
+    public static implicit operator bool(Volume volume)
+    {
+        return volume.muted;
+    }
 }

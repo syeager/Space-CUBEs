@@ -3,6 +3,8 @@
 // Created: 2014.04.27
 // Edited: 2014.05.27
 
+using System.Globalization;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -10,6 +12,7 @@ using UnityEngine;
 /// Handles creating an instance from a prefab in Edit Mode.
 /// </summary>
 /// <typeparam name="T">Singleton to create.</typeparam>
+[ExecuteInEditMode]
 public class Creator<T> : Editor where T : MonoBehaviour
 {
     #region Const Fields
@@ -43,6 +46,7 @@ public class Creator<T> : Editor where T : MonoBehaviour
         {
             var prefab = AssetDatabase.LoadAssetAtPath(path + prefabName + Postfix, typeof(GameObject)) as GameObject;
             var created = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
+            instance = created.GetComponent(typeof(T));
 
             if (Selection.activeGameObject != null)
             {
@@ -57,7 +61,13 @@ public class Creator<T> : Editor where T : MonoBehaviour
                 PrefabUtility.DisconnectPrefabInstance(created);
             }
 
-            Debug.Log("Created " + prefabName + ".", created);
+            MethodInfo method = typeof(T).GetMethod("Reset", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (method != null)
+            {
+                method.Invoke(instance, null);
+            }
+
+            Debugger.Log("Created " + prefabName + ".", created);
         }
     }
 

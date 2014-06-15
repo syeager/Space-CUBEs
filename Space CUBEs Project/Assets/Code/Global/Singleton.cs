@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2013.12.03
-// Edited: 2014.05.27
+// Edited: 2014.06.13
 
 using UnityEngine;
 
@@ -17,13 +17,11 @@ public class Singleton<T> : MonoBase where T : MonoBehaviour
     public bool logWarning;
 
     #endregion
-    
+
     #region Static Fields
 
-    // ReSharper disable InconsistentNaming
     /// <summary>Singleton instance of class.</summary>
     public static T Main { get; protected set; }
-    // ReSharper restore InconsistentNaming
 
     #endregion
 

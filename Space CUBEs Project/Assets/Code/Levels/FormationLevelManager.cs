@@ -1,8 +1,11 @@
-﻿// Steve Yeager
-// 1.12.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.01.12
+// Edited: 2014.06.13
 
 using System.Collections.Generic;
 using LittleByte.Data;
+using LittleByte.Pools;
 using UnityEngine;
 
 public class FormationLevelManager : LevelManager
@@ -32,7 +35,6 @@ public class FormationLevelManager : LevelManager
 
     #endregion
 
-
     #region Unity Overrides
 
     protected override void Start()
@@ -52,6 +54,7 @@ public class FormationLevelManager : LevelManager
         InvokeAction(() => SpawnNextFormation(), 3f);
 #endif
     }
+
 
 #if UNITY_EDITOR
     protected override void Update()
@@ -101,17 +104,17 @@ public class FormationLevelManager : LevelManager
 
         // last segment
         lastSegment = segmentCursor + 1 == formationGroups.Length;
-        
+
         // create enemies
         Vector3 formationCenter = formationGroups[segmentCursor].position;
         for (int i = 0; i < formationGroups[segmentCursor].formation.positions.Length; i++)
         {
             if (formationGroups[segmentCursor].enemies[i] == Enemy.Classes.None) continue;
 
-            GameObject enemyObject = PoolManager.Pop(enemies[formationGroups[segmentCursor].enemies[i]]);
+            GameObject enemyObject = Prefabs.Pop(enemies[formationGroups[segmentCursor].enemies[i]].GetComponent<PoolObject>());
             enemyObject.transform.SetPosRot(Utility.RotateVector(formationGroups[segmentCursor].formation.positions[i], Quaternion.AngleAxis(formationGroups[segmentCursor].rotation, Vector3.back)) + formationCenter, SpawnRotation);
             Enemy enemy = (Enemy)enemyObject.GetComponent(typeof(Enemy));
-            enemy.stateMachine.Start(new Dictionary<string, object> { { "path", (formationGroups[segmentCursor].paths[i]) } });
+            enemy.stateMachine.Start(new Dictionary<string, object> {{"path", (formationGroups[segmentCursor].paths[i])}});
             ((ShieldHealth)enemy.GetComponent(typeof(ShieldHealth))).DieEvent += OnEnemyDeath;
             activeEnemies.Add(enemy);
         }
@@ -142,8 +145,7 @@ public class FormationLevelManager : LevelManager
         boss.GetComponent<ShieldHealth>().DieEvent += OnBossDeath;
         boss.stateMachine.Start();
 
-        audio.clip = bossMusic;
-        audio.Play();
+        //AudioManager.Pl
     }
 
     #endregion
@@ -176,7 +178,7 @@ public class FormationLevelManager : LevelManager
         {
             SaveData.Save(LevelSelectManager.UnlockedLevelsKey, levelIndex + 1, LevelSelectManager.LevelsFolder);
         }
-        
+
         LevelFinished();
     }
 

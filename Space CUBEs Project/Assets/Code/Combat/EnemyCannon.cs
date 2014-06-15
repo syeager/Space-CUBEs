@@ -1,6 +1,9 @@
-﻿// Steve Yeager
-// 3.27.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.03.27
+// Edited: 2014.06.13
 
+using LittleByte.Pools;
 using UnityEngine;
 
 /// <summary>
@@ -9,14 +12,13 @@ using UnityEngine;
 public class EnemyCannon : Weapon
 {
     #region Public Fields
-    
-    public GameObject bulletPrefab;
+
+    public PoolObject bulletPrefab;
     public float speed;
     public float damage;
     public Vector3 offset;
-    
-    #endregion
 
+    #endregion
 
     #region Weapon Overrides
 
@@ -35,8 +37,8 @@ public class EnemyCannon : Weapon
     private void Fire()
     {
         Vector3 position = myTransform.position + myTransform.TransformDirection(offset);
-        PoolManager.Pop(bulletPrefab, position, myTransform.rotation).
-            GetComponent<Hitbox>().Initialize(myShip, damage, (LevelManager.Main.playerTransform.position - position).normalized*speed);
+        Prefabs.Pop(bulletPrefab, position, myTransform.rotation).
+            GetComponent<Hitbox>().Initialize(myShip, damage, (LevelManager.Main.playerTransform.position - position).normalized * speed);
     }
 
     #endregion

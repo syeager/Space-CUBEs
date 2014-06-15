@@ -1,8 +1,9 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.03.25
-// Edited: 2014.06.11
+// Edited: 2014.06.13
 
+using LittleByte.Pools;
 using UnityEngine;
 using System.Collections;
 
@@ -13,7 +14,7 @@ public class SidewinderMissileLauncher : Weapon
 {
     #region Public Fields
 
-    public GameObject Missile_Prefab;
+    public PoolObject missilePrefab;
     public Vector3[] missilePositions;
     public float missileDelay;
     public float missileSpeed;
@@ -22,7 +23,7 @@ public class SidewinderMissileLauncher : Weapon
     public float damage;
 
     /// <summary>Audio clip to play when a missile fires.</summary>
-    public AudioClip fireClip;
+    public AudioPlayer fireClip;
 
     public int dummyTargets = 5;
 
@@ -68,16 +69,15 @@ public class SidewinderMissileLauncher : Weapon
         WaitForSeconds wait = new WaitForSeconds(missileDelay);
         foreach (Vector3 position in missilePositions)
         {
-            PoolManager.Pop(Missile_Prefab, myTransform.position + myTransform.TransformDirection(position), myTransform.rotation).
+            Prefabs.Pop(missilePrefab, myTransform.position + myTransform.TransformDirection(position), myTransform.rotation).
                 GetComponent<SidewinderMissile>().Initialize(myShip, damage, missileSpeed, rotationSpeed, homingTime, dummyTargets, LevelManager.Main.player.transform);
 
-            audio.Play(fireClip);
+            AudioManager.Play(fireClip);
             animation.Play(FireAnim);
-            
+
             yield return wait;
 
             animation.Stop();
-            audio.Stop();
         }
     }
 

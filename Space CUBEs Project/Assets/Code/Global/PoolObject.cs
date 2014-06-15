@@ -1,66 +1,64 @@
-﻿// Steve Yeager
-// 12.22.2013
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2013.12.11
+// Edited: 2014.06.14
 
-using System.Collections;
+using System;
 using UnityEngine;
 
-/// <summary>
-/// A gameObject that is enabled and disabled by pools.
-/// </summary>
-public class PoolObject : MonoBehaviour
-{
-    #region Private Fields
-
-    /// <summary>Associated pool.</summary>
-    private Pool pool;
-
-    #endregion
-
-
-    #region Public Methods
-
+//namespace LittleByte.Pools
+//{
     /// <summary>
-    /// Caches pool.
+    /// A gameObject that is enabled and disabled by pools.
     /// </summary>
-    /// <param name="pool">Pool to save.</param>
-    public void Initialize(Pool pool)
+    public class PoolObject : MonoBehaviour
     {
-        this.pool = pool;
+        #region Private Fields
+
+        /// <summary>Associated pool.</summary>
+        private Pool pool;
+
+        #endregion
+
+        #region Events
+
+        /// <summary>Event fired when disabled.</summary>
+        public EventHandler DisableEvent;
+
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// Caches pool.
+        /// </summary>
+        /// <param name="pool">Pool to save.</param>
+        public void Initialize(Pool pool)
+        {
+            this.pool = pool;
+        }
+
+
+        /// <summary>
+        /// Disable gameObject and push back to the pool.
+        /// </summary>
+        public void Disable()
+        {
+            DisableEvent.Fire(this);
+            gameObject.SetActive(false);
+            pool.Push(this);
+        }
+
+
+        /// <summary>
+        /// Disable the gameObject after the timer runs out.
+        /// </summary>
+        /// <param name="life">Time in seconds before the gameObject is disabled.</param>
+        public void StartLifeTimer(float life)
+        {
+            Invoke("Disable", life);
+        }
+
+        #endregion
     }
-
-
-    /// <summary>
-    /// Disable gameObject and push back to the pool.
-    /// </summary>
-    public void Disable()
-    {
-        gameObject.SetActive(false);
-        pool.Push(this);
-    }
-
-
-    /// <summary>
-    /// Disable the gameObject after the timer runs out.
-    /// </summary>
-    /// <param name="life">Time in seconds before the gameObject is disabled.</param>
-    public void StartLifeTimer(float life)
-    {
-        StartCoroutine(LifeTimer(life));
-    }
-
-    #endregion
-
-    #region Private Methods
-
-    /// <summary>
-    /// Timer till gameObject is disabled.
-    /// </summary>
-    /// <param name="time">Time in seconds to run the timer.</param>
-    private IEnumerator LifeTimer(float time)
-    {
-        yield return new WaitForSeconds(time);
-        Disable();
-    }
-
-    #endregion
-}
+//}

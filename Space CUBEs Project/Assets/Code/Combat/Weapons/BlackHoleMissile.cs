@@ -1,6 +1,9 @@
-﻿// Steve Yeager
-// 2.202.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.02.20
+// Edited: 2014.06.13
 
+using LittleByte.Pools;
 using UnityEngine;
 
 /// <summary>
@@ -9,18 +12,17 @@ using UnityEngine;
 public class BlackHoleMissile : Hitbox
 {
     #region Public Fields
-    
-    public GameObject BlackHole_Prefab;
-    public float explosionTime;
-    
-    #endregion
 
+    public PoolObject blackHolePrefab;
+    public float explosionTime;
+
+    #endregion
 
     #region Public Methods
 
     public void Explode()
     {
-        PoolManager.Pop(BlackHole_Prefab, myTransform.position, myTransform.rotation).GetComponent<BlackHole>().Initialize(sender, damage, explosionTime);
+        Prefabs.Pop(blackHolePrefab, myTransform.position, myTransform.rotation).GetComponent<BlackHole>().Initialize(sender, damage, explosionTime);
         GetComponent<PoolObject>().Disable();
     }
 

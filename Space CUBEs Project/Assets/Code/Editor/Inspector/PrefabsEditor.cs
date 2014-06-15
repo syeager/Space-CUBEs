@@ -3,24 +3,27 @@
 
 using System.Collections.Generic;
 using Annotations;
+using LittleByte.Pools;
 using UnityEditor;
 using UnityEngine;
 
 /// <summary>
 /// Creator/Editor for PoolManager class.
 /// </summary>
-[CustomEditor(typeof(PoolManager))]
-public class PoolManagerEditor : Creator<PoolManager>
+[CustomEditor(typeof(Prefabs))]
+public class PrefabsEditor : Creator<Prefabs>
 {
     #region Const Fields
 
-    private const string PrefabName = "_PoolManager";
+    private const string PrefabName = "_PrefabPoolManager";
     private const string PrefabPath = "Assets/Global/";
 
     #endregion
 
     #region Editor Fields
 
+    private Prefabs prefabsSource;
+    private SerializedObject poolManager;
     private SerializedProperty cull;
     private SerializedProperty cullDelay;
     private SerializedProperty poolList;
@@ -36,7 +39,7 @@ public class PoolManagerEditor : Creator<PoolManager>
 
     #region Creator Methods
 
-    [MenuItem("GameObject/Singletons/Pool Manager", false, 3)]
+    [MenuItem("GameObject/Singletons/Prefab Pool Manager", false, 3)]
     public static void Create()
     {
         Create(PrefabName, PrefabPath, true);
@@ -49,9 +52,15 @@ public class PoolManagerEditor : Creator<PoolManager>
     [UsedImplicitly]
     private void OnEnable()
     {
-        cull = serializedObject.FindProperty("cull");
-        cullDelay = serializedObject.FindProperty("cullDelay");
-        poolList = serializedObject.FindProperty("poolList");
+        if (PrefabUtility.GetPrefabType(target) == PrefabType.Prefab) return;
+
+        prefabsSource = target as Prefabs;
+        if (prefabsSource.poolManager == null) return;
+
+        poolManager = new SerializedObject(prefabsSource.poolManager);
+        cull = poolManager.FindProperty("cull");
+        cullDelay = poolManager.FindProperty("cullDelay");
+        poolList = poolManager.FindProperty("poolList");
 
         poolToggles = new List<bool>(poolList.arraySize);
         poolToggles.Initialize(false, poolList.arraySize);
@@ -60,14 +69,21 @@ public class PoolManagerEditor : Creator<PoolManager>
 
     public override void OnInspectorGUI()
     {
-        serializedObject.Update();
+        if (poolManager == null)
+        {
+            GUIStyle textStyle = new GUIStyle {normal = {textColor = Color.white}, wordWrap = true, richText = true};
+            EditorGUILayout.LabelField("<color=#ffff00>Needs to be an instance.</color>", textStyle);
+            return;
+        }
+
+        poolManager.Update();
 
         Cull();
         EditorGUILayout.Space();
         PoolList();
         DropAreaGUI();
 
-        serializedObject.ApplyModifiedProperties();
+        poolManager.ApplyModifiedProperties();
     }
 
     #endregion
@@ -86,29 +102,38 @@ public class PoolManagerEditor : Creator<PoolManager>
 
     private void PoolList()
     {
+        // buttons
+        EditorGUILayout.BeginHorizontal();
+        {
+            if (GUILayout.Button("Open", EditorStyles.miniButtonLeft))
+            {
+                poolListToggle = true;
+                poolToggles.SetAll(true);
+            }
+            if (GUILayout.Button("Close", EditorStyles.miniButtonRight))
+            {
+                poolListToggle = false;
+                poolToggles.SetAll(false);
+            }
+        }
+
+        EditorGUILayout.EndHorizontal();
         poolListToggle = EditorGUILayout.Foldout(poolListToggle, "Pool List");
         if (poolListToggle)
         {
             EditorGUI.indentLevel++;
 
-            // buttons
-            EditorGUILayout.BeginHorizontal();
+            if (poolList.arraySize == 0)
             {
-                if (GUILayout.Button("Open", EditorStyles.miniButtonLeft))
-                {
-                    poolToggles.SetAll(true);
-                }
-                if (GUILayout.Button("Close", EditorStyles.miniButtonRight))
-                {
-                    poolToggles.SetAll(false);
-                }
+                GUILayout.Label("Empty");
             }
-            EditorGUILayout.EndHorizontal();
-
-            // pools
-            for (int i = 0; i < poolList.arraySize; i++)
+            else
             {
-                Pool(i);
+                // pools
+                for (int i = 0; i < poolList.arraySize; i++)
+                {
+                    Pool(i);
+                }
             }
             EditorGUI.indentLevel--;
         }
@@ -131,7 +156,18 @@ public class PoolManagerEditor : Creator<PoolManager>
         {
             poolToggles[index] = EditorGUILayout.Foldout(poolToggles[index], index + " " + (prefab.objectReferenceValue == null ? "---" : prefab.objectReferenceValue.name));
 
-            if (GUILayout.Button("-", EditorStyles.miniButton))
+            GUI.enabled = index > 0;
+            if (GUILayout.Button("↑", EditorStyles.miniButtonLeft, GUILayout.Width(30f)))
+            {
+                MovePool(index, index - 1);
+            }
+            GUI.enabled = index < poolList.arraySize - 1;
+            if (GUILayout.Button("↓", EditorStyles.miniButtonRight, GUILayout.Width(30f)))
+            {
+                MovePool(index, index + 1);
+            }
+            GUI.enabled = true;
+            if (GUILayout.Button("-", EditorStyles.miniButton, GUILayout.Width(30f)))
             {
                 RemovePool(index);
                 return;
@@ -185,12 +221,16 @@ public class PoolManagerEditor : Creator<PoolManager>
                     {
                         if (dragged is GameObject && ((GameObject)dragged).GetComponent<PoolObject>())
                         {
-                            Debug.Log("Added: " + dragged.name);
-                            AddPool(poolList.arraySize, dragged as GameObject);
+                            PoolObject poolObject = (dragged as GameObject).GetComponent<PoolObject>();
+                            if (poolObject != null)
+                            {
+                                Debugger.Log("Added: " + dragged.name);
+                                AddPool(poolList.arraySize, poolObject);
+                            }
                         }
                         else
                         {
-                            Debug.Log("Ignored: " + dragged.name);
+                            Debugger.Log("Ignored: " + dragged.name);
                         }
                     }
                 }
@@ -199,13 +239,20 @@ public class PoolManagerEditor : Creator<PoolManager>
     }
 
 
-    private void AddPool(int index, GameObject prefab)
+    private void AddPool(int index, PoolObject prefab)
     {
-        serializedObject.Update();
+        poolManager.Update();
         poolList.InsertArrayElementAtIndex(index);
-        poolList.GetArrayElementAtIndex(index).FindPropertyRelative("prefab").objectReferenceValue = prefab;
+        poolManager.ApplyModifiedProperties();
+
+        UpdatePool(index, prefab);
+    }
+
+
+    private void UpdatePool(int index, PoolObject prefab)
+    {
+        prefabsSource.poolManager.poolList[index] = new Pool(prefabsSource.poolManager, prefab);
         poolToggles.Add(true);
-        serializedObject.ApplyModifiedProperties();
     }
 
 
@@ -215,6 +262,12 @@ public class PoolManagerEditor : Creator<PoolManager>
         poolList.DeleteArrayElementAtIndex(index);
         poolToggles.RemoveAt(index);
         serializedObject.ApplyModifiedProperties();
+    }
+
+
+    private void MovePool(int index, int dest)
+    {
+        poolList.MoveArrayElement(index, dest);
     }
 
     #endregion

@@ -1,20 +1,22 @@
-﻿// Steve Yeager
-// 12.01.2013
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2013.12.01
+// Edited: 2014.06.13
 
 using System.Collections;
+using LittleByte.Pools;
 using UnityEngine;
 
 public class PlasmaCannon : Weapon
 {
     #region Public Fields
 
-    public GameObject Laser_Prefab;
+    public PoolObject laserPrefab;
     public float damage;
     public Vector3 laserOffset;
     public float speed;
 
     #endregion
-
 
     #region Weapon Overrides
 
@@ -36,7 +38,7 @@ public class PlasmaCannon : Weapon
     {
         var comp = parent.AddComponent<PlasmaCannon>();
         comp.index = index;
-        comp.Laser_Prefab = Laser_Prefab;
+        comp.laserPrefab = laserPrefab;
         comp.cooldownTime = cooldownTime;
         comp.damage = damage;
         comp.laserOffset = laserOffset + myTransform.localPosition;
@@ -53,7 +55,7 @@ public class PlasmaCannon : Weapon
     {
         while (true)
         {
-            GameObject laser = PoolManager.Pop(Laser_Prefab);
+            GameObject laser = Prefabs.Pop(laserPrefab);
             laser.transform.SetPosRot(myTransform.position + myTransform.TransformDirection(laserOffset), myTransform.rotation);
             laser.GetComponent<Hitbox>().Initialize(myShip, damage * multiplier, myTransform.forward * speed);
 

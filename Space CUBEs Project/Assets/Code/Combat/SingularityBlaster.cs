@@ -1,8 +1,10 @@
-﻿// Steve Yeager
-// 2.20.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.02.20
+// Edited: 2014.06.13
 
+using LittleByte.Pools;
 using UnityEngine;
-using System.Collections;
 
 /// <summary>
 /// 
@@ -10,13 +12,13 @@ using System.Collections;
 public class SingularityBlaster : Weapon
 {
     #region Public Fields
-    
-    public GameObject BlackHoleMissile_Prefab;
+
+    public PoolObject missilePrefab;
     public Vector3 missileOffset;
     public float damage;
     public float missileTime;
     public float missileSpeed;
-    
+
     #endregion
 
     #region Private Fields
@@ -24,7 +26,6 @@ public class SingularityBlaster : Weapon
     private BlackHoleMissile missile;
 
     #endregion
-
 
     #region Weapon Overrides
 
@@ -50,7 +51,7 @@ public class SingularityBlaster : Weapon
         var comp = parent.AddComponent<SingularityBlaster>();
         comp.index = index;
         comp.cooldownTime = cooldownTime;
-        comp.BlackHoleMissile_Prefab = BlackHoleMissile_Prefab;
+        comp.missilePrefab = missilePrefab;
         comp.missileOffset = missileOffset + myTransform.localPosition;
         comp.damage = damage;
         comp.missileTime = missileTime;
@@ -65,8 +66,8 @@ public class SingularityBlaster : Weapon
 
     private void Fire(float multiplier)
     {
-        missile = PoolManager.Pop(BlackHoleMissile_Prefab, myTransform.position + myTransform.TransformDirection(missileOffset), myTransform.rotation).GetComponent<BlackHoleMissile>();
-        missile.Initialize(myShip, damage * multiplier, missileTime, myTransform.forward*missileSpeed);
+        missile = Prefabs.Pop(missilePrefab, myTransform.position + myTransform.TransformDirection(missileOffset), myTransform.rotation).GetComponent<BlackHoleMissile>();
+        missile.Initialize(myShip, damage * multiplier, missileTime, myTransform.forward * missileSpeed);
     }
 
 
