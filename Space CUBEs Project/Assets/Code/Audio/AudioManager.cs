@@ -5,16 +5,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Annotations;
 using LittleByte.Data;
-using LittleByte.Pools;
 using UnityEngine;
 
 /// <summary>
 /// Singleton to play audio.
 /// </summary>
-[Serializable]
 public class AudioManager : Singleton<AudioManager>
 {
     #region Public Fields
@@ -41,15 +38,16 @@ public class AudioManager : Singleton<AudioManager>
     #region Private Fields
 
     /// <summary>Pool Manager for AudioPlayers.</summary>
-    [SerializeField]
     public PoolManager poolManager;
 
     #endregion
 
     #region Const Fields
 
+    /// <summary>Data folder for all volume settings.</summary>
     private const string VolumeFolder = @"Volume\";
 
+    /// <summary>Data file for saving master volume.</summary>
     private const string MasterFile = "MasterVolume";
 
     #endregion
@@ -60,7 +58,6 @@ public class AudioManager : Singleton<AudioManager>
     private void Reset()
     {
         poolManager = ScriptableObject.CreateInstance<PoolManager>();
-        //Initialize();
     }
 
 
@@ -76,10 +73,10 @@ public class AudioManager : Singleton<AudioManager>
 
     #endregion
 
-    #region Static Methods
+    #region Public Methods
 
     /// <summary>
-    /// 
+    /// Load data and create activePlayers.
     /// </summary>
     public void Initialize()
     {
@@ -98,13 +95,13 @@ public class AudioManager : Singleton<AudioManager>
     /// </summary>
     public void Load()
     {
-        MasterVolume = SaveData.Load<Volume>(MasterFile, VolumeFolder, new Volume());
+        MasterVolume = SaveData.Load(MasterFile, VolumeFolder, new Volume(0.5f, false));
 
         busVolumes = new Dictionary<Bus, Volume>();
         foreach (var value in Enum.GetValues(typeof(Bus)))
         {
             Bus bus = (Bus)value;
-            busVolumes.Add(bus, SaveData.Load<Volume>(bus.ToString(), VolumeFolder, new Volume()));
+            busVolumes.Add(bus, SaveData.Load(bus.ToString(), VolumeFolder, new Volume(0.5f, false)));
         }
     }
 
@@ -124,10 +121,30 @@ public class AudioManager : Singleton<AudioManager>
 
 
     /// <summary>
+    /// Play audio clip.
+    /// </summary>
+    /// <param name="audioPlayer">AudioPlayer to play.</param>
+    /// <param name="levelScale">Level scale to give to AudioPlayer.</param>
+    /// <returns>AudioPlayer being played.</returns>
+    public AudioPlayer play(AudioPlayer audioPlayer, float levelScale = 1f)
+    {
+        Bus playerGroup = audioPlayer.bus;
+
+        AudioPlayer player = poolManager.Pop(audioPlayer).GetComponent(typeof(AudioPlayer)) as AudioPlayer;
+
+        activePlayers[playerGroup].Add(player);
+        player.DisableEvent += OnAudioDone;
+
+        player.Play(levelScale, busVolumes[playerGroup] * MasterVolume, busVolumes[playerGroup] || MasterVolume);
+        return player;
+    }
+
+
+    /// <summary>
     /// Set the master volume level.
     /// </summary>
     /// <param name="level">New master volume level. 0-1.</param>
-    public void SetMasterLevel(float level)
+    public void setMasterLevel(float level)
     {
         MasterVolume.level = Mathf.Clamp01(level);
         UpdateActivePlayers();
@@ -138,7 +155,7 @@ public class AudioManager : Singleton<AudioManager>
     /// Set the master volume mute status.
     /// </summary>
     /// <param name="muted">Should the master volume be muted?</param>
-    public void SetMasterMute(bool muted)
+    public void setMasterMute(bool muted)
     {
         MasterVolume.muted = muted;
         UpdateActivePlayers();
@@ -150,7 +167,7 @@ public class AudioManager : Singleton<AudioManager>
     /// </summary>
     /// <param name="bus">Bus to update.</param>
     /// <param name="level">Volume level to give the bus. 0-1.</param>
-    public void SetBusLevel(Bus bus, float level)
+    public void setBusLevel(Bus bus, float level)
     {
         level = Mathf.Clamp01(level);
 
@@ -169,7 +186,7 @@ public class AudioManager : Singleton<AudioManager>
     /// </summary>
     /// <param name="bus">Bus to update.</param>
     /// <param name="muted">Should the bus be muted?</param>
-    public void SetBusMute(Bus bus, bool muted)
+    public void setBusMute(Bus bus, bool muted)
     {
         busVolumes[bus].muted = muted;
 
@@ -203,46 +220,70 @@ public class AudioManager : Singleton<AudioManager>
 
     #endregion
 
-    #region Play Methods
-
-    public void addPlayer(AudioPlayer audioPlayer)
-    {
-        poolManager.CreatePool(audioPlayer);
-    }
-
-
-    public AudioPlayer play(AudioPlayer audioPlayer, float volumeScale = 1f)
-    {
-        Bus playerGroup = audioPlayer.bus;
-
-        AudioPlayer player = poolManager.Pop(audioPlayer).GetComponent(typeof(AudioPlayer)) as AudioPlayer;
-
-        activePlayers[playerGroup].Add(player);
-        player.DisableEvent += OnAudioDone;
-
-        player.Play(volumeScale, busVolumes[playerGroup] * MasterVolume, busVolumes[playerGroup] || MasterVolume);
-        return player;
-    }
-
-    #endregion
-
     #region Static Methods
 
-    public static void AddPlayer(AudioPlayer audioPlayer)
+    /// <summary>
+    /// Play audio clip. Calls on Main.
+    /// </summary>
+    /// <param name="audioPlayer">AudioPlayer to play.</param>
+    /// <param name="levelScale">Level scale to give to AudioPlayer.</param>
+    /// <returns>AudioPlayer being played.</returns>
+    public static AudioPlayer Play(AudioPlayer audioPlayer, float levelScale = 1f)
     {
-        Main.addPlayer(audioPlayer);
+        return Main.play(audioPlayer, levelScale);
     }
 
 
-    public static AudioPlayer Play(AudioPlayer audioPlayer, float volumeScale = 1f)
+    /// <summary>
+    /// Set the master volume level. Calls on Main.
+    /// </summary>
+    /// <param name="level">New master volume level. 0-1.</param>
+    public static void SetMasterLevel(float level)
     {
-        return Main.play(audioPlayer, volumeScale);
+        Main.setMasterLevel(level);
+    }
+
+
+    /// <summary>
+    /// Set the master volume mute status. Calls on Main.
+    /// </summary>
+    /// <param name="muted">Should the master volume be muted?</param>
+    public static void SetMasterMute(bool muted)
+    {
+        Main.setMasterMute(muted);
+    }
+
+
+    /// <summary>
+    /// Set the volume level for a bus. Calls on Main.
+    /// </summary>
+    /// <param name="bus">Bus to update.</param>
+    /// <param name="level">Volume level to give the bus. 0-1.</param>
+    public static void SetBusLevel(Bus bus, float level)
+    {
+        Main.setBusLevel(bus, level);
+    }
+
+
+    /// <summary>
+    /// Set the mute status for a bus. Calls on Main.
+    /// </summary>
+    /// <param name="bus">Bus to update.</param>
+    /// <param name="muted">Should the bus be muted?</param>
+    public static void SetBusMute(Bus bus, bool muted)
+    {
+        Main.setBusMute(bus, muted);
     }
 
     #endregion
 
     #region Event Handlers
 
+    /// <summary>
+    /// Handler for audio player being disabled/completed.
+    /// </summary>
+    /// <param name="sender">AudioPlayer.</param>
+    /// <param name="args">Not used.</param>
     public void OnAudioDone(object sender, EventArgs args)
     {
         AudioPlayer player = (AudioPlayer)sender;
@@ -251,42 +292,4 @@ public class AudioManager : Singleton<AudioManager>
     }
 
     #endregion
-}
-
-[Serializable]
-public class Volume
-{
-    public float level;
-
-    public bool muted;
-
-
-    public Volume()
-    {
-        level = 1f;
-        muted = false;
-    }
-
-
-    public Volume(float level, bool muted)
-    {
-        this.level = level;
-        this.muted = muted;
-    }
-
-
-    public static float operator *(Volume left, Volume right)
-    {
-        return left.level * right.level;
-    }
-
-    public static float operator *(Volume left, float right)
-    {
-        return left.level * right;
-    }
-
-    public static implicit operator bool(Volume volume)
-    {
-        return volume.muted;
-    }
 }

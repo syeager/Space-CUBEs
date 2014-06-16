@@ -3,7 +3,7 @@
 // Created: 2014.03.09
 // Edited: 2014.06.13
 
-using LittleByte.Pools;
+
 using UnityEngine;
 using System.Collections;
 

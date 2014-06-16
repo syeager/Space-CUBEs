@@ -6,7 +6,7 @@
 using System;
 using System.Collections;
 using Annotations;
-using LittleByte.Pools;
+
 using UnityEngine;
 
 public class GigaLaser_Weapon : Weapon

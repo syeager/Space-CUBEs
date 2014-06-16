@@ -4,7 +4,7 @@
 // Edited: 2014.06.13
 
 using Annotations;
-using LittleByte.Pools;
+
 using UnityEngine;
 
 /// <summary>
@@ -20,6 +20,13 @@ public class Prefabs : Singleton<Prefabs>
 
     #region MonoBehaviour Overrides
 
+    [UsedImplicitly]
+    private void Reset()
+    {
+        poolManager = ScriptableObject.CreateInstance<PoolManager>();
+    }
+
+
     /// <summary>
     /// Initialize all pools and start cull loop.
     /// </summary>
@@ -28,13 +35,6 @@ public class Prefabs : Singleton<Prefabs>
         base.Awake();
 
         poolManager.Initialize();
-    }
-
-
-    [UsedImplicitly]
-    private void Reset()
-    {
-        poolManager = ScriptableObject.CreateInstance<PoolManager>();
     }
 
 

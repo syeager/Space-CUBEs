@@ -1,7 +1,8 @@
-// Steve Yeager
-// 4.1.2014
+// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.04.27
+// Edited: 2014.06.15
 
-using LittleByte.Pools;
 using UnityEngine;
 
 /// <summary>

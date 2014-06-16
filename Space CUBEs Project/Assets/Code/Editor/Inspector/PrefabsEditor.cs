@@ -3,7 +3,7 @@
 
 using System.Collections.Generic;
 using Annotations;
-using LittleByte.Pools;
+
 using UnityEditor;
 using UnityEngine;
 
@@ -69,10 +69,15 @@ public class PrefabsEditor : Creator<Prefabs>
 
     public override void OnInspectorGUI()
     {
-        if (poolManager == null)
+        GUIStyle textStyle = new GUIStyle { normal = { textColor = Color.white }, wordWrap = true, richText = true };
+        if (PrefabUtility.GetPrefabType(target) == PrefabType.Prefab)
         {
-            GUIStyle textStyle = new GUIStyle {normal = {textColor = Color.white}, wordWrap = true, richText = true};
             EditorGUILayout.LabelField("<color=#ffff00>Needs to be an instance.</color>", textStyle);
+            return;
+        }
+        else if (poolManager == null)
+        {
+            EditorGUILayout.LabelField("<color=#ff0000>No pool manager instance.</color>", textStyle);
             return;
         }
 

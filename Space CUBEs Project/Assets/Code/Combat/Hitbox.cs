@@ -4,7 +4,7 @@
 // Edited: 2014.05.27
 
 using Annotations;
-using LittleByte.Pools;
+
 using UnityEngine;
 
 /// <summary>

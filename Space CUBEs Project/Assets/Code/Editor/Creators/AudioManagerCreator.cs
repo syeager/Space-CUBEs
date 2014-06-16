@@ -5,7 +5,7 @@
 
 using System;
 using Annotations;
-using LittleByte.Pools;
+
 using UnityEditor;
 using UnityEngine;
 
@@ -120,14 +120,14 @@ public class AudioManagerCreator : Creator<AudioManager>
             float volume = EditorGUILayout.Slider(audioManager.MasterVolume.level, 0f, 1f, GUILayout.Width(150f));
             if (volume != audioManager.MasterVolume.level)
             {
-                audioManager.SetMasterLevel(volume);
+                audioManager.setMasterLevel(volume);
                 if (!Application.isPlaying) audioManager.Save();
             }
 
             // mute
             if (GUILayout.Button(audioManager.MasterVolume ? muteOnTexture : muteOffTexture, imageButton, GUILayout.Width(16)))
             {
-                audioManager.SetMasterMute(!audioManager.MasterVolume);
+                audioManager.setMasterMute(!audioManager.MasterVolume);
                 if (!Application.isPlaying) audioManager.Save();
             }
 
@@ -154,7 +154,7 @@ public class AudioManagerCreator : Creator<AudioManager>
                     float volume = EditorGUILayout.Slider(audioManager.busVolumes[bus].level, 0f, 1f, GUILayout.Width(150f));
                     if (volume != audioManager.busVolumes[bus].level)
                     {
-                        audioManager.SetBusLevel(bus, volume);
+                        audioManager.setBusLevel(bus, volume);
                         if (!Application.isPlaying) audioManager.Save();
                     }
 
@@ -166,7 +166,7 @@ public class AudioManagerCreator : Creator<AudioManager>
                     // mute
                     if (GUILayout.Button(audioManager.busVolumes[bus] ? muteOnTexture : muteOffTexture, imageButton, GUILayout.Width(16)))
                     {
-                        audioManager.SetBusMute(bus, !audioManager.busVolumes[bus]);
+                        audioManager.setBusMute(bus, !audioManager.busVolumes[bus]);
                         if (!Application.isPlaying) audioManager.Save();
                     }
 

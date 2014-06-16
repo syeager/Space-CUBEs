@@ -1,7 +1,7 @@
 ﻿// Steve Yeager
 // 12.16.2013
 
-using LittleByte.Pools;
+
 
 /// <summary>
 /// Base class for all enemies.
