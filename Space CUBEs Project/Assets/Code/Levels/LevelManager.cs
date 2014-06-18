@@ -61,7 +61,7 @@ public class LevelManager : Singleton<LevelManager>
 
     #endregion
 
-    #region Unity Overrides
+    #region MonoBehaviour Overrides
 
     protected override void Awake()
     {
@@ -100,7 +100,7 @@ public class LevelManager : Singleton<LevelManager>
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            GameTime.Pause(true);
+            GameTime.TogglePause();
         }
 
 #if UNITY_EDITOR
@@ -146,17 +146,6 @@ public class LevelManager : Singleton<LevelManager>
     #region Static Methods
 
     private bool firstPause = true;
-
-
-    public void TogglePause()
-    {
-        if (firstPause)
-        {
-            firstPause = false;
-            return;
-        }
-        GameTime.TogglePause(this);
-    }
 
     #endregion
 
@@ -275,15 +264,6 @@ public class LevelManager : Singleton<LevelManager>
 
     protected virtual void OnPause(object sender, PauseArgs args)
     {
-        if (args.paused)
-        {
-            audio.Pause();
-        }
-        else
-        {
-            audio.Play();
-        }
-
         pauseMenu.SetActive(args.paused);
     }
 
@@ -308,6 +288,17 @@ public class LevelManager : Singleton<LevelManager>
     {
         GameTime.Pause(false);
         SceneManager.ReloadScene();
+    }
+
+
+    public void TogglePause()
+    {
+        if (firstPause)
+        {
+            firstPause = false;
+            return;
+        }
+        GameTime.TogglePause();
     }
 
     #endregion

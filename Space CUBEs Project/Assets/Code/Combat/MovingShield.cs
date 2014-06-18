@@ -1,8 +1,9 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.03.28
-// Edited: 2014.06.11
+// Edited: 2014.06.16
 
+using System;
 using UnityEngine;
 using System.Collections;
 
@@ -16,53 +17,54 @@ public class MovingShield : Weapon
     public float amp = 1f;
     public float speed;
 
-    #endregion
-
-    #region Private Fields
-
-    private Vector3 start;
+    public AnimationClip deployClip;
+    public AudioPlayer deployAudio;
+    public AnimationClip retractClip;
 
     #endregion
 
     #region Weapon Overrides
 
-    public override void Initialize(Ship sender)
-    {
-        base.Initialize(sender);
-        start = myTransform.localPosition - new Vector3(amp * speed, 0f, 0f);
-    }
-
-
-    public override void Activate(bool pressed, float multiplier, object attackInfo = null)
+    public override Coroutine Activate(bool pressed, float multiplier, object attackInfo = null)
     {
         if (pressed)
         {
-            // reset position
-            myTransform.localPosition = start;
-
             gameObject.SetActive(true);
-            StartCoroutine(Fire());
+            animation.Play(deployClip);
+            AudioManager.Play(deployAudio);
+            StartCoroutine(Move());
         }
-        else
+        else if (gameObject.activeSelf)
         {
             StopAllCoroutines();
-            gameObject.SetActive(false);
+            StartCoroutine(Retract());
         }
+
+        return null;
     }
 
     #endregion
 
     #region Private Methods
 
-    private IEnumerator Fire()
+    private IEnumerator Move()
     {
+        yield return new WaitForSeconds(deployClip.length);
         float timer = 0f;
         while (true)
         {
-            timer += Time.deltaTime;
-            myTransform.localPosition += new Vector3(amp * Mathf.Sin(timer) * speed * Time.deltaTime, 0f, 0f);
+            myTransform.localPosition = new Vector3(amp * (float)Math.Sin(speed * timer), 0f, myTransform.localPosition.z);
+            timer += deltaTime;
             yield return null;
         }
+    }
+
+
+    private IEnumerator Retract()
+    {
+        animation.Play(retractClip);
+        yield return new WaitForSeconds(retractClip.length);
+        gameObject.SetActive(false);
     }
 
     #endregion

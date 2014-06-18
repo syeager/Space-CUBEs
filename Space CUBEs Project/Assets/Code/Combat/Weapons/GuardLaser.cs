@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.04.14
-// Edited: 2014.06.11
+// Edited: 2014.06.16
 
 using UnityEngine;
 
@@ -19,7 +19,7 @@ public class GuardLaser : Weapon
 
     #region Weapon Overrides
 
-    public override void Activate(bool pressed, float multiplier, object attackInfo = null)
+    public override Coroutine Activate(bool pressed, float multiplier, object attackInfo = null)
     {
         if (pressed)
         {
@@ -30,6 +30,8 @@ public class GuardLaser : Weapon
         {
             laser.SetActive(false);
         }
+
+        return null;
     }
 
     #endregion

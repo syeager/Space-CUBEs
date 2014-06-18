@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2013.12.01
-// Edited: 2014.06.11
+// Edited: 2014.06.16
 
 using System;
 using System.Collections;
@@ -137,7 +137,7 @@ public abstract class Weapon : MonoBase
     /// <param name="pressed">Is the weapon being pressed?</param>
     /// <param name="multiplier">Damage multiplier.</param>
     /// <param name="attackInfo">Data to be passed and converted on the weapon side.</param>
-    public abstract void Activate(bool pressed, float multiplier, object attackInfo = null); 
+    public abstract Coroutine Activate(bool pressed, float multiplier, object attackInfo = null);
 
     #endregion
 }

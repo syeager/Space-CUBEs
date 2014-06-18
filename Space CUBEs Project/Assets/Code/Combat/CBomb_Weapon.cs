@@ -21,9 +21,9 @@ public class CBomb_Weapon : Weapon
 
     #region Weapon Overrides
 
-    public override void Activate(bool pressed, float multiplier, object attackInfo = null)
+    public override Coroutine Activate(bool pressed, float multiplier, object attackInfo = null)
     {
-        if (!pressed) return;
+        if (!pressed) return null;
 
         // replace with pool
         GameObject bomb = Prefabs.Pop(bombPrefab, myTransform.position + myTransform.TransformDirection(attackOffset), myTransform.rotation);
@@ -34,6 +34,8 @@ public class CBomb_Weapon : Weapon
         {
             ActivatedEvent(this, EventArgs.Empty);
         }
+
+        return null;
     }
 
 

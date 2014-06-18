@@ -1,8 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.03.27
-// Edited: 2014.06.13
-
+// Edited: 2014.06.15
 
 using UnityEngine;
 
@@ -14,6 +13,7 @@ public class BurstBulletPattern : Weapon
     #region Public Fields
 
     public PoolObject bulletPrefab;
+    public AudioPlayer fireAudio;
     public int number;
     public float speed;
     public float damage;
@@ -24,12 +24,14 @@ public class BurstBulletPattern : Weapon
 
     #region Weapon Overrides
 
-    public override void Activate(bool pressed, float multiplier, object attackInfo = null)
+    public override Coroutine Activate(bool pressed, float multiplier, object attackInfo = null)
     {
         if (pressed)
         {
             Fire();
         }
+
+        return null;
     }
 
     #endregion
@@ -40,6 +42,8 @@ public class BurstBulletPattern : Weapon
     {
         float angle = 360f / number;
         Vector3 position = myTransform.position + myTransform.TransformDirection(offset);
+
+        AudioManager.Play(fireAudio);
 
         for (int i = 0; i < number; i++)
         {

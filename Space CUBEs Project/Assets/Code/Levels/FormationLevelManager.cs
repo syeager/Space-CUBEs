@@ -3,6 +3,7 @@
 // Created: 2014.01.12
 // Edited: 2014.06.13
 
+using System;
 using System.Collections.Generic;
 using LittleByte.Data;
 
@@ -63,11 +64,13 @@ public class FormationLevelManager : LevelManager
 
         if (Input.GetKeyDown(KeyCode.Keypad1))
         {
+            // kill boss
             if (boss != null)
             {
                 boss.GetComponent<Health>().Trash();
                 return;
             }
+            // spawn boss
             segmentCursor = 100000;
             while (activeEnemies.Count > 0)
             {
@@ -75,6 +78,15 @@ public class FormationLevelManager : LevelManager
                 ((Health)activeEnemies[0].GetComponent(typeof(Health))).Trash();
             }
             SpawnBoss();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Keypad2))
+        {
+            // hurt boss
+            if (boss != null)
+            {
+                boss.GetComponent<Health>().RecieveHit(null, 1000);
+            }
         }
     }
 #endif
@@ -142,7 +154,7 @@ public class FormationLevelManager : LevelManager
     {
         boss = (Instantiate(bossPrefab, bossSpawnPosition, SpawnRotation) as GameObject).GetComponent<Boss>();
         activeEnemies.Add(boss);
-        boss.GetComponent<ShieldHealth>().DieEvent += OnBossDeath;
+        boss.DeathEvent += OnBossDeath;
         boss.stateMachine.Start();
 
         //AudioManager.Pl
@@ -172,7 +184,7 @@ public class FormationLevelManager : LevelManager
     }
 
 
-    private void OnBossDeath(object sender, DieArgs args)
+    private void OnBossDeath(object sender, EventArgs args)
     {
         if (levelIndex >= SaveData.Load<int>(LevelSelectManager.UnlockedLevelsKey, LevelSelectManager.LevelsFolder))
         {

@@ -22,12 +22,14 @@ public class EnemyCannon : Weapon
 
     #region Weapon Overrides
 
-    public override void Activate(bool pressed, float multiplier, object attackInfo = null)
+    public override Coroutine Activate(bool pressed, float multiplier, object attackInfo = null)
     {
         if (pressed)
         {
             Fire();
         }
+
+        return null;
     }
 
     #endregion

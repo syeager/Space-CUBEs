@@ -20,7 +20,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &100002
 GameObject:
   m_ObjectHideFlags: 1
@@ -42,7 +42,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &100004
 GameObject:
   m_ObjectHideFlags: 1
@@ -165,6 +165,7 @@ GameObject:
   - 54: {fileID: 5400006}
   - 114: {fileID: 11400014}
   - 114: {fileID: 11400012}
+  - 111: {fileID: 11100012}
   m_Layer: 10
   m_Name: Shield
   m_TagString: Untagged
@@ -193,7 +194,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &100022
 GameObject:
   m_ObjectHideFlags: 1
@@ -205,13 +206,14 @@ GameObject:
   - 33: {fileID: 3300016}
   - 23: {fileID: 2300016}
   - 114: {fileID: 11400052}
+  - 111: {fileID: 11100014}
   m_Layer: 10
   m_Name: DeathLaser
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &100024
 GameObject:
   m_ObjectHideFlags: 1
@@ -232,7 +234,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &100026
 GameObject:
   m_ObjectHideFlags: 1
@@ -249,13 +251,14 @@ GameObject:
   - 114: {fileID: 11400044}
   - 114: {fileID: 11400042}
   - 114: {fileID: 11400040}
+  - 111: {fileID: 11100010}
   m_Layer: 10
   m_Name: ParticleCannon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &100028
 GameObject:
   m_ObjectHideFlags: 1
@@ -527,7 +530,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100034}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -13.256916, y: 86.6030273, z: 1.42481863}
+  m_LocalPosition: {x: .522399962, y: 75.1218262, z: -3.19243431}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400032}
@@ -1220,7 +1223,9 @@ Animation:
   serializedVersion: 3
   m_Animation: {fileID: 0}
   m_Animations:
-  - {fileID: 0}
+  - {fileID: 7400000, guid: dd86a060a42ed2a4f818bde2ba611788, type: 2}
+  - {fileID: 7400000, guid: 761c2cd2073430c43afe7c365557e3a3, type: 2}
+  - {fileID: 7400000, guid: a76cdd46125d68842b011f7ebd162306, type: 2}
   m_WrapMode: 0
   m_PlayAutomatically: 0
   m_AnimatePhysics: 1
@@ -1285,6 +1290,50 @@ Animation:
   - {fileID: 7400000, guid: 5cfc922612001cb41ad942faf1d170ef, type: 2}
   m_WrapMode: 0
   m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
+--- !u!111 &11100010
+Animation:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100026}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
+--- !u!111 &11100012
+Animation:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100016}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations:
+  - {fileID: 7400000, guid: 23488d94431652f4b8705bf4e69da600, type: 2}
+  - {fileID: 7400000, guid: 0ad41a0a4aff5f841b374c510be065a4, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 1
+  m_CullingType: 0
+--- !u!111 &11100014
+Animation:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100022}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
 --- !u!114 &11400000
@@ -1399,8 +1448,11 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
-  amp: 5
-  speed: 4
+  amp: 15
+  speed: 2
+  deployClip: {fileID: 7400000, guid: 23488d94431652f4b8705bf4e69da600, type: 2}
+  deployAudio: {fileID: 11400000, guid: 9705a2479fac9f34b8085e4bdf199ba2, type: 2}
+  retractClip: {fileID: 7400000, guid: 0ad41a0a4aff5f841b374c510be065a4, type: 2}
 --- !u!114 &11400016
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1433,7 +1485,7 @@ MonoBehaviour:
   bulletEmitterTime: 5
   shieldTime: 20
   shieldBuffer: 5
-  deathLaserTime: 1
+  deathLaserTime: 4
   deathLaserChargeTime: 1.5
 --- !u!114 &11400018
 MonoBehaviour:
@@ -1526,7 +1578,10 @@ MonoBehaviour:
   rotationSpeed: 3.5
   homingTime: 1.5
   damage: 20
-  fireClip: {fileID: 11400000, guid: 7db67d75ecd4bbe4ab50f123e8f847b2, type: 2}
+  deployClip: {fileID: 7400000, guid: 5cfc922612001cb41ad942faf1d170ef, type: 2}
+  fireClip: {fileID: 7400000, guid: 2e13eb4c4f2276b47b9bda306bb943ee, type: 2}
+  retractClip: {fileID: 7400000, guid: 2bbae1ff4c872914ea3daa55e7d039ab, type: 2}
+  fireAudio: {fileID: 11400000, guid: 7db67d75ecd4bbe4ab50f123e8f847b2, type: 2}
   dummyTargets: 5
 --- !u!114 &11400026
 MonoBehaviour:
@@ -1568,6 +1623,9 @@ MonoBehaviour:
   speed: 4
   time: 5
   damage: 30
+  deployClip: {fileID: 7400000, guid: 5cfc922612001cb41ad942faf1d170ef, type: 2}
+  retractClip: {fileID: 7400000, guid: 2bbae1ff4c872914ea3daa55e7d039ab, type: 2}
+  fireAudio: {fileID: 11400000, guid: 7d017c4fc7ce604488c40ed727aea3ed, type: 2}
 --- !u!114 &11400030
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1614,7 +1672,10 @@ MonoBehaviour:
   rotationSpeed: 3.5
   homingTime: 1.5
   damage: 20
-  fireClip: {fileID: 11400000, guid: 7db67d75ecd4bbe4ab50f123e8f847b2, type: 2}
+  deployClip: {fileID: 7400000, guid: 5cfc922612001cb41ad942faf1d170ef, type: 2}
+  fireClip: {fileID: 7400000, guid: 2e13eb4c4f2276b47b9bda306bb943ee, type: 2}
+  retractClip: {fileID: 7400000, guid: 2bbae1ff4c872914ea3daa55e7d039ab, type: 2}
+  fireAudio: {fileID: 11400000, guid: 7db67d75ecd4bbe4ab50f123e8f847b2, type: 2}
   dummyTargets: 5
 --- !u!114 &11400034
 MonoBehaviour:
@@ -1656,6 +1717,9 @@ MonoBehaviour:
   speed: 4
   time: 5
   damage: 30
+  deployClip: {fileID: 7400000, guid: 5cfc922612001cb41ad942faf1d170ef, type: 2}
+  retractClip: {fileID: 7400000, guid: 2bbae1ff4c872914ea3daa55e7d039ab, type: 2}
+  fireAudio: {fileID: 11400000, guid: 7d017c4fc7ce604488c40ed727aea3ed, type: 2}
 --- !u!114 &11400038
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1692,6 +1756,7 @@ MonoBehaviour:
   name: 4
   cooldownTime: 0
   bulletPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
+  fireAudio: {fileID: 11400000, guid: 725a8d7b161cda14aaa8b0d58457713d, type: 2}
   number: 36
   speed: 30
   damage: 10
@@ -1713,6 +1778,7 @@ MonoBehaviour:
   name: 3
   cooldownTime: 0
   bulletPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
+  fireAudio: {fileID: 11400000, guid: 725a8d7b161cda14aaa8b0d58457713d, type: 2}
   number: 8
   speed: 30
   damage: 10
@@ -1734,6 +1800,7 @@ MonoBehaviour:
   name: 2
   cooldownTime: 0
   bulletPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
+  fireAudio: {fileID: 11400000, guid: 725a8d7b161cda14aaa8b0d58457713d, type: 2}
   number: 8
   speed: 30
   damage: 10
@@ -1755,6 +1822,7 @@ MonoBehaviour:
   name: 1
   cooldownTime: 0
   bulletPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
+  fireAudio: {fileID: 11400000, guid: 725a8d7b161cda14aaa8b0d58457713d, type: 2}
   number: 10
   speed: 30
   damage: 10
@@ -1776,6 +1844,7 @@ MonoBehaviour:
   name: 0
   cooldownTime: 0
   bulletPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
+  fireAudio: {fileID: 11400000, guid: 725a8d7b161cda14aaa8b0d58457713d, type: 2}
   number: 20
   speed: 30
   damage: 10
@@ -1796,6 +1865,10 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  deployAudio: {fileID: 11400000, guid: b5e161b7a110a294294070014ce45239, type: 2}
+  deployClip: {fileID: 7400000, guid: 1c92495abb3cb854c8956328168cbbd6, type: 2}
+  retractAudio: {fileID: 11400000, guid: b5e161b7a110a294294070014ce45239, type: 2}
+  retractClip: {fileID: 7400000, guid: 818022f08cbcc3544b29358e8c5140fb, type: 2}
   weapons:
   - {fileID: 11400048}
   - {fileID: 11400046}
@@ -1803,7 +1876,7 @@ MonoBehaviour:
   - {fileID: 11400042}
   - {fileID: 11400040}
   delays:
-  - 0
+  - 1.5
   - .5
   - .75
   - .25
@@ -1825,6 +1898,12 @@ MonoBehaviour:
   cooldownTime: 0
   laser: {fileID: 100008}
   damage: 75
+  fireDelay: 1
+  deployClip: {fileID: 7400000, guid: 00163fcab9c5ddf4a9bb02e6b8f87837, type: 2}
+  deployAudio: {fileID: 11400000, guid: cd47dbf7acccac744a8bd3faa2d20f5c, type: 2}
+  chargeAudio: {fileID: 11400000, guid: 36c7908758ec51745aae772d696a66f5, type: 2}
+  fireAudio: {fileID: 11400000, guid: b6f90c6844276084fbbd43b5f6c540a2, type: 2}
+  retractClip: {fileID: 7400000, guid: 2dda63f5fb00ea64392c741cd4755f0c, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

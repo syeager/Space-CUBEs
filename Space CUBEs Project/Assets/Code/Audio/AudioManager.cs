@@ -19,8 +19,8 @@ public class AudioManager : Singleton<AudioManager>
     /// <summary>Different catagories of audio. Have master controls for each bus.</summary>
     public enum Bus
     {
-        Music,
         SFX,
+        Music,
         UI
     };
 
@@ -58,6 +58,8 @@ public class AudioManager : Singleton<AudioManager>
     private void Reset()
     {
         poolManager = ScriptableObject.CreateInstance<PoolManager>();
+        poolManager.parent = transform;
+        Resources.UnloadUnusedAssets();
     }
 
 
@@ -126,7 +128,7 @@ public class AudioManager : Singleton<AudioManager>
     /// <param name="audioPlayer">AudioPlayer to play.</param>
     /// <param name="levelScale">Level scale to give to AudioPlayer.</param>
     /// <returns>AudioPlayer being played.</returns>
-    public AudioPlayer play(AudioPlayer audioPlayer, float levelScale = 1f)
+    public AudioPlayer play(AudioPlayer audioPlayer, float? levelScale = null)
     {
         Bus playerGroup = audioPlayer.bus;
 
@@ -135,7 +137,7 @@ public class AudioManager : Singleton<AudioManager>
         activePlayers[playerGroup].Add(player);
         player.DisableEvent += OnAudioDone;
 
-        player.Play(levelScale, busVolumes[playerGroup] * MasterVolume, busVolumes[playerGroup] || MasterVolume);
+        player.Play(busVolumes[playerGroup] * MasterVolume, busVolumes[playerGroup] || MasterVolume, levelScale);
         return player;
     }
 
@@ -228,9 +230,9 @@ public class AudioManager : Singleton<AudioManager>
     /// <param name="audioPlayer">AudioPlayer to play.</param>
     /// <param name="levelScale">Level scale to give to AudioPlayer.</param>
     /// <returns>AudioPlayer being played.</returns>
-    public static AudioPlayer Play(AudioPlayer audioPlayer, float levelScale = 1f)
+    public static AudioPlayer Play(AudioPlayer audioPlayer, float? levelScale = null)
     {
-        return Main.play(audioPlayer, levelScale);
+        return audioPlayer == null ? null : Main.play(audioPlayer, levelScale);
     }
 
 

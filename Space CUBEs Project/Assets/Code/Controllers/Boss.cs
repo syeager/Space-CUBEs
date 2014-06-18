@@ -30,6 +30,9 @@ public class Boss : Enemy
 
     public EventHandler<ValueArgs> NextStageEvent;
 
+    /// <summary>Fired after death animation.</summary>
+    public EventHandler DeathEvent;
+
     #endregion
 
 

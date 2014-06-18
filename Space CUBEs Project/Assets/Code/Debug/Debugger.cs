@@ -515,7 +515,7 @@ public class Debugger : Singleton<Debugger>
     [DebuggerStepThrough]
     public static void Mark(string message = "", Object context = null)
     {
-        Debug.Log(String.Format("{0} {1}", marker, message), context);
+        Debug.Log((Main.showTime ? "[" + Time.realtimeSinceStartup + "] " : "") + String.Format("{0} {1}", marker, message), context);
         marker++;
     }
 

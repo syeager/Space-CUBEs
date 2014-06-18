@@ -1,10 +1,9 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2013.12.01
-// Edited: 2014.06.13
+// Edited: 2014.06.16
 
 using System.Collections;
-
 using UnityEngine;
 
 public class PlasmaCannon : Weapon
@@ -20,7 +19,7 @@ public class PlasmaCannon : Weapon
 
     #region Weapon Overrides
 
-    public override void Activate(bool pressed, float multiplier, object attackInfo = null)
+    public override Coroutine Activate(bool pressed, float multiplier, object attackInfo = null)
     {
         if (pressed)
         {
@@ -31,6 +30,8 @@ public class PlasmaCannon : Weapon
             StopAllCoroutines();
             StartCoroutine(Cooldown(true, false));
         }
+
+        return null;
     }
 
 

@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.03.25
-// Edited: 2014.06.08
+// Edited: 2014.06.15
 
 using System;
 using UnityEngine;
@@ -131,7 +131,6 @@ public class SwitchBlade : Boss
         for (int i = 0; i < myWeapons.weapons.Length; i++)
         {
             myWeapons.Activate(i, false);
-            myWeapons.weapons[i].gameObject.SetActive(false);
         }
 
         StopAllCoroutines();
@@ -196,8 +195,7 @@ public class SwitchBlade : Boss
 
             // all
             StartCoroutine(FirePattern(true));
-            StartCoroutine(FireSideWeapons(false));
-            yield return new WaitForSeconds(bulletEmitterTime + stage1SwitchTime);
+            yield return StartCoroutine(FireSideWeapons(false));
         }
     }
 
@@ -338,17 +336,6 @@ public class SwitchBlade : Boss
     }
 
 
-    private IEnumerator FireMissiles(bool right)
-    {
-        // deploy
-        myAnimation.Blend(right ? "Missiles_R_Deploy" : "Missiles_L_Deploy");
-        yield return new WaitForSeconds(2f);
-
-        // fire
-        myAnimation.Blend(right ? "Missiles_R_Shoot" : "Missiles_L_Shoot");
-    }
-
-
     private IEnumerator FirePattern(bool controlMovement)
     {
         // open
@@ -356,15 +343,15 @@ public class SwitchBlade : Boss
         {
             moveJob.Pause(true);
         }
-        myWeapons.weapons[4].gameObject.SetActive(true);
-        yield return new WaitForSeconds(stage1SwitchTime);
 
-        // fire
+        // deploy
+        myAnimation.Play("Doors_Open");
         myWeapons.Activate(4, true);
         yield return new WaitForSeconds(bulletEmitterTime);
 
         // close
-        myWeapons.weapons[4].gameObject.SetActive(false);
+        myAnimation.Play("Doors_Close");
+        myWeapons.Activate(4, false);
         yield return new WaitForSeconds(stage1SwitchTime);
         if (controlMovement)
         {
@@ -395,16 +382,13 @@ public class SwitchBlade : Boss
     {
         // open
         moveJob.Pause(true);
-        myWeapons.weapons[6].gameObject.SetActive(true);
-        yield return new WaitForSeconds(deathLaserChargeTime);
-
-        // fire
-        myWeapons.Activate(6, true);
-        yield return new WaitForSeconds(deathLaserTime);
+        myAnimation.Play("Doors_Open");
+        yield return myWeapons.Activate(6, true, deathLaserTime);
+        yield return new WaitForSeconds(stage1SwitchTime);
 
         // close
+        myAnimation.Play("Doors_Close");
         myWeapons.Activate(6, false);
-        myWeapons.weapons[6].gameObject.SetActive(false);
         yield return new WaitForSeconds(stage1SwitchTime);
         moveJob.Pause(false);
     }
@@ -416,6 +400,27 @@ public class SwitchBlade : Boss
         {
             moveJob.Kill();
         }
+
+        // clean up
+        myWeapons.ActivateAll(false);
+        foreach (var weapon in myWeapons.weapons)
+        {
+            weapon.gameObject.SetActive(false);
+        }
+
+        GameObject root = new GameObject();
+        root.transform.SetPosRot(myTransform.position, myTransform.rotation);
+        myTransform.parent = root.transform;
+        myAnimation.Play("Switchblade_Death");
+
+        stateMachine.SetUpdate(DeathUpdate());
+    }
+
+
+    private IEnumerator DeathUpdate()
+    {
+        yield return new WaitForSeconds(myAnimation["Switchblade_Death"].length + 1f);
+        DeathEvent.Fire();
         Destroy(gameObject);
     }
 

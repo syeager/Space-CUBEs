@@ -12,9 +12,9 @@ using System.Collections;
 /// 
 /// </summary>
 //[CustomPropertyDrawer(typeof(Pool))]
-public class NewBehaviourScript : PropertyDrawer
+public class PoolDrawer : PropertyDrawer
 {
-    private Color cachedColor;
+    //private Color cachedColor;
 
     #region PropertyDrawer Overrides
     
@@ -47,7 +47,7 @@ public class NewBehaviourScript : PropertyDrawer
 
     private void GUIColor(Color color)
     {
-        cachedColor = GUI.color;
+        //cachedColor = GUI.color;
         GUI.color = color;
     }
 

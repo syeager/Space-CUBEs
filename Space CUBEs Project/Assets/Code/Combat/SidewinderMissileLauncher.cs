@@ -1,8 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.03.25
-// Edited: 2014.06.13
-
+// Edited: 2014.06.16
 
 using UnityEngine;
 using System.Collections;
@@ -22,26 +21,20 @@ public class SidewinderMissileLauncher : Weapon
     public float homingTime;
     public float damage;
 
+    public AnimationClip deployClip;
+    public AnimationClip fireClip;
+    public AnimationClip retractClip;
+
     /// <summary>Audio clip to play when a missile fires.</summary>
-    public AudioPlayer fireClip;
+    public AudioPlayer fireAudio;
 
     public int dummyTargets = 5;
 
     #endregion
 
-    #region Const Fields
-
-    /// <summary>Animation of missile laucher moving into place.</summary>
-    private const string DeployAnim = "SideWeaponDeploy";
-
-    /// <summary>Animation of missiles firing.</summary>
-    private const string FireAnim = "SidewinderFire";
-
-    #endregion
-
     #region Weapon Overrides
 
-    public override void Activate(bool pressed, float multiplier, object attackInfo = null)
+    public override Coroutine Activate(bool pressed, float multiplier, object attackInfo = null)
     {
         if (pressed)
         {
@@ -51,8 +44,10 @@ public class SidewinderMissileLauncher : Weapon
         else
         {
             StopAllCoroutines();
-            animation.PlayReverse(DeployAnim, true);
+            animation.Play(retractClip);
         }
+
+        return null;
     }
 
     #endregion
@@ -62,22 +57,21 @@ public class SidewinderMissileLauncher : Weapon
     private IEnumerator Fire(float deployTime)
     {
         // deploy
-        animation.PlayReverse(DeployAnim, false);
+        animation.Play(deployClip);
         yield return new WaitForSeconds(deployTime);
 
         // create missiles
         WaitForSeconds wait = new WaitForSeconds(missileDelay);
         foreach (Vector3 position in missilePositions)
         {
+            animation.Stop();
             Prefabs.Pop(missilePrefab, myTransform.position + myTransform.TransformDirection(position), myTransform.rotation).
                 GetComponent<SidewinderMissile>().Initialize(myShip, damage, missileSpeed, rotationSpeed, homingTime, dummyTargets, LevelManager.Main.player.transform);
 
-            AudioManager.Play(fireClip);
-            animation.Play(FireAnim);
+            AudioManager.Play(fireAudio);
+            animation.Play(fireClip);
 
             yield return wait;
-
-            animation.Stop();
         }
     }
 

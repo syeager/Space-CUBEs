@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2013.12.04
-// Edited: 2014.05.31
+// Edited: 2014.06.16
 
 using System.Collections.Generic;
 using System.Linq;
@@ -88,12 +88,13 @@ public class WeaponManager : MonoBehaviour
     /// <param name="weapon">Weapon index.</param>
     /// <param name="isPressed">True, if weapon is pressed and not released.</param>
     /// <param name="attackInfo">Optional additional info to pass.</param>
-    public void Activate(int weapon, bool isPressed, object attackInfo = null)
+    /// <returns></returns>
+    public Coroutine Activate(int weapon, bool isPressed, object attackInfo = null)
     {
-        if (weapon >= weapons.Length) return;
-        if (weapons[weapon] == null) return;
+        if (weapon >= weapons.Length) return null;
+        if (weapons[weapon] == null) return null;
 
-        weapons[weapon].Activate(isPressed, damageMultiplier, attackInfo);
+        return weapons[weapon].Activate(isPressed, damageMultiplier, attackInfo);
     }
 
 
@@ -118,18 +119,17 @@ public class WeaponManager : MonoBehaviour
     /// <param name="weapon">Weapon index.</param>
     /// <param name="isPressed">True, if weapon is pressed and not released.</param>
     /// <returns>True, if the weapon is successfully activated.</returns>
-    public bool TryActivate(int weapon, bool isPressed)
+    public Coroutine TryActivate(int weapon, bool isPressed)
     {
-        if (weapon >= weapons.Length) return false;
-        if (!canActivate) return false;
+        if (weapon >= weapons.Length) return null;
+        if (!canActivate) return null;
 
-        bool activated = CanActivate(weapon);
-        if (activated)
+        if (CanActivate(weapon))
         {
-            Activate(weapon, isPressed);
+            return Activate(weapon, isPressed);
         }
 
-        return activated;
+        return null;
     }
 
     #endregion

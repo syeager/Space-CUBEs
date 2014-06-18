@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.05.17
-// Edited: 2014.06.15
+// Edited: 2014.06.16
 
 using UnityEngine;
 using Bus = AudioManager.Bus;
@@ -27,12 +27,18 @@ public class AudioPlayer : PoolObject
     /// <summary>Bus that this clip belongs to.</summary>
     public Bus bus;
 
+    /// <summary>Volume level scale for this clip.</summary>
+    public float levelScale = 1f;
+
     #endregion
 
-    #region Private Fields
+    #region Properties
 
-    /// <summary>Volume level scale for this clip.</summary>
-    private float levelScale;
+    /// <summary>Audio clip's length in seconds.</summary>
+    public float Length
+    {
+        get { return myAudio.clip.length; }
+    }
 
     #endregion
 
@@ -48,23 +54,48 @@ public class AudioPlayer : PoolObject
     public void PlayClipAtPoint(Vector3 position, float levelScale, float level, bool muted)
     {
         myTransform.position = position;
-        Play(levelScale, level, muted);
+        Play(level, muted, levelScale);
     }
 
 
     /// <summary>
     /// Play the audio clip.
     /// </summary>
-    /// <param name="levelScale">Local level scale to cache.</param>
     /// <param name="level">Volume level from Audio Manager.</param>
     /// <param name="muted">Mute from Audio Manager.</param>
-    public void Play(float levelScale, float level, bool muted)
+    /// <param name="levelScale">Local level scale to cache.</param>
+    public void Play(float level, bool muted, float? levelScale = null)
     {
-        this.levelScale = levelScale;
+        if (levelScale != null)
+        {
+            this.levelScale = levelScale.Value;
+        }
         myAudio.mute = muted;
-        myAudio.volume = levelScale * level;
+        myAudio.volume = this.levelScale * level;
         myAudio.Play();
-        Invoke("Disable", myAudio.clip.length);
+
+        if (!myAudio.loop)
+        {
+            Invoke("Disable", myAudio.clip.length);
+        }
+    }
+
+
+    /// <summary>
+    /// Stop playing audio.
+    /// </summary>
+    /// <param name="delay">Time in seconds to delay the stop call.</param>
+    public void Stop(float delay = 0f)
+    {
+        if (delay == 0f)
+        {
+            CancelInvoke();
+            myAudio.Stop();
+        }
+        else
+        {
+            Invoke("Stop", delay);
+        }
     }
 
 

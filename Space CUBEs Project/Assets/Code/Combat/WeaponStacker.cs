@@ -13,6 +13,11 @@ public class WeaponStacker : Weapon
 {
     #region Public Fields
 
+    public AudioPlayer deployAudio;
+    public AnimationClip deployClip;
+    public AudioPlayer retractAudio;
+    public AnimationClip retractClip;
+
     public Weapon[] weapons;
     public float[] delays;
 
@@ -31,20 +36,34 @@ public class WeaponStacker : Weapon
     }
 
 
-    public override void Activate(bool pressed, float multiplier, object attackInfo = null)
+    public override Coroutine Activate(bool pressed, float multiplier, object attackInfo = null)
     {
         if (pressed)
         {
-            StartCoroutine(Fire(multiplier));
+            gameObject.SetActive(true);
+            return StartCoroutine(Fire(multiplier));
         }
+        else if (gameObject.activeInHierarchy)
+        {
+            StopAllCoroutines();
+            
+            return StartCoroutine(Retract());
+        }
+
+        return null;
     }
 
     #endregion
 
-    #region Private Methods
+    #region Protected Methods
 
-    private IEnumerator Fire(float multiplier)
+    protected virtual IEnumerator Fire(float multiplier)
     {
+        // deploy
+        AudioManager.Play(deployAudio);
+        animation.Play(deployClip);
+
+        // fire
         for (int i = 0; i < weapons.Length; i++)
         {
             if (delays[i] > 0f)
@@ -54,6 +73,14 @@ public class WeaponStacker : Weapon
 
             weapons[i].Activate(true, multiplier);
         }
+    }
+
+
+    private IEnumerator Retract()
+    {
+        animation.Play(retractClip);
+        AudioManager.Play(retractAudio);
+        yield return new WaitForSeconds(retractClip.length);
     }
 
     #endregion

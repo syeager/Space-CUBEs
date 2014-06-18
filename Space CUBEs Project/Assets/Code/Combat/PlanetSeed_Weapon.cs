@@ -1,8 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.02.19
-// Edited: 2014.06.13
-
+// Edited: 2014.06.16
 
 using UnityEngine;
 
@@ -20,13 +19,15 @@ public class PlanetSeed_Weapon : Weapon
 
     #region Weapon Overrides
 
-    public override void Activate(bool pressed, float multiplier, object attackInfo = null)
+    public override Coroutine Activate(bool pressed, float multiplier, object attackInfo = null)
     {
-        if (!pressed) return;
+        if (!pressed) return null;
 
         Prefabs.Pop(starPrefab, myTransform.position + myTransform.TransformDirection(attackOffset), myTransform.rotation).GetComponent<Hitbox>().Initialize(myShip, damage * multiplier, time, myTransform.forward * speed);
         StartCoroutine(Cooldown(true));
         Activated();
+
+        return null;
     }
 
 

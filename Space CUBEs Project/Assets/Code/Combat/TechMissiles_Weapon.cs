@@ -21,11 +21,11 @@ public class TechMissiles_Weapon : Weapon
 
     #region Weapon Overrides
 
-    public override void Activate(bool pressed, float multiplier, object attackInfo = null)
+    public override Coroutine Activate(bool pressed, float multiplier, object attackInfo = null)
     {
-        if (!pressed) return;
+        if (!pressed) return null;
 
-        StartCoroutine(Fire(multiplier));
+        return StartCoroutine(Fire(multiplier));
     }
 
 

@@ -1,8 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.02.20
-// Edited: 2014.06.13
-
+// Edited: 2014.06.16
 
 using UnityEngine;
 
@@ -29,7 +28,7 @@ public class SingularityBlaster : Weapon
 
     #region Weapon Overrides
 
-    public override void Activate(bool pressed, float multiplier, object attackInfo = null)
+    public override Coroutine Activate(bool pressed, float multiplier, object attackInfo = null)
     {
         if (pressed)
         {
@@ -43,6 +42,8 @@ public class SingularityBlaster : Weapon
         {
             Release();
         }
+
+        return null;
     }
 
 

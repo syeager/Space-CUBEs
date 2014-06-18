@@ -11,7 +11,7 @@ GameObject:
   - 82: {fileID: 8200000}
   - 114: {fileID: 11400000}
   m_Layer: 0
-  m_Name: shot_bazooka
+  m_Name: ParticleCannon_Fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36,7 +36,7 @@ AudioSource:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   serializedVersion: 3
-  m_audioClip: {fileID: 8300000, guid: e5ffe5ad56ed84f80b79cf081c6d0209, type: 3}
+  m_audioClip: {fileID: 8300000, guid: f6cb1f581b7444b23a05b613a16420d5, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -99,7 +99,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myAudio: {fileID: 8200000}
   myTransform: {fileID: 400000}
-  bus: 1
+  bus: 0
+  levelScale: .200000003
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

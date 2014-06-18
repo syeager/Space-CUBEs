@@ -26,6 +26,9 @@ public class PoolManager : ScriptableObject
     /// <summary>List of pools.</summary>
     public List<Pool> poolList = new List<Pool>();
 
+    /// <summary>Parent for all pools created during runtime.</summary>
+    public Transform parent;
+
     #endregion
 
     #region Private Fields
@@ -91,17 +94,29 @@ public class PoolManager : ScriptableObject
     /// 
     /// </summary>
     /// <param name="prefab"></param>
-    /// <param name="parent"></param>
+    /// <param name="poolParent"></param>
     /// <returns></returns>
-    public Pool CreatePool(PoolObject prefab, Transform parent = null)
+    public Pool CreatePool(PoolObject prefab, Transform poolParent = null)
     {
-        Pool pool = new Pool(this, prefab, parent);
-        pools.Add(prefab, pool);
+        Pool pool = new Pool(this, prefab);
         poolList.Add(pool);
+        pools.Add(prefab, pool);
+        if (poolParent == null)
+        {
+            poolParent = new GameObject(prefab.name).transform;
+            poolParent.parent = parent;
+        }
+        pool.Initialize(poolParent);
+
         return pool;
     }
 
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="prefab"></param>
+    /// <returns></returns>
     public Pool GetPool(PoolObject prefab)
     {
         return poolList.FirstOrDefault(p => p.prefab == prefab);
@@ -123,11 +138,7 @@ public class PoolManager : ScriptableObject
                 return pool.Pop();
             }
 
-            pool = new Pool(this, prefab);
-            poolList.Add(pool);
-            pools.Add(prefab, pool);
-            Transform parent = new GameObject(prefab.name).transform;
-            pool.Initialize(parent);
+            CreatePool(prefab);
         }
     }
 
@@ -148,11 +159,7 @@ public class PoolManager : ScriptableObject
                 return pool.Pop(life);
             }
 
-            pool = new Pool(this, prefab);
-            poolList.Add(pool);
-            pools.Add(prefab, pool);
-            Transform parent = new GameObject(prefab.name).transform;
-            pool.Initialize(parent);
+            CreatePool(prefab);
         }
     }
 
@@ -177,11 +184,7 @@ public class PoolManager : ScriptableObject
                 return popped.gameObject;
             }
 
-            pool = new Pool(this, prefab);
-            poolList.Add(pool);
-            pools.Add(prefab, pool);
-            Transform parent = new GameObject(prefab.name).transform;
-            pool.Initialize(parent);
+            CreatePool(prefab);
         }
     }
 
@@ -207,11 +210,7 @@ public class PoolManager : ScriptableObject
                 return popped.gameObject;
             }
 
-            pool = new Pool(this, prefab);
-            poolList.Add(pool);
-            pools.Add(prefab, pool);
-            Transform parent = new GameObject(prefab.name).transform;
-            pool.Initialize(parent);
+            CreatePool(prefab);
         }
     }
 
