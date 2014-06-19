@@ -1,6 +1,7 @@
-﻿// Steve Yeager
-// 8.18.2013
-// prime31studios
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2013.12.16
+// Edited: 2014.06.18
 
 using System.Collections;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.Threading;
 /// <summary>
 /// Wrapper for the coroutine class.
 /// </summary>
+/// <remarks>prime31studios</remarks>
 public class Job
 {
     #region Public Fields
@@ -34,6 +36,14 @@ public class Job
 
     #endregion
 
+    #region Constructors
+
+    ~Job()
+    {
+        Kill();
+    }
+
+    #endregion
 
     #region Public Methods
 
@@ -268,5 +278,5 @@ public class Job
         }
     }
 
-    #endregion    
+    #endregion
 }
