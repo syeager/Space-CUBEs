@@ -11,7 +11,7 @@ GameObject:
   - 82: {fileID: 8200000}
   - 114: {fileID: 11400000}
   m_Layer: 0
-  m_Name: DeathLaser_Charge
+  m_Name: Last stand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36,11 +36,11 @@ AudioSource:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   serializedVersion: 3
-  m_audioClip: {fileID: 8300000, guid: cc8b1ab03fe33164b8949cd9423ce647, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 8f2d91c4b772ff3439e7a89dc715b328, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Priority: 128
   DopplerLevel: 1
@@ -94,13 +94,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c693568fb83952945940dba9317b5065, type: 3}
+  m_Script: {fileID: 11500000, guid: 206be813d5185664a90c8f156b4cc6db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   myAudio: {fileID: 8200000}
-  myTransform: {fileID: 400000}
+  playlistName: Last stand
   bus: 0
-  levelScale: .75
+  persist: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

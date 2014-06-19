@@ -1,11 +1,10 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.06.14
-// Edited: 2014.06.14
+// Edited: 2014.06.18
 
 using System;
 using Annotations;
-
 using UnityEditor;
 using UnityEngine;
 
@@ -198,7 +197,7 @@ public class AudioManagerCreator : Creator<AudioManager>
         {
             GUILayout.BeginVertical("box");
             {
-                foreach (var pool in audioManager.poolManager.poolList)
+                foreach (Pool pool in audioManager.poolManager.poolList)
                 {
                     //AudioManager.Bus bus = ((AudioPlayer)pool.prefab).bus;
 
@@ -249,7 +248,7 @@ public class AudioManagerCreator : Creator<AudioManager>
 
     #region Menu Methods
 
-    [MenuItem("Assets/Create Audio Player", false, 0)]
+    [MenuItem("Assets/Audio/Create Audio Player", false, 0)]
     public static void CreateAudioPlayer()
     {
         string path = AssetDatabase.GetAssetPath(Selection.activeObject);
@@ -265,12 +264,43 @@ public class AudioManagerCreator : Creator<AudioManager>
         audioPlayer.audio.clip = (AudioClip)Selection.activeObject;
         audioPlayer.myAudio = audioPlayer.audio;
         audioPlayer.myTransform = audioPlayer.transform;
-        
+
         Selection.activeObject = prefab;
     }
 
-    [MenuItem("Assets/Create Audio Player", true, 0)]
+
+    [MenuItem("Assets/Audio/Create Audio Player", true, 0)]
     public static bool ValidateCreateAudioPlayer()
+    {
+        return Selection.activeObject is AudioClip;
+    }
+
+
+    [MenuItem("Assets/Audio/Create Playlist", false, 1)]
+    public static void CreatePlaylist()
+    {
+        string path = AssetDatabase.GetAssetPath(Selection.activeObject);
+        path = path.Substring(0, path.Length - 4) + ".prefab";
+        Debug.Log(path);
+
+        AudioClip clip = (AudioClip)Selection.activeObject;
+        GameObject surrogate = new GameObject(clip.name, typeof(Playlist));
+        UnityEngine.Object prefab = PrefabUtility.CreatePrefab(path, surrogate);
+        DestroyImmediate(surrogate);
+
+        Playlist playlist = ((GameObject)prefab).GetComponent<Playlist>();
+        playlist.audio.playOnAwake = false;
+        playlist.audio.loop = true;
+        playlist.audio.clip = clip;
+        playlist.myAudio = playlist.audio;
+        playlist.playlistName = clip.name;
+
+        Selection.activeObject = prefab;
+    }
+
+
+    [MenuItem("Assets/Audio/Create Playlist", true, 0)]
+    public static bool ValidateCreatePlaylist()
     {
         return Selection.activeObject is AudioClip;
     }

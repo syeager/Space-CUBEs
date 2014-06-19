@@ -23,6 +23,9 @@ public class LevelManager : Singleton<LevelManager>
     /// <summary>Pause Menu.</summary>
     public GameObject pauseMenu;
 
+    /// <summary>Playlist name for the level's background music.</summary>
+    public string levelMusic;
+
     public GameObject[] enemyPrefabs;
     public int[] rankLimits = new int[6];
 

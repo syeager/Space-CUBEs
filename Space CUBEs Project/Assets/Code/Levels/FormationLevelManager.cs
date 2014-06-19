@@ -16,6 +16,12 @@ public class FormationLevelManager : LevelManager
     public FormationGroup[] formationGroups;
     public int levelIndex;
 
+    /// <summary>Playlist name for boss music.</summary>
+    public string bossMusic;
+
+    /// <summary>Time in seconds to fade to boss music.</summary>
+    public float bossFadeTime = 3f;
+
     #endregion
 
     #region Private Fields
@@ -30,9 +36,6 @@ public class FormationLevelManager : LevelManager
     public GameObject bossPrefab;
     private Boss boss;
     public Vector3 bossSpawnPosition;
-
-    /// <summary>Music for boss battle.</summary>
-    public AudioClip bossMusic;
 
     #endregion
 
@@ -54,6 +57,8 @@ public class FormationLevelManager : LevelManager
 #else
         InvokeAction(() => SpawnNextFormation(), 3f);
 #endif
+
+        AudioManager.PlayPlaylist(levelMusic);
     }
 
 
@@ -157,7 +162,7 @@ public class FormationLevelManager : LevelManager
         boss.DeathEvent += OnBossDeath;
         boss.stateMachine.Start();
 
-        //AudioManager.Pl
+        AudioManager.CrossFadePlaylist(levelMusic, bossMusic, bossFadeTime);
     }
 
     #endregion

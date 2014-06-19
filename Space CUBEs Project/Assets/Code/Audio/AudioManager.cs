@@ -1,9 +1,10 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.03.26
-// Edited: 2014.06.15
+// Edited: 2014.06.19
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Annotations;
 using LittleByte.Data;
@@ -49,6 +50,16 @@ public class AudioManager : Singleton<AudioManager>
 
     /// <summary>Data file for saving master volume.</summary>
     private const string MasterFile = "MasterVolume";
+
+    #endregion
+
+    #region Playlist Fields
+
+    /// <summary>All active playlists.</summary>
+    private static readonly Dictionary<string, Playlist> Playlists = new Dictionary<string, Playlist>();
+
+    /// <summary>All current jobs running on playlists.</summary>
+    private static readonly Dictionary<Playlist, Job> PlaylistJobs = new Dictionary<Playlist, Job>();
 
     #endregion
 
@@ -100,7 +111,7 @@ public class AudioManager : Singleton<AudioManager>
         MasterVolume = SaveData.Load(MasterFile, VolumeFolder, new Volume(0.5f, false));
 
         busVolumes = new Dictionary<Bus, Volume>();
-        foreach (var value in Enum.GetValues(typeof(Bus)))
+        foreach (object value in Enum.GetValues(typeof(Bus)))
         {
             Bus bus = (Bus)value;
             busVolumes.Add(bus, SaveData.Load(bus.ToString(), VolumeFolder, new Volume(0.5f, false)));
@@ -114,7 +125,7 @@ public class AudioManager : Singleton<AudioManager>
     public void Save()
     {
         SaveData.Save(MasterFile, MasterVolume, VolumeFolder);
-        foreach (var value in Enum.GetValues(typeof(Bus)))
+        foreach (object value in Enum.GetValues(typeof(Bus)))
         {
             Bus bus = (Bus)value;
             SaveData.Save(bus.ToString(), busVolumes[bus], VolumeFolder);
@@ -150,6 +161,7 @@ public class AudioManager : Singleton<AudioManager>
     {
         MasterVolume.level = Mathf.Clamp01(level);
         UpdateActivePlayers();
+        UpdatePlaylists();
     }
 
 
@@ -161,6 +173,7 @@ public class AudioManager : Singleton<AudioManager>
     {
         MasterVolume.muted = muted;
         UpdateActivePlayers();
+        UpdatePlaylists();
     }
 
 
@@ -180,6 +193,7 @@ public class AudioManager : Singleton<AudioManager>
         {
             activePlayer.SetLevel(newVolume);
         }
+        UpdatePlaylists();
     }
 
 
@@ -197,6 +211,7 @@ public class AudioManager : Singleton<AudioManager>
         {
             activePlayer.SetMuted(newMuted);
         }
+        UpdatePlaylists();
     }
 
     #endregion
@@ -208,17 +223,17 @@ public class AudioManager : Singleton<AudioManager>
     /// </summary>
     private void UpdateActivePlayers()
     {
-        foreach (var value in Enum.GetValues(typeof(Bus)))
+        foreach (object value in Enum.GetValues(typeof(Bus)))
         {
             Bus bus = (Bus)value;
             float level = MasterVolume * busVolumes[bus];
             bool muted = MasterVolume || busVolumes[bus];
-            foreach (var activePlayer in activePlayers[bus])
+            foreach (AudioPlayer activePlayer in activePlayers[bus])
             {
                 activePlayer.UpdateVolume(level, muted);
             }
         }
-    } 
+    }
 
     #endregion
 
@@ -275,6 +290,270 @@ public class AudioManager : Singleton<AudioManager>
     public static void SetBusMute(Bus bus, bool muted)
     {
         Main.setBusMute(bus, muted);
+    }
+
+    #endregion
+
+    #region Playlist Methods
+
+    /// <summary>
+    /// Update all playlists' volumes.
+    /// </summary>
+    public static void UpdatePlaylists()
+    {
+        Dictionary<string, Playlist>.KeyCollection names = Playlists.Keys;
+
+        foreach (string name in names)
+        {
+            UpdatePlaylist(Playlists[name]);
+        }
+    }
+
+
+    /// <summary>
+    /// Update a playlist's volume settings.
+    /// </summary>
+    /// <param name="playlist">Playlist to update.</param>
+    private static void UpdatePlaylist(Playlist playlist)
+    {
+        Volume masterVolume = Main.MasterVolume;
+        Volume busVolume = Main.busVolumes[playlist.bus];
+        playlist.UpdateVolume(new Volume(masterVolume * busVolume, masterVolume || busVolume));
+    }
+
+
+    /// <summary>
+    /// Add a new playlist.
+    /// </summary>
+    /// <param name="playlistName">Name for the playlist.</param>
+    /// <param name="playlist">Playlist to add.</param>
+    public static void AddPlaylist(string playlistName, Playlist playlist)
+    {
+        Playlists.Add(playlistName, playlist);
+        UpdatePlaylist(playlist);
+    }
+
+
+    /// <summary>
+    /// Remove a playlist.
+    /// </summary>
+    /// <param name="playlistName">Name of the playlist.</param>
+    public static void RemovePlaylist(string playlistName)
+    {
+        Playlists.Remove(playlistName);
+    }
+
+
+    /// <summary>
+    /// Get an active playlist.
+    /// </summary>
+    /// <param name="playlistName">Name of the playlist to search for.</param>
+    /// <returns>Playlist if found or null if not.</returns>
+    public static Playlist GetPlaylist(string playlistName)
+    {
+        Playlist playlist;
+        return Playlists.TryGetValue(playlistName, out playlist) ? playlist : null;
+    }
+
+
+    /// <summary>
+    /// Play a playlist.
+    /// </summary>
+    /// <param name="playlistName">Name of the playlist to play.</param>
+    /// <returns>Playlist that is being played.</returns>
+    public static Playlist PlayPlaylist(string playlistName)
+    {
+        Playlist playlist = Playlists[playlistName];
+        playlist.Play();
+        return playlist;
+    }
+
+
+    /// <summary>
+    /// Pause a playlist.
+    /// </summary>
+    /// <param name="playlistName">Name of the playlist to pause.</param>
+    /// <returns>Playlist that is being paused.</returns>
+    public static Playlist PausePlaylist(string playlistName)
+    {
+        Playlist playlist = Playlists[playlistName];
+        playlist.Pause();
+        return playlist;
+    }
+
+
+    /// <summary>
+    /// Stop a playlist.
+    /// </summary>
+    /// <param name="playlistName">Name of the playlist to stop.</param>
+    /// <returns>Playlist that is being stopped.</returns>
+    public static Playlist StopPlaylist(string playlistName)
+    {
+        Playlist playlist = Playlists[playlistName];
+        playlist.Stop();
+        return playlist;
+    }
+
+
+    /// <summary>
+    /// Start a playlist and fade it from 0 to full volume.
+    /// </summary>
+    /// <param name="playlist">Playlist to fade in.</param>
+    /// <param name="time">Time in seconds for fade.</param>
+    public static void FadeInPlaylist(Playlist playlist, float time)
+    {
+        KillPlaylistJob(playlist);
+
+        playlist.gameObject.SetActive(true);
+        playlist.levelScale = 0f;
+        playlist.Play();
+
+        PlaylistJobs[playlist] = new Job(PlaylistFade(playlist, 1f, time));
+    }
+
+
+    /// <summary>
+    /// Start a playlist and fade it from 0 to full volume.
+    /// </summary>
+    /// <param name="playlistName">Name of the playlist to fade in.</param>
+    /// <param name="time">Time in seconds for fade.</param>
+    /// <returns>Playlist being faded.</returns>
+    public static Playlist FadeInPlaylist(string playlistName, float time)
+    {
+        Playlist playlist = Playlists[playlistName];
+        FadeInPlaylist(playlist, time);
+        return playlist;
+    }
+
+
+    /// <summary>
+    /// Fade a playlist to 0.
+    /// </summary>
+    /// <param name="playlist">Playlist to fade out.</param>
+    /// <param name="time">Time in seconds for fade.</param>
+    /// <param name="stop">Should the playlist be stopped after fading out?</param>
+    public static void FadeOutPlaylist(Playlist playlist, float time, bool stop = true)
+    {
+        KillPlaylistJob(playlist);
+
+        Job fade = new Job(PlaylistFade(playlist, 0f, time, playlist.Stop));
+        PlaylistJobs[playlist] = fade;
+    }
+
+
+    /// <summary>
+    /// Fade a playlist to 0.
+    /// </summary>
+    /// <param name="playlistName">Name of the playlist to fade out.</param>
+    /// <param name="time">Time in seconds for fade.</param>
+    /// <param name="stop">Should the playlist be stopped after fading out?</param>
+    /// <returns>Playlist being faded.</returns>
+    public static Playlist FadeOutPlaylist(string playlistName, float time, bool stop = true)
+    {
+        Playlist playlist = Playlists[playlistName];
+        FadeOutPlaylist(playlist, time);
+        return playlist;
+    }
+
+
+    /// <summary>
+    /// Fade a playlist to a set value.
+    /// </summary>
+    /// <param name="playlist">Playlist to fade.</param>
+    /// <param name="value">Value to fade to. 0-1.</param>
+    /// <param name="time">Time in seconds for fade.</param>
+    public static void FadePlaylist(Playlist playlist, float value, float time)
+    {
+        KillPlaylistJob(playlist);
+
+        Job fade = new Job(PlaylistFade(playlist, value, time));
+        PlaylistJobs[playlist] = fade;
+    }
+
+
+    /// <summary>
+    /// Fade a playlist to a set value.
+    /// </summary>
+    /// <param name="playlistName">Name of the playlist to fade.</param>
+    /// <param name="value">Value to fade to. 0-1.</param>
+    /// <param name="time">Time in seconds for fade.</param>
+    /// <returns>Playlist being faded.</returns>
+    public static Playlist FadePlaylist(string playlistName, float value, float time)
+    {
+        Playlist playlist = Playlists[playlistName];
+        FadePlaylist(playlist, value, time);
+        return playlist;
+    }
+
+
+    /// <summary>
+    /// Fade one playlist out while fading another in.
+    /// </summary>
+    /// <param name="from">Playlist to fade out.</param>
+    /// <param name="to">Playlist to fade in.</param>
+    /// <param name="time">Time in seconds for fade.</param>
+    public static void CrossFadePlaylist(Playlist from, Playlist to, float time)
+    {
+        FadeOutPlaylist(from, time);
+        FadeInPlaylist(to, time);
+    }
+
+
+    /// <summary>
+    /// Fade one playlist out while fading another in.
+    /// </summary>
+    /// <param name="from">Name of the playlist to fade out.</param>
+    /// <param name="to">Name of the playlist to fade in.</param>
+    /// <param name="time">Time in seconds for fade.</param>
+    /// <returns>Array with both playlists. [0] From, [1] To.</returns>
+    public static Playlist[] CrossFadePlaylist(string from, string to, float time)
+    {
+        Playlist[] playlists = {Playlists[from], Playlists[to]};
+        CrossFadePlaylist(playlists[0], playlists[1], time);
+        return playlists;
+    }
+
+
+    /// <summary>
+    /// Fade a playlist over time to a value.
+    /// </summary>
+    /// <param name="playlist">Playlist to fade.</param>
+    /// <param name="value">Playlist's levelScale to fade to.</param>
+    /// <param name="time">Time in seconds to fade.</param>
+    /// <param name="onComplete">Action to call once fade is completed.</param>
+    private static IEnumerator PlaylistFade(Playlist playlist, float value, float time, Action onComplete = null)
+    {
+        float originalValue = playlist.levelScale;
+        float timer = 0f;
+        while (timer < time)
+        {
+            timer += Time.deltaTime / time;
+            playlist.UpdateLevelScale(Mathf.Lerp(originalValue, value, timer));
+            yield return null;
+        }
+        playlist.UpdateLevelScale(value);
+
+        if (onComplete != null)
+        {
+            onComplete.Invoke();
+        }
+    }
+
+
+    /// <summary>
+    /// Stop the current job for a playlist. Adds a new job if their is none.
+    /// </summary>
+    /// <param name="playlist">Playlist whose job is going to be killed.</param>
+    private static void KillPlaylistJob(Playlist playlist)
+    {
+        if (PlaylistJobs.ContainsKey(playlist))
+        {
+            PlaylistJobs[playlist].Kill();
+        }
+        else
+        {
+            PlaylistJobs.Add(playlist, null);
+        }
     }
 
     #endregion
