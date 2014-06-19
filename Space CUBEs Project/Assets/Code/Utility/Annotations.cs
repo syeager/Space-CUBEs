@@ -40,7 +40,7 @@ namespace Annotations
     AttributeTargets.Method | AttributeTargets.Parameter |
     AttributeTargets.Property | AttributeTargets.Delegate |
     AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
-  public sealed class NotNullAttribute : Attribute { }
+  public sealed class RSNotNullAttribute : Attribute { }
 
   /// <summary>
   /// Indicates that the marked method builds string by format pattern and (optional) arguments.
@@ -177,10 +177,10 @@ namespace Annotations
   [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
   public sealed class ContractAnnotationAttribute : Attribute
   {
-    public ContractAnnotationAttribute([NotNull] string contract)
+    public ContractAnnotationAttribute([RSNotNull] string contract)
       : this(contract, false) { }
 
-    public ContractAnnotationAttribute([NotNull] string contract, bool forceFullStates)
+    public ContractAnnotationAttribute([RSNotNull] string contract, bool forceFullStates)
     {
       Contract = contract;
       ForceFullStates = forceFullStates;
@@ -249,12 +249,12 @@ namespace Annotations
   [BaseTypeRequired(typeof(Attribute))]
   public sealed class BaseTypeRequiredAttribute : Attribute
   {
-    public BaseTypeRequiredAttribute([NotNull] Type baseType)
+    public BaseTypeRequiredAttribute([RSNotNull] Type baseType)
     {
       BaseType = baseType;
     }
 
-    [NotNull] public Type BaseType { get; private set; }
+    [RSNotNull] public Type BaseType { get; private set; }
   }
 
   /// <summary>
@@ -354,12 +354,12 @@ namespace Annotations
   public sealed class PublicAPIAttribute : Attribute
   {
     public PublicAPIAttribute() { }
-    public PublicAPIAttribute([NotNull] string comment)
+    public PublicAPIAttribute([RSNotNull] string comment)
     {
       Comment = comment;
     }
 
-    [NotNull] public string Comment { get; private set; }
+    [RSNotNull] public string Comment { get; private set; }
   }
 
   /// <summary>
@@ -400,7 +400,7 @@ namespace Annotations
       BasePath = basePath;
     }
 
-    [NotNull] public string BasePath { get; private set; }
+    [RSNotNull] public string BasePath { get; private set; }
   }
 
   // ASP.NET MVC attributes
@@ -451,12 +451,12 @@ namespace Annotations
   public sealed class AspMvcActionAttribute : Attribute
   {
     public AspMvcActionAttribute() { }
-    public AspMvcActionAttribute([NotNull] string anonymousProperty)
+    public AspMvcActionAttribute([RSNotNull] string anonymousProperty)
     {
       AnonymousProperty = anonymousProperty;
     }
 
-    [NotNull] public string AnonymousProperty { get; private set; }
+    [RSNotNull] public string AnonymousProperty { get; private set; }
   }
 
   /// <summary>
@@ -468,12 +468,12 @@ namespace Annotations
   public sealed class AspMvcAreaAttribute : PathReferenceAttribute
   {
     public AspMvcAreaAttribute() { }
-    public AspMvcAreaAttribute([NotNull] string anonymousProperty)
+    public AspMvcAreaAttribute([RSNotNull] string anonymousProperty)
     {
       AnonymousProperty = anonymousProperty;
     }
 
-    [NotNull] public string AnonymousProperty { get; private set; }
+    [RSNotNull] public string AnonymousProperty { get; private set; }
   }
 
   /// <summary>
@@ -487,12 +487,12 @@ namespace Annotations
   public sealed class AspMvcControllerAttribute : Attribute
   {
     public AspMvcControllerAttribute() { }
-    public AspMvcControllerAttribute([NotNull] string anonymousProperty)
+    public AspMvcControllerAttribute([RSNotNull] string anonymousProperty)
     {
       AnonymousProperty = anonymousProperty;
     }
 
-    [NotNull] public string AnonymousProperty { get; private set; }
+    [RSNotNull] public string AnonymousProperty { get; private set; }
   }
 
   /// <summary>
@@ -581,12 +581,12 @@ namespace Annotations
   public sealed class HtmlElementAttributesAttribute : Attribute
   {
     public HtmlElementAttributesAttribute() { }
-    public HtmlElementAttributesAttribute([NotNull] string name)
+    public HtmlElementAttributesAttribute([RSNotNull] string name)
     {
       Name = name;
     }
 
-    [NotNull] public string Name { get; private set; }
+    [RSNotNull] public string Name { get; private set; }
   }
 
   [AttributeUsage(
@@ -594,12 +594,12 @@ namespace Annotations
     AttributeTargets.Property, Inherited = true)]
   public sealed class HtmlAttributeValueAttribute : Attribute
   {
-    public HtmlAttributeValueAttribute([NotNull] string name)
+    public HtmlAttributeValueAttribute([RSNotNull] string name)
     {
       Name = name;
     }
 
-    [NotNull] public string Name { get; private set; }
+    [RSNotNull] public string Name { get; private set; }
   }
 
   // Razor attributes
