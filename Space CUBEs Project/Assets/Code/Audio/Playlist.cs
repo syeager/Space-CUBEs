@@ -33,11 +33,23 @@ public class Playlist : MonoBehaviour
 
     #endregion
 
+    #region Private Fields
+
+    /// <summary>Percentage of volume that is considered the new max volume.</summary>
+    private float maxLimit;
+
+    /// <summary>Volume level given to by AudioManager.</summary>
+    private float givenLevel;
+
+    #endregion
+
     #region MonoBehaviour Overrides
 
     [UsedImplicitly]
     private void Start()
     {
+        maxLimit = myAudio.volume;
+
         AudioManager.AddPlaylist(playlistName, this);
     }
 
@@ -58,7 +70,8 @@ public class Playlist : MonoBehaviour
     /// <param name="volume">New volume to update to.</param>
     public void UpdateVolume(Volume volume)
     {
-        myAudio.volume = volume.level * levelScale;
+        givenLevel = volume.level;
+        myAudio.volume = givenLevel * levelScale * maxLimit;
         myAudio.mute = volume.muted;
     }
 
@@ -76,9 +89,8 @@ public class Playlist : MonoBehaviour
         }
         else
         {
-            myAudio.volume /= levelScale;
             levelScale = value;
-            myAudio.volume *= value;
+            myAudio.volume = givenLevel * value * maxLimit;
         }
     }
 

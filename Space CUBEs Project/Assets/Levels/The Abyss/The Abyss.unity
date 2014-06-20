@@ -3395,7 +3395,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 375463472}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 489.600006, y: 305.399658, z: 0}
+  m_LocalPosition: {x: 489.600006, y: 305.800385, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 658625856}
@@ -7011,7 +7011,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 686265113}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -501.119995, y: -288.064911, z: 0}
+  m_LocalPosition: {x: -501.119995, y: -288.021576, z: 0}
   m_LocalScale: {x: 1.00007999, y: 1.00007999, z: 1.00007999}
   m_Children:
   - {fileID: 1701126472}
@@ -7358,7 +7358,7 @@ MonoBehaviour:
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: .800000012
+  aspectRatio: .533333361
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   mFont: {fileID: 0}
@@ -8288,7 +8288,7 @@ MonoBehaviour:
   timeScale: 1
   logWarning: 0
   invincible: 1
-  jumpToBoss: 0
+  jumpToBoss: 1
   joystickSensitivity: .5
   joystickXBuffer: .0500000007
   joystickYBuffer: .0500000007
@@ -9424,7 +9424,7 @@ MonoBehaviour:
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: .800000012
+  aspectRatio: .533333361
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   mFont: {fileID: 0}
@@ -11390,7 +11390,7 @@ MonoBehaviour:
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: .800000012
+  aspectRatio: .533333361
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   mFont: {fileID: 0}
@@ -11497,7 +11497,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1160269902}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -134.208008, y: -289.863281, z: 0}
+  m_LocalPosition: {x: -134.208008, y: -289.821045, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 658625856}
@@ -13016,7 +13016,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1347304326}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -133.631989, y: -299.214844, z: 0}
+  m_LocalPosition: {x: -133.631989, y: -299.178223, z: 0}
   m_LocalScale: {x: 1.00007999, y: 1.00007999, z: 1.00007999}
   m_Children: []
   m_Father: {fileID: 658625856}
@@ -13700,7 +13700,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1425579257}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 362.880005, y: -288.064911, z: 0}
+  m_LocalPosition: {x: 362.880005, y: -288.021576, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1695574997}
@@ -14035,7 +14035,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1459924920}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -288.064911, z: 0}
+  m_LocalPosition: {x: 0, y: -288.021576, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 658625856}
@@ -17094,7 +17094,7 @@ MonoBehaviour:
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: .800000012
+  aspectRatio: .533333361
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   mFont: {fileID: 0}
@@ -18560,7 +18560,7 @@ MonoBehaviour:
   bossMusic: Switchblade
   bossFadeTime: 3
   bossPrefab: {fileID: 100034, guid: c560118a2ef294345b65ebe15aec0a63, type: 2}
-  bossSpawnPosition: {x: 100, y: 0, z: 0}
+  bossSpawnPosition: {x: 110, y: 0, z: 0}
 --- !u!1 &1902849808
 GameObject:
   m_ObjectHideFlags: 0
@@ -18992,7 +18992,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400006, guid: aeed59aee1ea3714da2eb46ccb6175bd, type: 2}
       propertyPath: jumpToBoss
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: aeed59aee1ea3714da2eb46ccb6175bd, type: 2}
