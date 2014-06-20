@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.03.26
-// Edited: 2014.06.19
+// Edited: 2014.06.20
 
 using System;
 using System.Collections;
@@ -80,8 +80,16 @@ public class AudioManager : Singleton<AudioManager>
 
         if (!enabled) return;
 
+        GameTime.PausedEvent += OnPause;
         Initialize();
         poolManager.Initialize();
+    }
+
+
+    [UsedImplicitly]
+    private void OnDestroy()
+    {
+        GameTime.PausedEvent -= OnPause;
     }
 
     #endregion
@@ -565,11 +573,60 @@ public class AudioManager : Singleton<AudioManager>
     /// </summary>
     /// <param name="sender">AudioPlayer.</param>
     /// <param name="args">Not used.</param>
-    public void OnAudioDone(object sender, EventArgs args)
+    private void OnAudioDone(object sender, EventArgs args)
     {
         AudioPlayer player = (AudioPlayer)sender;
         player.DisableEvent -= OnAudioDone;
         activePlayers[player.bus].Remove(player);
+    }
+
+
+    /// <summary>
+    /// Recieved when the game is paused.
+    /// </summary>
+    /// <param name="sender">GameTime.</param>
+    /// <param name="args">Is the game paused?</param>
+    private void OnPause(object sender, PauseArgs args)
+    {
+        // audio players
+        Array buses = Enum.GetValues(typeof(Bus));
+        foreach (object bus in buses)
+        {
+            foreach (AudioPlayer player in activePlayers[(Bus)bus])
+            {
+                player.Pause(args.paused);
+            }
+        }
+
+        // playlists
+        Dictionary<string, Playlist>.KeyCollection keys = Playlists.Keys;
+        Playlist playlist;
+        if (args.paused)
+        {
+            foreach (string key in keys)
+            {
+                playlist = Playlists[key];
+                playlist.Pause();
+                Job job;
+                if (PlaylistJobs.TryGetValue(playlist, out job))
+                {
+                    job.Pause(true);
+                }
+            }
+        }
+        else
+        {
+            foreach (string key in keys)
+            {
+                playlist = Playlists[key];
+                playlist.Play();
+                Job job;
+                if (PlaylistJobs.TryGetValue(playlist, out job))
+                {
+                    job.Pause(false);
+                }
+            }
+        }
     }
 
     #endregion

@@ -82,6 +82,23 @@ public class AudioPlayer : PoolObject
 
 
     /// <summary>
+    /// Pause/unpause the player.
+    /// </summary>
+    /// <param name="pause">Should the player be paused?</param>
+    public void Pause(bool pause)
+    {
+        if (pause)
+        {
+            myAudio.Pause();
+        }
+        else
+        {
+            myAudio.Play();
+        }
+    }
+
+
+    /// <summary>
     /// Stop playing audio.
     /// </summary>
     /// <param name="delay">Time in seconds to delay the stop call.</param>
