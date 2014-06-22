@@ -2206,8 +2206,11 @@ MonoBehaviour:
   enemyClass: 3
   score: 100
   money: 100
-  attackBuffer: 3
+  attackBuffer: 2
   attackTime: 1.5
+  idleCycles: 1
+  idleSpeed: 1
+  idleAmp: 10
 --- !u!114 &185794461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4348,8 +4351,11 @@ MonoBehaviour:
   enemyClass: 3
   score: 100
   money: 100
-  attackBuffer: 3
+  attackBuffer: 2
   attackTime: 1.5
+  idleCycles: 1
+  idleSpeed: 1
+  idleAmp: 10
 --- !u!114 &501673502
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6156,8 +6162,11 @@ MonoBehaviour:
   enemyClass: 3
   score: 100
   money: 100
-  attackBuffer: 3
+  attackBuffer: 2
   attackTime: 1.5
+  idleCycles: 1
+  idleSpeed: 1
+  idleAmp: 10
 --- !u!114 &615295976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8245,7 +8254,7 @@ MonoBehaviour:
   log: 1
   timeScale: 1
   logWarning: 0
-  currentBuild: Berserker
+  currentBuild: Avenger
 --- !u!114 &824695457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8288,7 +8297,7 @@ MonoBehaviour:
   timeScale: 1
   logWarning: 0
   invincible: 1
-  jumpToBoss: 1
+  jumpToBoss: 0
   joystickSensitivity: .5
   joystickXBuffer: .0500000007
   joystickYBuffer: .0500000007
@@ -12233,11 +12242,11 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 501673496}
-  - {fileID: 615295970}
+  - {fileID: 1510592164}
   - {fileID: 185794455}
   - {fileID: 1882523044}
-  - {fileID: 1510592164}
+  - {fileID: 501673496}
+  - {fileID: 615295970}
   m_Father: {fileID: 296648924}
 --- !u!114 &1246102724
 MonoBehaviour:
@@ -14821,8 +14830,11 @@ MonoBehaviour:
   enemyClass: 3
   score: 100
   money: 100
-  attackBuffer: 3
+  attackBuffer: 2
   attackTime: 1.5
+  idleCycles: 1
+  idleSpeed: 1
+  idleAmp: 10
 --- !u!114 &1510592170
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18020,8 +18032,11 @@ MonoBehaviour:
   enemyClass: 3
   score: 100
   money: 100
-  attackBuffer: 3
+  attackBuffer: 2
   attackTime: 1.5
+  idleCycles: 1
+  idleSpeed: 1
+  idleAmp: 10
 --- !u!114 &1882523050
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18984,7 +18999,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: aeed59aee1ea3714da2eb46ccb6175bd, type: 2}
       propertyPath: currentBuild
-      value: Berserker
+      value: Avenger
       objectReference: {fileID: 0}
     - target: {fileID: 11400006, guid: aeed59aee1ea3714da2eb46ccb6175bd, type: 2}
       propertyPath: invincible
@@ -18992,7 +19007,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400006, guid: aeed59aee1ea3714da2eb46ccb6175bd, type: 2}
       propertyPath: jumpToBoss
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: aeed59aee1ea3714da2eb46ccb6175bd, type: 2}

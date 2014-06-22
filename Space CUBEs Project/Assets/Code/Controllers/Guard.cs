@@ -1,8 +1,12 @@
-﻿// Steve Yeager
-// 4.13.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.04.13
+// Edited: 2014.06.22
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using LittleByte.Debug.Attributes;
 using UnityEngine;
 
 /// <summary>
@@ -15,7 +19,8 @@ public class Guard : Enemy
     private const string SpawningState = "Spawning";
     private const string MovingState = "Moving";
     private const string AttackingState = "Attacking";
-    
+    private const string IdlingState = "Idling";
+
     #endregion
 
     #region Attacking Fields
@@ -28,6 +33,19 @@ public class Guard : Enemy
 
     #endregion
 
+    #region Idling Fields
+
+    /// <summary>Time in seconds to idle.</summary>
+    [GreaterThanZero]
+    public float idleCycles = 1f;
+
+    /// <summary>How fast the guard moves while idling. m/s</summary>
+    public float idleSpeed;
+
+    /// <summary>Height of the idle curve.</summary>
+    public float idleAmp;
+
+    #endregion
 
     #region MonoBehaviour Overrides
 
@@ -40,6 +58,7 @@ public class Guard : Enemy
         stateMachine.CreateState(SpawningState, SpawnEnter, info => { });
         stateMachine.CreateState(MovingState, info => stateMachine.SetUpdate(MovingUpdate()), info => { });
         stateMachine.CreateState(AttackingState, AttackEnter, info => { });
+        stateMachine.CreateState(IdlingState, info => stateMachine.SetUpdate(IdlingUpdate()), info => { });
         stateMachine.CreateState(DyingState, DyingEnter, info => { });
     }
 
@@ -90,16 +109,34 @@ public class Guard : Enemy
 
     private IEnumerator AttackingUpdate()
     {
-        WaitForSeconds buffer = new WaitForSeconds(attackBuffer);
-        WaitForSeconds attack = new WaitForSeconds(attackTime);
+        yield return new WaitForSeconds(attackBuffer);
+        myWeapons.Activate(0, true);
+        yield return new WaitForSeconds(attackTime);
+        myWeapons.Activate(0, false);
+        yield return new WaitForSeconds(attackBuffer / 2f);
+        stateMachine.SetState(IdlingState);
+    }
 
-        while (true)
+
+    private IEnumerator IdlingUpdate()
+    {
+        float period = 2f * Mathf.PI / idleSpeed * idleCycles;
+        float timer = 0;
+        while (timer < period)
         {
-            yield return buffer;
-            myWeapons.Activate(0, true);
-            yield return attack;
-            myWeapons.Activate(0, false);
+            float time = deltaTime;
+            timer += time;
+            myTransform.position += new Vector3(0f, idleAmp * (float)Math.Cos(timer * idleSpeed) * time, 0f);
+            if (timer > period)
+            {
+                float extra = timer - period;
+                timer = period;
+                myTransform.position -= new Vector3(0f, idleAmp * (float)Math.Cos(timer * idleSpeed) * extra, 0f);
+            }
+            yield return null;
         }
+
+        stateMachine.SetState(AttackingState);
     }
 
 
