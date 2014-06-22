@@ -24,7 +24,7 @@ public class LevelSelectManager : MonoBehaviour
     public const string UnlockedLevelsKey = "Unlocked Levels";
 
     /// <summary>Data folder for highscores and unlocked levels.</summary>
-    public const string LevelsFolder = @"Levels\";
+    public const string LevelsFolder = @"Levels/";
 
     #endregion
 

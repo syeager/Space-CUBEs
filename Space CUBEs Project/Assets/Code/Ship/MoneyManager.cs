@@ -21,7 +21,7 @@ public class MoneyManager
     #region Const Fields
 
     private const string MoneyFile = "Money";
-    private const string BankFolder = @"Bank\";
+    private const string BankFolder = @"Bank/";
     private const int BankStart = 100000;
 
     #endregion

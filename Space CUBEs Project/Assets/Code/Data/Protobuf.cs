@@ -25,7 +25,7 @@ namespace LittleByte.Data
         #region Const Fields
 
         private const string FileExt = ".proto";
-        public const string DefaultPath = @"Default\";
+        public const string DefaultPath = @"Default/";
 
         #endregion
 

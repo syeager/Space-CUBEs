@@ -46,10 +46,10 @@ public class AudioManager : Singleton<AudioManager>
     #region Const Fields
 
     /// <summary>Data folder for all volume settings.</summary>
-    private const string VolumeFolder = @"Volume\";
+    private const string VolumeFolder = @"Volume/";
 
     /// <summary>Data file for saving master volume.</summary>
-    private const string MasterFile = "MasterVolume";
+    private const string MasterFile = "Master Volume";
 
     #endregion
 

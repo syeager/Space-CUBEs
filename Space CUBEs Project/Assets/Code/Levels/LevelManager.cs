@@ -1,11 +1,10 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2013.12.03
-// Edited: 2014.06.04
+// Edited: 2014.06.20
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Annotations;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -92,7 +91,7 @@ public class LevelManager : Singleton<LevelManager>
 #if UNITY_EDITOR
         if (string.IsNullOrEmpty(build))
         {
-            build = GameStart.DevBuilds.ElementAt(0).Key;
+            build = GameStart.DevBuilds[0];
         }
 #endif
         InvokeAction(() => CreatePlayer(build), 1f);

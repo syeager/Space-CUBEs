@@ -72,7 +72,7 @@ public class ShowBuild : MonoBehaviour
             yield return null;
         }
 
-        finishedAction(new BuildFinishedArgs(gameObject, buildInfo.health, buildInfo.shield, buildInfo.speed, buildInfo.damage));
+        finishedAction(new BuildFinishedArgs(gameObject, buildInfo.stats.health, buildInfo.stats.shield, buildInfo.stats.speed, buildInfo.stats.damage));
         Destroy(this);
     }
 

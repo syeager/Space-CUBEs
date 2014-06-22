@@ -36,9 +36,9 @@ public class GameSettings : Singleton<GameSettings>
     #region Const Fields
 
     /// <summary>Data folder of setting files.</summary>
-    public const string SettingsFolder = @"Settings\";
+    public const string SettingsFolder = @"Settings/";
 
-    public const string InputFolder = SettingsFolder + @"Input\";
+    public const string InputFolder = SettingsFolder + @"Input/";
 
     #endregion
 

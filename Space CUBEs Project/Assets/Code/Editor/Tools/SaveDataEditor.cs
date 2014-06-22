@@ -37,6 +37,7 @@ public class SaveDataEditor : EditorWindow
     private static SaveDataEditor window;
     private int openFile;
     private Vector2 valueScrollPosition;
+    private Vector2 fileScroll;
 
     #endregion
 
@@ -51,14 +52,14 @@ public class SaveDataEditor : EditorWindow
     }
 
 
-    //[UsedImplicitly]
-    //private void Update()
-    //{
-    //    if (allData == null || allData.Length == 0)
-    //    {
-    //        ReloadAll();
-    //    }
-    //}
+    [UsedImplicitly]
+    private void Update()
+    {
+        if (rootNode == null)
+        {
+            ReloadAll();
+        }
+    }
 
 
     [UsedImplicitly]
@@ -142,7 +143,7 @@ public class SaveDataEditor : EditorWindow
         SaveData.FileSavedEvent -= OnFileSaved;
         SaveData.FileSavedEvent += OnFileSaved;
 
-        files = SaveData.GetFiles();
+        files = SaveData.GetAllFiles();
         rootNode = new FolderNode {value = "root"};
 
         foreach (string file in files)
@@ -177,7 +178,11 @@ public class SaveDataEditor : EditorWindow
 
     private void Files()
     {
-        DrawNode(rootNode);
+        fileScroll = EditorGUILayout.BeginScrollView(fileScroll);
+        {
+            DrawNode(rootNode);
+        }
+        EditorGUILayout.EndScrollView();
     }
 
 

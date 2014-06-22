@@ -1,21 +1,21 @@
-﻿// Steve Yeager
-// 4.27.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.04.28
+// Edited: 2014.06.20
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 
 public static class ListExtension
 {
     /// <summary>
-    /// 
+    /// Create a new list setting the same value to each entry.
     /// </summary>
-    /// <param name="list"></param>
-    /// <param name="value"></param>
-    /// <param name="count"></param>
+    /// <param name="list">List instance.</param>
+    /// <param name="value">Value to give each entry.</param>
+    /// <param name="count">How many entries to give the list.</param>
     public static void Initialize<T>(this List<T> list, T value, int count)
     {
-        bool test = typeof(ICollection) == typeof(int[]);
         list.Clear();
         for (int i = 0; i < count; i++)
         {
@@ -25,10 +25,10 @@ public static class ListExtension
 
 
     /// <summary>
-    /// 
+    /// Give all entries the same value.
     /// </summary>
-    /// <param name="list"></param>
-    /// <param name="value"></param>
+    /// <param name="list">List instance.</param>
+    /// <param name="value">Value to give each entry.</param>
     public static void SetAll<T>(this IList list, T value)
     {
         for (int i = 0; i < list.Count; i++)

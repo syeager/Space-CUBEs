@@ -57,7 +57,7 @@ public class CUBE : MonoBehaviour
     public const string CUBELIST = "CUBE List";
     public const string COLORLIST = "Color List";
     private const string InventoryFile = "Inventory";
-    private const string ItemsFolder = @"Items\";
+    private const string ItemsFolder = @"Items/";
     private const char CUBESEP = '|';
 
     public const string HEALTHICON = "♥";
@@ -116,29 +116,19 @@ public class CUBE : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public static int[] GetInventory()
     {
-        //string[] data = PlayerPrefs.GetString(INVENTORYPATH, "").Replace(" ", "").Split(CUBESEP); // TODO: replace with int[]?
-        //var inventory = new int[allCUBES.Length];
-
-        int[] inventory = SaveData.Load(InventoryFile, ItemsFolder, new int[allCUBES.Length]);
-
-        //if (data.Length != 1)
-        //{
-        //    for (int i = 0; i < data.Length; i++)
-        //    {
-        //        inventory[i] = int.Parse(data[i]);
-        //    }
-        //}
-
-        return inventory;
+        return SaveData.Load(InventoryFile, ItemsFolder, new int[allCUBES.Length]);
     }
 
 
     public static void SetInventory(int[] inventory)
     {
         SaveData.Save(InventoryFile, inventory, ItemsFolder);
-        //PlayerPrefs.SetString(INVENTORYPATH, string.Join(CUBESEP.ToString(), inventory.Select(c => c.ToString()).ToArray()));
     }
 
 

@@ -24,7 +24,7 @@ public static class BuildStats
 
     #region Const Fields
 
-    private const string ItemsFile = @"Items\";
+    private const string ItemsFile = @"Items/";
     private const string CoreCapacityPath = "Core Capacity";
     private const string WeaponExpansionPath = "Weapon Expansion";
     private const string AugmentationExpansionPath = "Augmentation Expansion";

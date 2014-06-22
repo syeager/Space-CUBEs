@@ -273,6 +273,7 @@ public class GarageManager : MonoBase
     [UsedImplicitly]
     private void Start()
     {
+        Debug.Log("STARTING!!!!!!!!!!!!!!!!!!");
         stateMachine.Start();
     }
 
@@ -874,7 +875,7 @@ public class GarageManager : MonoBase
         int i = 1;
         while (true)
         {
-            if (SaveData.Contains(custom + i, ConstructionGrid.BuildsFile))
+            if (SaveData.Contains(custom + i, ConstructionGrid.BuildsFolder))
             {
                 shipName.value = custom + i;
                 break;
@@ -1678,10 +1679,10 @@ public class GarageManager : MonoBase
         Grid.buildName = shipName.value;
 
         // stats
-        shipHealth.text = CUBE.HEALTHICON + " " + Grid.shipHealth;
-        shipShield.text = CUBE.SHIELDICON + " " + Grid.shipShield;
-        shipSpeed.text = CUBE.SPEEDICON + " " + Grid.shipSpeed;
-        shipDamage.text = CUBE.DAMAGEICON + " " + Grid.shipDamage;
+        shipHealth.text = CUBE.HEALTHICON + " " + Grid.CurrentStats.health;
+        shipShield.text = CUBE.SHIELDICON + " " + Grid.CurrentStats.shield;
+        shipSpeed.text = CUBE.SPEEDICON + " " + Grid.CurrentStats.speed;
+        shipDamage.text = CUBE.DAMAGEICON + " " + Grid.CurrentStats.damage;
     }
 
     #endregion

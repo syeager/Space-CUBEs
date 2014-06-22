@@ -26,13 +26,14 @@ public class MASTERTEST : MonoBehaviour
     [LittleByte.Debug.Attributes.Range(-5f, 5f)]
     public int test = -1;
 
-
-    private const string TestFolder = @"Tests\";
+    public string build;
+    private const string TestFolder = @"Tests/";
 
 
     private void Start()
     {
-        //AudioManager.AddPlayer(clip);
+        BuildInfo buildInfo = build;
+        SaveData.Save(buildInfo.name, buildInfo, TestFolder);
     }
 
 

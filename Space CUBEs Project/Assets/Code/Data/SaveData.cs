@@ -1,14 +1,13 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.05.18
-// Edited: 2014.06.09
+// Edited: 2014.06.20
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityClasses;
 using UnityEngine;
@@ -31,8 +30,8 @@ namespace LittleByte.Data
 
         #region Const Fields
 
-        private const string FileExt = ".dat";
-        public const string DefaultPath = @"Default\";
+        public const string FileExt = ".dat";
+        public const string DefaultPath = @"Default/";
 
         #endregion
 
@@ -127,7 +126,7 @@ namespace LittleByte.Data
         /// <returns>Value from data if found or default value.</returns>
         public static T LoadUnity<T>(string file, string path = DefaultPath, T defaultValue = default(T))
         {
-            T value = Load<T>(file, path, defaultValue);
+            T value = Load(file, path, defaultValue);
             return (T)UnityTypes.UnityCast(value);
         }
 
@@ -152,7 +151,6 @@ namespace LittleByte.Data
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <param name="defaultValue"></param>
         /// <returns></returns>
@@ -167,12 +165,50 @@ namespace LittleByte.Data
 
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="path"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
+        public static T LoadFromResources<T>(string path, T defaultValue = default(T))
+        {
+            var file = (TextAsset)Resources.Load(path);
+            using (var mStream = new MemoryStream(file.bytes))
+            {
+                object value = Formatter.Deserialize(mStream);
+                if (value is IUnityClass)
+                {
+                    value = ((IUnityClass)value).Cast();
+                }
+                else if (IsSList(value))
+                {
+                    return LoadList<T>((IList)value);
+                }
+                return (T)value;
+            }
+        }
+
+
+        /// <summary>
         /// Get list of all files in Data folder.
         /// </summary>
         /// <returns>List of file titles in data folder. Doesn't contain paths or postfixes.</returns>
-        public static string[] GetFiles()
+        public static string[] GetAllFiles()
         {
             return Directory.GetFiles(DataPath, "*" + FileExt, SearchOption.AllDirectories).Select(f => f.Remove(0, DataPath.Length).Replace(FileExt, "")).ToArray();
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static string[] GetFiles(string path)
+        {
+            path = DataPath + path;
+            return Directory.GetFiles(path, "*" + FileExt, SearchOption.AllDirectories).Select(f => f.Remove(0, path.Length).Replace(FileExt, "")).ToArray();
         }
 
 
@@ -321,6 +357,7 @@ namespace LittleByte.Data
 
             return false;
         }
+
 
         private static bool IsSList(object value)
         {

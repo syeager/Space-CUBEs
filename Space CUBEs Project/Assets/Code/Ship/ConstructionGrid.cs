@@ -95,12 +95,8 @@ public class ConstructionGrid : MonoBase
     /// <summary>Level of alpha to set CUBE materials if above current layer.</summary>
     private const float NearAlpha = 0.5f;
 
-    /// <summary>Path to all user build names.</summary>
-    [Obsolete]
-    private const string AllUserBuildsPath = "AllUserBuilds";
-
     /// <summary>File name for save data that contains all builds.</summary>
-    public const string BuildsFile = @"Builds\";
+    public const string BuildsFolder = @"Builds/";
 
     #endregion
 
@@ -169,17 +165,8 @@ public class ConstructionGrid : MonoBase
     /// <summary>Augmentation slots for the ship.</summary>
     public List<Augmentation> augmentations { get; private set; }
 
-    /// <summary>Current health of the ship.</summary>
-    public float shipHealth { get; private set; }
-
-    /// <summary>Current shield of the ship.</summary>
-    public float shipShield { get; private set; }
-
-    /// <summary>Current speed of the ship.</summary>
-    public float shipSpeed { get; private set; }
-
-    /// <summary>Current damage of the ship.</summary>
-    public float shipDamage { get; private set; }
+    /// <summary>Current stats for the build.</summary>
+    public ShipStats CurrentStats { get; private set; }
 
     /// <summary>Current weapon count of the ship.</summary>
     public int shipWeapons { get; private set; }
@@ -272,6 +259,7 @@ public class ConstructionGrid : MonoBase
             ship = new GameObject("Ship");
         }
         ship.transform.position = transform.position + Vector3.up * (size / 2f - 0.5f);
+        CurrentStats = new ShipStats();
 
         // build points
         corePointsMax = BuildStats.GetCoreCapacity();
@@ -526,6 +514,7 @@ public class ConstructionGrid : MonoBase
     {
         if (grid == null) return;
 
+        // held CUBE
         if (heldCUBE)
         {
             StopBlink(heldCUBE.renderer);
@@ -775,10 +764,10 @@ public class ConstructionGrid : MonoBase
         }
 
         // add CUBE's stats
-        shipHealth += heldInfo.health;
-        shipShield += heldInfo.shield;
-        shipSpeed += heldInfo.speed;
-        shipDamage += heldInfo.damage;
+        CurrentStats.health += heldInfo.health;
+        CurrentStats.shield += heldInfo.shield;
+        CurrentStats.speed += heldInfo.speed;
+        CurrentStats.damage += heldInfo.damage;
 
         // set parent to ship
         heldCUBE.transform.parent = ship.transform;
@@ -800,17 +789,15 @@ public class ConstructionGrid : MonoBase
     /// <param name="weaponIndex">Index of the weapon.</param>
     /// <param name="augmentationIndex">Index of the augmentation.</param>
     /// <returns>True, if the CUBE was successfully placed.</returns>
-    private bool PlaceCUBE(bool loadAnother, int weaponIndex = -1, int augmentationIndex = -1)
+    private void PlaceCUBE(bool loadAnother, int weaponIndex = -1, int augmentationIndex = -1)
     {
-        if (heldCUBE == null) return false;
+        if (heldCUBE == null) return;
 
         int id = heldCUBE.ID;
         if (PlaceCUBE(weaponIndex, augmentationIndex) && loadAnother)
         {
             CreateCUBE(id);
-            return true;
         }
-        return false;
     }
 
 
@@ -894,10 +881,10 @@ public class ConstructionGrid : MonoBase
 
         // remove stats
         CUBEInfo cubeInfo = CUBE.allCUBES[cube.ID];
-        shipHealth -= cubeInfo.health;
-        shipShield -= cubeInfo.shield;
-        shipSpeed -= cubeInfo.speed;
-        shipDamage -= cubeInfo.damage;
+        CurrentStats.health -= cubeInfo.health;
+        CurrentStats.shield -= cubeInfo.shield;
+        CurrentStats.speed -= cubeInfo.speed;
+        CurrentStats.damage -= cubeInfo.damage;
         corePointsAvailable += cubeInfo.cost;
 
         cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].renderer.material = CellCursor_Mat;
@@ -909,94 +896,20 @@ public class ConstructionGrid : MonoBase
     /// </summary>
     /// <param name="buildName">Name of the ship.</param>
     /// <returns>BuildInfo for the ship.</returns>
-    private BuildInfo LoadBuild(string buildName) // TODO: make private
+    private BuildInfo LoadBuild(string buildName)
     {
         this.buildName = buildName;
 
         // get buildInfo string from data
-        string build = SaveData.Load(buildName, BuildsFile, "NA");
-        if (build == "NA")
+        BuildInfo build = SaveData.Load<BuildInfo>(buildName, BuildsFolder);
+        if (build == null)
         {
             Debugger.Log(buildName + " is not in data.", null, Debugger.LogTypes.Data, false);
             return null;
         }
         Debugger.Log("Loading: " + build, null, Debugger.LogTypes.Data);
-        var buildInfo = new BuildInfo {partList = new List<KeyValuePair<int, CUBEGridInfo>>()};
 
-        string[] data = build.Split(BuildInfo.DataSep[0]);
-
-        // stats
-        buildInfo.name = data[0];
-        buildInfo.health = float.Parse(data[1]);
-        buildInfo.shield = float.Parse(data[2]);
-        buildInfo.speed = float.Parse(data[3]);
-        buildInfo.damage = float.Parse(data[4]);
-
-        // pieces
-        for (int i = 5; i < data.Length - 1; i++)
-        {
-            string[] info = data[i].Split(BuildInfo.PieceSep[0]);
-            int[] colors = info[5].Substring(0, info[5].Length - 1).Split(BuildInfo.ColorSep[0]).Select(s => int.Parse(s)).ToArray();
-            buildInfo.partList.Add(new KeyValuePair<int, CUBEGridInfo>(int.Parse(info[0]),
-                new CUBEGridInfo(
-                    Utility.ParseV3(info[1]),
-                    Utility.ParseV3(info[2]),
-                    int.Parse(info[3]),
-                    int.Parse(info[4]),
-                    colors)));
-        }
-
-        return buildInfo;
-    }
-
-
-    /// <summary>
-    /// Save build to data.
-    /// </summary>
-    private string CreateBuildInfoString()
-    {
-        var build = new StringBuilder();
-
-        // stats
-        build.Append(buildName);
-        build.Append(BuildInfo.DataSep);
-        build.Append(shipHealth);
-        build.Append(BuildInfo.DataSep);
-        build.Append(shipShield);
-        build.Append(BuildInfo.DataSep);
-        build.Append(shipSpeed);
-        build.Append(BuildInfo.DataSep);
-        build.Append(shipDamage);
-        build.Append(BuildInfo.DataSep);
-
-        // pieces
-        foreach (var piece in currentBuild)
-        {
-            // ID
-            build.Append(piece.Key.ID);
-            build.Append(BuildInfo.PieceSep);
-            // positon
-            build.Append(piece.Value.position);
-            build.Append(BuildInfo.PieceSep);
-            // rotation
-            build.Append(piece.Value.rotation);
-            build.Append(BuildInfo.PieceSep);
-            // weapon map
-            build.Append(piece.Value.weaponMap);
-            build.Append(BuildInfo.PieceSep);
-            // augmentation map
-            build.Append(piece.Value.augmentationMap);
-            build.Append(BuildInfo.PieceSep);
-            // colors
-            foreach (int color in piece.Value.colors)
-            {
-                build.Append(color);
-                build.Append(BuildInfo.ColorSep);
-            }
-            build.Append(BuildInfo.DataSep);
-        }
-
-        return build.ToString();
+        return build;
     }
 
 
@@ -1005,7 +918,7 @@ public class ConstructionGrid : MonoBase
     /// </summary>
     public void SaveBuild()
     {
-        SaveBuild(buildName, CreateBuildInfoString());
+        SaveBuild(buildName, new BuildInfo(buildName, CurrentStats, currentBuild));
     }
 
 
@@ -1070,38 +983,19 @@ public class ConstructionGrid : MonoBase
     /// <returns>All build names.</returns>
     public static List<string> BuildNames()
     {
-        const string namePath = AllUserBuildsPath;
-
-        List<string> builds = PlayerPrefs.GetString(namePath).Split(BuildInfo.PieceSep[0]).ToList();
-        if (builds[0] == "")
-        {
-            builds.RemoveAt(0);
-        }
-        return builds;
+        return SaveData.GetFiles(BuildsFolder).ToList();
     }
 
 
     /// <summary>
     /// Save build to data.
     /// </summary>
-    /// <param name="buildName">Name of ship to save.</param>
-    /// <param name="build">BuildInfo string to save.</param>
-    public static void SaveBuild(string buildName, string build)
+    /// <param name="buildName">Name of the build.</param>
+    /// <param name="build">Build info.</param>
+    public static void SaveBuild(string buildName, BuildInfo build)
     {
         Debugger.Log("Saving " + buildName + ": " + build, null, Debugger.LogTypes.Data);
-
-        // get paths
-        const string namePath = AllUserBuildsPath;
-
-        // save data
-        SaveData.Save(buildName, build, BuildsFile);
-        // save build name
-        List<string> buildNames = BuildNames();
-        if (!buildNames.Contains(buildName))
-        {
-            buildNames.Add(buildName);
-            PlayerPrefs.SetString(namePath, string.Join(BuildInfo.PieceSep, buildNames.ToArray()));
-        }
+        SaveData.Save(buildName, build, BuildsFolder);
     }
 
 
@@ -1111,15 +1005,7 @@ public class ConstructionGrid : MonoBase
     /// <param name="buildName">Name of build.</param>
     public static void DeleteBuild(string buildName)
     {
-        // get path
-        const string namePath = AllUserBuildsPath;
-
-        // remove from list of all builds
-        string[] builds = PlayerPrefs.GetString(namePath).Split(BuildInfo.PieceSep[0]).Where(b => b != buildName && !string.IsNullOrEmpty(b)).ToArray();
-        PlayerPrefs.SetString(namePath, string.Join(BuildInfo.PieceSep, builds));
-
-        // remove build data
-        SaveData.Delete(buildName, BuildsFile);
+        SaveData.Delete(buildName, BuildsFolder);
     }
 
 
@@ -1130,19 +1016,10 @@ public class ConstructionGrid : MonoBase
     /// <param name="newName">New name of the build.</param>
     public static void RenameBuild(string oldName, string newName)
     {
-        // get path
-        const string namePath = AllUserBuildsPath;
-
-        // update list of all builds
-        string[] builds = PlayerPrefs.GetString(namePath).Split(BuildInfo.PieceSep[0]);
-        int index = Array.IndexOf(builds, oldName);
-        builds[index] = newName;
-        PlayerPrefs.SetString(namePath, string.Join(BuildInfo.PieceSep, builds));
-
         // update build data
-        string buildInfo = SaveData.Load<string>(oldName, BuildsFile);
+        string buildInfo = SaveData.Load<string>(oldName, BuildsFolder);
         SaveData.Delete(oldName);
-        SaveData.Save(newName, buildInfo, BuildsFile);
+        SaveData.Save(newName, buildInfo, BuildsFolder);
     }
 
     #endregion
@@ -1201,53 +1078,6 @@ public class ConstructionGrid : MonoBase
             material.SetFloat("_Mix", 0f);
         }
     }
-
-    #endregion
-
-    #region Static Methods
-
-    /// <summary>
-    /// Get build data from data.
-    /// </summary>
-    /// <param name="buildName">Name of the ship.</param>
-    /// <returns>BuildInfo for the ship.</returns>
-    public static BuildInfo Load(string buildName) // TODO: make private
-    {
-        // get buildInfo string from data
-        string build = SaveData.Load(buildName, BuildsFile, "NA");
-        if (build == "NA")
-        {
-            Debugger.Log(buildName + " is not in data.", null, Debugger.LogTypes.Data, false);
-            return null;
-        }
-        Debugger.Log("Loading: " + build, null, Debugger.LogTypes.Data);
-        var buildInfo = new BuildInfo { partList = new List<KeyValuePair<int, CUBEGridInfo>>() };
-
-        string[] data = build.Split(BuildInfo.DataSep[0]);
-
-        // stats
-        buildInfo.name = data[0];
-        buildInfo.health = float.Parse(data[1]);
-        buildInfo.shield = float.Parse(data[2]);
-        buildInfo.speed = float.Parse(data[3]);
-        buildInfo.damage = float.Parse(data[4]);
-
-        // pieces
-        for (int i = 5; i < data.Length - 1; i++)
-        {
-            string[] info = data[i].Split(BuildInfo.PieceSep[0]);
-            int[] colors = info[5].Substring(0, info[5].Length - 1).Split(BuildInfo.ColorSep[0]).Select(s => int.Parse(s)).ToArray();
-            buildInfo.partList.Add(new KeyValuePair<int, CUBEGridInfo>(int.Parse(info[0]),
-                new CUBEGridInfo(
-                    Utility.ParseV3(info[1]),
-                    Utility.ParseV3(info[2]),
-                    int.Parse(info[3]),
-                    int.Parse(info[4]),
-                    colors)));
-        }
-
-        return buildInfo;
-    } 
 
     #endregion
 }
