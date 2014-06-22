@@ -291,7 +291,6 @@ public class SaveDataEditor : EditorWindow
 
             for (int i = 0; i < list.Count; i++)
             {
-                Debug.Log(list[i]);
                 if (list[i] is IUnityClass)
                 {
                     IUnityClass item = (IUnityClass)list[i];

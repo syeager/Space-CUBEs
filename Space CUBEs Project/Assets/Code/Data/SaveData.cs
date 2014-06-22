@@ -63,7 +63,7 @@ namespace LittleByte.Data
                 }
             }
 
-            FileSavedEvent.Fire(value, new ValueArgs(DataPath + path + file + FileExt));
+            FileSavedEvent.Fire(value, new ValueArgs(path + file));
         }
 
 
