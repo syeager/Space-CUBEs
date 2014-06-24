@@ -258,6 +258,10 @@ public class PrefabsEditor : Creator<Prefabs>
     {
         prefabsSource.poolManager.poolList[index] = new Pool(prefabsSource.poolManager, prefab);
         poolToggles.Add(true);
+        if (PrefabUtility.GetPrefabType(prefab) == PrefabType.PrefabInstance && prefab.transform.parent.GetComponents<Component>().Length == 1)
+        {
+            prefabsSource.poolManager.poolList[index].parent = prefab.transform.parent;
+        }
     }
 
 
