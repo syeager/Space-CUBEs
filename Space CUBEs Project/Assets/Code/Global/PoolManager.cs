@@ -4,6 +4,7 @@
 // Edited: 2014.06.15
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
@@ -36,6 +37,9 @@ public class PoolManager : ScriptableObject
     /// <summary>Timer that runs culling on elapse.</summary>
     private Timer cullTimer;
 
+    /// <summary>Cull pool list in intervals.</summary>
+    private Job cullJob;
+
     #endregion
 
     #region Readonly Fields
@@ -55,8 +59,6 @@ public class PoolManager : ScriptableObject
     /// </summary>
     public void Initialize()
     {
-        Clear();
-
         foreach (Pool pool in poolList)
         {
             pools.Add(pool.prefab, pool);
@@ -65,8 +67,7 @@ public class PoolManager : ScriptableObject
 
         if (cull)
         {
-            cullTimer = new Timer(cullDelay);
-            cullTimer.Elapsed += (sender, args) => Cull();
+            cullJob = new Job(Culling());
         }
     }
 
@@ -311,6 +312,23 @@ public class PoolManager : ScriptableObject
         foreach (Pool pool in cullList)
         {
             pool.Cull();
+        }
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private IEnumerator Culling()
+    {
+        WaitForSeconds wait = new WaitForSeconds(cullDelay);
+        while (true)
+        {
+            yield return wait;
+            Cull();
         }
     }
 

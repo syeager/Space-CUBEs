@@ -1,7 +1,7 @@
 // Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2013.12.09
-// Edited: 2014.06.15
+// Edited: 2014.06.24
 
 using System;
 using System.Linq;
@@ -50,8 +50,24 @@ public class Pool
     /// <summary>List of inactive gameObjects.</summary>
     private readonly Stack<GameObject> pool = new Stack<GameObject>();
 
+    #endregion
+
+    #region Properties
+
+    /// <summary>Number of active gameObjects in the pool.</summary>
+    public int ActiveCount { get; private set; }
+
+    /// <summary>Number of inactive gameObjects in the pool.</summary>
+    public int InactiveCount
+    {
+        get { return pool.Count; }
+    }
+
     /// <summary>Number of active and inactive gameObjects in the pool.</summary>
-    private int poolSize;
+    public int PoolCount
+    {
+        get { return ActiveCount + InactiveCount; }
+    }
 
     #endregion
 
@@ -103,10 +119,10 @@ public class Pool
             foreach (PoolObject poolObject in children.Select(child => child as PoolObject))
             {
                 poolObject.Initialize(this);
-                poolSize++;
                 if (!poolObject.gameObject.activeSelf)
                 {
                     Push(poolObject);
+                    ActiveCount++;
                 }
             }
         }
@@ -142,11 +158,12 @@ public class Pool
             {
                 GameObject go = pool.Pop();
                 go.SetActive(true);
+                ActiveCount++;
                 return go;
             }
 
             // reached hard limit
-            if (hardLimit && poolSize >= limit)
+            if (hardLimit && PoolCount >= limit)
             {
                 return null;
             }
@@ -168,6 +185,7 @@ public class Pool
         if (go != null)
         {
             ((PoolObject)go.GetComponent(typeof(PoolObject))).StartLifeTimer(life);
+            ActiveCount++;
             return go;
         }
 
@@ -182,6 +200,7 @@ public class Pool
     public void Push(PoolObject poolObject)
     {
         pool.Push(poolObject.gameObject);
+        ActiveCount--;
     }
 
 
@@ -206,7 +225,6 @@ public class Pool
     {
         while (pool.Count > cullLimit)
         {
-            poolSize--;
             UnityEngine.Object.Destroy(pool.Pop());
         }
     }
@@ -221,9 +239,9 @@ public class Pool
     /// <param name="size">Amount of gameObjects to create.</param>
     private void Allocate(int size)
     {
-        if (hardLimit && poolSize + size > limit)
+        if (hardLimit && PoolCount + size > limit)
         {
-            size = limit - poolSize;
+            size = limit - PoolCount;
         }
 
         for (int i = 0; i < size; i++)
@@ -233,7 +251,7 @@ public class Pool
             ((PoolObject)go.GetComponent(typeof(PoolObject))).Initialize(this);
             pool.Push(go);
             go.SetActive(false);
-            poolSize++;
+            ActiveCount++;
         }
     }
 

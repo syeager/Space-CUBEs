@@ -32,7 +32,7 @@ public class PrefabsEditor : Creator<Prefabs>
 
     #region Private Fields
 
-    private bool poolListToggle;
+    private bool poolListToggle = true;
     private List<bool> poolToggles;
 
     #endregion
@@ -69,6 +69,7 @@ public class PrefabsEditor : Creator<Prefabs>
 
     public override void OnInspectorGUI()
     {
+        Repaint();
         GUIStyle textStyle = new GUIStyle { normal = { textColor = Color.white }, wordWrap = true, richText = true };
         if (PrefabUtility.GetPrefabType(target) == PrefabType.Prefab)
         {
@@ -147,6 +148,11 @@ public class PrefabsEditor : Creator<Prefabs>
 
     private void Pool(int index)
     {
+        if (poolToggles == null || poolToggles.Count - 1 < index)
+        {
+            poolToggles = new List<bool>(poolList.arraySize);
+            poolToggles.Initialize(false, poolList.arraySize);
+        }
         SerializedProperty pool = poolList.GetArrayElementAtIndex(index);
         SerializedProperty prefab = pool.FindPropertyRelative("prefab");
         SerializedProperty preAllocate = pool.FindPropertyRelative("preAllocate");
@@ -160,6 +166,14 @@ public class PrefabsEditor : Creator<Prefabs>
         EditorGUILayout.BeginHorizontal();
         {
             poolToggles[index] = EditorGUILayout.Foldout(poolToggles[index], index + " " + (prefab.objectReferenceValue == null ? "---" : prefab.objectReferenceValue.name));
+
+            GUILayout.FlexibleSpace();
+            Color cachedColor = GUI.color;
+            Pool p = prefabsSource.poolManager.poolList[index];
+            float percent = p.cull ? (float)p.PoolCount / p.cullLimit : 0f;
+            GUI.color = Color.Lerp(Color.green, percent >= 1f ? Color.red : Color.yellow, p.cull ? percent : 0f);
+            GUILayout.Label(p.ActiveCount.ToString("000") + "+" + p.InactiveCount.ToString("000") + "/" + (p.cull ? p.cullLimit.ToString("000") : "∞∞") + "=" + p.PoolCount.ToString("000"));
+            GUI.color = cachedColor;
 
             GUI.enabled = index > 0;
             if (GUILayout.Button("↑", EditorStyles.miniButtonLeft, GUILayout.Width(30f)))
@@ -256,12 +270,10 @@ public class PrefabsEditor : Creator<Prefabs>
 
     private void UpdatePool(int index, PoolObject prefab)
     {
-        prefabsSource.poolManager.poolList[index] = new Pool(prefabsSource.poolManager, prefab);
+        bool foundParent = PrefabUtility.GetPrefabType(prefab) == PrefabType.PrefabInstance && prefab.transform.parent.GetComponents<Component>().Length == 1;
+        prefabsSource.poolManager.poolList[index] = new Pool(prefabsSource.poolManager, prefab, foundParent ? prefab.transform.parent : null);
         poolToggles.Add(true);
-        if (PrefabUtility.GetPrefabType(prefab) == PrefabType.PrefabInstance && prefab.transform.parent.GetComponents<Component>().Length == 1)
-        {
-            prefabsSource.poolManager.poolList[index].parent = prefab.transform.parent;
-        }
+        
     }
 
 
