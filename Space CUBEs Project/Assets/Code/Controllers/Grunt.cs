@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 12.17.2013
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2013.12.17
+// Edited: 2014.06.23
 
 using UnityEngine;
 using System.Collections.Generic;
@@ -29,7 +31,6 @@ public class Grunt : Enemy
     private const string MovingState = "Moving";
 
     #endregion
-
 
     #region MonoBehaviour Overrides
 
