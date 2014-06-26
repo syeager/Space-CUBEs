@@ -86,8 +86,10 @@ public class LevelCreator : EditorWindow
         }
 
         // path types
-        pathTypes = Assembly.GetAssembly(typeof(Path)).GetTypes().Where(t => t.Namespace == "Paths").ToArray();
-        pathNames = pathTypes.Select(p => p.Name).ToArray();
+        var pathTypesList = Assembly.GetAssembly(typeof(Path)).GetTypes().Where(t => t.Namespace == "Paths").ToList();
+        pathTypesList.Insert(0, null);
+        pathTypes = pathTypesList.ToArray();
+        pathNames = pathTypes.Select(p => p == null ? "None" : p.Name).ToArray();
 
         // formation prefabs
         formationPrefabs = Formation.AllFormations();
@@ -335,8 +337,9 @@ public class LevelCreator : EditorWindow
         // path
         GUI.enabled = enemyType != 0;
         SerializedProperty path = sformationGroup.FindPropertyRelative("paths").GetArrayElementAtIndex(enemyIndex);
-        Type pathType = levelManager.formationGroups[formationIndex].paths[enemyIndex].GetType();
-        int pathIndex = levelManager.formationGroups[formationIndex].paths[enemyIndex] == null ? -1 : Array.IndexOf(pathTypes, pathType);
+        Path p = levelManager.formationGroups[formationIndex].paths[enemyIndex];
+        Type pathType = p == null ? null : p.GetType();
+        int pathIndex = Array.IndexOf(pathTypes, pathType);
         EditorGUI.BeginChangeCheck();
         {
             pathIndex = EditorGUI.Popup(new Rect(136f, y, 100f, 20f), pathIndex, pathNames);
@@ -404,7 +407,7 @@ public class LevelCreator : EditorWindow
         GUI.enabled = true;
 
         // params
-        if (enemyToggles[formationIndex][enemyIndex])
+        if (enemyToggles[formationIndex][enemyIndex] && p != null)
         {
             // get params through reflection
             FieldInfo[] fieldInfos = pathType.GetFields();
