@@ -7,7 +7,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Timers;
 using UnityEngine;
 
 
@@ -33,9 +32,6 @@ public class PoolManager : ScriptableObject
     #endregion
 
     #region Private Fields
-
-    /// <summary>Timer that runs culling on elapse.</summary>
-    private Timer cullTimer;
 
     /// <summary>Cull pool list in intervals.</summary>
     private Job cullJob;
@@ -77,9 +73,9 @@ public class PoolManager : ScriptableObject
     /// </summary>
     public void Clear()
     {
-        if (cullTimer != null)
+        if (cullJob != null)
         {
-            cullTimer.Stop();
+            cullJob.Kill();
         }
 
         foreach (Pool pool in poolList)
