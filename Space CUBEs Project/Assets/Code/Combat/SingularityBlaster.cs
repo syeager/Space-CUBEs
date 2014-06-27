@@ -1,14 +1,14 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.02.20
-// Edited: 2014.06.16
+// Edited: 2014.06.25
 
 using UnityEngine;
 
 /// <summary>
 /// 
 /// </summary>
-public class SingularityBlaster : Weapon
+public class SingularityBlaster : PlayerWeapon
 {
     #region Public Fields
 
@@ -28,7 +28,7 @@ public class SingularityBlaster : Weapon
 
     #region Weapon Overrides
 
-    public override Coroutine Activate(bool pressed, float multiplier, object attackInfo = null)
+    public override Coroutine Activate(bool pressed, float multiplier)
     {
         if (pressed)
         {
@@ -77,7 +77,7 @@ public class SingularityBlaster : Weapon
         missile.Explode();
         missile = null;
         StartCoroutine(Cooldown(true));
-        Activated();
+        ActivatedEvent.Fire(this);
     }
 
     #endregion

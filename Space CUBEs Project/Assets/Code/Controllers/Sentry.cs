@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 4.7.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.04.07
+// Edited: 2014.06.25
 
 using System.Collections.Generic;
 using System.Collections;
@@ -12,6 +14,8 @@ using UnityEngine;
 public class Sentry : Enemy
 {
     #region Public Fields
+
+    public Weapon laser;
 
     /// <summary>Min target distance away from player.</summary>
     public float minTargetDistance;
@@ -57,7 +61,6 @@ public class Sentry : Enemy
 
     #endregion
 
-
     #region MonoBehaviour Overrides
 
     protected override void Awake()
@@ -83,7 +86,7 @@ public class Sentry : Enemy
         attackPath = ScriptableObject.CreateInstance(typeof(FigureEight)) as FigureEight;
         attackPath.Initialize(myTransform, idlingSpeed, 2f, 1f);
 
-        myHealth.Initialize();
+        MyHealth.Initialize();
 
         // decide target distance
         targetDistance = Random.Range(minTargetDistance, maxTargetDistance);
@@ -155,8 +158,8 @@ public class Sentry : Enemy
     private void Rotate()
     {
         myTransform.rotation = Quaternion.Slerp(myTransform.rotation,
-                                                Quaternion.LookRotation(player.position - myTransform.position, Vector3.back),
-                                                angularSpeed*Time.deltaTime);
+            Quaternion.LookRotation(player.position - myTransform.position, Vector3.back),
+            angularSpeed * Time.deltaTime);
     }
 
 
@@ -167,7 +170,7 @@ public class Sentry : Enemy
         {
             yield return wait;
 
-            myWeapons.Activate(0, true);
+            laser.Activate(true);
         }
     }
 

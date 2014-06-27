@@ -1,11 +1,11 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.03.05
-// Edited: 2014.06.16
+// Edited: 2014.06.25
 
 using UnityEngine;
 
-public class SharkMissiles_Weapon : Weapon
+public class SharkMissiles_Weapon : PlayerWeapon
 {
     #region Public Fields
 
@@ -26,7 +26,7 @@ public class SharkMissiles_Weapon : Weapon
 
     #region Weapon Overrides
 
-    public override Coroutine Activate(bool pressed, float multiplier, object attackInfo = null)
+    public override Coroutine Activate(bool pressed, float multiplier)
     {
         if (pressed)
         {
@@ -43,7 +43,7 @@ public class SharkMissiles_Weapon : Weapon
             FireMissile(multiplier);
 
             StartCoroutine(Cooldown(true));
-            Activated();
+            ActivatedEvent.Fire(this);
         }
 
         return null;

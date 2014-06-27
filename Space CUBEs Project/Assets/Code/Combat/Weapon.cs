@@ -60,8 +60,7 @@ public abstract class Weapon : MonoBase
     [UsedImplicitly]
     private void Awake()
     {
-        // get references
-        myTransform = transform;
+        Initialize((Ship)GetComponent(typeof(Ship)));
     }
 
     #endregion
@@ -87,15 +86,6 @@ public abstract class Weapon : MonoBase
         canActivate = true;
     }
 
-
-    protected void Activated()
-    {
-        if (ActivatedEvent != null)
-        {
-            ActivatedEvent(this, EventArgs.Empty);
-        }
-    }
-
     #endregion
 
     #region Virtual Methods
@@ -116,28 +106,14 @@ public abstract class Weapon : MonoBase
 
 
     /// <summary>
-    /// attach new Weapon to parent
-    //  copy values to parent
-    //  delete self
-    /// </summary>
-    /// <param name="parent"></param>
-    /// <returns></returns>
-    public virtual Weapon Bake(GameObject parent)
-    {
-        return null;
-    }
-
-    #endregion
-
-    #region Abstract Methods
-
-    /// <summary>
     /// Activate weapon with extra info.
     /// </summary>
     /// <param name="pressed">Is the weapon being pressed?</param>
     /// <param name="multiplier">Damage multiplier.</param>
-    /// <param name="attackInfo">Data to be passed and converted on the weapon side.</param>
-    public abstract Coroutine Activate(bool pressed, float multiplier, object attackInfo = null);
+    public virtual Coroutine Activate(bool pressed, float multiplier = 1f)
+    {
+        return null;
+    }
 
     #endregion
 }

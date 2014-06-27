@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.03.25
-// Edited: 2014.06.16
+// Edited: 2014.06.25
 
 using UnityEngine;
 using System.Collections;
@@ -34,12 +34,12 @@ public class SidewinderMissileLauncher : Weapon
 
     #region Weapon Overrides
 
-    public override Coroutine Activate(bool pressed, float multiplier, object attackInfo = null)
+    public Coroutine Activate(bool pressed, float multiplier, float deployTime)
     {
         if (pressed)
         {
             gameObject.SetActive(true);
-            StartCoroutine(Fire((float)attackInfo));
+            StartCoroutine(Fire(deployTime));
         }
         else
         {

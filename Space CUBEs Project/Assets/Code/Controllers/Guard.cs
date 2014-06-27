@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.04.13
-// Edited: 2014.06.22
+// Edited: 2014.06.25
 
 using System;
 using System.Collections;
@@ -14,6 +14,12 @@ using UnityEngine;
 /// </summary>
 public class Guard : Enemy
 {
+    #region Public Fields
+
+    public Weapon laser;
+
+    #endregion
+
     #region State Fields
 
     private const string SpawningState = "Spawning";
@@ -68,7 +74,7 @@ public class Guard : Enemy
 
     private void SpawnEnter(Dictionary<string, object> info)
     {
-        myHealth.Initialize();
+        MyHealth.Initialize();
 
         // initialize path from level manager
         path = (Path)info["path"];
@@ -110,9 +116,9 @@ public class Guard : Enemy
     private IEnumerator AttackingUpdate()
     {
         yield return new WaitForSeconds(attackBuffer);
-        myWeapons.Activate(0, true);
+        laser.Activate(true);
         yield return new WaitForSeconds(attackTime);
-        myWeapons.Activate(0, false);
+        laser.Activate(false);
         yield return new WaitForSeconds(attackBuffer / 2f);
         stateMachine.SetState(IdlingState);
     }
@@ -143,7 +149,7 @@ public class Guard : Enemy
     private void DyingEnter(Dictionary<string, object> info)
     {
         StopAllCoroutines();
-        myWeapons.Activate(0, false);
+        laser.Activate(false);
         poolObject.Disable();
     }
 

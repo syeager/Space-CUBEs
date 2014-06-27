@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 11.25.2013
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2013.11.25
+// Edited: 2014.06.25
 
 using System.Collections.Generic;
 using Annotations;
@@ -9,7 +11,6 @@ using UnityEngine;
 /// Base class for all ships.
 /// </summary>
 [RequireComponent(typeof(ShipMotor))]
-[RequireComponent(typeof(WeaponManager))]
 [RequireComponent(typeof(ShieldHealth))]
 public class Ship : MonoBase
 {
@@ -17,8 +18,7 @@ public class Ship : MonoBase
 
     protected Transform myTransform;
     protected ShipMotor myMotor;
-    public WeaponManager myWeapons;
-    public ShieldHealth myHealth { get; protected set; }
+    public ShieldHealth MyHealth { get; protected set; }
 
     #endregion
 
@@ -34,7 +34,6 @@ public class Ship : MonoBase
 
     #endregion
 
-
     #region Unity Overrides
 
     protected virtual void Awake()
@@ -42,15 +41,14 @@ public class Ship : MonoBase
         // get references
         myTransform = transform;
         myMotor = GetComponent<ShipMotor>() ?? gameObject.AddComponent<ShipMotor>();
-        myWeapons = GetComponent<WeaponManager>() ?? gameObject.AddComponent<WeaponManager>();
-        myHealth = GetComponent<ShieldHealth>() ?? gameObject.AddComponent<ShieldHealth>();
+        MyHealth = GetComponent<ShieldHealth>() ?? gameObject.AddComponent<ShieldHealth>();
     }
 
 
     protected virtual void Start()
     {
         // register events
-        myHealth.DieEvent += OnDie;
+        MyHealth.DieEvent += OnDie;
     }
 
 
@@ -80,7 +78,7 @@ public class Ship : MonoBase
     {
         if (stateMachine.currentState != DyingState)
         {
-            stateMachine.SetState(DyingState, new Dictionary<string, object> { { "sender", sender } });
+            stateMachine.SetState(DyingState, new Dictionary<string, object> {{"sender", sender}});
         }
     }
 

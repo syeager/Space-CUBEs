@@ -1,7 +1,7 @@
-﻿// Steve Yeager
-// 12.16.2013
-
-
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2013.12.16
+// Edited: 2014.06.25
 
 /// <summary>
 /// Base class for all enemies.
@@ -32,6 +32,7 @@ public class Enemy : Ship
         Twins,
         Instagator
     }
+
     public Classes enemyClass;
     public int score;
     public int money;
@@ -43,7 +44,6 @@ public class Enemy : Ship
     protected Path path;
 
     #endregion
-
 
     #region MonoBehaviour Overrides
 
@@ -60,10 +60,8 @@ public class Enemy : Ship
     {
         base.Start();
 
-        myWeapons.Initialize(this, 1f);
-
         // register events
-        myHealth.DieEvent += OnDie;
+        MyHealth.DieEvent += OnDie;
     }
 
     #endregion
@@ -75,7 +73,7 @@ public class Enemy : Ship
         Player player = args.killer as Player;
         if (player != null)
         {
-            player.RecieveKill(enemyClass, score, money, myHealth.maxHealth);
+            player.RecieveKill(enemyClass, score, money, MyHealth.maxHealth);
         }
 
         Destroy(path);

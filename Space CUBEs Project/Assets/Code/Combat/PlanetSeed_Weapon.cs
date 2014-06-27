@@ -1,11 +1,11 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.02.19
-// Edited: 2014.06.16
+// Edited: 2014.06.25
 
 using UnityEngine;
 
-public class PlanetSeed_Weapon : Weapon
+public class PlanetSeed_Weapon : PlayerWeapon
 {
     #region Public Fields
 
@@ -19,13 +19,13 @@ public class PlanetSeed_Weapon : Weapon
 
     #region Weapon Overrides
 
-    public override Coroutine Activate(bool pressed, float multiplier, object attackInfo = null)
+    public override Coroutine Activate(bool pressed, float multiplier)
     {
         if (!pressed) return null;
 
         Prefabs.Pop(starPrefab, myTransform.position + myTransform.TransformDirection(attackOffset), myTransform.rotation).GetComponent<Hitbox>().Initialize(myShip, damage * multiplier, time, myTransform.forward * speed);
         StartCoroutine(Cooldown(true));
-        Activated();
+        ActivatedEvent.Fire(this);
 
         return null;
     }

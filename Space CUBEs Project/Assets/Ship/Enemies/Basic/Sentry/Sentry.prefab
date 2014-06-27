@@ -44,7 +44,6 @@ GameObject:
   - 4: {fileID: 400006}
   - 114: {fileID: 11400006}
   - 114: {fileID: 11400008}
-  - 114: {fileID: 11400004}
   - 114: {fileID: 11400002}
   - 114: {fileID: 11400000}
   - 65: {fileID: 6500000}
@@ -201,10 +200,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 0
   timeScale: 1
-  myWeapons: {fileID: 11400004}
   enemyClass: 2
   score: 100
   money: 100
+  laser: {fileID: 11400008}
   minTargetDistance: 30
   maxTargetDistance: 50
   targetMoveSpeed: 25
@@ -234,20 +233,6 @@ MonoBehaviour:
   hasHorizontalBounds: 1
   leftBound: .00999999978
   rightBound: .00999999978
---- !u!114 &11400004
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100006}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2cedf86e75aa7e47ba8376813cf1e63, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weapons:
-  - {fileID: 11400008}
-  canActivate: 1
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1

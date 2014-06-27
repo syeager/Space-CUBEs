@@ -38,7 +38,7 @@ public class HornetCannon : Weapon
 
     #region Weapon Overrides
 
-    public override Coroutine Activate(bool pressed, float multiplier, object attackInfo = null)
+    public override Coroutine Activate(bool pressed, float multiplier)
     {
         if (pressed)
         {

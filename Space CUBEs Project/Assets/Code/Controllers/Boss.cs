@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 3.25.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.03.25
+// Edited: 2014.06.26
 
 using System;
 
@@ -9,7 +11,7 @@ using System;
 public class Boss : Enemy
 {
     #region Public Fields
-    
+
     public float[] stages;
 
     #endregion
@@ -35,14 +37,13 @@ public class Boss : Enemy
 
     #endregion
 
-
     #region MonoBehaviour Overrides
 
     protected override void Awake()
     {
- 	     base.Awake();
+        base.Awake();
 
-        myHealth.HealthUpdateEvent += OnHit;
+        MyHealth.HealthUpdateEvent += OnHit;
     }
 
     #endregion
@@ -64,15 +65,15 @@ public class Boss : Enemy
         // already dead
         if (args.health <= 0f)
         {
-            myHealth.HealthUpdateEvent -= OnHit;
+            MyHealth.HealthUpdateEvent -= OnHit;
             return;
         }
 
         // update HUD
-        healthBar.fillAmount = args.health/args.max;
+        healthBar.fillAmount = args.health / args.max;
 
         // next stage
-        if (args.health < stages[stage-1])
+        if (args.health < stages[stage - 1])
         {
             stage++;
             NextStageEvent(this, new ValueArgs(stage));

@@ -72,7 +72,7 @@ public class FormationLevelManager : LevelManager
             // kill boss
             if (boss != null)
             {
-                boss.GetComponent<Health>().Trash();
+                boss.MyHealth.Trash();
                 return;
             }
             // spawn boss
@@ -80,7 +80,7 @@ public class FormationLevelManager : LevelManager
             while (activeEnemies.Count > 0)
             {
                 if (activeEnemies[0] == null) continue;
-                ((Health)activeEnemies[0].GetComponent(typeof(Health))).Trash();
+                (activeEnemies[0].MyHealth).Trash();
             }
             SpawnBoss();
         }
@@ -90,7 +90,7 @@ public class FormationLevelManager : LevelManager
             // hurt boss
             if (boss != null)
             {
-                boss.GetComponent<Health>().RecieveHit(null, 1000);
+                boss.MyHealth.RecieveHit(null, 1000);
             }
         }
     }

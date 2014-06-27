@@ -1,9 +1,8 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.03.26
-// Edited: 2014.06.16
+// Edited: 2014.06.25
 
-using Annotations;
 using UnityEngine;
 using System.Collections;
 
@@ -34,12 +33,12 @@ public class OscillatingLaser : Weapon
 
     #region Weapon Overrides
 
-    public override Coroutine Activate(bool pressed, float multiplier, object attackInfo = null)
+    new public Coroutine Activate(bool pressed, float deployTime)
     {
         if (pressed)
         {
             gameObject.SetActive(true);
-            StartCoroutine(Fire((float)attackInfo));
+            StartCoroutine(Fire(deployTime));
         }
         else if (gameObject.activeInHierarchy)
         {

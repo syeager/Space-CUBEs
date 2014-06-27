@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2013.12.19
-// Edited: 2014.05.31
+// Edited: 2014.06.26
 
 using System;
 using System.Collections.Generic;
@@ -32,7 +32,7 @@ public class ShipCompactor : MonoBehaviour
         for (int i = 1; i < meshFilters.Length; i++)
         {
             // bake weapons. save refs for weapon manager
-            var weapon = (Weapon)meshFilters[i].GetComponent(typeof(Weapon));
+            var weapon = (PlayerWeapon)meshFilters[i].GetComponent(typeof(PlayerWeapon));
             if (weapon != null)
             {
                 weapons.Add(weapon.Bake(myGameObject));
@@ -86,9 +86,9 @@ public class ShipCompactor : MonoBehaviour
         // add ship
         var ship = (Player)GetComponent(typeof(Player));
         // bake weapons
-        ship.myWeapons.Bake(weapons);
+        ship.Weapons.Bake(weapons);
         // bake augmentations
-        ship.myAugmentations.Bake(augmentations);
+        ship.Augmentations.Bake(augmentations);
         // add collider
         var box = (BoxCollider)ship.gameObject.AddComponent(typeof(BoxCollider));
         box.size = box.size * PlayerCollider;

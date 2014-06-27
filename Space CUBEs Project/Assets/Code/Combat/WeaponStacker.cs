@@ -29,14 +29,14 @@ public class WeaponStacker : Weapon
     {
         base.Initialize(sender);
 
-        for (int i = 0; i < weapons.Length; i++)
+        foreach (Weapon weapon in weapons)
         {
-            weapons[i].Initialize(sender);
+            weapon.Initialize(sender);
         }
     }
 
 
-    public override Coroutine Activate(bool pressed, float multiplier, object attackInfo = null)
+    public override Coroutine Activate(bool pressed, float multiplier = 1f)
     {
         if (pressed)
         {

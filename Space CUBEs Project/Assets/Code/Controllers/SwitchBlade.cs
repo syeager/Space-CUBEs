@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.03.25
-// Edited: 2014.06.15
+// Edited: 2014.06.26
 
 using System;
 using UnityEngine;
@@ -17,6 +17,11 @@ public class SwitchBlade : Boss
     #region References
 
     private Animation myAnimation;
+    public OscillatingLaser[] lasers = new OscillatingLaser[2];
+    public SidewinderMissileLauncher[] missileLaunchers = new SidewinderMissileLauncher[2];
+    public MovingShield shield;
+    public WeaponStacker burstCannon;
+    public DeathLaser deathLaser;
 
     #endregion
 
@@ -98,7 +103,7 @@ public class SwitchBlade : Boss
 
     private void EnteringEnter(Dictionary<string, object> info)
     {
-        myHealth.invincible = true;
+        MyHealth.invincible = true;
 
         stateMachine.SetUpdate(EnteringUpdate());
     }
@@ -119,19 +124,16 @@ public class SwitchBlade : Boss
     private void EnteringExit(Dictionary<string, object> info)
     {
         InitializeHealth();
-        myHealth.invincible = false;
+        MyHealth.invincible = false;
     }
 
 
     private void StagingEnter(Dictionary<string, object> info)
     {
-        myHealth.invincible = true;
+        MyHealth.invincible = true;
         moveJob.Pause(true);
 
-        for (int i = 0; i < myWeapons.weapons.Length; i++)
-        {
-            myWeapons.Activate(i, false);
-        }
+        DeactivateWeapons(false);
 
         StopAllCoroutines();
 
@@ -157,7 +159,7 @@ public class SwitchBlade : Boss
 
     private void StagingExit(Dictionary<string, object> info)
     {
-        myHealth.invincible = false;
+        MyHealth.invincible = false;
         moveJob.Pause(false);
 
         stateMachine.SetUpdate(StagingUpdate());
@@ -271,9 +273,61 @@ public class SwitchBlade : Boss
         }
     }
 
+
+    private void DyingEnter(Dictionary<string, object> info)
+    {
+        if (moveJob != null)
+        {
+            moveJob.Kill();
+        }
+
+        // clean up
+        DeactivateWeapons(true);
+
+        GameObject root = new GameObject();
+        root.transform.SetPosRot(myTransform.position, myTransform.rotation);
+        myTransform.parent = root.transform;
+        myAnimation.Play("Switchblade_Death");
+
+        stateMachine.SetUpdate(DeathUpdate());
+    }
+
+
+    private IEnumerator DeathUpdate()
+    {
+        yield return new WaitForSeconds(myAnimation["Switchblade_Death"].length + 1f);
+        DeathEvent.Fire();
+        Destroy(gameObject);
+    }
+
     #endregion
 
     #region Private Methods
+
+    private void DeactivateWeapons(bool disable)
+    {
+        foreach (OscillatingLaser laser in lasers)
+        {
+            laser.Activate(false, 0f);
+            if (disable) laser.gameObject.SetActive(false);
+        }
+
+        foreach (SidewinderMissileLauncher missileLauncher in missileLaunchers)
+        {
+            missileLauncher.Activate(false);
+            if (disable) missileLauncher.gameObject.SetActive(false);
+        }
+
+        shield.Activate(false);
+        if (disable) shield.gameObject.SetActive(false);
+
+        burstCannon.Activate(false);
+        if (disable) burstCannon.gameObject.SetActive(false);
+
+        deathLaser.Activate(false);
+        if (disable) deathLaser.gameObject.SetActive(false);
+    }
+
 
     private IEnumerator Move()
     {
@@ -301,8 +355,8 @@ public class SwitchBlade : Boss
     private IEnumerator FireSideWeapons(bool controlMovement)
     {
         // get weapons
-        int weapon1 = Random.Range(0, 2);
-        int weapon2 = Random.Range(2, 4);
+        int leftWeapon = Random.Range(0, 2);
+        int rightWeapon = Random.Range(0, 2);
 
         // open
         if (controlMovement)
@@ -310,8 +364,8 @@ public class SwitchBlade : Boss
             moveJob.Pause(true);
         }
 
-        myWeapons.Activate(weapon1, true, stage1SwitchTime);
-        myWeapons.Activate(weapon2, true, stage1SwitchTime);
+        ActivateSideWeapon(false, leftWeapon, true, stage1SwitchTime);
+        ActivateSideWeapon(true, rightWeapon, true, stage1SwitchTime);
         yield return new WaitForSeconds(stage1SwitchTime);
 
         // fire
@@ -320,8 +374,8 @@ public class SwitchBlade : Boss
             moveJob.Pause(false);
         }
         yield return new WaitForSeconds(stage1AttackTime);
-        myWeapons.Activate(weapon1, false);
-        myWeapons.Activate(weapon2, false);
+        ActivateSideWeapon(false, leftWeapon, false, 0f);
+        ActivateSideWeapon(true, rightWeapon, false, 0f);
 
         // close
         if (controlMovement)
@@ -346,12 +400,12 @@ public class SwitchBlade : Boss
 
         // deploy
         myAnimation.Play("Doors_Open");
-        myWeapons.Activate(4, true);
+        burstCannon.Activate(true);
         yield return new WaitForSeconds(bulletEmitterTime);
 
         // close
         myAnimation.Play("Doors_Close");
-        myWeapons.Activate(4, false);
+        burstCannon.Activate(false);
         yield return new WaitForSeconds(stage1SwitchTime);
         if (controlMovement)
         {
@@ -368,11 +422,11 @@ public class SwitchBlade : Boss
         while (true)
         {
             // activate
-            myWeapons.Activate(5, true);
+            shield.Activate(true);
             yield return activated;
 
             // close
-            myWeapons.Activate(5, false);
+            shield.Activate(false);
             yield return deactivated;
         }
     }
@@ -383,45 +437,28 @@ public class SwitchBlade : Boss
         // open
         moveJob.Pause(true);
         myAnimation.Play("Doors_Open");
-        yield return myWeapons.Activate(6, true, deathLaserTime);
+        yield return deathLaser.Activate(true, deathLaserTime);
         yield return new WaitForSeconds(stage1SwitchTime);
 
         // close
         myAnimation.Play("Doors_Close");
-        myWeapons.Activate(6, false);
+        deathLaser.Activate(false);
         yield return new WaitForSeconds(stage1SwitchTime);
         moveJob.Pause(false);
     }
 
 
-    private void DyingEnter(Dictionary<string, object> info)
+    private void ActivateSideWeapon(bool right, int weapon, bool pressed, float deployTime)
     {
-        if (moveJob != null)
+        int side = right ? 1 : 0;
+        if (weapon == 0)
         {
-            moveJob.Kill();
+            lasers[side].Activate(pressed, deployTime);
         }
-
-        // clean up
-        myWeapons.ActivateAll(false);
-        foreach (var weapon in myWeapons.weapons)
+        else
         {
-            weapon.gameObject.SetActive(false);
+            missileLaunchers[side].Activate(pressed, deployTime);
         }
-
-        GameObject root = new GameObject();
-        root.transform.SetPosRot(myTransform.position, myTransform.rotation);
-        myTransform.parent = root.transform;
-        myAnimation.Play("Switchblade_Death");
-
-        stateMachine.SetUpdate(DeathUpdate());
-    }
-
-
-    private IEnumerator DeathUpdate()
-    {
-        yield return new WaitForSeconds(myAnimation["Switchblade_Death"].length + 1f);
-        DeathEvent.Fire();
-        Destroy(gameObject);
     }
 
     #endregion

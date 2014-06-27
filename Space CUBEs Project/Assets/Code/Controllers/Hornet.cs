@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.06.22
-// Edited: 2014.06.23
+// Edited: 2014.06.25
 
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +22,8 @@ public class Hornet : Enemy
     #endregion
 
     #region Attacking Fields
+
+    public Weapon laser;
 
     /// <summary>Time in seconds to sit and attack.</summary>
     public float attackingTime = 3f;
@@ -50,7 +52,7 @@ public class Hornet : Enemy
     private void SpawningEnter(Dictionary<string, object> info)
     {
         path = (Path)info["path"];
-        myHealth.Initialize();
+        MyHealth.Initialize();
         path.Initialize(myTransform);
 
         stateMachine.SetState(EnteringState);
@@ -81,8 +83,8 @@ public class Hornet : Enemy
 
     private IEnumerator AttackingUpdate()
     {
-        yield return myWeapons.Activate(0, true);
-        myWeapons.Activate(0, false);
+        yield return laser.Activate(true);
+        laser.Activate(false);
         stateMachine.SetState(ExitingState);
     }
 
@@ -100,7 +102,7 @@ public class Hornet : Enemy
     private void DyingEnter(Dictionary<string, object> info)
     {
         StopAllCoroutines();
-        myWeapons.Activate(0, false);
+        laser.Activate(false);
         poolObject.Disable();
     }
 

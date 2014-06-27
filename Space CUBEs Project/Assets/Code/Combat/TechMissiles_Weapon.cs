@@ -1,13 +1,12 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.03.09
-// Edited: 2014.06.13
-
+// Edited: 2014.06.25
 
 using UnityEngine;
 using System.Collections;
 
-public class TechMissiles_Weapon : Weapon
+public class TechMissiles_Weapon : PlayerWeapon
 {
     #region Public Fields
 
@@ -21,7 +20,7 @@ public class TechMissiles_Weapon : Weapon
 
     #region Weapon Overrides
 
-    public override Coroutine Activate(bool pressed, float multiplier, object attackInfo = null)
+    public override Coroutine Activate(bool pressed, float multiplier)
     {
         if (!pressed) return null;
 
@@ -63,7 +62,7 @@ public class TechMissiles_Weapon : Weapon
             yield return wait;
         }
 
-        Activated();
+        ActivatedEvent.Fire(this);
         StartCoroutine(Cooldown(true));
     }
 

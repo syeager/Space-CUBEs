@@ -1,12 +1,12 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2013.12.01
-// Edited: 2014.06.16
+// Edited: 2014.06.25
 
 using System.Collections;
 using UnityEngine;
 
-public class PlasmaCannon : Weapon
+public class PlasmaCannon : PlayerWeapon
 {
     #region Public Fields
 
@@ -19,7 +19,7 @@ public class PlasmaCannon : Weapon
 
     #region Weapon Overrides
 
-    public override Coroutine Activate(bool pressed, float multiplier, object attackInfo = null)
+    public override Coroutine Activate(bool pressed, float multiplier = 1f)
     {
         if (pressed)
         {
@@ -60,7 +60,7 @@ public class PlasmaCannon : Weapon
             laser.transform.SetPosRot(myTransform.position + myTransform.TransformDirection(laserOffset), myTransform.rotation);
             laser.GetComponent<Hitbox>().Initialize(myShip, damage * multiplier, myTransform.forward * speed);
 
-            Activated();
+            ActivatedEvent.Fire(this);
             yield return StartCoroutine(Cooldown(true, false));
         }
     }

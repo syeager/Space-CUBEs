@@ -36,7 +36,7 @@ public class BrassKnuckles : Augmentation
 
     #region Private Fields
 
-    private Ship ship;
+    private Player ship;
     private bool dealingDamage;
     private float multiplier;
 
@@ -94,7 +94,7 @@ public class BrassKnuckles : Augmentation
             myCollider.isTrigger = true;
             myCollider.enabled = true;
             myGameObject.layer = weaponLayer;
-            multiplier = ship.myWeapons.damageMultiplier;
+            multiplier = ship.Weapons.damageMultiplier;
         }
         else
         {

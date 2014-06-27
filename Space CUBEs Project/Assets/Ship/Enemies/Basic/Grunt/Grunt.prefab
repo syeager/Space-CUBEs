@@ -10,12 +10,11 @@ GameObject:
   - 4: {fileID: 400000}
   - 33: {fileID: 3300000}
   - 23: {fileID: 2300000}
-  - 114: {fileID: 11400008}
-  - 114: {fileID: 11400010}
   - 114: {fileID: 11400006}
   - 114: {fileID: 11400004}
   - 54: {fileID: 5400000}
   - 114: {fileID: 11400000}
+  - 114: {fileID: 11400002}
   - 114: {fileID: 11400012}
   - 65: {fileID: 6500002}
   m_Layer: 10
@@ -102,6 +101,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a811daa6c14fc348b0608b4c05762ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &11400002
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df91ff217fe8c414598527c13613db8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  log: 0
+  timeScale: 1
+  name: 
+  cooldownTime: 0
+  bulletPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
+  speed: 50
+  damage: 10
+  offset: {x: 0, y: 0, z: 0}
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -147,39 +165,6 @@ MonoBehaviour:
   hasHorizontalBounds: 0
   leftBound: .00999999978
   rightBound: .5
---- !u!114 &11400008
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2cedf86e75aa7e47ba8376813cf1e63, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weapons:
-  - {fileID: 11400010}
-  canActivate: 1
---- !u!114 &11400010
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 338eadfdc1ef901409328689e2f52b4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  log: 1
-  timeScale: 1
-  name: 
-  cooldownTime: 0
-  laserPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
-  damage: 10
-  laserOffset: {x: 0, y: 0, z: 0}
-  speed: 50
 --- !u!114 &11400012
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -193,12 +178,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 0
   timeScale: 1
-  myWeapons: {fileID: 11400008}
   enemyClass: 1
   score: 10
   money: 10
   minAttackDelay: 3
   maxAttackDelay: 8
+  laser: {fileID: 11400002}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

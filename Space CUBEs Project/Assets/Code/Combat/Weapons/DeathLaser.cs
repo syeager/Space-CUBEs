@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.04.01
-// Edited: 2014.06.16
+// Edited: 2014.06.25
 
 using System.Collections;
 using UnityEngine;
@@ -38,18 +38,17 @@ public class DeathLaser : Weapon
 
     #region Weapon Overrides
 
-    public override Coroutine Activate(bool pressed, float multiplier, object attackInfo = null)
+    public Coroutine Activate(bool pressed, float multiplier, float fireTime)
     {
         if (pressed)
         {
             gameObject.SetActive(true);
-            return StartCoroutine(Fire((float)attackInfo));
+            return StartCoroutine(Fire(fireTime));
         }
         else if (gameObject.activeInHierarchy)
         {
             laser.SetActive(false);
             animation.Play(retractClip);
-            //AudioManager.Play(deployAudio);
             InvokeAction(() => gameObject.SetActive(false), retractClip.length);
         }
 
@@ -64,7 +63,6 @@ public class DeathLaser : Weapon
     {
         // deploy
         animation.Play(deployClip);
-        //AudioManager.Play(deployAudio);
         yield return new WaitForSeconds(deployClip.length);
 
         // charge

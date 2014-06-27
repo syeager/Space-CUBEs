@@ -20,11 +20,11 @@ public class CoolingGel : Augmentation
 
     public override void Initialize(Player player)
     {
-        for (int i = 0; i < player.myWeapons.weapons.Length; i++)
+        for (int i = 0; i < player.Weapons.weapons.Length; i++)
         {
-            if (player.myWeapons.weapons[i] != null)
+            if (player.Weapons.weapons[i] != null)
             {
-                player.myWeapons.weapons[i].cooldownSpeed *= cooldownBoost;
+                player.Weapons.weapons[i].cooldownSpeed *= cooldownBoost;
             }
         }
     }

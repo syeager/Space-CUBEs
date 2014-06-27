@@ -27,7 +27,7 @@ public class VampireDrive : Augmentation
 
     public override void Initialize(Player player)
     {
-        health = player.myHealth;
+        health = player.MyHealth;
         player.KillRecievedEvent += OnKillReceived;
     }
 

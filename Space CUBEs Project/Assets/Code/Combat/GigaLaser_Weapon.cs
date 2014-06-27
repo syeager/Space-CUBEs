@@ -1,15 +1,14 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2013.12.13
-// Edited: 2014.06.13
+// Edited: 2014.06.25
 
 using System;
 using System.Collections;
 using Annotations;
-
 using UnityEngine;
 
-public class GigaLaser_Weapon : Weapon
+public class GigaLaser_Weapon : PlayerWeapon
 {
     #region Public Fields
 
@@ -36,7 +35,7 @@ public class GigaLaser_Weapon : Weapon
 
     #region Weapon Overrides
 
-    public override Coroutine Activate(bool pressed, float multiplier, object attackInfo = null)
+    public override Coroutine Activate(bool pressed, float multiplier)
     {
         if (pressed)
         {

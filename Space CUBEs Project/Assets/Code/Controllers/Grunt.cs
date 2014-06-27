@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2013.12.17
-// Edited: 2014.06.23
+// Edited: 2014.06.26
 
 using UnityEngine;
 using System.Collections.Generic;
@@ -16,6 +16,8 @@ public class Grunt : Enemy
 
     public float minAttackDelay;
     public float maxAttackDelay;
+
+    public Weapon laser;
 
     #endregion
 
@@ -58,9 +60,9 @@ public class Grunt : Enemy
         {
             attackCycle.Kill();
         }
-        attackCycle = new Job(AttackCycle(0));
+        attackCycle = new Job(AttackCycle());
 
-        myHealth.Initialize();
+        MyHealth.Initialize();
 
         stateMachine.SetState(MovingState);
     }
@@ -87,13 +89,13 @@ public class Grunt : Enemy
 
     #region Private Methods
 
-    private IEnumerator AttackCycle(int weapon)
+    private IEnumerator AttackCycle()
     {
         while (true)
         {
             yield return new WaitForSeconds(Random.Range(minAttackDelay, maxAttackDelay));
-            myWeapons.TryActivate(weapon, true);
-            myWeapons.TryActivate(weapon, false);
+            laser.Activate(true);
+            laser.Activate(false);
         }
     }
 

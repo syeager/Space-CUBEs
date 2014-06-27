@@ -73,12 +73,12 @@ public class HUD : Singleton<HUD>
         {
             ((WeaponButton)Main.weaponButtons[i].GetComponent(typeof(WeaponButton))).Disable();
         }
-        for (int i = 0; i < player.myWeapons.weapons.Length; i++)
+        for (int i = 0; i < player.Weapons.weapons.Length; i++)
         {
-            if (player.myWeapons.weapons[i] != null)
+            if (player.Weapons.weapons[i] != null)
             {
-                Main.weaponButtons[i].ActivateEvent += player.myWeapons.OnActivate;
-                ((WeaponButton)Main.weaponButtons[i].GetComponent(typeof(WeaponButton))).Initialize(player.myWeapons.weapons[i]);
+                Main.weaponButtons[i].ActivateEvent += player.Weapons.OnActivate;
+                ((WeaponButton)Main.weaponButtons[i].GetComponent(typeof(WeaponButton))).Initialize(player.Weapons.weapons[i]);
             }
         }
     }

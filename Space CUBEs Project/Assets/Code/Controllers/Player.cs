@@ -1,10 +1,11 @@
-﻿// Steve Yeager
-// 11.25.2013
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2013.11.25
+// Edited: 2014.06.25
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Annotations;
 using UnityEngine;
 
 /// <summary>
@@ -15,7 +16,8 @@ public class Player : Ship
     #region References
 
     public GameObject trailRenderer;
-    public AugmentationManager myAugmentations { get; private set; }
+    public AugmentationManager Augmentations { get; private set; }
+    public WeaponManager Weapons { get; private set; }
 
     #endregion
 
@@ -58,7 +60,6 @@ public class Player : Ship
 
     #endregion
 
-
     #region Unity Overrides
 
     protected override void Awake()
@@ -68,7 +69,8 @@ public class Player : Ship
         // setup
         myScore = new ScoreManager();
         myMoney = new MoneyManager();
-        myAugmentations = GetComponent<AugmentationManager>();
+        Augmentations = GetComponent<AugmentationManager>();
+        Weapons = GetComponent<WeaponManager>() ?? gameObject.AddComponent<WeaponManager>();
 
         // PC
 #if UNITY_STANDALONE
@@ -111,7 +113,7 @@ public class Player : Ship
 
 #if UNITY_STANDALONE
             // attack
-            var weapons = AttackInput();
+            List<KeyValuePair<int, bool>> weapons = AttackInput();
             if (weapons.Count > 0)
             {
                 Attack(weapons);
@@ -140,10 +142,10 @@ public class Player : Ship
         collider.enabled = false;
 
         // release all attacks
-        myWeapons.ActivateAll(false);
+        Weapons.ActivateAll(false);
 
-        stateMachine.SetUpdate(BarrelRollingUpdate(MovementInput(), myHealth.invincible));
-        myHealth.invincible = true;
+        stateMachine.SetUpdate(BarrelRollingUpdate(MovementInput(), MyHealth.invincible));
+        MyHealth.invincible = true;
 
         BarrelRollEvent.Fire(this, new ValueArgs(true));
     }
@@ -152,13 +154,13 @@ public class Player : Ship
     private IEnumerator BarrelRollingUpdate(Vector2 direction, bool invincible)
     {
         yield return StartCoroutine(myMotor.BarrelRoll(direction, horizontalBounds));
-        stateMachine.SetState(MovingState, new Dictionary<string, object>{{"invincible", invincible}});
+        stateMachine.SetState(MovingState, new Dictionary<string, object> {{"invincible", invincible}});
     }
 
 
     private void BarrelRollingExit(Dictionary<string, object> info)
     {
-        myHealth.invincible = (bool)info["invincible"];
+        MyHealth.invincible = (bool)info["invincible"];
         collider.enabled = true;
 #if !UNITY_STANDALONE
         barrelRoll = false;
@@ -171,7 +173,7 @@ public class Player : Ship
     private void DyingEnter(Dictionary<string, object> info)
     {
         gameObject.SetActive(false);
-        myWeapons.canActivate = false;
+        Weapons.canActivate = false;
     }
 
     #endregion
@@ -187,7 +189,7 @@ public class Player : Ship
 #endif
     }
 
-    
+
 #if UNITY_STANDALONE
 
     /// <summary>
@@ -200,10 +202,10 @@ public class Player : Ship
 
         for (int i = 0; i < Weaponlimit; i++)
         {
-            if (myWeapons.CanActivate(i))
+            if (Weapons.CanActivate(i))
             {
                 string input = WeaponInput + i;
-                
+
                 if (Input.GetButtonDown(input))
                 {
                     weapons.Add(new KeyValuePair<int, bool>(i, true));
@@ -262,7 +264,7 @@ public class Player : Ship
     private IEnumerator BarrelRollReleased()
     {
         while (Input.GetAxis("BarrelRoll") >= 0.5f) yield return null;
-        
+
         barrelRoll = true;
         CancelInvoke("BarrelRollReleased");
     }
@@ -293,10 +295,10 @@ public class Player : Ship
     /// </summary>
     public void Initialize(float maxHealth, float maxShield, float speed, float damage)
     {
-        myHealth.Initialize(maxHealth, maxShield);
+        MyHealth.Initialize(maxHealth, maxShield);
         myMotor.Initialize(speed);
-        myWeapons.Initialize(this, damage);
-        myAugmentations.Initialize(this);
+        Weapons.Initialize(this, damage);
+        Augmentations.Initialize(this);
 
         HUD.Initialize(this);
 #if !UNITY_STANDALONE
@@ -318,7 +320,7 @@ public class Player : Ship
     {
         foreach (var weapon in weapons)
         {
-            myWeapons.Activate(weapon.Key, weapon.Value);
+            Weapons.Activate(weapon.Key, weapon.Value);
         }
     }
 

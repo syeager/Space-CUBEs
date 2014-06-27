@@ -321,7 +321,6 @@ GameObject:
   - 64: {fileID: 6400000}
   - 54: {fileID: 5400008}
   - 114: {fileID: 11400022}
-  - 114: {fileID: 11400020}
   - 114: {fileID: 11400018}
   - 114: {fileID: 11400016}
   - 111: {fileID: 11100000}
@@ -1448,8 +1447,8 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
-  amp: 15
-  speed: 2
+  amp: 20
+  speed: 1
   deployClip: {fileID: 7400000, guid: 23488d94431652f4b8705bf4e69da600, type: 2}
   deployAudio: {fileID: 11400000, guid: 9705a2479fac9f34b8085e4bdf199ba2, type: 2}
   retractClip: {fileID: 7400000, guid: 0ad41a0a4aff5f841b374c510be065a4, type: 2}
@@ -1466,7 +1465,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 1
   timeScale: 1
-  myWeapons: {fileID: 11400020}
   enemyClass: 8
   score: 12000
   money: 1000
@@ -1474,6 +1472,15 @@ MonoBehaviour:
   - 5000
   - 2500
   - 0
+  lasers:
+  - {fileID: 11400028}
+  - {fileID: 11400036}
+  missileLaunchers:
+  - {fileID: 11400024}
+  - {fileID: 11400032}
+  shield: {fileID: 11400014}
+  burstCannon: {fileID: 11400050}
+  deathLaser: {fileID: 11400052}
   startPosition: {x: 50, y: 0, z: 0}
   stagingTime: 3
   stagingSize: .0500000007
@@ -1510,26 +1517,6 @@ MonoBehaviour:
   rechargeDelay: 1.5
   maxShield: 0
   shield: 0
---- !u!114 &11400020
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100034}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2cedf86e75aa7e47ba8376813cf1e63, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weapons:
-  - {fileID: 11400028}
-  - {fileID: 11400024}
-  - {fileID: 11400036}
-  - {fileID: 11400032}
-  - {fileID: 11400050}
-  - {fileID: 11400014}
-  - {fileID: 11400052}
-  canActivate: 1
 --- !u!114 &11400022
 MonoBehaviour:
   m_ObjectHideFlags: 1

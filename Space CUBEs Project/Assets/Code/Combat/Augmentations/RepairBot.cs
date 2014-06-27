@@ -30,7 +30,7 @@ public class RepairBot : Augmentation
 
     public override void Initialize(Player player)
     {
-        playerHealth = player.myHealth;
+        playerHealth = player.MyHealth;
         playerHealth.HealthUpdateEvent += OnHealthUpdate;
     }
 
