@@ -324,6 +324,7 @@ GameObject:
   - 114: {fileID: 11400018}
   - 111: {fileID: 11100000}
   - 114: {fileID: 11400016}
+  - 114: {fileID: 11400054}
   m_Layer: 10
   m_Name: Medic
   m_TagString: Untagged
@@ -1469,7 +1470,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebdfd969b8688d64ba4264aa4da37ef1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 0
+  log: 1
   timeScale: 1
   enemyClass: 9
   score: 0
@@ -1478,10 +1479,11 @@ MonoBehaviour:
   - 0
   - 0
   - 0
+  minionSpawner: {fileID: 11400054}
   stagingTime: 0
   stagingSize: 0
   stagingSpeed: 0
-  startPosition: {x: 0, y: 0, z: 0}
+  startPosition: {x: 80, y: 0, z: 0}
 --- !u!114 &11400018
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1499,10 +1501,10 @@ MonoBehaviour:
   HealthHit_Mat: {fileID: 2100000, guid: 714fd6fe39d4b7e4786c808fbccc8dd9, type: 2}
   healthHitMatTime: .5
   invincible: 0
-  maxHealth: 7500
+  maxHealth: 5000
   health: 0
-  rechargeSpeed: 20
-  rechargeDelay: 1.5
+  rechargeSpeed: 0
+  rechargeDelay: 0
   maxShield: 0
   shield: 0
 --- !u!114 &11400020
@@ -1899,6 +1901,28 @@ MonoBehaviour:
   chargeAudio: {fileID: 11400000, guid: 36c7908758ec51745aae772d696a66f5, type: 2}
   fireAudio: {fileID: 11400000, guid: b6f90c6844276084fbbd43b5f6c540a2, type: 2}
   retractClip: {fileID: 7400000, guid: 2dda63f5fb00ea64392c741cd4755f0c, type: 2}
+--- !u!114 &11400054
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d9d722683f333947a4ac972f6708f8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  log: 0
+  timeScale: 1
+  name: 
+  cooldownTime: 0
+  minionPrefab: {fileID: 11400010, guid: 65f3431ac18f52e439d1dcfd33584236, type: 2}
+  minionSpawnCount: 5
+  maxMinionCount: 15
+  minionSpawnDelay: 0
+  deployTime: 1
+  spawnPosition: {x: 0, y: 0, z: 0}
+  spawnRadius: {x: 20, y: 0, z: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

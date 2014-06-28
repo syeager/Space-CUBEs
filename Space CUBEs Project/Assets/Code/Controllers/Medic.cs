@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.06.25
-// Edited: 2014.06.25
+// Edited: 2014.06.26
 
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// 
+/// Boss for Nebula Forest. Summons minions and buffs them. Has a health stealing laser.
 /// </summary>
 public class Medic : Boss
 {
@@ -29,6 +29,12 @@ public class Medic : Boss
 
     #endregion
 
+    #region Weapon Fields
+
+    public MinionSpawner minionSpawner;
+
+    #endregion
+
     #region Staging Fields
 
     public float stagingTime;
@@ -39,13 +45,7 @@ public class Medic : Boss
 
     #region Public Fields
 
-    public Vector3 startPosition;     
-
-    #endregion
-
-    #region Private Fields
-
-    private List<Health> minions = new List<Health>(); 
+    public Vector3 startPosition;
 
     #endregion
 
@@ -96,6 +96,7 @@ public class Medic : Boss
 
     private void EnteringExit(Dictionary<string, object> info)
     {
+        myMotor.Stop();
         InitializeHealth();
         MyHealth.invincible = false;
     }
@@ -145,8 +146,8 @@ public class Medic : Boss
     {
         while (true)
         {
-
-            yield return null;
+            yield return minionSpawner.Activate(true);
+            yield return new WaitForSeconds(10f);
         }
     }
 
