@@ -1,9 +1,12 @@
-﻿// Steve Yeager
-// 1.11.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.01.11
+// Edited: 2014.06.26
 
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using UnityEditor;
 using UnityEngine;
 
 /// <summary>
@@ -74,8 +77,8 @@ public static class Utility
 
         for (int i = 0; i < files.Length; i++)
         {
-            Object obj = UnityEditor.AssetDatabase.LoadAssetAtPath(files[i], typeof(GameObject));
-            if (obj != null && UnityEditor.PrefabUtility.GetPrefabType(obj) == UnityEditor.PrefabType.Prefab)
+            Object obj = AssetDatabase.LoadAssetAtPath(files[i], typeof(GameObject));
+            if (obj != null && PrefabUtility.GetPrefabType(obj) == PrefabType.Prefab)
             {
                 T comp = (obj as GameObject).GetComponent<T>();
                 if (comp != null)
@@ -93,12 +96,12 @@ public static class Utility
 #if UNITY_EDITOR
     public static T LoadObject<T>(string path) where T : Component
     {
-        string[] files = System.IO.Directory.GetFiles(path);
+        string[] files = Directory.GetFiles(path);
 
         for (int i = 0; i < files.Length; i++)
         {
-            Object obj = UnityEditor.AssetDatabase.LoadAssetAtPath(files[i], typeof(GameObject));
-            if (obj != null && UnityEditor.PrefabUtility.GetPrefabType(obj) == UnityEditor.PrefabType.Prefab)
+            Object obj = AssetDatabase.LoadAssetAtPath(files[i], typeof(GameObject));
+            if (obj != null && PrefabUtility.GetPrefabType(obj) == PrefabType.Prefab)
             {
                 T comp = (obj as GameObject).GetComponent<T>();
                 if (comp != null)
@@ -127,7 +130,7 @@ public static class Utility
     {
         grid.Reposition();
         yield return new WaitForEndOfFrame();
-        
+
         scrollBar.value = value;
         scrollView.UpdateScrollbars();
     }
