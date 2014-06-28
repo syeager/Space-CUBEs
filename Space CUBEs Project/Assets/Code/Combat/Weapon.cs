@@ -55,16 +55,6 @@ public abstract class Weapon : MonoBase
 
     #endregion
 
-    #region MonoBehaviours
-
-    [UsedImplicitly]
-    private void Awake()
-    {
-        Initialize((Ship)GetComponent(typeof(Ship)));
-    }
-
-    #endregion
-
     #region Protected Methods
 
     protected IEnumerator Cooldown(bool empty = false, bool deActivate = true)

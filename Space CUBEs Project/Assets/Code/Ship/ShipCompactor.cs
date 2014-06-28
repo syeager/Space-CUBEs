@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2013.12.19
-// Edited: 2014.06.26
+// Edited: 2014.06.27
 
 using System;
 using System.Collections.Generic;
@@ -22,6 +22,9 @@ public class ShipCompactor : MonoBehaviour
 
     public Ship Compact(bool cleanUnused, params Type[] components)
     {
+        // add ship
+        var ship = (Player)GetComponent(typeof(Player));
+
         GameObject myGameObject = gameObject;
 
         var weapons = new List<Weapon>();
@@ -35,6 +38,7 @@ public class ShipCompactor : MonoBehaviour
             var weapon = (PlayerWeapon)meshFilters[i].GetComponent(typeof(PlayerWeapon));
             if (weapon != null)
             {
+                weapon.Initialize(ship);
                 weapons.Add(weapon.Bake(myGameObject));
             }
 
@@ -83,8 +87,7 @@ public class ShipCompactor : MonoBehaviour
             Resources.UnloadUnusedAssets();
         }
 
-        // add ship
-        var ship = (Player)GetComponent(typeof(Player));
+
         // bake weapons
         ship.Weapons.Bake(weapons);
         // bake augmentations

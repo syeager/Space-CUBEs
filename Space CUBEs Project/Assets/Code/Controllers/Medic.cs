@@ -32,6 +32,7 @@ public class Medic : Boss
     #region Weapon Fields
 
     public MinionSpawner minionSpawner;
+    public PlasmaMachineGun plasmaGun;
 
     #endregion
 
@@ -43,9 +44,23 @@ public class Medic : Boss
 
     #endregion
 
+    #region Stage 1 Fields
+
+    public float stage1DownTime; 
+
+    #endregion
+
     #region Public Fields
 
     public Vector3 startPosition;
+
+    #endregion
+
+    #region Movement Fields
+
+    private Job swayJob;
+    public float swaySpeed;
+    public float swayDistance;
 
     #endregion
 
@@ -68,6 +83,10 @@ public class Medic : Boss
 
         // stages
         NextStageEvent += OnStageIncrease;
+
+        // weapons
+        minionSpawner.Initialize(this);
+        plasmaGun.Initialize(this);
     }
 
     #endregion
@@ -106,6 +125,7 @@ public class Medic : Boss
     {
         MyHealth.invincible = true;
 
+        swayJob.Pause(true);
         StopAllCoroutines();
 
         stateMachine.SetUpdate(StagingUpdate());
@@ -138,16 +158,22 @@ public class Medic : Boss
 
     private void Stage1Enter(Dictionary<string, object> info)
     {
+        swayJob = new Job(Sway());
         stateMachine.SetUpdate(Stage1Update());
     }
 
 
     private IEnumerator Stage1Update()
     {
+        WaitForSeconds wait = new WaitForSeconds(stage1DownTime);
         while (true)
         {
             yield return minionSpawner.Activate(true);
-            yield return new WaitForSeconds(10f);
+            yield return wait;
+            yield return wait;
+            yield return plasmaGun.Activate(true);
+            yield return plasmaGun.Activate(false);
+            yield return wait;
         }
     }
 
@@ -174,9 +200,15 @@ public class Medic : Boss
 
     #region Private Methods
 
-    private IEnumerator ReleaseMinions(int count)
+    private IEnumerator Sway()
     {
-        yield return new WaitForSeconds(count);
+        float timer = 0f;
+        while (true)
+        {
+            timer += deltaTime;
+            myTransform.position = startPosition + swayDistance * (float)Math.Sin(timer * swaySpeed) * Vector3.up;
+            yield return null;
+        }
     }
 
     #endregion

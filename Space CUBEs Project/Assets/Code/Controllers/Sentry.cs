@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.04.07
-// Edited: 2014.06.25
+// Edited: 2014.06.27
 
 using System.Collections.Generic;
 using System.Collections;
@@ -73,6 +73,9 @@ public class Sentry : Enemy
         stateMachine.CreateState(MovingState, info => stateMachine.SetUpdate(MovingUpdate()), info => { });
         stateMachine.CreateState(AttackingState, AttackingEnter, info => { });
         stateMachine.CreateState(DyingState, DieEnter, info => { });
+
+        // weapons
+        laser.Initialize(this);
     }
 
     #endregion
