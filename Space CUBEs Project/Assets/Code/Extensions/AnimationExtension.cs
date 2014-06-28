@@ -31,9 +31,10 @@ public static class AnimationExtension
     /// <param name="animation">Animation component instance.</param>
     /// <param name="clip">Clip to play. If not in animation then it will be added.</param>
     /// <param name="reverse">Should the animation be played in reverse?</param>
-    public static void Play(this Animation animation, AnimationClip clip, bool reverse = false)
+    /// <returns>Animation clip in seconds.</returns>
+    public static float Play(this Animation animation, AnimationClip clip, bool reverse = false)
     {
-        if (clip == null) return;
+        if (clip == null) return 0f;
 
         string clipName = clip.name;
         if (animation.GetClip(clipName) == null)
@@ -43,5 +44,6 @@ public static class AnimationExtension
         animation[clipName].normalizedSpeed = reverse ? -1f : 1f;
         animation[clipName].normalizedTime = reverse ? 1f : 0f;
         animation.Play(clipName);
+        return clip.length;
     }
 }
