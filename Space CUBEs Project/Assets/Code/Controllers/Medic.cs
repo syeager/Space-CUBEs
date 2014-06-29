@@ -168,11 +168,20 @@ public class Medic : Boss
         WaitForSeconds wait = new WaitForSeconds(stage1DownTime);
         while (true)
         {
-            yield return minionSpawner.Activate(true);
+            yield return minionSpawner.Spawn();
             yield return wait;
             yield return wait;
             yield return plasmaGun.Activate(true);
             yield return plasmaGun.Activate(false);
+            yield return wait;
+            if (UnityEngine.Random.Range(0, 2) == 0)
+            {
+                yield return minionSpawner.BuffHealth();
+            }
+            else
+            {
+                yield return minionSpawner.BuffShield();
+            }
             yield return wait;
         }
     }

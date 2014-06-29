@@ -42,7 +42,7 @@ public class SharkMissiles_Weapon : PlayerWeapon
             firing = false;
             FireMissile(multiplier);
 
-            StartCoroutine(Cooldown(true));
+            StartCoroutine(CoolingDown(true));
             ActivatedEvent.Fire(this);
         }
 

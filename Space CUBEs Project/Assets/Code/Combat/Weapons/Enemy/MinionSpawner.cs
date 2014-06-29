@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.06.25
-// Edited: 2014.06.26
+// Edited: 2014.06.28
 
 using System.Collections;
 using System.Collections.Generic;
@@ -34,6 +34,18 @@ public class MinionSpawner : Weapon
     /// <summary>Max distance from spawnPosition.</summary>
     public Vector3 spawnRadius;
 
+    /// <summary>Time in seconds to buff and unbuff enemies.</summary>
+    public float buffingTime;
+
+    /// <summary>Health buff particles.</summary>
+    public ParticlePoolObject healthParticles;
+
+    /// <summary>Shield buff.</summary>
+    public float shieldBuff;
+
+    /// <summary>Shield buff particles.</summary>
+    public ParticlePoolObject shieldParticles;
+
     #endregion
 
     #region Private Fields
@@ -43,19 +55,24 @@ public class MinionSpawner : Weapon
 
     #endregion
 
-    #region Weapon Overrides
+    #region Public Methods
 
-    public Coroutine Activate(bool pressed)
+    public Coroutine Spawn()
     {
-        if (pressed)
-        {
-            int minionsToSpawn = Mathf.Clamp(maxMinionCount - minions.Count, 0, minionSpawnCount);
-            return StartCoroutine(Spawn(minionsToSpawn));
-        }
-        else
-        {
-            return null;
-        }
+        int minionsToSpawn = Mathf.Clamp(maxMinionCount - minions.Count, 0, minionSpawnCount);
+        return StartCoroutine(Spawn(minionsToSpawn));
+    }
+
+
+    public Coroutine BuffHealth()
+    {
+        return StartCoroutine(BuffingHealth());
+    }
+
+
+    public Coroutine BuffShield()
+    {
+        return StartCoroutine(BuffingShield());
     }
 
     #endregion
@@ -83,6 +100,39 @@ public class MinionSpawner : Weapon
         yield return new WaitForSeconds(deployTime);
     }
 
+
+    private IEnumerator BuffingHealth()
+    {
+        yield return new WaitForSeconds(buffingTime);
+        foreach (Health minion in minions)
+        {
+            minion.health = minion.maxHealth;
+            Prefabs.Pop(healthParticles, minion.transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
+        }
+        yield return new WaitForSeconds(buffingTime);
+    }
+
+
+    private IEnumerator BuffingShield()
+    {
+        yield return new WaitForSeconds(buffingTime);
+        foreach (ShieldHealth minion in minions)
+        {
+            minion.maxShield = shieldBuff;
+            minion.shield = shieldBuff;
+            Prefabs.Pop(shieldParticles, minion.transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
+        }
+        yield return new WaitForSeconds(buffingTime);
+        yield return new WaitForSeconds(buffingTime);
+        yield return new WaitForSeconds(buffingTime);
+        foreach (ShieldHealth minion in minions)
+        {
+            minion.maxShield = 0f;
+            minion.shield = 0f;
+            //Prefabs.Pop(shieldParticles, minion.transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
+        }
+    }
+
     #endregion
 
     #region Event Handlers
@@ -97,7 +147,7 @@ public class MinionSpawner : Weapon
         Health minion = (Health)sender;
         minions.Remove(minion);
         minion.DieEvent -= OnMinionDeath;
-    } 
+    }
 
     #endregion
 }

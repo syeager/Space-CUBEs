@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2013.12.01
-// Edited: 2014.06.16
+// Edited: 2014.06.28
 
 using System;
 using System.Collections;
@@ -55,9 +55,18 @@ public abstract class Weapon : MonoBase
 
     #endregion
 
+    #region Public Methods
+
+    public Coroutine CoolDown()
+    {
+        return StartCoroutine(CoolingDown());
+    }
+
+    #endregion
+
     #region Protected Methods
 
-    protected IEnumerator Cooldown(bool empty = false, bool deActivate = true)
+    protected IEnumerator CoolingDown(bool empty = false, bool deActivate = true)
     {
         if (empty) power = 0f;
         if (deActivate) canActivate = false;

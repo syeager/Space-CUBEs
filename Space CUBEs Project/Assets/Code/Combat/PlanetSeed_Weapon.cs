@@ -24,7 +24,7 @@ public class PlanetSeed_Weapon : PlayerWeapon
         if (!pressed) return null;
 
         Prefabs.Pop(starPrefab, myTransform.position + myTransform.TransformDirection(attackOffset), myTransform.rotation).GetComponent<Hitbox>().Initialize(myShip, damage * multiplier, time, myTransform.forward * speed);
-        StartCoroutine(Cooldown(true));
+        StartCoroutine(CoolingDown(true));
         ActivatedEvent.Fire(this);
 
         return null;

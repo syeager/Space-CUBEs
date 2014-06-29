@@ -6,7 +6,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using UnityEditor;
 using UnityEngine;
 
 /// <summary>
@@ -65,6 +64,18 @@ public static class Utility
         return RotateVector(vector, Quaternion.AngleAxis(angle, axis));
     }
 
+
+    /// <summary>
+    /// Caculate a random Vector3 between 2 vectors.
+    /// </summary>
+    /// <param name="bl">Small vector.</param>
+    /// <param name="tr">Big vector.</param>
+    /// <returns>Random Vector3.</returns>
+    public static Vector3 RandomVector3(Vector3 bl, Vector3 tr)
+    {
+        return new Vector3(Random.Range(bl.x, tr.x), Random.Range(bl.y, tr.y), Random.Range(bl.z, tr.z));
+    }
+
     #endregion
 
     #region Editor Methods
@@ -77,8 +88,8 @@ public static class Utility
 
         for (int i = 0; i < files.Length; i++)
         {
-            Object obj = AssetDatabase.LoadAssetAtPath(files[i], typeof(GameObject));
-            if (obj != null && PrefabUtility.GetPrefabType(obj) == PrefabType.Prefab)
+            Object obj = UnityEditor.AssetDatabase.LoadAssetAtPath(files[i], typeof(GameObject));
+            if (obj != null && UnityEditor.PrefabUtility.GetPrefabType(obj) == UnityEditor.PrefabType.Prefab)
             {
                 T comp = (obj as GameObject).GetComponent<T>();
                 if (comp != null)
@@ -100,8 +111,8 @@ public static class Utility
 
         for (int i = 0; i < files.Length; i++)
         {
-            Object obj = AssetDatabase.LoadAssetAtPath(files[i], typeof(GameObject));
-            if (obj != null && PrefabUtility.GetPrefabType(obj) == PrefabType.Prefab)
+            Object obj = UnityEditor.AssetDatabase.LoadAssetAtPath(files[i], typeof(GameObject));
+            if (obj != null && UnityEditor.PrefabUtility.GetPrefabType(obj) == UnityEditor.PrefabType.Prefab)
             {
                 T comp = (obj as GameObject).GetComponent<T>();
                 if (comp != null)

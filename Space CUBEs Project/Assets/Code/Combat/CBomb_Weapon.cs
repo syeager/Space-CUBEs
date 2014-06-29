@@ -27,7 +27,7 @@ public class CBomb_Weapon : PlayerWeapon
         // replace with pool
         GameObject bomb = Prefabs.Pop(bombPrefab, myTransform.position + myTransform.TransformDirection(attackOffset), myTransform.rotation);
         bomb.GetComponent<Hitbox>().Initialize(myShip, damage * multiplier, time, myTransform.forward * speed);
-        StartCoroutine(Cooldown(true));
+        StartCoroutine(CoolingDown(true));
 
         if (ActivatedEvent != null)
         {

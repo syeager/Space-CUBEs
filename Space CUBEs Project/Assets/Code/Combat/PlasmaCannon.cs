@@ -28,7 +28,7 @@ public class PlasmaCannon : PlayerWeapon
         else
         {
             StopAllCoroutines();
-            StartCoroutine(Cooldown(true, false));
+            StartCoroutine(CoolingDown(true, false));
         }
 
         return null;
@@ -61,7 +61,7 @@ public class PlasmaCannon : PlayerWeapon
             laser.GetComponent<Hitbox>().Initialize(myShip, damage * multiplier, myTransform.forward * speed);
 
             ActivatedEvent.Fire(this);
-            yield return StartCoroutine(Cooldown(true, false));
+            yield return StartCoroutine(CoolingDown(true, false));
         }
     }
 

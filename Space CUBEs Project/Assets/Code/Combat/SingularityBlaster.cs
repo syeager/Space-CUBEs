@@ -76,7 +76,7 @@ public class SingularityBlaster : PlayerWeapon
     {
         missile.Explode();
         missile = null;
-        StartCoroutine(Cooldown(true));
+        StartCoroutine(CoolingDown(true));
         ActivatedEvent.Fire(this);
     }
 

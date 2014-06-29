@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 1.1.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.01.01
+// Edited: 2014.06.28
 
 using UnityEngine;
 
@@ -13,6 +15,12 @@ public static class VectorExtension
 
     public static float Area(this Vector3 v)
     {
-        return v.x*v.y*v.z;
+        return v.x * v.y * v.z;
+    }
+
+
+    public static Vector3 To(this Vector3 from, Vector3 to)
+    {
+        return (to - from).normalized;
     }
 }

@@ -46,7 +46,7 @@ public class Playlist : MonoBehaviour
     #region MonoBehaviour Overrides
 
     [UsedImplicitly]
-    private void Start()
+    private void Awake()
     {
         maxLimit = myAudio.volume;
 

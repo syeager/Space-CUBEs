@@ -63,7 +63,7 @@ public class TechMissiles_Weapon : PlayerWeapon
         }
 
         ActivatedEvent.Fire(this);
-        StartCoroutine(Cooldown(true));
+        StartCoroutine(CoolingDown(true));
     }
 
     #endregion

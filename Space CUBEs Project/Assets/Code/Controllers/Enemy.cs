@@ -52,7 +52,7 @@ public class Enemy : Ship
         base.Awake();
 
         // references
-        poolObject = GetComponent<PoolObject>();
+        poolObject = (PoolObject)GetComponent(typeof(PoolObject));
     }
 
 

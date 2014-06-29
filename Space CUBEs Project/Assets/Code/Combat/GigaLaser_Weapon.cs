@@ -140,7 +140,7 @@ public class GigaLaser_Weapon : PlayerWeapon
         {
             ActivatedEvent(this, EventArgs.Empty);
         }
-        StartCoroutine(Cooldown(false, false));
+        StartCoroutine(CoolingDown(false, false));
     }
 
     #endregion

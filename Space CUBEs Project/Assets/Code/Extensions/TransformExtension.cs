@@ -47,4 +47,17 @@ public static class TransformExtension
             transform.localScale = Vector3.one;
         }
     }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="transform"></param>
+    /// <param name="target"></param>
+    /// <param name="speed"></param>
+    /// <returns></returns>
+    public static Quaternion RotateTowards(this Transform transform, Vector3 target, float speed, Vector3 up)
+    {
+        return Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(target - transform.position, up), speed);
+    }
 }
