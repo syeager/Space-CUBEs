@@ -875,7 +875,7 @@ public class GarageManager : MonoBase
         int i = 1;
         while (true)
         {
-            if (SaveData.Contains(custom + i, ConstructionGrid.BuildsFolder))
+            if (!SaveData.Contains(custom + i, ConstructionGrid.BuildsFolder))
             {
                 shipName.value = custom + i;
                 break;
