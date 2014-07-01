@@ -19,10 +19,10 @@ public class Pool
     /// <summary>GameObject to use for this pool.</summary>
     public PoolObject prefab;
 
-    /// <summary>Should the pool instantiate gameObjects when initialized?</summary>
+    /// <summary>How many gameObjects to created when initialized.</summary>
     public int preAllocate;
 
-    /// <summary>How many gameObjects to instantiate if preAllocating.</summary>
+    /// <summary>How many gameObjects to instantiate if when allocating.</summary>
     public int allocateBlock = 1;
 
     /// <summary>Should the pool be limited to a set number?</summary>

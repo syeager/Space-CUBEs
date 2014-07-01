@@ -3,6 +3,7 @@
 // Created: 2014.05.22
 // Edited: 2014.06.07
 
+using System.IO;
 using System.Linq;
 using Annotations;
 using UnityEditor;
@@ -33,6 +34,14 @@ public class KeyboardShortcuts : EditorWindow
         string path = Application.persistentDataPath.Replace(@"/", @"\") + @"\";
         Debug.Log(path);
         System.Diagnostics.Process.Start("explorer.exe", path);
+    }
+
+
+    [UsedImplicitly]
+    [MenuItem("Shortcuts/Create Folder &F", false, 2)]
+    private static void CreateFolder()
+    {
+        ProjectWindowUtil.CreateFolder();
     }
 
     #endregion

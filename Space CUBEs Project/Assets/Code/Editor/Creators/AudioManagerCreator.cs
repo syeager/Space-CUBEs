@@ -47,6 +47,7 @@ public class AudioManagerCreator : Creator<AudioManager>
 
     #region GUI Fields
 
+    private static AudioManagerCreator editor;
     private AudioManager audioManager;
     private SerializedObject poolManager;
     private GUIStyle imageButton;
@@ -75,6 +76,7 @@ public class AudioManagerCreator : Creator<AudioManager>
     [UsedImplicitly]
     private void OnEnable()
     {
+        editor = this;
         audioManager = target as AudioManager;
         poolManager = new SerializedObject(audioManager.poolManager);
 
@@ -82,6 +84,13 @@ public class AudioManagerCreator : Creator<AudioManager>
         {
             audioManager.Initialize();
         }
+    }
+
+
+    [UsedImplicitly]
+    private void OnDisable()
+    {
+        editor = null;
     }
 
 
@@ -303,6 +312,27 @@ public class AudioManagerCreator : Creator<AudioManager>
     public static bool ValidateCreatePlaylist()
     {
         return Selection.activeObject is AudioClip;
+    }
+
+
+    [MenuItem("Shortcuts/Mute Game %M", true, 150)]
+    public static bool ValidateMute()
+    {
+        return FindObjectOfType(typeof(AudioManager));
+    }
+
+
+    [MenuItem("Shortcuts/Mute Game %M", false, 150)]
+    public static void Mute()
+    {
+        AudioManager audioManager = (AudioManager)FindObjectOfType(typeof(AudioManager));
+        audioManager.setMasterMute(!audioManager.MasterVolume);
+        if (!Application.isPlaying) audioManager.Save();
+
+        if (editor != null)
+        {
+        }
+        editor.Repaint();
     }
 
     #endregion

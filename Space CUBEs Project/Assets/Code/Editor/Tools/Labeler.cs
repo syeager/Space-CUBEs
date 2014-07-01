@@ -40,8 +40,8 @@ public class Labeler : EditorWindow
     #region EditorWindow Overrides
 
     [UsedImplicitly]
-    [MenuItem("Tools/Manage Labels &L", false, 150)]
-    [MenuItem("Assets/Manage Labels &L")]
+    [MenuItem("Tools/Manage Labels %L", false, 150)]
+    [MenuItem("Assets/Manage Labels %L")]
     private static void Init()
     {
         var window = GetWindow<Labeler>("Labeler");

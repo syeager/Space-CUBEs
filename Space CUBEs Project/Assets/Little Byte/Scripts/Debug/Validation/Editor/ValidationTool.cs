@@ -1,7 +1,7 @@
 // Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.06.13
-// Edited: 2014.06.13
+// Edited: 2014.06.30
 
 using System;
 using System.Collections.Generic;
@@ -77,6 +77,12 @@ public class ValidationTool : EditorWindow
     [UsedImplicitly]
     private void OnGUI()
     {
+        // close
+        if (Event.current.isKey && Event.current.keyCode == KeyCode.Escape)
+        {
+            Close();
+        }
+
         // info
         GUILayout.BeginHorizontal();
         {
@@ -191,6 +197,7 @@ public class ValidationTool : EditorWindow
         Sort(Validate(FindObjectsOfType(typeof(Object))));
     }
 
+
     /// <summary>
     /// Run validation check.
     /// </summary>
@@ -209,6 +216,7 @@ public class ValidationTool : EditorWindow
             }
         }
 
+        ValidationAttribute.Clear();
         return objectExceptions;
     }
 

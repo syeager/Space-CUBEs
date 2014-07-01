@@ -1,7 +1,7 @@
 // Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.06.13
-// Edited: 2014.06.13
+// Edited: 2014.06.30
 
 using System;
 using System.Collections.Generic;
@@ -15,6 +15,8 @@ namespace LittleByte.Debug.Attributes
     /// </summary>
     public static class ValidateAttributes
     {
+        #region Public Methods
+
         /// <summary>
         /// Checks all attributes on an object.
         /// </summary>
@@ -29,18 +31,18 @@ namespace LittleByte.Debug.Attributes
             // fields
             foreach (FieldInfo fieldInfo in type.GetFields())
             {
-                foreach (ValidatingAttribute validatingAttrib in fieldInfo.GetCustomAttributes(true).Where(validatingAttrib => validatingAttrib is ValidatingAttribute))
+                foreach (ValidationAttribute attribute in fieldInfo.GetCustomAttributes(true).Where(validatingAttrib => validatingAttrib is ValidationAttribute))
                 {
                     if (log)
                     {
-                        Debugger.Log("Testing " + validatingAttrib.GetType().Name + " on: Class \'" + objInstance.GetType() +
+                        Debugger.Log("Testing " + attribute.GetType().Name + " on: Class \'" + objInstance.GetType() +
                                      "\' with Instance \'" + objInstance + "\' with a Field \'" + fieldInfo.Name +
                                      "\' which has value of \'" + fieldInfo.GetValue(objInstance) + "\'. ");
                     }
 
-                    if (!validatingAttrib.IsValidValue(fieldInfo.GetValue(objInstance)))
+                    if (!attribute.IsValidValue(fieldInfo.GetValue(objInstance)))
                     {
-                        exceptions.Add(new Exception(validatingAttrib.GetFieldErrorMessage(objInstance, fieldInfo)));
+                        exceptions.Add(new Exception(attribute.ErrorMessage));
                     }
                 }
             }
@@ -48,23 +50,39 @@ namespace LittleByte.Debug.Attributes
             // properties
             foreach (PropertyInfo propertyInfo in type.GetProperties())
             {
-                foreach (ValidatingAttribute validatingAttrib in propertyInfo.GetCustomAttributes(true).Where(validatingAttrib => validatingAttrib is ValidatingAttribute))
+                foreach (ValidationAttribute attribute in propertyInfo.GetCustomAttributes(true).Where(validatingAttrib => validatingAttrib is ValidationAttribute))
                 {
                     if (log)
                     {
-                        Debugger.Log("Testing " + validatingAttrib.GetType().Name + " on: Class \'" + objInstance.GetType() +
+                        Debugger.Log("Testing " + attribute.GetType().Name + " on: Class \'" + objInstance.GetType() +
                                      "\' with Instance \'" + objInstance + "\' with a Field \'" + propertyInfo.Name +
                                      "\' which has value of \'" + propertyInfo.GetValue(objInstance, null) + "\'. ");
                     }
 
-                    if (!validatingAttrib.IsValidValue(propertyInfo.GetValue(objInstance, null)))
+                    if (!attribute.IsValidValue(propertyInfo.GetValue(objInstance, null)))
                     {
-                        exceptions.Add(new Exception(validatingAttrib.GetFieldErrorMessage(objInstance, propertyInfo)));
+                        exceptions.Add(new Exception(attribute.ErrorMessage));
                     }
+                }
+            }
+
+            // class
+            foreach (ValidationAttribute attribute in type.GetCustomAttributes(true).Where(v => v is ValidationAttribute))
+            {
+                if (log)
+                {
+                    Debugger.Log("Testing " + attribute.GetType().Name + " on: Class \'" + objInstance.GetType() + "\'. ");
+                }
+
+                if (!attribute.IsValidValue(objInstance))
+                {
+                    exceptions.Add(new Exception(attribute.ErrorMessage));
                 }
             }
 
             return exceptions;
         }
+
+        #endregion
     }
 }

@@ -55,7 +55,7 @@ public class LevelCreator : EditorWindow
 
     #region EditorWindow Overrides
 
-    [MenuItem("CUBEs/Level Creator %l", true, 51)]
+    [MenuItem("CUBEs/Level Creator &L", true, 51)]
     public static bool Validate()
     {
         levelManager = FindObjectOfType<FormationLevelManager>();
@@ -63,7 +63,7 @@ public class LevelCreator : EditorWindow
     }
 
 
-    [MenuItem("CUBEs/Level Creator %l", false, 51)]
+    [MenuItem("CUBEs/Level Creator &L", false, 51)]
     public static void Init()
     {
         var window = GetWindow<LevelCreator>("Level Creator");
