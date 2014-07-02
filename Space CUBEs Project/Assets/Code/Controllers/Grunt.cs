@@ -45,6 +45,9 @@ public class Grunt : Enemy
         stateMachine.CreateState(SpawningState, SpawnEnter, info => { });
         stateMachine.CreateState(MovingState, info => stateMachine.SetUpdate(MovingUpdate()), info => { });
         stateMachine.CreateState(DyingState, DieEnter, info => { });
+
+        // weapons
+        laser.Initialize(this);
     }
 
     #endregion

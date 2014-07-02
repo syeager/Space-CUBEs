@@ -5,6 +5,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using GameSaveData;
 using LittleByte.Data;
 using LittleByte.Debug.Attributes;
@@ -13,6 +14,7 @@ using UnityClasses;
 //
 using UnityEngine;
 
+[InstanceCount]
 public class MASTERTEST : MonoBehaviour
 {
     public bool save;
@@ -20,10 +22,12 @@ public class MASTERTEST : MonoBehaviour
     public bool delete;
     public AudioPlayer clip;
 
+    public List<int> hello;
+
     [NotNull]
     public GameObject testGameObject;
 
-    [LittleByte.Debug.Attributes.Range(-5f, 5f)]
+    [LittleByte.Debug.Attributes.Range(-5, 5)]
     public int test = -1;
 
     public string build;

@@ -49,6 +49,7 @@ public class SwitchBlade : Boss
     #region Private Methods
 
     private Job moveJob;
+    private bool doorsOpen;
 
     #endregion
 
@@ -65,13 +66,6 @@ public class SwitchBlade : Boss
     public float shieldTime = 5f;
     public float shieldBuffer = 3f;
     private Job shieldJob;
-
-    #endregion
-
-    #region Stage 3
-
-    public float deathLaserTime;
-    public float deathLaserChargeTime;
 
     #endregion
 
@@ -95,6 +89,15 @@ public class SwitchBlade : Boss
 
         // stages
         NextStageEvent += OnStageIncrease;
+
+        // weapons
+        lasers[0].Initialize(this);
+        lasers[1].Initialize(this);
+        missileLaunchers[0].Initialize(this);
+        missileLaunchers[1].Initialize(this);
+        shield.Initialize(this);
+        burstCannon.Initialize(this);
+        deathLaser.Initialize(this);
     }
 
     #endregion
@@ -117,13 +120,14 @@ public class SwitchBlade : Boss
             yield return null;
         }
 
+        yield return BossHUD.Main.Initialize(this);
+
         stateMachine.SetState(Stage1State);
     }
 
 
     private void EnteringExit(Dictionary<string, object> info)
     {
-        InitializeHealth();
         MyHealth.invincible = false;
     }
 
@@ -134,6 +138,10 @@ public class SwitchBlade : Boss
         moveJob.Pause(true);
 
         DeactivateWeapons(false);
+        if (doorsOpen)
+        {
+            myAnimation.Play("Doors_Close");
+        }
 
         StopAllCoroutines();
 
@@ -153,7 +161,7 @@ public class SwitchBlade : Boss
         }
         myTransform.localScale = Vector3.one;
 
-        stateMachine.SetState(stage == 2 ? Stage2State : Stage3State);
+        stateMachine.SetState(CurrentStage == 2 ? Stage2State : Stage3State);
     }
 
 
@@ -314,7 +322,7 @@ public class SwitchBlade : Boss
 
         foreach (SidewinderMissileLauncher missileLauncher in missileLaunchers)
         {
-            missileLauncher.Activate(false);
+            missileLauncher.Activate(false, 0f);
             if (disable) missileLauncher.gameObject.SetActive(false);
         }
 
@@ -324,7 +332,7 @@ public class SwitchBlade : Boss
         burstCannon.Activate(false);
         if (disable) burstCannon.gameObject.SetActive(false);
 
-        deathLaser.Activate(false);
+        deathLaser.Activate(false, 0f);
         if (disable) deathLaser.gameObject.SetActive(false);
     }
 
@@ -400,11 +408,13 @@ public class SwitchBlade : Boss
 
         // deploy
         myAnimation.Play("Doors_Open");
+        doorsOpen = true;
         burstCannon.Activate(true);
         yield return new WaitForSeconds(bulletEmitterTime);
 
         // close
         myAnimation.Play("Doors_Close");
+        doorsOpen = false;
         burstCannon.Activate(false);
         yield return new WaitForSeconds(stage1SwitchTime);
         if (controlMovement)
@@ -437,11 +447,13 @@ public class SwitchBlade : Boss
         // open
         moveJob.Pause(true);
         myAnimation.Play("Doors_Open");
-        yield return deathLaser.Activate(true, deathLaserTime);
+        doorsOpen = true;
+        yield return deathLaser.Activate(true);
         yield return new WaitForSeconds(stage1SwitchTime);
 
         // close
         myAnimation.Play("Doors_Close");
+        doorsOpen = false;
         deathLaser.Activate(false);
         yield return new WaitForSeconds(stage1SwitchTime);
         moveJob.Pause(false);

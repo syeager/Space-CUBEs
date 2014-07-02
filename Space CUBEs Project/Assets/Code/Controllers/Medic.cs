@@ -78,6 +78,7 @@ public class Medic : Boss
         stateMachine.CreateState(EnteringState, EnteringEnter, EnteringExit);
         stateMachine.CreateState(StagingState, StagingEnter, StagingExit);
         stateMachine.CreateState(Stage1State, Stage1Enter, info => { });
+        stateMachine.CreateState(Stage2State, Stage2Enter, info => { });
 
         stateMachine.CreateState(DyingState, DyingEnter, i => { });
 
@@ -109,6 +110,8 @@ public class Medic : Boss
             yield return null;
         }
 
+        yield return BossHUD.Main.Initialize(this);
+
         stateMachine.SetState(Stage1State);
     }
 
@@ -116,7 +119,6 @@ public class Medic : Boss
     private void EnteringExit(Dictionary<string, object> info)
     {
         myMotor.Stop();
-        InitializeHealth();
         MyHealth.invincible = false;
     }
 
@@ -144,7 +146,7 @@ public class Medic : Boss
         }
         myTransform.localScale = Vector3.one;
 
-        stateMachine.SetState(stage == 2 ? Stage2State : Stage3State);
+        stateMachine.SetState(CurrentStage == 2 ? Stage2State : Stage3State);
     }
 
 
@@ -183,6 +185,23 @@ public class Medic : Boss
                 yield return minionSpawner.BuffShield();
             }
             yield return wait;
+        }
+    }
+
+
+    private void Stage2Enter(Dictionary<string, object> info)
+    {
+        swayJob.Pause(false);
+        stateMachine.SetUpdate(Stage2Update());
+    }
+
+
+    private IEnumerator Stage2Update()
+    {
+        while (true)
+        {
+
+            yield return null;
         }
     }
 

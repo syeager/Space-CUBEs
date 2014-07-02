@@ -46,6 +46,8 @@ public class Minion : Enemy
         stateMachine = new StateMachine(this, SpawningState);
         stateMachine.CreateState(SpawningState, SpawningEnter, info => { });
         stateMachine.CreateState(MovingState, info => stateMachine.SetUpdate(MovingUpdate()), info => { });
+        stateMachine.CreateState(AttackingState, info => stateMachine.SetUpdate(AttackingUpdate()), info => { });
+        stateMachine.CreateState(DyingState, DyingEnter, info => { });
     }
 
     #endregion
@@ -56,6 +58,7 @@ public class Minion : Enemy
     {
         MyHealth.maxShield = 0f;
         MyHealth.Initialize();
+        cannon.Initialize(this);
 
         stateMachine.SetState(MovingState);
     }
@@ -84,6 +87,12 @@ public class Minion : Enemy
             yield return cannon.Activate(true);
             yield return cannon.CoolDown();
         }
+    }
+
+
+    private void DyingEnter(Dictionary<string, object> info)
+    {
+        poolObject.Disable();
     }
 
     #endregion

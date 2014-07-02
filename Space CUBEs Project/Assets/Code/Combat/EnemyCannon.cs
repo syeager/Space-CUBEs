@@ -21,7 +21,7 @@ public class EnemyCannon : Weapon
 
     #region Weapon Overrides
 
-    public Coroutine Activate(bool pressed)
+    public override Coroutine Activate(bool pressed, float multiplier = 1f)
     {
         if (pressed)
         {

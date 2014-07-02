@@ -34,16 +34,19 @@ public class DeathLaser : Weapon
     /// <summary>Retracting animation.</summary>
     public AnimationClip retractClip;
 
+    /// <summary>Laser time in seconds.</summary>
+    public float fireTime;
+
     #endregion
 
     #region Weapon Overrides
 
-    public Coroutine Activate(bool pressed, float multiplier, float fireTime)
+    public Coroutine Activate(bool pressed)
     {
         if (pressed)
         {
             gameObject.SetActive(true);
-            return StartCoroutine(Fire(fireTime));
+            return StartCoroutine(Fire());
         }
         else if (gameObject.activeInHierarchy)
         {
@@ -59,7 +62,7 @@ public class DeathLaser : Weapon
 
     #region Private Methods
 
-    private IEnumerator Fire(float fireTime)
+    private IEnumerator Fire()
     {
         // deploy
         animation.Play(deployClip);

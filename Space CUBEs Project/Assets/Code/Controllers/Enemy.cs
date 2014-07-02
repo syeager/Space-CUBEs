@@ -30,7 +30,8 @@ public class Enemy : Ship
         Medic,
         Hacker,
         Twins,
-        Instagator
+        Instagator,
+        Minion
     }
 
     public Classes enemyClass;

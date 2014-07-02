@@ -1362,8 +1362,8 @@ MonoBehaviour:
   score: 0
   money: 0
   stages:
-  - 0
-  - 0
+  - 3600
+  - 1800
   - 0
   minionSpawner: {fileID: 11400054}
   plasmaGun: {fileID: 11400052}
@@ -1391,7 +1391,7 @@ MonoBehaviour:
   HealthHit_Mat: {fileID: 2100000, guid: 714fd6fe39d4b7e4786c808fbccc8dd9, type: 2}
   healthHitMatTime: .5
   invincible: 0
-  maxHealth: 5000
+  maxHealth: 5400
   health: 0
   rechargeSpeed: 0
   rechargeDelay: 0
@@ -1791,7 +1791,7 @@ MonoBehaviour:
   fireTime: 5
   laserSpeed: 50
   laserOffset: {x: 0, y: 0, z: 2}
-  targetSpeed: 1
+  targetSpeed: 1.5
 --- !u!114 &11400054
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1807,9 +1807,9 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
-  minionPrefab: {fileID: 11400010, guid: 65f3431ac18f52e439d1dcfd33584236, type: 2}
+  minionPrefab: {fileID: 11400000, guid: 6b8114e05b031b842bfb2a28c737b7f8, type: 2}
   minionSpawnCount: 5
-  maxMinionCount: 15
+  maxMinionCount: 10
   minionSpawnDelay: 0
   deployTime: 1
   spawnPosition: {x: 0, y: 0, z: 0}

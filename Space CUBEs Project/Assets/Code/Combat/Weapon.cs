@@ -59,7 +59,7 @@ public abstract class Weapon : MonoBase
 
     public Coroutine CoolDown()
     {
-        return StartCoroutine(CoolingDown());
+        return StartCoroutine(CoolingDown(true));
     }
 
     #endregion

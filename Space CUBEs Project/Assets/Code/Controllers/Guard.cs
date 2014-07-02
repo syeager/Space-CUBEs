@@ -66,6 +66,9 @@ public class Guard : Enemy
         stateMachine.CreateState(AttackingState, AttackEnter, info => { });
         stateMachine.CreateState(IdlingState, info => stateMachine.SetUpdate(IdlingUpdate()), info => { });
         stateMachine.CreateState(DyingState, DyingEnter, info => { });
+
+        // weapons
+        laser.Initialize(this);
     }
 
     #endregion

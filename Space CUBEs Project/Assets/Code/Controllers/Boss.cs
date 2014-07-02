@@ -16,15 +16,9 @@ public class Boss : Enemy
 
     #endregion
 
-    #region Protected Fields
+    #region Properties
 
-    protected int stage = 1;
-
-    #endregion
-
-    #region Private Fields
-
-    private UISprite healthBar;
+    public int CurrentStage { get; protected set; }
 
     #endregion
 
@@ -43,17 +37,8 @@ public class Boss : Enemy
     {
         base.Awake();
 
+        CurrentStage = 1;
         MyHealth.HealthUpdateEvent += OnHit;
-    }
-
-    #endregion
-
-    #region Protected Methods
-
-    protected void InitializeHealth()
-    {
-        healthBar = HUD.Main.bossHealth;
-        healthBar.gameObject.SetActive(true);
     }
 
     #endregion
@@ -69,14 +54,11 @@ public class Boss : Enemy
             return;
         }
 
-        // update HUD
-        healthBar.fillAmount = args.health / args.max;
-
         // next stage
-        if (args.health < stages[stage - 1])
+        if (args.health < stages[CurrentStage - 1])
         {
-            stage++;
-            NextStageEvent(this, new ValueArgs(stage));
+            CurrentStage++;
+            NextStageEvent(this, new ValueArgs(CurrentStage));
         }
     }
 
