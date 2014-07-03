@@ -1,6 +1,9 @@
-﻿// Steve Yeager
-// 5.22.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.05.22
+// Edited: 2014.07.02
 
+using System.Diagnostics;
 using System.IO;
 using Annotations;
 using UnityEditor;
@@ -18,7 +21,7 @@ public class ShowInExplorer : EditorWindow
     private static void Init()
     {
         string assetsPath = Application.dataPath.Remove(Application.dataPath.Length - 7) + @"\";
-        foreach (var selectedObject in Selection.objects)
+        foreach (Object selectedObject in Selection.objects)
         {
             bool openInsidesOfFolder = false;
             string path = (assetsPath + AssetDatabase.GetAssetPath(selectedObject)).Replace(@"/", @"\");
@@ -27,9 +30,9 @@ public class ShowInExplorer : EditorWindow
             {
                 openInsidesOfFolder = true;
             }
-            System.Diagnostics.Process.Start("explorer.exe", (openInsidesOfFolder ? "/root," : "/select,") + path);
+            Process.Start("explorer.exe", (openInsidesOfFolder ? "/root," : "/select,") + path);
         }
     }
-    
+
     #endregion
 }

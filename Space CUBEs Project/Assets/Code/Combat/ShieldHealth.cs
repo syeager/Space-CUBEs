@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 12.5.2013
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2013.12.05
+// Edited: 2014.07.02
 
 using System;
 using System.Collections;
@@ -28,7 +30,10 @@ public class ShieldHealth : Health
 
     #region Properties
 
-    public float strength { get { return health + shield; } }
+    public float Strength
+    {
+        get { return health + shield; }
+    }
 
     #endregion
 
@@ -37,7 +42,6 @@ public class ShieldHealth : Health
     public EventHandler<ShieldUpdateArgs> ShieldUpdateEvent;
 
     #endregion
-
 
     #region Monobehaviour Overrides
 
@@ -59,14 +63,29 @@ public class ShieldHealth : Health
     }
 
 
-    public override void RecieveHit(Ship sender, float damage)
+    public override float RecieveHit(Ship sender, float damage)
     {
-        if (invincible) return;
+        if (invincible) return 0f;
 
-        if (ApplyDamage(-damage))
+
+        float damageToHealth = damage - shield;
+        float damageDone = ChangeShield(-damage);
+        if (damageToHealth > 0f)
+        {
+            damageDone += ChangeHealth(-damageToHealth);
+            HitMat(HealthHit_Mat);
+        }
+        else
+        {
+            HitMat(shieldHitMat);
+        }
+
+        if (health <= 0f)
         {
             Killed(sender);
         }
+
+        return damageDone;
     }
 
 
@@ -92,14 +111,27 @@ public class ShieldHealth : Health
     }
 
 
+    /// <summary>
+    /// Either deal damage to or recover shield.
+    /// </summary>
+    /// <param name="amount">Amount to add to shield.</param>
+    /// <returns>Amount actually applied.</returns>
     public float ChangeShield(float amount)
     {
-        float extraDamage = shield + amount;
+        float amountAdded;
+        if (amount > 0)
+        {
+            amountAdded = shield + amount > maxShield ? maxShield - shield : amount;
+        }
+        else
+        {
+            amountAdded = shield + amount < 0f ? shield : amount;
+        }
         shield = Mathf.Clamp(shield + amount, 0f, maxShield);
 
         if (ShieldUpdateEvent != null)
         {
-            ShieldUpdateEvent(this, new ShieldUpdateArgs(maxShield, amount, shield));
+            ShieldUpdateEvent(this, new ShieldUpdateArgs(maxShield, amountAdded, shield));
         }
 
         if (amount < 0f)
@@ -108,44 +140,7 @@ public class ShieldHealth : Health
             rechargeJob = new Job(Recharge());
         }
 
-        if (extraDamage < 0f)
-        {
-            return extraDamage;
-        }
-        else
-        {
-            return 0f;
-        }
-    }
-
-
-    public bool ApplyDamage(float amount)
-    {
-        bool dead = false;
-        float extraDamage = ChangeShield(amount);
-        if (extraDamage < 0f)
-        {
-            dead = ChangeHealth(extraDamage);
-            HitMat(HealthHit_Mat);
-        }
-        else
-        {
-            HitMat(shieldHitMat);
-        }
-
-        return dead;
-    }
-
-
-    public void IncreaseHealth(float amount)
-    {
-        float extra = maxHealth - health;
-        
-        ChangeHealth(amount - extra);
-        if (extra > 0f)
-        {
-            ChangeShield(extra);
-        }
+        return amountAdded;
     }
 
     #endregion

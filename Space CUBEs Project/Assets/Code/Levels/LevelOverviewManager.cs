@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 1.5.2013
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.01.10
+// Edited: 2014.07.02
 
 using Annotations;
 using UnityEngine;
@@ -29,11 +31,19 @@ public class LevelOverviewManager : MonoBehaviour
 
     private float score;
     private float money;
-    private enum States { Score, Money, Rank, Awards, Done }
+
+    private enum States
+    {
+        Score,
+        Money,
+        Rank,
+        Awards,
+        Done
+    }
+
     private States state;
 
     #endregion
-
 
     #region MonoBehaviour Methods
 
@@ -162,25 +172,25 @@ public class LevelOverviewManager : MonoBehaviour
         //switch (state)
         //{
         //    case States.Score:
-                Score.text = String.Format("Score: {0:#,###0}", Mathf.RoundToInt((int)SceneManager.Main.levelData["Score"]));
-            //    break;
-            //case States.Money:
-                Money.text = String.Format("Money: {0:#,###0}", Mathf.RoundToInt((int)SceneManager.Main.levelData["Money"]));
-            //    break;
-            //case States.Rank:
-                Rank.text = "Rank: " + ((char)SceneManager.Main.levelData["Rank"]).ToString();
-            //    break;
-            //case States.Awards:
-                int[] IDs = (int[])SceneManager.Main.levelData["Awards"];
-                for (int i = 0; i < IDs.Length; i++)
-                {
-                    string grade = " ";
-                    for (int j = 0; j < CUBE.allCUBES[IDs[i]].rarity; j++)
-                    {
-                        grade += "★";
-                    }
-                    Awards[i].text = CUBE.allCUBES[IDs[i]].name + grade;
-                }
+        Score.text = String.Format("Score: {0:#,###0}", Mathf.RoundToInt((int)SceneManager.Main.levelData["Score"]));
+        //    break;
+        //case States.Money:
+        Money.text = String.Format("Money: {0:#,###0}", Mathf.RoundToInt((int)SceneManager.Main.levelData["Money"]));
+        //    break;
+        //case States.Rank:
+        Rank.text = "Rank: " + ((char)SceneManager.Main.levelData["Rank"]).ToString();
+        //    break;
+        //case States.Awards:
+        int[] IDs = (int[])SceneManager.Main.levelData["Awards"];
+        for (int i = 0; i < IDs.Length; i++)
+        {
+            string grade = " ";
+            for (int j = 0; j < CUBE.allCUBES[IDs[i]].rarity; j++)
+            {
+                grade += "★";
+            }
+            Awards[i].text = CUBE.allCUBES[IDs[i]].name + grade;
+        }
         //        break;
         //}
 

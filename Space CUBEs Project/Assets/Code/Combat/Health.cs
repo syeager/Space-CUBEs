@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 12.5.2013
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2013.12.05
+// Edited: 2014.07.02
 
 using System;
 using System.Collections;
@@ -22,8 +24,10 @@ public class Health : MonoBase
 
     /// <summary>Material when health is taken away.</summary>
     public Material HealthHit_Mat;
+
     /// <summary>Seconds for the hit material.</summary>
     public float healthHitMatTime = 0.5f;
+
     /// <summary>Can recieve damage?</summary>
     public bool invincible;
 
@@ -33,6 +37,7 @@ public class Health : MonoBase
 
     /// <summary>Changes material from normal to hit and back.</summary>
     protected Job changeMat;
+
     /// <summary>Material when gameobject is created.</summary>
     protected Material Normal_Mat;
 
@@ -41,9 +46,10 @@ public class Health : MonoBase
     #region Properties
 
     /// <summary>Max health allowed.</summary>
-    public float maxHealth;// { get; protected set; }
+    public float maxHealth; // { get; protected set; }
+
     /// <summary>Current health.</summary>
-    public float health;// { get; protected set; }
+    public float health; // { get; protected set; }
 
     #endregion
 
@@ -51,11 +57,11 @@ public class Health : MonoBase
 
     /// <summary>Sent when health is changed.</summary>
     public EventHandler<HealthUpdateArgs> HealthUpdateEvent;
+
     /// <summary>Sent when health reaches 0.</summary>
     public EventHandler<DieArgs> DieEvent;
 
     #endregion
-
 
     #region Monobehaviour Overrides
 
@@ -125,20 +131,23 @@ public class Health : MonoBase
     /// </summary>
     /// <param name="sender">Who shot the weapon.</param>
     /// <param name="damage">HitInfo from weapon.</param>
-    public virtual void RecieveHit(Ship sender, float damage)
+    public virtual float RecieveHit(Ship sender, float damage)
     {
-        if (invincible) return;
+        if (invincible) return 0f;
 
-        if (ChangeHealth(-damage))
+        float damageDone = ChangeHealth(-damage);
+        if (health <= 0f)
         {
             Killed(sender);
-            return;
+            return damageDone;
         }
 
         if (HealthHit_Mat != null)
         {
             HitMat(HealthHit_Mat);
         }
+
+        return damageDone;
     }
 
 
@@ -147,15 +156,25 @@ public class Health : MonoBase
     /// </summary>
     /// <param name="amount">Amount of health added.</param>
     /// <returns>True, if health is 0.</returns>
-    public bool ChangeHealth(float amount)
+    public float ChangeHealth(float amount)
     {
+        float amountAdded;
+        if (amount > 0)
+        {
+            amountAdded = health + amount > maxHealth ? maxHealth - health : amount;
+        }
+        else
+        {
+            amountAdded = health + amount < 0f ? health : amount;
+        }
         health = Mathf.Clamp(health + amount, 0f, maxHealth);
+
         if (HealthUpdateEvent != null)
         {
-            HealthUpdateEvent(this, new HealthUpdateArgs(maxHealth, amount, health));
+            HealthUpdateEvent(this, new HealthUpdateArgs(maxHealth, amountAdded, health));
         }
 
-        return health == 0f;
+        return amountAdded;
     }
 
     #endregion

@@ -242,7 +242,7 @@ MonoBehaviour:
   health: 0
   rechargeSpeed: 20
   rechargeDelay: 3
-  maxShield: 10
+  maxShield: 50
   shield: 0
 --- !u!114 &11400010
 MonoBehaviour:
@@ -268,6 +268,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 1
   timeScale: 1
+  myTransform: {fileID: 0}
+  myPoolObject: {fileID: 0}
   continuous: 1
   hitNumber: 0
 --- !u!114 &11400014

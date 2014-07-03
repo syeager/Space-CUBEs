@@ -13,6 +13,7 @@ public class PlasmaLaser : Hitbox, IBlackHoleListener
 {
     #region References
 
+    [SerializeField, HideInInspector]
     private Rigidbody myRigidbody;
 
     #endregion
@@ -33,9 +34,9 @@ public class PlasmaLaser : Hitbox, IBlackHoleListener
 
     #region MonoBehaviour Overrides
 
-    protected override void Awake()
+    protected override void Reset()
     {
-        base.Awake();
+        base.Reset();
         myRigidbody = rigidbody;
     }
 

@@ -46,11 +46,13 @@ public class PlasmaMachineGun : Weapon
             gameObject.SetActive(true);
             return StartCoroutine(Fire());
         }
-        else
+        else if (gameObject.activeInHierarchy)
         {
             StopAllCoroutines();
             return StartCoroutine(Retract());
         }
+
+        return null;
     }
 
     #endregion

@@ -334,8 +334,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 0
   timeScale: 1
+  myTransform: {fileID: 15967078}
+  myPoolObject: {fileID: 15967079}
   continuous: 0
   hitNumber: 1
+  myRigidbody: {fileID: 15967082}
   pullSpeed: 1
 --- !u!65 &15967081
 BoxCollider:
@@ -705,8 +708,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 0
   timeScale: 1
+  myTransform: {fileID: 38989474}
+  myPoolObject: {fileID: 38989475}
   continuous: 0
   hitNumber: 1
+  myRigidbody: {fileID: 38989478}
   pullSpeed: 1
 --- !u!65 &38989477
 BoxCollider:
@@ -1588,8 +1594,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 0
   timeScale: 1
+  myTransform: {fileID: 130277287}
+  myPoolObject: {fileID: 130277288}
   continuous: 0
   hitNumber: 1
+  myRigidbody: {fileID: 130277291}
   pullSpeed: 1
 --- !u!65 &130277290
 BoxCollider:
@@ -1780,6 +1789,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 1
   timeScale: 1
+  myTransform: {fileID: 0}
+  myPoolObject: {fileID: 0}
   continuous: 1
   hitNumber: 0
 --- !u!65 &161592429
@@ -2075,7 +2086,9 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 296648924}
+  - {fileID: 708413005}
   m_Father: {fileID: 0}
 --- !u!1 &182977525
 GameObject:
@@ -2341,7 +2354,7 @@ MonoBehaviour:
   health: 0
   rechargeSpeed: 20
   rechargeDelay: 3
-  maxShield: 10
+  maxShield: 50
   shield: 0
 --- !u!23 &185794465
 Renderer:
@@ -2669,11 +2682,11 @@ MonoBehaviour:
   HealthHit_Mat: {fileID: 2100000, guid: 714fd6fe39d4b7e4786c808fbccc8dd9, type: 2}
   healthHitMatTime: .5
   invincible: 0
-  maxHealth: 100
+  maxHealth: 50
   health: 0
-  rechargeSpeed: 20
-  rechargeDelay: 3
-  maxShield: 10
+  rechargeSpeed: 0
+  rechargeDelay: 0
+  maxShield: 0
   shield: 0
 --- !u!114 &237798905
 MonoBehaviour:
@@ -2778,8 +2791,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 0
   timeScale: 1
+  myTransform: {fileID: 255922878}
+  myPoolObject: {fileID: 255922872}
   continuous: 0
   hitNumber: 1
+  myRigidbody: {fileID: 255922875}
   pullSpeed: 1
 --- !u!65 &255922874
 BoxCollider:
@@ -3262,7 +3278,7 @@ Transform:
   - {fileID: 351614524}
   - {fileID: 1244242914}
   - {fileID: 1615264243}
-  m_Father: {fileID: 1887452256}
+  m_Father: {fileID: 176128823}
 --- !u!1 &307284056
 GameObject:
   m_ObjectHideFlags: 0
@@ -3308,6 +3324,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 1
   timeScale: 1
+  myTransform: {fileID: 0}
+  myPoolObject: {fileID: 0}
   continuous: 1
   hitNumber: 0
 --- !u!65 &307284059
@@ -3586,7 +3604,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 375463472}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 489.181396, y: 306, z: 0}
+  m_LocalPosition: {x: 408, y: 306, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 658625856}
@@ -3627,7 +3645,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 173, y: 108, z: 0}
+  m_Size: {x: 144, y: 108, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &375463476
 MonoBehaviour:
@@ -3659,13 +3677,13 @@ MonoBehaviour:
   updateAnchors: 0
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 173
+  mWidth: 144
   mHeight: 108
   mDepth: 21
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 1.60185182
+  aspectRatio: 1.33333337
 --- !u!114 &393436502
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3752,6 +3770,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 1
   timeScale: 1
+  myTransform: {fileID: 0}
+  myPoolObject: {fileID: 0}
   continuous: 1
   hitNumber: 0
 --- !u!65 &404717569
@@ -3875,8 +3895,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 0
   timeScale: 1
+  myTransform: {fileID: 422089771}
+  myPoolObject: {fileID: 422089765}
   continuous: 0
   hitNumber: 1
+  myRigidbody: {fileID: 422089768}
   pullSpeed: 1
 --- !u!65 &422089767
 BoxCollider:
@@ -4033,13 +4056,13 @@ MonoBehaviour:
   updateAnchors: 0
   mColor: {r: 1, g: 0, b: 0, a: .784313738}
   mPivot: 4
-  mWidth: 149
+  mWidth: 124
   mHeight: 72
   mDepth: 7
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 2.06944442
+  aspectRatio: 1.72222221
   mType: 3
   mFillDirection: 1
   mFillAmount: 1
@@ -4337,8 +4360,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 0
   timeScale: 1
+  myTransform: {fileID: 473515894}
+  myPoolObject: {fileID: 473515895}
   continuous: 0
   hitNumber: 1
+  myRigidbody: {fileID: 473515898}
   pullSpeed: 1
 --- !u!65 &473515897
 BoxCollider:
@@ -4606,7 +4632,7 @@ MonoBehaviour:
   health: 0
   rechargeSpeed: 20
   rechargeDelay: 3
-  maxShield: 10
+  maxShield: 50
   shield: 0
 --- !u!23 &501673506
 Renderer:
@@ -5124,11 +5150,11 @@ MonoBehaviour:
   HealthHit_Mat: {fileID: 2100000, guid: 714fd6fe39d4b7e4786c808fbccc8dd9, type: 2}
   healthHitMatTime: .5
   invincible: 0
-  maxHealth: 100
+  maxHealth: 50
   health: 0
-  rechargeSpeed: 20
-  rechargeDelay: 3
-  maxShield: 10
+  rechargeSpeed: 0
+  rechargeDelay: 0
+  maxShield: 0
   shield: 0
 --- !u!1 &537587076
 GameObject:
@@ -5592,11 +5618,11 @@ MonoBehaviour:
   HealthHit_Mat: {fileID: 2100000, guid: 714fd6fe39d4b7e4786c808fbccc8dd9, type: 2}
   healthHitMatTime: .5
   invincible: 0
-  maxHealth: 100
+  maxHealth: 50
   health: 0
-  rechargeSpeed: 20
-  rechargeDelay: 3
-  maxShield: 10
+  rechargeSpeed: 0
+  rechargeDelay: 0
+  maxShield: 0
   shield: 0
 --- !u!1 &569956244
 GameObject:
@@ -5643,6 +5669,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 1
   timeScale: 1
+  myTransform: {fileID: 0}
+  myPoolObject: {fileID: 0}
   continuous: 1
   hitNumber: 0
 --- !u!65 &569956247
@@ -5820,8 +5848,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 0
   timeScale: 1
+  myTransform: {fileID: 587028133}
+  myPoolObject: {fileID: 587028134}
   continuous: 0
   hitNumber: 1
+  myRigidbody: {fileID: 587028137}
   pullSpeed: 1
 --- !u!65 &587028136
 BoxCollider:
@@ -5940,8 +5971,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 0
   timeScale: 1
+  myTransform: {fileID: 595561216}
+  myPoolObject: {fileID: 595561217}
   continuous: 0
   hitNumber: 1
+  myRigidbody: {fileID: 595561220}
   pullSpeed: 1
 --- !u!65 &595561219
 BoxCollider:
@@ -6353,7 +6387,7 @@ MonoBehaviour:
   health: 0
   rechargeSpeed: 20
   rechargeDelay: 3
-  maxShield: 10
+  maxShield: 50
   shield: 0
 --- !u!23 &615295980
 Renderer:
@@ -6983,8 +7017,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 0
   timeScale: 1
+  myTransform: {fileID: 672086728}
+  myPoolObject: {fileID: 672086729}
   continuous: 0
   hitNumber: 1
+  myRigidbody: {fileID: 672086732}
   pullSpeed: 1
 --- !u!65 &672086731
 BoxCollider:
@@ -7112,7 +7149,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 686265113}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -501.149414, y: -288, z: 0}
+  m_LocalPosition: {x: -417.600006, y: -288, z: 0}
   m_LocalScale: {x: 1.00007999, y: 1.00007999, z: 1.00007999}
   m_Children:
   - {fileID: 1701126472}
@@ -7164,13 +7201,13 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 150
+  mWidth: 125
   mHeight: 144
   mDepth: 10
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 1.04166663
+  aspectRatio: .868055582
 --- !u!65 &686265117
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7437,7 +7474,7 @@ MonoBehaviour:
   updateAnchors: 0
   mColor: {r: 1, g: 0, b: 0, a: 1}
   mPivot: 4
-  mWidth: 18
+  mWidth: 16
   mHeight: 30
   mDepth: 8
   autoResizeBoxCollider: 0
@@ -7613,7 +7650,7 @@ Transform:
   - {fileID: 587028133}
   - {fileID: 2063085548}
   - {fileID: 1973698510}
-  m_Father: {fileID: 1887452256}
+  m_Father: {fileID: 176128823}
 --- !u!114 &715917131
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8287,7 +8324,7 @@ MonoBehaviour:
   log: 1
   timeScale: 1
   logWarning: 0
-  currentBuild: Avenger
+  currentBuild: Berserker
 --- !u!114 &824695457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8695,8 +8732,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 0
   timeScale: 1
+  myTransform: {fileID: 836543236}
+  myPoolObject: {fileID: 836543237}
   continuous: 0
   hitNumber: 1
+  myRigidbody: {fileID: 836543240}
   pullSpeed: 1
 --- !u!65 &836543239
 BoxCollider:
@@ -8976,7 +9016,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 844111788}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -138.449997, y: -36.0000038, z: 0}
+  m_LocalPosition: {x: -115.375, y: -36.0000038, z: 0}
   m_LocalScale: {x: 1.00001299, y: 1.00001299, z: 1.00001299}
   m_Children:
   - {fileID: 1811024393}
@@ -9033,7 +9073,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 149, y: 72, z: 0}
+  m_Size: {x: 124, y: 72, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &844111793
 MonoBehaviour:
@@ -9065,13 +9105,13 @@ MonoBehaviour:
   updateAnchors: 0
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 149
+  mWidth: 124
   mHeight: 72
   mDepth: 6
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 2.06944442
+  aspectRatio: 1.72222221
   mType: 1
   mFillDirection: 4
   mFillAmount: 1
@@ -9230,13 +9270,13 @@ MonoBehaviour:
   updateAnchors: 0
   mColor: {r: 1, g: 0, b: 0, a: .784313738}
   mPivot: 4
-  mWidth: 149
+  mWidth: 124
   mHeight: 72
   mDepth: 7
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 2.06944442
+  aspectRatio: 1.72222221
   mType: 3
   mFillDirection: 1
   mFillAmount: 1
@@ -9444,7 +9484,7 @@ MonoBehaviour:
   updateAnchors: 0
   mColor: {r: .0344827175, g: 1, b: 0, a: 1}
   mPivot: 4
-  mWidth: 18
+  mWidth: 16
   mHeight: 30
   mDepth: 8
   autoResizeBoxCollider: 0
@@ -9898,6 +9938,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 1
   timeScale: 1
+  myTransform: {fileID: 0}
+  myPoolObject: {fileID: 0}
   continuous: 1
   hitNumber: 0
 --- !u!65 &954835998
@@ -10745,7 +10787,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1063339091}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -138.449997, y: 35.9999886, z: 0}
+  m_LocalPosition: {x: -115.375, y: 35.9999886, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1755724714}
@@ -10802,7 +10844,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 149, y: 72, z: 0}
+  m_Size: {x: 124, y: 72, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1063339096
 MonoBehaviour:
@@ -10834,13 +10876,13 @@ MonoBehaviour:
   updateAnchors: 0
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 149
+  mWidth: 124
   mHeight: 72
   mDepth: 6
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 2.06944442
+  aspectRatio: 1.72222221
   mType: 1
   mFillDirection: 4
   mFillAmount: 1
@@ -11111,8 +11153,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 0
   timeScale: 1
+  myTransform: {fileID: 1129193088}
+  myPoolObject: {fileID: 1129193089}
   continuous: 0
   hitNumber: 1
+  myRigidbody: {fileID: 1129193092}
   pullSpeed: 1
 --- !u!65 &1129193091
 BoxCollider:
@@ -11276,6 +11321,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 1
   timeScale: 1
+  myTransform: {fileID: 0}
+  myPoolObject: {fileID: 0}
   continuous: 1
   hitNumber: 0
 --- !u!65 &1134889998
@@ -11394,7 +11441,7 @@ MonoBehaviour:
   updateAnchors: 0
   mColor: {r: 0, g: 1, b: 0, a: 1}
   mPivot: 4
-  mWidth: 18
+  mWidth: 16
   mHeight: 30
   mDepth: 8
   autoResizeBoxCollider: 0
@@ -11507,7 +11554,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1160269902}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -134.381561, y: -289.799988, z: 0}
+  m_LocalPosition: {x: -111.839989, y: -289.799988, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 658625856}
@@ -11541,13 +11588,13 @@ MonoBehaviour:
   updateAnchors: 0
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 565
+  mWidth: 471
   mHeight: 140
   mDepth: 13
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 4.03571415
+  aspectRatio: 3.36428571
   mType: 3
   mFillDirection: 3
   mFillAmount: 1
@@ -11574,7 +11621,43 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cull: 1
   cullDelay: 10
-  poolList: []
+  poolList:
+  - prefab: {fileID: 11400000, guid: e6ee90c6d98d0a449b1727cb1c1a0511, type: 2}
+    preAllocate: 0
+    allocateBlock: 5
+    hardLimit: 0
+    limit: 0
+    cull: 1
+    cullLimit: 20
+    parent: {fileID: 351614524}
+    poolManager: {fileID: 1166698793}
+  - prefab: {fileID: 11400010, guid: 7e93ca87700013f49b9d0022a0d91a63, type: 2}
+    preAllocate: 0
+    allocateBlock: 2
+    hardLimit: 0
+    limit: 0
+    cull: 1
+    cullLimit: 5
+    parent: {fileID: 1244242914}
+    poolManager: {fileID: 1166698793}
+  - prefab: {fileID: 11400010, guid: 65f3431ac18f52e439d1dcfd33584236, type: 2}
+    preAllocate: 0
+    allocateBlock: 2
+    hardLimit: 0
+    limit: 0
+    cull: 1
+    cullLimit: 7
+    parent: {fileID: 1615264243}
+    poolManager: {fileID: 1166698793}
+  - prefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
+    preAllocate: 0
+    allocateBlock: 5
+    hardLimit: 0
+    limit: 0
+    cull: 1
+    cullLimit: 20
+    parent: {fileID: 708413005}
+    poolManager: {fileID: 1166698793}
   parent: {fileID: 0}
 --- !u!114 &1180331399
 MonoBehaviour:
@@ -11852,11 +11935,11 @@ MonoBehaviour:
   HealthHit_Mat: {fileID: 2100000, guid: 714fd6fe39d4b7e4786c808fbccc8dd9, type: 2}
   healthHitMatTime: .5
   invincible: 0
-  maxHealth: 100
+  maxHealth: 50
   health: 0
-  rechargeSpeed: 20
-  rechargeDelay: 3
-  maxShield: 10
+  rechargeSpeed: 0
+  rechargeDelay: 0
+  maxShield: 0
   shield: 0
 --- !u!1001 &1215293823
 Prefab:
@@ -12728,11 +12811,11 @@ MonoBehaviour:
   HealthHit_Mat: {fileID: 2100000, guid: 714fd6fe39d4b7e4786c808fbccc8dd9, type: 2}
   healthHitMatTime: .5
   invincible: 0
-  maxHealth: 100
+  maxHealth: 50
   health: 0
-  rechargeSpeed: 20
-  rechargeDelay: 3
-  maxShield: 10
+  rechargeSpeed: 0
+  rechargeDelay: 0
+  maxShield: 0
   shield: 0
 --- !u!114 &1271540212
 MonoBehaviour:
@@ -13019,7 +13102,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1347304326}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -133.805786, y: -299.160004, z: 0}
+  m_LocalPosition: {x: -111.359985, y: -299.160004, z: 0}
   m_LocalScale: {x: 1.00007999, y: 1.00007999, z: 1.00007999}
   m_Children: []
   m_Father: {fileID: 658625856}
@@ -13053,13 +13136,13 @@ MonoBehaviour:
   updateAnchors: 0
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 497
+  mWidth: 415
   mHeight: 122
   mDepth: 13
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 4.07377052
+  aspectRatio: 3.40163946
   mType: 3
   mFillDirection: 3
   mFillAmount: 1
@@ -13142,7 +13225,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1363906079}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 138.449966, y: -36.0000038, z: 0}
+  m_LocalPosition: {x: 115.375023, y: -36.0000038, z: 0}
   m_LocalScale: {x: .999935031, y: .999935031, z: .999935031}
   m_Children:
   - {fileID: 452562788}
@@ -13199,7 +13282,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 149, y: 72, z: 0}
+  m_Size: {x: 124, y: 72, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1363906084
 MonoBehaviour:
@@ -13231,13 +13314,13 @@ MonoBehaviour:
   updateAnchors: 0
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 149
+  mWidth: 124
   mHeight: 72
   mDepth: 6
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 2.06944442
+  aspectRatio: 1.72222221
   mType: 1
   mFillDirection: 4
   mFillAmount: 1
@@ -13735,7 +13818,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1425579257}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 362.511139, y: -288, z: 0}
+  m_LocalPosition: {x: 302.399994, y: -288, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1695574997}
@@ -13774,13 +13857,13 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 426
+  mWidth: 355
   mHeight: 144
   mDepth: 5
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 2.95833325
+  aspectRatio: 2.46527767
 --- !u!1 &1425911521
 GameObject:
   m_ObjectHideFlags: 0
@@ -13839,8 +13922,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 0
   timeScale: 1
+  myTransform: {fileID: 1425911522}
+  myPoolObject: {fileID: 1425911523}
   continuous: 0
   hitNumber: 1
+  myRigidbody: {fileID: 1425911526}
   pullSpeed: 1
 --- !u!65 &1425911525
 BoxCollider:
@@ -14070,7 +14156,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1459924920}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.226287842, y: -288, z: 0}
+  m_LocalPosition: {x: 0, y: -288, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 658625856}
@@ -14104,13 +14190,13 @@ MonoBehaviour:
   updateAnchors: 0
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 1152
+  mWidth: 960
   mHeight: 144
   mDepth: 0
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 8
+  aspectRatio: 6.66666651
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
@@ -14528,8 +14614,6 @@ MonoBehaviour:
   bulletEmitterTime: 5
   shieldTime: 20
   shieldBuffer: 5
-  deathLaserTime: 4
-  deathLaserChargeTime: 1.5
 --- !u!114 &1474486120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14893,7 +14977,7 @@ MonoBehaviour:
   health: 0
   rechargeSpeed: 20
   rechargeDelay: 3
-  maxShield: 10
+  maxShield: 50
   shield: 0
 --- !u!23 &1510592174
 Renderer:
@@ -15009,7 +15093,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1522588396}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 138.449966, y: 35.9999886, z: 0}
+  m_LocalPosition: {x: 115.375023, y: 35.9999886, z: 0}
   m_LocalScale: {x: .999935031, y: .999935031, z: .999935031}
   m_Children:
   - {fileID: 1628038777}
@@ -15066,7 +15150,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 149, y: 72, z: 0}
+  m_Size: {x: 124, y: 72, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1522588401
 MonoBehaviour:
@@ -15098,13 +15182,13 @@ MonoBehaviour:
   updateAnchors: 0
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 149
+  mWidth: 124
   mHeight: 72
   mDepth: 6
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 2.06944442
+  aspectRatio: 1.72222221
   mType: 1
   mFillDirection: 4
   mFillAmount: 1
@@ -15432,8 +15516,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 0
   timeScale: 1
+  myTransform: {fileID: 1580955129}
+  myPoolObject: {fileID: 1580955130}
   continuous: 0
   hitNumber: 1
+  myRigidbody: {fileID: 1580955133}
   pullSpeed: 1
 --- !u!65 &1580955132
 BoxCollider:
@@ -15751,13 +15838,13 @@ MonoBehaviour:
   updateAnchors: 0
   mColor: {r: 1, g: 1, b: 1, a: .784313738}
   mPivot: 4
-  mWidth: 149
+  mWidth: 124
   mHeight: 72
   mDepth: 7
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 2.06944442
+  aspectRatio: 1.72222221
   mType: 3
   mFillDirection: 1
   mFillAmount: 1
@@ -15971,8 +16058,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 0
   timeScale: 1
+  myTransform: {fileID: 1652042472}
+  myPoolObject: {fileID: 1652042473}
   continuous: 0
   hitNumber: 1
+  myRigidbody: {fileID: 1652042476}
   pullSpeed: 1
 --- !u!65 &1652042475
 BoxCollider:
@@ -16106,8 +16196,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 0
   timeScale: 1
+  myTransform: {fileID: 1667228362}
+  myPoolObject: {fileID: 1667228363}
   continuous: 0
   hitNumber: 1
+  myRigidbody: {fileID: 1667228366}
   pullSpeed: 1
 --- !u!65 &1667228365
 BoxCollider:
@@ -16396,7 +16489,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 128, y: 144, z: 0}
+  m_Size: {x: 107, y: 144, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1695575000
 MonoBehaviour:
@@ -16428,13 +16521,13 @@ MonoBehaviour:
   updateAnchors: 0
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 128
+  mWidth: 107
   mHeight: 144
   mDepth: 8
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: .888888896
+  aspectRatio: .743055582
   mType: 1
   mFillDirection: 4
   mFillAmount: 1
@@ -16505,13 +16598,13 @@ MonoBehaviour:
   updateAnchors: 0
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 150
+  mWidth: 125
   mHeight: 144
   mDepth: 20
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 1.04166663
+  aspectRatio: .868055582
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
@@ -16685,8 +16778,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 0
   timeScale: 1
+  myTransform: {fileID: 1728594553}
+  myPoolObject: {fileID: 1728594554}
   continuous: 0
   hitNumber: 1
+  myRigidbody: {fileID: 1728594557}
   pullSpeed: 1
 --- !u!65 &1728594556
 BoxCollider:
@@ -17024,7 +17120,7 @@ MonoBehaviour:
   updateAnchors: 0
   mColor: {r: 0, g: 1, b: 0, a: 1}
   mPivot: 4
-  mWidth: 18
+  mWidth: 16
   mHeight: 30
   mDepth: 8
   autoResizeBoxCollider: 0
@@ -17379,13 +17475,13 @@ MonoBehaviour:
   updateAnchors: 0
   mColor: {r: 1, g: 0, b: 0, a: .784313738}
   mPivot: 4
-  mWidth: 149
+  mWidth: 124
   mHeight: 72
   mDepth: 7
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 2.06944442
+  aspectRatio: 1.72222221
   mType: 3
   mFillDirection: 1
   mFillAmount: 1
@@ -18023,7 +18119,7 @@ MonoBehaviour:
   health: 0
   rechargeSpeed: 20
   rechargeDelay: 3
-  maxShield: 10
+  maxShield: 50
   shield: 0
 --- !u!23 &1882523054
 Renderer:
@@ -18100,6 +18196,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 1
   timeScale: 1
+  myTransform: {fileID: 0}
+  myPoolObject: {fileID: 0}
   continuous: 1
   hitNumber: 0
 --- !u!65 &1882628954
@@ -18188,8 +18286,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1437348305}
-  - {fileID: 296648924}
-  - {fileID: 708413005}
   m_Father: {fileID: 0}
 --- !u!114 &1887452257
 MonoBehaviour:
@@ -18529,6 +18625,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 1
   timeScale: 1
+  myTransform: {fileID: 0}
+  myPoolObject: {fileID: 0}
   continuous: 1
   hitNumber: 0
 --- !u!65 &1902849811
@@ -18794,8 +18892,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 0
   timeScale: 1
+  myTransform: {fileID: 1928810341}
+  myPoolObject: {fileID: 1928810342}
   continuous: 0
   hitNumber: 1
+  myRigidbody: {fileID: 1928810345}
   pullSpeed: 1
 --- !u!65 &1928810344
 BoxCollider:
@@ -18907,7 +19008,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: aeed59aee1ea3714da2eb46ccb6175bd, type: 2}
       propertyPath: currentBuild
-      value: Avenger
+      value: Berserker
       objectReference: {fileID: 0}
     - target: {fileID: 11400006, guid: aeed59aee1ea3714da2eb46ccb6175bd, type: 2}
       propertyPath: invincible
@@ -19138,8 +19239,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 0
   timeScale: 1
+  myTransform: {fileID: 1973698510}
+  myPoolObject: {fileID: 1973698511}
   continuous: 0
   hitNumber: 1
+  myRigidbody: {fileID: 1973698514}
   pullSpeed: 1
 --- !u!65 &1973698513
 BoxCollider:
@@ -19258,8 +19362,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 0
   timeScale: 1
+  myTransform: {fileID: 1986870596}
+  myPoolObject: {fileID: 1986870597}
   continuous: 0
   hitNumber: 1
+  myRigidbody: {fileID: 1986870600}
   pullSpeed: 1
 --- !u!65 &1986870599
 BoxCollider:
@@ -19947,8 +20054,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 0
   timeScale: 1
+  myTransform: {fileID: 2063085548}
+  myPoolObject: {fileID: 2063085549}
   continuous: 0
   hitNumber: 1
+  myRigidbody: {fileID: 2063085552}
   pullSpeed: 1
 --- !u!65 &2063085551
 BoxCollider:

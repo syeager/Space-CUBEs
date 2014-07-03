@@ -33,6 +33,8 @@ public class Medic : Boss
 
     public MinionSpawner minionSpawner;
     public PlasmaMachineGun plasmaGun;
+    public WeaponStacker burstCannon;
+    public Syringe syringeLaser;
 
     #endregion
 
@@ -44,14 +46,8 @@ public class Medic : Boss
 
     #endregion
 
-    #region Stage 1 Fields
-
-    public float stage1DownTime; 
-
-    #endregion
-
     #region Public Fields
-
+    public float attackBuffer; 
     public Vector3 startPosition;
 
     #endregion
@@ -79,7 +75,7 @@ public class Medic : Boss
         stateMachine.CreateState(StagingState, StagingEnter, StagingExit);
         stateMachine.CreateState(Stage1State, Stage1Enter, info => { });
         stateMachine.CreateState(Stage2State, Stage2Enter, info => { });
-
+        stateMachine.CreateState(Stage3State, Stage3Enter, info => { });
         stateMachine.CreateState(DyingState, DyingEnter, i => { });
 
         // stages
@@ -88,6 +84,8 @@ public class Medic : Boss
         // weapons
         minionSpawner.Initialize(this);
         plasmaGun.Initialize(this);
+        burstCannon.Initialize(this);
+        syringeLaser.Initialize(this);
     }
 
     #endregion
@@ -129,6 +127,7 @@ public class Medic : Boss
 
         swayJob.Pause(true);
         StopAllCoroutines();
+        plasmaGun.Activate(false);
 
         stateMachine.SetUpdate(StagingUpdate());
     }
@@ -167,7 +166,7 @@ public class Medic : Boss
 
     private IEnumerator Stage1Update()
     {
-        WaitForSeconds wait = new WaitForSeconds(stage1DownTime);
+        WaitForSeconds wait = new WaitForSeconds(attackBuffer);
         while (true)
         {
             yield return minionSpawner.Spawn();
@@ -198,10 +197,60 @@ public class Medic : Boss
 
     private IEnumerator Stage2Update()
     {
+        WaitForSeconds wait = new WaitForSeconds(attackBuffer);
         while (true)
         {
+            yield return burstCannon.Activate(true);
+            yield return wait;
+            yield return minionSpawner.Spawn();
+            yield return wait;
+            yield return plasmaGun.Activate(true);
+            yield return plasmaGun.Activate(false);
+            yield return wait;
+            if (UnityEngine.Random.Range(0, 2) == 0)
+            {
+                yield return minionSpawner.BuffHealth();
+            }
+            else
+            {
+                yield return minionSpawner.BuffShield();
+            }
+            yield return wait;
+        }
+    }
 
-            yield return null;
+
+    private void Stage3Enter(Dictionary<string, object> info)
+    {
+        swayJob.Pause(false);
+        stateMachine.SetUpdate(Stage3Update());
+    }
+
+
+    private IEnumerator Stage3Update()
+    {
+        WaitForSeconds wait = new WaitForSeconds(attackBuffer);
+        while (true)
+        {
+            yield return syringeLaser.Activate(true);
+            yield return syringeLaser.Activate(false);
+            yield return wait;
+            yield return minionSpawner.Spawn();
+            yield return wait;
+            yield return burstCannon.Activate(true);
+            yield return wait;
+            yield return plasmaGun.Activate(true);
+            yield return plasmaGun.Activate(false);
+            yield return wait;
+            if (UnityEngine.Random.Range(0, 2) == 0)
+            {
+                yield return minionSpawner.BuffHealth();
+            }
+            else
+            {
+                yield return minionSpawner.BuffShield();
+            }
+            yield return wait;
         }
     }
 

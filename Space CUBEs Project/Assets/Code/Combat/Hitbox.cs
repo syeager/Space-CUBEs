@@ -1,9 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2013.12.09
-// Edited: 2014.05.27
-
-using Annotations;
+// Edited: 2014.07.02
 
 using UnityEngine;
 
@@ -14,7 +12,10 @@ public class Hitbox : MonoBase
 {
     #region References
 
+    [SerializeField, HideInInspector]
     protected Transform myTransform;
+
+    [SerializeField, HideInInspector]
     protected PoolObject myPoolObject;
 
     #endregion
@@ -44,7 +45,7 @@ public class Hitbox : MonoBase
 
     #region MonoBehavoiur Overrides
 
-    protected virtual void Awake()
+    protected virtual void Reset()
     {
         myTransform = transform;
         myPoolObject = GetComponent<PoolObject>();

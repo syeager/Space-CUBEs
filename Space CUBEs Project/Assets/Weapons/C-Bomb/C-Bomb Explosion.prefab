@@ -131,8 +131,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8273ebef845f4404d8bea2bf1af07008, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 1
+  log: 0
   timeScale: 1
+  myTransform: {fileID: 400000}
+  myPoolObject: {fileID: 11400002}
   continuous: 0
   hitNumber: 0
   shockwave: {fileID: 100002}
@@ -159,8 +161,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7afcabfce6f38614890fb88d29b335e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 1
+  log: 0
   timeScale: 1
+  myTransform: {fileID: 400002}
+  myPoolObject: {fileID: 0}
   continuous: 0
   hitNumber: 1
   strength: 5000

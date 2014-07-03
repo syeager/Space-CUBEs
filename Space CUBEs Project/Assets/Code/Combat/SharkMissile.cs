@@ -99,9 +99,9 @@ public class SharkMissile : Hitbox
         float max = 0f;
         foreach (var enemy in LevelManager.Main.activeEnemies)
         {
-            if (enemy.GetComponent<ShieldHealth>().strength > max)
+            if (enemy.GetComponent<ShieldHealth>().Strength > max)
             {
-                max = enemy.GetComponent<ShieldHealth>().strength;
+                max = enemy.GetComponent<ShieldHealth>().Strength;
                 target = enemy.transform;
             }
         }

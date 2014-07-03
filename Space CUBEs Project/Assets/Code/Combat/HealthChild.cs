@@ -24,9 +24,9 @@ public class HealthChild : Health
     }
 
 
-    public override void RecieveHit(Ship sender, float damage)
+    public override float RecieveHit(Ship sender, float damage)
     {
-        parent.RecieveHit(sender, damage);
+        return parent.RecieveHit(sender, damage);
     }
 
     #endregion
