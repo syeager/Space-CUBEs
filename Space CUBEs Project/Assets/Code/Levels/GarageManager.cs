@@ -273,7 +273,6 @@ public class GarageManager : MonoBase
     [UsedImplicitly]
     private void Start()
     {
-        Debug.Log("STARTING!!!!!!!!!!!!!!!!!!");
         stateMachine.Start();
     }
 
