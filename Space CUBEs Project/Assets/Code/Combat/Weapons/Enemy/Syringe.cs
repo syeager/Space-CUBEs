@@ -13,7 +13,7 @@ public class Syringe : Weapon
 {
     #region Public Fields
 
-    public ProjectingLaser laser;
+    public SyringeLaser laser;
 
     /// <summary>Time in seconds to fire laser.</summary>
     public float attackTime;

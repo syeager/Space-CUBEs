@@ -33,6 +33,8 @@ public class ProjectingLaser : Hitbox
 
     protected override void OnTriggerStay(Collider other)
     {
+        if (other.isTrigger) return;
+
         base.OnTriggerStay(other);
 
         contact = other.transform.position;

@@ -670,7 +670,8 @@ Animation:
   m_Enabled: 1
   serializedVersion: 3
   m_Animation: {fileID: 0}
-  m_Animations: []
+  m_Animations:
+  - {fileID: 7400000, guid: a76cdd46125d68842b011f7ebd162306, type: 2}
   m_WrapMode: 0
   m_PlayAutomatically: 0
   m_AnimatePhysics: 1
@@ -777,7 +778,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 100006}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1b2ee79484562144bd2544bbe307632, type: 3}
+  m_Script: {fileID: 11500000, guid: d2c863acdcfcf3048863a3a77904c378, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   log: 0
@@ -788,6 +789,7 @@ MonoBehaviour:
   hitNumber: 0
   projectSpeed: 200
   maxProjectionSize: 300
+  stealingModifier: 5
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -836,7 +838,7 @@ MonoBehaviour:
   stagingTime: 3
   stagingSize: .0500000007
   stagingSpeed: 3
-  attackBuffer: 2.5
+  attackBuffer: 2
   startPosition: {x: 80, y: 0, z: 0}
   swaySpeed: .5
   swayDistance: 2
@@ -1200,15 +1202,19 @@ MonoBehaviour:
   name: 
   cooldownTime: 0
   minionPrefab: {fileID: 11400000, guid: 6b8114e05b031b842bfb2a28c737b7f8, type: 2}
-  minionSpawnCount: 5
-  maxMinionCount: 10
+  minionSpawnCount: 7
+  maxMinionCount: 21
   minionSpawnDelay: 0
   deployTime: 1
   spawnPosition: {x: 0, y: 0, z: 0}
-  spawnRadius: {x: 20, y: 0, z: 0}
+  spawnRadius: {x: 15, y: 0, z: 0}
+  stageSpeeds:
+  - 20
+  - 25
+  - 30
   buffingTime: 1
   healthParticles: {fileID: 11400000, guid: 50ff28f063eb0344394877e319b0adb3, type: 2}
-  shieldBuff: 20
+  shieldBuff: 50
   shieldParticles: {fileID: 11400000, guid: bff7c525c9d0aa7499e78c99b7aefb27, type: 2}
 --- !u!1001 &100100000
 Prefab:

@@ -34,6 +34,9 @@ public class MinionSpawner : Weapon
     /// <summary>Max distance from spawnPosition.</summary>
     public Vector3 spawnRadius;
 
+    /// <summary>Different speeds for each Medic stage.</summary>
+    public float[] stageSpeeds;
+
     /// <summary>Time in seconds to buff and unbuff enemies.</summary>
     public float buffingTime;
 
@@ -51,16 +54,16 @@ public class MinionSpawner : Weapon
     #region Private Fields
 
     /// <summary>Currently spawned minions.</summary>
-    private readonly List<Health> minions = new List<Health>();
+    private readonly List<ShieldHealth> minions = new List<ShieldHealth>();
 
     #endregion
 
     #region Public Methods
 
-    public Coroutine Spawn()
+    public Coroutine Spawn(int stage)
     {
         int minionsToSpawn = Mathf.Clamp(maxMinionCount - minions.Count, 0, minionSpawnCount);
-        return StartCoroutine(Spawn(minionsToSpawn));
+        return StartCoroutine(Spawn(minionsToSpawn, stage));
     }
 
 
@@ -79,7 +82,7 @@ public class MinionSpawner : Weapon
 
     #region Private Methods
 
-    private IEnumerator Spawn(int count)
+    private IEnumerator Spawn(int count, int stage)
     {
         if (count == 0)
         {
@@ -92,6 +95,7 @@ public class MinionSpawner : Weapon
         {
             Vector3 spawn = myTransform.position + myTransform.TransformDirection(spawnPosition) + Utility.RotateVector(Random.Range(-1f, 1f) * spawnRadius, Random.Range(0f, 360f), Vector3.back);
             Ship minion = (Ship)Prefabs.Pop(minionPrefab, spawn, myTransform.rotation).GetComponent(typeof(Ship));
+            minion.GetComponent<ShipMotor>().speed = stageSpeeds[stage];
             minion.stateMachine.Start();
             minions.Add(minion.MyHealth);
             minion.MyHealth.DieEvent += OnMinionDeath;
@@ -104,12 +108,11 @@ public class MinionSpawner : Weapon
     private IEnumerator BuffingHealth()
     {
         yield return new WaitForSeconds(buffingTime);
-        foreach (Health minion in minions)
+        foreach (ShieldHealth minion in minions)
         {
             minion.health = minion.maxHealth;
             Prefabs.Pop(healthParticles, minion.transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
         }
-        yield return new WaitForSeconds(buffingTime);
     }
 
 
@@ -121,15 +124,6 @@ public class MinionSpawner : Weapon
             minion.maxShield = shieldBuff;
             minion.shield = shieldBuff;
             Prefabs.Pop(shieldParticles, minion.transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
-        }
-        yield return new WaitForSeconds(buffingTime);
-        yield return new WaitForSeconds(buffingTime);
-        yield return new WaitForSeconds(buffingTime);
-        foreach (ShieldHealth minion in minions)
-        {
-            minion.maxShield = 0f;
-            minion.shield = 0f;
-            //Prefabs.Pop(shieldParticles, minion.transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
         }
     }
 
@@ -144,7 +138,7 @@ public class MinionSpawner : Weapon
     /// <param name="args">Death data.</param>
     private void OnMinionDeath(object sender, DieArgs args)
     {
-        Health minion = (Health)sender;
+        ShieldHealth minion = (ShieldHealth)sender;
         minions.Remove(minion);
         minion.DieEvent -= OnMinionDeath;
     }

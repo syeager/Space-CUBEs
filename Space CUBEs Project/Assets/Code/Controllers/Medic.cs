@@ -169,20 +169,14 @@ public class Medic : Boss
         WaitForSeconds wait = new WaitForSeconds(attackBuffer);
         while (true)
         {
-            yield return minionSpawner.Spawn();
+            yield return minionSpawner.Spawn(0);
             yield return wait;
+            yield return minionSpawner.BuffHealth();
             yield return wait;
             yield return plasmaGun.Activate(true);
             yield return plasmaGun.Activate(false);
             yield return wait;
-            if (UnityEngine.Random.Range(0, 2) == 0)
-            {
-                yield return minionSpawner.BuffHealth();
-            }
-            else
-            {
-                yield return minionSpawner.BuffShield();
-            }
+            yield return minionSpawner.BuffHealth();
             yield return wait;
         }
     }
@@ -202,8 +196,16 @@ public class Medic : Boss
         {
             yield return burstCannon.Activate(true);
             yield return wait;
-            yield return minionSpawner.Spawn();
+            yield return minionSpawner.Spawn(1);
             yield return wait;
+            if (UnityEngine.Random.Range(0, 2) == 0)
+            {
+                yield return minionSpawner.BuffHealth();
+            }
+            else
+            {
+                yield return minionSpawner.BuffShield();
+            }
             yield return plasmaGun.Activate(true);
             yield return plasmaGun.Activate(false);
             yield return wait;
@@ -235,9 +237,11 @@ public class Medic : Boss
             yield return syringeLaser.Activate(true);
             yield return syringeLaser.Activate(false);
             yield return wait;
-            yield return minionSpawner.Spawn();
+            yield return minionSpawner.Spawn(2);
+            yield return minionSpawner.BuffShield();
             yield return wait;
             yield return burstCannon.Activate(true);
+            yield return minionSpawner.BuffHealth();
             yield return wait;
             yield return plasmaGun.Activate(true);
             yield return plasmaGun.Activate(false);
@@ -260,7 +264,8 @@ public class Medic : Boss
         GameObject root = new GameObject();
         root.transform.SetPosRot(myTransform.position, myTransform.rotation);
         myTransform.parent = root.transform;
-        myAnimation.Play("Medic_Death");
+        swayJob.Kill();
+        myAnimation.Play("Switchblade_Death");
 
         stateMachine.SetUpdate(DeathUpdate());
     }
@@ -268,7 +273,7 @@ public class Medic : Boss
 
     private IEnumerator DeathUpdate()
     {
-        yield return new WaitForSeconds(myAnimation["Medic_Death"].length + 1f);
+        yield return new WaitForSeconds(myAnimation["Switchblade_Death"].length + 1f);
         DeathEvent.Fire();
         Destroy(gameObject);
     }

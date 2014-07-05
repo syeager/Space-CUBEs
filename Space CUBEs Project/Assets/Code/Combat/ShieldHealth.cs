@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2013.12.05
-// Edited: 2014.07.02
+// Edited: 2014.07.04
 
 using System;
 using System.Collections;
@@ -67,7 +67,6 @@ public class ShieldHealth : Health
     {
         if (invincible) return 0f;
 
-
         float damageToHealth = damage - shield;
         float damageDone = ChangeShield(-damage);
         if (damageToHealth > 0f)
@@ -80,6 +79,22 @@ public class ShieldHealth : Health
             HitMat(shieldHitMat);
         }
 
+        if (health <= 0f)
+        {
+            Killed(sender);
+        }
+
+        return damageDone;
+    }
+
+
+    public float RecieveHit(Ship sender, float damage, bool bypassShield)
+    {
+        if (!bypassShield) return RecieveHit(sender, damage);
+        if (invincible) return 0f;
+
+        float damageDone = ChangeHealth(-damage);
+        HitMat(HealthHit_Mat);
         if (health <= 0f)
         {
             Killed(sender);
