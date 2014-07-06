@@ -175,13 +175,13 @@ public class UIGrid : UIWidgetContainer
 	{
 		if (trans != null)
 		{
-			BetterList<Transform> list = GetChildList();
-			list.Add(trans);
-			ResetPosition(list);
+			trans.parent = transform;
+			ResetPosition(GetChildList());
 		}
 	}
 
-	/// <summary>
+	// NOTE: This functionality is effectively removed until Unity 4.6.
+	/*/// <summary>
 	/// Convenience method -- add a new child at the specified index.
 	/// Note that if you plan on adding multiple objects, it's faster to GetChildList() and modify that instead.
 	/// </summary>
@@ -216,7 +216,7 @@ public class UIGrid : UIWidgetContainer
 			return t;
 		}
 		return null;
-	}
+	}*/
 
 	/// <summary>
 	/// Remove the specified child from the list.
@@ -361,7 +361,9 @@ public class UIGrid : UIWidgetContainer
 
 			if (animateSmoothly && Application.isPlaying)
 			{
-				SpringPosition.Begin(t.gameObject, pos, 15f).updateScrollView = true;
+				SpringPosition sp = SpringPosition.Begin(t.gameObject, pos, 15f);
+				sp.updateScrollView = true;
+				sp.ignoreTimeScale = true;
 			}
 			else t.localPosition = pos;
 

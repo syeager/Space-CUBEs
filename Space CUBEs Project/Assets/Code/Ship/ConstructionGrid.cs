@@ -90,6 +90,12 @@ public class ConstructionGrid : MonoBase
 
     #endregion
 
+    #region Static Fields
+
+    public static string selectedBuild; 
+
+    #endregion
+
     #region Const Fields
 
     /// <summary>Level of alpha to set CUBE materials if above current layer.</summary>
@@ -384,7 +390,7 @@ public class ConstructionGrid : MonoBase
         }
 
         // get data
-        heldInfo = CUBE.allCUBES[heldCUBE.ID];
+        heldInfo = CUBE.AllCUBES[heldCUBE.ID];
 
         // set rotation and position
         PositionCUBE();
@@ -629,7 +635,7 @@ public class ConstructionGrid : MonoBase
     {
         // grab CUBE
         heldCUBE = cube;
-        heldInfo = CUBE.allCUBES[heldCUBE.ID];
+        heldInfo = CUBE.AllCUBES[heldCUBE.ID];
         StartBlink(heldCUBE.renderer);
         // stock inventory
         inventory[heldCUBE.ID]++;
@@ -880,7 +886,7 @@ public class ConstructionGrid : MonoBase
         currentBuild.Remove(cube);
 
         // remove stats
-        CUBEInfo cubeInfo = CUBE.allCUBES[cube.ID];
+        CUBEInfo cubeInfo = CUBE.AllCUBES[cube.ID];
         CurrentStats.health -= cubeInfo.health;
         CurrentStats.shield -= cubeInfo.shield;
         CurrentStats.speed -= cubeInfo.speed;

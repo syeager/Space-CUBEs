@@ -45,7 +45,7 @@ public class MainMenuManager : MonoBehaviour
 
     public void LoadPlay()
     {
-        SceneManager.Main.currentBuild = GameStart.DevBuilds[0];
+        ConstructionGrid.selectedBuild = GameStart.DevBuilds[0];
         SceneManager.LoadScene("Level Select Menu");
     }
 

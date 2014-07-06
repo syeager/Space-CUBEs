@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 12.17.2013
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2013.12.17
+// Edited: 2014.07.06
 
 using System;
 using System.Collections;
@@ -15,7 +17,7 @@ public class StateMachine
 
     /// <summary>MonoBase that this statemachine belongs to. Used for logging.</summary>
     private readonly MonoBase owner;
-    
+
     #endregion
 
     #region Readonly Fields
@@ -33,7 +35,6 @@ public class StateMachine
     public Job update { get; private set; }
 
     #endregion
-
 
     #region Constructors/Deconstructors
 
@@ -133,13 +134,15 @@ public class StateMachine
     }
 
 
-    public void SetUpdate(IEnumerator updateJob)
+    public Job SetUpdate(IEnumerator updateJob)
     {
         if (update != null)
         {
             update.Kill();
         }
         update = new Job(updateJob);
+
+        return update;
     }
 
 

@@ -769,7 +769,7 @@ public class GarageManager : MonoBase
     {
         // create
         string[] buildNames = ConstructionGrid.BuildNames().ToArray();
-        if (buildNames.Length > 0) SceneManager.Main.currentBuild = buildNames[0];
+        if (buildNames.Length > 0) ConstructionGrid.selectedBuild = buildNames[0];
         for (int i = 0; i < buildNames.Length; i++)
         {
             var button = (Instantiate(BuildButton_Prefab) as GameObject).GetComponent<ScrollviewButton>();
@@ -801,7 +801,7 @@ public class GarageManager : MonoBase
     {
         if (args.isPressed) return;
 
-        SceneManager.Main.currentBuild = args.value;
+        ConstructionGrid.selectedBuild = args.value;
     }
 
 
@@ -810,39 +810,39 @@ public class GarageManager : MonoBase
     /// </summary>
     public void DeleteBuild()
     {
-        if (string.IsNullOrEmpty(SceneManager.Main.currentBuild)) return;
+        if (string.IsNullOrEmpty(ConstructionGrid.selectedBuild)) return;
 
         // delete build
-        ConstructionGrid.DeleteBuild(SceneManager.Main.currentBuild);
+        ConstructionGrid.DeleteBuild(ConstructionGrid.selectedBuild);
 
         // remove build button
-        ScrollviewButton button = loadGrid.GetComponentsInChildren<ScrollviewButton>().First(b => b.value == SceneManager.Main.currentBuild);
+        ScrollviewButton button = loadGrid.GetComponentsInChildren<ScrollviewButton>().First(b => b.value == ConstructionGrid.selectedBuild);
         button.ActivateEvent -= OnBuildChosen;
         Destroy(button.gameObject);
 
         // reload grid
         StartCoroutine(Utility.UpdateScrollView(loadGrid, loadScrollBar, loadScrollView));
 
-        SceneManager.Main.currentBuild = ConstructionGrid.BuildNames()[0];
+        ConstructionGrid.selectedBuild = ConstructionGrid.BuildNames()[0];
     }
 
 
     public void ConfirmRename()
     {
         renamePanel.SetActive(true);
-        renameInput.value = SceneManager.Main.currentBuild;
+        renameInput.value = ConstructionGrid.selectedBuild;
     }
 
 
     public void RenameBuild()
     {
-        ConstructionGrid.RenameBuild(SceneManager.Main.currentBuild, renameInput.value);
+        ConstructionGrid.RenameBuild(ConstructionGrid.selectedBuild, renameInput.value);
         renamePanel.SetActive(false);
 
-        ScrollviewButton button = loadGrid.GetComponentsInChildren<ScrollviewButton>().First(b => b.value == SceneManager.Main.currentBuild);
-        SceneManager.Main.currentBuild = renameInput.value;
-        button.value = SceneManager.Main.currentBuild;
-        button.label.text = SceneManager.Main.currentBuild;
+        ScrollviewButton button = loadGrid.GetComponentsInChildren<ScrollviewButton>().First(b => b.value == ConstructionGrid.selectedBuild);
+        ConstructionGrid.selectedBuild = renameInput.value;
+        button.value = ConstructionGrid.selectedBuild;
+        button.label.text = ConstructionGrid.selectedBuild;
     }
 
 
@@ -858,7 +858,7 @@ public class GarageManager : MonoBase
         {
             CreateGrid();
         }
-        Grid.CreateBuild(SceneManager.Main.currentBuild);
+        Grid.CreateBuild(ConstructionGrid.selectedBuild);
         shipName.value = Grid.buildName;
         corePointsLabel.text = Grid.corePointsAvailable.ToString();
         stateMachine.SetState(SelectState, new Dictionary<string, object>());
@@ -1020,7 +1020,7 @@ public class GarageManager : MonoBase
         mainCamera.camera.rect = new Rect(0f, 0f, 1f, 1f);
 
         string[] names = Enum.GetNames(typeof(CUBE.Types));
-        foreach (CUBEInfo info in CUBE.allCUBES)
+        foreach (CUBEInfo info in CUBE.AllCUBES)
         {
             int index = Array.IndexOf(names, info.type.ToString());
             var button = (Instantiate(CUBESelectionButton_Prefab) as GameObject).GetComponent(typeof(ScrollviewButton)) as ScrollviewButton;
@@ -1085,12 +1085,12 @@ public class GarageManager : MonoBase
     /// <param name="ID"></param>
     private void SetCurrentCUBE(int ID)
     {
-        currentCUBE = CUBE.allCUBES[ID];
+        currentCUBE = CUBE.AllCUBES[ID];
         CUBEName.text = currentCUBE.name;
-        CUBEHealth.text = CUBE.HEALTHICON + " " + currentCUBE.health;
-        CUBEShield.text = CUBE.SHIELDICON + " " + currentCUBE.shield;
-        CUBESpeed.text = CUBE.SPEEDICON + " " + currentCUBE.speed;
-        CUBEDamage.text = CUBE.DAMAGEICON + " " + currentCUBE.damage;
+        CUBEHealth.text = CUBE.HealthIcon + " " + currentCUBE.health;
+        CUBEShield.text = CUBE.ShieldIcon + " " + currentCUBE.shield;
+        CUBESpeed.text = CUBE.SpeedIcon + " " + currentCUBE.speed;
+        CUBEDamage.text = CUBE.DamageIcon + " " + currentCUBE.damage;
 
         Grid.CreateCUBE(ID);
     }
@@ -1451,12 +1451,12 @@ public class GarageManager : MonoBase
         if (args.value == "Primary")
         {
             Color color = colors[Grid.hoveredCUBE.GetComponent<ColorVertices>().colors[pieceSelected]];
-            SetPrimaryColor(Array.IndexOf(CUBE.colors, color));
+            SetPrimaryColor(Array.IndexOf(CUBE.Colors, color));
         }
         else
         {
             Color color = colors[Grid.hoveredCUBE.GetComponent<ColorVertices>().colors[pieceSelected]];
-            SetSecondaryColor(Array.IndexOf(CUBE.colors, color));
+            SetSecondaryColor(Array.IndexOf(CUBE.Colors, color));
         }
     }
 
@@ -1500,16 +1500,16 @@ public class GarageManager : MonoBase
     private void SetPrimaryColor(int colorIndex)
     {
         primaryColor = colorIndex;
-        actionButton1.Activate(CUBE.colors[primaryColor]);
-        selectPrimary.SetColor(CUBE.colors[primaryColor]);
+        actionButton1.Activate(CUBE.Colors[primaryColor]);
+        selectPrimary.SetColor(CUBE.Colors[primaryColor]);
     }
 
 
     private void SetSecondaryColor(int colorIndex)
     {
         secondaryColor = colorIndex;
-        actionButton2.Activate(CUBE.colors[secondaryColor]);
-        selectSecondary.SetColor(CUBE.colors[secondaryColor]);
+        actionButton2.Activate(CUBE.Colors[secondaryColor]);
+        selectSecondary.SetColor(CUBE.Colors[secondaryColor]);
     }
 
     #endregion
@@ -1678,10 +1678,10 @@ public class GarageManager : MonoBase
         Grid.buildName = shipName.value;
 
         // stats
-        shipHealth.text = CUBE.HEALTHICON + " " + Grid.CurrentStats.health;
-        shipShield.text = CUBE.SHIELDICON + " " + Grid.CurrentStats.shield;
-        shipSpeed.text = CUBE.SPEEDICON + " " + Grid.CurrentStats.speed;
-        shipDamage.text = CUBE.DAMAGEICON + " " + Grid.CurrentStats.damage;
+        shipHealth.text = CUBE.HealthIcon + " " + Grid.CurrentStats.health;
+        shipShield.text = CUBE.ShieldIcon + " " + Grid.CurrentStats.shield;
+        shipSpeed.text = CUBE.SpeedIcon + " " + Grid.CurrentStats.speed;
+        shipDamage.text = CUBE.DamageIcon + " " + Grid.CurrentStats.damage;
     }
 
     #endregion

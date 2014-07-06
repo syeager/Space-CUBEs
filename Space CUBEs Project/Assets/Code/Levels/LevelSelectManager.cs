@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.04.03
-// Edited: 2014.06.11
+// Edited: 2014.07.06
 
 using Annotations;
 using LittleByte.Data;
@@ -23,9 +23,6 @@ public class LevelSelectManager : MonoBehaviour
 
     public const string UnlockedLevelsKey = "Unlocked Levels";
 
-    /// <summary>Data folder for highscores and unlocked levels.</summary>
-    public const string LevelsFolder = @"Levels/";
-
     #endregion
 
     #region MonoBehaviour Overrides
@@ -34,7 +31,7 @@ public class LevelSelectManager : MonoBehaviour
     private void Start()
     {
         // register button events
-        int unlocked = SaveData.Load<int>(UnlockedLevelsKey, LevelsFolder);
+        int unlocked = SaveData.Load<int>(UnlockedLevelsKey, FormationLevelManager.LevelsFolder);
         for (int i = 0; i < levelButtons.Length; i++)
         {
             levelButtons[i].ActivateEvent += OnLevelSelected;

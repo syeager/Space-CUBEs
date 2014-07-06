@@ -30,7 +30,7 @@ public class ColorSaver : EditorWindow
     #region Const Fields
 
     private const string ColorSelector = "Color Selector";
-    private static readonly string ColorListPathEditor = Application.dataPath + "/Resources/" + CUBE.COLORLIST + ".bytes";
+    private static readonly string ColorListPathEditor = Application.dataPath + "/Resources/" + CUBE.ColorList + ".bytes";
 
     #endregion
 

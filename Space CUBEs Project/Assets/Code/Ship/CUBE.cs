@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2013.11.26
-// Edited: 2014.06.06
+// Edited: 2014.07.06
 
 using System.Collections.Generic;
 using System.IO;
@@ -46,24 +46,23 @@ public class CUBE : MonoBehaviour
 
     #region Static Fields
 
-    public static CUBEInfo[] allCUBES { get; private set; }
-    public static int[][] gradedCUBEs { get; private set; }
-    public static Color[] colors { get; private set; }
+    public static CUBEInfo[] AllCUBES { get; private set; }
+    public static int[][] GradedCUBEs { get; private set; }
+    public static Color[] Colors { get; private set; }
 
     #endregion
 
     #region Const Fields
 
-    public const string CUBELIST = "CUBE List";
-    public const string COLORLIST = "Color List";
+    public const string CUBEList = "CUBE List";
+    public const string ColorList = "Color List";
     private const string InventoryFile = "Inventory";
     private const string ItemsFolder = @"Items/";
-    private const char CUBESEP = '|';
 
-    public const string HEALTHICON = "♥";
-    public const string SHIELDICON = "Θ";
-    public const string SPEEDICON = "►";
-    public const string DAMAGEICON = "•";
+    public const string HealthIcon = "♥";
+    public const string ShieldIcon = "Θ";
+    public const string SpeedIcon = "►";
+    public const string DamageIcon = "•";
 
     #endregion
 
@@ -72,7 +71,7 @@ public class CUBE : MonoBehaviour
     public static CUBEInfo[] LoadAllCUBEInfo()
     {
         // load all CUBEs
-        var binaryFile = (TextAsset)Resources.Load(CUBELIST);
+        var binaryFile = (TextAsset)Resources.Load(CUBEList);
         Stream binaryStream = new MemoryStream(binaryFile.bytes);
         var infoList = new List<CUBEInfo>();
         using (var reader = new BinaryReader(binaryStream))
@@ -98,7 +97,7 @@ public class CUBE : MonoBehaviour
                     ));
             }
         }
-        allCUBES = infoList.ToArray();
+        AllCUBES = infoList.ToArray();
 
         if (Application.isPlaying)
         {
@@ -106,13 +105,13 @@ public class CUBE : MonoBehaviour
         }
 
         // filter into graded
-        gradedCUBEs = new int[5][];
+        GradedCUBEs = new int[5][];
         for (int i = 0; i < 5; i++)
         {
-            gradedCUBEs[i] = allCUBES.Where(c => c.rarity == i + 1).Select(c => c.ID).ToArray();
+            GradedCUBEs[i] = AllCUBES.Where(c => c.rarity == i + 1).Select(c => c.ID).ToArray();
         }
 
-        return allCUBES;
+        return AllCUBES;
     }
 
 
@@ -122,7 +121,7 @@ public class CUBE : MonoBehaviour
     /// <returns></returns>
     public static int[] GetInventory()
     {
-        return SaveData.Load(InventoryFile, ItemsFolder, new int[allCUBES.Length]);
+        return SaveData.Load(InventoryFile, ItemsFolder, new int[AllCUBES.Length]);
     }
 
 
@@ -134,7 +133,7 @@ public class CUBE : MonoBehaviour
 
     public static Color[] LoadColors()
     {
-        var binaryFile = (TextAsset)Resources.Load(COLORLIST);
+        var binaryFile = (TextAsset)Resources.Load(ColorList);
         Stream binaryStream = new MemoryStream(binaryFile.bytes);
         var colors = new List<Color>();
         using (var reader = new BinaryReader(binaryStream))
@@ -145,22 +144,22 @@ public class CUBE : MonoBehaviour
             }
         }
 
-        CUBE.colors = colors.ToArray();
-        return CUBE.colors;
+        CUBE.Colors = colors.ToArray();
+        return CUBE.Colors;
     }
 
 
     public static CUBEInfo GetInfo(string cubeName)
     {
 #if UNITY_EDITOR
-        if (allCUBES == null)
+        if (AllCUBES == null)
         {
             LoadAllCUBEInfo();
         }
 #endif
 
 // ReSharper disable AssignNullToNotNullAttribute
-        return allCUBES.First(c => c.name == cubeName);
+        return AllCUBES.First(c => c.name == cubeName);
 // ReSharper restore AssignNullToNotNullAttribute
     }
 

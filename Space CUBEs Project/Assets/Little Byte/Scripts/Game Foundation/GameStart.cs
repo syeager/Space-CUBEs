@@ -78,7 +78,7 @@ public class GameStart : Singleton<GameStart>
     private static void Version1()
     {
         // initial inventory
-        int count = CUBE.allCUBES.Length;
+        int count = CUBE.AllCUBES.Length;
 
         var inventory = new int[count];
         for (int i = 0; i < count; i++)

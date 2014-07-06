@@ -1,40 +1,32 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2013.12.03
-// Edited: 2014.07.02
+// Edited: 2014.07.06
 
 using System;
 using UnityEngine;
-using System.Collections.Generic;
 
 /// <summary>
 /// Singleton to transition between scenes.
 /// </summary>
 public class SceneManager : Singleton<SceneManager>
 {
-    #region Loading Fields
+    #region Const Fields
 
-    public string previousScene { get; private set; }
-    public string nextScene { get; private set; }
-
-    #endregion
-
-    #region Level Fields
-
-    [Obsolete("Don't need. Removing Level Overview Screen.")]
-    public Dictionary<string, object> levelData { get; private set; }
-    public string currentBuild = "Test Build";
+    public const string MainMenu = "Main Menu";
+    public const string Garage = "Garage";
+    public const string Store = "Store";
+    public const string Options = "Options Menu";
 
     #endregion
 
-    #region MonoBehaviour Overrides
+    #region Properties
 
-    protected override void Awake()
-    {
-        base.Awake();
+    /// <summary>The scene loaded previously to this scene.</summary>
+    public string PreviousScene { get; private set; }
 
-        levelData = new Dictionary<string, object>();
-    }
+    /// <summary>The scene to load after the Loading Screen.</summary>
+    public string NextScene { get; private set; }
 
     #endregion
 
@@ -44,16 +36,17 @@ public class SceneManager : Singleton<SceneManager>
     /// Load the next scene and cache data.
     /// </summary>
     /// <param name="nextScene">Name of next scene.</param>
-    /// <param name="load">Should the Loading Screen be loaded first?</param>
-    /// <param name="sceneData">Data to save for the next scene.</param>
-    [Obsolete("remove scene data and add unload and collect")]
-    public static void LoadScene(string nextScene, bool load = false, Dictionary<string, object> sceneData = null)
+    /// <param name="loadScreen">Should the Loading Screen be loaded first?</param>
+    /// <param name="unloadUnused">Should unused assests be unloaded?</param>
+    /// <param name="garbageCollect">Should the garbage collector be run?</param>
+    public static void LoadScene(string nextScene, bool loadScreen = false, bool unloadUnused = false, bool garbageCollect = false)
     {
-        Main.levelData = sceneData ?? new Dictionary<string, object>();
-        Main.previousScene = Application.loadedLevelName;
-        Main.nextScene = nextScene;
+        Main.PreviousScene = Application.loadedLevelName;
+        Main.NextScene = nextScene;
 
-        Application.LoadLevel(load ? "Loading Screen" : nextScene);
+        Application.LoadLevel(loadScreen ? "Loading Screen" : nextScene);
+        if (unloadUnused) Resources.UnloadUnusedAssets();
+        if (garbageCollect) GC.Collect();
     }
 
 

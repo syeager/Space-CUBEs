@@ -131,7 +131,7 @@ public class StoreManager : MonoBehaviour
 
         inventory[itemIndex]--;
         CUBE.SetInventory(inventory);
-        int balance = MoneyManager.Transaction(CUBE.allCUBES[itemIndex].price / 2);
+        int balance = MoneyManager.Transaction(CUBE.AllCUBES[itemIndex].price / 2);
         bank.text = String.Format("${0:#,###0}", balance);
         count.text = "You have: " + inventory[itemIndex];
         UpdateShopButtons(itemIndex);
@@ -146,7 +146,7 @@ public class StoreManager : MonoBehaviour
             case ItemTypes.CUBE:
                 inventory[itemIndex]++;
                 CUBE.SetInventory(inventory);
-                balance = MoneyManager.Transaction(-CUBE.allCUBES[itemIndex].price);
+                balance = MoneyManager.Transaction(-CUBE.AllCUBES[itemIndex].price);
                 bank.text = String.Format("${0:#,###0}", balance);
                 count.text = "You have: " + inventory[itemIndex];
                 UpdateShopButtons(itemIndex);
@@ -206,7 +206,7 @@ public class StoreManager : MonoBehaviour
         {
             case ItemTypes.CUBE:
                 sellButton.isEnabled = inventory[index] > 0;
-                buyButton.isEnabled = MoneyManager.Balance() >= CUBE.allCUBES[index].price;
+                buyButton.isEnabled = MoneyManager.Balance() >= CUBE.AllCUBES[index].price;
                 break;
             case ItemTypes.Core:
                 sellButton.isEnabled = false;
@@ -253,7 +253,7 @@ public class StoreManager : MonoBehaviour
         CUBEInfo[] cubeInfo;
 
         // system
-        cubeInfo = CUBE.allCUBES.Where(c => c.type == CUBE.Types.System).ToArray();
+        cubeInfo = CUBE.AllCUBES.Where(c => c.type == CUBE.Types.System).ToArray();
         itemButtons[0] = new ScrollviewButton[cubeInfo.Length];
         for (int i = 0; i < cubeInfo.Length; i++)
         {
@@ -263,7 +263,7 @@ public class StoreManager : MonoBehaviour
             itemButtons[0][i] = button;
         }
         // hull
-        cubeInfo = CUBE.allCUBES.Where(c => c.type == CUBE.Types.Hull).ToArray();
+        cubeInfo = CUBE.AllCUBES.Where(c => c.type == CUBE.Types.Hull).ToArray();
         itemButtons[1] = new ScrollviewButton[cubeInfo.Length];
         for (int i = 0; i < cubeInfo.Length; i++)
         {
@@ -273,7 +273,7 @@ public class StoreManager : MonoBehaviour
             itemButtons[1][i] = button;
         }
         // weapon
-        cubeInfo = CUBE.allCUBES.Where(c => c.type == CUBE.Types.Weapon).ToArray();
+        cubeInfo = CUBE.AllCUBES.Where(c => c.type == CUBE.Types.Weapon).ToArray();
         itemButtons[2] = new ScrollviewButton[cubeInfo.Length];
         for (int i = 0; i < cubeInfo.Length; i++)
         {
@@ -283,7 +283,7 @@ public class StoreManager : MonoBehaviour
             itemButtons[2][i] = button;
         }
         // augmentation
-        cubeInfo = CUBE.allCUBES.Where(c => c.type == CUBE.Types.Augmentation).ToArray();
+        cubeInfo = CUBE.AllCUBES.Where(c => c.type == CUBE.Types.Augmentation).ToArray();
         itemButtons[3] = new ScrollviewButton[cubeInfo.Length];
         for (int i = 0; i < cubeInfo.Length; i++)
         {
@@ -375,7 +375,7 @@ public class StoreManager : MonoBehaviour
 
         // selected CUBE
         itemIndex = int.Parse(args.value);
-        CUBEInfo info = CUBE.allCUBES[itemIndex];
+        CUBEInfo info = CUBE.AllCUBES[itemIndex];
         if (GameResources.GetCUBE(info.ID) == null) return;
         selectedCUBE.text = info.name;
         count.text = "x" + inventory[itemIndex];

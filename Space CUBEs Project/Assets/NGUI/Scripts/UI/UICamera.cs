@@ -6,6 +6,10 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 /// <summary>
 /// This script should be attached to each camera that's used to draw the objects with
 /// UI components on them. This may mean only one camera (main camera or your UI camera),
@@ -88,10 +92,8 @@ public class UICamera : MonoBehaviour
 	{
 		World_3D,	// Perform a Physics.Raycast and sort by distance to the point that was hit.
 		UI_3D,		// Perform a Physics.Raycast and sort by widget depth.
-#if !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_1 && !UNITY_4_2
 		World_2D,	// Perform a Physics2D.OverlapPoint
 		UI_2D,		// Physics2D.OverlapPoint then sort by widget depth
-#endif
 	}
 
 	/// <summary>
@@ -561,6 +563,7 @@ public class UICamera : MonoBehaviour
 	{
 		public int depth;
 		public RaycastHit hit;
+		public Vector3 point;
 		public GameObject go;
 	}
 
@@ -632,6 +635,7 @@ public class UICamera : MonoBehaviour
 						if (mHit.depth != int.MaxValue)
 						{
 							mHit.hit = hits[b];
+							mHit.point = hits[b].point;
 							mHit.go = hits[b].collider.gameObject;
 							mHits.Add(mHit);
 						}
@@ -649,7 +653,7 @@ public class UICamera : MonoBehaviour
 						{
 							lastHit = mHits[b].hit;
 							hoveredObject = mHits[b].go;
-							lastWorldPosition = hits[b].point;
+							lastWorldPosition = mHits[b].point;
 							mHits.Clear();
 							return true;
 						}
@@ -682,7 +686,6 @@ public class UICamera : MonoBehaviour
 				}
 				continue;
 			}
-#if !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_1 && !UNITY_4_2
 			else if (cam.eventType == EventType.World_2D)
 			{
 				if (m2DPlane.Raycast(ray, out dist))
@@ -729,6 +732,7 @@ public class UICamera : MonoBehaviour
 							if (mHit.depth != int.MaxValue)
 							{
 								mHit.go = go;
+								mHit.point = lastWorldPosition;
 								mHits.Add(mHit);
 							}
 						}
@@ -775,14 +779,11 @@ public class UICamera : MonoBehaviour
 				}
 				continue;
 			}
-#endif
 		}
 		return false;
 	}
 
-#if !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_1 && !UNITY_4_2
 	static Plane m2DPlane = new Plane(Vector3.back, 0f);
-#endif
 
 	/// <summary>
 	/// Helper function to check if the specified hit is visible by the panel.
@@ -814,7 +815,7 @@ public class UICamera : MonoBehaviour
 
 		while (panel != null)
 		{
-			if (!panel.IsVisible(de.hit.point)) return false;
+			if (!panel.IsVisible(de.point)) return false;
 			panel = panel.parentPanel;
 		}
 		return true;
@@ -966,13 +967,11 @@ public class UICamera : MonoBehaviour
 
 		if (Application.platform == RuntimePlatform.Android ||
 			Application.platform == RuntimePlatform.IPhonePlayer
-#if !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_1
 			|| Application.platform == RuntimePlatform.WP8Player
-#if UNITY_4_0 || UNITY_4_1 || UNITY_4_2 || UNITY_4_3
+#if UNITY_4_3
 			|| Application.platform == RuntimePlatform.BB10Player
 #else
 			|| Application.platform == RuntimePlatform.BlackBerryPlayer
-#endif
 #endif
 			)
 		{
@@ -1010,7 +1009,10 @@ public class UICamera : MonoBehaviour
 	/// Sort the list when enabled.
 	/// </summary>
 
-	void OnEnable () { list.Add(this); list.Sort(CompareFunc); }
+	void OnEnable ()
+	{ list.Add(this);
+		list.Sort(CompareFunc);
+	}
 
 	/// <summary>
 	/// Remove this camera from the list.
