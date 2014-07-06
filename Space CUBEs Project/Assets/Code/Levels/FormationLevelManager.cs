@@ -1,12 +1,12 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.01.12
-// Edited: 2014.06.13
+// Edited: 2014.07.06
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using LittleByte.Data;
-
 using UnityEngine;
 
 public class FormationLevelManager : LevelManager
@@ -22,12 +22,33 @@ public class FormationLevelManager : LevelManager
     /// <summary>Time in seconds to fade to boss music.</summary>
     public float bossFadeTime = 3f;
 
+    public CampaignOverview campaignOverview;
+
     #endregion
 
     #region Private Fields
 
     private int segmentCursor;
     private bool lastSegment;
+
+    #endregion
+
+    #region Const Fields
+
+    public static readonly string[] LevelNames =
+    {
+        "The Abyss",
+        "Nebula Forest",
+        "Forsaken Colonies",
+        "The Capital",
+        "Galactic Core",
+    };
+
+    /// <summary>Data folder for highscores and unlocked levels.</summary>
+    public const string LevelsFolder = @"Levels/";
+
+    /// <summary>Data file prefix for level highscores. 0: rank, 1: score.</summary>
+    public const string HighScoreKey = "HighScore ";
 
     #endregion
 
@@ -46,7 +67,7 @@ public class FormationLevelManager : LevelManager
         base.Start();
 
 #if DEBUG
-        if (GameSettings.Main.jumpToBoss)
+        if (Singleton<GameSettings>.Main.jumpToBoss)
         {
             SpawnBoss();
         }
@@ -95,6 +116,39 @@ public class FormationLevelManager : LevelManager
         }
     }
 #endif
+
+    #endregion
+
+    #region LevelManager Overrides
+
+    protected override void LevelCompleted()
+    {
+        base.LevelCompleted();
+
+        // score
+        int score = player.myScore.points;
+
+        // rank
+        int rank = rankLimits.First(r => r > score) - 1;
+
+        // save rank and score
+        SaveData.Save(HighScoreKey + LevelNames[levelIndex], new int[] {rank, score});
+
+        // money
+        int money = player.myMoney.money;
+        player.myMoney.Save();
+
+        // awards
+        int[] awards = AwardCUBEs();
+        int[] inventory = CUBE.GetInventory();
+        foreach (int award in awards)
+        {
+            inventory[award]++;
+        }
+        CUBE.SetInventory(inventory);
+
+        campaignOverview.Initialize(score, rankLimits, rank, money, awards);
+    }
 
     #endregion
 
@@ -191,12 +245,12 @@ public class FormationLevelManager : LevelManager
 
     private void OnBossDeath(object sender, EventArgs args)
     {
-        if (levelIndex >= SaveData.Load<int>(LevelSelectManager.UnlockedLevelsKey, LevelSelectManager.LevelsFolder))
+        if (levelIndex >= SaveData.Load<int>(LevelSelectManager.UnlockedLevelsKey, LevelsFolder))
         {
-            SaveData.Save(LevelSelectManager.UnlockedLevelsKey, levelIndex + 1, LevelSelectManager.LevelsFolder);
+            SaveData.Save(LevelSelectManager.UnlockedLevelsKey, levelIndex + 1, LevelsFolder);
         }
 
-        LevelFinished();
+        LevelCompleted();
     }
 
     #endregion

@@ -1,11 +1,12 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2013.12.03
-// Edited: 2014.06.20
+// Edited: 2014.07.06
 
 using System;
 using System.Collections.Generic;
 using Annotations;
+using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -44,7 +45,6 @@ public class LevelManager : Singleton<LevelManager>
 
     #region Static Fields
 
-    private static readonly char[] Ranks = {'F', 'D', 'C', 'B', 'A', 'S'};
     private static readonly int[] GradeChances = {50000, 25000, 12500, 6250, 3125};
 
     #endregion
@@ -57,9 +57,11 @@ public class LevelManager : Singleton<LevelManager>
 
     #endregion
 
-    #region Events
+    #region TESTING
 
-    public EventHandler LevelFinishedEvent;
+#if UNITY_EDITOR
+    public string buildToLoad;
+#endif
 
     #endregion
 
@@ -87,7 +89,7 @@ public class LevelManager : Singleton<LevelManager>
 
         grid = ((GameObject)Instantiate(GameResources.Main.ConstructionGrid_Prefab, Vector3.zero, Quaternion.identity)).GetComponent<ConstructionGrid>();
 
-        string build = SceneManager.Main.currentBuild;
+        string build = ConstructionGrid.selectedBuild;
 #if UNITY_EDITOR
         if (string.IsNullOrEmpty(build))
         {
@@ -131,7 +133,7 @@ public class LevelManager : Singleton<LevelManager>
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            UnityEditor.EditorApplication.isPaused = true;
+            EditorApplication.isPaused = true;
         }
 #endif
     }
@@ -153,46 +155,12 @@ public class LevelManager : Singleton<LevelManager>
 
     #region Protected Methods
 
-    protected void LevelFinished()
+    // TODO: maybe make abstract
+    protected virtual void LevelCompleted()
     {
         Log("Level Finished.", Debugger.LogTypes.LevelEvents);
 
         player.MyHealth.invincible = true;
-
-        var data = new Dictionary<string, object>();
-        // score
-        data.Add("Score", player.myScore.points);
-        // save score
-        // money
-        data.Add("Money", player.myMoney.money);
-        player.myMoney.Save();
-        // awards
-        int[] awards = AwardCUBEs();
-        data.Add("Awards", awards);
-        int[] inventory = CUBE.GetInventory();
-        foreach (int award in awards)
-        {
-            inventory[award]++;
-        }
-        CUBE.SetInventory(inventory);
-        // level rank
-        char rank = Ranks[Ranks.Length - 1];
-
-        for (int i = 0; i < rankLimits.Length; i++)
-        {
-            if (player.myScore.points <= rankLimits[i])
-            {
-                rank = Ranks[i - 1];
-                break;
-            }
-        }
-        data.Add("Rank", rank);
-        InvokeAction(() => SceneManager.LoadScene("Level Overview", true, data), 2f);
-
-        if (LevelFinishedEvent != null)
-        {
-            LevelFinishedEvent(this, EventArgs.Empty);
-        }
     }
 
     #endregion
@@ -205,7 +173,7 @@ public class LevelManager : Singleton<LevelManager>
     }
 
 
-    private static int[] AwardCUBEs()
+    protected static int[] AwardCUBEs()
     {
         // get grades
         var grades = new int[5];
@@ -226,7 +194,7 @@ public class LevelManager : Singleton<LevelManager>
         var awards = new int[5];
         for (int i = 0; i < 5; i++)
         {
-            awards[i] = CUBE.gradedCUBEs[grades[i]][Random.Range(0, CUBE.gradedCUBEs[grades[i]].Length - 1)];
+            awards[i] = CUBE.GradedCUBEs[grades[i]][Random.Range(0, CUBE.GradedCUBEs[grades[i]].Length - 1)];
         }
 
         return awards;
@@ -260,7 +228,7 @@ public class LevelManager : Singleton<LevelManager>
 
     private void OnPlayerDeath(object sender, DieArgs args)
     {
-        LevelFinished();
+        LevelCompleted();
     }
 
 
