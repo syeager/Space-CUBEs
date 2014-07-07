@@ -25,7 +25,7 @@ namespace LittleByte.Debug.Attributes
             }
             if (value is ICollection)
             {
-                return ((ICollection)value).Count == 0 || Failed("Collection cannot be empty.");
+                return ((ICollection)value).Count >= 0 || Failed("Collection cannot be empty.");
             }
 
             return Failed("Type \'{0}\' is not supported.", value.GetType().Name);

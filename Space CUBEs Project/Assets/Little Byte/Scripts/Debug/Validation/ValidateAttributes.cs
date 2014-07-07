@@ -42,7 +42,7 @@ namespace LittleByte.Debug.Attributes
 
                     if (!attribute.IsValidValue(fieldInfo.GetValue(objInstance)))
                     {
-                        exceptions.Add(new Exception(attribute.ErrorMessage));
+                        exceptions.Add(new Exception(fieldInfo.Name + ": " + attribute.ErrorMessage));
                     }
                 }
             }
@@ -61,7 +61,7 @@ namespace LittleByte.Debug.Attributes
 
                     if (!attribute.IsValidValue(propertyInfo.GetValue(objInstance, null)))
                     {
-                        exceptions.Add(new Exception(attribute.ErrorMessage));
+                        exceptions.Add(new Exception(propertyInfo.Name + ": " + attribute.ErrorMessage));
                     }
                 }
             }
