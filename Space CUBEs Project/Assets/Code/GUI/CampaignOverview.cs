@@ -84,17 +84,6 @@ public class CampaignOverview : MonoBase
     #region MonoBehaviour Overrides
 
     [UsedImplicitly]
-    private void Awake()
-    {
-        states = new StateMachine(this, InitializingState);
-        states.CreateState(InitializingState, InitializingEnter, info => { });
-        states.CreateState(LootState, LootEnter, info => { });
-        states.CreateState(SalvageState, info => states.SetUpdate(SalvageUpdate()), info => { });
-        states.CreateState(IdleState, IdleEnter, info => { });
-    }
-
-    
-    [UsedImplicitly]
     private void Update()
     {
         if (completed) return;
@@ -148,7 +137,8 @@ public class CampaignOverview : MonoBase
         garageButton.gameObject.SetActive(true);
         storeButton.gameObject.SetActive(true);
         replayButton.gameObject.SetActive(true);
-        nextButton.gameObject.SetActive(!lastLevel);
+        nextButton.gameObject.SetActive(true);
+        nextButton.isEnabled = !lastLevel;
     }
 
     #endregion
@@ -163,7 +153,7 @@ public class CampaignOverview : MonoBase
         rankThresholds = ranks;
         playerLoot = loot;
         playerSalvage = salvage;
-        
+
         // buttons
         mainMenuButton.ActivateEvent += (sender, args) => SceneManager.LoadScene(SceneManager.MainMenu, true, true, true);
         garageButton.ActivateEvent += (sender, args) => SceneManager.LoadScene(SceneManager.Garage, true, true, true);
@@ -179,6 +169,11 @@ public class CampaignOverview : MonoBase
             lastLevel = true;
         }
 
+        states = new StateMachine(this, InitializingState);
+        states.CreateState(InitializingState, InitializingEnter, info => { });
+        states.CreateState(LootState, LootEnter, info => { });
+        states.CreateState(SalvageState, info => states.SetUpdate(SalvageUpdate()), info => { });
+        states.CreateState(IdleState, IdleEnter, info => { });
         states.Start();
     }
 
