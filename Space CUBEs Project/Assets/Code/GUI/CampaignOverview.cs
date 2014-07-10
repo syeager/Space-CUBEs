@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.07.06
-// Edited: 2014.07.06
+// Edited: 2014.07.08
 
 using System.Collections;
 using System.Collections.Generic;
@@ -26,7 +26,7 @@ public class CampaignOverview : MonoBase
     public GameObject[] rankSymbols;
 
     [NotEmpty]
-    public UISprite[] ranks;
+    public UIWidget[] ranks;
 
     [NotNull]
     public UILabel lootLabel;
@@ -56,7 +56,7 @@ public class CampaignOverview : MonoBase
 
     private StateMachine states;
 
-    private bool completed;
+    private bool scoreCompleted;
 
     private bool lastLevel;
 
@@ -78,6 +78,7 @@ public class CampaignOverview : MonoBase
     private const string LootState = "Loot";
     private const string SalvageState = "Salvage";
     private const string IdleState = "Idle";
+    private const string CompleteState = "Complete";
 
     #endregion
 
@@ -86,11 +87,11 @@ public class CampaignOverview : MonoBase
     [UsedImplicitly]
     private void Update()
     {
-        if (completed) return;
+        if (states.IsCurrentState(CompleteState)) return;
 
         if (Skip())
         {
-            Complete();
+            states.SetState(CompleteState);
         }
     }
 
@@ -103,18 +104,26 @@ public class CampaignOverview : MonoBase
         gameObject.SetActive(true);
 
         // score
-        StartCoroutine(Rollup(playerScore, scoreRollup, scoreLabel));
-
-        // rank
-        StartCoroutine(IncreaseRank());
+        StartCoroutine(ScoreRollup());
 
         states.SetState(LootState);
     }
 
 
-    private void LootEnter(Dictionary<string, object> info = null)
+    private IEnumerator LootUpdate()
     {
-        states.SetUpdate(Rollup(playerLoot, lootRollup, lootLabel)).JobCompleteEvent += killed => states.SetState(SalvageState);
+        float cursor = 0f;
+        while (cursor < playerLoot)
+        {
+            cursor += lootRollup * deltaTime;
+            lootLabel.text = Mathf.FloorToInt(cursor).ToString();
+
+            yield return null;
+        }
+        cursor = playerLoot;
+        lootLabel.text = Mathf.FloorToInt(cursor).ToString();
+
+        states.SetState(SalvageState);
     }
 
 
@@ -127,11 +136,15 @@ public class CampaignOverview : MonoBase
             salvageLabels[i].text = CUBE.AllCUBES[playerSalvage[i]].name;
         }
         yield return wait;
+
+        states.SetState(scoreCompleted ? CompleteState : IdleState);
     }
 
 
-    private void IdleEnter(Dictionary<string, object> info = null)
+    private void CompleteEnter(Dictionary<string, object> info = null)
     {
+        StopAllCoroutines();
+
         // show buttons
         mainMenuButton.gameObject.SetActive(true);
         garageButton.gameObject.SetActive(true);
@@ -139,6 +152,34 @@ public class CampaignOverview : MonoBase
         replayButton.gameObject.SetActive(true);
         nextButton.gameObject.SetActive(true);
         nextButton.isEnabled = !lastLevel;
+
+        // loot
+        lootLabel.text = playerLoot.ToString();
+
+        // salvage
+        for (int i = 0; i < playerSalvage.Length; i++)
+        {
+            salvageLabels[i].text = CUBE.AllCUBES[playerSalvage[i]].name;
+        }
+
+        // score
+        scoreLabel.text = playerScore.ToString();
+
+        // rank
+        for (int i = 0; i < ranks.Length; i++)
+        {
+            ranks[i].gameObject.SetActive(i == playerRank);
+            if (i == playerRank)
+            {
+                ranks[i].color = Color.white;
+            }
+        }
+
+        // symbol
+        for (int i = 0; i < rankSymbols.Length; i++)
+        {
+            rankSymbols[i].gameObject.SetActive(i == playerRank);
+        }
     }
 
     #endregion
@@ -149,8 +190,8 @@ public class CampaignOverview : MonoBase
     {
         // cache data
         playerScore = score;
-        playerRank = rank;
         rankThresholds = ranks;
+        playerRank = rank;
         playerLoot = loot;
         playerSalvage = salvage;
 
@@ -171,9 +212,10 @@ public class CampaignOverview : MonoBase
 
         states = new StateMachine(this, InitializingState);
         states.CreateState(InitializingState, InitializingEnter, info => { });
-        states.CreateState(LootState, LootEnter, info => { });
+        states.CreateState(LootState, info => states.SetUpdate(LootUpdate()), info => { });
         states.CreateState(SalvageState, info => states.SetUpdate(SalvageUpdate()), info => { });
-        states.CreateState(IdleState, IdleEnter, info => { });
+        states.CreateState(IdleState, info => { }, info => { });
+        states.CreateState(CompleteState, CompleteEnter, info => { });
         states.Start();
     }
 
@@ -181,24 +223,65 @@ public class CampaignOverview : MonoBase
 
     #region Private Methods
 
-    private IEnumerator Rollup(float target, float speed, UILabel label)
+    private IEnumerator ScoreRollup()
     {
-        float cursor = 0f;
-        while (cursor < target)
+        float scoreCursor = 0f;
+        int rankCursor = 0;
+        while (scoreCursor < playerScore)
         {
-            cursor += speed * deltaTime;
-            label.text = Mathf.FloorToInt(cursor).ToString();
+            scoreCursor += scoreRollup * deltaTime;
+
+            // label
+            scoreLabel.text = Mathf.FloorToInt(scoreCursor).ToString();
+
+            // rank
+            if (playerRank > 0 && rankCursor < rankThresholds.Length - 1)
+            {
+                float scoreProgress = scoreCursor;
+                if (rankCursor > 0)
+                {
+                    scoreProgress -= rankThresholds[rankCursor - 1];
+                }
+                float rankProgress = rankThresholds[rankCursor];
+                if (rankCursor > 0)
+                {
+                    rankProgress -= rankThresholds[rankCursor - 1];
+                }
+
+                float rankPercent = scoreProgress / rankProgress;
+                ranks[rankCursor].color = new Color(1f, 1f, 1f, 1f - rankPercent);
+                ranks[rankCursor + 1].color = new Color(1f, 1f, 1f, rankPercent);
+
+                // new rank
+                if (scoreCursor > rankThresholds[rankCursor])
+                {
+                    // rank
+                    ranks[rankCursor].gameObject.SetActive(false);
+                    ranks[rankCursor + 1].color = Color.white;
+
+                    // symbol
+                    rankSymbols[rankCursor].SetActive(false);
+                    rankCursor++;
+                    rankSymbols[rankCursor].SetActive(true);
+                }
+            }
 
             yield return null;
         }
-        cursor = target;
-        label.text = Mathf.FloorToInt(cursor).ToString();
-    }
+        scoreCursor = playerScore;
 
+        // label
+        scoreLabel.text = Mathf.FloorToInt(scoreCursor).ToString();
 
-    private IEnumerator IncreaseRank()
-    {
-        yield return null;
+        // rank
+        ranks[rankCursor + 1].gameObject.SetActive(false);
+        ranks[rankCursor].color = Color.white;
+
+        scoreCompleted = true;
+        if (states.IsCurrentState(IdleState))
+        {
+            states.SetState(CompleteState);
+        }
     }
 
 
@@ -209,29 +292,6 @@ public class CampaignOverview : MonoBase
 #else
         return Input.GetKeyUp(KeyCode.Escape) || (Input.touchCount > 0 && Input.GetTouch(0).tapCount >= 2);
 #endif
-    }
-
-
-    private void Complete()
-    {
-        completed = true;
-
-        // loot
-
-
-        // salvage
-
-
-        // score
-
-
-        // rank
-
-
-        if (states.currentState != IdleState)
-        {
-            states.SetState(IdleState);
-        }
     }
 
     #endregion

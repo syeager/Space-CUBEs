@@ -6,7 +6,6 @@
 using System;
 using System.Collections.Generic;
 using Annotations;
-using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -111,11 +110,11 @@ public class LevelManager : Singleton<LevelManager>
         // invincible
         if (Input.GetKeyDown(KeyCode.KeypadEnter))
         {
-            player.GetComponent<ShieldHealth>().invincible = true;
+            if (player != null) player.GetComponent<ShieldHealth>().invincible = true;
         }
         if (Input.GetKeyDown(KeyCode.KeypadPlus))
         {
-            player.GetComponent<ShieldHealth>().invincible = false;
+            if (player != null) player.GetComponent<ShieldHealth>().invincible = false;
         }
 
         // time controls
@@ -133,7 +132,7 @@ public class LevelManager : Singleton<LevelManager>
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            EditorApplication.isPaused = true;
+            UnityEditor.EditorApplication.isPaused = true;
         }
 #endif
     }
@@ -156,11 +155,14 @@ public class LevelManager : Singleton<LevelManager>
     #region Protected Methods
 
     // TODO: maybe make abstract
-    protected virtual void LevelCompleted()
+    protected virtual void LevelCompleted(bool won)
     {
         Log("Level Finished.", Debugger.LogTypes.LevelEvents);
 
-        player.MyHealth.invincible = true;
+        if (won)
+        {
+            player.MyHealth.invincible = true;
+        }
     }
 
     #endregion
@@ -216,19 +218,15 @@ public class LevelManager : Singleton<LevelManager>
         {
             player.GetComponent<ShieldHealth>().invincible = true;
         }
-        else
-        {
-            player.GetComponent<ShieldHealth>().DieEvent += OnPlayerDeath;
-        }
-#else
-        player.GetComponent<ShieldHealth>().DieEvent += OnPlayerDeath;
 #endif
+
+        player.GetComponent<ShieldHealth>().DieEvent += OnPlayerDeath;
     }
 
 
     private void OnPlayerDeath(object sender, DieArgs args)
     {
-        LevelCompleted();
+        LevelCompleted(false);
     }
 
 

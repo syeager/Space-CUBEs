@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.03.25
-// Edited: 2014.06.26
+// Edited: 2014.07.07
 
 using System;
 using UnityEngine;
@@ -284,10 +284,9 @@ public class SwitchBlade : Boss
 
     private void DyingEnter(Dictionary<string, object> info)
     {
-        if (moveJob != null)
-        {
-            moveJob.Kill();
-        }
+        if (moveJob != null) moveJob.Kill();
+        if (shieldJob != null) shieldJob.Kill();
+
 
         // clean up
         DeactivateWeapons(true);

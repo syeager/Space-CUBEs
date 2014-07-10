@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 1.5.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.01.10
+// Edited: 2014.07.08
 
 using UnityEngine;
 using System.Collections;
@@ -24,15 +26,9 @@ public class ScoreManager
 
     #endregion
 
-    #region Const Fields
-
-    private const string Scorepath = "Score";
-
-    #endregion
-
     #region Properties
 
-    public int points { get; private set; }
+    public int points;// { get; private set; }
 
     #endregion
 
@@ -42,7 +38,6 @@ public class ScoreManager
     public EventHandler<MultiplierUpdateArgs> MultiplierUpdateEvent;
 
     #endregion
-
 
     #region Public Methods
 
@@ -80,7 +75,7 @@ public class ScoreManager
         yield return new WaitForSeconds(multiplierLife);
         if (MultiplierUpdateEvent != null)
         {
-            MultiplierUpdateEvent(this, new MultiplierUpdateArgs(-multiplier+1, 1));
+            MultiplierUpdateEvent(this, new MultiplierUpdateArgs(-multiplier + 1, 1));
         }
         multiplier = 1;
     }

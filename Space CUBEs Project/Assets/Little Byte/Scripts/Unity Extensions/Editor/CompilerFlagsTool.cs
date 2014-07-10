@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.05.22
-// Edited: 2014.05.23
+// Edited: 2014.07.08
 
 using System.Collections.Generic;
 using System.Linq;

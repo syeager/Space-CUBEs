@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.01.12
-// Edited: 2014.07.06
+// Edited: 2014.07.09
 
 using System;
 using System.Collections.Generic;
@@ -114,6 +114,15 @@ public class FormationLevelManager : LevelManager
                 boss.MyHealth.RecieveHit(null, 1000);
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.Keypad3))
+        {
+            // kill player
+            if (player != null)
+            {
+                player.MyHealth.Trash();
+            }
+        }
     }
 #endif
 
@@ -121,15 +130,33 @@ public class FormationLevelManager : LevelManager
 
     #region LevelManager Overrides
 
-    protected override void LevelCompleted()
+    protected override void LevelCompleted(bool won)
     {
-        base.LevelCompleted();
+        base.LevelCompleted(won);
+
+        // stop spawning
+        StopAllCoroutines();
 
         // score
         int score = player.myScore.points;
 
         // rank
-        int rank = rankLimits.First(r => r > score) - 1;
+        int rank = rankLimits.Length - 1;
+        if (!won)
+        {
+            rank = 0;
+        }
+        else
+        {
+            for (int i = 0; i < rankLimits.Length; i++)
+            {
+                if (score < rankLimits[i])
+                {
+                    rank = i - 1;
+                    break;
+                }
+            }
+        }
 
         // save rank and score
         SaveData.Save(HighScoreKey + LevelNames[levelIndex], new int[] {rank, score});
@@ -250,7 +277,7 @@ public class FormationLevelManager : LevelManager
             SaveData.Save(LevelSelectManager.UnlockedLevelsKey, levelIndex + 1, LevelsFolder);
         }
 
-        LevelCompleted();
+        LevelCompleted(true);
     }
 
     #endregion

@@ -155,5 +155,11 @@ public class StateMachine
         }
     }
 
+
+    public bool IsCurrentState(string stateName)
+    {
+        return currentState == stateName;
+    }
+
     #endregion
 }
