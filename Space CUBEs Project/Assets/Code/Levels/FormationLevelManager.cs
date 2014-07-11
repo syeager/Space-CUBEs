@@ -1,11 +1,10 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.01.12
-// Edited: 2014.07.09
+// Edited: 2014.07.10
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using LittleByte.Data;
 using UnityEngine;
 
@@ -23,6 +22,9 @@ public class FormationLevelManager : LevelManager
     public float bossFadeTime = 3f;
 
     public CampaignOverview campaignOverview;
+
+    public int maxTimeScore;
+    public float minutesToBeat = 10f;
 
     #endregion
 
@@ -140,6 +142,12 @@ public class FormationLevelManager : LevelManager
         // score
         int score = player.myScore.points;
 
+        // time
+        int timeScore = TimeScore(Time.timeSinceLevelLoad);
+        score += timeScore;
+        Debugger.Log("Completion Time: " + Time.timeSinceLevelLoad, this, Debugger.LogTypes.LevelEvents);
+        Debugger.Log("Time Score: " + timeScore, this, Debugger.LogTypes.LevelEvents);
+
         // rank
         int rank = rankLimits.Length - 1;
         if (!won)
@@ -174,7 +182,7 @@ public class FormationLevelManager : LevelManager
         }
         CUBE.SetInventory(inventory);
 
-        campaignOverview.Initialize(score, rankLimits, rank, money, awards);
+        campaignOverview.Initialize(score, rankLimits, rank, Time.timeSinceLevelLoad, money, awards);
     }
 
     #endregion
@@ -278,6 +286,12 @@ public class FormationLevelManager : LevelManager
         }
 
         LevelCompleted(true);
+    }
+
+
+    private int TimeScore(float time)
+    {
+        return Mathf.RoundToInt(maxTimeScore * Mathf.Pow(Mathf.Clamp01(time / (minutesToBeat * 60f)) - 1, 2f));
     }
 
     #endregion

@@ -1,8 +1,9 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.07.06
-// Edited: 2014.07.08
+// Edited: 2014.07.09
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Annotations;
@@ -27,6 +28,9 @@ public class CampaignOverview : MonoBase
 
     [NotEmpty]
     public UIWidget[] ranks;
+
+    [NotNull]
+    public UILabel timeLabel;
 
     [NotNull]
     public UILabel lootLabel;
@@ -75,6 +79,7 @@ public class CampaignOverview : MonoBase
     #region State Names
 
     private const string InitializingState = "Initializing";
+    private const string TimeState = "Time";
     private const string LootState = "Loot";
     private const string SalvageState = "Salvage";
     private const string IdleState = "Idle";
@@ -106,7 +111,7 @@ public class CampaignOverview : MonoBase
         // score
         StartCoroutine(ScoreRollup());
 
-        states.SetState(LootState);
+        states.SetState(TimeState);
     }
 
 
@@ -116,12 +121,12 @@ public class CampaignOverview : MonoBase
         while (cursor < playerLoot)
         {
             cursor += lootRollup * deltaTime;
-            lootLabel.text = Mathf.FloorToInt(cursor).ToString();
+            lootLabel.text = Mathf.FloorToInt(cursor).ToString("N0");
 
             yield return null;
         }
         cursor = playerLoot;
-        lootLabel.text = Mathf.FloorToInt(cursor).ToString();
+        lootLabel.text = Mathf.FloorToInt(cursor).ToString("N0");
 
         states.SetState(SalvageState);
     }
@@ -154,7 +159,7 @@ public class CampaignOverview : MonoBase
         nextButton.isEnabled = !lastLevel;
 
         // loot
-        lootLabel.text = playerLoot.ToString();
+        lootLabel.text = playerLoot.ToString("N0");
 
         // salvage
         for (int i = 0; i < playerSalvage.Length; i++)
@@ -163,7 +168,7 @@ public class CampaignOverview : MonoBase
         }
 
         // score
-        scoreLabel.text = playerScore.ToString();
+        scoreLabel.text = playerScore.ToString("N0");
 
         // rank
         for (int i = 0; i < ranks.Length; i++)
@@ -186,7 +191,7 @@ public class CampaignOverview : MonoBase
 
     #region Public Methods
 
-    public void Initialize(float score, int[] ranks, int rank, float loot, int[] salvage)
+    public void Initialize(float score, int[] ranks, int rank, float time, float loot, int[] salvage)
     {
         // cache data
         playerScore = score;
@@ -212,6 +217,12 @@ public class CampaignOverview : MonoBase
 
         states = new StateMachine(this, InitializingState);
         states.CreateState(InitializingState, InitializingEnter, info => { });
+        states.CreateState(TimeState, info =>
+                                      {
+                                          TimeSpan timeSpan = TimeSpan.FromSeconds(time);
+                                          timeLabel.text = string.Format("{0:D2}:{1:D2}:{2:D3}", timeSpan.Minutes, timeSpan.Seconds, timeSpan.Milliseconds);
+                                          states.SetState(LootState);
+                                      }, info => { });
         states.CreateState(LootState, info => states.SetUpdate(LootUpdate()), info => { });
         states.CreateState(SalvageState, info => states.SetUpdate(SalvageUpdate()), info => { });
         states.CreateState(IdleState, info => { }, info => { });
@@ -232,7 +243,7 @@ public class CampaignOverview : MonoBase
             scoreCursor += scoreRollup * deltaTime;
 
             // label
-            scoreLabel.text = Mathf.FloorToInt(scoreCursor).ToString();
+            scoreLabel.text = Mathf.FloorToInt(scoreCursor).ToString("N0");
 
             // rank
             if (playerRank > 0 && rankCursor < rankThresholds.Length - 1)
@@ -271,7 +282,7 @@ public class CampaignOverview : MonoBase
         scoreCursor = playerScore;
 
         // label
-        scoreLabel.text = Mathf.FloorToInt(scoreCursor).ToString();
+        scoreLabel.text = Mathf.FloorToInt(scoreCursor).ToString("N0");
 
         // rank
         ranks[rankCursor + 1].gameObject.SetActive(false);
