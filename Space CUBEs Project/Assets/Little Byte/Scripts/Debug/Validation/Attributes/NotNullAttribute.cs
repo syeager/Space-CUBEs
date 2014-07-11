@@ -37,7 +37,7 @@ namespace LittleByte.Debug.Attributes
         public override bool IsValidValue(object value)
         {
             if (allowedInEditMode && !Application.isPlaying) return true;
-            return value != null || Failed("Valid cannot be null.");
+            return value != null || Failed("Value cannot be null.");
         }
 
         #endregion
