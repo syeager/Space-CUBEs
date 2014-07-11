@@ -127,6 +127,7 @@ public class KeyboardShortcuts : EditorWindow
         created.tag = Selection.activeGameObject.tag;
         created.layer = Selection.activeGameObject.layer;
 
+        created.transform.parent = Selection.activeTransform.parent;
         Selection.activeTransform.parent = created.transform;
         created.transform.position = Selection.activeTransform.position;
         created.transform.rotation = Selection.activeTransform.rotation;
