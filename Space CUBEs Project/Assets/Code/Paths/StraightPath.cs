@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 1.26.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.01.28
+// Edited: 2014.07.12
 
 using UnityEngine;
 
@@ -19,7 +21,6 @@ namespace Paths
         private Vector3 direction;
 
         #endregion
-
 
         #region Path Overrides
 
