@@ -1,9 +1,8 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2013.12.03
-// Edited: 2014.07.06
+// Edited: 2014.07.12
 
-using System;
 using System.Collections.Generic;
 using Annotations;
 using UnityEngine;
@@ -50,9 +49,9 @@ public class LevelManager : Singleton<LevelManager>
 
     #region Properties
 
-    public List<Enemy> activeEnemies { get; protected set; }
-    public Player player { get; protected set; }
-    public Transform playerTransform { get; protected set; }
+    public List<Enemy> ActiveEnemies { get; protected set; }
+    public Player PlayerController { get; protected set; }
+    public Transform PlayerTransform { get; protected set; }
 
     #endregion
 
@@ -84,7 +83,7 @@ public class LevelManager : Singleton<LevelManager>
         GameTime.PausedEvent += OnPause;
 
         // active enemies
-        activeEnemies = new List<Enemy>();
+        ActiveEnemies = new List<Enemy>();
 
         grid = ((GameObject)Instantiate(GameResources.Main.ConstructionGrid_Prefab, Vector3.zero, Quaternion.identity)).GetComponent<ConstructionGrid>();
 
@@ -110,11 +109,11 @@ public class LevelManager : Singleton<LevelManager>
         // invincible
         if (Input.GetKeyDown(KeyCode.KeypadEnter))
         {
-            if (player != null) player.GetComponent<ShieldHealth>().invincible = true;
+            if (PlayerController != null) PlayerController.GetComponent<ShieldHealth>().invincible = true;
         }
         if (Input.GetKeyDown(KeyCode.KeypadPlus))
         {
-            if (player != null) player.GetComponent<ShieldHealth>().invincible = false;
+            if (PlayerController != null) PlayerController.GetComponent<ShieldHealth>().invincible = false;
         }
 #endif
     }
@@ -143,7 +142,7 @@ public class LevelManager : Singleton<LevelManager>
 
         if (won)
         {
-            player.MyHealth.invincible = true;
+            PlayerController.MyHealth.invincible = true;
         }
     }
 
@@ -191,18 +190,18 @@ public class LevelManager : Singleton<LevelManager>
     private void OnBuildFinished(BuildFinishedArgs args)
     {
         var buildShip = args.ship.AddComponent<ShipCompactor>();
-        player = buildShip.Compact(true) as Player;
-        playerTransform = player.transform;
-        player.Initialize(args.health, args.shield, args.speed, args.damage);
+        PlayerController = buildShip.Compact(true) as Player;
+        PlayerTransform = PlayerController.transform;
+        PlayerController.Initialize(args.health, args.shield, args.speed, args.damage);
 
 #if DEBUG
         if (GameSettings.Main.invincible)
         {
-            player.GetComponent<ShieldHealth>().invincible = true;
+            PlayerController.GetComponent<ShieldHealth>().invincible = true;
         }
 #endif
 
-        player.GetComponent<ShieldHealth>().DieEvent += OnPlayerDeath;
+        PlayerController.GetComponent<ShieldHealth>().DieEvent += OnPlayerDeath;
     }
 
 
