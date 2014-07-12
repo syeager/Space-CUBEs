@@ -129,6 +129,8 @@ public class Medic : Boss
         StopAllCoroutines();
         plasmaGun.Activate(false);
 
+        minionSpawner.BuffHealth();
+
         stateMachine.SetUpdate(StagingUpdate());
     }
 
