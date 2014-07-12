@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.06.25
-// Edited: 2014.06.28
+// Edited: 2014.07.12
 
 using System.Collections;
 using System.Collections.Generic;
@@ -76,6 +76,16 @@ public class MinionSpawner : Weapon
     public Coroutine BuffShield()
     {
         return StartCoroutine(BuffingShield());
+    }
+
+
+    public void KillAll()
+    {
+        StopAllCoroutines();
+        while (minions.Count > 0)
+        {
+            minions[0].Trash();
+        }
     }
 
     #endregion

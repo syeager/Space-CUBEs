@@ -267,6 +267,9 @@ public class Medic : Boss
         swayJob.Kill();
         myAnimation.Play("Switchblade_Death");
 
+        // kill minions
+        minionSpawner.KillAll();
+
         stateMachine.SetUpdate(DeathUpdate());
     }
 

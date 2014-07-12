@@ -285,7 +285,10 @@ public class CampaignOverview : MonoBase
         scoreLabel.text = Mathf.FloorToInt(scoreCursor).ToString("N0");
 
         // rank
-        ranks[rankCursor + 1].gameObject.SetActive(false);
+        if (rankCursor < ranks.Length - 1)
+        {
+            ranks[rankCursor + 1].gameObject.SetActive(false);
+        }
         ranks[rankCursor].color = Color.white;
 
         scoreCompleted = true;
