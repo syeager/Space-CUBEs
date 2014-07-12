@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 3.10.2014
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2014.03.10
+// Edited: 2014.07.12
 
 using UnityEngine;
 
@@ -10,7 +12,7 @@ namespace Paths
         #region Public Fields
 
         public Vector3[] stops = new Vector3[1];
-        public float[] delays = { 1f };
+        public float[] delays = {1f};
 
         #endregion
 
@@ -24,9 +26,8 @@ namespace Paths
         #region Const Fields
 
         private const float DistanceBuffer = 0.5f;
-        
-        #endregion
 
+        #endregion
 
         #region Path Overrides
 
@@ -51,6 +52,7 @@ namespace Paths
             else
             {
                 Vector3 move = (stops[cursor] - myTransform.position).normalized * speed;
+                Debug.Log(move);
                 return move;
             }
         }

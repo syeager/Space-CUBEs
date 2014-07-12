@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 11.25.2013
+﻿// Space CUBEs Project-csharp
+// Author: Steve Yeager
+// Created: 2013.11.25
+// Edited: 2014.07.12
 
 using Annotations;
 using UnityEngine;
@@ -15,23 +17,28 @@ public class ShipMotor : MonoBase
     private Transform myTransform;
     private Rigidbody myRigidbody;
     private Camera levelCamera;
-    
+
     #endregion
 
     #region Public Fields
 
     /// <summary>Max movement speed.</summary>
     public float speed;
+
     /// <summary>Movement speed during barrel roll.</summary>
     public float barrelRollMoveSpeed;
+
     /// <summary>How long the barrel roll lasts.</summary>
     public float barrelRollTime = 0.3f;
+
     /// <summary>Time between allowed barrel rolls.</summary>
     public float barrelRollBuffer = 0.5f;
 
     public bool hasVerticalBounds = true;
+
     /// <summary>Screen percentage for screen top/bottom boundary.</summary>
     public float verticalBounds = 0.05f;
+
     public bool hasHorizontalBounds = true;
     public float leftBound = 0.01f;
     public float rightBound = 0.01f;
@@ -40,7 +47,13 @@ public class ShipMotor : MonoBase
 
     #region Private Fields
 
-    private enum BarrelRollStatuses { Ready, Rolling, Waiting }
+    private enum BarrelRollStatuses
+    {
+        Ready,
+        Rolling,
+        Waiting
+    }
+
     private BarrelRollStatuses barrelRollStatus = BarrelRollStatuses.Ready;
 
     /// <summary>Velocity to be applied to the ship next step.</summary>
@@ -54,7 +67,6 @@ public class ShipMotor : MonoBase
     private const float Barrelrollmodifier = 2f;
 
     #endregion
-
 
     #region Unity Overrides
 
@@ -84,7 +96,7 @@ public class ShipMotor : MonoBase
     #endregion
 
     #region Public Methods
-    
+
     public void Initialize(float speed)
     {
         myRigidbody = rigidbody;
@@ -103,7 +115,7 @@ public class ShipMotor : MonoBase
             TestBoundaries(ref input);
         }
 
-        velocity = input * speed;
+        velocity = input.normalized * speed;
     }
 
 
@@ -131,12 +143,12 @@ public class ShipMotor : MonoBase
     public IEnumerator BarrelRoll(Vector2 direction, float bounds)
     {
         if (barrelRollStatus != BarrelRollStatuses.Ready) yield break;
-        
+
         barrelRollStatus = BarrelRollStatuses.Rolling;
         float rollingSpeed = 360f / barrelRollTime;
         Vector3 eulerAngles = myTransform.eulerAngles;
 
-        var timer = barrelRollTime;
+        float timer = barrelRollTime;
         while (timer > 0f)
         {
             // test bounds
@@ -178,7 +190,7 @@ public class ShipMotor : MonoBase
                     input.y = 0f;
                 }
             }
-            // bottom
+                // bottom
             else if (input.y < 0f)
             {
                 if (screenPosition.y <= verticalBounds)
@@ -198,7 +210,7 @@ public class ShipMotor : MonoBase
                     input.x = 0f;
                 }
             }
-            // right
+                // right
             else if (input.x > 0f)
             {
                 if (screenPosition.x >= 1 - rightBound)

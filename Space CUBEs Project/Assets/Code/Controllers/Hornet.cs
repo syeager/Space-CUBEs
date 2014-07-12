@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.06.22
-// Edited: 2014.06.25
+// Edited: 2014.07.12
 
 using System.Collections.Generic;
 using UnityEngine;
@@ -43,6 +43,9 @@ public class Hornet : Enemy
         stateMachine.CreateState(AttackingState, info => stateMachine.SetUpdate(AttackingUpdate()), info => { });
         stateMachine.CreateState(ExitingState, info => stateMachine.SetUpdate(ExitingUpdate()), info => { });
         stateMachine.CreateState(DyingState, DyingEnter, info => { });
+
+        // weapons
+        laser.Initialize(this);
     }
 
     #endregion
@@ -93,7 +96,7 @@ public class Hornet : Enemy
     {
         while (true)
         {
-            myMotor.Move(path.Direction(deltaTime));
+            myMotor.Move((Vector2)path.Direction(deltaTime));
             yield return null;
         }
     }
