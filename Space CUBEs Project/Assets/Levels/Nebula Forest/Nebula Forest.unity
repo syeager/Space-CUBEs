@@ -84,12 +84,13 @@ GameObject:
   - 4: {fileID: 6372173}
   - 114: {fileID: 6372172}
   - 114: {fileID: 6372174}
+  - 114: {fileID: 6372175}
   m_Layer: 0
   m_Name: ___Debugger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!114 &6372172
 MonoBehaviour:
@@ -124,7 +125,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 360899704}
   m_Father: {fileID: 0}
 --- !u!114 &6372174
 MonoBehaviour:
@@ -138,6 +140,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b32fd8b6b34e20f46a0168dd34944ddd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6372175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400004, guid: 45c62a3fc8a9231409c29375e8f213d8,
+    type: 2}
+  m_PrefabInternal: {fileID: 502363018}
+  m_GameObject: {fileID: 6372171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6923d3ccfea26ca4f9dd01984a01a109, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  log: 0
+  timeScale: 1
+  logWarning: 0
+  aboveOne: 1
+  belowOne: .100000001
+  timeDisplay: {fileID: 360899703}
+  displayTime: 1
 --- !u!114 &8800428
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3846,6 +3867,57 @@ MeshFilter:
   m_PrefabInternal: {fileID: 1895399209}
   m_GameObject: {fileID: 354956047}
   m_Mesh: {fileID: 4300000, guid: da8497d2fe386724fb30058f6dffe5ec, type: 3}
+--- !u!1 &360899702
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100002, guid: 45c62a3fc8a9231409c29375e8f213d8, type: 2}
+  m_PrefabInternal: {fileID: 502363018}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 360899704}
+  - 132: {fileID: 360899703}
+  m_Layer: 0
+  m_Name: Time Scale
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 4294967295
+  m_IsActive: 0
+--- !u!132 &360899703
+GUIText:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 13200000, guid: 45c62a3fc8a9231409c29375e8f213d8,
+    type: 2}
+  m_PrefabInternal: {fileID: 502363018}
+  m_GameObject: {fileID: 360899702}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Text: Time Scale
+  m_Anchor: 1
+  m_Alignment: 1
+  m_PixelOffset: {x: 0, y: 0}
+  m_LineSpacing: 1
+  m_TabSize: 4
+  m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Material: {fileID: 0}
+  m_FontSize: 0
+  m_FontStyle: 0
+  m_Color:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_PixelCorrect: 1
+  m_RichText: 1
+--- !u!4 &360899704
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400002, guid: 45c62a3fc8a9231409c29375e8f213d8, type: 2}
+  m_PrefabInternal: {fileID: 502363018}
+  m_GameObject: {fileID: 360899702}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: .5, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6372173}
 --- !u!1 &373227453
 GameObject:
   m_ObjectHideFlags: 0
@@ -7936,7 +8008,6 @@ MonoBehaviour:
   campaignOverview: {fileID: 870080097}
   maxTimeScore: 50000
   minutesToBeat: 10
-  timeFactor: 1.10000002
   bossPrefab: {fileID: 100034, guid: 0ce5bd1487d41de42aefedb033b98e5a, type: 2}
   bossSpawnPosition: {x: 125, y: 0, z: 0}
 --- !u!4 &643404111
@@ -10514,8 +10585,8 @@ MonoBehaviour:
   log: 1
   timeScale: 1
   logWarning: 0
-  invincible: 1
-  jumpToBoss: 1
+  invincible: 0
+  jumpToBoss: 0
   joystickSensitivity: .5
   joystickXBuffer: .0500000007
   joystickYBuffer: .0500000007
@@ -23572,7 +23643,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400006, guid: aeed59aee1ea3714da2eb46ccb6175bd, type: 2}
       propertyPath: invincible
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11400006, guid: aeed59aee1ea3714da2eb46ccb6175bd, type: 2}
       propertyPath: logWarning
@@ -23580,7 +23651,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400006, guid: aeed59aee1ea3714da2eb46ccb6175bd, type: 2}
       propertyPath: jumpToBoss
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: aeed59aee1ea3714da2eb46ccb6175bd, type: 2}
