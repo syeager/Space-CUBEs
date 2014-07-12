@@ -116,24 +116,6 @@ public class LevelManager : Singleton<LevelManager>
         {
             if (player != null) player.GetComponent<ShieldHealth>().invincible = false;
         }
-
-        // time controls
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            GameTime.timeScale += 1f * GameTime.deltaTime;
-        }
-        if (Input.GetKey(KeyCode.DownArrow))
-        {
-            GameTime.timeScale = Mathf.Clamp(GameTime.timeScale - 0.5f * GameTime.deltaTime, 0f, 5f);
-        }
-        if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            GameTime.timeScale = 1f;
-        }
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            UnityEditor.EditorApplication.isPaused = true;
-        }
 #endif
     }
 
