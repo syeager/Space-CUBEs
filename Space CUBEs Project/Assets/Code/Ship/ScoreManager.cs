@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.01.10
-// Edited: 2014.07.08
+// Edited: 2014.07.12
 
 using UnityEngine;
 using System.Collections;
@@ -21,14 +21,29 @@ public class ScoreManager
 
     #region Private Fields
 
-    private int multiplier = 1;
+    private int cursor;
     private Job multiplierJob;
+
+    #endregion
+
+    #region Const Fields
+
+    private const int GroupSize = 10;
+    private const int MaxMultiplier = 10;
 
     #endregion
 
     #region Properties
 
-    public int points;// { get; private set; }
+    private int multiplier = 1;
+
+    private int Multiplier
+    {
+        get { return multiplier; }
+        set { multiplier = Mathf.Clamp(value, 1, MaxMultiplier); }
+    }
+
+    public int points; // { get; private set; }
 
     #endregion
 
@@ -53,17 +68,14 @@ public class ScoreManager
 
     public void IncreaseMultiplier(int amount = 1)
     {
-        multiplier += amount;
-        if (multiplierJob != null)
-        {
-            multiplierJob.Kill();
-        }
+        cursor += amount;
+        int mult = cursor / GroupSize + 1;
+
+        if (multiplierJob != null) multiplierJob.Kill();
         multiplierJob = new Job(MultiplierLife());
 
-        if (MultiplierUpdateEvent != null)
-        {
-            MultiplierUpdateEvent(this, new MultiplierUpdateArgs(amount, multiplier));
-        }
+        MultiplierUpdateEvent.Fire(this, new MultiplierUpdateArgs(mult - Multiplier, mult));
+        Multiplier = mult;
     }
 
     #endregion
@@ -75,9 +87,9 @@ public class ScoreManager
         yield return new WaitForSeconds(multiplierLife);
         if (MultiplierUpdateEvent != null)
         {
-            MultiplierUpdateEvent(this, new MultiplierUpdateArgs(-multiplier + 1, 1));
+            MultiplierUpdateEvent(this, new MultiplierUpdateArgs(-Multiplier + 1, 1));
         }
-        multiplier = 1;
+        cursor = 0;
     }
 
     #endregion
