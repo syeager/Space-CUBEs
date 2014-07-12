@@ -66,7 +66,7 @@ public class SidewinderMissileLauncher : Weapon
         {
             animation.Stop();
             Prefabs.Pop(missilePrefab, myTransform.position + myTransform.TransformDirection(position), myTransform.rotation).
-                GetComponent<SidewinderMissile>().Initialize(myShip, damage, missileSpeed, rotationSpeed, homingTime, dummyTargets, LevelManager.Main.player.transform);
+                GetComponent<SidewinderMissile>().Initialize(myShip, damage, missileSpeed, rotationSpeed, homingTime, dummyTargets, LevelManager.Main.PlayerController.transform);
 
             AudioManager.Play(fireAudio);
             animation.Play(fireClip);

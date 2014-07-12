@@ -39,7 +39,7 @@ public class EnemyCannon : Weapon
     {
         Vector3 position = myTransform.position + myTransform.TransformDirection(offset);
         Prefabs.Pop(bulletPrefab, position, myTransform.rotation).
-            GetComponent<Hitbox>().Initialize(myShip, damage, (LevelManager.Main.playerTransform.position - position).normalized * speed);
+            GetComponent<Hitbox>().Initialize(myShip, damage, (LevelManager.Main.PlayerTransform.position - position).normalized * speed);
     }
 
     #endregion

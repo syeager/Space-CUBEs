@@ -66,7 +66,7 @@ public class Minion : Enemy
 
     private IEnumerator MovingUpdate()
     {
-        Transform player = LevelManager.Main.playerTransform;
+        Transform player = LevelManager.Main.PlayerTransform;
         Vector3 target = Utility.RandomVector3(attackPositionMin, attackPositionMax);
         const float distBuffer = 1f;
         while (Vector3.Distance(myTransform.position, target) > distBuffer)

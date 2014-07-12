@@ -97,7 +97,7 @@ public class SharkMissile : Hitbox
     private void FindTarget()
     {
         float max = 0f;
-        foreach (var enemy in LevelManager.Main.activeEnemies)
+        foreach (var enemy in LevelManager.Main.ActiveEnemies)
         {
             if (enemy.GetComponent<ShieldHealth>().Strength > max)
             {

@@ -100,10 +100,10 @@ public class FormationLevelManager : LevelManager
             }
             // spawn boss
             segmentCursor = 100000;
-            while (activeEnemies.Count > 0)
+            while (ActiveEnemies.Count > 0)
             {
-                if (activeEnemies[0] == null) continue;
-                (activeEnemies[0].MyHealth).Trash();
+                if (ActiveEnemies[0] == null) continue;
+                (ActiveEnemies[0].MyHealth).Trash();
             }
             SpawnBoss();
         }
@@ -120,9 +120,9 @@ public class FormationLevelManager : LevelManager
         if (Input.GetKeyDown(KeyCode.Keypad3))
         {
             // kill player
-            if (player != null)
+            if (PlayerController != null)
             {
-                player.MyHealth.Trash();
+                PlayerController.MyHealth.Trash();
             }
         }
     }
@@ -140,7 +140,7 @@ public class FormationLevelManager : LevelManager
         StopAllCoroutines();
 
         // score
-        int score = player.myScore.points;
+        int score = PlayerController.myScore.points;
 
         // time
         int timeScore = TimeScore(Time.timeSinceLevelLoad);
@@ -170,8 +170,8 @@ public class FormationLevelManager : LevelManager
         SaveData.Save(HighScoreKey + LevelNames[levelIndex], new int[] {rank, score});
 
         // money
-        int money = player.myMoney.money;
-        player.myMoney.Save();
+        int money = PlayerController.myMoney.money;
+        PlayerController.myMoney.Save();
 
         // awards
         int[] awards = AwardCUBEs();
@@ -222,7 +222,7 @@ public class FormationLevelManager : LevelManager
             Enemy enemy = (Enemy)enemyObject.GetComponent(typeof(Enemy));
             enemy.stateMachine.Start(new Dictionary<string, object> {{"path", (formationGroups[segmentCursor].paths[i])}});
             ((ShieldHealth)enemy.GetComponent(typeof(ShieldHealth))).DieEvent += OnEnemyDeath;
-            activeEnemies.Add(enemy);
+            ActiveEnemies.Add(enemy);
         }
 
         // increase segmentCursor
@@ -247,7 +247,7 @@ public class FormationLevelManager : LevelManager
     private void SpawnBoss()
     {
         boss = (Instantiate(bossPrefab, bossSpawnPosition, SpawnRotation) as GameObject).GetComponent<Boss>();
-        activeEnemies.Add(boss);
+        ActiveEnemies.Add(boss);
         boss.DeathEvent += OnBossDeath;
         boss.stateMachine.Start();
 
@@ -262,8 +262,8 @@ public class FormationLevelManager : LevelManager
     {
         ShieldHealth enemyHealth = sender as ShieldHealth;
         enemyHealth.DieEvent -= OnEnemyDeath;
-        activeEnemies.Remove((Enemy)enemyHealth.GetComponent(typeof(Enemy)));
-        if (activeEnemies.Count == 0)
+        ActiveEnemies.Remove((Enemy)enemyHealth.GetComponent(typeof(Enemy)));
+        if (ActiveEnemies.Count == 0)
         {
             Log("Formation " + (segmentCursor - 1) + " cleared.", Debugger.LogTypes.LevelEvents);
             if (lastSegment)

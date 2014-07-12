@@ -84,7 +84,7 @@ public class Sentry : Enemy
 
     private void SpawnEnter(Dictionary<string, object> info)
     {
-        player = LevelManager.Main.playerTransform;
+        player = LevelManager.Main.PlayerTransform;
 
         attackPath = ScriptableObject.CreateInstance(typeof(FigureEight)) as FigureEight;
         attackPath.Initialize(myTransform, idlingSpeed, 2f, 1f);

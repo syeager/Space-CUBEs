@@ -57,7 +57,7 @@ public class HornetCannon : Weapon
 
     private IEnumerator Fire()
     {
-        Transform player = LevelManager.Main.playerTransform;
+        Transform player = LevelManager.Main.PlayerTransform;
         if (player == null) yield break;
         Vector3 direction = (player.position - myTransform.position).normalized;
         Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.back);

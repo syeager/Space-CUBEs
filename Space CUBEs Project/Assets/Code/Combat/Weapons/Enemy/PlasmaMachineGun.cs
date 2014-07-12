@@ -61,7 +61,7 @@ public class PlasmaMachineGun : Weapon
 
     private IEnumerator Target()
     {
-        Transform player = LevelManager.Main.playerTransform;
+        Transform player = LevelManager.Main.PlayerTransform;
         while (true)
         {
             Quaternion targetRotation = Quaternion.LookRotation(player.position - myTransform.position, myTransform.up);
