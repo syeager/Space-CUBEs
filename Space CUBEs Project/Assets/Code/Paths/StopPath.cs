@@ -52,7 +52,6 @@ namespace Paths
             else
             {
                 Vector3 move = (stops[cursor] - myTransform.position).normalized * speed;
-                Debug.Log(move);
                 return move;
             }
         }
