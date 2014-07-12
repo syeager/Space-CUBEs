@@ -26,6 +26,9 @@ public class FormationLevelManager : LevelManager
     public int maxTimeScore;
     public float minutesToBeat = 10f;
 
+    /// <summary>Points given for winning with max health.</summary>
+    public float maxHealthScore;
+
     #endregion
 
     #region Private Fields
@@ -142,11 +145,14 @@ public class FormationLevelManager : LevelManager
         // score
         int score = PlayerController.myScore.points;
 
-        // time
+        // time score
         int timeScore = TimeScore(Time.timeSinceLevelLoad);
         score += timeScore;
         Debugger.Log("Completion Time: " + Time.timeSinceLevelLoad, this, Debugger.LogTypes.LevelEvents);
         Debugger.Log("Time Score: " + timeScore, this, Debugger.LogTypes.LevelEvents);
+
+        // health score
+        score += Mathf.RoundToInt((PlayerController.MyHealth.health / PlayerController.MyHealth.maxHealth) * maxHealthScore);
 
         // rank
         int rank = rankLimits.Length - 1;

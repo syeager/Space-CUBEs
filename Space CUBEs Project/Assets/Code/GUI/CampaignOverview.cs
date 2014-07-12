@@ -249,22 +249,16 @@ public class CampaignOverview : MonoBase
             if (playerRank > 0 && rankCursor < rankThresholds.Length - 1)
             {
                 float scoreProgress = scoreCursor;
-                if (rankCursor > 0)
-                {
-                    scoreProgress -= rankThresholds[rankCursor - 1];
-                }
-                float rankProgress = rankThresholds[rankCursor];
-                if (rankCursor > 0)
-                {
-                    rankProgress -= rankThresholds[rankCursor - 1];
-                }
+                scoreProgress -= rankThresholds[rankCursor];
+                float rankProgress = rankThresholds[rankCursor + 1];
+                rankProgress -= rankThresholds[rankCursor];
 
                 float rankPercent = scoreProgress / rankProgress;
                 ranks[rankCursor].color = new Color(1f, 1f, 1f, 1f - rankPercent);
                 ranks[rankCursor + 1].color = new Color(1f, 1f, 1f, rankPercent);
 
                 // new rank
-                if (scoreCursor > rankThresholds[rankCursor])
+                if (scoreCursor >= rankThresholds[rankCursor + 1])
                 {
                     // rank
                     ranks[rankCursor].gameObject.SetActive(false);

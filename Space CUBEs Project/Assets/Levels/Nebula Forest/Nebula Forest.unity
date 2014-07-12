@@ -8958,6 +8958,7 @@ MonoBehaviour:
   campaignOverview: {fileID: 870080097}
   maxTimeScore: 50000
   minutesToBeat: 10
+  maxHealthScore: 25000
   bossPrefab: {fileID: 100034, guid: 0ce5bd1487d41de42aefedb033b98e5a, type: 2}
   bossSpawnPosition: {x: 125, y: 0, z: 0}
 --- !u!4 &643404111
@@ -18455,6 +18456,30 @@ Prefab:
     - target: {fileID: 100022, guid: ef37d6ae96166484fa5d9f034eae21d3, type: 2}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100068, guid: ef37d6ae96166484fa5d9f034eae21d3, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100074, guid: ef37d6ae96166484fa5d9f034eae21d3, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100084, guid: ef37d6ae96166484fa5d9f034eae21d3, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: ef37d6ae96166484fa5d9f034eae21d3, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100086, guid: ef37d6ae96166484fa5d9f034eae21d3, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100034, guid: ef37d6ae96166484fa5d9f034eae21d3, type: 2}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ef37d6ae96166484fa5d9f034eae21d3, type: 2}

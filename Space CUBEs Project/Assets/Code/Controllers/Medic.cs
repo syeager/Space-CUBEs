@@ -264,7 +264,10 @@ public class Medic : Boss
         GameObject root = new GameObject();
         root.transform.SetPosRot(myTransform.position, myTransform.rotation);
         myTransform.parent = root.transform;
-        swayJob.Kill();
+        if (swayJob != null)
+        {
+            swayJob.Kill();
+        }
         myAnimation.Play("Switchblade_Death");
 
         // kill minions
