@@ -39,6 +39,8 @@ namespace LittleByte.Debug
         [Conditional("DEBUG")]
         private void Update()
         {
+            if (!Input.GetKey(KeyCode.LeftShift)) return;
+
             // fast forward
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
