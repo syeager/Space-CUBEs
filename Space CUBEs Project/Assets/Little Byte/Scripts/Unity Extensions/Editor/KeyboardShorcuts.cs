@@ -3,7 +3,6 @@
 // Created: 2014.05.22
 // Edited: 2014.06.07
 
-using System.IO;
 using System.Linq;
 using Annotations;
 using UnityEditor;

@@ -2533,20 +2533,6 @@ MonoBehaviour:
   angle: 0
   center: {x: 0, y: -10, z: 0}
   angularSpeed: -1
---- !u!114 &205260086
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: abf2270f409eace46877033dc0a5f0e7, type: 3}
-  m_Name: (Clone)(Clone)(Clone)
-  m_EditorClassIdentifier: 
-  speed: 15
-  angle: 45
-  rotation: 0
 --- !u!1 &218534980
 GameObject:
   m_ObjectHideFlags: 0
@@ -3567,20 +3553,6 @@ MonoBehaviour:
   speed: 15
   amplitude: -.349999994
   frequency: 4
---- !u!114 &295992264
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: abf2270f409eace46877033dc0a5f0e7, type: 3}
-  m_Name: (Clone)(Clone)(Clone)
-  m_EditorClassIdentifier: 
-  speed: 15
-  angle: 45
-  rotation: 0
 --- !u!1 &296648923
 GameObject:
   m_ObjectHideFlags: 0
@@ -8060,6 +8032,20 @@ Transform:
   - {fileID: 1704642304}
   - {fileID: 602895943}
   m_Father: {fileID: 886307572}
+--- !u!114 &612092436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abf2270f409eace46877033dc0a5f0e7, type: 3}
+  m_Name: (Clone)(Clone)(Clone)
+  m_EditorClassIdentifier: 
+  speed: 15
+  angle: -45
+  rotation: 0
 --- !u!1 &615043081
 GameObject:
   m_ObjectHideFlags: 0
@@ -8451,20 +8437,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 1445555953}
   m_GameObject: {fileID: 615295969}
   m_Mesh: {fileID: 4300000, guid: bc144e22dd4cdcb4d9668f3f454d74ba, type: 3}
---- !u!114 &618902555
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: abf2270f409eace46877033dc0a5f0e7, type: 3}
-  m_Name: (Clone)(Clone)(Clone)
-  m_EditorClassIdentifier: 
-  speed: 15
-  angle: 45
-  rotation: 0
 --- !u!114 &619782525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8587,13 +8559,21 @@ MonoBehaviour:
     needsClearing: 0
     spawnTime: 0
   - formation: {fileID: 11400000, guid: 2ea9cca42d0fb644da5a6c7344602b01, type: 2}
-    position: {x: 120, y: 0, z: 0}
+    position: {x: 100, y: 0, z: 0}
     rotation: 0
-    enemies: 00000000
+    enemies: 04000000
     paths:
-    - {fileID: 967337708}
+    - {fileID: 835313286}
     needsClearing: 0
-    spawnTime: 10
+    spawnTime: 0
+  - formation: {fileID: 11400000, guid: 2ea9cca42d0fb644da5a6c7344602b01, type: 2}
+    position: {x: 100, y: 0, z: 0}
+    rotation: 0
+    enemies: 04000000
+    paths:
+    - {fileID: 2006980785}
+    needsClearing: 0
+    spawnTime: 0
   - formation: {fileID: 11400000, guid: 751c02be967f91448a87b780c464c093, type: 2}
     position: {x: 80, y: -75, z: 0}
     rotation: -45
@@ -8611,19 +8591,19 @@ MonoBehaviour:
     needsClearing: 0
     spawnTime: .300000012
   - formation: {fileID: 11400000, guid: 751c02be967f91448a87b780c464c093, type: 2}
-    position: {x: 80, y: -75, z: 0}
+    position: {x: 90, y: 75, z: 0}
     rotation: -45
     enemies: 010000000100000001000000010000000100000001000000010000000100000001000000
     paths:
     - {fileID: 753043895}
-    - {fileID: 295992264}
-    - {fileID: 902179782}
-    - {fileID: 205260086}
-    - {fileID: 824286032}
-    - {fileID: 969126070}
-    - {fileID: 618902555}
-    - {fileID: 644053098}
-    - {fileID: 2086569624}
+    - {fileID: 1082605286}
+    - {fileID: 987134146}
+    - {fileID: 994428971}
+    - {fileID: 1883617819}
+    - {fileID: 612092436}
+    - {fileID: 2042561956}
+    - {fileID: 1899454367}
+    - {fileID: 664698510}
     needsClearing: 0
     spawnTime: .300000012
   - formation: {fileID: 11400000, guid: 751c02be967f91448a87b780c464c093, type: 2}
@@ -8657,7 +8637,7 @@ MonoBehaviour:
     - {fileID: 1254497312}
     - {fileID: 1929622429}
     needsClearing: 0
-    spawnTime: 4
+    spawnTime: 3
   - formation: {fileID: 11400000, guid: 2ea9cca42d0fb644da5a6c7344602b01, type: 2}
     position: {x: 100, y: -30, z: 0}
     rotation: 0
@@ -8727,15 +8707,7 @@ MonoBehaviour:
     paths:
     - {fileID: 1649302432}
     needsClearing: 0
-    spawnTime: 12
-  - formation: {fileID: 11400000, guid: 2ea9cca42d0fb644da5a6c7344602b01, type: 2}
-    position: {x: 50, y: 60, z: 0}
-    rotation: 0
-    enemies: 03000000
-    paths:
-    - {fileID: 229705942}
-    needsClearing: 0
-    spawnTime: 12
+    spawnTime: 3
   - formation: {fileID: 11400000, guid: 0affad58899b75041a7baebd69a5f094, type: 2}
     position: {x: 140, y: 0, z: 0}
     rotation: 0
@@ -8778,6 +8750,14 @@ MonoBehaviour:
     - {fileID: 600002096}
     needsClearing: 0
     spawnTime: 4
+  - formation: {fileID: 11400000, guid: 2ea9cca42d0fb644da5a6c7344602b01, type: 2}
+    position: {x: 50, y: 60, z: 0}
+    rotation: 0
+    enemies: 03000000
+    paths:
+    - {fileID: 229705942}
+    needsClearing: 0
+    spawnTime: 5
   - formation: {fileID: 11400000, guid: 751c02be967f91448a87b780c464c093, type: 2}
     position: {x: 120, y: 10, z: 0}
     rotation: 90
@@ -8865,7 +8845,7 @@ MonoBehaviour:
     - {fileID: 787530251}
     - {fileID: 1064044176}
     needsClearing: 0
-    spawnTime: 10
+    spawnTime: 5
   levelIndex: 1
   bossMusic: Medic Soundtrack
   bossFadeTime: 3
@@ -8901,20 +8881,6 @@ MonoBehaviour:
   angle: 0
   center: {x: -18.5, y: -7.69999981, z: 0}
   angularSpeed: .5
---- !u!114 &644053098
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: abf2270f409eace46877033dc0a5f0e7, type: 3}
-  m_Name: (Clone)(Clone)(Clone)
-  m_EditorClassIdentifier: 
-  speed: 15
-  angle: 45
-  rotation: 0
 --- !u!114 &646388124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9164,6 +9130,20 @@ MonoBehaviour:
   speed: 15
   amplitude: -.349999994
   frequency: 4
+--- !u!114 &664698510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abf2270f409eace46877033dc0a5f0e7, type: 3}
+  m_Name: (Clone)(Clone)(Clone)
+  m_EditorClassIdentifier: 
+  speed: 15
+  angle: -45
+  rotation: 0
 --- !u!1 &672086727
 GameObject:
   m_ObjectHideFlags: 0
@@ -10278,7 +10258,7 @@ MonoBehaviour:
   m_Name: (Clone)(Clone)
   m_EditorClassIdentifier: 
   speed: 15
-  angle: 45
+  angle: -45
   rotation: 0
 --- !u!1 &766059837
 GameObject:
@@ -10820,20 +10800,6 @@ MonoBehaviour:
   angle: 0
   center: {x: -10, y: 0, z: 0}
   angularSpeed: 1
---- !u!114 &824286032
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: abf2270f409eace46877033dc0a5f0e7, type: 3}
-  m_Name: (Clone)(Clone)(Clone)
-  m_EditorClassIdentifier: 
-  speed: 15
-  angle: 45
-  rotation: 0
 --- !u!1 &824695454
 GameObject:
   m_ObjectHideFlags: 0
@@ -11178,6 +11144,24 @@ Prefab:
   m_RootGameObject: {fileID: 1035768701}
   m_IsPrefabParent: 0
   m_IsExploded: 1
+--- !u!114 &835313286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24e404d27141dad4cbe7d5ec980616f8, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  speed: 15
+  stops:
+  - {x: 25, y: 25, z: 0}
+  - {x: 0, y: 200, z: 0}
+  delays:
+  - .100000001
+  - .100000001
 --- !u!1 &836543235
 GameObject:
   m_ObjectHideFlags: 0
@@ -11972,6 +11956,38 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11400038, guid: 67eec733f5d2910439bc9c40d3e0714a, type: 2}
+      propertyPath: mWidth
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400038, guid: 67eec733f5d2910439bc9c40d3e0714a, type: 2}
+      propertyPath: aspectRatio
+      value: .533333361
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400070, guid: 67eec733f5d2910439bc9c40d3e0714a, type: 2}
+      propertyPath: mWidth
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400070, guid: 67eec733f5d2910439bc9c40d3e0714a, type: 2}
+      propertyPath: aspectRatio
+      value: .533333361
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400028, guid: 67eec733f5d2910439bc9c40d3e0714a, type: 2}
+      propertyPath: mWidth
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400028, guid: 67eec733f5d2910439bc9c40d3e0714a, type: 2}
+      propertyPath: aspectRatio
+      value: .533333361
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400016, guid: 67eec733f5d2910439bc9c40d3e0714a, type: 2}
+      propertyPath: mWidth
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400016, guid: 67eec733f5d2910439bc9c40d3e0714a, type: 2}
+      propertyPath: aspectRatio
+      value: .533333361
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 67eec733f5d2910439bc9c40d3e0714a, type: 2}
   m_RootGameObject: {fileID: 421451330}
@@ -12229,20 +12245,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 896471793}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &902179782
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: abf2270f409eace46877033dc0a5f0e7, type: 3}
-  m_Name: (Clone)(Clone)(Clone)
-  m_EditorClassIdentifier: 
-  speed: 15
-  angle: 45
-  rotation: 0
 --- !u!1 &908384244
 GameObject:
   m_ObjectHideFlags: 0
@@ -12624,20 +12626,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1664687641}
---- !u!114 &967337708
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6cc49a44957775a4e9ebbee718728f7d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 15
-  amplitude: .5
-  frequency: 1
 --- !u!1001 &967475985
 Prefab:
   m_ObjectHideFlags: 0
@@ -12682,20 +12670,6 @@ Prefab:
   m_RootGameObject: {fileID: 836543235}
   m_IsPrefabParent: 0
   m_IsExploded: 1
---- !u!114 &969126070
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: abf2270f409eace46877033dc0a5f0e7, type: 3}
-  m_Name: (Clone)(Clone)(Clone)
-  m_EditorClassIdentifier: 
-  speed: 15
-  angle: 45
-  rotation: 0
 --- !u!114 &971697174
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12709,6 +12683,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 15
   angle: 0
+  rotation: 0
+--- !u!114 &987134146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abf2270f409eace46877033dc0a5f0e7, type: 3}
+  m_Name: (Clone)(Clone)(Clone)
+  m_EditorClassIdentifier: 
+  speed: 15
+  angle: -45
   rotation: 0
 --- !u!1001 &987202138
 Prefab:
@@ -12754,6 +12742,20 @@ Prefab:
   m_RootGameObject: {fileID: 422089764}
   m_IsPrefabParent: 0
   m_IsExploded: 1
+--- !u!114 &994428971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abf2270f409eace46877033dc0a5f0e7, type: 3}
+  m_Name: (Clone)(Clone)(Clone)
+  m_EditorClassIdentifier: 
+  speed: 15
+  angle: -45
+  rotation: 0
 --- !u!1 &999781576
 GameObject:
   m_ObjectHideFlags: 0
@@ -13558,6 +13560,20 @@ Prefab:
   m_RootGameObject: {fileID: 130277286}
   m_IsPrefabParent: 0
   m_IsExploded: 1
+--- !u!114 &1082605286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abf2270f409eace46877033dc0a5f0e7, type: 3}
+  m_Name: (Clone)(Clone)(Clone)
+  m_EditorClassIdentifier: 
+  speed: 15
+  angle: -45
+  rotation: 0
 --- !u!114 &1082859077
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21751,6 +21767,20 @@ MeshFilter:
   m_PrefabInternal: {fileID: 1610487553}
   m_GameObject: {fileID: 1882628951}
   m_Mesh: {fileID: 4300000, guid: c4445600adc5bd14d9971f02f35c0a20, type: 3}
+--- !u!114 &1883617819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abf2270f409eace46877033dc0a5f0e7, type: 3}
+  m_Name: (Clone)(Clone)(Clone)
+  m_EditorClassIdentifier: 
+  speed: 15
+  angle: -45
+  rotation: 0
 --- !u!1 &1890204694
 GameObject:
   m_ObjectHideFlags: 0
@@ -21841,6 +21871,20 @@ MonoBehaviour:
   mMaxLineHeight: 0
   mLineWidth: 0
   mMultiline: 1
+--- !u!114 &1899454367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abf2270f409eace46877033dc0a5f0e7, type: 3}
+  m_Name: (Clone)(Clone)(Clone)
+  m_EditorClassIdentifier: 
+  speed: 15
+  angle: -45
+  rotation: 0
 --- !u!1 &1902849808
 GameObject:
   m_ObjectHideFlags: 0
@@ -23093,6 +23137,24 @@ MonoBehaviour:
   hideIfOffScreen: 0
   keepAspectRatio: 0
   aspectRatio: 1.60185182
+--- !u!114 &2006980785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24e404d27141dad4cbe7d5ec980616f8, type: 3}
+  m_Name: (Clone)(Clone)
+  m_EditorClassIdentifier: 
+  speed: 15
+  stops:
+  - {x: 25, y: -25, z: 0}
+  - {x: 0, y: 200, z: 0}
+  delays:
+  - .100000001
+  - .100000001
 --- !u!114 &2009447427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23487,6 +23549,20 @@ MonoBehaviour:
   speed: 15
   amplitude: .349999994
   frequency: 4
+--- !u!114 &2042561956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abf2270f409eace46877033dc0a5f0e7, type: 3}
+  m_Name: (Clone)(Clone)(Clone)
+  m_EditorClassIdentifier: 
+  speed: 15
+  angle: -45
+  rotation: 0
 --- !u!1001 &2052835605
 Prefab:
   m_ObjectHideFlags: 0
@@ -23894,20 +23970,6 @@ MonoBehaviour:
   mAtlas: {fileID: 11400000, guid: 603488284951f9c4cbaf11f175695661, type: 2}
   mSpriteName: Window
   mFillCenter: 1
---- !u!114 &2086569624
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: abf2270f409eace46877033dc0a5f0e7, type: 3}
-  m_Name: (Clone)(Clone)(Clone)
-  m_EditorClassIdentifier: 
-  speed: 15
-  angle: 45
-  rotation: 0
 --- !u!1 &2094064457
 GameObject:
   m_ObjectHideFlags: 0
