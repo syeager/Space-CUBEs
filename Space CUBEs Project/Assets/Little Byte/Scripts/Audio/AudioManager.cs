@@ -385,7 +385,7 @@ public class AudioManager : Singleton<AudioManager>
     public static Playlist PausePlaylist(string playlistName)
     {
         Playlist playlist = Playlists[playlistName];
-        playlist.Pause();
+        playlist.Pause(true);
         return playlist;
     }
 
@@ -606,7 +606,7 @@ public class AudioManager : Singleton<AudioManager>
             foreach (string key in keys)
             {
                 playlist = Playlists[key];
-                playlist.Pause();
+                playlist.Pause(true);
                 Job job;
                 if (PlaylistJobs.TryGetValue(playlist, out job))
                 {
@@ -619,7 +619,7 @@ public class AudioManager : Singleton<AudioManager>
             foreach (string key in keys)
             {
                 playlist = Playlists[key];
-                playlist.Play();
+                playlist.Pause(false);
                 Job job;
                 if (PlaylistJobs.TryGetValue(playlist, out job))
                 {

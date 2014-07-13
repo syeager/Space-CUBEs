@@ -41,6 +41,9 @@ public class Playlist : MonoBehaviour
     /// <summary>Volume level given to by AudioManager.</summary>
     private float givenLevel;
 
+    /// <summary>Is the audio source currently paused?</summary>
+    private bool paused;
+
     #endregion
 
     #region MonoBehaviour Overrides
@@ -107,9 +110,19 @@ public class Playlist : MonoBehaviour
     /// <summary>
     /// Pause audio.
     /// </summary>
-    public void Pause()
+    /// <param name="pause">Should the playlist be paused?</param>
+    public void Pause(bool pause)
     {
-        myAudio.Pause();
+        if (pause && myAudio.isPlaying)
+        {
+            paused = true;
+            myAudio.Pause(); 
+        }
+        else if (paused)
+        {
+            paused = false;
+            myAudio.Play();
+        }
     }
 
 
