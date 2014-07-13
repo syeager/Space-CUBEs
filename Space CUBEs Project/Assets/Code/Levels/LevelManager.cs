@@ -100,7 +100,7 @@ public class LevelManager : Singleton<LevelManager>
 
     protected virtual void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetButtonDown("Pause"))
         {
             GameTime.TogglePause();
         }
