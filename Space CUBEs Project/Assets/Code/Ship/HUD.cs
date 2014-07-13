@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2013.12.08
-// Edited: 2014.05.31
+// Edited: 2014.07.12
 
 using System;
 using Annotations;
@@ -14,6 +14,8 @@ public class HUD : Singleton<HUD>
 {
     #region References
 
+    private Animator animator;
+
     public GameObject multX;
     public UISprite[] multipliers;
     private ShieldHealth PlayerHealth;
@@ -24,6 +26,13 @@ public class HUD : Singleton<HUD>
     public UISprite HealthBar;
     public UILabel Points;
     public UISprite bossHealth;
+
+    #endregion
+
+    #region Private Fields
+
+    private int killClip;
+    private int increaseClip;
 
     #endregion
 
@@ -44,12 +53,19 @@ public class HUD : Singleton<HUD>
     [UsedImplicitly]
     private void Start()
     {
+        // references
+        animator = GetComponent<Animator>();
+
         // multiplier
         multX.SetActive(false);
         foreach (UISprite mult in multipliers)
         {
             mult.gameObject.SetActive(false);
         }
+
+        // animations
+        killClip = Animator.StringToHash("Kill");
+        increaseClip = Animator.StringToHash("Increase");
     }
 
     #endregion
@@ -117,6 +133,8 @@ public class HUD : Singleton<HUD>
         }
         else
         {
+            animator.Play(args.multiplierGained == 0 ? killClip : increaseClip);
+
             multX.SetActive(true);
             string multiplier = args.multiplier.ToString();
             for (int i = 0; i < multiplier.Length; i++)
