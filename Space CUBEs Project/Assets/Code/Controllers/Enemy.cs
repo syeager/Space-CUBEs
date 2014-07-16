@@ -23,7 +23,7 @@ public class Enemy : Ship
         Sentry,
         Guard,
         Hornet,
-        Kamakazee,
+        Kamikaze,
         Bomber,
         Elites,
         SwitchBlade,
