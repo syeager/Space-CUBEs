@@ -452,7 +452,7 @@ public class LevelCreator : EditorWindow
         SerializedProperty paths = sFormationGroups.GetArrayElementAtIndex(formationIndex + 1).FindPropertyRelative("paths");
         for (int i = 0; i < paths.arraySize; i++)
         {
-            paths.GetArrayElementAtIndex(i).objectReferenceValue = Instantiate(paths.GetArrayElementAtIndex(i).objectReferenceValue);
+            paths.GetArrayElementAtIndex(i).objectReferenceValue = paths.GetArrayElementAtIndex(i).objectReferenceValue == null ? null : Instantiate(paths.GetArrayElementAtIndex(i).objectReferenceValue);
         }
 
         formationToggles.Insert(formationIndex + 1, true);
