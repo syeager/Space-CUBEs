@@ -23,4 +23,9 @@ public static class VectorExtension
     {
         return (to - from).normalized;
     }
+
+    public static Vector2 To(this Vector2 from, Vector2 to)
+    {
+        return (to - from).normalized;
+    }
 }
