@@ -68,7 +68,7 @@ public class ShipMotor : MonoBase
 
     #endregion
 
-    #region Unity Overrides
+    #region MonoBehaviour Overrides
 
     [UsedImplicitly]
     private void Awake()

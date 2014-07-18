@@ -34,7 +34,7 @@ public class SidewinderMissileLauncher : Weapon
 
     #region Weapon Overrides
 
-    public new Coroutine Activate(bool pressed, float deployTime)
+    public Coroutine Activate(bool pressed, float deployTime)
     {
         if (pressed)
         {
@@ -66,7 +66,7 @@ public class SidewinderMissileLauncher : Weapon
         {
             animation.Stop();
             Prefabs.Pop(missilePrefab, myTransform.position + myTransform.TransformDirection(position), myTransform.rotation).
-                GetComponent<SidewinderMissile>().Initialize(myShip, damage, missileSpeed, rotationSpeed, homingTime, dummyTargets, LevelManager.Main.PlayerController.transform);
+                GetComponent<SidewinderMissile>().Initialize(myShip, damage, missileSpeed, rotationSpeed, homingTime, dummyTargets, LevelManager.Main.PlayerTransform);
 
             AudioManager.Play(fireAudio);
             animation.Play(fireClip);

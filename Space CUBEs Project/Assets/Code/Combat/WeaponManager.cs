@@ -14,14 +14,14 @@ public class WeaponManager : MonoBehaviour
 {
     #region Public Fields
 
-    public Weapon[] weapons;
+    public PlayerWeapon[] weapons;
     public bool canActivate = true;
 
     #endregion
 
     #region Private Fields
 
-    public float damageMultiplier { get; private set; }
+    public float DamageMultiplier { get; private set; }
 
     #endregion
 
@@ -31,12 +31,12 @@ public class WeaponManager : MonoBehaviour
     /// Adds weapons.
     /// </summary>
     /// <param name="weaponList">Weapons to add by their index.</param>
-    public void Bake(List<Weapon> weaponList)
+    public void Bake(List<PlayerWeapon> weaponList)
     {
-        weapons = new Weapon[BuildStats.ExpansionLimit];
+        weapons = new PlayerWeapon[BuildStats.ExpansionLimit];
         int weaponLimit = BuildStats.GetWeaponExpansion();
 
-        foreach (Weapon weapon in weaponList.Where(weapon => weapon.index < weaponLimit))
+        foreach (PlayerWeapon weapon in weaponList.Where(weapon => weapon.index < weaponLimit))
         {
             weapons[weapon.index] = weapon;
         }
@@ -50,7 +50,7 @@ public class WeaponManager : MonoBehaviour
     /// <param name="damageStat">Ship's damage stat. Used to create the damage multiplier. 1+damageStat/100.</param>
     public void Initialize(Ship sender, float damageStat)
     {
-        damageMultiplier = 1 + damageStat / 100;
+        DamageMultiplier = 1 + damageStat / 100;
 
         for (int i = 0; i < weapons.Length; i++)
         {
@@ -93,7 +93,7 @@ public class WeaponManager : MonoBehaviour
         if (weapon >= weapons.Length) return null;
         if (weapons[weapon] == null) return null;
 
-        return weapons[weapon].Activate(isPressed, damageMultiplier);
+        return weapons[weapon].Activate(isPressed, DamageMultiplier);
     }
 
 
@@ -103,11 +103,11 @@ public class WeaponManager : MonoBehaviour
     /// <param name="isPressed"></param>
     public void ActivateAll(bool isPressed)
     {
-        foreach (Weapon weapon in weapons)
+        foreach (PlayerWeapon weapon in weapons)
         {
             if (weapon == null) continue;
 
-            weapon.Activate(isPressed, damageMultiplier);
+            weapon.Activate(isPressed, DamageMultiplier);
         }
     }
 

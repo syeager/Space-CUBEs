@@ -27,11 +27,7 @@ public abstract class Weapon : MonoBase
     /// <summary>Power regenerated every second.</summary>
     public float cooldownSpeed { get; set; }
 
-    #endregion
-
-    #region Protected Fields
-
-    protected bool canActivate = true;
+    public bool canActivate = true;
 
     #endregion
 
@@ -108,8 +104,7 @@ public abstract class Weapon : MonoBase
     /// Activate weapon with extra info.
     /// </summary>
     /// <param name="pressed">Is the weapon being pressed?</param>
-    /// <param name="multiplier">Damage multiplier.</param>
-    public virtual Coroutine Activate(bool pressed, float multiplier = 1f)
+    public virtual Coroutine Activate(bool pressed)
     {
         return null;
     }

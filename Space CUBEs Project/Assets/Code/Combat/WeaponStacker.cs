@@ -36,12 +36,12 @@ public class WeaponStacker : Weapon
     }
 
 
-    public override Coroutine Activate(bool pressed, float multiplier = 1f)
+    public override Coroutine Activate(bool pressed)
     {
         if (pressed)
         {
             gameObject.SetActive(true);
-            return StartCoroutine(Fire(multiplier));
+            return StartCoroutine(Fire());
         }
         else if (gameObject.activeInHierarchy)
         {
@@ -57,7 +57,7 @@ public class WeaponStacker : Weapon
 
     #region Protected Methods
 
-    protected virtual IEnumerator Fire(float multiplier)
+    protected virtual IEnumerator Fire()
     {
         // deploy
         AudioManager.Play(deployAudio);
@@ -71,7 +71,7 @@ public class WeaponStacker : Weapon
                 yield return new WaitForSeconds(delays[i]);
             }
 
-            weapons[i].Activate(true, multiplier);
+            weapons[i].Activate(true);
         }
     }
 

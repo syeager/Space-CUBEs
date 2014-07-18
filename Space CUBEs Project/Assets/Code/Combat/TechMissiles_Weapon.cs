@@ -28,7 +28,7 @@ public class TechMissiles_Weapon : PlayerWeapon
     }
 
 
-    public override Weapon Bake(GameObject parent)
+    public override PlayerWeapon Bake(GameObject parent)
     {
         var comp = parent.AddComponent<TechMissiles_Weapon>();
         comp.index = index;

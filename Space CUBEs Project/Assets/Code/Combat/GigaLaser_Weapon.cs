@@ -55,7 +55,7 @@ public class GigaLaser_Weapon : PlayerWeapon
     }
 
 
-    public override Weapon Bake(GameObject parent)
+    public override PlayerWeapon Bake(GameObject parent)
     {
         var comp = parent.AddComponent<GigaLaser_Weapon>();
         comp.index = index;

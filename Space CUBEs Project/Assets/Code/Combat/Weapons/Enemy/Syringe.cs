@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.07.01
-// Edited: 2014.07.01
+// Edited: 2014.07.17
 
 using UnityEngine;
 using System.Collections;
@@ -34,7 +34,7 @@ public class Syringe : Weapon
 
     #region Weapon Overrides
 
-    public Coroutine Activate(bool pressed)
+    public override Coroutine Activate(bool pressed)
     {
         if (pressed)
         {
@@ -63,6 +63,7 @@ public class Syringe : Weapon
         yield return new WaitForSeconds(retractTime);
         gameObject.SetActive(false);
     }
+
 
     private IEnumerator Target()
     {

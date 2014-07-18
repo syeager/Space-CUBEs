@@ -13,12 +13,6 @@ using System.Collections;
 /// </summary>
 public class Medic : Boss
 {
-    #region References
-
-    private Animation myAnimation;
-
-    #endregion
-
     #region State Fields
 
     private const string EnteringState = "Entering";
@@ -65,9 +59,6 @@ public class Medic : Boss
     protected override void Awake()
     {
         base.Awake();
-
-        // references
-        myAnimation = animation;
 
         // state machine
         stateMachine = new StateMachine(this, EnteringState);

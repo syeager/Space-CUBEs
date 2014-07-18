@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.06.27
-// Edited: 2014.06.27
+// Edited: 2014.07.17
 
 using UnityEngine;
 using System.Collections;
@@ -39,7 +39,7 @@ public class PlasmaMachineGun : Weapon
 
     #region Weapon Overrides
 
-    public  Coroutine Activate(bool pressed)
+    public override Coroutine Activate(bool pressed)
     {
         if (pressed)
         {

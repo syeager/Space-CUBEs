@@ -38,7 +38,7 @@ public class CBomb_Weapon : PlayerWeapon
     }
 
 
-    public override Weapon Bake(GameObject parent)
+    public override PlayerWeapon Bake(GameObject parent)
     {
         var comp = parent.AddComponent<CBomb_Weapon>();
         comp.index = index;

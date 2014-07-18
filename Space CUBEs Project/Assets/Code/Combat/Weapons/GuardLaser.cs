@@ -19,7 +19,7 @@ public class GuardLaser : Weapon
 
     #region Weapon Overrides
 
-    public override Coroutine Activate(bool pressed, float multiplier)
+    public override Coroutine Activate(bool pressed)
     {
         if (pressed)
         {

@@ -31,7 +31,7 @@ public class PlanetSeed_Weapon : PlayerWeapon
     }
 
 
-    public override Weapon Bake(GameObject parent)
+    public override PlayerWeapon Bake(GameObject parent)
     {
         var comp = parent.AddComponent<PlanetSeed_Weapon>();
         comp.index = index;

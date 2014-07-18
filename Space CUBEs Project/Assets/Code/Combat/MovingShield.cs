@@ -25,7 +25,7 @@ public class MovingShield : Weapon
 
     #region Weapon Overrides
 
-    public override Coroutine Activate(bool pressed, float multiplier = 1f)
+    public override Coroutine Activate(bool pressed)
     {
         if (pressed)
         {

@@ -47,7 +47,7 @@ public class SingularityBlaster : PlayerWeapon
     }
 
 
-    public override Weapon Bake(GameObject parent)
+    public override PlayerWeapon Bake(GameObject parent)
     {
         var comp = parent.AddComponent<SingularityBlaster>();
         comp.index = index;

@@ -50,7 +50,7 @@ public class SharkMissiles_Weapon : PlayerWeapon
     }
 
 
-    public override Weapon Bake(GameObject parent)
+    public override PlayerWeapon Bake(GameObject parent)
     {
         var comp = parent.AddComponent<SharkMissiles_Weapon>();
         comp.index = index;

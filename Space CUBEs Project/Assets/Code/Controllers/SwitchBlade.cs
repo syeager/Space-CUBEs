@@ -16,7 +16,6 @@ public class SwitchBlade : Boss
 {
     #region References
 
-    private Animation myAnimation;
     public OscillatingLaser[] lasers = new OscillatingLaser[2];
     public SidewinderMissileLauncher[] missileLaunchers = new SidewinderMissileLauncher[2];
     public MovingShield shield;
@@ -74,9 +73,6 @@ public class SwitchBlade : Boss
     protected override void Awake()
     {
         base.Awake();
-
-        // references
-        myAnimation = animation;
 
         // state machine
         stateMachine = new StateMachine(this, EnteringState);
@@ -331,7 +327,7 @@ public class SwitchBlade : Boss
         burstCannon.Activate(false);
         if (disable) burstCannon.gameObject.SetActive(false);
 
-        deathLaser.Activate(false, 0f);
+        deathLaser.Activate(false);
         if (disable) deathLaser.gameObject.SetActive(false);
     }
 

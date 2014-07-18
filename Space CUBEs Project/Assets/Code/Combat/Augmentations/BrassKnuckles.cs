@@ -94,7 +94,7 @@ public class BrassKnuckles : Augmentation
             myCollider.isTrigger = true;
             myCollider.enabled = true;
             myGameObject.layer = weaponLayer;
-            multiplier = ship.Weapons.damageMultiplier;
+            multiplier = ship.Weapons.DamageMultiplier;
         }
         else
         {

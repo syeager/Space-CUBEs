@@ -27,7 +27,7 @@ public class ShipCompactor : MonoBehaviour
 
         GameObject myGameObject = gameObject;
 
-        var weapons = new List<Weapon>();
+        var weapons = new List<PlayerWeapon>();
         var augmentations = new List<Augmentation>();
 
         MeshFilter[] meshFilters = GetComponentsInChildren<MeshFilter>();

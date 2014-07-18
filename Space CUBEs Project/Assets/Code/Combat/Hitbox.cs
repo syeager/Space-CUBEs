@@ -16,7 +16,7 @@ public class Hitbox : MonoBase
     protected Transform myTransform;
 
     [SerializeField, HideInInspector]
-    protected PoolObject myPoolObject;
+    public PoolObject myPoolObject;
 
     #endregion
 
@@ -69,7 +69,7 @@ public class Hitbox : MonoBase
                 if (hitCount >= hitNumber)
                 {
                     disabled = true;
-                    GetComponent<PoolObject>().Disable();
+                    myPoolObject.Disable();
                 }
             }
         }

@@ -33,7 +33,7 @@ public class OscillatingLaser : Weapon
 
     #region Weapon Overrides
 
-    new public Coroutine Activate(bool pressed, float deployTime)
+    public Coroutine Activate(bool pressed, float deployTime)
     {
         if (pressed)
         {

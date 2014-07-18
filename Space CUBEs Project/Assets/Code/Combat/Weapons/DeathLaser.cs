@@ -41,7 +41,7 @@ public class DeathLaser : Weapon
 
     #region Weapon Overrides
 
-    public Coroutine Activate(bool pressed)
+    public override Coroutine Activate(bool pressed)
     {
         if (pressed)
         {
