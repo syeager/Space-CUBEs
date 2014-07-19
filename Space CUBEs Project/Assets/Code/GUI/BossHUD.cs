@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.06.30
-// Edited: 2014.06.30
+// Edited: 2014.07.18
 
 using System.Collections;
 using UnityEngine;
@@ -28,12 +28,15 @@ public class BossHUD : Singleton<BossHUD>
     /// <summary>Time in seconds for the health bar to grow to max size.</summary>
     public float growTime;
 
+    /// <summary>Time in seconds to wait before pausing time for the title.</summary>
+    public float pauseDelay = 1f;
+
     #endregion
 
     #region Private Fields
 
     /// <summary>Cached reference to boss this HUD belongs to.</summary>
-    private Boss boss; 
+    private Boss boss;
 
     #endregion
 
@@ -57,6 +60,7 @@ public class BossHUD : Singleton<BossHUD>
 
     private IEnumerator Initializing()
     {
+        yield return new WaitForSeconds(pauseDelay);
         yield return StartCoroutine(ShowTitle());
         yield return StartCoroutine(ShowHealth());
     }
@@ -74,6 +78,7 @@ public class BossHUD : Singleton<BossHUD>
         Time.timeScale = 1f;
         title.SetActive(false);
     }
+
 
     private IEnumerator ShowHealth()
     {

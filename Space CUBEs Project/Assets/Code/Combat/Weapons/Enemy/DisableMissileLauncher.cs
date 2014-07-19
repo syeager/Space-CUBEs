@@ -15,6 +15,9 @@ public class DisableMissileLauncher : Weapon
 
     public DisableMissile missilePrefab;
 
+    /// <summary>The amount of missiles to fire each stage.</summary>
+    public int[] missiles;
+
     /// <summary>Time in seconds to disable a player's weapon.</summary>
     public float disableTime;
 
@@ -31,11 +34,11 @@ public class DisableMissileLauncher : Weapon
 
     #region Weapon Overrides
 
-    public Coroutine Activate(bool pressed, int missileCount)
+    public Coroutine Activate(bool pressed, int stage)
     {
         if (pressed)
         {
-            return StartCoroutine(Fire(missileCount));
+            return StartCoroutine(Fire(stage));
         }
         else if (gameObject.activeInHierarchy)
         {
@@ -49,10 +52,10 @@ public class DisableMissileLauncher : Weapon
 
     #region Private Methods
 
-    private IEnumerator Fire(int missileCount)
+    private IEnumerator Fire(int stage)
     {
         WaitForSeconds wait = new WaitForSeconds(fireBuffer);
-        for (int i = 0; i < missileCount; i++)
+        for (int i = 0; i < missiles[stage]; i++)
         {
             Prefabs.Pop(missilePrefab.myPoolObject, myTransform.position + myTransform.TransformDirection(offset), myTransform.rotation).
                     GetComponent<DisableMissile>().Initialize(myShip, damage, disableTime);

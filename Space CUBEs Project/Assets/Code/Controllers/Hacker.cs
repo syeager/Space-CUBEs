@@ -1,7 +1,7 @@
 ﻿// Space CUBEs Project-csharp
 // Author: Steve Yeager
 // Created: 2014.07.15
-// Edited: 2014.07.17
+// Edited: 2014.07.18
 
 using System;
 using System.Collections.Generic;
@@ -16,6 +16,8 @@ public class Hacker : Boss
     #region References
 
     public DisableMissileLauncher disableMissileLauncher;
+    public WeaponStacker burstCannon;
+    public HelixLaser helixLaser;
 
     #endregion
 
@@ -43,9 +45,19 @@ public class Hacker : Boss
 
     #endregion
 
-    #region Private Fields
+    #region Public Fields
 
-    private Job moveJob; 
+    /// <summary>Bottom-left possible movement position.</summary>
+    public Vector3 minBarrier;
+
+    /// <summary>Top-right possible movement position.</summary>
+    public Vector3 maxBarrier;
+
+    /// <summary>Time in seconds to delay after each attack each stage.</summary>
+    public float[] attackCooldowns = new float[3];
+
+    /// <summary>Target angular speed.</summary>
+    public float targetingSpeed;
 
     #endregion
 
@@ -69,6 +81,8 @@ public class Hacker : Boss
 
         // weapons
         disableMissileLauncher.Initialize(this);
+        burstCannon.Initialize(this);
+        helixLaser.Initialize(this);
     }
 
     #endregion
@@ -106,7 +120,6 @@ public class Hacker : Boss
     private void StagingEnter(Dictionary<string, object> info)
     {
         MyHealth.invincible = true;
-        moveJob.Pause(true);
 
         DeactivateWeapons();
         StopAllCoroutines();
@@ -134,7 +147,6 @@ public class Hacker : Boss
     private void StagingExit(Dictionary<string, object> info)
     {
         MyHealth.invincible = false;
-        moveJob.Pause(false);
 
         stateMachine.SetUpdate(StagingUpdate());
     }
@@ -142,17 +154,34 @@ public class Hacker : Boss
 
     private void Stage1Enter(Dictionary<string, object> info)
     {
-        //moveJob = new Job();
         stateMachine.SetUpdate(Stage1Update());
     }
 
 
     private IEnumerator Stage1Update()
     {
+        WaitForSeconds attackCooldown = new WaitForSeconds(attackCooldowns[0]);
+
         while (true)
         {
+            // missiles, targeted laser
+            disableMissileLauncher.Activate(true, CurrentStage);
+            yield return StartCoroutine(Target(LevelManager.Main.PlayerTransform.position));
+            yield return helixLaser.Activate(true);
+            yield return attackCooldown;
 
-            yield return null;
+            // move
+            yield return StartCoroutine(Move());
+
+            // missiles, straight laser, burst
+            disableMissileLauncher.Activate(true, CurrentStage);
+            yield return StartCoroutine(Target(myTransform.position + Vector3.left));
+            burstCannon.Activate(true);
+            yield return helixLaser.Activate(true);
+            yield return attackCooldown;
+
+            // move
+            yield return StartCoroutine(Move());
         }
     }
 
@@ -160,9 +189,34 @@ public class Hacker : Boss
 
     #region Private Methods
 
+    private IEnumerator Move()
+    {
+        const float distBuffer = 2f;
+        Vector3 targetPosition = Utility.RandomVector3(minBarrier, maxBarrier);
+        while (Vector3.Distance(myTransform.position, targetPosition) >= distBuffer)
+        {
+            myMotor.Move((Vector2)myTransform.position.To(targetPosition));
+            yield return null;
+        }
+    }
+
+
+    private IEnumerator Target(Vector3 targetPosition)
+    {
+        Quaternion targetRotation = Quaternion.LookRotation(myTransform.position.To(targetPosition), Vector3.back);
+        while (Mathf.Abs(Quaternion.Angle(myTransform.rotation, targetRotation)) > 1f)
+        {
+            myTransform.rotation = Quaternion.Slerp(myTransform.rotation, targetRotation, targetingSpeed * deltaTime);
+            yield return null;
+        }
+    }
+
+
     private void DeactivateWeapons()
     {
         disableMissileLauncher.Activate(false);
+        burstCannon.Activate(false);
+        helixLaser.Activate(false);
     }
 
     #endregion
