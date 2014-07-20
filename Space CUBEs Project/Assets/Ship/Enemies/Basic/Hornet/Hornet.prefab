@@ -115,7 +115,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100006}
-  m_Mesh: {fileID: 4300000, guid: 80ab9ed8dab65e74a9c0decc1ad7ee90, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 60b32803fd3ee2645ba229cb9f9bb929, type: 3}
 --- !u!33 &3300006
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -163,8 +163,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 7, y: 10, z: 6}
-  m_Center: {x: 0, y: .0144810081, z: .00963747501}
+  m_Size: {x: 4.36999989, y: 10, z: 3.61999989}
+  m_Center: {x: 0, y: .00575947762, z: -.0591375232}
 --- !u!65 &6500004
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -192,6 +192,7 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  canActivate: 1
   laserPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
   cannon: {x: 0, y: 0, z: 1}
   fireCount: 3

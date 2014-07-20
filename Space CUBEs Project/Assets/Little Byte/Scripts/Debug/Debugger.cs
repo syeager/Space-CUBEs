@@ -228,7 +228,7 @@ public class Debugger : Singleton<Debugger>
     /// </summary>
     /// <param name="message">Message to be displayed.</param>
     /// <param name="context">Unity Object to highlight in the Hierarchy.</param>
-    public static void Break(object message, Object context = null)
+    public static void Break(object message = null, Object context = null)
     {
         Debug.Log(message, context);
         Debug.Break();

@@ -104,7 +104,7 @@ public class LevelManager : Singleton<LevelManager>
         {
             GameTime.TogglePause();
         }
-
+        if (GameTime.paused) Debugger.Log(GameTime.UnscaledDeltaTime);
 #if UNITY_EDITOR
         // invincible
         if (Input.GetKeyDown(KeyCode.KeypadEnter))

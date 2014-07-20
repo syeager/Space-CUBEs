@@ -538,6 +538,7 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  canActivate: 1
   bulletPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
   speed: 50
   damage: 10
@@ -954,6 +955,7 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  canActivate: 1
   bulletPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
   speed: 50
   damage: 10
@@ -1177,6 +1179,7 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  canActivate: 1
   bulletPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
   speed: 50
   damage: 10
@@ -2178,6 +2181,7 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  canActivate: 1
   bulletPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
   speed: 50
   damage: 10
@@ -2446,6 +2450,7 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  canActivate: 1
   laser: {fileID: 1882628951}
   damage: 20
 --- !u!114 &185794464
@@ -2686,6 +2691,7 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  canActivate: 1
   bulletPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
   speed: 30
   damage: 20
@@ -3049,6 +3055,7 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  canActivate: 1
   bulletPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
   speed: 50
   damage: 10
@@ -5682,6 +5689,7 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  canActivate: 1
   laser: {fileID: 569956244}
   damage: 20
 --- !u!114 &501673505
@@ -5880,6 +5888,7 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  canActivate: 1
   bulletPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
   speed: 50
   damage: 10
@@ -6292,6 +6301,7 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  canActivate: 1
   bulletPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
   speed: 30
   damage: 20
@@ -7175,6 +7185,7 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  canActivate: 1
   bulletPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
   speed: 30
   damage: 20
@@ -7777,13 +7788,13 @@ MonoBehaviour:
   updateAnchors: 0
   mColor: {r: 0, g: 1, b: 0, a: 1}
   mPivot: 4
-  mWidth: 16
+  mWidth: 18
   mHeight: 30
   mDepth: 8
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: .533333361
+  aspectRatio: .600000024
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   mFont: {fileID: 0}
@@ -8121,8 +8132,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 7, y: 10, z: 6}
-  m_Center: {x: 0, y: .0144810081, z: .00963747501}
+  m_Size: {x: 4.36999989, y: 10, z: 3.61999989}
+  m_Center: {x: 0, y: .00575947762, z: -.0591375232}
 --- !u!114 &615043086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8181,6 +8192,7 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  canActivate: 1
   laserPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
   cannon: {x: 0, y: 0, z: 1}
   fireCount: 3
@@ -8241,7 +8253,7 @@ MeshFilter:
     type: 2}
   m_PrefabInternal: {fileID: 1593384756}
   m_GameObject: {fileID: 615043081}
-  m_Mesh: {fileID: 4300000, guid: 80ab9ed8dab65e74a9c0decc1ad7ee90, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 60b32803fd3ee2645ba229cb9f9bb929, type: 3}
 --- !u!1 &615295969
 GameObject:
   m_ObjectHideFlags: 0
@@ -8381,6 +8393,7 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  canActivate: 1
   laser: {fileID: 307284056}
   damage: 20
 --- !u!114 &615295979
@@ -8959,6 +8972,7 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  canActivate: 1
   bulletPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
   speed: 50
   damage: 10
@@ -9373,6 +9387,7 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  canActivate: 1
   bulletPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
   speed: 50
   damage: 10
@@ -9740,8 +9755,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 7, y: 10, z: 6}
-  m_Center: {x: 0, y: .0144810081, z: .00963747501}
+  m_Size: {x: 4.36999989, y: 10, z: 3.61999989}
+  m_Center: {x: 0, y: .00575947762, z: -.0591375232}
 --- !u!114 &717840637
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9800,6 +9815,7 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  canActivate: 1
   laserPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
   cannon: {x: 0, y: 0, z: 1}
   fireCount: 3
@@ -9860,7 +9876,7 @@ MeshFilter:
     type: 2}
   m_PrefabInternal: {fileID: 2062516479}
   m_GameObject: {fileID: 717840632}
-  m_Mesh: {fileID: 4300000, guid: 80ab9ed8dab65e74a9c0decc1ad7ee90, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 60b32803fd3ee2645ba229cb9f9bb929, type: 3}
 --- !u!1 &721526181
 GameObject:
   m_ObjectHideFlags: 0
@@ -10103,6 +10119,7 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  canActivate: 1
   bulletPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
   speed: 50
   damage: 10
@@ -10497,6 +10514,7 @@ MonoBehaviour:
   - {fileID: 1667544737}
   - {fileID: 2135786984}
   growTime: 2
+  pauseDelay: 1
 --- !u!1001 &780990455
 Prefab:
   m_ObjectHideFlags: 0
@@ -11349,6 +11367,7 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  canActivate: 1
   bulletPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
   speed: 50
   damage: 10
@@ -11958,35 +11977,35 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400038, guid: 67eec733f5d2910439bc9c40d3e0714a, type: 2}
       propertyPath: mWidth
-      value: 16
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 11400038, guid: 67eec733f5d2910439bc9c40d3e0714a, type: 2}
       propertyPath: aspectRatio
-      value: .533333361
+      value: .600000024
       objectReference: {fileID: 0}
     - target: {fileID: 11400070, guid: 67eec733f5d2910439bc9c40d3e0714a, type: 2}
       propertyPath: mWidth
-      value: 16
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 11400070, guid: 67eec733f5d2910439bc9c40d3e0714a, type: 2}
       propertyPath: aspectRatio
-      value: .533333361
+      value: .600000024
       objectReference: {fileID: 0}
     - target: {fileID: 11400028, guid: 67eec733f5d2910439bc9c40d3e0714a, type: 2}
       propertyPath: mWidth
-      value: 16
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 11400028, guid: 67eec733f5d2910439bc9c40d3e0714a, type: 2}
       propertyPath: aspectRatio
-      value: .533333361
+      value: .600000024
       objectReference: {fileID: 0}
     - target: {fileID: 11400016, guid: 67eec733f5d2910439bc9c40d3e0714a, type: 2}
       propertyPath: mWidth
-      value: 16
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 11400016, guid: 67eec733f5d2910439bc9c40d3e0714a, type: 2}
       propertyPath: aspectRatio
-      value: .533333361
+      value: .600000024
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 67eec733f5d2910439bc9c40d3e0714a, type: 2}
@@ -12068,8 +12087,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 7, y: 10, z: 6}
-  m_Center: {x: 0, y: .0144810081, z: .00963747501}
+  m_Size: {x: 4.36999989, y: 10, z: 3.61999989}
+  m_Center: {x: 0, y: .00575947762, z: -.0591375232}
 --- !u!114 &893453689
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12128,6 +12147,7 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  canActivate: 1
   laserPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
   cannon: {x: 0, y: 0, z: 1}
   fireCount: 3
@@ -12188,7 +12208,7 @@ MeshFilter:
     type: 2}
   m_PrefabInternal: {fileID: 1023809024}
   m_GameObject: {fileID: 893453684}
-  m_Mesh: {fileID: 4300000, guid: 80ab9ed8dab65e74a9c0decc1ad7ee90, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 60b32803fd3ee2645ba229cb9f9bb929, type: 3}
 --- !u!1 &896471793
 GameObject:
   m_ObjectHideFlags: 0
@@ -12878,6 +12898,7 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  canActivate: 1
   bulletPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
   speed: 50
   damage: 10
@@ -13388,46 +13409,6 @@ MonoBehaviour:
   speed: 15
   angle: 45
   rotation: 0
---- !u!1001 &1046961217
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 1684849260}
-    m_Modifications:
-    - target: {fileID: 400006, guid: 8a1b2bcaa835b6844b5514ee4aeb501d, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400006, guid: 8a1b2bcaa835b6844b5514ee4aeb501d, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400006, guid: 8a1b2bcaa835b6844b5514ee4aeb501d, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400006, guid: 8a1b2bcaa835b6844b5514ee4aeb501d, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: -.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 400006, guid: 8a1b2bcaa835b6844b5514ee4aeb501d, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: -.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 400006, guid: 8a1b2bcaa835b6844b5514ee4aeb501d, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: .5
-      objectReference: {fileID: 0}
-    - target: {fileID: 400006, guid: 8a1b2bcaa835b6844b5514ee4aeb501d, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: .5
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 8a1b2bcaa835b6844b5514ee4aeb501d, type: 2}
-  m_RootGameObject: {fileID: 1626152947}
-  m_IsPrefabParent: 0
-  m_IsExploded: 1
 --- !u!1001 &1060203727
 Prefab:
   m_ObjectHideFlags: 0
@@ -13687,13 +13668,13 @@ MonoBehaviour:
   updateAnchors: 0
   mColor: {r: 0, g: 1, b: 0, a: 1}
   mPivot: 4
-  mWidth: 16
+  mWidth: 18
   mHeight: 30
   mDepth: 8
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: .533333361
+  aspectRatio: .600000024
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   mFont: {fileID: 0}
@@ -14110,6 +14091,46 @@ MeshFilter:
   m_PrefabInternal: {fileID: 2035995925}
   m_GameObject: {fileID: 1134889995}
   m_Mesh: {fileID: 4300000, guid: c4445600adc5bd14d9971f02f35c0a20, type: 3}
+--- !u!1001 &1142131991
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1684849260}
+    m_Modifications:
+    - target: {fileID: 400006, guid: 8a1b2bcaa835b6844b5514ee4aeb501d, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: 8a1b2bcaa835b6844b5514ee4aeb501d, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: 8a1b2bcaa835b6844b5514ee4aeb501d, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: 8a1b2bcaa835b6844b5514ee4aeb501d, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: 8a1b2bcaa835b6844b5514ee4aeb501d, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: -.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: 8a1b2bcaa835b6844b5514ee4aeb501d, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: .5
+      objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: 8a1b2bcaa835b6844b5514ee4aeb501d, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: .5
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 8a1b2bcaa835b6844b5514ee4aeb501d, type: 2}
+  m_RootGameObject: {fileID: 1626152947}
+  m_IsPrefabParent: 0
+  m_IsExploded: 1
 --- !u!114 &1145213544
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14784,6 +14805,7 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  canActivate: 1
   bulletPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
   speed: 30
   damage: 20
@@ -15037,13 +15059,13 @@ MonoBehaviour:
   updateAnchors: 0
   mColor: {r: .0344827175, g: 1, b: 0, a: 1}
   mPivot: 4
-  mWidth: 16
+  mWidth: 18
   mHeight: 30
   mDepth: 8
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: .533333361
+  aspectRatio: .600000024
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   mFont: {fileID: 0}
@@ -15227,6 +15249,7 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  canActivate: 1
   bulletPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
   speed: 50
   damage: 10
@@ -15608,6 +15631,7 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  canActivate: 1
   bulletPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
   speed: 30
   damage: 20
@@ -16216,6 +16240,7 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  canActivate: 1
   bulletPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
   speed: 50
   damage: 10
@@ -16420,8 +16445,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 7, y: 10, z: 6}
-  m_Center: {x: 0, y: .0144810081, z: .00963747501}
+  m_Size: {x: 4.36999989, y: 10, z: 3.61999989}
+  m_Center: {x: 0, y: .00575947762, z: -.0591375232}
 --- !u!114 &1416520102
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16480,6 +16505,7 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  canActivate: 1
   laserPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
   cannon: {x: 0, y: 0, z: 1}
   fireCount: 3
@@ -16540,7 +16566,7 @@ MeshFilter:
     type: 2}
   m_PrefabInternal: {fileID: 1983091006}
   m_GameObject: {fileID: 1416520097}
-  m_Mesh: {fileID: 4300000, guid: 80ab9ed8dab65e74a9c0decc1ad7ee90, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 60b32803fd3ee2645ba229cb9f9bb929, type: 3}
 --- !u!114 &1421738222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17159,6 +17185,7 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  canActivate: 1
   bulletPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
   speed: 50
   damage: 10
@@ -18026,6 +18053,7 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  canActivate: 1
   laser: {fileID: 1134889995}
   damage: 20
 --- !u!114 &1510592173
@@ -18829,7 +18857,7 @@ MonoBehaviour:
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 100006, guid: 8a1b2bcaa835b6844b5514ee4aeb501d, type: 2}
-  m_PrefabInternal: {fileID: 1046961217}
+  m_PrefabInternal: {fileID: 1142131991}
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1626152948}
@@ -18853,7 +18881,7 @@ GameObject:
 Transform:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 400006, guid: 8a1b2bcaa835b6844b5514ee4aeb501d, type: 2}
-  m_PrefabInternal: {fileID: 1046961217}
+  m_PrefabInternal: {fileID: 1142131991}
   m_GameObject: {fileID: 1626152947}
   m_LocalRotation: {x: -.5, y: -.5, z: .5, w: .5}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -18866,7 +18894,7 @@ MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 11400010, guid: 8a1b2bcaa835b6844b5514ee4aeb501d,
     type: 2}
-  m_PrefabInternal: {fileID: 1046961217}
+  m_PrefabInternal: {fileID: 1142131991}
   m_GameObject: {fileID: 1626152947}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -18878,7 +18906,7 @@ Rigidbody:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 5400000, guid: 8a1b2bcaa835b6844b5514ee4aeb501d,
     type: 2}
-  m_PrefabInternal: {fileID: 1046961217}
+  m_PrefabInternal: {fileID: 1142131991}
   m_GameObject: {fileID: 1626152947}
   serializedVersion: 2
   m_Mass: 1
@@ -18894,20 +18922,20 @@ BoxCollider:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 6500000, guid: 8a1b2bcaa835b6844b5514ee4aeb501d,
     type: 2}
-  m_PrefabInternal: {fileID: 1046961217}
+  m_PrefabInternal: {fileID: 1142131991}
   m_GameObject: {fileID: 1626152947}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 7, y: 10, z: 6}
-  m_Center: {x: 0, y: .0144810081, z: .00963747501}
+  m_Size: {x: 4.36999989, y: 10, z: 3.61999989}
+  m_Center: {x: 0, y: .00575947762, z: -.0591375232}
 --- !u!114 &1626152952
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 11400008, guid: 8a1b2bcaa835b6844b5514ee4aeb501d,
     type: 2}
-  m_PrefabInternal: {fileID: 1046961217}
+  m_PrefabInternal: {fileID: 1142131991}
   m_GameObject: {fileID: 1626152947}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -18926,7 +18954,7 @@ MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 11400002, guid: 8a1b2bcaa835b6844b5514ee4aeb501d,
     type: 2}
-  m_PrefabInternal: {fileID: 1046961217}
+  m_PrefabInternal: {fileID: 1142131991}
   m_GameObject: {fileID: 1626152947}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -18949,7 +18977,7 @@ MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 11400000, guid: 8a1b2bcaa835b6844b5514ee4aeb501d,
     type: 2}
-  m_PrefabInternal: {fileID: 1046961217}
+  m_PrefabInternal: {fileID: 1142131991}
   m_GameObject: {fileID: 1626152947}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -18960,6 +18988,7 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  canActivate: 1
   laserPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
   cannon: {x: 0, y: 0, z: 1}
   fireCount: 3
@@ -18972,7 +19001,7 @@ MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 11400006, guid: 8a1b2bcaa835b6844b5514ee4aeb501d,
     type: 2}
-  m_PrefabInternal: {fileID: 1046961217}
+  m_PrefabInternal: {fileID: 1142131991}
   m_GameObject: {fileID: 1626152947}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -18996,7 +19025,7 @@ Renderer:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 2300000, guid: 8a1b2bcaa835b6844b5514ee4aeb501d,
     type: 2}
-  m_PrefabInternal: {fileID: 1046961217}
+  m_PrefabInternal: {fileID: 1142131991}
   m_GameObject: {fileID: 1626152947}
   m_Enabled: 1
   m_CastShadows: 1
@@ -19018,9 +19047,9 @@ MeshFilter:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 3300000, guid: 8a1b2bcaa835b6844b5514ee4aeb501d,
     type: 2}
-  m_PrefabInternal: {fileID: 1046961217}
+  m_PrefabInternal: {fileID: 1142131991}
   m_GameObject: {fileID: 1626152947}
-  m_Mesh: {fileID: 4300000, guid: 80ab9ed8dab65e74a9c0decc1ad7ee90, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 60b32803fd3ee2645ba229cb9f9bb929, type: 3}
 --- !u!1 &1630941665
 GameObject:
   m_ObjectHideFlags: 0
@@ -21009,7 +21038,7 @@ Transform:
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 100008, guid: 8a1b2bcaa835b6844b5514ee4aeb501d, type: 2}
-  m_PrefabInternal: {fileID: 1046961217}
+  m_PrefabInternal: {fileID: 1142131991}
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1815656695}
@@ -21029,7 +21058,7 @@ GameObject:
 Transform:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 400008, guid: 8a1b2bcaa835b6844b5514ee4aeb501d, type: 2}
-  m_PrefabInternal: {fileID: 1046961217}
+  m_PrefabInternal: {fileID: 1142131991}
   m_GameObject: {fileID: 1815656694}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
@@ -21041,7 +21070,7 @@ MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 11400012, guid: 8a1b2bcaa835b6844b5514ee4aeb501d,
     type: 2}
-  m_PrefabInternal: {fileID: 1046961217}
+  m_PrefabInternal: {fileID: 1142131991}
   m_GameObject: {fileID: 1815656694}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -21059,7 +21088,7 @@ BoxCollider:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 6500004, guid: 8a1b2bcaa835b6844b5514ee4aeb501d,
     type: 2}
-  m_PrefabInternal: {fileID: 1046961217}
+  m_PrefabInternal: {fileID: 1142131991}
   m_GameObject: {fileID: 1815656694}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
@@ -21072,7 +21101,7 @@ Rigidbody:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 5400002, guid: 8a1b2bcaa835b6844b5514ee4aeb501d,
     type: 2}
-  m_PrefabInternal: {fileID: 1046961217}
+  m_PrefabInternal: {fileID: 1142131991}
   m_GameObject: {fileID: 1815656694}
   serializedVersion: 2
   m_Mass: 1
@@ -21088,7 +21117,7 @@ Renderer:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 2300006, guid: 8a1b2bcaa835b6844b5514ee4aeb501d,
     type: 2}
-  m_PrefabInternal: {fileID: 1046961217}
+  m_PrefabInternal: {fileID: 1142131991}
   m_GameObject: {fileID: 1815656694}
   m_Enabled: 1
   m_CastShadows: 0
@@ -21110,7 +21139,7 @@ MeshFilter:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 3300006, guid: 8a1b2bcaa835b6844b5514ee4aeb501d,
     type: 2}
-  m_PrefabInternal: {fileID: 1046961217}
+  m_PrefabInternal: {fileID: 1142131991}
   m_GameObject: {fileID: 1815656694}
   m_Mesh: {fileID: 4300000, guid: c4445600adc5bd14d9971f02f35c0a20, type: 3}
 --- !u!1 &1817638761
@@ -21603,6 +21632,7 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  canActivate: 1
   laser: {fileID: 1902849808}
   damage: 20
 --- !u!114 &1882523053
@@ -23233,6 +23263,7 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  canActivate: 1
   bulletPrefab: {fileID: 11400002, guid: 023549f1a73033642a26c4403e392f54, type: 2}
   speed: 50
   damage: 10
@@ -24319,13 +24350,13 @@ MonoBehaviour:
   updateAnchors: 0
   mColor: {r: 1, g: 0, b: 0, a: 1}
   mPivot: 4
-  mWidth: 16
+  mWidth: 18
   mHeight: 30
   mDepth: 8
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: .533333361
+  aspectRatio: .600000024
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   mFont: {fileID: 0}

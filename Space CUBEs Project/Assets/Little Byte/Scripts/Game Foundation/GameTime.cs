@@ -1,10 +1,12 @@
-﻿// Space CUBEs Project-csharp
+﻿// Little Byte Games
 // Author: Steve Yeager
-// Created: 2014.05.17
-// Edited: 2014.06.04
+// Created: 2014.07.19
+// Edited: 2014.07.20
 
 using System;
+using System.Collections;
 using LittleByte.Data;
+using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -20,6 +22,12 @@ public static class GameTime
 
     /// <summary>Unmodified Time.fixedDeltaTime.</summary>
     private static float fixedDeltaTime;
+
+    #endregion
+
+    #region Private Fields
+
+    private static Job unscaledTimeJob;
 
     #endregion
 
@@ -46,6 +54,9 @@ public static class GameTime
         }
     }
 
+    /// <summary>Delta time that is uneffected by time scale.</summary>
+    public static float UnscaledDeltaTime { get; private set; }
+
     /// <summary>FPS cap. FrameRate won't exceed but isn't guaranteed to reach.</summary>
     private static int _targetFPS;
 
@@ -53,7 +64,7 @@ public static class GameTime
     public static int targetFPS
     {
 #if UNITY_EDITOR
-        get { return Application.isPlaying ? _targetFPS : UnityEditor.EditorPrefs.GetInt(TargetFPSKey); }
+        get { return Application.isPlaying ? _targetFPS : EditorPrefs.GetInt(TargetFPSKey); }
         set
         {
             if (Application.isPlaying)
@@ -62,7 +73,7 @@ public static class GameTime
             }
             else
             {
-                UnityEditor.EditorPrefs.SetInt(TargetFPSKey, value);
+                EditorPrefs.SetInt(TargetFPSKey, value);
             }
         }
 #else
@@ -124,10 +135,12 @@ public static class GameTime
         {
             cachedTimeScale = timeScale;
             timeScale = 0f;
+            unscaledTimeJob = new Job(UnscaledTimer());
         }
         else
         {
             timeScale = cachedTimeScale;
+            unscaledTimeJob.Kill();
         }
     }
 
@@ -155,6 +168,21 @@ public static class GameTime
         GameTime.targetFPS = targetFPS;
         Application.targetFrameRate = targetFPS;
         SaveData.Save(TargetFPSKey, targetFPS, GameSettings.SettingsFolder);
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    private static IEnumerator UnscaledTimer()
+    {
+        float lastTime = Time.realtimeSinceStartup;
+        while (true)
+        {
+            yield return null;
+            UnscaledDeltaTime = Time.realtimeSinceStartup - lastTime;
+            lastTime = Time.realtimeSinceStartup;
+        }
     }
 
     #endregion

@@ -33,7 +33,6 @@ public class MASTERTEST : MonoBehaviour
     public string build;
     private const string TestFolder = @"Tests/";
 
-
     private void Start()
     {
         BuildInfo buildInfo = build;

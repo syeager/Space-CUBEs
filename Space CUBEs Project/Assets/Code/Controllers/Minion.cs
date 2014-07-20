@@ -8,10 +8,16 @@ using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// 
+/// Created by Medic.
 /// </summary>
 public class Minion : Enemy
 {
+    #region References
+
+    public Transform cannonTransform;
+
+    #endregion
+
     #region State Names
 
     private const string SpawningState = "Spawning";
@@ -72,7 +78,7 @@ public class Minion : Enemy
         while (Vector3.Distance(myTransform.position, target) > distBuffer)
         {
             myMotor.Move((Vector2)myTransform.position.To(target));
-            myTransform.rotation = myTransform.RotateTowards(player.position, targetingSpeed * deltaTime, Vector3.back);
+            cannonTransform.rotation = cannonTransform.RotateTowards(player.position, targetingSpeed * deltaTime, Vector3.back);
             yield return null;
         }
 
