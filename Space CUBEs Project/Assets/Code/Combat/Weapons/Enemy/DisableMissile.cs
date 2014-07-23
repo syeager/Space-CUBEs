@@ -3,6 +3,7 @@
 // Created: 2014.07.16
 // Edited: 2014.07.16
 
+using System;
 using UnityEngine;
 using System.Collections;
 
@@ -14,6 +15,8 @@ public class DisableMissile : Hitbox
     #region Public Fields
 
     public float speed;
+    public float freq;
+    public float amp;
 
     #endregion
 
@@ -31,10 +34,12 @@ public class DisableMissile : Hitbox
     {
         if (!other.CompareTag("Player")) return;
 
+        StopAllCoroutines();
+
         var oppHealth = (Health)other.gameObject.GetComponent(typeof(Health));
         oppHealth.RecieveHit(sender, damage);
 
-        disabledWeapon = LevelManager.Main.PlayerController.Weapons.weapons[Random.Range(0, Player.Weaponlimit)];
+        disabledWeapon = other.GetComponent<Player>().Weapons.weapons[UnityEngine.Random.Range(0, Player.Weaponlimit)];
         if (disabledJob != null) disabledJob.Kill();
         disabledJob = new Job(Disable());
 
@@ -45,10 +50,11 @@ public class DisableMissile : Hitbox
 
     #region Hitbox Overrides
 
-    public override void Initialize(Ship sender, float damage, float disableTime)
+    public void Initialize(Ship sender, float damage, float disableTime, int id)
     {
         this.disableTime = disableTime;
-        Initialize(sender, damage);
+        base.Initialize(sender, damage);
+        StartCoroutine(Move(id));
     }
 
     #endregion
@@ -57,8 +63,31 @@ public class DisableMissile : Hitbox
 
     private IEnumerator Disable()
     {
+        disabledWeapon.Disable();
         yield return new WaitForSeconds(disableTime);
-        disabledWeapon.canActivate = true;
+        disabledWeapon.Enable();
+    }
+
+
+    private IEnumerator Move(int id)
+    {
+        Vector3 straight = myTransform.forward;
+        float timer = 0f;
+        if (id % 2 == 0)
+        {
+            timer = 0.5f;
+        }
+
+        while (true)
+        {
+            float time = deltaTime;
+            timer += time;
+
+            myTransform.rotation = Quaternion.LookRotation(Utility.RotateVector(straight, amp * (float)Math.Cos(freq * timer), Vector3.back), Vector3.back);
+            myTransform.position += myTransform.forward * speed * time;
+
+            yield return null;
+        }
     }
 
     #endregion

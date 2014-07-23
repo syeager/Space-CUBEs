@@ -58,7 +58,7 @@ public class DisableMissileLauncher : Weapon
         for (int i = 0; i < missiles[stage]; i++)
         {
             Prefabs.Pop(missilePrefab.myPoolObject, myTransform.position + myTransform.TransformDirection(offset), myTransform.rotation).
-                    GetComponent<DisableMissile>().Initialize(myShip, damage, disableTime);
+                    GetComponent<DisableMissile>().Initialize(myShip, damage, disableTime, i);
 
             yield return wait;
         }

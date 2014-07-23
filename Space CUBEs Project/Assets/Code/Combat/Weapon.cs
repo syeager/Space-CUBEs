@@ -48,6 +48,7 @@ public abstract class Weapon : MonoBase
 
     public EventHandler<ValueArgs> PowerUpdateEvent;
     public EventHandler ActivatedEvent;
+    public EventHandler<ValueArgs> EnabledEvent;
 
     #endregion
 
@@ -56,6 +57,20 @@ public abstract class Weapon : MonoBase
     public Coroutine CoolDown()
     {
         return StartCoroutine(CoolingDown(true));
+    }
+
+
+    public void Enable()
+    {
+        canActivate = true;
+        EnabledEvent.Fire(this, new ValueArgs(true));
+    }
+
+
+    public void Disable()
+    {
+        canActivate = false;
+        EnabledEvent.Fire(this, new ValueArgs(false));
     }
 
     #endregion

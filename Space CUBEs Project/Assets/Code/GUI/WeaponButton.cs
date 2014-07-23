@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 1.23.2014
+﻿// Little Byte Games
+// Author: Steve Yeager
+// Created: 2014.01.23
+// Edited: 2014.07.22
 
 using Annotations;
 using UnityEngine;
@@ -31,7 +33,6 @@ public class WeaponButton : MonoBehaviour
 
     #endregion
 
-
     #region MonoBehaviour Overrides
 
     [UsedImplicitly]
@@ -46,12 +47,19 @@ public class WeaponButton : MonoBehaviour
 
     public void Initialize(Weapon weapon)
     {
-        GetComponent<ActivateButton>().isEnabled = true;
-        number.color = readyColor;
-        cooldownOverlay.enabled = false;
+        Enable();
 
         weapon.PowerUpdateEvent += OnPowerUpdate;
         weapon.ActivatedEvent += OnActivated;
+        weapon.EnabledEvent += OnEnabled;
+    }
+
+
+    public void Enable()
+    {
+        GetComponent<ActivateButton>().isEnabled = true;
+        number.color = readyColor;
+        cooldownOverlay.enabled = true;
     }
 
 
@@ -76,7 +84,7 @@ public class WeaponButton : MonoBehaviour
         }
         else
         {
-            cooldownOverlay.fillAmount = 1-(float)args.value / Weapon.FullPower;
+            cooldownOverlay.fillAmount = 1 - (float)args.value / Weapon.FullPower;
         }
     }
 
@@ -86,6 +94,19 @@ public class WeaponButton : MonoBehaviour
         number.color = cooldownColor;
         cooldownOverlay.enabled = true;
         cooldownOverlay.fillAmount = 1f;
+    }
+
+
+    private void OnEnabled(object sender, ValueArgs args)
+    {
+        if ((bool)args.value)
+        {
+            Enable();
+        }
+        else
+        {
+            Disable();
+        }
     }
 
     #endregion
