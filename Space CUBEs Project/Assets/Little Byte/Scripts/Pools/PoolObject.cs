@@ -42,6 +42,7 @@ public class PoolObject : MonoBehaviour
     /// </summary>
     public void Disable()
     {
+        StopAllCoroutines();
         DisableEvent.Fire(this);
         gameObject.SetActive(false);
         pool.Push(this);

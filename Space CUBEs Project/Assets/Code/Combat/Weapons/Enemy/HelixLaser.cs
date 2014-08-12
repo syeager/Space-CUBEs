@@ -50,18 +50,19 @@ public class HelixLaser : Weapon
     private IEnumerator Fire()
     {
         float cannon = 0f;
-        float attackTimer = attackTime;
+        float attackTimer = 1f/fireRate;
         for (float timer = 0; timer < attackTime; timer += deltaTime)
         {
             // attack
+            attackTimer -= deltaTime;
             if (attackTimer <= 0f)
             {
-                attackTimer = attackTime;
+                attackTimer = 1f/fireRate;
 
                 // fire 1
-                Prefabs.Pop(laserPrefab, myTransform.position + myTransform.right * cannon, myTransform.rotation).AddComponent<Hitbox>().Initialize(myShip, damage, myTransform.forward * speed);
+                Prefabs.Pop(laserPrefab, myTransform.position + myTransform.right * cannon, myTransform.rotation).GetComponent<Hitbox>().Initialize(myShip, damage, myTransform.forward * speed);
                 // fire 2
-                Prefabs.Pop(laserPrefab, myTransform.position + myTransform.right * -cannon, myTransform.rotation).AddComponent<Hitbox>().Initialize(myShip, damage, myTransform.forward * speed);
+                Prefabs.Pop(laserPrefab, myTransform.position + myTransform.right * -cannon, myTransform.rotation).GetComponent<Hitbox>().Initialize(myShip, damage, myTransform.forward * speed);
             }
 
             // move

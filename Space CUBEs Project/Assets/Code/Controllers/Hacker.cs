@@ -15,9 +15,10 @@ public class Hacker : Boss
 {
     #region References
 
-    public DisableMissileLauncher disableMissileLauncher;
+    public DisableMissileLauncher[] disableMissileLaunchers;
     public WeaponStacker burstCannon;
     public HelixLaser helixLaser;
+    public EMPBlaster empBlaster;
 
     #endregion
 
@@ -72,7 +73,7 @@ public class Hacker : Boss
         stateMachine.CreateState(EnteringState, EnteringEnter, EnteringExit);
         stateMachine.CreateState(StagingState, StagingEnter, StagingExit);
         stateMachine.CreateState(Stage1State, Stage1Enter, info => { });
-        //stateMachine.CreateState(Stage2State, Stage2Enter, info => { });
+        stateMachine.CreateState(Stage2State, Stage2Enter, info => { });
         //stateMachine.CreateState(Stage3State, Stage3Enter, info => { });
         //stateMachine.CreateState(DyingState, DyingEnter, i => { });
 
@@ -80,9 +81,11 @@ public class Hacker : Boss
         NextStageEvent += OnStageIncrease;
 
         // weapons
-        disableMissileLauncher.Initialize(this);
+        disableMissileLaunchers[0].Initialize(this);
+        disableMissileLaunchers[1].Initialize(this);
         burstCannon.Initialize(this);
         helixLaser.Initialize(this);
+        empBlaster.Initialize(this);
     }
 
     #endregion
@@ -165,7 +168,8 @@ public class Hacker : Boss
         while (true)
         {
             // missiles, targeted laser
-            disableMissileLauncher.Activate(true, CurrentStage);
+            disableMissileLaunchers[0].Activate(true, CurrentStage);
+            disableMissileLaunchers[1].Activate(true, CurrentStage);
             yield return StartCoroutine(Target(LevelManager.Main.PlayerTransform.position));
             yield return helixLaser.Activate(true);
             yield return attackCooldown;
@@ -174,11 +178,56 @@ public class Hacker : Boss
             yield return StartCoroutine(Move());
 
             // missiles, straight laser, burst
-            disableMissileLauncher.Activate(true, CurrentStage);
+            disableMissileLaunchers[0].Activate(true, CurrentStage);
+            disableMissileLaunchers[1].Activate(true, CurrentStage);
             yield return StartCoroutine(Target(myTransform.position + Vector3.left));
             burstCannon.Activate(true);
             yield return helixLaser.Activate(true);
             yield return attackCooldown;
+
+            // move
+            yield return StartCoroutine(Move());
+        }
+    }
+
+
+    private void Stage2Enter(Dictionary<string, object> info)
+    {
+        stateMachine.SetUpdate(Stage2Update());
+    }
+
+
+    private IEnumerator Stage2Update()
+    {
+        WaitForSeconds attackCooldown = new WaitForSeconds(attackCooldowns[1]);
+
+        yield return empBlaster.Activate(true);
+
+        while (true)
+        {
+            // missiles, targeted laser
+            disableMissileLaunchers[0].Activate(true, CurrentStage);
+            disableMissileLaunchers[1].Activate(true, CurrentStage);
+            yield return StartCoroutine(Target(LevelManager.Main.PlayerTransform.position));
+            yield return helixLaser.Activate(true);
+            yield return attackCooldown;
+
+            // move
+            yield return StartCoroutine(Move());
+
+            // emp blast
+            yield return empBlaster.Activate(true);
+
+            // missiles, straight laser, burst
+            disableMissileLaunchers[0].Activate(true, CurrentStage);
+            disableMissileLaunchers[1].Activate(true, CurrentStage);
+            yield return StartCoroutine(Target(myTransform.position + Vector3.left));
+            burstCannon.Activate(true);
+            yield return helixLaser.Activate(true);
+            yield return attackCooldown;
+
+            // emp blast
+            yield return empBlaster.Activate(true);
 
             // move
             yield return StartCoroutine(Move());
@@ -214,7 +263,8 @@ public class Hacker : Boss
 
     private void DeactivateWeapons()
     {
-        disableMissileLauncher.Activate(false);
+        disableMissileLaunchers[0].Activate(false);
+        disableMissileLaunchers[1].Activate(false);
         burstCannon.Activate(false);
         helixLaser.Activate(false);
     }

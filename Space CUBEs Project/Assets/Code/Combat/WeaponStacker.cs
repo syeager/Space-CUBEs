@@ -80,7 +80,7 @@ public class WeaponStacker : Weapon
     {
         animation.Play(retractClip);
         AudioManager.Play(retractAudio);
-        yield return new WaitForSeconds(retractClip.length);
+        yield return new WaitForSeconds(retractClip == null ? 0f : retractClip.length);
     }
 
     #endregion
