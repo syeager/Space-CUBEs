@@ -6,8 +6,8 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: VertexColor_Mat
-  m_Shader: {fileID: 4800000, guid: 883aa776d172c2946b6b633b6555960b, type: 3}
+  m_Name: MedicPlasmaCannon
+  m_Shader: {fileID: 4800000, guid: 493aa4cc507fe1b47a982c0333dd4539, type: 3}
   m_ShaderKeywords: []
   m_CustomRenderQueue: -1
   m_SavedProperties:
@@ -29,8 +29,24 @@ Material:
         first:
           name: _Attenu
         second: 2
+      data:
+        first:
+          name: _Mix
+        second: 1
+      data:
+        first:
+          name: _Shininess
+        second: .699999988
     m_Colors:
       data:
         first:
           name: _Color
         second: {r: 1, g: 0, b: 0, a: 1}
+      data:
+        first:
+          name: _Emission
+        second: {r: 0, g: 0, b: 0, a: 0}
+      data:
+        first:
+          name: _SpecColor
+        second: {r: 1, g: 1, b: 1, a: 1}
