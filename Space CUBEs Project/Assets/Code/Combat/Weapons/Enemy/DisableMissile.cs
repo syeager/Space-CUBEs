@@ -4,6 +4,7 @@
 // Edited: 2014.07.16
 
 using System;
+using Annotations;
 using UnityEngine;
 using System.Collections;
 
@@ -29,6 +30,12 @@ public class DisableMissile : Hitbox
     #endregion
 
     #region MonoBehaviour Overrides
+
+    [UsedImplicitly]
+    private void Awake()
+    {
+        GetComponent<Health>().DieEvent += OnDieHandler;
+    }
 
     protected override void OnTriggerEnter(Collider other)
     {
@@ -88,6 +95,15 @@ public class DisableMissile : Hitbox
 
             yield return null;
         }
+    }
+
+    #endregion
+
+    #region Event Handlers
+
+    private void OnDieHandler(object sender, DieArgs args)
+    {
+        myPoolObject.Disable();
     }
 
     #endregion

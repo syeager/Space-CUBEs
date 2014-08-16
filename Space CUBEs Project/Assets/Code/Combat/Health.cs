@@ -95,7 +95,7 @@ public class Health : MonoBase
 
 
     //
-    public void Reset()
+    public void ReInitialize()
     {
         if (myRenderer == null) myRenderer = renderer;
         Normal_Mat = myRenderer.material;
