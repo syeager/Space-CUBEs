@@ -70,10 +70,10 @@ public class Kamikaze : Enemy
     [UsedImplicitly]
     private void OnTriggerEnter(Collider other)
     {
-        const string playerTag = "Player";
-        if (!other.CompareTag(playerTag)) return;
+        if (!other.CompareTag(Player.Tag)) return;
 
-        stateMachine.SetState(DyingState);
+        //stateMachine.SetState(DyingState);
+        MyHealth.Trash();
     }
 
     #endregion

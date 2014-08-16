@@ -17,7 +17,7 @@ public class Ship : MonoBase
     #region References
 
     protected Transform myTransform;
-    protected ShipMotor myMotor;
+    public ShipMotor MyMotor { get; protected set; }
     public ShieldHealth MyHealth { get; protected set; }
 
     #endregion
@@ -40,7 +40,7 @@ public class Ship : MonoBase
     {
         // get references
         myTransform = transform;
-        myMotor = GetComponent<ShipMotor>() ?? gameObject.AddComponent<ShipMotor>();
+        MyMotor = GetComponent<ShipMotor>() ?? gameObject.AddComponent<ShipMotor>();
         MyHealth = GetComponent<ShieldHealth>() ?? gameObject.AddComponent<ShieldHealth>();
     }
 

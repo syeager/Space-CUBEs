@@ -101,7 +101,7 @@ public class Guard : Enemy
             }
             else
             {
-                myMotor.Move(direction);
+                MyMotor.Move(direction);
             }
 
             yield return null;
@@ -111,7 +111,7 @@ public class Guard : Enemy
 
     private void AttackEnter(Dictionary<string, object> info)
     {
-        myMotor.Move(Vector3.zero);
+        MyMotor.Move(Vector3.zero);
         stateMachine.SetUpdate(AttackingUpdate());
     }
 

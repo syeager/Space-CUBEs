@@ -76,7 +76,7 @@ public class Grunt : Enemy
         while (true)
         {
             // move
-            myMotor.Move(path.Direction(deltaTime));
+            MyMotor.Move(path.Direction(deltaTime));
             yield return null;
         }
     }

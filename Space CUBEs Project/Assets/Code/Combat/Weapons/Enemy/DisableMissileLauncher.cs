@@ -38,7 +38,7 @@ public class DisableMissileLauncher : Weapon
     {
         if (pressed)
         {
-            return StartCoroutine(Fire(stage));
+            return StartCoroutine(Fire(stage - 1));
         }
         else if (gameObject.activeInHierarchy)
         {

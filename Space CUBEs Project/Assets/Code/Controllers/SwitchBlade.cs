@@ -112,7 +112,7 @@ public class SwitchBlade : Boss
     {
         while (Vector3.Distance(myTransform.position, startPosition) > 1f)
         {
-            myMotor.Move(-Vector2.right);
+            MyMotor.Move(-Vector2.right);
             yield return null;
         }
 
@@ -172,7 +172,7 @@ public class SwitchBlade : Boss
 
     private void Stage1Enter(Dictionary<string, object> info)
     {
-        myMotor.speed = moveSpeed;
+        MyMotor.speed = moveSpeed;
         moveJob = new Job(Move());
         stateMachine.SetUpdate(Stage1Update());
     }
@@ -339,14 +339,14 @@ public class SwitchBlade : Boss
             // up
             while (myTransform.position.y < moveHeight)
             {
-                myMotor.Move(Vector2.up);
+                MyMotor.Move(Vector2.up);
                 yield return null;
             }
 
             // down
             while (myTransform.position.y > -moveHeight)
             {
-                myMotor.Move(-Vector2.up);
+                MyMotor.Move(-Vector2.up);
                 yield return null;
             }
 

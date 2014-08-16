@@ -11,6 +11,22 @@ using System.Collections;
 /// </summary>
 public class EMPBlast : Hitbox
 {
+    #region MonoBehaviour Overrides
+
+    protected override void OnTriggerEnter(Collider other)
+    {
+        Player player = other.GetComponent(typeof(Player)) as Player;
+        if (player != null)
+        {
+            foreach (PlayerWeapon playerWeapon in player.Weapons.weapons)
+            {
+                playerWeapon.CoolDown();
+            }
+        }
+    }
+
+    #endregion
+
     #region Hitbox Overrides
 
     public void Initialize(Ship sender, float damage, float time, float spreadSpeed)

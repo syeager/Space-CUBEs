@@ -50,6 +50,7 @@ public class Player : Ship
     #region Const Fields
 
     public const int Weaponlimit = 4;
+    public const string Tag = "Player";
 
     #endregion
 
@@ -121,7 +122,7 @@ public class Player : Ship
 #endif
 
             // move
-            myMotor.Move(MovementInput());
+            MyMotor.Move(MovementInput());
 
             yield return null;
         }
@@ -153,7 +154,7 @@ public class Player : Ship
 
     private IEnumerator BarrelRollingUpdate(Vector2 direction, bool invincible)
     {
-        yield return StartCoroutine(myMotor.BarrelRoll(direction, horizontalBounds));
+        yield return StartCoroutine(MyMotor.BarrelRoll(direction, horizontalBounds));
         stateMachine.SetState(MovingState, new Dictionary<string, object> {{"invincible", invincible}});
     }
 
@@ -296,7 +297,7 @@ public class Player : Ship
     public void Initialize(float maxHealth, float maxShield, float speed, float damage)
     {
         MyHealth.Initialize(maxHealth, maxShield);
-        myMotor.Initialize(speed);
+        MyMotor.Initialize(speed);
         Weapons.Initialize(this, damage);
         Augmentations.Initialize(this);
 

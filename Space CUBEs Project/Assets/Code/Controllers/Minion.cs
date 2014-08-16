@@ -77,7 +77,7 @@ public class Minion : Enemy
         const float distBuffer = 1f;
         while (Vector3.Distance(myTransform.position, target) > distBuffer)
         {
-            myMotor.Move((Vector2)myTransform.position.To(target));
+            MyMotor.Move((Vector2)myTransform.position.To(target));
             cannonTransform.rotation = cannonTransform.RotateTowards(player.position, targetingSpeed * deltaTime, Vector3.back);
             yield return null;
         }

@@ -1,7 +1,7 @@
-﻿// Space CUBEs Project-csharp
+﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.07.15
-// Edited: 2014.07.18
+// Edited: 2014.08.14
 
 using System;
 using System.Collections.Generic;
@@ -19,6 +19,7 @@ public class Hacker : Boss
     public WeaponStacker burstCannon;
     public HelixLaser helixLaser;
     public EMPBlaster empBlaster;
+    public LaserLock laserLock;
 
     #endregion
 
@@ -74,8 +75,8 @@ public class Hacker : Boss
         stateMachine.CreateState(StagingState, StagingEnter, StagingExit);
         stateMachine.CreateState(Stage1State, Stage1Enter, info => { });
         stateMachine.CreateState(Stage2State, Stage2Enter, info => { });
-        //stateMachine.CreateState(Stage3State, Stage3Enter, info => { });
-        //stateMachine.CreateState(DyingState, DyingEnter, i => { });
+        stateMachine.CreateState(Stage3State, Stage3Enter, info => { });
+        stateMachine.CreateState(DyingState, DyingEnter, i => { });
 
         // stages
         NextStageEvent += OnStageIncrease;
@@ -86,6 +87,7 @@ public class Hacker : Boss
         burstCannon.Initialize(this);
         helixLaser.Initialize(this);
         empBlaster.Initialize(this);
+        laserLock.Initialize(this);
     }
 
     #endregion
@@ -104,7 +106,7 @@ public class Hacker : Boss
     {
         while (Vector3.Distance(myTransform.position, startPosition) > 1f)
         {
-            myMotor.Move(-Vector2.right);
+            MyMotor.Move(-Vector2.right);
             yield return null;
         }
 
@@ -216,7 +218,7 @@ public class Hacker : Boss
             yield return StartCoroutine(Move());
 
             // emp blast
-            yield return empBlaster.Activate(true);
+            yield return empBlaster.Activate(true); // TODO: fix emp blast
 
             // missiles, straight laser, burst
             disableMissileLaunchers[0].Activate(true, CurrentStage);
@@ -234,6 +236,89 @@ public class Hacker : Boss
         }
     }
 
+
+    private void Stage3Enter(Dictionary<string, object> info)
+    {
+        stateMachine.SetUpdate(Stage3Update());
+    }
+
+
+    private IEnumerator Stage3Update()
+    {
+        WaitForSeconds attackCooldown = new WaitForSeconds(attackCooldowns[1]);
+
+        yield return laserLock.Activate(true);
+
+        while (true)
+        {
+            // missiles, targeted laser
+            disableMissileLaunchers[0].Activate(true, CurrentStage);
+            disableMissileLaunchers[1].Activate(true, CurrentStage);
+            yield return StartCoroutine(Target(LevelManager.Main.PlayerTransform.position));
+            yield return helixLaser.Activate(true);
+            yield return attackCooldown;
+
+            // emp blast
+            yield return empBlaster.Activate(true);
+
+            // move
+            yield return StartCoroutine(Move());
+
+            // laser lock
+            yield return laserLock.Activate(true); 
+
+            // missiles, straight laser, burst
+            disableMissileLaunchers[0].Activate(true, CurrentStage);
+            disableMissileLaunchers[1].Activate(true, CurrentStage);
+            yield return StartCoroutine(Target(myTransform.position + Vector3.left));
+            burstCannon.Activate(true);
+            yield return helixLaser.Activate(true);
+            yield return attackCooldown;
+
+            // move
+            yield return StartCoroutine(Move());
+
+            // laser lock
+            yield return laserLock.Activate(true);
+
+            // emp blast
+            yield return empBlaster.Activate(true);
+
+            // missiles, straight laser, burst
+            disableMissileLaunchers[0].Activate(true, CurrentStage);
+            disableMissileLaunchers[1].Activate(true, CurrentStage);
+            yield return StartCoroutine(Target(myTransform.position + Vector3.left));
+            burstCannon.Activate(true);
+            yield return helixLaser.Activate(true);
+            yield return attackCooldown;
+
+            // move
+            yield return StartCoroutine(Move());
+        }
+    }
+
+
+    private void DyingEnter(Dictionary<string, object> info)
+    {
+        DeactivateWeapons();
+        StopAllCoroutines();
+
+        GameObject root = new GameObject();
+        root.transform.SetPosRot(myTransform.position, myTransform.rotation);
+        myTransform.parent = root.transform;
+        myAnimation.Play("Switchblade_Death");
+
+        stateMachine.SetUpdate(DeathUpdate());
+    }
+
+
+    private IEnumerator DeathUpdate()
+    {
+        yield return new WaitForSeconds(myAnimation["Switchblade_Death"].length + 1f);
+        DeathEvent.Fire();
+        Destroy(gameObject);
+    }
+
     #endregion
 
     #region Private Methods
@@ -244,7 +329,7 @@ public class Hacker : Boss
         Vector3 targetPosition = Utility.RandomVector3(minBarrier, maxBarrier);
         while (Vector3.Distance(myTransform.position, targetPosition) >= distBuffer)
         {
-            myMotor.Move((Vector2)myTransform.position.To(targetPosition));
+            MyMotor.Move((Vector2)myTransform.position.To(targetPosition));
             yield return null;
         }
     }
@@ -267,6 +352,7 @@ public class Hacker : Boss
         disableMissileLaunchers[1].Activate(false);
         burstCannon.Activate(false);
         helixLaser.Activate(false);
+        laserLock.Activate(false);
     }
 
     #endregion

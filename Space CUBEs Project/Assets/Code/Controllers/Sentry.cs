@@ -106,7 +106,7 @@ public class Sentry : Enemy
 
             // update transform
             Rotate();
-            myMotor.Move(myTransform.forward * targetMoveSpeed);
+            MyMotor.Move(myTransform.forward * targetMoveSpeed);
 
             // enter attacking
             if (Vector3.Distance(targetPosition, myTransform.position) <= targetDistance)
@@ -139,7 +139,7 @@ public class Sentry : Enemy
 
             // idle
             Rotate();
-            myMotor.Move(attackPath.Direction(deltaTime));
+            MyMotor.Move(attackPath.Direction(deltaTime));
             yield return null;
         }
     }

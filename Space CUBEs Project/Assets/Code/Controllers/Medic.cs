@@ -95,7 +95,7 @@ public class Medic : Boss
     {
         while (Vector3.Distance(myTransform.position, startPosition) > 1f)
         {
-            myMotor.Move(-Vector2.right);
+            MyMotor.Move(-Vector2.right);
             yield return null;
         }
 
@@ -107,7 +107,7 @@ public class Medic : Boss
 
     private void EnteringExit(Dictionary<string, object> info)
     {
-        myMotor.Stop();
+        MyMotor.Stop();
         MyHealth.invincible = false;
     }
 

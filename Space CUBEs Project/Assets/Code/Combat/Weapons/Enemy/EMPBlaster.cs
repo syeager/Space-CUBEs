@@ -18,6 +18,7 @@ public class EMPBlaster : Weapon
 
     public float chargeTime;
     public float chargeSpeed;
+    public float fireDelay;
 
     public float damage;
     public float spreadSpeed;
@@ -55,6 +56,8 @@ public class EMPBlaster : Weapon
             energyBall.localScale += Vector3.one * chargeSpeed * deltaTime;
             yield return null;
         }
+        yield return new WaitForSeconds(fireDelay);
+        energyBall.gameObject.SetActive(false);
 
         // fire
         Prefabs.Pop(blastPrefab, myTransform.position, myTransform.rotation).GetComponent<EMPBlast>().Initialize(myShip, damage, attackTime, spreadSpeed);

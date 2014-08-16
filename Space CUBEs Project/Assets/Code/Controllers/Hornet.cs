@@ -76,7 +76,7 @@ public class Hornet : Enemy
             }
             else
             {
-                myMotor.Move(direction);
+                MyMotor.Move(direction);
             }
 
             yield return null;
@@ -96,7 +96,7 @@ public class Hornet : Enemy
     {
         while (true)
         {
-            myMotor.Move((Vector2)path.Direction(deltaTime));
+            MyMotor.Move((Vector2)path.Direction(deltaTime));
             yield return null;
         }
     }
