@@ -1149,6 +1149,7 @@ GameObject:
   - 54: {fileID: 74913996}
   - 114: {fileID: 74913995}
   - 64: {fileID: 74913997}
+  - 111: {fileID: 74913998}
   m_Layer: 10
   m_Name: Hacker
   m_TagString: Untagged
@@ -1225,6 +1226,21 @@ MeshCollider:
   m_SmoothSphereCollisions: 0
   m_Convex: 1
   m_Mesh: {fileID: 4300012, guid: f37750526d2d0a248a09d7e61bfb5e1e, type: 3}
+--- !u!111 &74913998
+Animation:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11100000, guid: bcda671e9a9a0324e85481e7899594c7,
+    type: 2}
+  m_PrefabInternal: {fileID: 744368638}
+  m_GameObject: {fileID: 74913994}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!114 &74913999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5424,7 +5440,7 @@ MonoBehaviour:
   updateAnchors: 0
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 1278
+  mWidth: 1281
   mHeight: 144
   mDepth: 0
   autoResizeBoxCollider: 0
@@ -8986,7 +9002,7 @@ MonoBehaviour:
   - {fileID: 100006, guid: 8a1b2bcaa835b6844b5514ee4aeb501d, type: 2}
   - {fileID: 100006, guid: a62332c82414b4441aa9623a7c0cb319, type: 2}
   rankLimits: ffffffffa861000050c30000a0860100400d0300801a0600
-  buildToLoad: 
+  buildToLoad: Berserker
   formationGroups:
   - formation: {fileID: 11400000, guid: 2ea9cca42d0fb644da5a6c7344602b01, type: 2}
     position: {x: 120, y: 0, z: 0}

@@ -58,7 +58,7 @@ public class TechMissiles_Weapon : PlayerWeapon
 
         for (int i = 0; i < 8; i++)
         {
-            Prefabs.Pop(missilePrefab, myTransform.TransformPoint(launchPositions[i]), myTransform.rotation).GetComponent<Hitbox>().Initialize(myShip, damage * multiplier, myTransform.forward * speed);
+            Prefabs.Pop(missilePrefab, myTransform.TransformPoint(launchPositions[i]), myTransform.rotation).GetComponent<TechMissile>().Initialize(myShip, damage * multiplier, myTransform.forward * speed);
             yield return wait;
         }
 

@@ -91,7 +91,7 @@ public class LevelManager : Singleton<LevelManager>
 #if UNITY_EDITOR
         if (string.IsNullOrEmpty(build))
         {
-            build = GameStart.DevBuilds[0];
+            build = buildToLoad;
         }
 #endif
         InvokeAction(() => CreatePlayer(build), 1f);

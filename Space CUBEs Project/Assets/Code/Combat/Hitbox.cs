@@ -45,7 +45,7 @@ public class Hitbox : MonoBase
 
     #region MonoBehavoiur Overrides
 
-    protected virtual void Reset()
+    protected virtual void Awake()
     {
         myTransform = transform;
         myPoolObject = GetComponent<PoolObject>();

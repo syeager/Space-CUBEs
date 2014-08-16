@@ -34,9 +34,9 @@ public class PlasmaLaser : Hitbox, IBlackHoleListener
 
     #region MonoBehaviour Overrides
 
-    protected override void Reset()
+    protected override void Awake()
     {
-        base.Reset();
+        base.Awake();
         myRigidbody = rigidbody;
     }
 

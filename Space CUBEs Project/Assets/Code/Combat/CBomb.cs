@@ -1,15 +1,14 @@
-﻿// Space CUBEs Project-csharp
+﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.03.03
-// Edited: 2014.06.13
-
+// Edited: 2014.08.16
 
 using UnityEngine;
 
 /// <summary>
 /// Giant nuke for the CBomb weapon.
 /// </summary>
-public class CBomb : Hitbox
+public class CBomb : Hitbox, IEMPBlastListener
 {
     #region Public Fields
 
@@ -29,6 +28,16 @@ public class CBomb : Hitbox
         base.OnTriggerEnter(other);
 
         Detonate();
+    }
+
+    #endregion
+
+    #region IEMPBlastListener Overrides
+
+    public void InteractEMP()
+    {
+        disabled = true;
+        GetComponent<PoolObject>().Disable();
     }
 
     #endregion

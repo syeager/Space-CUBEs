@@ -1,11 +1,12 @@
-﻿// Steve Yeager
-// 3.4.2014
-
+﻿// Little Byte Games
+// Author: Steve Yeager
+// Created: 2014.03.05
+// Edited: 2014.08.16
 
 using UnityEngine;
 using System.Collections;
 
-public class SharkMissile : Hitbox
+public class SharkMissile : Hitbox, IEMPBlastListener
 {
     #region Public Fields
 
@@ -17,9 +18,8 @@ public class SharkMissile : Hitbox
 
     private float homingSpeed;
     private Transform target;
-    
-    #endregion
 
+    #endregion
 
     #region MonoBehaviour Overrides
 
@@ -47,6 +47,15 @@ public class SharkMissile : Hitbox
         collider.enabled = false;
 
         StartCoroutine(Delay(delay, delaySpeed));
+    }
+
+    #endregion
+
+    #region IEMPBlastListener Overrides
+
+    public void InteractEMP()
+    {
+        Detonate();
     }
 
     #endregion
@@ -97,7 +106,7 @@ public class SharkMissile : Hitbox
     private void FindTarget()
     {
         float max = 0f;
-        foreach (var enemy in LevelManager.Main.ActiveEnemies)
+        foreach (Enemy enemy in LevelManager.Main.ActiveEnemies)
         {
             if (enemy.GetComponent<ShieldHealth>().Strength > max)
             {

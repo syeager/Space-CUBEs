@@ -22,6 +22,14 @@ public class EMPBlast : Hitbox
             {
                 playerWeapon.CoolDown();
             }
+
+            return;
+        }
+
+        IEMPBlastListener listener = other.GetComponent(typeof(IEMPBlastListener)) as IEMPBlastListener;
+        if (listener != null)
+        {
+            listener.InteractEMP();
         }
     }
 
