@@ -433,7 +433,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: 88ee6551d56b65a479d4c1304c6dbd27, type: 2}
+  - {fileID: 2100000, guid: 640cc5b3182e3554f9a381aa19358a63, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -584,8 +584,8 @@ MonoBehaviour:
   invincible: 0
   maxHealth: 3000
   health: 0
-  rechargeSpeed: 1
-  rechargeDelay: 3
+  rechargeSpeed: 50
+  rechargeDelay: 2
   maxShield: 100
   shield: 0
 --- !u!114 &11400002
@@ -705,9 +705,9 @@ MonoBehaviour:
   empBlaster: {fileID: 11400014}
   laserLock: {fileID: 11400016}
   startPosition: {x: 70, y: 0, z: 0}
-  stagingTime: 0
-  stagingSize: 0
-  stagingSpeed: 0
+  stagingTime: 3
+  stagingSize: .0500000007
+  stagingSpeed: 3
   minBarrier: {x: 20, y: -30, z: 0}
   maxBarrier: {x: 85, y: 30, z: 0}
   attackCooldowns:
