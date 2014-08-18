@@ -1,10 +1,11 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.07.15
-// Edited: 2014.08.14
+// Edited: 2014.08.18
 
 using System;
 using System.Collections.Generic;
+using Annotations;
 using UnityEngine;
 using System.Collections;
 
@@ -172,8 +173,9 @@ public class Hacker : Boss
             // missiles, targeted laser
             disableMissileLaunchers[0].Activate(true, CurrentStage);
             disableMissileLaunchers[1].Activate(true, CurrentStage);
-            yield return StartCoroutine(Target(LevelManager.Main.PlayerTransform.position));
+            StartCoroutine("Target", LevelManager.Main.PlayerTransform);
             yield return helixLaser.Activate(true);
+            StopCoroutine("Target");
             yield return attackCooldown;
 
             // move
@@ -182,9 +184,10 @@ public class Hacker : Boss
             // missiles, straight laser, burst
             disableMissileLaunchers[0].Activate(true, CurrentStage);
             disableMissileLaunchers[1].Activate(true, CurrentStage);
-            yield return StartCoroutine(Target(myTransform.position + Vector3.left));
             burstCannon.Activate(true);
+            StartCoroutine("Follow", LevelManager.Main.PlayerTransform);
             yield return helixLaser.Activate(true);
+            StopCoroutine("Follow");
             yield return attackCooldown;
 
             // move
@@ -210,22 +213,24 @@ public class Hacker : Boss
             // missiles, targeted laser
             disableMissileLaunchers[0].Activate(true, CurrentStage);
             disableMissileLaunchers[1].Activate(true, CurrentStage);
-            yield return StartCoroutine(Target(LevelManager.Main.PlayerTransform.position));
+            StartCoroutine("Target", LevelManager.Main.PlayerTransform);
             yield return helixLaser.Activate(true);
+            StopCoroutine("Target");
             yield return attackCooldown;
 
             // move
             yield return StartCoroutine(Move());
 
             // emp blast
-            yield return empBlaster.Activate(true); // TODO: fix emp blast
+            yield return empBlaster.Activate(true);
 
             // missiles, straight laser, burst
             disableMissileLaunchers[0].Activate(true, CurrentStage);
             disableMissileLaunchers[1].Activate(true, CurrentStage);
-            yield return StartCoroutine(Target(myTransform.position + Vector3.left));
+            StartCoroutine("Follow", LevelManager.Main.PlayerTransform);
             burstCannon.Activate(true);
             yield return helixLaser.Activate(true);
+            StopCoroutine("Follow");
             yield return attackCooldown;
 
             // emp blast
@@ -254,8 +259,9 @@ public class Hacker : Boss
             // missiles, targeted laser
             disableMissileLaunchers[0].Activate(true, CurrentStage);
             disableMissileLaunchers[1].Activate(true, CurrentStage);
-            yield return StartCoroutine(Target(LevelManager.Main.PlayerTransform.position));
+            StartCoroutine("Target", LevelManager.Main.PlayerTransform);
             yield return helixLaser.Activate(true);
+            StopCoroutine("Target");
             yield return attackCooldown;
 
             // emp blast
@@ -265,14 +271,15 @@ public class Hacker : Boss
             yield return StartCoroutine(Move());
 
             // laser lock
-            yield return laserLock.Activate(true); 
+            yield return laserLock.Activate(true);
 
             // missiles, straight laser, burst
             disableMissileLaunchers[0].Activate(true, CurrentStage);
             disableMissileLaunchers[1].Activate(true, CurrentStage);
-            yield return StartCoroutine(Target(myTransform.position + Vector3.left));
+            StartCoroutine("Follow", LevelManager.Main.PlayerTransform);
             burstCannon.Activate(true);
             yield return helixLaser.Activate(true);
+            StopCoroutine("Follow");
             yield return attackCooldown;
 
             // move
@@ -287,9 +294,10 @@ public class Hacker : Boss
             // missiles, straight laser, burst
             disableMissileLaunchers[0].Activate(true, CurrentStage);
             disableMissileLaunchers[1].Activate(true, CurrentStage);
-            yield return StartCoroutine(Target(myTransform.position + Vector3.left));
+            StartCoroutine("Follow", LevelManager.Main.PlayerTransform);
             burstCannon.Activate(true);
             yield return helixLaser.Activate(true);
+            StopCoroutine("Follow");
             yield return attackCooldown;
 
             // move
@@ -325,22 +333,45 @@ public class Hacker : Boss
 
     private IEnumerator Move()
     {
-        const float distBuffer = 2f;
+        Vector3 left = new Vector3(0f, -90f, 90f);
         Vector3 targetPosition = Utility.RandomVector3(minBarrier, maxBarrier);
-        while (Vector3.Distance(myTransform.position, targetPosition) >= distBuffer)
+
+        float time = Vector3.Distance(targetPosition, myTransform.position) / MyMotor.speed;
+        float angle = myTransform.eulerAngles.x;
+        if (angle > 180f) angle -= 360f;
+        float rotateSpeed = angle / time;
+
+        for (float timer = 0f; timer < time; timer += deltaTime)
         {
             MyMotor.Move((Vector2)myTransform.position.To(targetPosition));
+            myTransform.Rotate(Vector3.back, rotateSpeed * deltaTime, Space.World);
+
+            yield return null;
+        }
+
+        myTransform.rotation = Quaternion.Euler(left);
+    }
+
+
+    [UsedImplicitly]
+    private IEnumerator Target(Transform target)
+    {
+        while (true)
+        {
+            myTransform.rotation = Quaternion.Slerp(myTransform.rotation, Quaternion.LookRotation(myTransform.position.To(target.position), Vector3.back), targetingSpeed * deltaTime);
             yield return null;
         }
     }
 
 
-    private IEnumerator Target(Vector3 targetPosition)
+    [UsedImplicitly]
+    private IEnumerator Follow(Transform target)
     {
-        Quaternion targetRotation = Quaternion.LookRotation(myTransform.position.To(targetPosition), Vector3.back);
-        while (Mathf.Abs(Quaternion.Angle(myTransform.rotation, targetRotation)) > 1f)
+        Vector3 distance = Vector3.right * Vector3.Distance(target.position, myTransform.position);
+        while (true)
         {
-            myTransform.rotation = Quaternion.Slerp(myTransform.rotation, targetRotation, targetingSpeed * deltaTime);
+            Vector3 targetPosition = target.position + distance;
+            MyMotor.Move((Vector2)myTransform.position.To(targetPosition));
             yield return null;
         }
     }
