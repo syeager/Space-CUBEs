@@ -80,7 +80,11 @@ public abstract class Weapon : MonoBase
     protected IEnumerator CoolingDown(bool empty = false, bool deActivate = true)
     {
         if (empty) power = 0f;
-        if (deActivate) canActivate = false;
+        if (deActivate)
+        {
+            ActivatedEvent.Fire();
+            canActivate = false;
+        }
 
         do
         {
