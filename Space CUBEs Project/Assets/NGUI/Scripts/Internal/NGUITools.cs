@@ -636,7 +636,24 @@ static public class NGUITools
 
 	static public void NormalizeWidgetDepths ()
 	{
-		UIWidget[] list = FindActive<UIWidget>();
+		NormalizeWidgetDepths(FindActive<UIWidget>());
+	}
+
+	/// <summary>
+	/// Normalize the depths of all the widgets in the scene, making them start from 0 and remain in order.
+	/// </summary>
+
+	static public void NormalizeWidgetDepths (GameObject go)
+	{
+		NormalizeWidgetDepths(go.GetComponentsInChildren<UIWidget>());
+	}
+
+	/// <summary>
+	/// Normalize the depths of all the widgets in the scene, making them start from 0 and remain in order.
+	/// </summary>
+
+	static public void NormalizeWidgetDepths (UIWidget[] list)
+	{
 		int size = list.Length;
 
 		if (size > 0)
@@ -755,12 +772,12 @@ static public class NGUITools
 			if (advanced3D)
 			{
 				go.name = "UI Root (3D)";
-				root.scalingStyle = UIRoot.Scaling.FixedSize;
+				root.scalingStyle = UIRoot.Scaling.Constrained;
 			}
 			else
 			{
 				go.name = "UI Root";
-				root.scalingStyle = UIRoot.Scaling.PixelPerfect;
+				root.scalingStyle = UIRoot.Scaling.Flexible;
 			}
 		}
 

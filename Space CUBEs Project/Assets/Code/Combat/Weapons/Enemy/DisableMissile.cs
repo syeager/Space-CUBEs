@@ -31,9 +31,9 @@ public class DisableMissile : Hitbox
 
     #region MonoBehaviour Overrides
 
-    [UsedImplicitly]
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         GetComponent<Health>().DieEvent += OnDieHandler;
     }
 

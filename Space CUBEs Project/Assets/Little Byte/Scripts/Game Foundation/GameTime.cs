@@ -6,7 +6,6 @@
 using System;
 using System.Collections;
 using LittleByte.Data;
-using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -64,7 +63,7 @@ public static class GameTime
     public static int targetFPS
     {
 #if UNITY_EDITOR
-        get { return Application.isPlaying ? _targetFPS : EditorPrefs.GetInt(TargetFPSKey); }
+        get { return Application.isPlaying ? _targetFPS : UnityEditor.EditorPrefs.GetInt(TargetFPSKey); }
         set
         {
             if (Application.isPlaying)
@@ -73,7 +72,7 @@ public static class GameTime
             }
             else
             {
-                EditorPrefs.SetInt(TargetFPSKey, value);
+                UnityEditor.EditorPrefs.SetInt(TargetFPSKey, value);
             }
         }
 #else

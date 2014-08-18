@@ -573,12 +573,12 @@ public class UIPanel : UIRect
 			{
 				Vector3[] corners = mCam.GetWorldCorners(cameraRayDistance);
 
-				if (anchorOffset)
-				{
-					Vector3 off = cachedTransform.position;
-					for (int i = 0; i < 4; ++i)
-						corners[i] += off;
-				}
+				//if (anchorOffset && mCam == null || mCam.transform.parent != cachedTransform)
+				//{
+				//    Vector3 off = cachedTransform.position;
+				//    for (int i = 0; i < 4; ++i)
+				//        corners[i] += off;
+				//}
 				return corners;
 			}
 			else
@@ -595,7 +595,7 @@ public class UIPanel : UIRect
 				mCorners[2] = new Vector3(x1, y1);
 				mCorners[3] = new Vector3(x1, y0);
 
-				if (anchorOffset)
+				if (anchorOffset && mCam == null || mCam.transform.parent != cachedTransform)
 				{
 					Vector3 off = cachedTransform.position;
 					for (int i = 0; i < 4; ++i)
@@ -1237,6 +1237,7 @@ public class UIPanel : UIRect
 		Texture tex = null;
 		Shader sdr = null;
 		UIDrawCall dc = null;
+		int count = 0;
 
 		if (mSortWidgets) SortWidgets();
 
@@ -1255,7 +1256,10 @@ public class UIPanel : UIRect
 					if (dc != null && dc.verts.size != 0)
 					{
 						drawCalls.Add(dc);
-						dc.UpdateGeometry();
+						dc.UpdateGeometry(count);
+						dc.onRender = mOnRender;
+						mOnRender = null;
+						count = 0;
 						dc = null;
 					}
 
@@ -1282,8 +1286,15 @@ public class UIPanel : UIRect
 
 					w.drawCall = dc;
 
+					++count;
 					if (generateNormals) w.WriteToBuffers(dc.verts, dc.uvs, dc.cols, dc.norms, dc.tans);
 					else w.WriteToBuffers(dc.verts, dc.uvs, dc.cols, null, null);
+
+					if (w.mOnRender != null)
+					{
+						if (mOnRender == null) mOnRender = w.mOnRender;
+						else mOnRender += w.mOnRender;
+					}
 				}
 			}
 			else w.drawCall = null;
@@ -1292,9 +1303,13 @@ public class UIPanel : UIRect
 		if (dc != null && dc.verts.size != 0)
 		{
 			drawCalls.Add(dc);
-			dc.UpdateGeometry();
+			dc.UpdateGeometry(count);
+			dc.onRender = mOnRender;
+			mOnRender = null;
 		}
 	}
+
+	UIDrawCall.OnRenderCallback mOnRender;
 
 	/// <summary>
 	/// Fill the geometry for the specified draw call.
@@ -1305,6 +1320,7 @@ public class UIPanel : UIRect
 		if (dc != null)
 		{
 			dc.isDirty = false;
+			int count = 0;
 
 			for (int i = 0; i < widgets.Count; )
 			{
@@ -1323,8 +1339,16 @@ public class UIPanel : UIRect
 				{
 					if (w.isVisible && w.hasVertices)
 					{
+						++count;
+						
 						if (generateNormals) w.WriteToBuffers(dc.verts, dc.uvs, dc.cols, dc.norms, dc.tans);
 						else w.WriteToBuffers(dc.verts, dc.uvs, dc.cols, null, null);
+
+						if (w.mOnRender != null)
+						{
+							if (mOnRender == null) mOnRender = w.mOnRender;
+							else mOnRender += w.mOnRender;
+						}
 					}
 					else w.drawCall = null;
 				}
@@ -1333,7 +1357,9 @@ public class UIPanel : UIRect
 
 			if (dc.verts.size != 0)
 			{
-				dc.UpdateGeometry();
+				dc.UpdateGeometry(count);
+				dc.onRender = mOnRender;
+				mOnRender = null;
 				return true;
 			}
 		}
@@ -1370,25 +1396,11 @@ public class UIPanel : UIRect
 
 		Vector3 pos;
 
-		// We want the position to always be on even pixels so that the
-		// panel's contents always appear pixel-perfect.
 		if (isUI)
 		{
 			Transform parent = cachedTransform.parent;
 			pos = cachedTransform.localPosition;
-
-			if (parent != null)
-			{
-				float x = Mathf.Round(pos.x);
-				float y = Mathf.Round(pos.y);
-
-				drawCallClipRange.x += pos.x - x;
-				drawCallClipRange.y += pos.y - y;
-
-				pos.x = x;
-				pos.y = y;
-				pos = parent.TransformPoint(pos);
-			}
+			if (parent != null) pos = parent.TransformPoint(pos);
 			pos += drawCallOffset;
 		}
 		else pos = trans.position;
@@ -1712,15 +1724,8 @@ public class UIPanel : UIRect
 
 	static public UIPanel Find (Transform trans, bool createIfMissing, int layer)
 	{
-		UIPanel panel = null;
-
-		while (panel == null && trans != null)
-		{
-			panel = trans.GetComponent<UIPanel>();
-			if (panel != null) return panel;
-			if (trans.parent == null) break;
-			trans = trans.parent;
-		}
+		UIPanel panel = trans.GetComponentInParent<UIPanel>();
+		if (panel != null) return panel;
 		return createIfMissing ? NGUITools.CreateUI(trans, false, layer) : null;
 	}
 
@@ -1771,21 +1776,49 @@ public class UIPanel : UIRect
 		GameObject go = UnityEditor.Selection.activeGameObject;
 		bool isUsingThisPanel = (go != null) && (NGUITools.FindInParents<UIPanel>(go) == this);
 		bool isSelected = (UnityEditor.Selection.activeGameObject == gameObject);
-		bool detailedView = (isSelected && isUsingThisPanel && mClipping == UIDrawCall.Clipping.SoftClip);
+		bool detailedView = (isSelected && isUsingThisPanel);
+		bool detailedClipped = detailedView && mClipping == UIDrawCall.Clipping.SoftClip;
 
-		Gizmos.color = (isUsingThisPanel && !detailedView) ? new Color(1f, 0f, 0.5f) : new Color(0.5f, 0f, 0.5f);
 		Gizmos.matrix = t.localToWorldMatrix;
+
+		if (isUsingThisPanel && !clip && mCam.isOrthoGraphic)
+		{
+			UIRoot rt = root;
+
+			if (rt != null && rt.scalingStyle != UIRoot.Scaling.Flexible)
+			{
+				float width = rt.manualWidth;
+				float height = rt.manualHeight;
+
+				float x0 = -0.5f * width;
+				float y0 = -0.5f * height;
+				float x1 = x0 + width;
+				float y1 = y0 + height;
+
+				corners[0] = new Vector3(x0, y0);
+				corners[1] = new Vector3(x0, y1);
+				corners[2] = new Vector3(x1, y1);
+				corners[3] = new Vector3(x1, y0);
+
+				Vector3 szPos = Vector3.Lerp(corners[0], corners[2], 0.5f);
+				Vector3 szSize = corners[2] - corners[0];
+
+				Gizmos.color = new Color(0f, 0.75f, 1f);
+				Gizmos.DrawWireCube(szPos, szSize);
+			}
+		}
+		Gizmos.color = (isUsingThisPanel && !detailedClipped) ? new Color(1f, 0f, 0.5f) : new Color(0.5f, 0f, 0.5f);
 		Gizmos.DrawWireCube(pos, size);
 
 		if (detailedView)
 		{
-			//UIRoot rt = root;
-			//float scale = (rt != null) ? rt.pixelSizeAdjustment : 1f;
-
-			Gizmos.color = new Color(1f, 0f, 0.5f);
-			size.x -= mClipSoftness.x * 2f;// *scale;
-			size.y -= mClipSoftness.y * 2f;// *scale;
-			Gizmos.DrawWireCube(pos, size);
+			if (detailedClipped)
+			{
+				Gizmos.color = new Color(1f, 0f, 0.5f);
+				size.x -= mClipSoftness.x * 2f;
+				size.y -= mClipSoftness.y * 2f;
+				Gizmos.DrawWireCube(pos, size);
+			}
 		}
 	}
 #endif // UNITY_EDITOR

@@ -59,7 +59,7 @@ public class WeaponButton : MonoBehaviour
     {
         GetComponent<ActivateButton>().isEnabled = true;
         number.color = readyColor;
-        cooldownOverlay.enabled = true;
+        cooldownOverlay.enabled = false;
     }
 
 
