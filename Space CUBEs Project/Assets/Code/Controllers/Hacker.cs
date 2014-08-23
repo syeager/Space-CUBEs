@@ -367,11 +367,15 @@ public class Hacker : Boss
     [UsedImplicitly]
     private IEnumerator Follow(Transform target)
     {
+        const float minDist = 2f;
         Vector3 distance = Vector3.right * Vector3.Distance(target.position, myTransform.position);
         while (true)
         {
             Vector3 targetPosition = target.position + distance;
-            MyMotor.Move((Vector2)myTransform.position.To(targetPosition));
+            if (Vector3.Distance(targetPosition, myTransform.position) >= minDist)
+            {
+                MyMotor.Move((Vector2)myTransform.position.To(targetPosition));
+            }
             yield return null;
         }
     }
