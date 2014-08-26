@@ -1,7 +1,7 @@
-﻿// Space CUBEs Project-csharp
+﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.04.03
-// Edited: 2014.07.06
+// Edited: 2014.08.24
 
 using Annotations;
 using LittleByte.Data;
@@ -15,7 +15,7 @@ public class LevelSelectManager : MonoBehaviour
     #region Public Fields
 
     /// <summary>Buttons that load corresponding level.</summary>
-    public ActivateButton[] levelButtons;
+    public LevelSelectButton[] levelButtons;
 
     #endregion
 
@@ -30,12 +30,24 @@ public class LevelSelectManager : MonoBehaviour
     [UsedImplicitly]
     private void Start()
     {
-        // register button events
+        // load buttons
         int unlocked = SaveData.Load<int>(UnlockedLevelsKey, FormationLevelManager.LevelsFolder);
-        for (int i = 0; i < levelButtons.Length; i++)
+        for (int i = 0; i < unlocked; i++)
         {
-            levelButtons[i].ActivateEvent += OnLevelSelected;
-            levelButtons[i].Toggle(!(i > unlocked));
+            string key = FormationLevelManager.HighScoreKey + ((Levels)i).ToString().SplitCamelCase();
+            levelButtons[i].highScoreLabel.text = SaveData.Load<int[]>(key)[1].ToString("N");
+            levelButtons[i].Toggle(false);
+        }
+        levelButtons[unlocked].Toggle(true);
+        levelButtons[unlocked].highScoreLabel.text = SaveData.Load(FormationLevelManager.HighScoreKey + ((Levels)unlocked).ToString().SplitCamelCase(), "Default/", new[] {0, 0})[1].ToString("N");
+        for (int i = unlocked + 1; i < levelButtons.Length; i++)
+        {
+            string key = FormationLevelManager.HighScoreKey + ((Levels)i).ToString().SplitCamelCase();
+            if (SaveData.Contains(key))
+            {
+                levelButtons[i].highScoreLabel.text = SaveData.Load<int[]>(key, "Default/", new[] {0, 0})[1].ToString("N");
+            }
+            levelButtons[i].Disable();
         }
     }
 
@@ -45,17 +57,17 @@ public class LevelSelectManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            SceneManager.LoadScene("Main Menu");
+            SceneManager.LoadScene(Menus.MainMenu.ToString().SplitCamelCase());
         }
     }
 
     #endregion
 
-    #region Event Handlers
+    #region Public Methods
 
-    private static void OnLevelSelected(object sender, ActivateButtonArgs args)
+    public void Play()
     {
-        SceneManager.LoadScene(args.value, true);
+        SceneManager.LoadScene(LevelSelectButton.ActiveButton.level.ToString().SplitCamelCase(), true);
     }
 
     #endregion

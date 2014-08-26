@@ -1,7 +1,7 @@
-﻿// Space CUBEs Project-csharp
+﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2013.11.25
-// Edited: 2014.06.25
+// Edited: 2014.08.25
 
 using System;
 using System.Collections;
@@ -79,7 +79,7 @@ public class Player : Ship
 #endif
 
         // effects
-        if (!GameSettings.Main.trailRenderer)
+        if (GameSettings.Main.qualityLevel == 0)
         {
             Destroy(trailRenderer);
         }

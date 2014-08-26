@@ -3,8 +3,8 @@
 // Created: 2014.01.15
 // Edited: 2014.05.27
 
-using System;
 using Annotations;
+using LittleByte.Data;
 using UnityEngine;
 
 /// <summary>
@@ -44,28 +44,11 @@ public class MainMenuManager : MonoBehaviour
 
     #region Button Methods
 
-    public void LoadPlay()
+    public void Play()
     {
-        ConstructionGrid.selectedBuild = GameStart.DevBuilds[0];
-        SceneManager.LoadScene("Level Select Menu");
-    }
-
-
-    public void LoadGarage()
-    {
-        SceneManager.LoadScene("Garage");
-    }
-
-
-    public void LoadStore()
-    {
-        SceneManager.LoadScene("Store", true);
-    }
-
-
-    public void LoadOptions()
-    {
-        SceneManager.LoadScene("Options Menu");
+        ConstructionGrid.selectedBuild = ConstructionGrid.DevBuilds[0];
+        int unlocked = SaveData.Load<int>(LevelSelectManager.UnlockedLevelsKey, FormationLevelManager.LevelsFolder);
+        SceneManager.LoadScene(((Levels)unlocked).ToString().SplitCamelCase(), true, true, true);
     }
 
 

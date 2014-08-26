@@ -24,12 +24,6 @@ public class GameStart : Singleton<GameStart>
 
     private static readonly List<Action> StartActions = new List<Action> {Version1};
 
-    public static readonly string[] DevBuilds =
-    {
-        "Avenger",
-        "Berserker"
-    };
-
     #endregion
 
     #region MonoBehaviour Overrides
@@ -89,7 +83,7 @@ public class GameStart : Singleton<GameStart>
         CUBE.SetInventory(inventory);
 
         // default ship build
-        foreach (string build in DevBuilds)
+        foreach (string build in ConstructionGrid.DevBuilds)
         {
             ConstructionGrid.SaveBuild(build, SaveData.LoadFromResources<BuildInfo>(build));
         }

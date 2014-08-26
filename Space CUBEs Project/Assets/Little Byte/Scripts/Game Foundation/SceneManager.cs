@@ -23,10 +23,16 @@ public class SceneManager : Singleton<SceneManager>
     #region Properties
 
     /// <summary>The scene loaded previously to this scene.</summary>
-    public string PreviousScene { get; private set; }
+    public static string PreviousScene { get; private set; }
 
     /// <summary>The scene to load after the Loading Screen.</summary>
-    public string NextScene { get; private set; }
+    public static string NextScene { get; private set; }
+
+    #endregion
+
+    #region Events
+
+    public static event Action<string> SceneLoadEvent; 
 
     #endregion
 
@@ -41,10 +47,15 @@ public class SceneManager : Singleton<SceneManager>
     /// <param name="garbageCollect">Should the garbage collector be run?</param>
     public static void LoadScene(string nextScene, bool loadScreen = false, bool unloadUnused = false, bool garbageCollect = false)
     {
-        Main.PreviousScene = Application.loadedLevelName;
-        Main.NextScene = nextScene;
+        PreviousScene = Application.loadedLevelName;
+        NextScene = nextScene;
 
         Application.LoadLevel(loadScreen ? "Loading Screen" : nextScene);
+        if (SceneLoadEvent != null)
+        {
+            SceneLoadEvent(nextScene);
+        }
+
         if (unloadUnused) Resources.UnloadUnusedAssets();
         if (garbageCollect) GC.Collect();
     }
@@ -55,9 +66,14 @@ public class SceneManager : Singleton<SceneManager>
     /// </summary>
     public static void ReloadScene(bool load = false, bool unload = false, bool collect = false)
     {
+        Application.LoadLevel(Application.loadedLevel);
+        if (SceneLoadEvent != null)
+        {
+            SceneLoadEvent(NextScene);
+        }
+
         if (unload) Resources.UnloadUnusedAssets();
         if (collect) GC.Collect();
-        Application.LoadLevel(Application.loadedLevel);
     }
 
     #endregion

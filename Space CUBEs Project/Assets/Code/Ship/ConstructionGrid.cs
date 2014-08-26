@@ -1,13 +1,12 @@
-﻿// Space CUBEs Project-csharp
+﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2013.11.26
-// Edited: 2014.05.31
+// Edited: 2014.08.25
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Annotations;
 using LittleByte.Data;
 using UnityEngine;
@@ -92,7 +91,7 @@ public class ConstructionGrid : MonoBase
 
     #region Static Fields
 
-    public static string selectedBuild; 
+    public static string selectedBuild;
 
     #endregion
 
@@ -103,6 +102,12 @@ public class ConstructionGrid : MonoBase
 
     /// <summary>File name for save data that contains all builds.</summary>
     public const string BuildsFolder = @"Builds/";
+
+    public static readonly string[] DevBuilds =
+    {
+        "Avenger",
+        "Berserker"
+    };
 
     #endregion
 
@@ -200,7 +205,7 @@ public class ConstructionGrid : MonoBase
         }
         else if (cubeMat == null)
         {
-            cubeMat = GameResources.Main.VertexColorLerp_Mat;
+            cubeMat = Singleton<GameResources>.Main.VertexColorLerp_Mat;
         }
 
         // clear any previous data
@@ -504,7 +509,7 @@ public class ConstructionGrid : MonoBase
 
     public void Build(string build, int buildSize, Vector3 startPosition, Vector3 startRotation, float maxTime, Action<BuildFinishedArgs> finshedAction)
     {
-        var showShip = (GameObject)Instantiate(GameResources.Main.player_Prefab);
+        var showShip = (GameObject)Instantiate(Singleton<GameResources>.Main.player_Prefab);
         showShip.name = "Player";
         StartCoroutine(showShip.AddComponent<ShowBuild>().Build(LoadBuild(build), buildSize, startPosition, startRotation, maxTime, finshedAction));
     }

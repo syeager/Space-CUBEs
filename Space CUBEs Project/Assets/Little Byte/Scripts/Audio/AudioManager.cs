@@ -1,7 +1,7 @@
-﻿// Space CUBEs Project-csharp
+﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.03.26
-// Edited: 2014.06.20
+// Edited: 2014.08.25
 
 using System;
 using System.Collections;
@@ -49,7 +49,7 @@ public class AudioManager : Singleton<AudioManager>
     private const string VolumeFolder = @"Volume/";
 
     /// <summary>Data file for saving master volume.</summary>
-    private const string MasterFile = "Master Volume";
+    private const string MasterFile = "Master";
 
     #endregion
 

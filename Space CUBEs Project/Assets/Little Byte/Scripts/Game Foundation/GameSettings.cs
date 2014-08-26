@@ -3,7 +3,6 @@
 // Created: 2013.12.03
 // Edited: 2014.06.07
 
-using Annotations;
 using LittleByte.Data;
 
 /// <summary>
@@ -29,7 +28,7 @@ public class GameSettings : Singleton<GameSettings>
 
     #region Quality Fields
 
-    public bool trailRenderer;
+    public int qualityLevel = QualityLevelDefault;
 
     #endregion
 
@@ -40,13 +39,19 @@ public class GameSettings : Singleton<GameSettings>
 
     public const string InputFolder = SettingsFolder + @"Input/";
 
+    public const string QualityLevelKey = "Quality Level";
+    public const int QualityLevelDefault = 2;
+
     #endregion
 
     #region MonoBehaviour Overrides
 
-    [UsedImplicitly]
-    private void Start()
+    protected override void Awake()
     {
+        base.Awake();
+
+        if (!enabled) return;
+
         Load();
     }
 
@@ -60,6 +65,7 @@ public class GameSettings : Singleton<GameSettings>
         SaveData.Save("Joystick xBuffer", Main.joystickSensitivity, InputFolder);
         SaveData.Save("Joystick yBuffer", Main.joystickSensitivity, InputFolder);
         SaveData.Save("Joystick Deadzone", Main.joystickSensitivity, InputFolder);
+        SaveData.Save(QualityLevelKey, Main.qualityLevel, InputFolder);
     }
 
     #endregion
@@ -72,6 +78,7 @@ public class GameSettings : Singleton<GameSettings>
         joystickSensitivity = SaveData.Load("Joystick xBuffer", InputFolder, 0.5f);
         joystickSensitivity = SaveData.Load("Joystick yBuffer", InputFolder, 0.5f);
         joystickSensitivity = SaveData.Load("Joystick Deadzone", InputFolder, 0.25f);
+        qualityLevel = SaveData.Load(QualityLevelKey, SettingsFolder, QualityLevelDefault);
     }
 
     #endregion

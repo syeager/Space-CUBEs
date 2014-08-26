@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 1.5.2014
+﻿// Little Byte Games
+// Author: Steve Yeager
+// Created: 2014.01.10
+// Edited: 2014.08.24
 
 using Annotations;
 using UnityEngine;
@@ -13,14 +15,13 @@ public class LoadingScreenManager : MonoBehaviour
 
     #endregion
 
-
     #region MonoBehaviour Overrides
 
     [UsedImplicitly]
     private void Awake()
     {
         // set up GUI
-        levelToLoad.text = SceneManager.Main.NextScene + "...";
+        levelToLoad.text = SceneManager.NextScene + "...";
 
         // clean
         Resources.UnloadUnusedAssets();
@@ -31,7 +32,7 @@ public class LoadingScreenManager : MonoBehaviour
     [UsedImplicitly]
     private void Start()
     {
-        Application.LoadLevel(SceneManager.Main.NextScene);
+        Application.LoadLevel(SceneManager.NextScene);
     }
 
     #endregion

@@ -16,6 +16,9 @@ public class Singleton<T> : MonoBase where T : MonoBehaviour
     /// <summary>Should a warning be logged if there are multiple occurences of singleton.</summary>
     public bool logWarning;
 
+    /// <summary>Should this game object not be destroyed on load?</summary>
+    public bool dontDestroy;
+
     #endregion
 
     #region Static Fields
@@ -41,6 +44,10 @@ public class Singleton<T> : MonoBase where T : MonoBehaviour
         else
         {
             Main = GetComponent<T>();
+            if (dontDestroy)
+            {
+                DontDestroyOnLoad(gameObject);
+            }
         }
     }
 
