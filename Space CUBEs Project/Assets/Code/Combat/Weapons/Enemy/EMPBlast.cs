@@ -16,7 +16,7 @@ public class EMPBlast : Hitbox
     protected override void OnTriggerEnter(Collider other)
     {
         Player player = other.GetComponent(typeof(Player)) as Player;
-        if (player != null)
+        if (player != null && !player.MyHealth.invincible)
         {
             foreach (PlayerWeapon playerWeapon in player.Weapons.weapons)
             {
