@@ -15,6 +15,7 @@ public class NavigationBar : Singleton<NavigationBar>
     public GameObject root;
 
     public UIButton options;
+    public GameObject optionsMenuPrefab;
 
     public UIButton mainMenu;
     public UIButton garage;
@@ -45,7 +46,7 @@ public class NavigationBar : Singleton<NavigationBar>
 
     public void ToggleOptions()
     {
-        SceneManager.LoadScene("Options Menu");
+        Instantiate(optionsMenuPrefab, Vector3.left * 5000f, Quaternion.identity);
     }
 
     public void LoadMainMenu()

@@ -12,7 +12,7 @@ using UnityEngine;
 /// <summary>
 /// Manager for the Options Menu.
 /// </summary>
-public class OptionsMenuManager : MonoBase
+public class OptionsMenuManager : MonoBehaviour
 {
     #region Public Fields
 
@@ -112,7 +112,7 @@ public class OptionsMenuManager : MonoBase
     public void Exit()
     {
         Save();
-        SceneManager.LoadScene(SceneManager.PreviousScene);
+        Destroy(gameObject);
     }
 
     #endregion
@@ -141,6 +141,7 @@ public class OptionsMenuManager : MonoBase
     }
 
     #endregion
+
 
     #region Quality Methods
 
