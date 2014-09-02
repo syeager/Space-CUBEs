@@ -41,7 +41,7 @@ public class CompilerFlagsTool : EditorWindow
     #region Editor Overrides
 
     [UsedImplicitly]
-    [MenuItem("Tools/Compiler Flags &C", false, 50)]
+    [MenuItem("Tools/Compiler Flags #&C", false, 50)]
     private static void Init()
     {
         GetWindow<CompilerFlagsTool>("Compiler Flags");

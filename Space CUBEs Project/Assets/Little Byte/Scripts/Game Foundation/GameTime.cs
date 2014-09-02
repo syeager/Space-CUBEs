@@ -114,7 +114,7 @@ public static class GameTime
     public static void Initialize()
     {
         fixedDeltaTime = Time.fixedDeltaTime;
-        CapFPS(SaveData.Load(TargetFPSKey, GameSettings.SettingsFolder, 60));
+        CapFPS(SaveData.Load(TargetFPSKey, GameSettings.SettingsFolder, MaxFPS));
     }
 
 

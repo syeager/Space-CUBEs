@@ -14,9 +14,12 @@ public class Singleton<T> : MonoBase where T : MonoBehaviour
     #region Public Fields
 
     /// <summary>Should a warning be logged if there are multiple occurences of singleton.</summary>
+    [Header("Singleton")]
+    [Tooltip("Should a warning be logged if there are multiple occurences of singleton.")]
     public bool logWarning;
 
     /// <summary>Should this game object not be destroyed on load?</summary>
+    [Tooltip("Should this game object not be destroyed on load?")]
     public bool dontDestroy;
 
     #endregion

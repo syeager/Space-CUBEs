@@ -1,12 +1,16 @@
-﻿// Space CUBEs Project-csharp
+﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.05.22
-// Edited: 2014.06.07
+// Edited: 2014.09.01
 
+using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using Annotations;
 using UnityEditor;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 /// <summary>
 /// Actions that can be applied on Prefabs through shortcuts.
@@ -32,7 +36,7 @@ public class KeyboardShortcuts : EditorWindow
     {
         string path = Application.persistentDataPath.Replace(@"/", @"\") + @"\";
         Debug.Log(path);
-        System.Diagnostics.Process.Start("explorer.exe", path);
+        Process.Start("explorer.exe", path);
     }
 
 
@@ -41,6 +45,47 @@ public class KeyboardShortcuts : EditorWindow
     private static void CreateFolder()
     {
         ProjectWindowUtil.CreateFolder();
+    }
+
+
+    [UsedImplicitly]
+    [MenuItem("Shortcuts/Create C# Script &C", false, 3)]
+    private static void CreateScript()
+    {
+        var window = GetWindow<ScriptName>(true);
+        window.position = new Rect(Screen.width / 2f, Screen.height / 2f, 250, 50);
+        window.minSize = new Vector2(250, 50);
+        window.maxSize = new Vector2(250, 50);
+    }
+
+
+    public static void CreateScript(string scriptName)
+    {
+        // get current path
+        Type projectBrowser = Type.GetType("UnityEditor.ProjectBrowser, UnityEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null");
+        object last = projectBrowser.GetField("s_LastInteractedProjectBrowser", BindingFlags.Public | BindingFlags.Static).GetValue(null);
+        string path = projectBrowser.GetMethod("GetActiveFolderPath", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(last, null).ToString();
+        path = path.Substring(6);
+
+        // set class name
+        Type componentMenu = Type.GetType("UnityEditor.AddComponentWindow, UnityEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null");
+        ScriptableObject addComponentWindow = CreateInstance(componentMenu);
+        componentMenu.GetField("m_ClassName", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(addComponentWindow, scriptName);
+
+        // create new script
+        Type newScriptElement = Type.GetType("UnityEditor.AddComponentWindow+NewScriptElement, UnityEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null");
+        object created = Activator.CreateInstance(newScriptElement);
+
+        // set values
+        newScriptElement.GetField("m_Directory", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(created, path);
+        newScriptElement.GetMethod("CreateScript", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(created, null);
+
+        // select and open
+        Selection.activeObject = AssetDatabase.LoadAssetAtPath("Assets" + path + "/" + scriptName + ".cs", typeof(MonoScript));
+        AssetDatabase.OpenAsset(Selection.activeObject);
+
+        // cleanup
+        DestroyImmediate(addComponentWindow);
     }
 
     #endregion
@@ -136,4 +181,46 @@ public class KeyboardShortcuts : EditorWindow
     }
 
     #endregion
+}
+
+public class ScriptName : EditorWindow
+{
+    private string scriptName = "";
+
+    [UsedImplicitly]
+    private void OnGUI()
+    {
+        GUI.SetNextControlName("name");
+        scriptName = EditorGUILayout.TextField(scriptName);
+        if (GUI.GetNameOfFocusedControl() != "name")
+        {
+            GUI.FocusControl("name");
+        }
+
+        GUILayout.FlexibleSpace();
+
+        if (GUILayout.Button("Create"))
+        {
+            Create();
+        }
+
+        if (Event.current.isKey)
+        {
+            if (Event.current.keyCode == KeyCode.Return)
+            {
+                Create();
+            }
+            else if (Event.current.keyCode == KeyCode.Escape)
+            {
+                Close();
+            }
+        }
+    }
+
+
+    private void Create()
+    {
+        KeyboardShortcuts.CreateScript(scriptName);
+        Close();
+    }
 }

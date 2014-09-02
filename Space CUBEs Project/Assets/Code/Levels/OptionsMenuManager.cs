@@ -47,6 +47,8 @@ public class OptionsMenuManager : MonoBehaviour
 
     #region Quality Fields
 
+    private int qualityLevel;
+
     [Header("Quality")]
     [SerializeField, UsedImplicitly]
     private UIToggle[] fpsToggles;
@@ -111,6 +113,10 @@ public class OptionsMenuManager : MonoBehaviour
 
     public void Exit()
     {
+        if (qualityLevel != QualitySettings.GetQualityLevel())
+        {
+            QualitySettings.SetQualityLevel(qualityLevel, true);
+        }
         Save();
         Destroy(gameObject);
     }
@@ -142,7 +148,6 @@ public class OptionsMenuManager : MonoBehaviour
 
     #endregion
 
-
     #region Quality Methods
 
     private void LoadQuality()
@@ -150,7 +155,7 @@ public class OptionsMenuManager : MonoBehaviour
         int fpsIndex = Array.IndexOf(FrameRates, GameTime.targetFPS);
         fpsToggles[fpsIndex].value = true;
 
-        int qualityLevel = GameSettings.Main.qualityLevel;
+        qualityLevel = GameSettings.Main.qualityLevel;
         qualityToggles[qualityLevel].value = true;
     }
 
@@ -172,7 +177,6 @@ public class OptionsMenuManager : MonoBehaviour
         description.text = QualityLevelInfo;
 
         int index = Array.IndexOf(qualityToggles, toggle);
-        QualitySettings.SetQualityLevel(index, true);
         GameSettings.Main.qualityLevel = index;
     }
 

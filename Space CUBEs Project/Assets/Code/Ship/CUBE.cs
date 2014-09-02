@@ -121,6 +121,10 @@ public class CUBE : MonoBehaviour
     /// <returns></returns>
     public static int[] GetInventory()
     {
+        if (AllCUBES == null)
+        {
+            LoadAllCUBEInfo();
+        }
         return SaveData.Load(InventoryFile, ItemsFolder, new int[AllCUBES.Length]);
     }
 

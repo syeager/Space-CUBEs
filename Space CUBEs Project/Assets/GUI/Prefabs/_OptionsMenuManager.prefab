@@ -357,7 +357,7 @@ GameObject:
   - 4: {fileID: 400042}
   - 114: {fileID: 11400046}
   m_Layer: 14
-  m_Name: Label
+  m_Name: Subtitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -701,7 +701,7 @@ GameObject:
   - 4: {fileID: 400084}
   - 114: {fileID: 11400092}
   m_Layer: 14
-  m_Name: Label
+  m_Name: Subtitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1126,7 +1126,7 @@ GameObject:
   - 4: {fileID: 400136}
   - 114: {fileID: 11400146}
   m_Layer: 14
-  m_Name: Label
+  m_Name: Subtitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1208,7 +1208,7 @@ GameObject:
   - 4: {fileID: 400146}
   - 114: {fileID: 11400158}
   m_Layer: 14
-  m_Name: Label
+  m_Name: Subtitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1475,7 +1475,7 @@ GameObject:
   - 4: {fileID: 400178}
   - 114: {fileID: 11400200}
   m_Layer: 14
-  m_Name: Label
+  m_Name: Subtitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1622,7 +1622,7 @@ GameObject:
   - 4: {fileID: 400196}
   - 114: {fileID: 11400218}
   m_Layer: 14
-  m_Name: Label
+  m_Name: Subtitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2026,7 +2026,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100030}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -105, y: 65, z: 0}
+  m_LocalPosition: {x: -112, y: 65, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400130}
@@ -2434,7 +2434,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100094}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -105.005676, y: 65.0035172, z: 0}
+  m_LocalPosition: {x: -112, y: 65, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400070}
@@ -2446,7 +2446,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100096}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -105, y: 65, z: 0}
+  m_LocalPosition: {x: -120, y: 65, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400018}
@@ -2643,7 +2643,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100126}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -590, y: 310, z: 0}
+  m_LocalPosition: {x: -590.291016, y: 305.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400134}
@@ -2699,7 +2699,7 @@ Transform:
   m_GameObject: {fileID: 100134}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: .0027816412, y: .0027816412, z: .0027816412}
+  m_LocalScale: {x: .0027739252, y: .0027739252, z: .0027739252}
   m_Children:
   - {fileID: 400110}
   - {fileID: 400152}
@@ -3009,7 +3009,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100182}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -105.005676, y: 65.0035172, z: 0}
+  m_LocalPosition: {x: -120, y: 65, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400088}
@@ -4434,10 +4434,10 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 5.8499999
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
-  mFont: {fileID: 0}
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
   mText: Sensitivity
-  mFontSize: 18
+  mFontSize: 30
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
@@ -4677,10 +4677,10 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 3.24000001
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
-  mFont: {fileID: 0}
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
   mText: FPS Cap
-  mFontSize: 18
+  mFontSize: 40
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
@@ -4789,10 +4789,10 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 4.66666651
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
-  mFont: {fileID: 0}
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
   mText: UI
-  mFontSize: 18
+  mFontSize: 30
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
@@ -5080,10 +5080,10 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 2
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
-  mFont: {fileID: 0}
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
   mText: 1
-  mFontSize: 20
+  mFontSize: 30
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
@@ -5174,10 +5174,10 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 1.10714281
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
-  mFont: {fileID: 0}
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
   mText: 30
-  mFontSize: 18
+  mFontSize: 30
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
@@ -5612,7 +5612,7 @@ MonoBehaviour:
   checkSprite: {fileID: 0}
   checkAnimation: {fileID: 0}
   eventReceiver: {fileID: 0}
-  functionName: OnActivate
+  functionName: 
   startsChecked: 0
 --- !u!114 &11400084
 MonoBehaviour:
@@ -5702,10 +5702,10 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 1.10714281
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
-  mFont: {fileID: 0}
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
   mText: 45
-  mFontSize: 18
+  mFontSize: 30
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
@@ -5764,10 +5764,10 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 1.26315784
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
-  mFont: {fileID: 0}
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 11400000, guid: 85f6eb7fbf44bc245aa653dd675e21e2, type: 2}
   mText: Audio
-  mFontSize: 12
+  mFontSize: 20
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
@@ -5826,10 +5826,10 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 1.26315784
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
-  mFont: {fileID: 0}
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 11400000, guid: 85f6eb7fbf44bc245aa653dd675e21e2, type: 2}
   mText: Input
-  mFontSize: 12
+  mFontSize: 20
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
@@ -5888,10 +5888,10 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 4.66666651
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
-  mFont: {fileID: 0}
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
   mText: Master
-  mFontSize: 18
+  mFontSize: 30
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
@@ -6050,10 +6050,10 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 1.10714281
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
-  mFont: {fileID: 0}
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
   mText: Mute
-  mFontSize: 18
+  mFontSize: 20
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
@@ -6112,10 +6112,10 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 5.8499999
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
-  mFont: {fileID: 0}
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
   mText: Deadzone
-  mFontSize: 18
+  mFontSize: 30
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
@@ -6174,10 +6174,10 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 5.8499999
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
-  mFont: {fileID: 0}
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
   mText: Y Buffer
-  mFontSize: 18
+  mFontSize: 30
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
@@ -6286,10 +6286,10 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 2
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
-  mFont: {fileID: 0}
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
   mText: 1
-  mFontSize: 20
+  mFontSize: 30
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
@@ -6746,10 +6746,10 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 1.10714281
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
-  mFont: {fileID: 0}
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
   mText: Med
-  mFontSize: 18
+  mFontSize: 30
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
@@ -6808,10 +6808,10 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 1.10714281
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
-  mFont: {fileID: 0}
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
   mText: Mute
-  mFontSize: 18
+  mFontSize: 20
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
@@ -6951,22 +6951,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   leftAnchor:
-    target: {fileID: 0}
+    target: {fileID: 400134}
     relative: 0
-    absolute: 0
+    absolute: 15
   rightAnchor:
-    target: {fileID: 0}
-    relative: 1
-    absolute: 0
-  bottomAnchor:
-    target: {fileID: 0}
+    target: {fileID: 400134}
     relative: 0
-    absolute: 0
-  topAnchor:
-    target: {fileID: 0}
+    absolute: 85
+  bottomAnchor:
+    target: {fileID: 400134}
     relative: 1
-    absolute: 0
-  updateAnchors: 1
+    absolute: -95
+  topAnchor:
+    target: {fileID: 400134}
+    relative: 1
+    absolute: -15
+  updateAnchors: 0
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mWidth: 70
@@ -6975,7 +6975,7 @@ MonoBehaviour:
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: .875
+  aspectRatio: 35
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
@@ -7027,10 +7027,10 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 1.26315784
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
-  mFont: {fileID: 0}
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 11400000, guid: 85f6eb7fbf44bc245aa653dd675e21e2, type: 2}
   mText: Data
-  mFontSize: 12
+  mFontSize: 20
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
@@ -7153,10 +7153,10 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 4.66666651
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
-  mFont: {fileID: 0}
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
   mText: Music
-  mFontSize: 18
+  mFontSize: 30
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
@@ -7443,10 +7443,10 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 4.41176462
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
-  mFont: {fileID: 0}
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
   mText: Clear Data
-  mFontSize: 20
+  mFontSize: 30
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
@@ -7555,10 +7555,10 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 8
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
-  mFont: {fileID: 0}
-  mText: Quality Seetings
-  mFontSize: 18
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
+  mText: Quality Settings
+  mFontSize: 40
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
@@ -7617,8 +7617,8 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 7.38709688
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
-  mFont: {fileID: 0}
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 11400000, guid: 85f6eb7fbf44bc245aa653dd675e21e2, type: 2}
   mText: Options
   mFontSize: 50
   mFontStyle: 0
@@ -7739,7 +7739,7 @@ MonoBehaviour:
   checkSprite: {fileID: 0}
   checkAnimation: {fileID: 0}
   eventReceiver: {fileID: 0}
-  functionName: OnActivate
+  functionName: 
   startsChecked: 0
 --- !u!114 &11400172
 MonoBehaviour:
@@ -7897,7 +7897,7 @@ MonoBehaviour:
   checkSprite: {fileID: 0}
   checkAnimation: {fileID: 0}
   eventReceiver: {fileID: 0}
-  functionName: OnActivate
+  functionName: 
   startsChecked: 0
 --- !u!114 &11400180
 MonoBehaviour:
@@ -7987,10 +7987,10 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 1.10714281
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
-  mFont: {fileID: 0}
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
   mText: High
-  mFontSize: 18
+  mFontSize: 30
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
@@ -8049,10 +8049,10 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 1.10714281
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
-  mFont: {fileID: 0}
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
   mText: Low
-  mFontSize: 18
+  mFontSize: 30
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
@@ -8420,10 +8420,10 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 4.66666651
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
-  mFont: {fileID: 0}
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
   mText: SFX
-  mFontSize: 18
+  mFontSize: 30
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
@@ -8482,10 +8482,10 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 2
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
-  mFont: {fileID: 0}
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
   mText: 1
-  mFontSize: 20
+  mFontSize: 30
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
@@ -8576,10 +8576,10 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 5.8499999
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
-  mFont: {fileID: 0}
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
   mText: X Buffer
-  mFontSize: 18
+  mFontSize: 30
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
@@ -8688,10 +8688,10 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 1.10714281
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
-  mFont: {fileID: 0}
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
   mText: Mute
-  mFontSize: 18
+  mFontSize: 20
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
@@ -8800,10 +8800,10 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 2
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
-  mFont: {fileID: 0}
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
   mText: 1
-  mFontSize: 20
+  mFontSize: 30
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
@@ -8894,10 +8894,10 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 4.41176462
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
-  mFont: {fileID: 0}
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
   mText: Reload Starter Builds
-  mFontSize: 20
+  mFontSize: 30
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
@@ -9099,10 +9099,10 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 1.10714281
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
-  mFont: {fileID: 0}
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
   mText: 60
-  mFontSize: 18
+  mFontSize: 30
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
@@ -9239,10 +9239,10 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 1.10714281
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
-  mFont: {fileID: 0}
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
   mText: Mute
-  mFontSize: 18
+  mFontSize: 20
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
@@ -9430,10 +9430,10 @@ MonoBehaviour:
   keepAspectRatio: 0
   aspectRatio: 1.26315784
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
-  mFont: {fileID: 0}
-  mText: Graphics
-  mFontSize: 12
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 11400000, guid: 85f6eb7fbf44bc245aa653dd675e21e2, type: 2}
+  mText: Video
+  mFontSize: 20
   mFontStyle: 0
   mAlignment: 0
   mEncoding: 1
@@ -9531,7 +9531,7 @@ MonoBehaviour:
   checkSprite: {fileID: 0}
   checkAnimation: {fileID: 0}
   eventReceiver: {fileID: 0}
-  functionName: OnActivate
+  functionName: 
   startsChecked: 0
 --- !u!114 &11400246
 MonoBehaviour:

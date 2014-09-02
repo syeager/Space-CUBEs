@@ -65,7 +65,7 @@ public class GameSettings : Singleton<GameSettings>
         SaveData.Save("Joystick xBuffer", Main.joystickSensitivity, InputFolder);
         SaveData.Save("Joystick yBuffer", Main.joystickSensitivity, InputFolder);
         SaveData.Save("Joystick Deadzone", Main.joystickSensitivity, InputFolder);
-        SaveData.Save(QualityLevelKey, Main.qualityLevel, InputFolder);
+        SaveData.Save(QualityLevelKey, Main.qualityLevel, SettingsFolder);
     }
 
     #endregion
