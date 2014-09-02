@@ -52,7 +52,7 @@ public class KeyboardShortcuts : EditorWindow
     [MenuItem("Shortcuts/Create C# Script &C", false, 3)]
     private static void CreateScript()
     {
-        var window = GetWindow<ScriptName>(true);
+        var window = GetWindow<ScriptName>(true, "New C# Script");
         window.position = new Rect(Screen.width / 2f, Screen.height / 2f, 250, 50);
         window.minSize = new Vector2(250, 50);
         window.maxSize = new Vector2(250, 50);
@@ -186,15 +186,16 @@ public class KeyboardShortcuts : EditorWindow
 public class ScriptName : EditorWindow
 {
     private string scriptName = "";
+    private const string FocusName = "NewScriptName";
 
     [UsedImplicitly]
     private void OnGUI()
     {
-        GUI.SetNextControlName("name");
+        GUI.SetNextControlName(FocusName);
         scriptName = EditorGUILayout.TextField(scriptName);
-        if (GUI.GetNameOfFocusedControl() != "name")
+        if (GUI.GetNameOfFocusedControl() != FocusName)
         {
-            GUI.FocusControl("name");
+            GUI.FocusControl(FocusName);
         }
 
         GUILayout.FlexibleSpace();
