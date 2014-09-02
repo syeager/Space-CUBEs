@@ -1,12 +1,13 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.02.17
-// Edited: 2014.08.25
+// Edited: 2014.09.01
 
 using System;
 using System.Linq;
 using Annotations;
 using LittleByte.Data;
+using LittleByte.Options;
 using UnityEngine;
 
 /// <summary>
@@ -14,7 +15,7 @@ using UnityEngine;
 /// </summary>
 public class OptionsMenuManager : MonoBehaviour
 {
-    #region Public Fields
+    #region Private Fields
 
     public enum Menus
     {
@@ -85,6 +86,7 @@ public class OptionsMenuManager : MonoBehaviour
 
     [Header("Input")]
     public UISlider[] inputSliders;
+
     public UIInput[] inputInputs;
 
     #endregion
@@ -108,6 +110,34 @@ public class OptionsMenuManager : MonoBehaviour
     public void SetMenuButton(UIButton menuButton)
     {
         SetMenu(Array.IndexOf(menuButtons, menuButton));
+    }
+
+
+    public void ResetOptions()
+    {
+        switch (menu)
+        {
+            case Menus.Graphics:
+                fpsToggles[2].value = true;
+                qualityToggles[2].value = true;
+                break;
+            case Menus.Audio:
+                const float volumeReset = 0.5f;
+                masterVolume.value = volumeReset;
+                masterMute.value = false;
+                for (int i = 0; i < busVolumes.Length; i++)
+                {
+                    busVolumes[i].value = volumeReset;
+                    busMutes[i].value = false;
+                }
+                break;
+            case Menus.Input:
+                inputSliders[0].value = GameSettings.JoystickSensitivityDefault;
+                inputSliders[1].value = GameSettings.JoystickDeadzoneDefault;
+                inputSliders[2].value = GameSettings.JoystickXBufferDefault;
+                inputSliders[3].value = GameSettings.JoystickYBufferDefault;
+                break;
+        }
     }
 
 
@@ -159,6 +189,7 @@ public class OptionsMenuManager : MonoBehaviour
         qualityToggles[qualityLevel].value = true;
     }
 
+
     public void FrameRateUpdated(UIToggle toggle)
     {
         if (!toggle.value) return;
@@ -173,7 +204,7 @@ public class OptionsMenuManager : MonoBehaviour
     public void QualityUpdated(UIToggle toggle)
     {
         if (!toggle.value) return;
-        
+
         description.text = QualityLevelInfo;
 
         int index = Array.IndexOf(qualityToggles, toggle);

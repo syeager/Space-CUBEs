@@ -31,6 +31,7 @@ public class ShowInProjectPane : EditorWindow
 
     [UsedImplicitly]
     [MenuItem("Assets/Show in Project Pane &P")]
+    [MenuItem("Shortcuts/Show in Project Pane &P")]
     private static void Init()
     {
         Object[] selected = Selection.GetFiltered(typeof(Object), SelectionMode.Deep);

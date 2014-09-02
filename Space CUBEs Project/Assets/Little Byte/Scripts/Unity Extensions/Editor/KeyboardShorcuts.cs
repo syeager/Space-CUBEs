@@ -93,9 +93,9 @@ public class KeyboardShortcuts : EditorWindow
     #region Prefab Shortcuts
 
     [UsedImplicitly]
-    [MenuItem("Shortcuts/Apply Prefab &I", true)]
-    [MenuItem("Shortcuts/Break Prefab &O", true)]
-    [MenuItem("Shortcuts/Revert Prefab &P", true)]
+    [MenuItem("Shortcuts/Apply Prefab #&I", true)]
+    [MenuItem("Shortcuts/Break Prefab #&O", true)]
+    [MenuItem("Shortcuts/Revert Prefab #&P", true)]
     private static bool IsPrefab()
     {
         return Selection.gameObjects.All(obj => PrefabUtility.GetPrefabType(obj) == PrefabType.PrefabInstance);
@@ -103,7 +103,7 @@ public class KeyboardShortcuts : EditorWindow
 
 
     [UsedImplicitly]
-    [MenuItem("Shortcuts/Apply Prefab &I", false, 50)]
+    [MenuItem("Shortcuts/Apply Prefab #&I", false, 50)]
     private static void ApplyPrefab()
     {
         foreach (GameObject obj in Selection.gameObjects)
@@ -114,7 +114,7 @@ public class KeyboardShortcuts : EditorWindow
 
 
     [UsedImplicitly]
-    [MenuItem("Shortcuts/Break Prefab &O", false, 51)]
+    [MenuItem("Shortcuts/Break Prefab #&O", false, 51)]
     private static void BreakPrefab()
     {
         foreach (GameObject obj in Selection.gameObjects)
@@ -125,7 +125,7 @@ public class KeyboardShortcuts : EditorWindow
 
 
     [UsedImplicitly]
-    [MenuItem("Shortcuts/Revert Prefab &P", false, 52)]
+    [MenuItem("Shortcuts/Revert Prefab #&P", false, 52)]
     private static void RevertPrefab()
     {
         foreach (GameObject obj in Selection.gameObjects)

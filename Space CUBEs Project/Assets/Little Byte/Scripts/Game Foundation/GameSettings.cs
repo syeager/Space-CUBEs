@@ -1,7 +1,7 @@
-﻿// Space CUBEs Project-csharp
+﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2013.12.03
-// Edited: 2014.06.07
+// Edited: 2014.09.01
 
 using LittleByte.Data;
 
@@ -23,6 +23,11 @@ public class GameSettings : Singleton<GameSettings>
     public float joystickXBuffer;
     public float joystickYBuffer;
     public float joystickDeadzone;
+
+    public const float JoystickSensitivityDefault = 0.35f;
+    public const float JoystickXBufferDefault = 0.1f;
+    public const float JoystickYBufferDefault = 0.1f;
+    public const float JoystickDeadzoneDefault = 0.25f;
 
     #endregion
 
@@ -74,10 +79,10 @@ public class GameSettings : Singleton<GameSettings>
 
     private void Load()
     {
-        joystickSensitivity = SaveData.Load("Joystick Sensitivity", InputFolder, 0.35f);
-        joystickSensitivity = SaveData.Load("Joystick xBuffer", InputFolder, 0.5f);
-        joystickSensitivity = SaveData.Load("Joystick yBuffer", InputFolder, 0.5f);
-        joystickSensitivity = SaveData.Load("Joystick Deadzone", InputFolder, 0.25f);
+        joystickSensitivity = SaveData.Load("Joystick Sensitivity", InputFolder, JoystickSensitivityDefault);
+        joystickSensitivity = SaveData.Load("Joystick xBuffer", InputFolder, JoystickXBufferDefault);
+        joystickSensitivity = SaveData.Load("Joystick yBuffer", InputFolder, JoystickYBufferDefault);
+        joystickSensitivity = SaveData.Load("Joystick Deadzone", InputFolder, JoystickDeadzoneDefault);
         qualityLevel = SaveData.Load(QualityLevelKey, SettingsFolder, QualityLevelDefault);
     }
 
