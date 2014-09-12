@@ -1,113 +1,116 @@
-﻿// Space CUBEs Project-csharp
+﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.06.22
-// Edited: 2014.07.12
+// Edited: 2014.09.08
 
 using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
 
-/// <summary>
-/// Pops in, takes a couple shot at the player, then leaves.
-/// </summary>
-public class Hornet : Enemy
+namespace SpaceCUBEs
 {
-    #region State Names
-
-    private const string SpawningState = "Spawning";
-    private const string EnteringState = "Entering";
-    private const string AttackingState = "Attacking";
-    private const string ExitingState = "Exiting";
-
-    #endregion
-
-    #region Attacking Fields
-
-    public Weapon laser;
-
-    /// <summary>Time in seconds to sit and attack.</summary>
-    public float attackingTime = 3f;
-
-    #endregion
-
-    #region MonoBehaviour Overrides
-
-    protected override void Awake()
+    /// <summary>
+    /// Pops in, takes a couple shot at the player, then leaves.
+    /// </summary>
+    public class Hornet : Enemy
     {
-        base.Awake();
+        #region State Names
 
-        // states
-        stateMachine = new StateMachine(this, SpawningState);
-        stateMachine.CreateState(SpawningState, SpawningEnter, info => { });
-        stateMachine.CreateState(EnteringState, info => stateMachine.SetUpdate(EnteringUpdate()), info => { });
-        stateMachine.CreateState(AttackingState, info => stateMachine.SetUpdate(AttackingUpdate()), info => { });
-        stateMachine.CreateState(ExitingState, info => stateMachine.SetUpdate(ExitingUpdate()), info => { });
-        stateMachine.CreateState(DyingState, DyingEnter, info => { });
+        private const string SpawningState = "Spawning";
+        private const string EnteringState = "Entering";
+        private const string AttackingState = "Attacking";
+        private const string ExitingState = "Exiting";
 
-        // weapons
-        laser.Initialize(this);
-    }
+        #endregion
 
-    #endregion
+        #region Attacking Fields
 
-    #region State Methods
+        public Weapon laser;
 
-    private void SpawningEnter(Dictionary<string, object> info)
-    {
-        path = (Path)info["path"];
-        MyHealth.Initialize();
-        path.Initialize(myTransform);
+        /// <summary>Time in seconds to sit and attack.</summary>
+        public float attackingTime = 3f;
 
-        stateMachine.SetState(EnteringState);
-    }
+        #endregion
 
+        #region MonoBehaviour Overrides
 
-    private IEnumerator EnteringUpdate()
-    {
-        while (true)
+        protected override void Awake()
         {
-            Vector2 direction = path.Direction(deltaTime);
+            base.Awake();
 
-            // reached destination
-            if (direction == Vector2.zero)
-            {
-                stateMachine.SetState(AttackingState);
-                yield break;
-            }
-            else
-            {
-                MyMotor.Move(direction);
-            }
+            // states
+            stateMachine = new StateMachine(this, SpawningState);
+            stateMachine.CreateState(SpawningState, SpawningEnter, info => { });
+            stateMachine.CreateState(EnteringState, info => stateMachine.SetUpdate(EnteringUpdate()), info => { });
+            stateMachine.CreateState(AttackingState, info => stateMachine.SetUpdate(AttackingUpdate()), info => { });
+            stateMachine.CreateState(ExitingState, info => stateMachine.SetUpdate(ExitingUpdate()), info => { });
+            stateMachine.CreateState(DyingState, DyingEnter, info => { });
 
-            yield return null;
+            // weapons
+            laser.Initialize(this);
         }
-    }
 
+        #endregion
 
-    private IEnumerator AttackingUpdate()
-    {
-        yield return laser.Activate(true);
-        laser.Activate(false);
-        stateMachine.SetState(ExitingState);
-    }
+        #region State Methods
 
-
-    private IEnumerator ExitingUpdate()
-    {
-        while (true)
+        private void SpawningEnter(Dictionary<string, object> info)
         {
-            MyMotor.Move((Vector2)path.Direction(deltaTime));
-            yield return null;
+            path = (Path)info["path"];
+            MyHealth.Initialize();
+            path.Initialize(myTransform);
+
+            stateMachine.SetState(EnteringState);
         }
+
+
+        private IEnumerator EnteringUpdate()
+        {
+            while (true)
+            {
+                Vector2 direction = path.Direction(deltaTime);
+
+                // reached destination
+                if (direction == Vector2.zero)
+                {
+                    stateMachine.SetState(AttackingState);
+                    yield break;
+                }
+                else
+                {
+                    MyMotor.Move(direction);
+                }
+
+                yield return null;
+            }
+        }
+
+
+        private IEnumerator AttackingUpdate()
+        {
+            yield return laser.Activate(true);
+            laser.Activate(false);
+            stateMachine.SetState(ExitingState);
+        }
+
+
+        private IEnumerator ExitingUpdate()
+        {
+            while (true)
+            {
+                MyMotor.Move((Vector2)path.Direction(deltaTime));
+                yield return null;
+            }
+        }
+
+
+        private void DyingEnter(Dictionary<string, object> info)
+        {
+            StopAllCoroutines();
+            laser.Activate(false);
+            poolObject.Disable();
+        }
+
+        #endregion
     }
-
-
-    private void DyingEnter(Dictionary<string, object> info)
-    {
-        StopAllCoroutines();
-        laser.Activate(false);
-        poolObject.Disable();
-    }
-
-    #endregion
 }

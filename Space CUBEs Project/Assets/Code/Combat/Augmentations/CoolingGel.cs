@@ -3,41 +3,44 @@
 
 using UnityEngine;
 
-/// <summary>
-/// Speeds up weapon cooldowns.
-/// </summary>
-public class CoolingGel : Augmentation
+namespace SpaceCUBEs
 {
-    #region Public Fields
-
-    /// <summary>Multiplies weapon's cooldown speed.</summary>
-    public float cooldownBoost = 1.25f;
-    
-    #endregion
-
-
-    #region Augmentation Methods
-
-    public override void Initialize(Player player)
+    /// <summary>
+    /// Speeds up weapon cooldowns.
+    /// </summary>
+    public class CoolingGel : Augmentation
     {
-        for (int i = 0; i < player.Weapons.weapons.Length; i++)
+        #region Public Fields
+
+        /// <summary>Multiplies weapon's cooldown speed.</summary>
+        public float cooldownBoost = 1.25f;
+
+        #endregion
+
+
+        #region Augmentation Methods
+
+        public override void Initialize(Player player)
         {
-            if (player.Weapons.weapons[i] != null)
+            for (int i = 0; i < player.Weapons.weapons.Length; i++)
             {
-                player.Weapons.weapons[i].cooldownSpeed *= cooldownBoost;
+                if (player.Weapons.weapons[i] != null)
+                {
+                    player.Weapons.weapons[i].cooldownSpeed *= cooldownBoost;
+                }
             }
         }
-    }
 
 
-    public override Augmentation Bake(GameObject player)
-    {
-        CoolingGel comp = player.AddComponent<CoolingGel>();
-        comp.index = index;
-        comp.cooldownBoost = cooldownBoost;
+        public override Augmentation Bake(GameObject player)
+        {
+            CoolingGel comp = player.AddComponent<CoolingGel>();
+            comp.index = index;
+            comp.cooldownBoost = cooldownBoost;
 
-        return comp;
-    }
+            return comp;
+        }
 
-    #endregion
+        #endregion
+    } 
 }

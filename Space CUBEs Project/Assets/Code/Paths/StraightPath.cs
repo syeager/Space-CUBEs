@@ -1,8 +1,9 @@
-﻿// Space CUBEs Project-csharp
+﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.01.28
-// Edited: 2014.07.12
+// Edited: 2014.09.10
 
+using SpaceCUBEs;
 using UnityEngine;
 
 namespace Paths

@@ -1,38 +1,42 @@
-﻿// Steve Yeager
-// 1.26.2014
+﻿// Little Byte Games
+// Author: Steve Yeager
+// Created: 2014.01.26
+// Edited: 2014.09.10
 
 using UnityEngine;
 
-/// <summary>
-/// Flight path for enemy to take. 
-/// </summary>
-public class Path : ScriptableObject
+namespace SpaceCUBEs
 {
-    #region Public Fields
-
-    public float speed = 15f;
-
-    #endregion
-
-    #region Protected Fields
-
-    protected Transform myTransform;
-
-    #endregion
-
-
-    #region Virtual Methods
-
-    public virtual Vector3 Direction(float deltaTime)
+    /// <summary>
+    /// Flight path for enemy to take. 
+    /// </summary>
+    public class Path : ScriptableObject
     {
-        return Vector3.zero;
+        #region Public Fields
+
+        public float speed = 15f;
+
+        #endregion
+
+        #region Protected Fields
+
+        protected Transform myTransform;
+
+        #endregion
+
+        #region Virtual Methods
+
+        public virtual Vector3 Direction(float deltaTime)
+        {
+            return Vector3.zero;
+        }
+
+
+        public virtual void Initialize(Transform transform)
+        {
+            myTransform = transform;
+        }
+
+        #endregion
     }
-
-
-    public virtual void Initialize(Transform transform)
-    {
-        myTransform = transform;
-    }
-
-    #endregion
 }

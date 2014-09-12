@@ -1,73 +1,77 @@
-﻿// Steve Yeager
-// 4.21.2014
+﻿// Little Byte Games
+// Author: Steve Yeager
+// Created: 2014.04.21
+// Edited: 2014.09.08
 
 using UnityEngine;
 using System.Collections;
 
-/// <summary>
-/// Repairs health over time.
-/// </summary>
-public class RepairBot : Augmentation
+namespace SpaceCUBEs
 {
-    #region Public Fields
-
-    /// <summary>How long to delay regen in seconds.</summary>
-    public float delay = 2f;
-
-    /// <summary>Health/s to regen.</summary>
-    public float regenSpeed = 5f;
-    
-    #endregion
-
-    #region Private Fields
-
-    private ShieldHealth playerHealth;
-
-    #endregion
-
-
-    #region Augmentation Methods
-
-    public override void Initialize(Player player)
+    /// <summary>
+    /// Repairs health over time.
+    /// </summary>
+    public class RepairBot : Augmentation
     {
-        playerHealth = player.MyHealth;
-        playerHealth.HealthUpdateEvent += OnHealthUpdate;
-    }
+        #region Public Fields
 
+        /// <summary>How long to delay regen in seconds.</summary>
+        public float delay = 2f;
 
-    public override Augmentation Bake(GameObject player)
-    {
-        RepairBot comp = player.AddComponent<RepairBot>();
-        comp.index = index;
-        comp.delay = delay;
-        comp.regenSpeed = regenSpeed;
+        /// <summary>Health/s to regen.</summary>
+        public float regenSpeed = 5f;
 
-        return comp;
-    }
+        #endregion
 
-    #endregion
+        #region Private Fields
 
-    #region Private Methods
+        private ShieldHealth playerHealth;
 
-    private void OnHealthUpdate(object sender, HealthUpdateArgs args)
-    {
-        if (!(args.amount < 0)) return;
+        #endregion
 
-        StopAllCoroutines();
-        StartCoroutine(Heal());
-    }
+        #region Augmentation Methods
 
-
-    private IEnumerator Heal()
-    {
-        yield return new WaitForSeconds(delay);
-
-        while (playerHealth.health < playerHealth.maxHealth)
+        public override void Initialize(Player player)
         {
-            playerHealth.ChangeHealth(regenSpeed * Time.deltaTime);
-            yield return null;
+            playerHealth = player.MyHealth;
+            playerHealth.HealthUpdateEvent += OnHealthUpdate;
         }
-    }
 
-    #endregion
+
+        public override Augmentation Bake(GameObject player)
+        {
+            RepairBot comp = player.AddComponent<RepairBot>();
+            comp.index = index;
+            comp.delay = delay;
+            comp.regenSpeed = regenSpeed;
+
+            return comp;
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private void OnHealthUpdate(object sender, HealthUpdateArgs args)
+        {
+            if (!(args.amount < 0)) return;
+
+            StopAllCoroutines();
+            StartCoroutine(Heal());
+        }
+
+
+        private IEnumerator Heal()
+        {
+            yield return new WaitForSeconds(delay);
+
+            while (playerHealth.health < playerHealth.maxHealth)
+            {
+                playerHealth.ChangeHealth(regenSpeed * Time.deltaTime);
+                yield return null;
+            }
+        }
+
+        #endregion
+    }
 }

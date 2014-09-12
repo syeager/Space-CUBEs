@@ -6,103 +6,106 @@
 using Annotations;
 using UnityEngine;
 
-/// <summary>
-/// Damages enemies when barrel rolling.
-/// </summary>
-public class BrassKnuckles : Augmentation
+namespace SpaceCUBEs
 {
-    #region References
-
-    private GameObject myGameObject;
-    private Collider myCollider;
-
-    #endregion
-
-    #region Public Fields
-
-    public float damage = 10f;
-
-    #endregion
-
-    #region Private Fields
-
-    /// <summary>Physics layer for PlayerShip.</summary>
-    private int shipLayer;
-
-    /// <summary>Physics layer for PlayerWeapon.</summary>
-    private int weaponLayer;
-
-    #endregion
-
-    #region Private Fields
-
-    private Player ship;
-    private bool dealingDamage;
-    private float multiplier;
-
-    #endregion
-
-    #region Augmentation Overrides
-
-    public override void Initialize(Player player)
+    /// <summary>
+    /// Damages enemies when barrel rolling.
+    /// </summary>
+    public class BrassKnuckles : Augmentation
     {
-        ship = player;
-        player.BarrelRollEvent += OnBarrelRoll;
+        #region References
 
-        myGameObject = gameObject;
-        myCollider = collider;
-        shipLayer = LayerMask.NameToLayer("PlayerShip");
-        weaponLayer = LayerMask.NameToLayer("PlayerWeapon");
-    }
+        private GameObject myGameObject;
+        private Collider myCollider;
 
+        #endregion
 
-    public override Augmentation Bake(GameObject player)
-    {
-        var comp = (BrassKnuckles)player.AddComponent(typeof(BrassKnuckles));
-        comp.index = index;
-        comp.damage = damage;
+        #region Public Fields
 
-        return comp;
-    }
+        public float damage = 10f;
 
-    #endregion
+        #endregion
 
-    #region MonoBehaviour Overrides
+        #region Private Fields
 
-    [UsedImplicitly]
-    private void OnTriggerEnter(Collider other)
-    {
-        if (!dealingDamage) return;
+        /// <summary>Physics layer for PlayerShip.</summary>
+        private int shipLayer;
 
-        var enemyHealth = other.GetComponent(typeof(Health)) as Health;
-        if (enemyHealth != null)
+        /// <summary>Physics layer for PlayerWeapon.</summary>
+        private int weaponLayer;
+
+        #endregion
+
+        #region Private Fields
+
+        private Player ship;
+        private bool dealingDamage;
+        private float multiplier;
+
+        #endregion
+
+        #region Augmentation Overrides
+
+        public override void Initialize(Player player)
         {
-            enemyHealth.RecieveHit(ship, damage * multiplier);
+            ship = player;
+            player.BarrelRollEvent += OnBarrelRoll;
+
+            myGameObject = gameObject;
+            myCollider = collider;
+            shipLayer = LayerMask.NameToLayer("PlayerShip");
+            weaponLayer = LayerMask.NameToLayer("PlayerWeapon");
         }
-    }
 
-    #endregion
 
-    #region Event Handlers
-
-    public void OnBarrelRoll(object sender, ValueArgs args)
-    {
-        var rolling = (bool)args.value;
-        if (rolling)
+        public override Augmentation Bake(GameObject player)
         {
-            dealingDamage = true;
-            myCollider.isTrigger = true;
-            myCollider.enabled = true;
-            myGameObject.layer = weaponLayer;
-            multiplier = ship.Weapons.DamageMultiplier;
-        }
-        else
-        {
-            dealingDamage = false;
-            myCollider.isTrigger = false;
-            myGameObject.layer = shipLayer;
-        }
-    }
+            var comp = (BrassKnuckles)player.AddComponent(typeof(BrassKnuckles));
+            comp.index = index;
+            comp.damage = damage;
 
-    #endregion
+            return comp;
+        }
+
+        #endregion
+
+        #region MonoBehaviour Overrides
+
+        [UsedImplicitly]
+        private void OnTriggerEnter(Collider other)
+        {
+            if (!dealingDamage) return;
+
+            var enemyHealth = other.GetComponent(typeof(Health)) as Health;
+            if (enemyHealth != null)
+            {
+                enemyHealth.RecieveHit(ship, damage * multiplier);
+            }
+        }
+
+        #endregion
+
+        #region Event Handlers
+
+        public void OnBarrelRoll(object sender, ValueArgs args)
+        {
+            var rolling = (bool)args.value;
+            if (rolling)
+            {
+                dealingDamage = true;
+                myCollider.isTrigger = true;
+                myCollider.enabled = true;
+                myGameObject.layer = weaponLayer;
+                multiplier = ship.Weapons.DamageMultiplier;
+            }
+            else
+            {
+                dealingDamage = false;
+                myCollider.isTrigger = false;
+                myGameObject.layer = shipLayer;
+            }
+        }
+
+        #endregion
+    } 
 }

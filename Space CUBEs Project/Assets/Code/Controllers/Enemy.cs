@@ -1,84 +1,87 @@
-﻿// Space CUBEs Project-csharp
+﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2013.12.16
-// Edited: 2014.06.25
+// Edited: 2014.09.08
 
-/// <summary>
-/// Base class for all enemies.
-/// </summary>
-public class Enemy : Ship
+namespace SpaceCUBEs
 {
-    #region References
-
-    protected PoolObject poolObject;
-
-    #endregion
-
-    #region Public Fields
-
-    public enum Classes
+    /// <summary>
+    /// Base class for all enemies.
+    /// </summary>
+    public class Enemy : Ship
     {
-        None,
-        Grunt,
-        Sentry,
-        Guard,
-        Hornet,
-        Kamikaze,
-        Bomber,
-        Elites,
-        SwitchBlade,
-        Medic,
-        Hacker,
-        Twins,
-        Instagator,
-        Minion
-    }
+        #region References
 
-    public Classes enemyClass;
-    public int score;
-    public int money;
+        protected PoolObject poolObject;
 
-    #endregion
+        #endregion
 
-    #region Protected Fields
+        #region Public Fields
 
-    protected Path path;
-
-    #endregion
-
-    #region MonoBehaviour Overrides
-
-    protected override void Awake()
-    {
-        base.Awake();
-
-        // references
-        poolObject = (PoolObject)GetComponent(typeof(PoolObject));
-    }
-
-
-    protected override void Start()
-    {
-        base.Start();
-
-        // register events
-        MyHealth.DieEvent += OnDie;
-    }
-
-    #endregion
-
-    #region Private Methods
-
-    private void OnDie(object sender, DieArgs args)
-    {
-        Player player = args.killer as Player;
-        if (player != null)
+        public enum Classes
         {
-            player.RecieveKill(enemyClass, score, money, MyHealth.maxHealth);
+            None,
+            Grunt,
+            Sentry,
+            Guard,
+            Hornet,
+            Kamikaze,
+            Bomber,
+            Elites,
+            SwitchBlade,
+            Medic,
+            Hacker,
+            Twins,
+            Instagator,
+            Minion
         }
 
-        Destroy(path);
-    }
+        public Classes enemyClass;
+        public int score;
+        public int money;
 
-    #endregion
+        #endregion
+
+        #region Protected Fields
+
+        protected Path path;
+
+        #endregion
+
+        #region MonoBehaviour Overrides
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            // references
+            poolObject = (PoolObject)GetComponent(typeof(PoolObject));
+        }
+
+
+        protected override void Start()
+        {
+            base.Start();
+
+            // register events
+            MyHealth.DieEvent += OnDie;
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private void OnDie(object sender, DieArgs args)
+        {
+            Player player = args.killer as Player;
+            if (player != null)
+            {
+                player.RecieveKill(enemyClass, score, money, MyHealth.maxHealth);
+            }
+
+            Destroy(path);
+        }
+
+        #endregion
+    }
 }

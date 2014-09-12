@@ -1,61 +1,64 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.08.05
-// Edited: 2014.08.05
+// Edited: 2014.09.08
 
 using UnityEngine;
 using System.Collections;
 
-/// <summary>
-/// 
-/// </summary>
-public class EMPBlast : Hitbox
+namespace SpaceCUBEs
 {
-    #region MonoBehaviour Overrides
-
-    protected override void OnTriggerEnter(Collider other)
+    /// <summary>
+    /// 
+    /// </summary>
+    public class EMPBlast : Hitbox
     {
-        Player player = other.GetComponent(typeof(Player)) as Player;
-        if (player != null && !player.MyHealth.invincible)
+        #region MonoBehaviour Overrides
+
+        protected override void OnTriggerEnter(Collider other)
         {
-            foreach (PlayerWeapon playerWeapon in player.Weapons.weapons)
+            Player player = other.GetComponent(typeof(Player)) as Player;
+            if (player != null && !player.MyHealth.invincible)
             {
-                playerWeapon.CoolDown();
+                foreach (PlayerWeapon playerWeapon in player.Weapons.weapons)
+                {
+                    playerWeapon.CoolDown();
+                }
+
+                return;
             }
 
-            return;
+            IEMPBlastListener listener = other.GetComponent(typeof(IEMPBlastListener)) as IEMPBlastListener;
+            if (listener != null)
+            {
+                listener.InteractEMP();
+            }
         }
 
-        IEMPBlastListener listener = other.GetComponent(typeof(IEMPBlastListener)) as IEMPBlastListener;
-        if (listener != null)
+        #endregion
+
+        #region Hitbox Overrides
+
+        public void Initialize(Ship sender, float damage, float time, float spreadSpeed)
         {
-            listener.InteractEMP();
+            Initialize(sender, damage, time);
+            myTransform.localScale = Vector3.one;
+            StartCoroutine(Spread(new Vector3(spreadSpeed, 0f, spreadSpeed)));
         }
-    }
 
-    #endregion
+        #endregion
 
-    #region Hitbox Overrides
+        #region Private Methods
 
-    public void Initialize(Ship sender, float damage, float time, float spreadSpeed)
-    {
-        Initialize(sender, damage, time);
-        myTransform.localScale = Vector3.one;
-        StartCoroutine(Spread(new Vector3(spreadSpeed, 0f, spreadSpeed)));
-    }
-
-    #endregion
-
-    #region Private Methods
-
-    private IEnumerator Spread(Vector3 scale)
-    {
-        while (true)
+        private IEnumerator Spread(Vector3 scale)
         {
-            myTransform.localScale += scale * deltaTime;
-            yield return null;
+            while (true)
+            {
+                myTransform.localScale += scale * deltaTime;
+                yield return null;
+            }
         }
-    }
 
-    #endregion
+        #endregion
+    }
 }

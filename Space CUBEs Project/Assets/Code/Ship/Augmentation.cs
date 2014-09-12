@@ -5,22 +5,25 @@
 
 using UnityEngine;
 
-/// <summary>
-/// Empty base class for augmentation CUBEs.
-/// </summary>
-public abstract class Augmentation : MonoBehaviour
+namespace SpaceCUBEs
 {
-    #region Properties
+    /// <summary>
+    /// Empty base class for augmentation CUBEs.
+    /// </summary>
+    public abstract class Augmentation : MonoBehaviour
+    {
+        #region Properties
 
-    public int index { get; set; }
+        public int index { get; set; }
 
-    #endregion
+        #endregion
 
-    #region Abstract Methods
+        #region Abstract Methods
 
-    public abstract void Initialize(Player player);
+        public abstract void Initialize(Player player);
 
-    public abstract Augmentation Bake(GameObject player);
+        public abstract Augmentation Bake(GameObject player);
 
-    #endregion
+        #endregion
+    } 
 }

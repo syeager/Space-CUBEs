@@ -1,82 +1,85 @@
-﻿// Space CUBEs Project-csharp
+﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.03.05
-// Edited: 2014.06.25
+// Edited: 2014.09.08
 
 using UnityEngine;
 
-public class SharkMissiles_Weapon : PlayerWeapon
+namespace SpaceCUBEs
 {
-    #region Public Fields
-
-    public PoolObject missilePrefab;
-    public Vector3 missileOffset = new Vector3(0f, 0f, 1f);
-    public float missileDelay = 1f;
-    public float missileDelaySpeed;
-    public float missileHomingSpeed;
-    public float damage;
-
-    #endregion
-
-    #region Private Fields
-
-    private bool firing;
-
-    #endregion
-
-    #region Weapon Overrides
-
-    public override Coroutine Activate(bool pressed, float multiplier)
+    public class SharkMissiles_Weapon : PlayerWeapon
     {
-        if (pressed)
+        #region Public Fields
+
+        public PoolObject missilePrefab;
+        public Vector3 missileOffset = new Vector3(0f, 0f, 1f);
+        public float missileDelay = 1f;
+        public float missileDelaySpeed;
+        public float missileHomingSpeed;
+        public float damage;
+
+        #endregion
+
+        #region Private Fields
+
+        private bool firing;
+
+        #endregion
+
+        #region Weapon Overrides
+
+        public override Coroutine Activate(bool pressed, float multiplier)
         {
-            if (firing) return null;
+            if (pressed)
+            {
+                if (firing) return null;
 
-            firing = true;
-            FireMissile(multiplier);
+                firing = true;
+                FireMissile(multiplier);
+            }
+            else
+            {
+                if (!firing) return null;
+
+                firing = false;
+                FireMissile(multiplier);
+
+                StartCoroutine(CoolingDown(true));
+                ActivatedEvent.Fire(this);
+            }
+
+            return null;
         }
-        else
+
+
+        public override PlayerWeapon Bake(GameObject parent)
         {
-            if (!firing) return null;
+            var comp = parent.AddComponent<SharkMissiles_Weapon>();
+            comp.index = index;
+            comp.cooldownTime = cooldownTime;
+            comp.missilePrefab = missilePrefab;
+            comp.missileOffset = missileOffset + myTransform.localPosition;
+            comp.missileDelay = missileDelay;
+            comp.missileDelaySpeed = missileDelaySpeed;
+            comp.missileHomingSpeed = missileHomingSpeed;
+            comp.damage = damage;
 
-            firing = false;
-            FireMissile(multiplier);
-
-            StartCoroutine(CoolingDown(true));
-            ActivatedEvent.Fire(this);
+            return comp;
         }
 
-        return null;
+        #endregion
+
+        #region Private Fields
+
+        private void FireMissile(float multiplier)
+        {
+            // create missile
+            SharkMissile missile = Prefabs.Pop(missilePrefab, myTransform.position + myTransform.TransformDirection(missileOffset), myTransform.rotation).GetComponent<SharkMissile>();
+
+            // fire missile
+            missile.Initialize(myShip, damage * multiplier, missileDelay, missileDelaySpeed, missileHomingSpeed);
+        }
+
+        #endregion
     }
-
-
-    public override PlayerWeapon Bake(GameObject parent)
-    {
-        var comp = parent.AddComponent<SharkMissiles_Weapon>();
-        comp.index = index;
-        comp.cooldownTime = cooldownTime;
-        comp.missilePrefab = missilePrefab;
-        comp.missileOffset = missileOffset + myTransform.localPosition;
-        comp.missileDelay = missileDelay;
-        comp.missileDelaySpeed = missileDelaySpeed;
-        comp.missileHomingSpeed = missileHomingSpeed;
-        comp.damage = damage;
-
-        return comp;
-    }
-
-    #endregion
-
-    #region Private Fields
-
-    private void FireMissile(float multiplier)
-    {
-        // create missile
-        SharkMissile missile = Prefabs.Pop(missilePrefab, myTransform.position + myTransform.TransformDirection(missileOffset), myTransform.rotation).GetComponent<SharkMissile>();
-
-        // fire missile
-        missile.Initialize(myShip, damage * multiplier, missileDelay, missileDelaySpeed, missileHomingSpeed);
-    }
-
-    #endregion
 }

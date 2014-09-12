@@ -1,6 +1,9 @@
-﻿// Steve Yeager
-// 1.26.2014
+﻿// Little Byte Games
+// Author: Steve Yeager
+// Created: 2014.01.28
+// Edited: 2014.09.10
 
+using SpaceCUBEs;
 using UnityEngine;
 
 namespace Paths
@@ -20,15 +23,15 @@ namespace Paths
 
         #endregion
 
-
         #region Path Overrides
 
         public override void Initialize(Transform transform)
         {
             base.Initialize(transform);
 
-            lapTime += time/2f;
+            lapTime += time / 2f;
         }
+
 
         public override Vector3 Direction(float deltaTime)
         {

@@ -1,7 +1,10 @@
-﻿// Steve Yeager
-// 1.26.2014
+﻿// Little Byte Games
+// Author: Steve Yeager
+// Created: 2014.01.28
+// Edited: 2014.09.10
 
 using System;
+using SpaceCUBEs;
 using UnityEngine;
 
 namespace Paths
@@ -20,7 +23,6 @@ namespace Paths
         private float time;
 
         #endregion
-
 
         #region Path Overrides
 

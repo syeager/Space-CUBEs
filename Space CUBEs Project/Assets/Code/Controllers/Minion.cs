@@ -1,105 +1,108 @@
-﻿// Space CUBEs Project-csharp
+﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.06.28
-// Edited: 2014.06.28
+// Edited: 2014.09.08
 
 using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
 
-/// <summary>
-/// Created by Medic.
-/// </summary>
-public class Minion : Enemy
+namespace SpaceCUBEs
 {
-    #region References
-
-    public Transform cannonTransform;
-
-    #endregion
-
-    #region State Names
-
-    private const string SpawningState = "Spawning";
-    private const string MovingState = "Moving";
-    private const string AttackingState = "Attacking";
-
-    #endregion
-
-    #region Public Fields
-
-    /// <summary>Laser weapon.</summary>
-    public EnemyCannon cannon;
-
-    /// <summary>Min world position to move to then attack from.</summary>
-    public Vector3 attackPositionMin;
-
-    /// <summary>Max world position to move to then attack from.</summary>
-    public Vector3 attackPositionMax;
-
-    /// <summary>Angular targeting speed.</summary>
-    public float targetingSpeed;
-
-    #endregion
-
-    #region MonoBehaviour Overrides
-
-    protected override void Awake()
+    /// <summary>
+    /// Created by Medic.
+    /// </summary>
+    public class Minion : Enemy
     {
-        base.Awake();
+        #region References
 
-        // states
-        stateMachine = new StateMachine(this, SpawningState);
-        stateMachine.CreateState(SpawningState, SpawningEnter, info => { });
-        stateMachine.CreateState(MovingState, info => stateMachine.SetUpdate(MovingUpdate()), info => { });
-        stateMachine.CreateState(AttackingState, info => stateMachine.SetUpdate(AttackingUpdate()), info => { });
-        stateMachine.CreateState(DyingState, DyingEnter, info => { });
-    }
+        public Transform cannonTransform;
 
-    #endregion
+        #endregion
 
-    #region State Methods
+        #region State Names
 
-    private void SpawningEnter(Dictionary<string, object> info)
-    {
-        MyHealth.maxShield = 0f;
-        MyHealth.Initialize();
-        cannon.Initialize(this);
+        private const string SpawningState = "Spawning";
+        private const string MovingState = "Moving";
+        private const string AttackingState = "Attacking";
 
-        stateMachine.SetState(MovingState);
-    }
+        #endregion
 
+        #region Public Fields
 
-    private IEnumerator MovingUpdate()
-    {
-        Transform player = LevelManager.Main.PlayerTransform;
-        Vector3 target = Utility.RandomVector3(attackPositionMin, attackPositionMax);
-        const float distBuffer = 1f;
-        while (Vector3.Distance(myTransform.position, target) > distBuffer)
+        /// <summary>Laser weapon.</summary>
+        public EnemyCannon cannon;
+
+        /// <summary>Min world position to move to then attack from.</summary>
+        public Vector3 attackPositionMin;
+
+        /// <summary>Max world position to move to then attack from.</summary>
+        public Vector3 attackPositionMax;
+
+        /// <summary>Angular targeting speed.</summary>
+        public float targetingSpeed;
+
+        #endregion
+
+        #region MonoBehaviour Overrides
+
+        protected override void Awake()
         {
-            MyMotor.Move((Vector2)myTransform.position.To(target));
-            cannonTransform.rotation = cannonTransform.RotateTowards(player.position, targetingSpeed * deltaTime, Vector3.back);
-            yield return null;
+            base.Awake();
+
+            // states
+            stateMachine = new StateMachine(this, SpawningState);
+            stateMachine.CreateState(SpawningState, SpawningEnter, info => { });
+            stateMachine.CreateState(MovingState, info => stateMachine.SetUpdate(MovingUpdate()), info => { });
+            stateMachine.CreateState(AttackingState, info => stateMachine.SetUpdate(AttackingUpdate()), info => { });
+            stateMachine.CreateState(DyingState, DyingEnter, info => { });
         }
 
-        stateMachine.SetState(AttackingState);
-    }
+        #endregion
 
+        #region State Methods
 
-    private IEnumerator AttackingUpdate()
-    {
-        while (true)
+        private void SpawningEnter(Dictionary<string, object> info)
         {
-            yield return cannon.Activate(true);
-            yield return cannon.CoolDown();
+            MyHealth.maxShield = 0f;
+            MyHealth.Initialize();
+            cannon.Initialize(this);
+
+            stateMachine.SetState(MovingState);
         }
+
+
+        private IEnumerator MovingUpdate()
+        {
+            Transform player = LevelManager.Main.PlayerTransform;
+            Vector3 target = Utility.RandomVector3(attackPositionMin, attackPositionMax);
+            const float distBuffer = 1f;
+            while (Vector3.Distance(myTransform.position, target) > distBuffer)
+            {
+                MyMotor.Move((Vector2)myTransform.position.To(target));
+                cannonTransform.rotation = cannonTransform.RotateTowards(player.position, targetingSpeed * deltaTime, Vector3.back);
+                yield return null;
+            }
+
+            stateMachine.SetState(AttackingState);
+        }
+
+
+        private IEnumerator AttackingUpdate()
+        {
+            while (true)
+            {
+                yield return cannon.Activate(true);
+                yield return cannon.CoolDown();
+            }
+        }
+
+
+        private void DyingEnter(Dictionary<string, object> info)
+        {
+            poolObject.Disable();
+        }
+
+        #endregion
     }
-
-
-    private void DyingEnter(Dictionary<string, object> info)
-    {
-        poolObject.Disable();
-    }
-
-    #endregion
 }

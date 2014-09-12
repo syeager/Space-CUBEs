@@ -1,80 +1,83 @@
-﻿// Space CUBEs Project-csharp
+﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.07.01
-// Edited: 2014.07.17
+// Edited: 2014.09.08
 
 using UnityEngine;
 using System.Collections;
 
-/// <summary>
-/// 
-/// </summary>
-public class Syringe : Weapon
+namespace SpaceCUBEs
 {
-    #region Public Fields
-
-    public SyringeLaser laser;
-
-    /// <summary>Time in seconds to fire laser.</summary>
-    public float attackTime;
-
-    /// <summary>Damage done per second.</summary>
-    public float damage;
-
-    /// <summary>Time in seconds for deploying the gun.</summary>
-    public float deployTime;
-
-    /// <summary>Time in sconds for retracting the gun.</summary>
-    public float retractTime;
-
-    /// <summary>How fast to rotate to target player.</summary>
-    public float angularSpeed;
-
-    #endregion
-
-    #region Weapon Overrides
-
-    public override Coroutine Activate(bool pressed)
+    /// <summary>
+    /// 
+    /// </summary>
+    public class Syringe : Weapon
     {
-        if (pressed)
+        #region Public Fields
+
+        public SyringeLaser laser;
+
+        /// <summary>Time in seconds to fire laser.</summary>
+        public float attackTime;
+
+        /// <summary>Damage done per second.</summary>
+        public float damage;
+
+        /// <summary>Time in seconds for deploying the gun.</summary>
+        public float deployTime;
+
+        /// <summary>Time in sconds for retracting the gun.</summary>
+        public float retractTime;
+
+        /// <summary>How fast to rotate to target player.</summary>
+        public float angularSpeed;
+
+        #endregion
+
+        #region Weapon Overrides
+
+        public override Coroutine Activate(bool pressed)
         {
-            gameObject.SetActive(true);
-            StartCoroutine(Target());
-            return StartCoroutine(Fire());
-        }
-        else if (gameObject.activeInHierarchy)
-        {
+            if (pressed)
+            {
+                gameObject.SetActive(true);
+                StartCoroutine(Target());
+                return StartCoroutine(Fire());
+            }
+            else if (gameObject.activeInHierarchy)
+            {
+                return null;
+            }
+
             return null;
         }
 
-        return null;
-    }
+        #endregion
 
-    #endregion
+        #region Private Methods
 
-    #region Private Methods
-
-    private IEnumerator Fire()
-    {
-        yield return new WaitForSeconds(deployTime);
-        laser.Initialize(myShip, damage);
-        yield return new WaitForSeconds(attackTime);
-        laser.Stop();
-        yield return new WaitForSeconds(retractTime);
-        gameObject.SetActive(false);
-    }
-
-
-    private IEnumerator Target()
-    {
-        Transform player = LevelManager.Main.PlayerTransform;
-        while (true)
+        private IEnumerator Fire()
         {
-            Quaternion targetRotation = Quaternion.LookRotation(player.position - myTransform.position, myTransform.up);
-            myTransform.rotation = Quaternion.Slerp(myTransform.rotation, targetRotation, angularSpeed * deltaTime);
-            yield return null;
+            yield return new WaitForSeconds(deployTime);
+            laser.Initialize(myShip, damage);
+            yield return new WaitForSeconds(attackTime);
+            laser.Stop();
+            yield return new WaitForSeconds(retractTime);
+            gameObject.SetActive(false);
         }
-    }
 
-    #endregion
+
+        private IEnumerator Target()
+        {
+            Transform player = LevelManager.Main.PlayerTransform;
+            while (true)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(player.position - myTransform.position, myTransform.up);
+                myTransform.rotation = Quaternion.Slerp(myTransform.rotation, targetRotation, angularSpeed * deltaTime);
+                yield return null;
+            }
+        }
+
+        #endregion
+    }
 }

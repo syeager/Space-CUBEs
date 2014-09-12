@@ -1,53 +1,56 @@
-﻿// Space CUBEs Project-csharp
+﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.04.23
-// Edited: 2014.05.31
+// Edited: 2014.09.08
 
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-/// <summary>
-/// Manages initializing and holding all augmentations.
-/// </summary>
-public class AugmentationManager : MonoBehaviour
+namespace SpaceCUBEs
 {
-    #region Public Fields
-
-    /// <summary>List of all augmentations.</summary>
-    public Augmentation[] augmentations;
-
-    #endregion
-
-    #region Public Methods
-
     /// <summary>
-    /// Add all augmentations.
+    /// Manages initializing and holding all augmentations.
     /// </summary>
-    /// <param name="augmentationList">Augmentations to save.</param>
-    public void Bake(List<Augmentation> augmentationList)
+    public class AugmentationManager : MonoBehaviour
     {
-        augmentations = new Augmentation[BuildStats.ExpansionLimit];
-        int augmentationLimit = BuildStats.GetAugmentationExpansion();
+        #region Public Fields
 
-        foreach (Augmentation augmentation in augmentationList.Where(augmentation => augmentation.index < augmentationLimit))
+        /// <summary>List of all augmentations.</summary>
+        public Augmentation[] augmentations;
+
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// Add all augmentations.
+        /// </summary>
+        /// <param name="augmentationList">Augmentations to save.</param>
+        public void Bake(List<Augmentation> augmentationList)
         {
-            augmentations[augmentation.index] = augmentation;
+            augmentations = new Augmentation[BuildStats.ExpansionLimit];
+            int augmentationLimit = BuildStats.GetAugmentationExpansion();
+
+            foreach (Augmentation augmentation in augmentationList.Where(augmentation => augmentation.index < augmentationLimit))
+            {
+                augmentations[augmentation.index] = augmentation;
+            }
         }
-    }
 
 
-    /// <summary>
-    /// Initialize all augmentations.
-    /// </summary>
-    /// <param name="player">Player to pass to each augmentation.</param>
-    public void Initialize(Player player)
-    {
-        foreach (Augmentation augmentation in augmentations.Where(augmentation => augmentation != null))
+        /// <summary>
+        /// Initialize all augmentations.
+        /// </summary>
+        /// <param name="player">Player to pass to each augmentation.</param>
+        public void Initialize(Player player)
         {
-            augmentation.Initialize(player);
+            foreach (Augmentation augmentation in augmentations.Where(augmentation => augmentation != null))
+            {
+                augmentation.Initialize(player);
+            }
         }
-    }
 
-    #endregion
+        #endregion
+    }
 }
