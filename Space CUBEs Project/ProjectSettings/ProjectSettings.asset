@@ -64,11 +64,11 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 0
-  iPhoneBundleIdentifier: com.TinyByteGames.CUBEs
+  iPhoneBundleIdentifier: com.LittleByteGames.CUBEs
   metroEnableIndependentInputSource: 0
   metroEnableLowLatencyPresentationAPI: 0
   productGUID: 6240a2a5be6caab4ba350af273d2dcef
-  iPhoneBundleVersion: 0.34.16
+  iPhoneBundleVersion: 0.34.21
   AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 9
   AndroidPreferredInstallLocation: 1
@@ -97,8 +97,8 @@ PlayerSettings:
   iPadHighResLandscapeSplashScreen: {fileID: 0}
   AndroidTargetDevice: 0
   AndroidSplashScreenScale: 0
-  AndroidKeystoreName: D:/Documents/GitHub/Space-CUBEs/Publish Info/cube.keystore
-  AndroidKeyaliasName: 
+  AndroidKeystoreName: D:/Documents/GitHub/Space-CUBEs/Publish Info/spacecubes.keystore
+  AndroidKeyaliasName: space cubes
   resolutionDialogBanner: {fileID: 0}
   m_BuildTargetIcons:
   - m_BuildTarget: 
@@ -139,6 +139,9 @@ PlayerSettings:
     m_DynamicBatching: 1
   - m_BuildTarget: Standalone
     m_StaticBatching: 1
+    m_DynamicBatching: 1
+  - m_BuildTarget: Web
+    m_StaticBatching: 0
     m_DynamicBatching: 1
   webPlayerTemplate: APPLICATION:Default
   m_TemplateCustomTags: {}
@@ -185,11 +188,11 @@ PlayerSettings:
   scriptingDefineSymbols:
     1: DEVMODE_OFF;DEBUG;warnaserror_OFF
     7: DEVMODE_off;DEBUG
-  metroPackageName: Space CUBEs Project
+  metroPackageName: SpaceCUBEs
   metroPackageLogo: 
   metroPackageLogo140: 
   metroPackageLogo180: 
-  metroPackageVersion: 
+  metroPackageVersion: 1.0.0.0
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
@@ -216,7 +219,7 @@ PlayerSettings:
   metroLargeTile: 
   metroLargeTile140: 
   metroLargeTile180: 
-  metroTileShortName: 
+  metroTileShortName: Space CUBEs
   metroCommandLineArgsFile: 
   metroTileShowName: 1
   metroMediumTileShowName: 0

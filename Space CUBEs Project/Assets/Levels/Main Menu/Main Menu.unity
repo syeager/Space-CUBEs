@@ -216,6 +216,135 @@ MonoBehaviour:
   hideInactive: 0
   keepWithinPanel: 0
   sorted: 0
+--- !u!1 &165249772
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 165249773}
+  - 65: {fileID: 165249775}
+  - 114: {fileID: 165249774}
+  - 114: {fileID: 165249776}
+  m_Layer: 5
+  m_Name: Google Play
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &165249773
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 165249772}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 601, y: -323, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 738041340}
+  m_RootOrder: 4
+--- !u!114 &165249774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 165249772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fdca5042b1d12a4890ec1bd4f04290d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tweenTarget: {fileID: 165249772}
+  hover: {r: .882352948, g: .784313738, b: .588235319, a: 1}
+  pressed: {r: .717647076, g: .639215708, b: .482352942, a: 1}
+  disabledColor: {r: .5, g: .5, b: .5, a: 1}
+  duration: .200000003
+  dragHighlight: 0
+  hoverSprite: 
+  pressedSprite: 
+  disabledSprite: 
+  hoverSprite2D: {fileID: 0}
+  pressedSprite2D: {fileID: 0}
+  disabledSprite2D: {fileID: 0}
+  pixelSnap: 0
+  onClick:
+  - mTarget: {fileID: 1892598696}
+    mMethodName: SignIn
+    mParameters: []
+    oneShot: 0
+--- !u!65 &165249775
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 165249772}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 64, y: 64, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &165249776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 165249772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5c5ca47aa5c01740810b7c66662099f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftAnchor:
+    target: {fileID: 0}
+    relative: 0
+    absolute: 0
+  rightAnchor:
+    target: {fileID: 0}
+    relative: 1
+    absolute: 0
+  bottomAnchor:
+    target: {fileID: 0}
+    relative: 0
+    absolute: 0
+  topAnchor:
+    target: {fileID: 0}
+    relative: 1
+    absolute: 0
+  updateAnchors: 1
+  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mPivot: 4
+  mWidth: 64
+  mHeight: 64
+  mDepth: 0
+  autoResizeBoxCollider: 0
+  hideIfOffScreen: 0
+  keepAspectRatio: 0
+  aspectRatio: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
+  mFlip: 0
+  centerType: 1
+  leftType: 1
+  rightType: 1
+  bottomType: 1
+  topType: 1
+  mRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  mTexture: {fileID: 2800000, guid: 34f3b1ece398d0445a43a7b7f08ecc72, type: 3}
+  mMat: {fileID: 0}
+  mShader: {fileID: 4800000, guid: e75727d9555d9d14ca51d91908c681bc, type: 3}
+  mBorder: {x: 0, y: 0, z: 0, w: 0}
+  mFixedAspect: 0
 --- !u!1 &170718071
 GameObject:
   m_ObjectHideFlags: 0
@@ -241,7 +370,7 @@ Transform:
   m_PrefabInternal: {fileID: 1210404098}
   m_GameObject: {fileID: 170718071}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 359409.812, y: 305, z: 0}
+  m_LocalPosition: {x: 358910.281, y: 304.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2001038391}
@@ -365,7 +494,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 257266839}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 590.206177, y: 305, z: 0}
+  m_LocalPosition: {x: 589.731384, y: 304.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 738041340}
@@ -420,7 +549,7 @@ MonoBehaviour:
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 35
+  aspectRatio: .875
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
@@ -965,12 +1094,13 @@ Transform:
   m_GameObject: {fileID: 738041339}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: .00277777785, y: .00277777785, z: .00277777785}
+  m_LocalScale: {x: .0027816412, y: .0027816412, z: .0027816412}
   m_Children:
   - {fileID: 1119306810}
   - {fileID: 1894692055}
   - {fileID: 1708809539}
   - {fileID: 257266840}
+  - {fileID: 165249773}
   m_Father: {fileID: 348445059}
   m_RootOrder: 0
 --- !u!54 &738041341
@@ -1920,23 +2050,35 @@ Prefab:
       objectReference: {fileID: 100072, guid: d7579329213a0b14abaa054e02eb134a, type: 2}
     - target: {fileID: 400024, guid: e95f85aa3110abc429999d6bba111ed7, type: 2}
       propertyPath: m_LocalScale.x
-      value: .00277777785
+      value: .0027816412
       objectReference: {fileID: 0}
     - target: {fileID: 400024, guid: e95f85aa3110abc429999d6bba111ed7, type: 2}
       propertyPath: m_LocalScale.y
-      value: .00277777785
+      value: .0027816412
       objectReference: {fileID: 0}
     - target: {fileID: 400024, guid: e95f85aa3110abc429999d6bba111ed7, type: 2}
       propertyPath: m_LocalScale.z
-      value: .00277777785
+      value: .0027816412
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: e95f85aa3110abc429999d6bba111ed7, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 359409.812
+      value: 358910.281
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: e95f85aa3110abc429999d6bba111ed7, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 305
+      value: 304.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: e95f85aa3110abc429999d6bba111ed7, type: 2}
+      propertyPath: mEffectColor.r
+      value: .996078432
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: e95f85aa3110abc429999d6bba111ed7, type: 2}
+      propertyPath: mEffectColor.g
+      value: .996078432
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400024, guid: e95f85aa3110abc429999d6bba111ed7, type: 2}
+      propertyPath: mEffectColor.b
+      value: .996078432
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e95f85aa3110abc429999d6bba111ed7, type: 2}
@@ -2346,7 +2488,7 @@ MonoBehaviour:
   mEncoding: 1
   mMaxLineCount: 0
   mEffectStyle: 1
-  mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mEffectColor: {r: .996078432, g: .996078432, b: .996078432, a: 1}
   mSymbols: 1
   mEffectDistance: {x: 1, y: 1}
   mOverflow: 0
@@ -2671,6 +2813,46 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
+--- !u!1 &1892598695
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1892598697}
+  - 114: {fileID: 1892598696}
+  m_Layer: 0
+  m_Name: Google Play
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1892598696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1892598695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63afd30b0ec1ca645aac241fcc18c6cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 165249776}
+--- !u!4 &1892598697
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1892598695}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
 --- !u!1 &1894692054
 GameObject:
   m_ObjectHideFlags: 0
@@ -2916,7 +3098,7 @@ Transform:
   m_GameObject: {fileID: 2001038390}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: .00277777785, y: .00277777785, z: .00277777785}
+  m_LocalScale: {x: .0027816412, y: .0027816412, z: .0027816412}
   m_Children:
   - {fileID: 1116460772}
   - {fileID: 170718072}
@@ -2976,7 +3158,7 @@ MonoBehaviour:
   anchorOffset: 0
   softBorderPadding: 0
   renderQueue: 0
-  startingRenderQueue: 3004
+  startingRenderQueue: 3005
   mAlpha: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 300, w: 200}

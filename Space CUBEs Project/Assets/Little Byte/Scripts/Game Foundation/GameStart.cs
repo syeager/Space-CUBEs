@@ -1,12 +1,13 @@
-﻿// Space CUBEs Project-csharp
+﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.01.15
-// Edited: 2014.06.20
+// Edited: 2014.09.09
 
 using System;
 using System.Collections.Generic;
 using Annotations;
 using LittleByte.Data;
+using SpaceCUBEs;
 
 /// <summary>
 /// Runs all methods needed at game start.
@@ -26,6 +27,12 @@ public class GameStart : Singleton<GameStart>
 
     #endregion
 
+    #region Events
+
+    public static event Action GameStartedEvent;
+
+    #endregion
+
     #region MonoBehaviour Overrides
 
     [UsedImplicitly]
@@ -36,6 +43,11 @@ public class GameStart : Singleton<GameStart>
 
         LoadGame();
         UpdateVersions(resetVersion);
+
+        if (GameStartedEvent != null)
+        {
+            GameStartedEvent.Invoke();
+        }
     }
 
     #endregion
