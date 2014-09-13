@@ -493,7 +493,7 @@ namespace SpaceCUBEs
         // place/pickup
         if (Input.GetKeyUp(KeyCode.Space))
         {
-            Grid.CursorAction(true);
+            OnActionButtonPressed(this, new ActivateButtonArgs(string.Empty, true));
             corePointsLabel.text = Grid.corePointsAvailable.ToString();
         }
 
@@ -1258,7 +1258,17 @@ namespace SpaceCUBEs
         private void OnActionButtonPressed(object sender, ActivateButtonArgs args)
         {
             if (!args.isPressed) return;
-            Grid.CursorAction(true);
+
+            switch (Grid.cursorStatus)
+            {
+                case ConstructionGrid.CursorStatuses.Holding:
+                    Grid.PlaceCUBE(true, -1, -1, Grid.heldCUBE.GetComponent<ColorVertices>().colors);
+                    break;
+                    case ConstructionGrid.CursorStatuses.Hover:
+                    Grid.PickupCUBE();
+                    break;
+            }
+
             corePointsLabel.text = Grid.corePointsAvailable.ToString();
         }
 

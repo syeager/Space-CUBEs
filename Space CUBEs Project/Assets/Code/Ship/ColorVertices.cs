@@ -1,10 +1,10 @@
-﻿// Steve Yeager
-// 12.19.2013
+﻿// Little Byte Games
+// Author: Steve Yeager
+// Created: 2013.12.19
+// Edited: 2014.09.13
 
+using UnityEditor;
 using UnityEngine;
-using System.Collections;
-using System;
-using System.Diagnostics;
 
 /// <summary>
 /// 
@@ -17,7 +17,6 @@ public class ColorVertices : MonoBehaviour
     public int[] colors = new int[1];
 
     #endregion
-
 
     #region Public Methods
 
@@ -41,7 +40,7 @@ public class ColorVertices : MonoBehaviour
 
         Mesh mesh;
 #if UNITY_EDITOR
-        if (UnityEditor.PrefabUtility.GetPrefabType(gameObject) == UnityEditor.PrefabType.Prefab)
+        if (PrefabUtility.GetPrefabType(gameObject) == PrefabType.Prefab)
         {
             mesh = GetComponent<MeshFilter>().sharedMesh;
         }
@@ -58,9 +57,9 @@ public class ColorVertices : MonoBehaviour
         for (int i = 0; i < colors.Length; i++)
         {
             int[] tris = mesh.GetTriangles(i);
-            for (int j = 0; j < tris.Length; j++)
+            foreach (int tri in tris)
             {
-                vertColors[tris[j]] = allColors[colors[i]];
+                vertColors[tri] = allColors[colors[i]];
             }
         }
 
@@ -76,7 +75,7 @@ public class ColorVertices : MonoBehaviour
     public void SetandBake(int index, int colorIndex)
     {
 #if UNITY_EDITOR
-        UnityEditor.SerializedObject so = new UnityEditor.SerializedObject(this);
+        SerializedObject so = new SerializedObject(this);
         so.FindProperty("colors").GetArrayElementAtIndex(index).intValue = colorIndex;
         so.ApplyModifiedProperties();
 #else

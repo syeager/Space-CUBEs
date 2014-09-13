@@ -1,7 +1,7 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2013.11.26
-// Edited: 2014.09.08
+// Edited: 2014.09.12
 
 using System;
 using System.Collections;
@@ -371,7 +371,7 @@ namespace SpaceCUBEs
         /// Creates CUBE and added to cursor.
         /// </summary>
         /// <param name="CUBEID">ID of the CUBE to create.</param>
-        public void CreateCUBE(int CUBEID)
+        public void CreateCUBE(int CUBEID, int[] colors = null)
         {
             // destroy currently held CUBE
             DeleteCUBE();
@@ -386,7 +386,7 @@ namespace SpaceCUBEs
                 alphaMats[i] = new Material(cubeMat);
             }
             heldCUBE.renderer.materials = alphaMats;
-            heldCUBE.GetComponent<ColorVertices>().Bake();
+            heldCUBE.GetComponent<ColorVertices>().Bake(colors);
             // blink
             StartBlink(heldCUBE.renderer);
 
@@ -404,25 +404,6 @@ namespace SpaceCUBEs
 
             // update status
             cursorStatus = CursorStatuses.Holding;
-        }
-
-
-        /// <summary>
-        /// If cursor is empty, pick up CUBE if hovering. If cursor is not empty, place CUBE.
-        /// </summary>
-        /// <param name="loadAnother">Should another CUBE be loaded of the same type that was placed?</param>
-        public void CursorAction(bool loadAnother)
-        {
-            // place currenlty held CUBE
-            if (heldCUBE != null)
-            {
-                PlaceCUBE(loadAnother);
-            }
-                // pick up CUBE if possible
-            else if (grid[(int)cursor.y][(int)cursor.z][(int)cursor.x] != null)
-            {
-                PickupCUBE(grid[(int)cursor.y][(int)cursor.z][(int)cursor.x]);
-            }
         }
 
 
@@ -462,9 +443,7 @@ namespace SpaceCUBEs
                 // rotation
                 cursorRotation = Quaternion.Euler(piece.Value.rotation);
                 // create CUBE
-                CreateCUBE(piece.Key);
-                // colors
-                ((ColorVertices)heldCUBE.GetComponent(typeof(ColorVertices))).Bake(piece.Value.colors);
+                CreateCUBE(piece.Key, piece.Value.colors);
                 // place
                 PlaceCUBE(piece.Value.weaponMap, piece.Value.augmentationMap);
             }
@@ -653,6 +632,12 @@ namespace SpaceCUBEs
         }
 
 
+        public void PickupCUBE()
+        {
+            PickupCUBE(hoveredCUBE);
+        }
+
+
         /// <summary>
         /// Place held CUBE into the build.
         /// </summary>
@@ -802,14 +787,14 @@ namespace SpaceCUBEs
         /// <param name="weaponIndex">Index of the weapon.</param>
         /// <param name="augmentationIndex">Index of the augmentation.</param>
         /// <returns>True, if the CUBE was successfully placed.</returns>
-        private void PlaceCUBE(bool loadAnother, int weaponIndex = -1, int augmentationIndex = -1)
+        public void PlaceCUBE(bool loadAnother, int weaponIndex = -1, int augmentationIndex = -1, int[] colors = null)
         {
             if (heldCUBE == null) return;
 
             int id = heldCUBE.ID;
             if (PlaceCUBE(weaponIndex, augmentationIndex) && loadAnother)
             {
-                CreateCUBE(id);
+                CreateCUBE(id, colors);
             }
         }
 

@@ -1,8 +1,10 @@
-﻿// Steve Yeager
-// 2.19.2014
+﻿// Little Byte Games
+// Author: Steve Yeager
+// Created: 2014.02.19
+// Edited: 2014.09.12
 
+using Annotations;
 using UnityEngine;
-using System.Collections;
 using UnityEditor;
 
 /// <summary>
@@ -19,9 +21,9 @@ public class ColorVerticesEditor : Editor
 
     #endregion
 
-
     #region Editor Overrides
 
+    [UsedImplicitly]
     private void OnEnable()
     {
         cv = target as ColorVertices;
@@ -45,12 +47,11 @@ public class ColorVerticesEditor : Editor
                 {
                     ColorSelector.OpenSelector(allColors, cv, i);
                 }
-
             }
             EditorGUILayout.EndHorizontal();
         }
         EditorGUI.indentLevel--;
     }
-    
+
     #endregion
 }

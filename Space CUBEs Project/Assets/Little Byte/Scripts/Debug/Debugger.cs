@@ -406,7 +406,7 @@ public class Debugger : Singleton<Debugger>
         int count = 0;
         foreach (object item in list)
         {
-            Debug.Log(count + ": " + item, item is Object ? (Object)item : context);
+            Debug.Log(count + ": " + item);//, item is Object ? (Object)item : context);
             count++;
         }
 
