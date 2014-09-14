@@ -69,9 +69,6 @@ namespace SpaceCUBEs
         private Transform cameraTarget;
 
         private bool menuOpen;
-
-        private int weaponIndex = -1;
-
         private int[] inventory;
 
         private Vector3 cameraDirection = Vector3.up;
@@ -184,6 +181,8 @@ namespace SpaceCUBEs
 
         /// <summary>Weapon expansions available.</summary>
         private int weaponExpansions;
+
+        private int weaponIndex = -1;
 
         #endregion
 
@@ -1621,6 +1620,7 @@ namespace SpaceCUBEs
         {
             menuPanels[3].SetActive(false);
             infoPanel.SetActive(false);
+            StopWeaponBlink();
             weaponIndex = -1;
 
             // weapon buttons
@@ -1657,6 +1657,8 @@ namespace SpaceCUBEs
             else
             {
                 weaponButtons[index].Activate(true);
+                StartWeaponBlink(index);
+
                 if (weaponIndex != -1)
                 {
                     weaponButtons[weaponIndex].Activate(false);
@@ -1678,6 +1680,22 @@ namespace SpaceCUBEs
             int dir = int.Parse(args.value);
 
             weaponIndex = Grid.MoveWeaponMap(weaponIndex, dir);
+        }
+
+
+        private void StartWeaponBlink(int index)
+        {
+            StopWeaponBlink();
+            Grid.StartBlink(Grid.weapons[index].renderer);
+        }
+
+
+        private void StopWeaponBlink()
+        {
+            if (weaponIndex >= 0)
+            {
+                Grid.StopBlink(Grid.weapons[weaponIndex].renderer);
+            }
         }
 
         #endregion

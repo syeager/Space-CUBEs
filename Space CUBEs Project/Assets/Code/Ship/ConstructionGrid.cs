@@ -1024,7 +1024,7 @@ namespace SpaceCUBEs
 
         #region Blink Methods
 
-        private void StartBlink(Renderer target)
+        public void StartBlink(Renderer target)
         {
             foreach (Material material in target.sharedMaterials)
             {
@@ -1067,7 +1067,7 @@ namespace SpaceCUBEs
         }
 
 
-        private void StopBlink(Renderer target)
+        public void StopBlink(Renderer target)
         {
             StopCoroutine("Blinking");
 
