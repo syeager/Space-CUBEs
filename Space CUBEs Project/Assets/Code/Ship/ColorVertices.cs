@@ -1,9 +1,8 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2013.12.19
-// Edited: 2014.09.13
+// Edited: 2014.09.14
 
-using UnityEditor;
 using UnityEngine;
 
 /// <summary>
@@ -40,7 +39,7 @@ public class ColorVertices : MonoBehaviour
 
         Mesh mesh;
 #if UNITY_EDITOR
-        if (PrefabUtility.GetPrefabType(gameObject) == PrefabType.Prefab)
+        if (UnityEditor.PrefabUtility.GetPrefabType(gameObject) == UnityEditor.PrefabType.Prefab)
         {
             mesh = GetComponent<MeshFilter>().sharedMesh;
         }
@@ -75,7 +74,7 @@ public class ColorVertices : MonoBehaviour
     public void SetandBake(int index, int colorIndex)
     {
 #if UNITY_EDITOR
-        SerializedObject so = new SerializedObject(this);
+        UnityEditor.SerializedObject so = new UnityEditor.SerializedObject(this);
         so.FindProperty("colors").GetArrayElementAtIndex(index).intValue = colorIndex;
         so.ApplyModifiedProperties();
 #else
