@@ -68,7 +68,7 @@ PlayerSettings:
   metroEnableIndependentInputSource: 0
   metroEnableLowLatencyPresentationAPI: 0
   productGUID: 6240a2a5be6caab4ba350af273d2dcef
-  iPhoneBundleVersion: 0.34.24
+  iPhoneBundleVersion: 0.34.26
   AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 9
   AndroidPreferredInstallLocation: 1
@@ -98,7 +98,7 @@ PlayerSettings:
   AndroidTargetDevice: 0
   AndroidSplashScreenScale: 0
   AndroidKeystoreName: D:/Documents/GitHub/Space-CUBEs/Publish Info/spacecubes.keystore
-  AndroidKeyaliasName: 
+  AndroidKeyaliasName: space cubes
   resolutionDialogBanner: {fileID: 0}
   m_BuildTargetIcons:
   - m_BuildTarget: 
@@ -187,7 +187,7 @@ PlayerSettings:
   spritePackerPolicy: 
   scriptingDefineSymbols:
     1: DEVMODE_OFF;DEBUG;warnaserror_OFF
-    7: DEVMODE_off;DEBUG
+    7: DEBUG
   metroPackageName: SpaceCUBEs
   metroPackageLogo: 
   metroPackageLogo140: 
@@ -233,7 +233,20 @@ PlayerSettings:
   metroSplashScreenImage180: 
   metroSplashScreenBackgroundColor: {r: 0, g: 0, b: 0, a: 1}
   metroSplashScreenUseBackgroundColor: 0
-  metroCapabilities: {}
+  metroCapabilities:
+    EnterpriseAuthentication: 0
+    InternetClient: 0
+    InternetClientServer: 0
+    Location: 0
+    Microphone: 0
+    MusicLibrary: 0
+    PicturesLibrary: 0
+    PrivateNetworkClientServer: 0
+    Proximity: 0
+    RemovableStorage: 0
+    SharedUserCertificates: 0
+    VideosLibrary: 0
+    WebCam: 0
   metroUnprocessedPlugins: []
   metroCompilationOverrides: 1
   blackberryDeviceAddress: 

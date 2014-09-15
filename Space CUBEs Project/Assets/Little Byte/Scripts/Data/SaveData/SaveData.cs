@@ -262,7 +262,10 @@ namespace LittleByte.Data
         /// </summary>
         public static void DeleteAll()
         {
-            Directory.Delete(DataPath, true);
+            if (Directory.Exists(DataPath))
+            {
+                Directory.Delete(DataPath, true);
+            }
             Directory.CreateDirectory(DataPath);
         }
 

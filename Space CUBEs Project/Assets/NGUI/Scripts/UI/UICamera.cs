@@ -76,12 +76,19 @@ public class UICamera : MonoBehaviour
 		public GameObject pressed;		// Last game object to receive OnPress
 		public GameObject dragged;		// Game object that's being dragged
 
+		public float pressTime = 0f;	// When the touch event started
 		public float clickTime = 0f;	// The last time a click event was sent out
 
 		public ClickNotification clickNotification = ClickNotification.Always;
 		public bool touchBegan = true;
 		public bool pressStarted = false;
 		public bool dragStarted = false;
+
+		/// <summary>
+		/// Delta time since the touch operation started.
+		/// </summary>
+
+		public float deltaTime { get { return touchBegan ? RealTime.time - pressTime : 0f; } }
 
 		/// <summary>
 		/// Returns whether this touch is currently over a UI element.
@@ -91,7 +98,7 @@ public class UICamera : MonoBehaviour
 		{
 			get
 			{
-				return current != null && NGUITools.FindInParents<UIRoot>(current) != null;
+				return current != null && current != fallThrough && NGUITools.FindInParents<UIRoot>(current) != null;
 			}
 		}
 	}
@@ -471,6 +478,7 @@ public class UICamera : MonoBehaviour
 		{
 			if (currentTouch != null) return currentTouch.isOverUI;
 			if (hoveredObject == null) return false;
+			if (hoveredObject == fallThrough) return false;
 			return NGUITools.FindInParents<UIRoot>(hoveredObject) != null;
 		}
 	}
@@ -1070,6 +1078,7 @@ public class UICamera : MonoBehaviour
 		if (!mTouches.TryGetValue(id, out touch))
 		{
 			touch = new MouseOrTouch();
+			touch.pressTime = RealTime.time;
 			touch.touchBegan = true;
 			mTouches.Add(id, touch);
 		}
@@ -1101,7 +1110,6 @@ public class UICamera : MonoBehaviour
 #endif
 			)
 		{
-			useMouse = false;
 			useTouch = true;
 
 			if (Application.platform == RuntimePlatform.IPhonePlayer)
@@ -1146,7 +1154,6 @@ public class UICamera : MonoBehaviour
 
 	void OnDisable () { list.Remove(this); }
 
-#if !UNITY_3_5 && !UNITY_4_0
 	/// <summary>
 	/// We don't want the camera to send out any kind of mouse events.
 	/// </summary>
@@ -1156,12 +1163,27 @@ public class UICamera : MonoBehaviour
 		if (eventType != EventType.World_3D && cachedCamera.transparencySortMode != TransparencySortMode.Orthographic)
 			cachedCamera.transparencySortMode = TransparencySortMode.Orthographic;
 
-		if (Application.isPlaying) cachedCamera.eventMask = 0;
+		if (Application.isPlaying)
+		{
+			// Always set a fallthrough object
+			if (fallThrough == null)
+			{
+				UIRoot root = NGUITools.FindInParents<UIRoot>(gameObject);
+
+				if (root != null)
+				{
+					fallThrough = root.gameObject;
+				}
+				else
+				{
+					Transform t = transform;
+					fallThrough = (t.parent != null) ? t.parent.gameObject : gameObject;
+				}
+			}
+			cachedCamera.eventMask = 0;
+		}
 		if (handlesEvents) NGUIDebug.debugRaycast = debug;
 	}
-#else
-	void Start () { if (handlesEvents) NGUIDebug.debugRaycast = debug; }
-#endif
 
 #if UNITY_EDITOR
 	void OnValidate () { Start(); }
@@ -1458,6 +1480,7 @@ public class UICamera : MonoBehaviour
 			currentTouchID = 1;
 			currentTouch = mMouse[0];
 			currentTouch.touchBegan = pressed;
+			if (pressed) currentTouch.pressTime = RealTime.time;
 
 			Vector2 pos = Input.mousePosition;
 			currentTouch.delta = pressed ? Vector2.zero : pos - currentTouch.pos;

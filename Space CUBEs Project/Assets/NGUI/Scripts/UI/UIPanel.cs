@@ -573,7 +573,7 @@ public class UIPanel : UIRect
 			{
 				Vector3[] corners = mCam.GetWorldCorners(cameraRayDistance);
 
-				//if (anchorOffset && mCam == null || mCam.transform.parent != cachedTransform)
+				//if (anchorOffset && (mCam == null || mCam.transform.parent != cachedTransform))
 				//{
 				//    Vector3 off = cachedTransform.position;
 				//    for (int i = 0; i < 4; ++i)
@@ -595,7 +595,7 @@ public class UIPanel : UIRect
 				mCorners[2] = new Vector3(x1, y1);
 				mCorners[3] = new Vector3(x1, y0);
 
-				if (anchorOffset && mCam == null || mCam.transform.parent != cachedTransform)
+				if (anchorOffset && (mCam == null || mCam.transform.parent != cachedTransform))
 				{
 					Vector3 off = cachedTransform.position;
 					for (int i = 0; i < 4; ++i)
@@ -856,7 +856,8 @@ public class UIPanel : UIRect
 			Application.platform == RuntimePlatform.WindowsEditor);
 
 		// Only DirectX 9 needs the half-pixel offset
-		if (mHalfPixelOffset) mHalfPixelOffset = (SystemInfo.graphicsShaderLevel < 40);
+		if (mHalfPixelOffset) mHalfPixelOffset = (SystemInfo.graphicsShaderLevel < 40 &&
+		                                          SystemInfo.graphicsDeviceVersion.Contains("Direct3D"));
 	}
 
 	/// <summary>
@@ -909,9 +910,10 @@ public class UIPanel : UIRect
 	protected override void OnInit ()
 	{
 		base.OnInit();
+		FindParent();
 
 		// Apparently having a rigidbody helps
-		if (rigidbody == null)
+		if (rigidbody == null && mParentPanel == null)
 		{
 			UICamera uic = (anchorCamera != null) ? mCam.GetComponent<UICamera>() : null;
 
@@ -933,7 +935,6 @@ public class UIPanel : UIRect
 			}
 		}
 
-		FindParent();
 		mRebuild = true;
 		mAlphaFrameID = -1;
 		mMatrixFrame = -1;

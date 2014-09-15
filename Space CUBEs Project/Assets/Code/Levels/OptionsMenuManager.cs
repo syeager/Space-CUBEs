@@ -343,8 +343,9 @@ public class OptionsMenuManager : MonoBehaviour
 
     #region Data Methods
 
-    public void GameReset()
+    public static void GameReset()
     {
+        Debugger.Log("Resetting game.", null, Debugger.LogTypes.Data);
         PlayerPrefs.DeleteAll();
         SaveData.DeleteAll();
         GameStart.Main.UpdateVersions(true);
