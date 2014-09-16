@@ -102,6 +102,8 @@ namespace SpaceCUBEs
         /// <summary>Level of alpha to set CUBE materials if above current layer.</summary>
         private const float NearAlpha = 0.5f;
 
+        public const int BuildSize = 10;
+
         /// <summary>File name for save data that contains all builds.</summary>
         public const string BuildsFolder = @"Builds/";
 
@@ -492,7 +494,8 @@ namespace SpaceCUBEs
         {
             var showShip = (GameObject)Instantiate(Singleton<GameResources>.Main.player_Prefab);
             showShip.name = "Player";
-            StartCoroutine(showShip.AddComponent<ShowBuild>().Build(LoadBuild(build), buildSize, startPosition, startRotation, maxTime, finshedAction));
+            showShip.transform.SetPosRot(startPosition, Quaternion.Euler(startRotation));
+            StartCoroutine(ShowBuild.Join(LoadBuild(build), buildSize, showShip.transform, maxTime, finshedAction));
         }
 
         #endregion
@@ -894,7 +897,7 @@ namespace SpaceCUBEs
         /// </summary>
         /// <param name="buildName">Name of the ship.</param>
         /// <returns>BuildInfo for the ship.</returns>
-        private BuildInfo LoadBuild(string buildName)
+        public BuildInfo LoadBuild(string buildName)
         {
             this.buildName = buildName;
 

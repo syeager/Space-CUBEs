@@ -1,7 +1,7 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2013.11.26
-// Edited: 2014.09.08
+// Edited: 2014.09.15
 
 using System;
 using System.Collections;
@@ -26,41 +26,41 @@ namespace SpaceCUBEs
 
         private const int GridSize = 10;
 
+        [Header("Camera")]
         public float cameraSpeed;
+
         public float zoomSpeed;
         public float zoomMin;
         public float zoomMax;
         public float zoomStart;
 
+        [Header("Touch")]
         public float swipeDist;
+
         public float swipeTime;
         public float pinchModifier;
         public float pinchMin;
         public float menuSwipeDist;
 
+        [Header("Panels")]
         public GameObject[] menuPanels;
+
         public GameObject infoPanel;
 
-        public UIScrollView loadScrollView;
-        public UIScrollBar loadScrollBar;
-        public UIGrid loadGrid;
-        public GameObject BuildButton_Prefab;
-
-        public GameObject CUBESelectionButton_Prefab;
-
-        public UILabel CUBEName;
-        public UILabel CUBEHealth;
-        public UILabel CUBEShield;
-        public UILabel CUBESpeed;
-        public UILabel CUBEDamage;
-
-        public UIInput shipName;
-        public UILabel shipHealth;
-        public UILabel shipShield;
-        public UILabel shipSpeed;
-        public UILabel shipDamage;
         public ActivateButton actionButton1;
         public ActivateButton actionButton2;
+
+        [Header("Preview")]
+        public Transform preview;
+
+        private GameObject lastPreview;
+        private GameObject currentPreview;
+
+        public float buildTime = 1f;
+        public float releaseTime = 2f;
+
+        private Job disjoinJob;
+        private Job joinJob;
 
         #endregion
 
@@ -94,7 +94,7 @@ namespace SpaceCUBEs
         private const string NavState = "Nav";
         private const string WeaponState = "Weapon";
         private const string PaintState = "Paint";
-        private const string ObserveState = "Observe";
+        private const string ObservationState = "Observation";
 
         #endregion
 
@@ -125,7 +125,28 @@ namespace SpaceCUBEs
 
         #endregion
 
+        #region Info Panel Fields
+
+        [Header("Info")]
+        public UIInput shipName;
+
+        public UILabel shipHealth;
+        public UILabel shipShield;
+        public UILabel shipSpeed;
+        public UILabel shipDamage;
+
+        #endregion
+
         #region Load Menu Fields
+
+        [Header("Entrance")]
+        public UIScrollView loadScrollView;
+
+        public UIScrollBar loadScrollBar;
+        public UIGrid loadGrid;
+        public ScrollviewButton buildPreviewButtonPrefab;
+
+        public BuildPreview selectedBuildPreview;
 
         public GameObject renamePanel;
         public UIInput renameInput;
@@ -134,6 +155,13 @@ namespace SpaceCUBEs
 
         #region Selection Fields
 
+        public UILabel CUBEName;
+
+        public UILabel CUBEHealth;
+        public UILabel CUBEShield;
+        public UILabel CUBESpeed;
+        public UILabel CUBEDamage;
+        public GameObject CUBESelectionButton_Prefab;
         private int selectionIndex;
         public ActivateButton leftFilter;
         public UILabel filterLabel;
@@ -209,6 +237,9 @@ namespace SpaceCUBEs
         [UsedImplicitly]
         private void Awake()
         {
+            // initialize
+            LoadInitialize();
+
             // create states
             stateMachine = new StateMachine(this, LoadState);
             stateMachine.CreateState(LoadState, LoadEnter, LoadExit);
@@ -216,6 +247,7 @@ namespace SpaceCUBEs
             stateMachine.CreateState(NavState, NavEnter, NavExit);
             stateMachine.CreateState(PaintState, PaintEnter, PaintExit);
             stateMachine.CreateState(WeaponState, WeaponEnter, WeaponExit);
+            stateMachine.CreateState(ObservationState, ObservationEnter, info => { });
 
             cameraTarget = new GameObject("Camera Target").transform;
             StartCoroutine(ResettingCamera());
@@ -709,43 +741,24 @@ namespace SpaceCUBEs
 
         #region Load Menu Methods
 
+        private void LoadInitialize()
+        {
+            CreateBuildPreviews();
+        }
+
+
         private void LoadEnter(Dictionary<string, object> info)
         {
             mainCamera.camera.rect = new Rect(0f, 0f, 1f, 1f);
             menuPanels[0].SetActive(true);
-            StartCoroutine(CreateBuildButtons());
-
-            stateMachine.SetUpdate(LoadUpdate());
-        }
-
-
-        private IEnumerator LoadUpdate()
-        {
-            while (true)
-            {
-                if (selectedBuild)
-                {
-                    if (MenuSwipe() == 1)
-                    {
-                        stateMachine.SetState(SelectState);
-                    }
-                }
-                yield return null;
-            }
+            NavigationBar.Main.gameObject.SetActive(true);
         }
 
 
         private void LoadExit(Dictionary<string, object> info)
         {
-            // clear
-            ActivateButton[] buttons = loadGrid.GetComponentsInChildren<ActivateButton>();
-            foreach (ActivateButton button in buttons)
-            {
-                button.ActivateEvent -= OnBuildChosen;
-                Destroy(button.gameObject);
-            }
-
             menuPanels[0].SetActive(false);
+            NavigationBar.Main.gameObject.SetActive(false);
         }
 
 
@@ -763,26 +776,23 @@ namespace SpaceCUBEs
         }
 
 
-        /// <summary>
-        /// Create all of the buttons for the builds in the load menu.
-        /// </summary>
-        private IEnumerator CreateBuildButtons()
+        private void CreateBuildPreviews()
         {
-            // create
             string[] buildNames = ConstructionGrid.BuildNames().ToArray();
-            if (buildNames.Length > 0) ConstructionGrid.selectedBuild = buildNames[0];
             for (int i = 0; i < buildNames.Length; i++)
             {
-                var button = (Instantiate(BuildButton_Prefab) as GameObject).GetComponent<ScrollviewButton>();
-                button.Initialize(i.ToString(), buildNames[i], buildNames[i], loadGrid.transform, loadScrollView);
+                string build = buildNames[i];
+                BuildInfo info = Grid.LoadBuild(build);
+                var button = (ScrollviewButton)Instantiate(buildPreviewButtonPrefab);
+                button.Initialize(build, build, build, loadGrid.transform, loadScrollView);
+                button.GetComponent<BuildPreview>().Initialize(info);
                 button.ActivateEvent += OnBuildChosen;
+
+                if (i == 0)
+                {
+                    OnBuildChosen(button, new ActivateButtonArgs(build, false));
+                }
             }
-
-            yield return StartCoroutine(Utility.UpdateScrollView(loadGrid, loadScrollBar, loadScrollView));
-
-            var centerOnChild = (UICenterOnChild)loadGrid.GetComponent(typeof(UICenterOnChild));
-            centerOnChild.Recenter();
-            centerOnChild.CenterOn(loadGrid.transform.GetChild(0));
         }
 
 
@@ -801,8 +811,35 @@ namespace SpaceCUBEs
         private void OnBuildChosen(object sender, ActivateButtonArgs args)
         {
             if (args.isPressed) return;
+            if (ConstructionGrid.selectedBuild == args.value) return;
 
             ConstructionGrid.selectedBuild = args.value;
+            ScrollviewButton button = (ScrollviewButton)sender;
+            BuildInfo buildInfo = button.GetComponent<BuildPreview>().buildInfo;
+            selectedBuildPreview.Initialize(buildInfo);
+
+            // release
+            if (currentPreview != null)
+            {
+                if (disjoinJob != null)
+                {
+                    disjoinJob.Kill();
+                    Destroy(lastPreview);
+                }
+                lastPreview = currentPreview;
+                disjoinJob = new Job(ShowBuild.Disjoin(lastPreview.transform, releaseTime, () => Destroy(lastPreview))); 
+            }
+            
+            // build
+            currentPreview = new GameObject();
+            currentPreview.transform.parent = preview;
+            currentPreview.transform.localPosition = new Vector3(-0.5f, -0.5f, -0.5f);
+
+            if (joinJob != null)
+            {
+                joinJob.Kill();
+            }
+            joinJob = new Job(ShowBuild.Join(buildInfo, ConstructionGrid.BuildSize, currentPreview.transform, buildTime));
         }
 
 
@@ -871,21 +908,32 @@ namespace SpaceCUBEs
         {
             CreateGrid();
 
+            shipName.value = CustomName();
+
+            corePointsLabel.text = Grid.corePointsAvailable.ToString();
+            stateMachine.SetState(SelectState);
+            selectedBuild = true;
+        }
+
+
+        public void CopyBuild()
+        {
+            // TODO
+        }
+
+
+        private static string CustomName()
+        {
             const string custom = "Custom";
             int i = 1;
             while (true)
             {
                 if (!SaveData.Contains(custom + i, ConstructionGrid.BuildsFolder))
                 {
-                    shipName.value = custom + i;
-                    break;
+                    return custom + i;
                 }
                 i++;
             }
-
-            corePointsLabel.text = Grid.corePointsAvailable.ToString();
-            stateMachine.SetState(SelectState);
-            selectedBuild = true;
         }
 
 
@@ -1263,7 +1311,7 @@ namespace SpaceCUBEs
                 case ConstructionGrid.CursorStatuses.Holding:
                     Grid.PlaceCUBE(true, -1, -1, Grid.heldCUBE.GetComponent<ColorVertices>().colors);
                     break;
-                    case ConstructionGrid.CursorStatuses.Hover:
+                case ConstructionGrid.CursorStatuses.Hover:
                     Grid.PickupCUBE();
                     break;
             }
@@ -1695,6 +1743,23 @@ namespace SpaceCUBEs
             if (weaponIndex >= 0)
             {
                 Grid.StopBlink(Grid.weapons[weaponIndex].renderer);
+            }
+        }
+
+        #endregion
+
+        #region Observation Methods
+
+        private void ObservationEnter(Dictionary<string, object> info)
+        {
+        }
+
+
+        private IEnumerator ObservationUpdate()
+        {
+            while (true)
+            {
+                yield return null;
             }
         }
 

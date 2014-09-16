@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 2.8.2014
+﻿// Little Byte Games
+// Author: Steve Yeager
+// Created: 2014.02.08
+// Edited: 2014.09.14
 
 using UnityEngine;
 
@@ -13,7 +15,6 @@ public class ScrollviewButton : ActivateButton
     public UIDragScrollView dragScrollView;
 
     #endregion
-
 
     #region Public Methods
 

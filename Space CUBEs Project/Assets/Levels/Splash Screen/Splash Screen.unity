@@ -1055,11 +1055,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9997cc572df21f40a28b4140136f1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 0
+  log: 1
   timeScale: 1
   logWarning: 0
   dontDestroy: 0
-  version: 0
+  version: 1
   resetVersion: 0
 --- !u!114 &1807856739
 MonoBehaviour:
@@ -1129,7 +1129,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400010, guid: aeed59aee1ea3714da2eb46ccb6175bd, type: 2}
       propertyPath: version
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400010, guid: aeed59aee1ea3714da2eb46ccb6175bd, type: 2}
+      propertyPath: log
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: aeed59aee1ea3714da2eb46ccb6175bd, type: 2}

@@ -1,7 +1,7 @@
-﻿// Space CUBEs Project-csharp
+﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.04.06
-// Edited: 2014.05.30
+// Edited: 2014.09.15
 
 using System;
 using System.Collections;
@@ -13,7 +13,7 @@ using Random = UnityEngine.Random;
 /// <summary>
 /// Builds the player's ship from parts overtime.
 /// </summary>
-public class ShowBuild : MonoBehaviour
+public static class ShowBuild
 {
     #region Public Methods
 
@@ -22,25 +22,22 @@ public class ShowBuild : MonoBehaviour
     /// </summary>
     /// <param name="buildInfo">Ship instructions.</param>
     /// <param name="buildSize">Size of the grid.</param>
-    /// <param name="startPosition">Ship's position.</param>
-    /// <param name="startRotation">Ship's rotation.</param>
+    /// <param name="transform">Ship transforms.</param>
     /// <param name="maxTime">How long the building process can take.</param>
     /// <param name="finishedAction">Method to call when completed.</param>
-    public IEnumerator Build(BuildInfo buildInfo, int buildSize, Vector3 startPosition, Vector3 startRotation, float maxTime, Action<BuildFinishedArgs> finishedAction)
+    public static IEnumerator Join(BuildInfo buildInfo, int buildSize, Transform transform, float maxTime, Action<BuildFinishedArgs> finishedAction = null)
     {
         var pieces = new List<BuildCUBE>();
 
         const float minDist = 100f;
         const float maxDist = 250f;
         Vector3 halfGrid = Vector3.one * (buildSize / 2f - 1f);
-        var pivotOffset = new Vector3(-0.5f, -0.5f, -0.5f);
-        transform.position = startPosition;
-        transform.eulerAngles = startRotation;
+        Vector3 pivotOffset = -Vector3.one / 2f;
         float speed = maxDist / maxTime;
 
         foreach (var piece in buildInfo.partList)
         {
-            var cube = (CUBE)Instantiate(GameResources.GetCUBE(piece.Key));
+            var cube = (CUBE)UnityEngine.Object.Instantiate(GameResources.GetCUBE(piece.Key));
             cube.transform.parent = transform;
 
             cube.transform.localPosition = piece.Value.position.normalized * Random.Range(minDist, maxDist);
@@ -73,8 +70,39 @@ public class ShowBuild : MonoBehaviour
             yield return null;
         }
 
-        finishedAction(new BuildFinishedArgs(gameObject, buildInfo.stats.health, buildInfo.stats.shield, buildInfo.stats.speed, buildInfo.stats.damage));
-        Destroy(this);
+        if (finishedAction != null)
+        {
+            finishedAction(new BuildFinishedArgs(transform.gameObject, buildInfo.stats.health, buildInfo.stats.shield, buildInfo.stats.speed, buildInfo.stats.damage));
+        }
+    }
+
+
+    public static IEnumerator Disjoin(Transform transform, float time, Action finishedAction = null)
+    {
+        var pieces = new List<BuildCUBE>();
+        const float maxDist = 250f;
+        float speed = maxDist / time;
+
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            Transform child = transform.GetChild(i);
+            pieces.Add(new BuildCUBE(child, Utility.RotateVector(Vector3.forward * maxDist, Random.rotation), speed));
+        }
+
+        while (time > 0f)
+        {
+            foreach (BuildCUBE piece in pieces)
+            {
+                piece.Update(Time.deltaTime);
+            }
+            time -= Time.deltaTime;
+            yield return null;
+        }
+
+        if (finishedAction != null)
+        {
+            finishedAction();
+        }
     }
 
     #endregion
