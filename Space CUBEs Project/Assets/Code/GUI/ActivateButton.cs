@@ -1,8 +1,9 @@
-﻿// Steve Yeager
-// 12.18.2014
+﻿// Little Byte Games
+// Author: Steve Yeager
+// Created: 2013.12.12
+// Edited: 2014.09.15
 
 using System;
-using Annotations;
 using UnityEngine;
 
 /// <summary>
@@ -18,18 +19,18 @@ public class ActivateButton : UIButton
     public EventHandler<ActivateButtonArgs> ActivateEvent;
 
     #endregion
-    
+
     #region Private Fields
 
     private bool activated;
 
     #endregion
 
-
     #region UIButton Overrides
 
     protected override void OnPress(bool isPressed)
     {
+        base.OnPress(isPressed);
         if (ActivateEvent != null)
         {
             ActivateEvent(this, new ActivateButtonArgs(value, isPressed));
@@ -40,7 +41,7 @@ public class ActivateButton : UIButton
     protected override void OnHover(bool isOver)
     {
         if (activated) return;
-        
+
         base.OnHover(isOver);
     }
 
