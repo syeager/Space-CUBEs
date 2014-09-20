@@ -159,12 +159,6 @@ namespace SpaceCUBEs
 
         #region Selection Fields
 
-        public UILabel CUBEName;
-
-        public UILabel CUBEHealth;
-        public UILabel CUBEShield;
-        public UILabel CUBESpeed;
-        public UILabel CUBEDamage;
         public GameObject CUBESelectionButton_Prefab;
         private int selectionIndex;
         public ActivateButton leftFilter;
@@ -965,7 +959,6 @@ namespace SpaceCUBEs
         private void SetCurrentCUBE(int ID)
         {
             currentCUBE = CUBE.AllCUBES[ID];
-            SetCUBEInfo(currentCUBE);
 
             grid.CreateCUBE(ID);
         }
@@ -1650,49 +1643,22 @@ namespace SpaceCUBEs
             grid.RotateCursor(direction);
         }
 
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="info"></param>
-        public void SetCUBEInfo(CUBEInfo info)
-        {
-            if (info == null)
-            {
-                CUBEName.text = string.Empty;
-                CUBEHealth.text = string.Empty;
-                CUBEShield.text =string.Empty;
-                CUBESpeed.text = string.Empty;
-                CUBEDamage.text = string.Empty;
-                return;
-            }
-
-            CUBEName.text = info.name;
-            CUBEHealth.text = CUBE.HealthIcon + " " + info.health;
-            CUBEShield.text = CUBE.ShieldIcon + " " + info.shield;
-            CUBESpeed.text = CUBE.SpeedIcon + " " + info.speed;
-            CUBEDamage.text = CUBE.DamageIcon + " " + info.damage;
-        }
-
         #endregion
 
         #region Events
 
-        private void OnCursorStatusChanged(ConstructionGrid.CursorStatuses previousStatus, ConstructionGrid.CursorStatuses currentStatus)
+        private void OnCursorStatusChanged(object sender, CursorUpdatedArgs args)
         {
-            switch (currentStatus)
+            switch (args.current)
             {
                 case ConstructionGrid.CursorStatuses.Holding:
-                    SetCUBEInfo(grid.heldInfo);
                     SetShipInfo();
                     break;
 
                 case ConstructionGrid.CursorStatuses.Hover:
-                    SetCUBEInfo(CUBE.AllCUBES[grid.hoveredCUBE.ID]);
                     break;
 
                 case ConstructionGrid.CursorStatuses.None:
-                    SetCUBEInfo(null);
                     SetShipInfo();
                     break;
             }

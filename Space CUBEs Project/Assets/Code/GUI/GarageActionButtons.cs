@@ -69,13 +69,13 @@ namespace SpaceCUBEs
         {
             GarageManager.Main.MenuChangedEvent += OnMenuChanged;
             GarageManager.Main.grid.StatusChangedEvent += OnCursorStatusChanged;
-            OnCursorStatusChanged(ConstructionGrid.CursorStatuses.None, GarageManager.Main.grid.cursorStatus);
+            OnCursorStatusChanged(null, new CursorUpdatedArgs(ConstructionGrid.CursorStatuses.None, GarageManager.Main.grid.cursorStatus));
         }
 
 
-        private void OnCursorStatusChanged(ConstructionGrid.CursorStatuses previousStatus, ConstructionGrid.CursorStatuses currentStatus)
+        private void OnCursorStatusChanged(object sender, CursorUpdatedArgs args)
         {
-            switch (currentStatus)
+            switch (args.current)
             {
                 case ConstructionGrid.CursorStatuses.Holding:
                     buttons[0].buttons[1].isEnabled = true;

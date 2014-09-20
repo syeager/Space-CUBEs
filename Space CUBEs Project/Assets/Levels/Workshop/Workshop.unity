@@ -7619,6 +7619,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 533655217}
   - 114: {fileID: 533655218}
+  - 114: {fileID: 533655219}
   m_Layer: 8
   m_Name: CUBE HUD
   m_TagString: Untagged
@@ -7682,6 +7683,24 @@ MonoBehaviour:
   hideIfOffScreen: 0
   keepAspectRatio: 0
   aspectRatio: 2.25
+--- !u!114 &533655219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 533655216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f04530ca261517348ba034b96f0a1699, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nameLabel: {fileID: 2094239201}
+  healthLabel: {fileID: 1862725018}
+  shieldLabel: {fileID: 1268871973}
+  speedLabel: {fileID: 1469303566}
+  damageLabel: {fileID: 417340542}
+  stockLabel: {fileID: 432620466}
+  costLabel: {fileID: 738244097}
 --- !u!1 &535646004
 GameObject:
   m_ObjectHideFlags: 0
@@ -10575,7 +10594,7 @@ MonoBehaviour:
   consoleLinePrefab: {fileID: 100000, guid: 1abf603ef50833b4ba9818e64b0f75db, type: 2}
   showTime: 1
   logSaving: 1
-  logFlags: 010101010001
+  logFlags: 000000000100
   fpsWarning: 1
   lowFPS: 20
 --- !u!4 &746733008
@@ -18073,11 +18092,6 @@ MonoBehaviour:
   shipShield: {fileID: 1778600682}
   shipSpeed: {fileID: 838226299}
   shipDamage: {fileID: 778543924}
-  CUBEName: {fileID: 2094239201}
-  CUBEHealth: {fileID: 1862725018}
-  CUBEShield: {fileID: 1268871973}
-  CUBESpeed: {fileID: 1469303566}
-  CUBEDamage: {fileID: 417340542}
   CUBESelectionButton_Prefab: {fileID: 100002, guid: dc404455588e72547b17bf2a83af057c,
     type: 2}
   leftFilter: {fileID: 1323708996}
@@ -23807,6 +23821,7 @@ MonoBehaviour:
   buildName: Test Build
   blinkColor: {r: .647058845, g: .609114289, b: .0627450794, a: 1}
   blinkTime: 2
+  nearAlpha: .100000001
 --- !u!1 &1778600680
 GameObject:
   m_ObjectHideFlags: 0
@@ -27902,6 +27917,30 @@ Prefab:
     - target: {fileID: 11400000, guid: 45c62a3fc8a9231409c29375e8f213d8, type: 2}
       propertyPath: logSaving
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 45c62a3fc8a9231409c29375e8f213d8, type: 2}
+      propertyPath: logFlags.Array.data[5]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 45c62a3fc8a9231409c29375e8f213d8, type: 2}
+      propertyPath: logFlags.Array.data[4]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 45c62a3fc8a9231409c29375e8f213d8, type: 2}
+      propertyPath: logFlags.Array.data[0]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 45c62a3fc8a9231409c29375e8f213d8, type: 2}
+      propertyPath: logFlags.Array.data[1]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 45c62a3fc8a9231409c29375e8f213d8, type: 2}
+      propertyPath: logFlags.Array.data[2]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 45c62a3fc8a9231409c29375e8f213d8, type: 2}
+      propertyPath: logFlags.Array.data[3]
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 45c62a3fc8a9231409c29375e8f213d8, type: 2}
