@@ -153,7 +153,7 @@ namespace SpaceCUBEs
 
             yield return null;
 
-
+            lockButton.SetActive(true);
             layerButtons.gameObject.SetActive(true);
             navButtons.gameObject.SetActive(true);
             rotateZButtons.gameObject.SetActive(true);
@@ -165,6 +165,7 @@ namespace SpaceCUBEs
         {
             yield return null;
 
+            lockButton.SetActive(true);
             layerButtons.gameObject.SetActive(true);
             navButtons.gameObject.SetActive(true);
             rotateZButtons.gameObject.SetActive(false);
@@ -176,6 +177,7 @@ namespace SpaceCUBEs
         {
             yield return null;
 
+            lockButton.SetActive(false);
             layerButtons.gameObject.SetActive(false);
             navButtons.gameObject.SetActive(false);
             rotateZButtons.gameObject.SetActive(false);
