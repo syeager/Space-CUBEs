@@ -1,7 +1,7 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2013.11.26
-// Edited: 2014.09.19
+// Edited: 2014.09.20
 
 using System;
 using System.Collections;
@@ -89,6 +89,10 @@ namespace SpaceCUBEs
         /// <summary>Available augmentation slots.</summary>
         private int augmentationSlots;
 
+        /// <summary>Level of alpha to set CUBE materials if above current layer.</summary>
+        [SerializeField, UsedImplicitly]
+        private float nearAlpha = 0.25f;
+
         #endregion
 
         #region Static Fields
@@ -108,9 +112,6 @@ namespace SpaceCUBEs
         #endregion
 
         #region Const Fields
-
-        /// <summary>Level of alpha to set CUBE materials if above current layer.</summary>
-        private const float NearAlpha = 0.5f;
 
         public const int BuildSize = 10;
 
@@ -188,6 +189,12 @@ namespace SpaceCUBEs
         /// <summary>CUBEInfo of currently held CUBE.</summary>
         public CUBEInfo heldInfo { get; private set; }
 
+        /// <summary>Info of currently hovered CUBE if there is one.</summary>
+        public CUBEInfo HoverInfo
+        {
+            get { return hoveredCUBE == null ? null : CUBE.AllCUBES[hoveredCUBE.ID]; }
+        }
+
         /// <summary>Weapon slots for the ship.</summary>
         public List<Weapon> weapons { get; private set; }
 
@@ -207,7 +214,7 @@ namespace SpaceCUBEs
 
         #region Events
 
-        public event Action<CursorStatuses, CursorStatuses> StatusChangedEvent;
+        public EventHandler<CursorUpdatedArgs> StatusChangedEvent;
 
         #endregion
 
@@ -400,6 +407,7 @@ namespace SpaceCUBEs
 
             // create new CUBE
             heldCUBE = (CUBE)Instantiate(GameResources.GetCUBE(CUBEID));
+            heldCUBE.name = CUBE.AllCUBES[CUBEID].name;
             // set materials
             int materialCount = heldCUBE.renderer.materials.Length;
             var alphaMats = new Material[materialCount];
@@ -702,7 +710,6 @@ namespace SpaceCUBEs
                     for (int i = 0; i < weapons.Count; i++)
                     {
                         if (weapons[i] != null) continue;
-                        Debug.Log("Found open slot");
                         weapons[i] = (Weapon)heldCUBE.GetComponent(typeof(Weapon));
                         weaponIndex = i;
                         break;
@@ -711,7 +718,6 @@ namespace SpaceCUBEs
                     // add as extra
                     if (weaponIndex == -1)
                     {
-                        Debug.Log("adding extra");
                         weapons.Add((Weapon)heldCUBE.GetComponent(typeof(Weapon)));
                         weaponIndex = weapons.Count - 1;
                     }
@@ -847,6 +853,7 @@ namespace SpaceCUBEs
                         Vector3 point = pivot + RotateVector(new Vector3(x, y, z)).Round();
                         point = point.Round();
                         grid[(int)point.y][(int)point.z][(int)point.x] = null;
+                        cells[(int)point.y][(int)point.z][(int)point.x].SetActive(true);
                         cells[(int)point.y][(int)point.z][(int)point.x].renderer.material = CellOpen_Mat;
                     }
                 }
@@ -956,9 +963,9 @@ namespace SpaceCUBEs
                 {
                     for (int x = 0; x < grid.Length; x++)
                     {
-                        var c = new Vector3(x, y, z);
-                        Vector3 cLayer = new Vector3(viewAxis.x * c.x, viewAxis.y * c.y, viewAxis.z * c.z).Round();
-                        if (cLayer == cursorLayer && (grid[y][z][x] == null || cursor == c))
+                        var index = new Vector3(x, y, z);
+                        Vector3 currentLayer = new Vector3(viewAxis.x * index.x, viewAxis.y * index.y, viewAxis.z * index.z).Round();
+                        if (currentLayer == cursorLayer && (grid[y][z][x] == null || cursor == index))
                         {
                             cells[y][z][x].SetActive(true);
                         }
@@ -983,7 +990,7 @@ namespace SpaceCUBEs
                 {
                     foreach (Material mat in cube.Key.renderer.materials)
                     {
-                        mat.SetFloat("_Alpha", NearAlpha);
+                        mat.SetFloat("_Alpha", nearAlpha);
                     }
                 }
                 else
@@ -996,10 +1003,7 @@ namespace SpaceCUBEs
 
         private void SetStatus(CursorStatuses nextStatus)
         {
-            if (StatusChangedEvent != null)
-            {
-                StatusChangedEvent.Invoke(cursorStatus, nextStatus);
-            }
+            StatusChangedEvent.Fire(this, new CursorUpdatedArgs(cursorStatus, nextStatus));
             cursorStatus = nextStatus;
         }
 
@@ -1117,4 +1121,21 @@ namespace SpaceCUBEs
 
         #endregion
     }
+
+    #region Classes
+
+    public class CursorUpdatedArgs : EventArgs
+    {
+        public readonly ConstructionGrid.CursorStatuses previous;
+        public readonly ConstructionGrid.CursorStatuses current;
+
+
+        public CursorUpdatedArgs(ConstructionGrid.CursorStatuses previous, ConstructionGrid.CursorStatuses current)
+        {
+            this.previous = previous;
+            this.current = current;
+        }
+    }
+
+    #endregion
 }

@@ -53,6 +53,29 @@ public class CUBEInfo
     }
 
 
+    public CUBEInfo(CUBEInfo other)
+    {
+        // General Stats
+        name = other.name;
+        ID = other.ID;
+        type = other.type;
+        // System Stats
+        subsystem = other.subsystem;
+        brand = other.brand;
+        grade = other.grade;
+        // Combat Stats
+        health = other.health;
+        shield = other.shield;
+        speed = other.speed;
+        damage = other.damage;
+        // Part Stats
+        size = other.size;
+        cost = other.cost;
+        rarity = other.rarity;
+        price = other.price;
+    }
+
+
     public override string ToString()
     {
         switch (type)

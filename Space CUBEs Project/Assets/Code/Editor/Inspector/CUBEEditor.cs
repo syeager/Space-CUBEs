@@ -1,10 +1,10 @@
-﻿// Steve Yeager
-// 11.26.2013
+﻿// Little Byte Games
+// Author: Steve Yeager
+// Created: 2013.11.26
+// Edited: 2014.09.20
 
-using Annotations;
-using UnityEngine;
-using UnityEditor;
 using System.Linq;
+using UnityEditor;
 
 [CustomEditor(typeof(CUBE))]
 public class CUBEEditor : Editor
@@ -15,22 +15,12 @@ public class CUBEEditor : Editor
 
     #endregion
 
-
     #region Editor Overrides
-
-    [UsedImplicitly]
-    private void OnEnable()
-    {
-        if (!Application.isPlaying)
-        {
-            CUBEInfo[] cubes = CUBE.LoadAllCUBEInfo();
-            info = cubes.First(c => c.name == target.name);
-        }
-    }
-
 
     public override void OnInspectorGUI()
     {
+        LoadInfo();
+
         // stats
         General();
         if (info.type == CUBE.Types.System)
@@ -43,7 +33,7 @@ public class CUBEEditor : Editor
 
     #endregion
 
-    #region Private Methods
+    #region GUI Methods
 
     private void General()
     {
@@ -70,6 +60,19 @@ public class CUBEEditor : Editor
         EditorGUILayout.LabelField("Cost", info.cost.ToString());
         EditorGUILayout.LabelField("Rarity", info.rarity.ToString());
         EditorGUILayout.LabelField("Price", info.price.ToString());
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    private void LoadInfo()
+    {
+        if (info == null)
+        {
+            CUBEInfo[] cubes = CUBE.AllCUBES ?? CUBE.LoadAllCUBEInfo();
+            info = cubes.First(c => c.name == target.name);
+        }
     }
 
     #endregion
