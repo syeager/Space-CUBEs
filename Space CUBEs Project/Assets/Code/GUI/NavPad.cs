@@ -62,13 +62,13 @@ namespace SpaceCUBEs
 
         public void MoveDown()
         {
-            GarageManager.Main.MoveCursor(Vector3.down);
+            GarageManager.Main.MoveCursor(Vector3.back);
         }
 
 
         public void MoveUp()
         {
-            GarageManager.Main.MoveCursor(Vector3.up);
+            GarageManager.Main.MoveCursor(Vector3.forward);
         }
 
 
@@ -86,13 +86,13 @@ namespace SpaceCUBEs
 
         public void MoveBack()
         {
-            GarageManager.Main.MoveCursor(Vector3.back);
+            GarageManager.Main.MoveCursor(Vector3.down);
         }
 
 
         public void MoveForward()
         {
-            GarageManager.Main.MoveCursor(Vector3.forward);
+            GarageManager.Main.MoveCursor(Vector3.up);
         }
 
 

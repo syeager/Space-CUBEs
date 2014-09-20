@@ -1,12 +1,14 @@
-﻿// Steve Yeager
-// 1.14.2014
+﻿// Little Byte Games
+// Author: Steve Yeager
+// Created: 2014.01.14
+// Edited: 2014.09.20
 
 using UnityEngine;
 
 /// <summary>
 /// Holds all info for a CUBE piece except pieces.
 /// </summary>
-public struct CUBEInfo
+public class CUBEInfo
 {
     // General Stats
     public readonly string name;
@@ -28,12 +30,11 @@ public struct CUBEInfo
     public readonly int price;
 
 
-
     public CUBEInfo(string name, int id, CUBE.Types type, CUBE.Subsystems subsystem, CUBE.Brands brand, int grade, float health, float shield, float speed, float damage, Vector3 size, int cost, int rarity, int price)
     {
         // General Stats
         this.name = name;
-        this.ID = id;
+        ID = id;
         this.type = type;
         // System Stats
         this.subsystem = subsystem;
@@ -61,10 +62,10 @@ public struct CUBEInfo
                                      ID, name, subsystem, brand, grade, size, cost, rarity, price);
             case CUBE.Types.Weapon:
                 return string.Format("{0}: {1} - {2} | {3} | {4} | {5} - {6} | {7} | {8} | {9}",
-                                      ID, name, health, shield, speed, damage, size, cost, rarity, price);
+                                     ID, name, health, shield, speed, damage, size, cost, rarity, price);
             default:
                 return string.Format("{0}: {1} - {2} | {3} | {4} | {5}",
-                                      ID, name, size, cost, rarity, price);
+                                     ID, name, size, cost, rarity, price);
         }
     }
 }

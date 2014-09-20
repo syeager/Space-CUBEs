@@ -1,7 +1,7 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2013.11.26
-// Edited: 2014.09.19
+// Edited: 2014.09.20
 
 using System;
 using System.Collections;
@@ -90,7 +90,7 @@ namespace SpaceCUBEs
         private bool menuOpen;
         private int[] inventory;
 
-        private Vector3 cameraDirection = Vector3.up;
+        private Vector3 cameraDirection = Vector3.back;
         private float zoom;
 
         private CUBEInfo currentCUBE;
@@ -270,13 +270,11 @@ namespace SpaceCUBEs
 #endif
             grid.CreateGrid(ConstructionGrid.BuildSize, Player.Weaponlimit, Player.Weaponlimit);
             grid.CreateBuild(buildName);
-            shipName.value = grid.buildName;
+            shipName.value = buildName;
             corePointsLabel.text = grid.corePointsAvailable.ToString();
 
             // scene
             cameraTarget = new GameObject("Camera Target").transform;
-            StartCoroutine(ResettingCamera());
-
 
             return;
 
@@ -321,6 +319,7 @@ namespace SpaceCUBEs
         private void Start()
         {
             // events
+            grid.StatusChangedEvent += OnCursorStatusChanged;
             actionButtons.PickupPlaceEvent += () =>
                                               {
                                                   if (grid.cursorStatus == ConstructionGrid.CursorStatuses.Holding)
@@ -332,6 +331,9 @@ namespace SpaceCUBEs
                                                       grid.PickupCUBE();
                                                   }
                                               };
+            actionButtons.DeleteEvent += () => grid.DeleteCUBE();
+
+            StartCoroutine(ResettingCamera());
         }
 
 
@@ -881,7 +883,7 @@ namespace SpaceCUBEs
                 ResetCamera(InfoPanelRect, NavMenuButtonsRect);
 
                 // update ship stats
-                UpdateInfoPanel();
+                SetShipInfo();
                 yield return null;
             }
         }
@@ -963,11 +965,7 @@ namespace SpaceCUBEs
         private void SetCurrentCUBE(int ID)
         {
             currentCUBE = CUBE.AllCUBES[ID];
-            CUBEName.text = currentCUBE.name;
-            CUBEHealth.text = CUBE.HealthIcon + " " + currentCUBE.health;
-            CUBEShield.text = CUBE.ShieldIcon + " " + currentCUBE.shield;
-            CUBESpeed.text = CUBE.SpeedIcon + " " + currentCUBE.speed;
-            CUBEDamage.text = CUBE.DamageIcon + " " + currentCUBE.damage;
+            SetCUBEInfo(currentCUBE);
 
             grid.CreateCUBE(ID);
         }
@@ -985,7 +983,6 @@ namespace SpaceCUBEs
             mainCamera.camera.rect = new Rect(0.25f, 0f, 1f, 1f);
             menuPanels[2].SetActive(true);
             infoPanel.SetActive(true);
-            actionButton1.ActivateEvent += OnDeleteButtonPressed;
             actionButton2.ActivateEvent += OnActionButtonPressed;
             States.SetUpdate(NavUpdate());
             StartCoroutine("SaveConfirmation");
@@ -1051,7 +1048,7 @@ namespace SpaceCUBEs
                 }
 
                 // update ship stats
-                UpdateInfoPanel();
+                SetShipInfo();
 
                 // reset camera
                 ResetCamera(InfoPanelRect, NavMenuButtonsRect);
@@ -1065,16 +1062,8 @@ namespace SpaceCUBEs
         {
             menuPanels[2].SetActive(false);
             infoPanel.SetActive(false);
-            actionButton1.ActivateEvent -= OnDeleteButtonPressed;
             actionButton2.ActivateEvent -= OnActionButtonPressed;
             StopCoroutine("SaveConfirmation");
-        }
-
-
-        private void OnDeleteButtonPressed(object sender, ActivateButtonArgs args)
-        {
-            if (!args.isPressed) return;
-            grid.DeleteCUBE();
         }
 
 
@@ -1145,7 +1134,7 @@ namespace SpaceCUBEs
                 paintPostionLabel.text = "Position " + (grid.cursor + Vector3.one).ToString("0");
 
                 UpdatePieces();
-                UpdateInfoPanel();
+                SetShipInfo();
 
                 // reset camera
                 ResetCamera(InfoPanelRect, NavMenuButtonsRect);
@@ -1413,7 +1402,7 @@ namespace SpaceCUBEs
                 }
 
                 // update ship stats
-                UpdateInfoPanel();
+                SetShipInfo();
 
                 // update weapon buttons
                 for (int i = 0; i < weaponExpansions; i++)
@@ -1543,16 +1532,16 @@ namespace SpaceCUBEs
 
         #region Info Panel Methods
 
-        private void UpdateInfoPanel()
+        private void SetShipInfo()
         {
             // name
-            grid.buildName = shipName.value;
+            //grid.buildName = shipName.value;
 
             // stats
-            shipHealth.text = CUBE.HealthIcon + " " + grid.CurrentStats.health;
-            shipShield.text = CUBE.ShieldIcon + " " + grid.CurrentStats.shield;
-            shipSpeed.text = CUBE.SpeedIcon + " " + grid.CurrentStats.speed;
-            shipDamage.text = CUBE.DamageIcon + " " + grid.CurrentStats.damage;
+            shipHealth.text = grid.CurrentStats.health.ToString();
+            shipShield.text = grid.CurrentStats.shield.ToString();
+            shipSpeed.text = grid.CurrentStats.speed.ToString();
+            shipDamage.text = grid.CurrentStats.damage.ToString();
         }
 
         #endregion
@@ -1653,12 +1642,60 @@ namespace SpaceCUBEs
 
 
         /// <summary>
-        /// 
+        /// Rotate the cursor inside the grid.
         /// </summary>
-        /// <param name="direction"></param>
+        /// <param name="direction">Local rotation axis.</param>
         public void RotateCursor(Vector3 direction)
         {
             grid.RotateCursor(direction);
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="info"></param>
+        public void SetCUBEInfo(CUBEInfo info)
+        {
+            if (info == null)
+            {
+                CUBEName.text = string.Empty;
+                CUBEHealth.text = string.Empty;
+                CUBEShield.text =string.Empty;
+                CUBESpeed.text = string.Empty;
+                CUBEDamage.text = string.Empty;
+                return;
+            }
+
+            CUBEName.text = info.name;
+            CUBEHealth.text = CUBE.HealthIcon + " " + info.health;
+            CUBEShield.text = CUBE.ShieldIcon + " " + info.shield;
+            CUBESpeed.text = CUBE.SpeedIcon + " " + info.speed;
+            CUBEDamage.text = CUBE.DamageIcon + " " + info.damage;
+        }
+
+        #endregion
+
+        #region Events
+
+        private void OnCursorStatusChanged(ConstructionGrid.CursorStatuses previousStatus, ConstructionGrid.CursorStatuses currentStatus)
+        {
+            switch (currentStatus)
+            {
+                case ConstructionGrid.CursorStatuses.Holding:
+                    SetCUBEInfo(grid.heldInfo);
+                    SetShipInfo();
+                    break;
+
+                case ConstructionGrid.CursorStatuses.Hover:
+                    SetCUBEInfo(CUBE.AllCUBES[grid.hoveredCUBE.ID]);
+                    break;
+
+                case ConstructionGrid.CursorStatuses.None:
+                    SetCUBEInfo(null);
+                    SetShipInfo();
+                    break;
+            }
         }
 
         #endregion

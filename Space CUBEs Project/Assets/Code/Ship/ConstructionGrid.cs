@@ -114,6 +114,8 @@ namespace SpaceCUBEs
 
         public const int BuildSize = 10;
 
+        private static readonly Vector3 StartCursorPosition = new Vector3(4f, 5f, 4f);
+
         /// <summary>File name for save data that contains all builds.</summary>
         public const string BuildsFolder = @"Builds/";
 
@@ -284,7 +286,7 @@ namespace SpaceCUBEs
             }
 
             // set current layer and cursor
-            cursor = new Vector3(4, 5, 4);
+            cursor = StartCursorPosition;
 
             // create ship
             if (ship == null)
@@ -411,7 +413,7 @@ namespace SpaceCUBEs
             StartBlink(heldCUBE.renderer);
 
             // reset cursorOffset when creating new type of CUBE
-            if (heldInfo.ID != CUBEID)
+            if (heldInfo == null || heldInfo.ID != CUBEID)
             {
                 cursorOffset = Vector3.zero;
             }
@@ -455,7 +457,6 @@ namespace SpaceCUBEs
             Clear();
 
             // run through build list and create build (this adds stats)
-            Vector3 position = cursor;
             foreach (var piece in buildInfo.partList)
             {
                 // position
@@ -467,7 +468,9 @@ namespace SpaceCUBEs
                 // place
                 PlaceCUBE(piece.Value.weaponMap, piece.Value.augmentationMap);
             }
-            cursor = position;
+            cursor = StartCursorPosition;
+
+            UpdateGrid();
         }
 
 

@@ -1116,7 +1116,11 @@ MonoBehaviour:
   pressedSprite2D: {fileID: 0}
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
-  onClick: []
+  onClick:
+  - mTarget: {fileID: 330648654}
+    mMethodName: RotateZRight
+    mParameters: []
+    oneShot: 0
 --- !u!65 &76230209
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2559,7 +2563,7 @@ Transform:
   m_Children:
   - {fileID: 738244096}
   m_Father: {fileID: 533655217}
-  m_RootOrder: 5
+  m_RootOrder: 4
 --- !u!114 &209023949
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2729,7 +2733,6 @@ Transform:
   m_Children:
   - {fileID: 1497629108}
   - {fileID: 1419818371}
-  - {fileID: 1581512733}
   - {fileID: 1899832508}
   - {fileID: 1926407750}
   - {fileID: 2067485435}
@@ -5369,6 +5372,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2000
+  pickupPlaceLabel: {fileID: 2011522458}
   buttons:
   - buttons:
     - {fileID: 1225038919}
@@ -6479,7 +6483,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 533655217}
-  m_RootOrder: 3
+  m_RootOrder: 2
 --- !u!114 &490892577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7634,7 +7638,6 @@ Transform:
   m_Children:
   - {fileID: 400409791}
   - {fileID: 1866919795}
-  - {fileID: 2094239200}
   - {fileID: 490892576}
   - {fileID: 1501518679}
   - {fileID: 209023948}
@@ -15639,7 +15642,7 @@ Transform:
   m_Children:
   - {fileID: 535646005}
   m_Father: {fileID: 533655217}
-  m_RootOrder: 6
+  m_RootOrder: 5
 --- !u!114 &1202622692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17008,7 +17011,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1294868597}
   m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: 0, y: 25, z: .600002944}
+  m_LocalPosition: {x: 0, y: 25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1659943252}
@@ -18065,16 +18068,16 @@ MonoBehaviour:
   navButtons: {fileID: 0}
   actionButtons: {fileID: 451820593}
   cubeHUD: {fileID: 533655216}
-  shipName: {fileID: 698365425}
-  shipHealth: {fileID: 253875753}
-  shipShield: {fileID: 2101795604}
-  shipSpeed: {fileID: 27383516}
-  shipDamage: {fileID: 1272572689}
-  CUBEName: {fileID: 628387866}
-  CUBEHealth: {fileID: 2037081664}
-  CUBEShield: {fileID: 553731458}
-  CUBESpeed: {fileID: 2096113584}
-  CUBEDamage: {fileID: 1579866858}
+  shipName: {fileID: 1581512734}
+  shipHealth: {fileID: 704033538}
+  shipShield: {fileID: 1778600682}
+  shipSpeed: {fileID: 838226299}
+  shipDamage: {fileID: 778543924}
+  CUBEName: {fileID: 2094239201}
+  CUBEHealth: {fileID: 1862725018}
+  CUBEShield: {fileID: 1268871973}
+  CUBESpeed: {fileID: 1469303566}
+  CUBEDamage: {fileID: 417340542}
   CUBESelectionButton_Prefab: {fileID: 100002, guid: dc404455588e72547b17bf2a83af057c,
     type: 2}
   leftFilter: {fileID: 1323708996}
@@ -18492,7 +18495,11 @@ MonoBehaviour:
   pressedSprite2D: {fileID: 0}
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
-  onClick: []
+  onClick:
+  - mTarget: {fileID: 330648654}
+    mMethodName: RotateZLeft
+    mParameters: []
+    oneShot: 0
 --- !u!65 &1370128342
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -18899,7 +18906,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -11, y: 80, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1581512733}
   m_Father: {fileID: 228716851}
   m_RootOrder: 1
 --- !u!114 &1419818372
@@ -20133,7 +20141,7 @@ Transform:
   m_Children:
   - {fileID: 432620465}
   m_Father: {fileID: 533655217}
-  m_RootOrder: 4
+  m_RootOrder: 3
 --- !u!114 &1501518680
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21546,11 +21554,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1581512732}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -143, y: 77, z: 0}
+  m_LocalPosition: {x: -132.011444, y: -2.99383545, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 228716851}
-  m_RootOrder: 2
+  m_Father: {fileID: 1419818371}
+  m_RootOrder: 0
 --- !u!114 &1581512734
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21629,7 +21637,7 @@ MonoBehaviour:
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 0}
   mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
-  mText: CUBE Name
+  mText: Ship Name
   mFontSize: 30
   mFontStyle: 0
   mAlignment: 0
@@ -25386,7 +25394,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 13, y: 81, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 2094239200}
   m_Father: {fileID: 533655217}
   m_RootOrder: 1
 --- !u!114 &1866919796
@@ -25957,7 +25966,7 @@ Transform:
   m_Children:
   - {fileID: 653447134}
   m_Father: {fileID: 228716851}
-  m_RootOrder: 3
+  m_RootOrder: 2
 --- !u!114 &1899832509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26718,7 +26727,7 @@ Transform:
   m_Children:
   - {fileID: 1963942853}
   m_Father: {fileID: 228716851}
-  m_RootOrder: 4
+  m_RootOrder: 3
 --- !u!114 &1926407751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26800,7 +26809,7 @@ Transform:
   - {fileID: 234379413}
   - {fileID: 1023457573}
   m_Father: {fileID: 533655217}
-  m_RootOrder: 7
+  m_RootOrder: 6
 --- !u!114 &1945017074
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28650,7 +28659,11 @@ MonoBehaviour:
   pressedSprite2D: {fileID: 0}
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
-  onClick: []
+  onClick:
+  - mTarget: {fileID: 330648654}
+    mMethodName: RotateYRight
+    mParameters: []
+    oneShot: 0
 --- !u!65 &2041443867
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -28814,7 +28827,7 @@ Transform:
   - {fileID: 870063698}
   - {fileID: 1415281170}
   m_Father: {fileID: 228716851}
-  m_RootOrder: 5
+  m_RootOrder: 4
 --- !u!114 &2067485436
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28958,7 +28971,11 @@ MonoBehaviour:
   pressedSprite2D: {fileID: 0}
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
-  onClick: []
+  onClick:
+  - mTarget: {fileID: 330648654}
+    mMethodName: RotateYLeft
+    mParameters: []
+    oneShot: 0
 --- !u!65 &2083796301
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -29114,11 +29131,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2094239199}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -122, y: 79, z: 0}
+  m_LocalPosition: {x: -135, y: -2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 533655217}
-  m_RootOrder: 2
+  m_Father: {fileID: 1866919795}
+  m_RootOrder: 0
 --- !u!114 &2094239201
 MonoBehaviour:
   m_ObjectHideFlags: 0
