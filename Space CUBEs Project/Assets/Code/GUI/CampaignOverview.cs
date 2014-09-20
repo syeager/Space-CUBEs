@@ -1,7 +1,7 @@
-﻿// Space CUBEs Project-csharp
+﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.07.06
-// Edited: 2014.07.09
+// Edited: 2014.09.17
 
 using System;
 using System.Collections;
@@ -10,6 +10,7 @@ using Annotations;
 using LittleByte.Debug.Attributes;
 using SpaceCUBEs;
 using UnityEngine;
+using LittleByte;
 
 /// <summary>
 /// 
@@ -202,9 +203,9 @@ public class CampaignOverview : MonoBase
         playerSalvage = salvage;
 
         // buttons
-        mainMenuButton.ActivateEvent += (sender, args) => SceneManager.LoadScene(SceneManager.MainMenu, true, true, true);
-        garageButton.ActivateEvent += (sender, args) => SceneManager.LoadScene(SceneManager.Garage, true, true, true);
-        storeButton.ActivateEvent += (sender, args) => SceneManager.LoadScene(SceneManager.Store, true, true, true);
+        mainMenuButton.ActivateEvent += (sender, args) => SceneManager.LoadScene(Scenes.Menus.MainMenu.ToString(), true, true);
+        garageButton.ActivateEvent += (sender, args) => SceneManager.LoadScene(Scenes.Menus.Garage.ToString(), true, true);
+        storeButton.ActivateEvent += (sender, args) => SceneManager.LoadScene(Scenes.Menus.Store.ToString(), true, true);
         replayButton.ActivateEvent += (sender, args) => SceneManager.ReloadScene();
         int nextLevel = ((FormationLevelManager)FormationLevelManager.Main).levelIndex + 1;
         if (nextLevel < FormationLevelManager.LevelNames.Length)

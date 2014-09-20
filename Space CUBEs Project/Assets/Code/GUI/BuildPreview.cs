@@ -18,7 +18,7 @@ public class BuildPreview : MonoBehaviour
 
     #region Private Fields
 
-    public BuildInfo buildInfo { get; private set; }
+    public BuildInfo Info { get; private set; }
 
     #endregion
 
@@ -26,7 +26,7 @@ public class BuildPreview : MonoBehaviour
 
     public void Initialize(BuildInfo buildInfo)
     {
-        this.buildInfo = buildInfo;
+        Info = buildInfo;
 
         nameLabel.text = buildInfo.name;
         healthLabel.text = buildInfo.stats.health.ToString();

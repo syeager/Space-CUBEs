@@ -1,7 +1,7 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2013.11.26
-// Edited: 2014.09.12
+// Edited: 2014.09.19
 
 using System;
 using System.Collections;
@@ -93,7 +93,17 @@ namespace SpaceCUBEs
 
         #region Static Fields
 
-        public static string selectedBuild;
+        private static string selectedBuild;
+
+        public static string SelectedBuild
+        {
+            get { return selectedBuild; }
+            set
+            {
+                selectedBuild = value;
+                SaveData.Save(SelectedBuildKey, selectedBuild);
+            }
+        }
 
         #endregion
 
@@ -106,6 +116,8 @@ namespace SpaceCUBEs
 
         /// <summary>File name for save data that contains all builds.</summary>
         public const string BuildsFolder = @"Builds/";
+
+        public const string SelectedBuildKey = "Selected Build";
 
         public static readonly string[] DevBuilds =
         {
@@ -188,6 +200,12 @@ namespace SpaceCUBEs
 
         /// <summary>Player's CUBE inverntory.</summary>
         public int[] inventory { get; private set; }
+
+        #endregion
+
+        #region Events
+
+        public event Action<CursorStatuses, CursorStatuses> StatusChangedEvent;
 
         #endregion
 
@@ -291,7 +309,7 @@ namespace SpaceCUBEs
             augmentations.Initialize(null, augmentationCount);
 
             // create grid center
-            Center = (Instantiate(Center_Prefab, ship.transform.position, Quaternion.identity) as GameObject).transform;
+            Center = ((GameObject)Instantiate(Center_Prefab, ship.transform.position, Quaternion.identity)).transform;
         }
 
 
@@ -352,17 +370,17 @@ namespace SpaceCUBEs
             if (heldCUBE != null)
             {
                 heldCUBE.transform.position += vector;
-                cursorStatus = CursorStatuses.Holding;
+                SetStatus(CursorStatuses.Holding);
             }
                 // set status to hover
             else if (grid[(int)cursor.y][(int)cursor.z][(int)cursor.x] != null)
             {
-                cursorStatus = CursorStatuses.Hover;
+                SetStatus(CursorStatuses.Hover);
             }
                 // set status to none
             else
             {
-                cursorStatus = CursorStatuses.None;
+                SetStatus(CursorStatuses.None);
             }
 
             UpdateGrid();
@@ -405,7 +423,7 @@ namespace SpaceCUBEs
             PositionCUBE();
 
             // update status
-            cursorStatus = CursorStatuses.Holding;
+            SetStatus(CursorStatuses.Holding);
         }
 
 
@@ -419,7 +437,7 @@ namespace SpaceCUBEs
             StopBlink(heldCUBE.renderer);
             Destroy(heldCUBE.gameObject);
             heldCUBE = null;
-            cursorStatus = hoveredCUBE == null ? CursorStatuses.None : CursorStatuses.Hover;
+            SetStatus(hoveredCUBE == null ? CursorStatuses.None : CursorStatuses.Hover);
         }
 
 
@@ -631,7 +649,7 @@ namespace SpaceCUBEs
             // remove CUBE from build
             RemoveCUBE(cube);
             // set status
-            cursorStatus = CursorStatuses.Holding;
+            SetStatus(CursorStatuses.Holding);
         }
 
 
@@ -777,7 +795,7 @@ namespace SpaceCUBEs
 
             heldCUBE = null;
             // reset
-            cursorStatus = CursorStatuses.Hover;
+            SetStatus(CursorStatuses.Hover);
 
             return true;
         }
@@ -897,10 +915,8 @@ namespace SpaceCUBEs
         /// </summary>
         /// <param name="buildName">Name of the ship.</param>
         /// <returns>BuildInfo for the ship.</returns>
-        public BuildInfo LoadBuild(string buildName)
+        public static BuildInfo LoadBuild(string buildName)
         {
-            this.buildName = buildName;
-
             // get buildInfo string from data
             BuildInfo build = SaveData.Load<BuildInfo>(buildName, BuildsFolder);
             if (build == null)
@@ -974,6 +990,16 @@ namespace SpaceCUBEs
             }
         }
 
+
+        private void SetStatus(CursorStatuses nextStatus)
+        {
+            if (StatusChangedEvent != null)
+            {
+                StatusChangedEvent.Invoke(cursorStatus, nextStatus);
+            }
+            cursorStatus = nextStatus;
+        }
+
         #endregion
 
         #region Static Methods
@@ -1021,6 +1047,12 @@ namespace SpaceCUBEs
             string buildInfo = SaveData.Load<string>(oldName, BuildsFolder);
             SaveData.Delete(oldName);
             SaveData.Save(newName, buildInfo, BuildsFolder);
+        }
+
+
+        public static void Load()
+        {
+            selectedBuild = SaveData.Load(SelectedBuildKey, SaveData.DefaultPath, DevBuilds[0]);
         }
 
         #endregion

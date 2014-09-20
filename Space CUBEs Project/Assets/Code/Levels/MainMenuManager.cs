@@ -1,9 +1,10 @@
-﻿// Space CUBEs Project-csharp
+﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.01.15
-// Edited: 2014.05.27
+// Edited: 2014.09.17
 
 using Annotations;
+using LittleByte;
 using LittleByte.Data;
 using SpaceCUBEs;
 using UnityEngine;
@@ -47,9 +48,9 @@ public class MainMenuManager : MonoBehaviour
 
     public void Play()
     {
-        ConstructionGrid.selectedBuild = ConstructionGrid.DevBuilds[0];
+        ConstructionGrid.SelectedBuild = ConstructionGrid.DevBuilds[0];
         int unlocked = SaveData.Load<int>(LevelSelectManager.UnlockedLevelsKey, FormationLevelManager.LevelsFolder);
-        SceneManager.LoadScene(((Levels)unlocked).ToString().SplitCamelCase(), true, true, true);
+        SceneManager.LoadScene(((Scenes.Levels)unlocked).ToString().SplitCamelCase(), true, true);
     }
 
 

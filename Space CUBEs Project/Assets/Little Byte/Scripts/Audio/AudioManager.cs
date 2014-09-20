@@ -7,6 +7,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Annotations;
+using LittleByte;
 using LittleByte.Data;
 using UnityEngine;
 

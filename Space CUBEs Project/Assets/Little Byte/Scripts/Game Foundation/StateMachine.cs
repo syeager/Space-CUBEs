@@ -1,7 +1,7 @@
-﻿// Space CUBEs Project-csharp
+﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2013.12.17
-// Edited: 2014.07.06
+// Edited: 2014.09.19
 
 using System;
 using System.Collections;
@@ -33,6 +33,12 @@ public class StateMachine
     public string currentState { get; private set; }
     public string previousState { get; private set; }
     public Job update { get; private set; }
+
+    #endregion
+
+    #region Events
+
+    public EventHandler<StateChangedArgs> StateChangedEvent;
 
     #endregion
 
@@ -84,6 +90,8 @@ public class StateMachine
             Debugger.Log(owner.name + ": " + currentState + "→" + stateName, owner, Debugger.LogTypes.StateMachines, false);
         }
 #endif
+
+        StateChangedEvent.Fire(this, new StateChangedArgs(previousState, stateName));
 
         // save previous state
         previousState = currentState;
@@ -163,3 +171,20 @@ public class StateMachine
 
     #endregion
 }
+
+#region Classes
+
+public class StateChangedArgs : EventArgs
+{
+    public readonly string previousState;
+    public readonly string currentState;
+
+
+    public StateChangedArgs(string previousState, string currentState)
+    {
+        this.previousState = previousState;
+        this.currentState = currentState;
+    }
+}
+
+#endregion

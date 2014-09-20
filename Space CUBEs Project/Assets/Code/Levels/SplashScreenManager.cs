@@ -1,9 +1,11 @@
-﻿// Space CUBEs Project-csharp
+﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.05.28
-// Edited: 2014.05.28
+// Edited: 2014.09.17
 
 using Annotations;
+using LittleByte;
+using SpaceCUBEs;
 using UnityEngine;
 
 /// <summary>
@@ -108,7 +110,7 @@ public class SplashScreenManager : Singleton<SplashScreenManager>
     private void LoadMainMenu()
     {
         CancelInvoke();
-        SceneManager.LoadScene("Main Menu");
+        SceneManager.LoadScene(Scenes.Scene(Scenes.Menus.MainMenu));
     }
 
     #endregion

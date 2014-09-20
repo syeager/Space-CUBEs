@@ -6,6 +6,7 @@
 using Annotations;
 using UnityEngine;
 using System;
+using LittleByte;
 
 public class LoadingScreenManager : MonoBehaviour
 {
@@ -22,10 +23,6 @@ public class LoadingScreenManager : MonoBehaviour
     {
         // set up GUI
         levelToLoad.text = SceneManager.NextScene + "...";
-
-        // clean
-        Resources.UnloadUnusedAssets();
-        GC.Collect();
     }
 
 

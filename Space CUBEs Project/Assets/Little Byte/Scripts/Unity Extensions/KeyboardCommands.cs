@@ -1,9 +1,12 @@
-﻿// Steve Yeager
-// 4.26.2014
+﻿// Little Byte Games
+// Author: Steve Yeager
+// Created: 2014.04.27
+// Edited: 2014.09.17
 
 using System;
 using UnityEngine;
 using Annotations;
+using LittleByte;
 
 /// <summary>
 /// Script to put keyboard shortcuts that aid in debugging.

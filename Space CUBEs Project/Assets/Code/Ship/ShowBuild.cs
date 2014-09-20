@@ -1,13 +1,14 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.04.06
-// Edited: 2014.09.15
+// Edited: 2014.09.17
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using SpaceCUBEs;
 using UnityEngine;
+using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 /// <summary>
@@ -15,6 +16,12 @@ using Random = UnityEngine.Random;
 /// </summary>
 public static class ShowBuild
 {
+    #region Public Fields
+
+    public static Material material;
+
+    #endregion
+
     #region Public Methods
 
     /// <summary>
@@ -37,8 +44,11 @@ public static class ShowBuild
 
         foreach (var piece in buildInfo.partList)
         {
-            var cube = (CUBE)UnityEngine.Object.Instantiate(GameResources.GetCUBE(piece.Key));
+            var cube = (CUBE)Object.Instantiate(GameResources.GetCUBE(piece.Key));
             cube.transform.parent = transform;
+            Material[] materials = new Material[cube.renderer.materials.Length];
+            materials.SetAll(material);
+            cube.renderer.materials = materials;
 
             cube.transform.localPosition = piece.Value.position.normalized * Random.Range(minDist, maxDist);
             cube.transform.localPosition = Quaternion.Euler(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360)) * cube.transform.localPosition;

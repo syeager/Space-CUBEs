@@ -1,9 +1,10 @@
-﻿// Space CUBEs Project-csharp
+﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.04.03
-// Edited: 2014.06.02
+// Edited: 2014.09.17
 
 using Annotations;
+using LittleByte;
 using UnityEngine;
 
 /// <summary>

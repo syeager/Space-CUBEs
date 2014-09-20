@@ -78,6 +78,7 @@ public class GameStart : Singleton<GameStart>
     {
         GameTime.Initialize();
         CUBE.LoadAllCUBEInfo();
+        ConstructionGrid.Load();
     }
 
 

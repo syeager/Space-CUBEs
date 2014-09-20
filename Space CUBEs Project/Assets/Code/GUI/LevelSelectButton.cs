@@ -4,14 +4,14 @@
 // Edited: 2014.08.24
 
 using System.Text;
-using Annotations;
 using UnityEngine;
+using SpaceCUBEs;
 
 public class LevelSelectButton : UIButton
 {
     #region Public Fields
 
-    public Levels level;
+    public Scenes.Levels level;
     public UILabel nameLabel;
     public GameObject infoBackground;
     public UILabel highScoreLabel;

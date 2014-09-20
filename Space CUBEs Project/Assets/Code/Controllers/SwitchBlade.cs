@@ -4,6 +4,7 @@
 // Edited: 2014.09.08
 
 using System;
+using LittleByte;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;

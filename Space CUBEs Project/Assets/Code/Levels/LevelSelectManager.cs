@@ -1,9 +1,10 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.04.03
-// Edited: 2014.08.24
+// Edited: 2014.09.17
 
 using Annotations;
+using LittleByte;
 using LittleByte.Data;
 using SpaceCUBEs;
 using UnityEngine;
@@ -35,15 +36,15 @@ public class LevelSelectManager : MonoBehaviour
         int unlocked = SaveData.Load<int>(UnlockedLevelsKey, FormationLevelManager.LevelsFolder);
         for (int i = 0; i < unlocked; i++)
         {
-            string key = FormationLevelManager.HighScoreKey + ((Levels)i).ToString().SplitCamelCase();
+            string key = FormationLevelManager.HighScoreKey + ((Scenes.Levels)i).ToString().SplitCamelCase();
             levelButtons[i].highScoreLabel.text = SaveData.Load<int[]>(key)[1].ToString("N");
             levelButtons[i].Toggle(false);
         }
         levelButtons[unlocked].Toggle(true);
-        levelButtons[unlocked].highScoreLabel.text = SaveData.Load(FormationLevelManager.HighScoreKey + ((Levels)unlocked).ToString().SplitCamelCase(), "Default/", new[] {0, 0})[1].ToString("N");
+        levelButtons[unlocked].highScoreLabel.text = SaveData.Load(FormationLevelManager.HighScoreKey + ((Scenes.Levels)unlocked).ToString().SplitCamelCase(), "Default/", new[] {0, 0})[1].ToString("N");
         for (int i = unlocked + 1; i < levelButtons.Length; i++)
         {
-            string key = FormationLevelManager.HighScoreKey + ((Levels)i).ToString().SplitCamelCase();
+            string key = FormationLevelManager.HighScoreKey + ((Scenes.Levels)i).ToString().SplitCamelCase();
             if (SaveData.Contains(key))
             {
                 levelButtons[i].highScoreLabel.text = SaveData.Load<int[]>(key, "Default/", new[] {0, 0})[1].ToString("N");
@@ -58,7 +59,7 @@ public class LevelSelectManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            SceneManager.LoadScene(Menus.MainMenu.ToString().SplitCamelCase());
+            SceneManager.LoadScene(Scenes.Menus.MainMenu.ToString().SplitCamelCase());
         }
     }
 

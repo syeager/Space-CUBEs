@@ -1,12 +1,13 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2013.12.03
-// Edited: 2014.09.08
+// Edited: 2014.09.17
 
 using System.Collections.Generic;
 using Annotations;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using LittleByte;
 
 namespace SpaceCUBEs
 {
@@ -89,7 +90,7 @@ namespace SpaceCUBEs
 
             grid = ((GameObject)Instantiate(GameResources.Main.ConstructionGrid_Prefab, Vector3.zero, Quaternion.identity)).GetComponent<ConstructionGrid>();
 
-            string build = ConstructionGrid.selectedBuild;
+            string build = ConstructionGrid.SelectedBuild;
 #if UNITY_EDITOR
             if (string.IsNullOrEmpty(build))
             {
@@ -228,7 +229,7 @@ namespace SpaceCUBEs
         public void LoadMainMenu()
         {
             GameTime.Pause(false);
-            SceneManager.LoadScene("Main Menu", true);
+            SceneManager.LoadScene(Scenes.Menus.MainMenu.ToString(), true);
         }
 
 

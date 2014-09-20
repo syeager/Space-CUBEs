@@ -1,12 +1,14 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.08.24
-// Edited: 2014.08.24
+// Edited: 2014.09.17
 
 using System;
 using System.Linq;
 using Annotations;
 using UnityEngine;
+using LittleByte;
+using SpaceCUBEs;
 
 public class NavigationBar : Singleton<NavigationBar>
 {
@@ -29,7 +31,7 @@ public class NavigationBar : Singleton<NavigationBar>
     [UsedImplicitly]
     private void Start()
     {
-        UpdateButtons(Application.loadedLevelName);
+        UpdateButtons(Scenes.Menu(Application.loadedLevelName));
     }
 
 
@@ -37,7 +39,7 @@ public class NavigationBar : Singleton<NavigationBar>
     private void OnLevelWasLoaded(int level)
     {
         string levelName = Application.loadedLevelName;
-        root.SetActive(Enum.GetNames(typeof(Menus)).Select(l => l.SplitCamelCase()).Contains(levelName));
+        root.SetActive(Enum.GetNames(typeof(Scenes.Menus)).Select(l => l.SplitCamelCase()).Contains(levelName));
     }
 
     #endregion
@@ -49,47 +51,44 @@ public class NavigationBar : Singleton<NavigationBar>
         Instantiate(optionsMenuPrefab, Vector3.left * 5000f, Quaternion.identity);
     }
 
+
     public void LoadMainMenu()
     {
-        string menu = Menus.MainMenu.ToString().SplitCamelCase();
-        SceneManager.LoadScene(menu);
-        UpdateButtons(menu);
+        SceneManager.LoadScene(Scenes.Scene(Scenes.Menus.MainMenu));
+        UpdateButtons(Scenes.Menus.MainMenu);
     }
 
 
     public void LoadGarage()
     {
-        string menu = Menus.Garage.ToString().SplitCamelCase();
-        SceneManager.LoadScene(menu);
-        UpdateButtons(menu);
+        SceneManager.LoadScene(Scenes.Scene(Scenes.Menus.Garage));
+        UpdateButtons(Scenes.Menus.Garage);
     }
 
 
     public void LoadStore()
     {
-        string menu = Menus.Store.ToString().SplitCamelCase();
-        SceneManager.LoadScene(menu);
-        UpdateButtons(menu);
+        SceneManager.LoadScene(Scenes.Scene(Scenes.Menus.Store));
+        UpdateButtons(Scenes.Menus.Store);
     }
 
 
     public void LoadLevelSelect()
     {
-        string menu = Menus.LevelSelectMenu.ToString().SplitCamelCase();
-        SceneManager.LoadScene(menu);
-        UpdateButtons(menu);
+        SceneManager.LoadScene(Scenes.Scene(Scenes.Menus.LevelSelectMenu));
+        UpdateButtons(Scenes.Menus.LevelSelectMenu);
     }
 
     #endregion
 
     #region Private Methods
 
-    private void UpdateButtons(string menu)
+    private void UpdateButtons(Scenes.Menus menu)
     {
-        mainMenu.isEnabled = menu != Menus.MainMenu.ToString().SplitCamelCase();
-        garage.isEnabled = menu != Menus.Garage.ToString().SplitCamelCase();
-        store.isEnabled = menu != Menus.Store.ToString().SplitCamelCase();
-        levelSelect.isEnabled = menu != Menus.LevelSelectMenu.ToString().SplitCamelCase();
+        mainMenu.isEnabled = menu != Scenes.Menus.MainMenu;
+        garage.isEnabled = menu != Scenes.Menus.Garage;
+        store.isEnabled = menu != Scenes.Menus.Store;
+        levelSelect.isEnabled = menu != Scenes.Menus.LevelSelectMenu;
     }
 
     #endregion

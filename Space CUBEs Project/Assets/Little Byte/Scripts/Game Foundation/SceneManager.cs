@@ -1,80 +1,94 @@
-﻿// Space CUBEs Project-csharp
+﻿// Little Byte Games
 // Author: Steve Yeager
-// Created: 2013.12.03
-// Edited: 2014.07.06
+// Created: 2014.07.31
+// Edited: 2014.08.15
 
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Singleton to transition between scenes.
-/// </summary>
-public class SceneManager : Singleton<SceneManager>
+namespace LittleByte
 {
-    #region Const Fields
-
-    public const string MainMenu = "Main Menu";
-    public const string Garage = "Garage";
-    public const string Store = "Store";
-    public const string Options = "Options Menu";
-
-    #endregion
-
-    #region Properties
-
-    /// <summary>The scene loaded previously to this scene.</summary>
-    public static string PreviousScene { get; private set; }
-
-    /// <summary>The scene to load after the Loading Screen.</summary>
-    public static string NextScene { get; private set; }
-
-    #endregion
-
-    #region Events
-
-    public static event Action<string> SceneLoadEvent; 
-
-    #endregion
-
-    #region Loading Methods
-
     /// <summary>
-    /// Load the next scene and cache data.
+    /// Singleton to transition between scenes.
     /// </summary>
-    /// <param name="nextScene">Name of next scene.</param>
-    /// <param name="loadScreen">Should the Loading Screen be loaded first?</param>
-    /// <param name="unloadUnused">Should unused assests be unloaded?</param>
-    /// <param name="garbageCollect">Should the garbage collector be run?</param>
-    public static void LoadScene(string nextScene, bool loadScreen = false, bool unloadUnused = false, bool garbageCollect = false)
+    public static class SceneManager
     {
-        PreviousScene = Application.loadedLevelName;
-        NextScene = nextScene;
+        #region Const Fields
 
-        Application.LoadLevel(loadScreen ? "Loading Screen" : nextScene);
-        if (SceneLoadEvent != null)
+        public const string LoadScreen = "Load Screen";
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>The scene loaded previously to this scene.</summary>
+        public static string PreviousScene { get; private set; }
+
+        /// <summary>The scene to load after the Loading Screen.</summary>
+        public static string NextScene { get; private set; }
+
+        public static Dictionary<string, object> Payload { get; private set; }
+
+        #endregion
+
+        #region Constructors
+
+        static SceneManager()
         {
-            SceneLoadEvent(nextScene);
+            Payload = new Dictionary<string, object>();
         }
 
-        if (unloadUnused) Resources.UnloadUnusedAssets();
-        if (garbageCollect) GC.Collect();
-    }
+        #endregion
 
+        #region Loading Methods
 
-    /// <summary>
-    /// Reloads the current scene without the Loading Screen.
-    /// </summary>
-    public static void ReloadScene(bool load = false, bool unload = false, bool collect = false)
-    {
-        Application.LoadLevel(Application.loadedLevel);
-        if (SceneLoadEvent != null)
+        /// <summary>
+        /// Load the next scene and cache data.
+        /// </summary>
+        /// <param name="nextScene">Name of next scene.</param>
+        /// <param name="loadScreen">Should the Loading Screen be loaded first?</param>
+        /// <param name="clean">Should the game be cleaned up?</param>
+        public static AsyncOperation LoadScene(string nextScene, bool loadScreen = false, bool clean = false)
         {
-            SceneLoadEvent(NextScene);
+            PreviousScene = Application.loadedLevelName;
+            NextScene = nextScene;
+
+            Application.LoadLevel(loadScreen ? LoadScreen : nextScene);
+            if (clean)
+            {
+                GC.Collect();
+                return Resources.UnloadUnusedAssets();
+            }
+
+            return null;
         }
 
-        if (unload) Resources.UnloadUnusedAssets();
-        if (collect) GC.Collect();
-    }
 
-    #endregion
+        public static AsyncOperation LoadScenePayload(string nextScene, Dictionary<string, object> payload, bool loadScreen, bool clean)
+        {
+            Payload = payload ?? new Dictionary<string, object>();
+            return LoadScene(nextScene, loadScreen, clean);
+        }
+
+
+        public static AsyncOperation LoadScenePayload(string nextScene, string key, object value, bool loadScreen, bool clean)
+        {
+            Payload = new Dictionary<string, object>{{key, value}};
+            return LoadScene(nextScene, loadScreen, clean);
+        }
+
+
+        /// <summary>
+        /// Reloads the current scene without the Loading Screen.
+        /// </summary>
+        public static void ReloadScene(bool load = false, bool unload = false, bool collect = false)
+        {
+            if (unload) Resources.UnloadUnusedAssets();
+            if (collect) GC.Collect();
+            Application.LoadLevel(Application.loadedLevel);
+        }
+
+        #endregion
+    }
 }

@@ -1,32 +1,31 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2013.11.26
-// Edited: 2014.09.15
+// Edited: 2014.09.19
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Annotations;
-using LittleByte.Data;
 using UnityEngine;
 
 namespace SpaceCUBEs
 {
-    public class GarageManager : MonoBase
+    public class GarageManager : Singleton<GarageManager>
     {
         #region References
 
-        public ConstructionGrid Grid;
-        public Transform mainCamera;
+        public ConstructionGrid grid;
 
         #endregion
 
         #region Public Fields
 
-        private const int GridSize = 10;
+        public const string BuildKey = "Build";
 
         [Header("Camera")]
+        public Transform mainCamera;
+
         public float cameraSpeed;
 
         public float zoomSpeed;
@@ -43,24 +42,44 @@ namespace SpaceCUBEs
         public float menuSwipeDist;
 
         [Header("Panels")]
-        public GameObject[] menuPanels;
+        public GameObject garage;
 
+        public GameObject[] menuPanels;
         public GameObject infoPanel;
+        public GameObject navMenu;
 
         public ActivateButton actionButton1;
         public ActivateButton actionButton2;
 
-        [Header("Preview")]
-        public Transform preview;
+        public enum Menus
+        {
+            Edit = 0,
+            Paint = 1,
+            Abilities = 2,
+            View = 3,
+        }
 
-        private GameObject lastPreview;
-        private GameObject currentPreview;
+        public Menus openMenu;
 
-        public float buildTime = 1f;
-        public float releaseTime = 2f;
+        public event Action<Menus, Menus> MenuChangedEvent;
 
-        private Job disjoinJob;
-        private Job joinJob;
+        #endregion
+
+        #region Private Fields
+
+        [SerializeField, UsedImplicitly]
+        private GameObject navButtons;
+
+        [SerializeField, UsedImplicitly]
+        private GarageActionButtons actionButtons;
+
+        #endregion
+
+        #region Edit Fields
+
+        [Header("Edit")]
+        [SerializeField, UsedImplicitly]
+        private GameObject cubeHUD;
 
         #endregion
 
@@ -74,8 +93,6 @@ namespace SpaceCUBEs
         private Vector3 cameraDirection = Vector3.up;
         private float zoom;
 
-        private bool selectedBuild;
-
         private CUBEInfo currentCUBE;
 
         #endregion
@@ -88,19 +105,22 @@ namespace SpaceCUBEs
 
         #region State Fields
 
-        private StateMachine stateMachine;
-        private const string LoadState = "Load";
+        public StateMachine States { get; private set; }
+        private const string EditState = "Edit";
+        private const string PaintState = "Paint";
+        private const string AbilityState = "Ability";
+        private const string ViewState = "View";
+
+
         private const string SelectState = "Select";
         private const string NavState = "Nav";
         private const string WeaponState = "Weapon";
-        private const string PaintState = "Paint";
-        private const string ObservationState = "Observation";
 
         #endregion
 
-        #region Readonly Fields
+        #region Const Fields
 
-        private readonly Vector3[] cameraPositions =
+        private static readonly Vector3[] CameraPositions =
         {
             new Vector3(0, 1, 0),
             new Vector3(0, -1, 0),
@@ -110,7 +130,7 @@ namespace SpaceCUBEs
             new Vector3(0, 0, -1)
         };
 
-        private readonly Vector3[] cameraRotations =
+        private static readonly Vector3[] CameraRotations =
         {
             new Vector3(90, 0, 0),
             new Vector3(270, 180, 0),
@@ -134,22 +154,6 @@ namespace SpaceCUBEs
         public UILabel shipShield;
         public UILabel shipSpeed;
         public UILabel shipDamage;
-
-        #endregion
-
-        #region Load Menu Fields
-
-        [Header("Entrance")]
-        public UIScrollView loadScrollView;
-
-        public UIScrollBar loadScrollBar;
-        public UIGrid loadGrid;
-        public ScrollviewButton buildPreviewButtonPrefab;
-
-        public BuildPreview selectedBuildPreview;
-
-        public GameObject renamePanel;
-        public UIInput renameInput;
 
         #endregion
 
@@ -234,38 +238,48 @@ namespace SpaceCUBEs
 
         #region MonoBehaviour Overrides
 
-        [UsedImplicitly]
-        private void Awake()
+        protected override void Awake()
         {
-            // initialize
-            LoadInitialize();
+            base.Awake();
 
-            // create states
-            stateMachine = new StateMachine(this, LoadState);
-            stateMachine.CreateState(LoadState, LoadEnter, LoadExit);
-            stateMachine.CreateState(SelectState, SelectEnter, SelectExit);
-            stateMachine.CreateState(NavState, NavEnter, NavExit);
-            stateMachine.CreateState(PaintState, PaintEnter, PaintExit);
-            stateMachine.CreateState(WeaponState, WeaponEnter, WeaponExit);
-            stateMachine.CreateState(ObservationState, ObservationEnter, info => { });
+            if (NavigationBar.Main)
+            {
+                NavigationBar.Main.gameObject.SetActive(false);
+            }
 
+            // states
+            States = new StateMachine(this, EditState);
+            States.CreateState(EditState, EditEnter, EditExit);
+            States.CreateState(PaintState, PaintEnter, PaintExit);
+            States.CreateState(AbilityState, PaintEnter, PaintExit);
+            States.CreateState(ViewState, PaintEnter, PaintExit);
+            EditInit();
+            PaintInit();
+            States.Start();
+
+            // grid
+#if UNITY_EDITOR
+            string buildName = ConstructionGrid.SelectedBuild;
+            if (string.IsNullOrEmpty(buildName))
+            {
+                buildName = ConstructionGrid.DevBuilds[0];
+                ConstructionGrid.SelectedBuild = buildName;
+            }
+#else
+            string buildName = ConstructionGrid.SelectedBuild;
+#endif
+            grid.CreateGrid(ConstructionGrid.BuildSize, Player.Weaponlimit, Player.Weaponlimit);
+            grid.CreateBuild(buildName);
+            shipName.value = grid.buildName;
+            corePointsLabel.text = grid.corePointsAvailable.ToString();
+
+            // scene
             cameraTarget = new GameObject("Camera Target").transform;
             StartCoroutine(ResettingCamera());
 
-            // load colors
-            colors = CUBE.LoadColors();
 
-            SelectInit();
+            return;
 
-            // nav menu
-            foreach (ActivateButton button in positionButtons)
-            {
-                button.ActivateEvent += OnPositionButtonPressed;
-            }
-            foreach (ActivateButton button in rotationButtons)
-            {
-                button.ActivateEvent += OnRotationButtonPressed;
-            }
 
             // paint menu
             ActivateButton[] paints = paintGrid.GetComponentsInChildren<ActivateButton>(true);
@@ -306,7 +320,18 @@ namespace SpaceCUBEs
         [UsedImplicitly]
         private void Start()
         {
-            stateMachine.Start();
+            // events
+            actionButtons.PickupPlaceEvent += () =>
+                                              {
+                                                  if (grid.cursorStatus == ConstructionGrid.CursorStatuses.Holding)
+                                                  {
+                                                      grid.PlaceCUBE(true);
+                                                  }
+                                                  else
+                                                  {
+                                                      grid.PickupCUBE();
+                                                  }
+                                              };
         }
 
 
@@ -316,7 +341,7 @@ namespace SpaceCUBEs
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 CancelSave();
-                stateMachine.SetState(stateMachine.previousState);
+                States.SetState(States.previousState);
             }
         }
 
@@ -343,40 +368,34 @@ namespace SpaceCUBEs
         {
             if (moveRight)
             {
-                switch (stateMachine.currentState)
+                switch (States.currentState)
                 {
-                    case LoadState:
-                        stateMachine.SetState(SelectState);
-                        break;
                     case SelectState:
-                        stateMachine.SetState(NavState);
+                        States.SetState(NavState);
                         break;
                     case NavState:
-                        stateMachine.SetState(PaintState);
+                        States.SetState(PaintState);
                         break;
                     case PaintState:
-                        stateMachine.SetState(WeaponState);
+                        States.SetState(WeaponState);
                         break;
                 }
 
                 menuNavButtons[0].isEnabled = true;
-                menuNavButtons[1].isEnabled = stateMachine.currentState != WeaponState;
+                menuNavButtons[1].isEnabled = States.currentState != WeaponState;
             }
             else
             {
-                switch (stateMachine.currentState)
+                switch (States.currentState)
                 {
-                    case SelectState:
-                        stateMachine.SetState(LoadState);
-                        break;
                     case NavState:
-                        stateMachine.SetState(SelectState);
+                        States.SetState(SelectState);
                         break;
                     case PaintState:
-                        stateMachine.SetState(NavState);
+                        States.SetState(NavState);
                         break;
                     case WeaponState:
-                        stateMachine.SetState(PaintState);
+                        States.SetState(PaintState);
                         break;
                 }
 
@@ -415,7 +434,7 @@ namespace SpaceCUBEs
         /// <returns></returns>
         private Vector3 CalculateTargetPostion(Vector3 direction)
         {
-            return (Grid.layer + direction * zoom).Round();
+            return (grid.layer + direction * zoom).Round();
         }
 
 
@@ -438,114 +457,114 @@ namespace SpaceCUBEs
         {
 #if UNITY_STANDALONE
 
-    // move CUBE
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            Grid.MoveCursor(-cameraTarget.right);
-        }
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            Grid.MoveCursor(cameraTarget.right);
-        }
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            Grid.MoveCursor(cameraTarget.up);
-        }
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            Grid.MoveCursor(-cameraTarget.up);
-        }
+            // move CUBE
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                grid.MoveCursor(-cameraTarget.right);
+            }
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                grid.MoveCursor(cameraTarget.right);
+            }
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                grid.MoveCursor(cameraTarget.up);
+            }
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                grid.MoveCursor(-cameraTarget.up);
+            }
 
-        // rotate CUBE
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            if (Input.GetKeyDown(KeyCode.RightArrow))
+            // rotate CUBE
+            if (Input.GetKey(KeyCode.LeftShift))
             {
-                Grid.RotateCursor(cameraTarget.forward);
+                if (Input.GetKeyDown(KeyCode.RightArrow))
+                {
+                    grid.RotateCursor(cameraTarget.forward);
+                }
+                if (Input.GetKeyDown(KeyCode.LeftArrow))
+                {
+                    grid.RotateCursor(-cameraTarget.forward);
+                }
+                if (Input.GetKeyDown(KeyCode.UpArrow))
+                {
+                    grid.RotateCursor(cameraTarget.up);
+                }
+                if (Input.GetKeyDown(KeyCode.DownArrow))
+                {
+                    grid.RotateCursor(-cameraTarget.up);
+                }
             }
-            if (Input.GetKeyDown(KeyCode.LeftArrow))
+                // rotate camera
+            else if (Input.GetKey(KeyCode.LeftControl))
             {
-                Grid.RotateCursor(-cameraTarget.forward);
+                if (Input.GetKeyDown(KeyCode.RightArrow))
+                {
+                    RotateCamera(Vector3.right);
+                }
+                if (Input.GetKeyDown(KeyCode.LeftArrow))
+                {
+                    RotateCamera(Vector3.left);
+                }
+                if (Input.GetKeyDown(KeyCode.UpArrow))
+                {
+                    RotateCamera(Vector3.up);
+                }
+                if (Input.GetKeyDown(KeyCode.DownArrow))
+                {
+                    RotateCamera(Vector3.down);
+                }
             }
-            if (Input.GetKeyDown(KeyCode.UpArrow))
+                // change layer
+            else
             {
-                Grid.RotateCursor(cameraTarget.up);
+                if (Input.GetKeyDown(KeyCode.UpArrow))
+                {
+                    grid.MoveCursor(cameraTarget.forward);
+                    CameraZoom(0f);
+                }
+                if (Input.GetKeyDown(KeyCode.DownArrow))
+                {
+                    grid.MoveCursor(-cameraTarget.forward);
+                    CameraZoom(0f);
+                }
             }
-            if (Input.GetKeyDown(KeyCode.DownArrow))
-            {
-                Grid.RotateCursor(-cameraTarget.up);
-            }
-        }
-            // rotate camera
-        else if (Input.GetKey(KeyCode.LeftControl))
-        {
-            if (Input.GetKeyDown(KeyCode.RightArrow))
-            {
-                RotateCamera(Vector3.right);
-            }
-            if (Input.GetKeyDown(KeyCode.LeftArrow))
-            {
-                RotateCamera(Vector3.left);
-            }
-            if (Input.GetKeyDown(KeyCode.UpArrow))
-            {
-                RotateCamera(Vector3.up);
-            }
-            if (Input.GetKeyDown(KeyCode.DownArrow))
-            {
-                RotateCamera(Vector3.down);
-            }
-        }
-            // change layer
-        else
-        {
-            if (Input.GetKeyDown(KeyCode.UpArrow))
-            {
-                Grid.MoveCursor(cameraTarget.forward);
-                CameraZoom(0f);
-            }
-            if (Input.GetKeyDown(KeyCode.DownArrow))
-            {
-                Grid.MoveCursor(-cameraTarget.forward);
-                CameraZoom(0f);
-            }
-        }
 
-        // zoom
-        if (Input.GetKey(KeyCode.R))
-        {
-            CameraZoom(-1f);
-        }
-        if (Input.GetKey(KeyCode.F))
-        {
-            CameraZoom(1f);
-        }
+            // zoom
+            if (Input.GetKey(KeyCode.R))
+            {
+                CameraZoom(-1f);
+            }
+            if (Input.GetKey(KeyCode.F))
+            {
+                CameraZoom(1f);
+            }
 
-        // place/pickup
-        if (Input.GetKeyUp(KeyCode.Space))
-        {
-            OnActionButtonPressed(this, new ActivateButtonArgs(string.Empty, true));
-            corePointsLabel.text = Grid.corePointsAvailable.ToString();
-        }
+            // place/pickup
+            if (Input.GetKeyUp(KeyCode.Space))
+            {
+                OnActionButtonPressed(this, new ActivateButtonArgs(string.Empty, true));
+                corePointsLabel.text = grid.corePointsAvailable.ToString();
+            }
 
-        // delete
-        if (Input.GetKeyUp(KeyCode.Delete))
-        {
-            Grid.DeleteCUBE();
-            corePointsLabel.text = Grid.corePointsAvailable.ToString();
-        }
+            // delete
+            if (Input.GetKeyUp(KeyCode.Delete))
+            {
+                grid.DeleteCUBE();
+                corePointsLabel.text = grid.corePointsAvailable.ToString();
+            }
 
-        // build
-        if (Input.GetKeyUp(KeyCode.Return))
-        {
-            Grid.SaveBuild();
-        }
+            // build
+            if (Input.GetKeyUp(KeyCode.Return))
+            {
+                grid.SaveBuild();
+            }
 
-        // load
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            Grid.CreateBuild("Test Compact");
-        }
+            // load
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                grid.CreateBuild("Test Compact");
+            }
 
 #else
 
@@ -590,9 +609,9 @@ namespace SpaceCUBEs
             cameraDirection = cameraTarget.TransformDirection(direction).Round();
 
             int index = -1;
-            for (int i = 0; i < cameraPositions.Length; i++)
+            for (int i = 0; i < CameraPositions.Length; i++)
             {
-                if (cameraDirection == cameraPositions[i])
+                if (cameraDirection == CameraPositions[i])
                 {
                     index = i;
                     break;
@@ -600,12 +619,12 @@ namespace SpaceCUBEs
             }
 
             // rotate grid
-            Grid.RotateGrid(cameraPositions[index]);
+            grid.RotateGrid(CameraPositions[index]);
 
             // set target position
             cameraTarget.position = CalculateTargetPostion(cameraDirection);
             // get target rotation
-            cameraTarget.rotation = Quaternion.Euler(cameraRotations[index]);
+            cameraTarget.rotation = Quaternion.Euler(CameraRotations[index]);
         }
 
 
@@ -623,10 +642,10 @@ namespace SpaceCUBEs
         private void ResetCamera(params Rect[] restricted)
         {
 #if UNITY_STANDALONE
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            StartCoroutine(ResettingCamera());
-        }
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                StartCoroutine(ResettingCamera());
+            }
 #else
             if (Input.touchCount > 0 && Input.GetTouch(0).tapCount == 2)
             {
@@ -650,7 +669,7 @@ namespace SpaceCUBEs
         /// </summary>
         private IEnumerator ResettingCamera()
         {
-            while (cameraDirection != cameraPositions[0])
+            while (cameraDirection != CameraPositions[0])
             {
                 RotateCamera(Vector3.up);
             }
@@ -739,207 +758,63 @@ namespace SpaceCUBEs
 
         #endregion
 
-        #region Load Menu Methods
+        #region Edit Methods
 
-        private void LoadInitialize()
+        private void EditInit()
         {
-            CreateBuildPreviews();
+            inventory = CUBE.GetInventory();
         }
 
 
-        private void LoadEnter(Dictionary<string, object> info)
+        private void EditEnter(Dictionary<string, object> info)
         {
-            mainCamera.camera.rect = new Rect(0f, 0f, 1f, 1f);
-            menuPanels[0].SetActive(true);
-            NavigationBar.Main.gameObject.SetActive(true);
+            cubeHUD.SetActive(true);
         }
 
 
-        private void LoadExit(Dictionary<string, object> info)
+        private void EditExit(Dictionary<string, object> info)
         {
-            menuPanels[0].SetActive(false);
-            NavigationBar.Main.gameObject.SetActive(false);
-        }
-
-
-        /// <summary>
-        /// Create Construction Grid and position camera.
-        /// </summary>
-        private void CreateGrid()
-        {
-            Grid.CreateGrid(GridSize, BuildStats.GetWeaponExpansion(), BuildStats.GetAugmentationExpansion());
-
-            // position camera
-            Grid.RotateGrid(Vector3.up);
-            cameraTarget.position = CalculateTargetPostion(Vector3.up);
-            cameraTarget.rotation = Quaternion.Euler(cameraRotations[0]);
-        }
-
-
-        private void CreateBuildPreviews()
-        {
-            string[] buildNames = ConstructionGrid.BuildNames().ToArray();
-            for (int i = 0; i < buildNames.Length; i++)
-            {
-                string build = buildNames[i];
-                BuildInfo info = Grid.LoadBuild(build);
-                var button = (ScrollviewButton)Instantiate(buildPreviewButtonPrefab);
-                button.Initialize(build, build, build, loadGrid.transform, loadScrollView);
-                button.GetComponent<BuildPreview>().Initialize(info);
-                button.ActivateEvent += OnBuildChosen;
-
-                if (i == 0)
-                {
-                    OnBuildChosen(button, new ActivateButtonArgs(build, false));
-                }
-            }
-        }
-
-
-        public void LoadMainMenu()
-        {
-            SceneManager.LoadScene("Main Menu");
-        }
-
-
-        public void LoadStore()
-        {
-            SceneManager.LoadScene("Store");
-        }
-
-
-        private void OnBuildChosen(object sender, ActivateButtonArgs args)
-        {
-            if (args.isPressed) return;
-            if (ConstructionGrid.selectedBuild == args.value) return;
-
-            ConstructionGrid.selectedBuild = args.value;
-            ScrollviewButton button = (ScrollviewButton)sender;
-            BuildInfo buildInfo = button.GetComponent<BuildPreview>().buildInfo;
-            selectedBuildPreview.Initialize(buildInfo);
-
-            // release
-            if (currentPreview != null)
-            {
-                if (disjoinJob != null)
-                {
-                    disjoinJob.Kill();
-                    Destroy(lastPreview);
-                }
-                lastPreview = currentPreview;
-                disjoinJob = new Job(ShowBuild.Disjoin(lastPreview.transform, releaseTime, () => Destroy(lastPreview))); 
-            }
-            
-            // build
-            currentPreview = new GameObject();
-            currentPreview.transform.parent = preview;
-            currentPreview.transform.localPosition = new Vector3(-0.5f, -0.5f, -0.5f);
-
-            if (joinJob != null)
-            {
-                joinJob.Kill();
-            }
-            joinJob = new Job(ShowBuild.Join(buildInfo, ConstructionGrid.BuildSize, currentPreview.transform, buildTime));
+            cubeHUD.SetActive(false);
         }
 
 
         /// <summary>
-        /// Delete selected build from data.
+        /// Handler for cube selection filter button pressed.
         /// </summary>
-        public void DeleteBuild()
+        private void OnFilterChanged(object sender, ActivateButtonArgs args)
         {
-            if (string.IsNullOrEmpty(ConstructionGrid.selectedBuild)) return;
+            if (!args.isPressed) return;
 
-            // delete build
-            ConstructionGrid.DeleteBuild(ConstructionGrid.selectedBuild);
-
-            // remove build button
-            ScrollviewButton button = loadGrid.GetComponentsInChildren<ScrollviewButton>().First(b => b.value == ConstructionGrid.selectedBuild);
-            button.ActivateEvent -= OnBuildChosen;
-            Destroy(button.gameObject);
-
-            // reload grid
-            StartCoroutine(Utility.UpdateScrollView(loadGrid, loadScrollBar, loadScrollView));
-
-            ConstructionGrid.selectedBuild = ConstructionGrid.BuildNames()[0];
+            FilterCUBEs(selectionIndex + int.Parse(args.value));
         }
 
 
-        public void ConfirmRename()
+        /// <summary>
+        /// Show cubes associated with this filter index.
+        /// </summary>
+        private void FilterCUBEs(int index)
         {
-            renamePanel.SetActive(true);
-            renameInput.value = ConstructionGrid.selectedBuild;
+            // active selection
+            selections[selectionIndex].SetActive(false);
+            selectionIndex = Mathf.Clamp(index, 0, selections.Length - 1);
+            selections[selectionIndex].SetActive(true);
+            selectionScrollViews[selectionIndex].UpdateScrollbars();
+
+            // toggle filter buttons
+            leftFilter.isEnabled = selectionIndex > 0;
+            rightFilter.isEnabled = selectionIndex < selections.Length - 1;
+
+            // set filter
+            filterLabel.text = Enum.GetNames(typeof(CUBE.Types))[selectionIndex];
         }
 
+        #endregion
 
-        public void RenameBuild()
+        #region Paint Methods
+
+        private void PaintInit()
         {
-            ConstructionGrid.RenameBuild(ConstructionGrid.selectedBuild, renameInput.value);
-            renamePanel.SetActive(false);
-
-            ScrollviewButton button = loadGrid.GetComponentsInChildren<ScrollviewButton>().First(b => b.value == ConstructionGrid.selectedBuild);
-            ConstructionGrid.selectedBuild = renameInput.value;
-            button.value = ConstructionGrid.selectedBuild;
-            button.label.text = ConstructionGrid.selectedBuild;
-        }
-
-
-        public void CancelRename()
-        {
-            renamePanel.SetActive(false);
-        }
-
-
-        public void LoadBuild()
-        {
-            if (!selectedBuild)
-            {
-                CreateGrid();
-            }
-            Grid.CreateBuild(ConstructionGrid.selectedBuild);
-            shipName.value = Grid.buildName;
-            corePointsLabel.text = Grid.corePointsAvailable.ToString();
-            stateMachine.SetState(SelectState, new Dictionary<string, object>());
-            selectedBuild = true;
-        }
-
-
-        public void NewBuild()
-        {
-            CreateGrid();
-
-            shipName.value = CustomName();
-
-            corePointsLabel.text = Grid.corePointsAvailable.ToString();
-            stateMachine.SetState(SelectState);
-            selectedBuild = true;
-        }
-
-
-        public void CopyBuild()
-        {
-            // TODO
-        }
-
-
-        private static string CustomName()
-        {
-            const string custom = "Custom";
-            int i = 1;
-            while (true)
-            {
-                if (!SaveData.Contains(custom + i, ConstructionGrid.BuildsFolder))
-                {
-                    return custom + i;
-                }
-                i++;
-            }
-        }
-
-
-        public void Play()
-        {
-            SceneManager.LoadScene("Level Select Menu", true);
+            colors = CUBE.LoadColors();
         }
 
         #endregion
@@ -948,8 +823,6 @@ namespace SpaceCUBEs
 
         private void SelectInit()
         {
-            inventory = CUBE.GetInventory();
-
             foreach (GameObject selection in selections)
             {
                 selection.SetActive(true);
@@ -974,17 +847,9 @@ namespace SpaceCUBEs
 
         private void SelectEnter(Dictionary<string, object> info)
         {
-#if UNITY_ANDROID
-            touchRect = new Rect(0f, 0.125f, 1f, 1f);
-#endif
-
-            mainCamera.camera.rect = new Rect(0.25f, 0f, 1f, 1f);
-            menuPanels[1].SetActive(true);
-            infoPanel.SetActive(true);
-
             FilterCUBEs(selectionIndex);
 
-            stateMachine.SetUpdate(SelectUpdate());
+            States.SetUpdate(SelectUpdate());
             StartCoroutine("SaveConfirmation");
         }
 
@@ -1007,13 +872,9 @@ namespace SpaceCUBEs
 
                 // change menu
                 int dir = MenuSwipe();
-                if (dir == -1)
+                if (dir == 1)
                 {
-                    stateMachine.SetState(LoadState);
-                }
-                else if (dir == 1)
-                {
-                    stateMachine.SetState(NavState);
+                    States.SetState(NavState);
                 }
 
                 // reset camera
@@ -1032,26 +893,6 @@ namespace SpaceCUBEs
             infoPanel.SetActive(false);
             actionButton2.ActivateEvent -= OnNavMenuPressed;
             StopCoroutine("SaveConfirmation");
-        }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private void FilterCUBEs(int index)
-        {
-            // active selection
-            selections[selectionIndex].SetActive(false);
-            selectionIndex = Mathf.Clamp(index, 0, selections.Length - 1);
-            selections[selectionIndex].SetActive(true);
-            selectionScrollViews[selectionIndex].UpdateScrollbars();
-
-            // toggle filter buttons
-            leftFilter.isEnabled = selectionIndex > 0;
-            rightFilter.isEnabled = selectionIndex < selections.Length - 1;
-
-            // set filter
-            filterLabel.text = Enum.GetNames(typeof(CUBE.Types))[selectionIndex];
         }
 
 
@@ -1107,24 +948,11 @@ namespace SpaceCUBEs
         }
 
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
-        private void OnFilterChanged(object sender, ActivateButtonArgs args)
-        {
-            if (!args.isPressed) return;
-
-            FilterCUBEs(selectionIndex + int.Parse(args.value));
-        }
-
-
         private void OnNavMenuPressed(object sender, ActivateButtonArgs args)
         {
             if (args.isPressed) return;
 
-            stateMachine.SetState(NavState);
+            States.SetState(NavState);
         }
 
 
@@ -1141,7 +969,7 @@ namespace SpaceCUBEs
             CUBESpeed.text = CUBE.SpeedIcon + " " + currentCUBE.speed;
             CUBEDamage.text = CUBE.DamageIcon + " " + currentCUBE.damage;
 
-            Grid.CreateCUBE(ID);
+            grid.CreateCUBE(ID);
         }
 
         #endregion
@@ -1159,7 +987,7 @@ namespace SpaceCUBEs
             infoPanel.SetActive(true);
             actionButton1.ActivateEvent += OnDeleteButtonPressed;
             actionButton2.ActivateEvent += OnActionButtonPressed;
-            stateMachine.SetUpdate(NavUpdate());
+            States.SetUpdate(NavUpdate());
             StartCoroutine("SaveConfirmation");
         }
 
@@ -1184,29 +1012,29 @@ namespace SpaceCUBEs
                 int dir = MenuSwipe();
                 if (dir == -1)
                 {
-                    stateMachine.SetState(SelectState);
+                    States.SetState(SelectState);
                 }
                 else if (dir == 1)
                 {
-                    stateMachine.SetState(PaintState);
+                    States.SetState(PaintState);
                 }
 
                 // update position and rotation
-                postionLabel.text = "Position " + (Grid.cursor + Vector3.one).ToString("0");
-                rotationLabel.text = "Rotation " + Grid.cursorRotation.eulerAngles.ToString("0");
+                postionLabel.text = "Position " + (grid.cursor + Vector3.one).ToString("0");
+                rotationLabel.text = "Rotation " + grid.cursorRotation.eulerAngles.ToString("0");
 
                 // update delete button
-                if (Grid.cursorStatus == ConstructionGrid.CursorStatuses.Holding && !actionButton1.isEnabled)
+                if (grid.cursorStatus == ConstructionGrid.CursorStatuses.Holding && !actionButton1.isEnabled)
                 {
                     actionButton1.isEnabled = true;
                 }
-                else if (Grid.cursorStatus != ConstructionGrid.CursorStatuses.Holding && actionButton1.isEnabled)
+                else if (grid.cursorStatus != ConstructionGrid.CursorStatuses.Holding && actionButton1.isEnabled)
                 {
                     actionButton1.isEnabled = false;
                 }
 
                 // update action button
-                switch (Grid.cursorStatus)
+                switch (grid.cursorStatus)
                 {
                     case ConstructionGrid.CursorStatuses.Holding:
                         actionButton2.label.text = "Place";
@@ -1243,62 +1071,10 @@ namespace SpaceCUBEs
         }
 
 
-        private void OnPositionButtonPressed(object sender, ActivateButtonArgs args)
-        {
-            if (!args.isPressed) return;
-
-            switch (args.value)
-            {
-                case "back":
-                    Grid.MoveCursor(-cameraTarget.forward);
-                    CameraZoom(0f);
-                    break;
-                case "forward":
-                    Grid.MoveCursor(cameraTarget.forward);
-                    CameraZoom(0f);
-                    break;
-                case "left":
-                    Grid.MoveCursor(-cameraTarget.right);
-                    break;
-                case "right":
-                    Grid.MoveCursor(cameraTarget.right);
-                    break;
-                case "down":
-                    Grid.MoveCursor(-cameraTarget.up);
-                    break;
-                case "up":
-                    Grid.MoveCursor(cameraTarget.up);
-                    break;
-            }
-        }
-
-
-        private void OnRotationButtonPressed(object sender, ActivateButtonArgs args)
-        {
-            if (!args.isPressed) return;
-
-            switch (args.value)
-            {
-                case "y left":
-                    Grid.RotateCursor(Vector3.up);
-                    break;
-                case "y right":
-                    Grid.RotateCursor(Vector3.down);
-                    break;
-                case "z left":
-                    Grid.RotateCursor(Vector3.forward);
-                    break;
-                case "z right":
-                    Grid.RotateCursor(Vector3.back);
-                    break;
-            }
-        }
-
-
         private void OnDeleteButtonPressed(object sender, ActivateButtonArgs args)
         {
             if (!args.isPressed) return;
-            Grid.DeleteCUBE();
+            grid.DeleteCUBE();
         }
 
 
@@ -1306,17 +1082,17 @@ namespace SpaceCUBEs
         {
             if (!args.isPressed) return;
 
-            switch (Grid.cursorStatus)
+            switch (grid.cursorStatus)
             {
                 case ConstructionGrid.CursorStatuses.Holding:
-                    Grid.PlaceCUBE(true, -1, -1, Grid.heldCUBE.GetComponent<ColorVertices>().colors);
+                    grid.PlaceCUBE(true, -1, -1, grid.heldCUBE.GetComponent<ColorVertices>().colors);
                     break;
                 case ConstructionGrid.CursorStatuses.Hover:
-                    Grid.PickupCUBE();
+                    grid.PickupCUBE();
                     break;
             }
 
-            corePointsLabel.text = Grid.corePointsAvailable.ToString();
+            corePointsLabel.text = grid.corePointsAvailable.ToString();
         }
 
         #endregion
@@ -1332,9 +1108,9 @@ namespace SpaceCUBEs
             actionButton1.ActivateEvent += OnPaint;
             actionButton2.ActivateEvent += OnPaint;
 
-            Grid.DeleteCUBE();
+            grid.DeleteCUBE();
 
-            stateMachine.SetUpdate(PaintUpdate());
+            States.SetUpdate(PaintUpdate());
             StartCoroutine("SaveConfirmation");
         }
 
@@ -1358,15 +1134,15 @@ namespace SpaceCUBEs
                 int dir = MenuSwipe();
                 if (dir == -1)
                 {
-                    stateMachine.SetState(NavState);
+                    States.SetState(NavState);
                 }
                 else if (dir == 1)
                 {
-                    stateMachine.SetState(WeaponState);
+                    States.SetState(WeaponState);
                 }
 
                 // update position and rotation
-                paintPostionLabel.text = "Position " + (Grid.cursor + Vector3.one).ToString("0");
+                paintPostionLabel.text = "Position " + (grid.cursor + Vector3.one).ToString("0");
 
                 UpdatePieces();
                 UpdateInfoPanel();
@@ -1415,13 +1191,13 @@ namespace SpaceCUBEs
         {
             if (args.isPressed) return;
 
-            Grid.Paint(pieceSelected, args.value == "action1" ? primaryColor : secondaryColor);
+            grid.Paint(pieceSelected, args.value == "action1" ? primaryColor : secondaryColor);
         }
 
 
         private void UpdatePieces()
         {
-            if (Grid.cursorStatus == ConstructionGrid.CursorStatuses.Hover)
+            if (grid.cursorStatus == ConstructionGrid.CursorStatuses.Hover)
             {
                 // enable copy to's
                 copyPrimary.isEnabled = true;
@@ -1435,7 +1211,7 @@ namespace SpaceCUBEs
 
                 // enable pieces
                 pieces[pieceSelected].Activate(false);
-                int count = Grid.hoveredCUBE.renderer.sharedMaterials.Length;
+                int count = grid.hoveredCUBE.renderer.sharedMaterials.Length;
                 int cursor = 0;
                 while (cursor < count)
                 {
@@ -1455,7 +1231,7 @@ namespace SpaceCUBEs
                 pieces[pieceSelected].Activate(true);
 
                 // copy colors
-                Color copyColor = colors[Grid.hoveredCUBE.GetComponent<ColorVertices>().colors[pieceSelected]];
+                Color copyColor = colors[grid.hoveredCUBE.GetComponent<ColorVertices>().colors[pieceSelected]];
                 copyPrimary.SetColor(copyColor);
                 copySecondary.SetColor(copyColor);
             }
@@ -1491,7 +1267,7 @@ namespace SpaceCUBEs
             pieces[pieceSelected].Activate(true);
 
             // copy colors
-            Color copyColor = colors[Grid.hoveredCUBE.GetComponent<ColorVertices>().colors[pieceSelected]];
+            Color copyColor = colors[grid.hoveredCUBE.GetComponent<ColorVertices>().colors[pieceSelected]];
             copyPrimary.SetColor(copyColor);
             copySecondary.SetColor(copyColor);
         }
@@ -1509,12 +1285,12 @@ namespace SpaceCUBEs
         {
             if (args.value == "Primary")
             {
-                Color color = colors[Grid.hoveredCUBE.GetComponent<ColorVertices>().colors[pieceSelected]];
+                Color color = colors[grid.hoveredCUBE.GetComponent<ColorVertices>().colors[pieceSelected]];
                 SetPrimaryColor(Array.IndexOf(CUBE.Colors, color));
             }
             else
             {
-                Color color = colors[Grid.hoveredCUBE.GetComponent<ColorVertices>().colors[pieceSelected]];
+                Color color = colors[grid.hoveredCUBE.GetComponent<ColorVertices>().colors[pieceSelected]];
                 SetSecondaryColor(Array.IndexOf(CUBE.Colors, color));
             }
         }
@@ -1527,29 +1303,29 @@ namespace SpaceCUBEs
             switch (args.value)
             {
                 case "back":
-                    Grid.MoveCursor(-cameraTarget.forward);
+                    grid.MoveCursor(-cameraTarget.forward);
                     CameraZoom(0f);
                     UpdatePieces();
                     break;
                 case "forward":
-                    Grid.MoveCursor(cameraTarget.forward);
+                    grid.MoveCursor(cameraTarget.forward);
                     CameraZoom(0f);
                     UpdatePieces();
                     break;
                 case "left":
-                    Grid.MoveCursor(-cameraTarget.right);
+                    grid.MoveCursor(-cameraTarget.right);
                     UpdatePieces();
                     break;
                 case "right":
-                    Grid.MoveCursor(cameraTarget.right);
+                    grid.MoveCursor(cameraTarget.right);
                     UpdatePieces();
                     break;
                 case "down":
-                    Grid.MoveCursor(-cameraTarget.up);
+                    grid.MoveCursor(-cameraTarget.up);
                     UpdatePieces();
                     break;
                 case "up":
-                    Grid.MoveCursor(cameraTarget.up);
+                    grid.MoveCursor(cameraTarget.up);
                     UpdatePieces();
                     break;
             }
@@ -1589,7 +1365,7 @@ namespace SpaceCUBEs
             // weapon buttons
             for (int i = 0; i < weaponExpansions; i++)
             {
-                if (Grid.weapons[i] == null)
+                if (grid.weapons[i] == null)
                 {
                     weaponButtons[i].isEnabled = false;
                 }
@@ -1607,7 +1383,7 @@ namespace SpaceCUBEs
                 button.ActivateEvent += OnWeaponNavButton;
             }
 
-            stateMachine.SetUpdate(WeaponUpdate());
+            States.SetUpdate(WeaponUpdate());
             StartCoroutine("SaveConfirmation");
         }
 
@@ -1633,7 +1409,7 @@ namespace SpaceCUBEs
                 int dir = MenuSwipe();
                 if (dir == -1)
                 {
-                    stateMachine.SetState(PaintState);
+                    States.SetState(PaintState);
                 }
 
                 // update ship stats
@@ -1642,7 +1418,7 @@ namespace SpaceCUBEs
                 // update weapon buttons
                 for (int i = 0; i < weaponExpansions; i++)
                 {
-                    if (Grid.weapons[i] == null)
+                    if (grid.weapons[i] == null)
                     {
                         weaponButtons[i].isEnabled = false;
                         weaponButtons[i].label.text = "Weapon " + (i + 1);
@@ -1651,7 +1427,7 @@ namespace SpaceCUBEs
                     else
                     {
                         weaponButtons[i].isEnabled = true;
-                        weaponButtons[i].label.text = Grid.weapons[i].name;
+                        weaponButtons[i].label.text = grid.weapons[i].name;
                         weaponButtons[i].Activate(i == weaponIndex);
                     }
                 }
@@ -1727,14 +1503,14 @@ namespace SpaceCUBEs
 
             int dir = int.Parse(args.value);
 
-            weaponIndex = Grid.MoveWeaponMap(weaponIndex, dir);
+            weaponIndex = grid.MoveWeaponMap(weaponIndex, dir);
         }
 
 
         private void StartWeaponBlink(int index)
         {
             StopWeaponBlink();
-            Grid.StartBlink(Grid.weapons[index].renderer);
+            grid.StartBlink(grid.weapons[index].renderer);
         }
 
 
@@ -1742,7 +1518,7 @@ namespace SpaceCUBEs
         {
             if (weaponIndex >= 0)
             {
-                Grid.StopBlink(Grid.weapons[weaponIndex].renderer);
+                grid.StopBlink(grid.weapons[weaponIndex].renderer);
             }
         }
 
@@ -1770,13 +1546,13 @@ namespace SpaceCUBEs
         private void UpdateInfoPanel()
         {
             // name
-            Grid.buildName = shipName.value;
+            grid.buildName = shipName.value;
 
             // stats
-            shipHealth.text = CUBE.HealthIcon + " " + Grid.CurrentStats.health;
-            shipShield.text = CUBE.ShieldIcon + " " + Grid.CurrentStats.shield;
-            shipSpeed.text = CUBE.SpeedIcon + " " + Grid.CurrentStats.speed;
-            shipDamage.text = CUBE.DamageIcon + " " + Grid.CurrentStats.damage;
+            shipHealth.text = CUBE.HealthIcon + " " + grid.CurrentStats.health;
+            shipShield.text = CUBE.ShieldIcon + " " + grid.CurrentStats.shield;
+            shipSpeed.text = CUBE.SpeedIcon + " " + grid.CurrentStats.speed;
+            shipDamage.text = CUBE.DamageIcon + " " + grid.CurrentStats.damage;
         }
 
         #endregion
@@ -1787,15 +1563,15 @@ namespace SpaceCUBEs
         private IEnumerator SaveConfirmation()
         {
 #if UNITY_STANDALONE
-        while (true)
-        {
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.S))
+            while (true)
             {
-                ConfirmSave();
-            }
+                if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.S))
+                {
+                    ConfirmSave();
+                }
 
-            yield return null;
-        }
+                yield return null;
+            }
 #else
             while (true)
             {
@@ -1825,7 +1601,7 @@ namespace SpaceCUBEs
         private void ConfirmSave()
         {
             saveConfirmation.SetActive(true);
-            saveShipName.text = Grid.buildName;
+            saveShipName.text = grid.buildName;
             StopCoroutine("SaveConfirmation");
             UICamera.selectedObject = saveButton;
         }
@@ -1833,7 +1609,7 @@ namespace SpaceCUBEs
 
         public void Save()
         {
-            Grid.SaveBuild();
+            grid.SaveBuild();
             saveConfirmation.SetActive(false);
             StartCoroutine("SaveConfirmation");
         }
@@ -1843,6 +1619,46 @@ namespace SpaceCUBEs
         {
             saveConfirmation.SetActive(false);
             StartCoroutine("SaveConfirmation");
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// Change the currently open menu.
+        /// </summary>
+        /// <param name="menu">Menu to switch to.</param>
+        public void ChangeMenu(Menus menu)
+        {
+            if (menu == openMenu) return;
+
+            if (MenuChangedEvent != null)
+            {
+                MenuChangedEvent.Invoke(openMenu, menu);
+            }
+
+            openMenu = menu;
+        }
+
+
+        /// <summary>
+        /// Move the cursor inside the grid.
+        /// </summary>
+        /// <param name="direction">Local unit vector.</param>
+        public void MoveCursor(Vector3 direction)
+        {
+            grid.MoveCursor(cameraTarget.TransformDirection(direction));
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="direction"></param>
+        public void RotateCursor(Vector3 direction)
+        {
+            grid.RotateCursor(direction);
         }
 
         #endregion
