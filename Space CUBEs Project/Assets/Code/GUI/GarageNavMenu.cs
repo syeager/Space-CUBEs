@@ -54,7 +54,7 @@ namespace SpaceCUBEs
 
         public void SetMenu(GarageManager.Menus menu)
         {
-            menuButtons[(int)GarageManager.Main.openMenu].isEnabled = true;
+            menuButtons[(int)GarageManager.Main.OpenMenu].isEnabled = true;
             menuButtons[(int)menu].isEnabled = false;
             
             Toggle(false);
@@ -76,7 +76,7 @@ namespace SpaceCUBEs
         private void Toggle(bool open)
         {
             this.open = open;
-            activeLabel.text = open ? menu : GarageManager.Main.openMenu.ToString();
+            activeLabel.text = open ? menu : GarageManager.Main.OpenMenu.ToString();
 
             foreach (var menuButton in menuButtons)
             {

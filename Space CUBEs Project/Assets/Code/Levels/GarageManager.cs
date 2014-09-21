@@ -1,7 +1,7 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2013.11.26
-// Edited: 2014.09.20
+// Edited: 2014.09.21
 
 using System;
 using System.Collections;
@@ -19,37 +19,61 @@ namespace SpaceCUBEs
 
         #endregion
 
-        #region Public Fields
+        #region State Fields
 
-        public const string BuildKey = "Build";
+        public StateMachine States { get; private set; }
+
+        #endregion
+
+        #region Camera Fields
 
         [Header("Camera")]
-        public Transform mainCamera;
+        private Transform cameraTarget;
 
-        public float cameraSpeed;
+        private Vector3 cameraDirection = Vector3.back;
 
-        public float zoomSpeed;
-        public float zoomMin;
-        public float zoomMax;
-        public float zoomStart;
+        [SerializeField, UsedImplicitly]
+        private Transform mainCamera;
+
+        [SerializeField, UsedImplicitly]
+        private float cameraSpeed;
+
+        [SerializeField, UsedImplicitly]
+        private float zoomSpeed;
+
+        [SerializeField, UsedImplicitly]
+        private float zoomMin;
+
+        [SerializeField, UsedImplicitly]
+        private float zoomMax;
+
+        [SerializeField, UsedImplicitly]
+        private float zoomStart;
+
+        private float zoom;
+
+        #endregion
+
+        #region Touch Fields
 
         [Header("Touch")]
         public float swipeDist;
 
-        public float swipeTime;
-        public float pinchModifier;
-        public float pinchMin;
-        public float menuSwipeDist;
+        [SerializeField, UsedImplicitly]
+        private float swipeTime;
 
-        [Header("Panels")]
-        public GameObject garage;
+        [SerializeField, UsedImplicitly]
+        private float pinchModifier;
 
-        public GameObject[] menuPanels;
-        public GameObject infoPanel;
-        public GameObject navMenu;
+        [SerializeField, UsedImplicitly]
+        private float pinchMin;
 
-        public ActivateButton actionButton1;
-        public ActivateButton actionButton2;
+        [SerializeField, UsedImplicitly]
+        private float menuSwipeDist;
+
+        #endregion
+
+        #region Public Fields
 
         public enum Menus
         {
@@ -59,19 +83,14 @@ namespace SpaceCUBEs
             View = 3,
         }
 
-        public Menus openMenu;
-
-        public event Action<Menus, Menus> MenuChangedEvent;
-
         #endregion
 
         #region Private Fields
 
         [SerializeField, UsedImplicitly]
-        private GameObject navButtons;
-
-        [SerializeField, UsedImplicitly]
         private GarageActionButtons actionButtons;
+
+        private int[] inventory;
 
         #endregion
 
@@ -79,55 +98,25 @@ namespace SpaceCUBEs
 
         [Header("Edit")]
         [SerializeField, UsedImplicitly]
-        private GameObject cubeHUD;
+        private GameObject previewCube;
 
-        #endregion
-
-        #region Private Fields
-
-        private Transform cameraTarget;
-
-        private bool menuOpen;
-        private int[] inventory;
-
-        private Vector3 cameraDirection = Vector3.back;
-        private float zoom;
-
-        private CUBEInfo currentCUBE;
-
-        #endregion
-
-        #region Mobile Fields
-
-        private Rect touchRect;
-
-        #endregion
-
-        #region State Fields
-
-        public StateMachine States { get; private set; }
-        private const string EditState = "Edit";
-        private const string PaintState = "Paint";
-        private const string AbilityState = "Ability";
-        private const string ViewState = "View";
-
-
-        private const string SelectState = "Select";
-        private const string NavState = "Nav";
-        private const string WeaponState = "Weapon";
+        [SerializeField, UsedImplicitly]
+        private PreviewShip previewShip;
 
         #endregion
 
         #region Const Fields
 
+        public const string BuildKey = "Build";
+
         private static readonly Vector3[] CameraPositions =
         {
-            new Vector3(0, 1, 0),
-            new Vector3(0, -1, 0),
-            new Vector3(1, 0, 0),
-            new Vector3(-1, 0, 0),
-            new Vector3(0, 0, 1),
-            new Vector3(0, 0, -1)
+            Vector3.up,
+            Vector3.down,
+            Vector3.right,
+            Vector3.left,
+            Vector3.forward,
+            Vector3.back
         };
 
         private static readonly Vector3[] CameraRotations =
@@ -140,20 +129,20 @@ namespace SpaceCUBEs
             new Vector3(0, 0, 0)
         };
 
-        private static readonly Rect InfoPanelRect = new Rect(0f, 0f, 1f, 0.125f);
-        private static readonly Rect NavMenuButtonsRect = new Rect(0.86f, 0.9f, 0.14f, 0.1f);
+        #endregion
+
+        #region Properties
+
+        public Menus OpenMenu
+        {
+            get { return (Menus)Enum.Parse(typeof(Menus), States.currentState); }
+        }
 
         #endregion
 
-        #region Info Panel Fields
+        #region Events
 
-        [Header("Info")]
-        public UIInput shipName;
-
-        public UILabel shipHealth;
-        public UILabel shipShield;
-        public UILabel shipSpeed;
-        public UILabel shipDamage;
+        public event Action<Menus, Menus> MenuChangedEvent;
 
         #endregion
 
@@ -242,11 +231,11 @@ namespace SpaceCUBEs
             }
 
             // states
-            States = new StateMachine(this, EditState);
-            States.CreateState(EditState, EditEnter, EditExit);
-            States.CreateState(PaintState, PaintEnter, PaintExit);
-            States.CreateState(AbilityState, PaintEnter, PaintExit);
-            States.CreateState(ViewState, PaintEnter, PaintExit);
+            States = new StateMachine(this, Menus.Edit.ToString());
+            States.CreateState(Menus.Edit.ToString(), EditEnter, EditExit);
+            States.CreateState(Menus.Paint.ToString(), PaintEnter, PaintExit);
+            //States.CreateState(AbilityState, PaintEnter, PaintExit);
+            //States.CreateState(ViewState, PaintEnter, PaintExit);
             EditInit();
             PaintInit();
             States.Start();
@@ -264,7 +253,8 @@ namespace SpaceCUBEs
 #endif
             grid.CreateGrid(ConstructionGrid.BuildSize, Player.Weaponlimit, Player.Weaponlimit);
             grid.CreateBuild(buildName);
-            shipName.value = buildName;
+            previewShip.Initialize(buildName, BuildStats.GetCoreCapacity());
+            SetShipInfo();
             corePointsLabel.text = grid.corePointsAvailable.ToString();
 
             // scene
@@ -299,12 +289,6 @@ namespace SpaceCUBEs
             for (int i = weaponExpansions; i < BuildStats.WeaponExpansions[BuildStats.WeaponExpansions.Length - 1]; i++)
             {
                 weaponButtons[i].gameObject.SetActive(false);
-            }
-
-            // info panel
-            foreach (ActivateButton button in menuNavButtons)
-            {
-                button.ActivateEvent += ChangeMenu;
             }
         }
 
@@ -344,61 +328,6 @@ namespace SpaceCUBEs
         #endregion
 
         #region Camera Methods
-
-        /// <summary>
-        /// Event handler for menu nav buttons.
-        /// </summary>
-        public void ChangeMenu(object sender, ActivateButtonArgs args)
-        {
-            if (args.isPressed) return;
-
-            SwitchMenu(args.value == "right");
-        }
-
-
-        /// <summary>
-        /// Switch to the next menu.
-        /// </summary>
-        /// <param name="moveRight">Should we move to the next right menu?</param>
-        private void SwitchMenu(bool moveRight)
-        {
-            if (moveRight)
-            {
-                switch (States.currentState)
-                {
-                    case SelectState:
-                        States.SetState(NavState);
-                        break;
-                    case NavState:
-                        States.SetState(PaintState);
-                        break;
-                    case PaintState:
-                        States.SetState(WeaponState);
-                        break;
-                }
-
-                menuNavButtons[0].isEnabled = true;
-                menuNavButtons[1].isEnabled = States.currentState != WeaponState;
-            }
-            else
-            {
-                switch (States.currentState)
-                {
-                    case NavState:
-                        States.SetState(SelectState);
-                        break;
-                    case PaintState:
-                        States.SetState(NavState);
-                        break;
-                    case WeaponState:
-                        States.SetState(PaintState);
-                        break;
-                }
-
-                menuNavButtons[1].isEnabled = true;
-            }
-        }
-
 
         /// <summary>
         /// 
@@ -634,32 +563,6 @@ namespace SpaceCUBEs
         }
 
 
-        //
-        private void ResetCamera(params Rect[] restricted)
-        {
-#if UNITY_STANDALONE
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                StartCoroutine(ResettingCamera());
-            }
-#else
-            if (Input.touchCount > 0 && Input.GetTouch(0).tapCount == 2)
-            {
-                Vector3 screenPos = mainCamera.camera.ScreenToViewportPoint(Input.GetTouch(0).position);
-
-                if (screenPos.x < 0f) return;
-
-                for (int i = 0; i < restricted.Length; i++)
-                {
-                    if (restricted[i].Contains(screenPos)) return;
-                }
-
-                StartCoroutine(ResettingCamera());
-            }
-#endif
-        }
-
-
         /// <summary>
         /// Return camera back to original position and rotation over time.
         /// </summary>
@@ -764,13 +667,13 @@ namespace SpaceCUBEs
 
         private void EditEnter(Dictionary<string, object> info)
         {
-            cubeHUD.SetActive(true);
+            previewCube.SetActive(true);
         }
 
 
         private void EditExit(Dictionary<string, object> info)
         {
-            cubeHUD.SetActive(false);
+            previewCube.SetActive(false);
         }
 
 
@@ -813,6 +716,20 @@ namespace SpaceCUBEs
             colors = CUBE.LoadColors();
         }
 
+
+        private void PaintEnter(Dictionary<string, object> info)
+        {
+            colorSelector.SetActive(false);
+
+            grid.DeleteCUBE();
+        }
+
+
+        private void PaintExit(Dictionary<string, object> info)
+        {
+            colorSelector.SetActive(false);
+        }
+
         #endregion
 
         #region Selection Menu Methods
@@ -852,16 +769,10 @@ namespace SpaceCUBEs
 
         private IEnumerator SelectUpdate()
         {
-            actionButton1.label.text = "---";
-            actionButton1.isEnabled = false;
-            actionButton2.label.text = "---";
-            actionButton2.isEnabled = false;
-
             while (true)
             {
                 // update camera
                 UpdateCamera();
-                if (UICamera.selectedObject != shipName.gameObject)
                 {
                     CameraMovementEdit();
                 }
@@ -870,11 +781,7 @@ namespace SpaceCUBEs
                 int dir = MenuSwipe();
                 if (dir == 1)
                 {
-                    States.SetState(NavState);
                 }
-
-                // reset camera
-                ResetCamera(InfoPanelRect, NavMenuButtonsRect);
 
                 // update ship stats
                 SetShipInfo();
@@ -885,9 +792,6 @@ namespace SpaceCUBEs
 
         private void SelectExit(Dictionary<string, object> info)
         {
-            menuPanels[1].SetActive(false);
-            infoPanel.SetActive(false);
-            actionButton2.ActivateEvent -= OnNavMenuPressed;
             StopCoroutine("SaveConfirmation");
         }
 
@@ -897,12 +801,6 @@ namespace SpaceCUBEs
         /// </summary>
         private IEnumerator CreateItemButtons()
         {
-            menuPanels[0].SetActive(true);
-            menuPanels[1].SetActive(false);
-            menuPanels[2].SetActive(false);
-            menuPanels[3].SetActive(false);
-            menuPanels[4].SetActive(false);
-            infoPanel.SetActive(false);
             mainCamera.camera.rect = new Rect(0f, 0f, 1f, 1f);
 
             string[] names = Enum.GetNames(typeof(CUBE.Types));
@@ -944,22 +842,12 @@ namespace SpaceCUBEs
         }
 
 
-        private void OnNavMenuPressed(object sender, ActivateButtonArgs args)
-        {
-            if (args.isPressed) return;
-
-            States.SetState(NavState);
-        }
-
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="ID"></param>
         private void SetCurrentCUBE(int ID)
         {
-            currentCUBE = CUBE.AllCUBES[ID];
-
             grid.CreateCUBE(ID);
         }
 
@@ -974,9 +862,6 @@ namespace SpaceCUBEs
 #endif
 
             mainCamera.camera.rect = new Rect(0.25f, 0f, 1f, 1f);
-            menuPanels[2].SetActive(true);
-            infoPanel.SetActive(true);
-            actionButton2.ActivateEvent += OnActionButtonPressed;
             States.SetUpdate(NavUpdate());
             StartCoroutine("SaveConfirmation");
         }
@@ -984,16 +869,10 @@ namespace SpaceCUBEs
 
         private IEnumerator NavUpdate()
         {
-            actionButton1.isEnabled = true;
-            actionButton1.label.text = "Delete";
-            actionButton2.isEnabled = true;
-            actionButton2.label.text = "Place";
-
             while (true)
             {
                 // update camera
                 UpdateCamera();
-                if (UICamera.selectedObject != shipName.gameObject)
                 {
                     CameraMovementEdit();
                 }
@@ -1002,49 +881,18 @@ namespace SpaceCUBEs
                 int dir = MenuSwipe();
                 if (dir == -1)
                 {
-                    States.SetState(SelectState);
                 }
                 else if (dir == 1)
                 {
-                    States.SetState(PaintState);
+                    States.SetState(Menus.Paint.ToString());
                 }
 
                 // update position and rotation
                 postionLabel.text = "Position " + (grid.cursor + Vector3.one).ToString("0");
                 rotationLabel.text = "Rotation " + grid.cursorRotation.eulerAngles.ToString("0");
 
-                // update delete button
-                if (grid.cursorStatus == ConstructionGrid.CursorStatuses.Holding && !actionButton1.isEnabled)
-                {
-                    actionButton1.isEnabled = true;
-                }
-                else if (grid.cursorStatus != ConstructionGrid.CursorStatuses.Holding && actionButton1.isEnabled)
-                {
-                    actionButton1.isEnabled = false;
-                }
-
-                // update action button
-                switch (grid.cursorStatus)
-                {
-                    case ConstructionGrid.CursorStatuses.Holding:
-                        actionButton2.label.text = "Place";
-                        actionButton2.isEnabled = true;
-                        break;
-                    case ConstructionGrid.CursorStatuses.Hover:
-                        actionButton2.label.text = "Pickup";
-                        actionButton2.isEnabled = true;
-                        break;
-                    case ConstructionGrid.CursorStatuses.None:
-                        actionButton2.label.text = "---";
-                        actionButton2.isEnabled = false;
-                        break;
-                }
-
                 // update ship stats
                 SetShipInfo();
-
-                // reset camera
-                ResetCamera(InfoPanelRect, NavMenuButtonsRect);
 
                 yield return null;
             }
@@ -1053,9 +901,6 @@ namespace SpaceCUBEs
 
         private void NavExit(Dictionary<string, object> info)
         {
-            menuPanels[2].SetActive(false);
-            infoPanel.SetActive(false);
-            actionButton2.ActivateEvent -= OnActionButtonPressed;
             StopCoroutine("SaveConfirmation");
         }
 
@@ -1081,33 +926,14 @@ namespace SpaceCUBEs
 
         #region Paint Methods
 
-        private void PaintEnter(Dictionary<string, object> info)
-        {
-            menuPanels[4].SetActive(true);
-            colorSelector.SetActive(false);
-            infoPanel.SetActive(true);
-
-            actionButton1.ActivateEvent += OnPaint;
-            actionButton2.ActivateEvent += OnPaint;
-
-            grid.DeleteCUBE();
-
-            States.SetUpdate(PaintUpdate());
-            StartCoroutine("SaveConfirmation");
-        }
-
-
         private IEnumerator PaintUpdate()
         {
-            actionButton1.label.text = "";
-            actionButton2.label.text = "";
             UpdatePieces();
 
             while (true)
             {
                 // update camera
                 UpdateCamera();
-                if (UICamera.selectedObject != shipName.gameObject)
                 {
                     CameraMovementEdit();
                 }
@@ -1116,11 +942,9 @@ namespace SpaceCUBEs
                 int dir = MenuSwipe();
                 if (dir == -1)
                 {
-                    States.SetState(NavState);
                 }
                 else if (dir == 1)
                 {
-                    States.SetState(WeaponState);
                 }
 
                 // update position and rotation
@@ -1129,26 +953,8 @@ namespace SpaceCUBEs
                 UpdatePieces();
                 SetShipInfo();
 
-                // reset camera
-                ResetCamera(InfoPanelRect, NavMenuButtonsRect);
-
                 yield return null;
             }
-        }
-
-
-        private void PaintExit(Dictionary<string, object> info)
-        {
-            menuPanels[4].SetActive(false);
-            colorSelector.SetActive(false);
-            infoPanel.SetActive(false);
-
-            actionButton1.ActivateEvent -= OnPaint;
-            actionButton1.defaultColor = Color.white;
-            actionButton2.ActivateEvent -= OnPaint;
-            actionButton2.defaultColor = Color.white;
-
-            StopCoroutine("SaveConfirmation");
         }
 
 
@@ -1186,9 +992,7 @@ namespace SpaceCUBEs
                 copySecondary.isEnabled = true;
 
                 // enable paints
-                actionButton1.isEnabled = true;
                 SetPrimaryColor(primaryColor);
-                actionButton2.isEnabled = true;
                 SetSecondaryColor(secondaryColor);
 
                 // enable pieces
@@ -1222,10 +1026,6 @@ namespace SpaceCUBEs
                 // disable copy to's
                 copyPrimary.isEnabled = false;
                 copySecondary.isEnabled = false;
-
-                // disable paints
-                actionButton1.isEnabled = false;
-                actionButton2.isEnabled = false;
 
                 // disable pieces
                 foreach (ActivateButton piece in pieces)
@@ -1317,7 +1117,6 @@ namespace SpaceCUBEs
         private void SetPrimaryColor(int colorIndex)
         {
             primaryColor = colorIndex;
-            actionButton1.Activate(CUBE.Colors[primaryColor]);
             selectPrimary.SetColor(CUBE.Colors[primaryColor]);
         }
 
@@ -1325,7 +1124,6 @@ namespace SpaceCUBEs
         private void SetSecondaryColor(int colorIndex)
         {
             secondaryColor = colorIndex;
-            actionButton2.Activate(CUBE.Colors[secondaryColor]);
             selectSecondary.SetColor(CUBE.Colors[secondaryColor]);
         }
 
@@ -1341,8 +1139,6 @@ namespace SpaceCUBEs
 
             // gui
             mainCamera.camera.rect = new Rect(0.25f, 0f, 1f, 1f);
-            menuPanels[3].SetActive(true);
-            infoPanel.SetActive(true);
 
             // weapon buttons
             for (int i = 0; i < weaponExpansions; i++)
@@ -1372,17 +1168,10 @@ namespace SpaceCUBEs
 
         public IEnumerator WeaponUpdate()
         {
-            // action buttons
-            actionButton1.label.text = "---";
-            actionButton1.isEnabled = false;
-            actionButton2.label.text = "---";
-            actionButton2.isEnabled = false;
-
             while (true)
             {
                 // update camera
                 UpdateCamera();
-                if (UICamera.selectedObject != shipName.gameObject)
                 {
                     CameraMovementEdit();
                 }
@@ -1391,7 +1180,7 @@ namespace SpaceCUBEs
                 int dir = MenuSwipe();
                 if (dir == -1)
                 {
-                    States.SetState(PaintState);
+                    States.SetState(Menus.Paint.ToString());
                 }
 
                 // update ship stats
@@ -1414,9 +1203,6 @@ namespace SpaceCUBEs
                     }
                 }
 
-                // reset camera
-                ResetCamera(InfoPanelRect, NavMenuButtonsRect);
-
                 yield return null;
             }
         }
@@ -1424,8 +1210,6 @@ namespace SpaceCUBEs
 
         public void WeaponExit(Dictionary<string, object> info)
         {
-            menuPanels[3].SetActive(false);
-            infoPanel.SetActive(false);
             StopWeaponBlink();
             weaponIndex = -1;
 
@@ -1531,10 +1315,7 @@ namespace SpaceCUBEs
             //grid.buildName = shipName.value;
 
             // stats
-            shipHealth.text = grid.CurrentStats.health.ToString();
-            shipShield.text = grid.CurrentStats.shield.ToString();
-            shipSpeed.text = grid.CurrentStats.speed.ToString();
-            shipDamage.text = grid.CurrentStats.damage.ToString();
+            previewShip.SetValues(grid.CurrentStats, grid.corePointsAvailable);
         }
 
         #endregion
@@ -1613,14 +1394,14 @@ namespace SpaceCUBEs
         /// <param name="menu">Menu to switch to.</param>
         public void ChangeMenu(Menus menu)
         {
-            if (menu == openMenu) return;
+            if (menu == OpenMenu) return;
 
             if (MenuChangedEvent != null)
             {
-                MenuChangedEvent.Invoke(openMenu, menu);
+                MenuChangedEvent.Invoke(OpenMenu, menu);
             }
 
-            openMenu = menu;
+            States.SetState(menu.ToString());
         }
 
 
