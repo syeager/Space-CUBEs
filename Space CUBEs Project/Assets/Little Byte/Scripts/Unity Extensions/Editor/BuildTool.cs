@@ -45,6 +45,8 @@ public class BuildTool : EditorWindow
 //    private const string EmailWilliams = "sam.erin.williams@gmail.com";
     private const string EmailPassword = "Yeager_7";
 
+    private const string Password = "Yeager_7";
+
     #endregion
 
     #region EditorWindow Overrides
@@ -110,6 +112,9 @@ public class BuildTool : EditorWindow
         Debugger.Print("Building: " + version);
         PlayerSettings.bundleVersion = version;
 
+        // settings
+        PlayerSettings.keystorePass = Password;
+        PlayerSettings.keyaliasPass = Password;
         // build
         string buildPath = BuildPath + PlayerSettings.productName + " " + version + APK;
         BuildPipeline.BuildPlayer(EditorBuildSettings.scenes.Where(s => s.enabled).Select(s => s.path).ToArray(),

@@ -128,6 +128,8 @@ namespace SpaceCUBEs
             "Berserker"
         };
 
+        private const string AlphaName = "_Alpha";
+
         #endregion
 
         #region Properties
@@ -954,7 +956,7 @@ namespace SpaceCUBEs
         /// </summary>
         private void UpdateGrid()
         {
-            Vector3 cursorLayer = new Vector3(viewAxis.x * cursor.x, viewAxis.y * cursor.y, viewAxis.z * cursor.z).Round();
+            Vector3 cursorLayer = cursor.Multipy(viewAxis).Round();
 
             // update cells
             for (int y = 0; y < grid.Length; y++)
@@ -964,7 +966,7 @@ namespace SpaceCUBEs
                     for (int x = 0; x < grid.Length; x++)
                     {
                         var index = new Vector3(x, y, z);
-                        Vector3 currentLayer = new Vector3(viewAxis.x * index.x, viewAxis.y * index.y, viewAxis.z * index.z).Round();
+                        Vector3 currentLayer = index.Multipy(viewAxis).Round();
                         if (currentLayer == cursorLayer && (grid[y][z][x] == null || cursor == index))
                         {
                             cells[y][z][x].SetActive(true);
@@ -977,26 +979,18 @@ namespace SpaceCUBEs
                 }
             }
 
+            // get direction of camera
             float direction = (viewAxis == Vector3.right || viewAxis == Vector3.up || viewAxis == Vector3.forward ? 1f : -1f);
-            Vector3 viewAxisNorm = viewAxis.normalized;
 
             // update CUBEs
             foreach (var cube in currentBuild)
             {
-                Vector3 cPosition = new Vector3(cube.Value.position.x * viewAxis.x, cube.Value.position.y * viewAxis.y, cube.Value.position.z * viewAxis.z).Round();
-                Vector3 difference = cPosition - cursorLayer;
+                Vector3 depth = (CUBE.AllCUBES[cube.Key.ID].size - Vector3.one).Multipy(viewAxis).Round() * direction;
+                Vector3 cubePosition = cube.Value.position.Multipy(viewAxis).Round();
+                Vector3 difference = (cubePosition - depth) - cursorLayer;
 
-                if (difference.normalized * direction == viewAxisNorm)
-                {
-                    foreach (Material mat in cube.Key.renderer.materials)
-                    {
-                        mat.SetFloat("_Alpha", nearAlpha);
-                    }
-                }
-                else
-                {
-                    foreach (Material mat in cube.Key.renderer.materials) mat.SetFloat("_Alpha", 1f);
-                }
+                // if difference vector is facing down camera forward
+                foreach (Material mat in cube.Key.renderer.materials) mat.SetFloat(AlphaName, difference.normalized * direction == viewAxis ? nearAlpha : 1f);
             }
         }
 
@@ -1122,8 +1116,6 @@ namespace SpaceCUBEs
         #endregion
     }
 
-    #region Classes
-
     public class CursorUpdatedArgs : EventArgs
     {
         public readonly ConstructionGrid.CursorStatuses previous;
@@ -1136,6 +1128,4 @@ namespace SpaceCUBEs
             this.current = current;
         }
     }
-
-    #endregion
 }
