@@ -112,7 +112,7 @@ Transform:
   m_PrefabInternal: {fileID: 373307765}
   m_GameObject: {fileID: 118111846}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -18, y: 7, z: 0}
+  m_LocalPosition: {x: -14, y: 9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1024460094}
@@ -148,13 +148,13 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 18
-  mHeight: 15
+  mWidth: 14
+  mHeight: 12
   mDepth: 9
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
-  keepAspectRatio: 0
-  aspectRatio: 1.20000005
+  keepAspectRatio: 1
+  aspectRatio: 1.17647064
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
@@ -165,8 +165,8 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: c49e0b18a2206fa4ea30611008a6dab7, type: 2}
-  mSpriteName: ItemHUD_Triangle
+  mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
+  mSpriteName: Widget_ShipStat_Spd
   mFillCenter: 1
 --- !u!1 &168025243
 GameObject:
@@ -322,7 +322,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tweenTarget: {fileID: 174008625}
   hover: {r: .882352948, g: .784313738, b: .588235319, a: 1}
-  pressed: {r: .717647076, g: .639215708, b: .482352942, a: 1}
+  pressed: {r: .603921592, g: .466666669, b: .698039234, a: 1}
   disabledColor: {r: .5, g: .5, b: .5, a: 1}
   duration: .200000003
   dragHighlight: 0
@@ -412,8 +412,8 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: d3bf3c0a54e363846a4a86b312c0a841, type: 2}
-  mSpriteName: NavButton
+  mAtlas: {fileID: 11400000, guid: b23d7dc3a51931046a1fbdc82310bb5d, type: 2}
+  mSpriteName: Btn_MenuNav
   mFillCenter: 1
 --- !u!1 &193790574
 GameObject:
@@ -552,7 +552,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 232557715}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 41, y: 0, z: 0}
+  m_LocalPosition: {x: 30, y: 0, z: 0}
   m_LocalScale: {x: 1.00007999, y: 1.00007999, z: 1.00007999}
   m_Children: []
   m_Father: {fileID: 1502158318}
@@ -711,6 +711,314 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mAtlas
+      value: 
+      objectReference: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f,
+        type: 2}
+    - target: {fileID: 11400006, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mAtlas
+      value: 
+      objectReference: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f,
+        type: 2}
+    - target: {fileID: 11400012, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mAtlas
+      value: 
+      objectReference: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f,
+        type: 2}
+    - target: {fileID: 11400020, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mAtlas
+      value: 
+      objectReference: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f,
+        type: 2}
+    - target: {fileID: 11400002, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mSpriteName
+      value: Widget_ShipStat
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400006, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mSpriteName
+      value: Widget_ShipStat
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400012, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mSpriteName
+      value: Widget_ShipStat
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400020, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mSpriteName
+      value: Widget_ShipStat
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mWidth
+      value: 46
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: aspectRatio
+      value: 1.43137252
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mHeight
+      value: 32
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: keepAspectRatio
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 62
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400006, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mWidth
+      value: 46
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400006, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: aspectRatio
+      value: 1.4375
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400006, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mHeight
+      value: 32
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400006, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: keepAspectRatio
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400020, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mWidth
+      value: 46
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400020, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: aspectRatio
+      value: 1.4375
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400020, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mHeight
+      value: 32
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400020, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: keepAspectRatio
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400012, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mWidth
+      value: 46
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400012, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: aspectRatio
+      value: 1.4375
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400012, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mHeight
+      value: 32
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400012, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: keepAspectRatio
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400022, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mAtlas
+      value: 
+      objectReference: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f,
+        type: 2}
+    - target: {fileID: 11400022, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mSpriteName
+      value: Widget_ShipStat_Hth
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400022, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mFlip
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mAtlas
+      value: 
+      objectReference: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f,
+        type: 2}
+    - target: {fileID: 11400010, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mAtlas
+      value: 
+      objectReference: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f,
+        type: 2}
+    - target: {fileID: 11400014, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mAtlas
+      value: 
+      objectReference: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f,
+        type: 2}
+    - target: {fileID: 11400014, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mSpriteName
+      value: Widget_ShipStat_Shd
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mSpriteName
+      value: Widget_ShipStat_Spd
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400010, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mSpriteName
+      value: Widget_ShipStat_Dmg
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400010, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mWidth
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400010, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: aspectRatio
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400010, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: keepAspectRatio
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mWidth
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: aspectRatio
+      value: 1.17647064
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: keepAspectRatio
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mWidth
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: aspectRatio
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: keepAspectRatio
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400022, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mWidth
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400022, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: aspectRatio
+      value: 1.06666672
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400022, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: keepAspectRatio
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400022, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mHeight
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400010, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mHeight
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mHeight
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100010, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100014, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100022, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -46
+      objectReference: {fileID: 0}
+    - target: {fileID: 400012, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400020, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400020, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -10
+      objectReference: {fileID: 0}
+    - target: {fileID: 400012, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 26
+      objectReference: {fileID: 0}
+    - target: {fileID: 400010, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -13
+      objectReference: {fileID: 0}
+    - target: {fileID: 400010, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -14
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 400014, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -12
+      objectReference: {fileID: 0}
+    - target: {fileID: 400014, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 400022, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -12
+      objectReference: {fileID: 0}
+    - target: {fileID: 400022, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400014, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: mHeight
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 400016, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 400008, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 400024, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 43adcd2709e69a24aa2403e61da93c47, type: 2}
   m_RootGameObject: {fileID: 1404917364}
@@ -739,7 +1047,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 390005040}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -79.9999847, y: -9.53674316e-07, z: 0}
+  m_LocalPosition: {x: -80, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1725477178}
@@ -776,12 +1084,12 @@ MonoBehaviour:
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 3
   mWidth: 160
-  mHeight: 22
+  mHeight: 26
   mDepth: 5
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 7.27272749
+  aspectRatio: 6.15384626
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 0}
   mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
@@ -884,7 +1192,7 @@ Transform:
   m_PrefabInternal: {fileID: 373307765}
   m_GameObject: {fileID: 410775814}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 61, y: 0, z: 0}
+  m_LocalPosition: {x: 62, y: -1, z: 0}
   m_LocalScale: {x: 1.00007999, y: 1.00007999, z: 1.00007999}
   m_Children:
   - {fileID: 943082656}
@@ -922,13 +1230,13 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 36
-  mHeight: 31
+  mWidth: 46
+  mHeight: 32
   mDepth: 8
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
-  keepAspectRatio: 0
-  aspectRatio: 1.16129029
+  keepAspectRatio: 1
+  aspectRatio: 1.43137252
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
@@ -939,8 +1247,8 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: c49e0b18a2206fa4ea30611008a6dab7, type: 2}
-  mSpriteName: ItemHUD_Stat
+  mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
+  mSpriteName: Widget_ShipStat
   mFillCenter: 1
 --- !u!1 &451979670
 GameObject:
@@ -1140,8 +1448,8 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: c49e0b18a2206fa4ea30611008a6dab7, type: 2}
-  mSpriteName: ItemHUD_Stat
+  mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
+  mSpriteName: Widget_ShipWeap
   mFillCenter: 1
 --- !u!1 &507769694
 GameObject:
@@ -1166,7 +1474,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 507769694}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.52587891e-05, y: -9.53674316e-07, z: 0}
+  m_LocalPosition: {x: -10, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1502158318}
@@ -1257,7 +1565,7 @@ Transform:
   m_PrefabInternal: {fileID: 373307765}
   m_GameObject: {fileID: 517972190}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 4, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1024460094}
@@ -1479,7 +1787,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tweenTarget: {fileID: 564044028}
   hover: {r: .882352948, g: .784313738, b: .588235319, a: 1}
-  pressed: {r: .717647076, g: .639215708, b: .482352942, a: 1}
+  pressed: {r: .603921592, g: .466666669, b: .698039234, a: 1}
   disabledColor: {r: .5, g: .5, b: .5, a: 1}
   duration: .200000003
   dragHighlight: 0
@@ -1569,8 +1877,8 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: d3bf3c0a54e363846a4a86b312c0a841, type: 2}
-  mSpriteName: NavButton
+  mAtlas: {fileID: 11400000, guid: b23d7dc3a51931046a1fbdc82310bb5d, type: 2}
+  mSpriteName: Btn_MenuNav
   mFillCenter: 1
 --- !u!1001 &605502910
 Prefab:
@@ -1639,7 +1947,7 @@ Transform:
   m_PrefabInternal: {fileID: 373307765}
   m_GameObject: {fileID: 611848873}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -47, y: 0, z: 0}
+  m_LocalPosition: {x: -46, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2044062787}
@@ -1677,13 +1985,13 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 36
-  mHeight: 31
+  mWidth: 46
+  mHeight: 32
   mDepth: 8
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
-  keepAspectRatio: 0
-  aspectRatio: 1.16129029
+  keepAspectRatio: 1
+  aspectRatio: 1.4375
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
@@ -1694,8 +2002,8 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: c49e0b18a2206fa4ea30611008a6dab7, type: 2}
-  mSpriteName: ItemHUD_Stat
+  mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
+  mSpriteName: Widget_ShipStat
   mFillCenter: 1
 --- !u!1 &631295040
 GameObject:
@@ -1720,7 +2028,7 @@ Transform:
   m_PrefabInternal: {fileID: 373307765}
   m_GameObject: {fileID: 631295040}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 4, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1616269695}
@@ -1864,8 +2172,8 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: c49e0b18a2206fa4ea30611008a6dab7, type: 2}
-  mSpriteName: ItemHUD_Stat
+  mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
+  mSpriteName: Widget_ShipWeap
   mFillCenter: 1
 --- !u!1 &677092852
 GameObject:
@@ -1924,7 +2232,7 @@ MonoBehaviour:
     relative: 1
     absolute: 0
   updateAnchors: 1
-  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mColor: {r: .760784328, g: .529411793, b: .858823538, a: 1}
   mPivot: 4
   mWidth: 120
   mHeight: 95
@@ -1944,8 +2252,8 @@ MonoBehaviour:
   mAlignment: 0
   mEncoding: 1
   mMaxLineCount: 0
-  mEffectStyle: 1
-  mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mEffectStyle: 2
+  mEffectColor: {r: .4627451, g: .101960786, b: .858823538, a: 1}
   mSymbols: 1
   mEffectDistance: {x: 1, y: 1}
   mOverflow: 0
@@ -2521,8 +2829,8 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: c49e0b18a2206fa4ea30611008a6dab7, type: 2}
-  mSpriteName: ItemHUD_Stat
+  mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
+  mSpriteName: Widget_ShipAug
   mFillCenter: 1
 --- !u!1 &783280883
 GameObject:
@@ -2581,7 +2889,7 @@ MonoBehaviour:
     relative: 1
     absolute: 0
   updateAnchors: 1
-  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mColor: {r: .760784328, g: .529411793, b: .858823538, a: 1}
   mPivot: 4
   mWidth: 120
   mHeight: 95
@@ -2599,8 +2907,8 @@ MonoBehaviour:
   mAlignment: 0
   mEncoding: 1
   mMaxLineCount: 0
-  mEffectStyle: 1
-  mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mEffectStyle: 2
+  mEffectColor: {r: .4627451, g: .101960786, b: .858823538, a: 1}
   mSymbols: 1
   mEffectDistance: {x: 1, y: 1}
   mOverflow: 0
@@ -2729,7 +3037,7 @@ MonoBehaviour:
   anchorOffset: 0
   softBorderPadding: 0
   renderQueue: 0
-  startingRenderQueue: 3008
+  startingRenderQueue: 3010
   mAlpha: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 300, w: 200}
@@ -2834,8 +3142,8 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: c49e0b18a2206fa4ea30611008a6dab7, type: 2}
-  mSpriteName: ItemHUD_Stat
+  mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
+  mSpriteName: Widget_ShipWeap
   mFillCenter: 1
 --- !u!1 &936092051
 GameObject:
@@ -2869,7 +3177,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tweenTarget: {fileID: 936092051}
   hover: {r: .882352948, g: .784313738, b: .588235319, a: 1}
-  pressed: {r: .717647076, g: .639215708, b: .482352942, a: 1}
+  pressed: {r: .603921592, g: .466666669, b: .698039234, a: 1}
   disabledColor: {r: .5, g: .5, b: .5, a: 1}
   duration: .200000003
   dragHighlight: 0
@@ -2959,8 +3267,8 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: d3bf3c0a54e363846a4a86b312c0a841, type: 2}
-  mSpriteName: NavButton
+  mAtlas: {fileID: 11400000, guid: b23d7dc3a51931046a1fbdc82310bb5d, type: 2}
+  mSpriteName: Btn_MenuNav
   mFillCenter: 1
 --- !u!1 &943082655
 GameObject:
@@ -2985,7 +3293,7 @@ Transform:
   m_PrefabInternal: {fileID: 373307765}
   m_GameObject: {fileID: 943082655}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -18, y: 7, z: 0}
+  m_LocalPosition: {x: -13, y: 9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 410775815}
@@ -3021,13 +3329,13 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 18
-  mHeight: 15
+  mWidth: 14
+  mHeight: 14
   mDepth: 9
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
-  keepAspectRatio: 0
-  aspectRatio: 1.20000005
+  keepAspectRatio: 1
+  aspectRatio: 1
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
@@ -3038,8 +3346,8 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: c49e0b18a2206fa4ea30611008a6dab7, type: 2}
-  mSpriteName: ItemHUD_Triangle
+  mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
+  mSpriteName: Widget_ShipStat_Dmg
   mFillCenter: 1
 --- !u!1 &1024460093
 GameObject:
@@ -3064,7 +3372,7 @@ Transform:
   m_PrefabInternal: {fileID: 373307765}
   m_GameObject: {fileID: 1024460093}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 25, y: -0, z: 0}
+  m_LocalPosition: {x: 26, y: -1, z: 0}
   m_LocalScale: {x: 1.00007999, y: 1.00007999, z: 1.00007999}
   m_Children:
   - {fileID: 118111847}
@@ -3102,13 +3410,13 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 36
-  mHeight: 31
+  mWidth: 46
+  mHeight: 32
   mDepth: 8
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
-  keepAspectRatio: 0
-  aspectRatio: 1.16129029
+  keepAspectRatio: 1
+  aspectRatio: 1.4375
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
@@ -3119,8 +3427,8 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: c49e0b18a2206fa4ea30611008a6dab7, type: 2}
-  mSpriteName: ItemHUD_Stat
+  mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
+  mSpriteName: Widget_ShipStat
   mFillCenter: 1
 --- !u!1 &1036628316
 GameObject:
@@ -3166,7 +3474,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c8d596c16f05d949922ef16347e4cc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thumb: {fileID: 0}
+  thumb: {fileID: 1806772112}
   mBG: {fileID: 1479695523}
   mFG: {fileID: 1402255037}
   mValue: 0
@@ -3453,8 +3761,8 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: c49e0b18a2206fa4ea30611008a6dab7, type: 2}
-  mSpriteName: ItemHUD_Stat
+  mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
+  mSpriteName: Widget_ShipWeap
   mFillCenter: 1
 --- !u!1 &1110919821
 GameObject:
@@ -3479,7 +3787,7 @@ Transform:
   m_PrefabInternal: {fileID: 373307765}
   m_GameObject: {fileID: 1110919821}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -18, y: 7, z: 0}
+  m_LocalPosition: {x: -12, y: 9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1616269695}
@@ -3515,13 +3823,13 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 18
-  mHeight: 15
+  mWidth: 14
+  mHeight: 14
   mDepth: 9
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
-  keepAspectRatio: 0
-  aspectRatio: 1.20000005
+  keepAspectRatio: 1
+  aspectRatio: 1
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
@@ -3532,8 +3840,8 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: c49e0b18a2206fa4ea30611008a6dab7, type: 2}
-  mSpriteName: ItemHUD_Triangle
+  mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
+  mSpriteName: Widget_ShipStat_Shd
   mFillCenter: 1
 --- !u!1 &1133191211
 GameObject:
@@ -3592,7 +3900,7 @@ MonoBehaviour:
     relative: 1
     absolute: 0
   updateAnchors: 1
-  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mColor: {r: .760784328, g: .529411793, b: .858823538, a: 1}
   mPivot: 4
   mWidth: 120
   mHeight: 95
@@ -3610,8 +3918,8 @@ MonoBehaviour:
   mAlignment: 0
   mEncoding: 1
   mMaxLineCount: 0
-  mEffectStyle: 1
-  mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mEffectStyle: 2
+  mEffectColor: {r: .4627451, g: .101960786, b: .858823538, a: 1}
   mSymbols: 1
   mEffectDistance: {x: 1, y: 1}
   mOverflow: 0
@@ -3739,7 +4047,7 @@ Transform:
   m_PrefabInternal: {fileID: 373307765}
   m_GameObject: {fileID: 1219373331}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 4, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 611848874}
@@ -3839,7 +4147,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tweenTarget: {fileID: 1225730423}
   hover: {r: .882352948, g: .784313738, b: .588235319, a: 1}
-  pressed: {r: .717647076, g: .639215708, b: .482352942, a: 1}
+  pressed: {r: .603921592, g: .466666669, b: .698039234, a: 1}
   disabledColor: {r: .5, g: .5, b: .5, a: 1}
   duration: .200000003
   dragHighlight: 0
@@ -3916,8 +4224,8 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: d3bf3c0a54e363846a4a86b312c0a841, type: 2}
-  mSpriteName: OptionsButton
+  mAtlas: {fileID: 11400000, guid: b23d7dc3a51931046a1fbdc82310bb5d, type: 2}
+  mSpriteName: Btn_Options
   mFillCenter: 1
 --- !u!4 &1225730427
 Transform:
@@ -3926,7 +4234,7 @@ Transform:
   m_PrefabInternal: {fileID: 1355525250}
   m_GameObject: {fileID: 1225730423}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -589.868164, y: 345, z: 0}
+  m_LocalPosition: {x: -589.72168, y: 345, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 830012836}
@@ -4052,7 +4360,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1244934544}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -220, y: 148, z: 0}
+  m_LocalPosition: {x: -254, y: 144, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1725477178}
@@ -4524,7 +4832,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: e95f85aa3110abc429999d6bba111ed7, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -589.868164
+      value: -589.72168
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: e95f85aa3110abc429999d6bba111ed7, type: 2}
       propertyPath: m_LocalPosition.y
@@ -4723,9 +5031,10 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1402255035}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .000122070312, y: -.000156402588, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.00007999, y: 1.00007999, z: 1.00007999}
-  m_Children: []
+  m_Children:
+  - {fileID: 1806772112}
   m_Father: {fileID: 1036628317}
   m_RootOrder: 0
 --- !u!114 &1402255037
@@ -4775,8 +5084,8 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: c49e0b18a2206fa4ea30611008a6dab7, type: 2}
-  mSpriteName: SliderThumb
+  mAtlas: {fileID: 11400000, guid: b23d7dc3a51931046a1fbdc82310bb5d, type: 2}
+  mSpriteName: Scroll_Handle
   mFillCenter: 1
 --- !u!65 &1402255038
 BoxCollider:
@@ -4944,7 +5253,7 @@ MonoBehaviour:
     relative: 1
     absolute: 0
   updateAnchors: 1
-  mColor: {r: .125490203, g: .0980392173, b: .129411772, a: 1}
+  mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mWidth: 40
   mHeight: 570
@@ -4963,8 +5272,8 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: c49e0b18a2206fa4ea30611008a6dab7, type: 2}
-  mSpriteName: Square
+  mAtlas: {fileID: 11400000, guid: b23d7dc3a51931046a1fbdc82310bb5d, type: 2}
+  mSpriteName: Scroll_Track
   mFillCenter: 1
 --- !u!1 &1502158317
 GameObject:
@@ -4989,7 +5298,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1502158317}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 84, y: 55, z: 0}
+  m_LocalPosition: {x: 85.5999985, y: 55, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 507769695}
@@ -5027,13 +5336,13 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: .294266313, g: .243836492, b: .301470578, a: 1}
   mPivot: 4
-  mWidth: 60
+  mWidth: 102
   mHeight: 30
   mDepth: 6
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
-  keepAspectRatio: 0
-  aspectRatio: 2
+  keepAspectRatio: 1
+  aspectRatio: 3.40425539
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
@@ -5044,8 +5353,8 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: c49e0b18a2206fa4ea30611008a6dab7, type: 2}
-  mSpriteName: ItemHUD_Name
+  mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
+  mSpriteName: Widget_ShipCP
   mFillCenter: 1
 --- !u!1 &1513866330
 GameObject:
@@ -5213,8 +5522,8 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: c49e0b18a2206fa4ea30611008a6dab7, type: 2}
-  mSpriteName: ItemHUD_Stat
+  mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
+  mSpriteName: Widget_ShipAug
   mFillCenter: 1
 --- !u!1 &1580787897
 GameObject:
@@ -5248,7 +5557,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tweenTarget: {fileID: 1580787897}
   hover: {r: .882352948, g: .784313738, b: .588235319, a: 1}
-  pressed: {r: .717647076, g: .639215708, b: .482352942, a: 1}
+  pressed: {r: .603921592, g: .466666669, b: .698039234, a: 1}
   disabledColor: {r: .5, g: .5, b: .5, a: 1}
   duration: .200000003
   dragHighlight: 0
@@ -5338,8 +5647,8 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: d3bf3c0a54e363846a4a86b312c0a841, type: 2}
-  mSpriteName: NavButton
+  mAtlas: {fileID: 11400000, guid: b23d7dc3a51931046a1fbdc82310bb5d, type: 2}
+  mSpriteName: Btn_MenuNav
   mFillCenter: 1
 --- !u!1 &1616269694
 GameObject:
@@ -5364,7 +5673,7 @@ Transform:
   m_PrefabInternal: {fileID: 373307765}
   m_GameObject: {fileID: 1616269694}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11, y: 0, z: 0}
+  m_LocalPosition: {x: -10, y: -1, z: 0}
   m_LocalScale: {x: 1.00007999, y: 1.00007999, z: 1.00007999}
   m_Children:
   - {fileID: 1110919822}
@@ -5402,13 +5711,13 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 36
-  mHeight: 31
+  mWidth: 46
+  mHeight: 32
   mDepth: 8
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
-  keepAspectRatio: 0
-  aspectRatio: 1.16129029
+  keepAspectRatio: 1
+  aspectRatio: 1.4375
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
@@ -5419,8 +5728,8 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: c49e0b18a2206fa4ea30611008a6dab7, type: 2}
-  mSpriteName: ItemHUD_Stat
+  mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
+  mSpriteName: Widget_ShipStat
   mFillCenter: 1
 --- !u!1 &1618140053
 GameObject:
@@ -5479,7 +5788,7 @@ MonoBehaviour:
     relative: 1
     absolute: 0
   updateAnchors: 1
-  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mColor: {r: .760784328, g: .529411793, b: .858823538, a: 1}
   mPivot: 4
   mWidth: 120
   mHeight: 95
@@ -5499,8 +5808,8 @@ MonoBehaviour:
   mAlignment: 0
   mEncoding: 1
   mMaxLineCount: 0
-  mEffectStyle: 1
-  mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mEffectStyle: 2
+  mEffectColor: {r: .4627451, g: .101960786, b: .858823538, a: 1}
   mSymbols: 1
   mEffectDistance: {x: 1, y: 1}
   mOverflow: 0
@@ -5730,7 +6039,7 @@ MonoBehaviour:
   anchorOffset: 0
   softBorderPadding: 1
   renderQueue: 0
-  startingRenderQueue: 3010
+  startingRenderQueue: 3012
   mAlpha: 1
   mClipping: 3
   mClipRange: {x: 0, y: 0, z: 510, w: 570}
@@ -5799,12 +6108,12 @@ MonoBehaviour:
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mWidth: 200
-  mHeight: 30
+  mHeight: 34
   mDepth: 4
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
-  keepAspectRatio: 0
-  aspectRatio: 6.66666651
+  keepAspectRatio: 1
+  aspectRatio: 5.85714293
   mType: 1
   mFillDirection: 4
   mFillAmount: 1
@@ -5815,8 +6124,8 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: c49e0b18a2206fa4ea30611008a6dab7, type: 2}
-  mSpriteName: ItemHUD_Name
+  mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
+  mSpriteName: Widget_ShipName
   mFillCenter: 1
 --- !u!1 &1795678367
 GameObject:
@@ -5871,6 +6180,84 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 8
+--- !u!1 &1806772111
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1806772112}
+  - 114: {fileID: 1806772114}
+  m_Layer: 8
+  m_Name: FGBars
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1806772112
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1806772111}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1402255036}
+  m_RootOrder: 0
+--- !u!114 &1806772114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1806772111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftAnchor:
+    target: {fileID: 0}
+    relative: 0
+    absolute: 0
+  rightAnchor:
+    target: {fileID: 0}
+    relative: 1
+    absolute: 0
+  bottomAnchor:
+    target: {fileID: 0}
+    relative: 0
+    absolute: 0
+  topAnchor:
+    target: {fileID: 0}
+    relative: 1
+    absolute: 0
+  updateAnchors: 1
+  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mPivot: 4
+  mWidth: 20
+  mHeight: 20
+  mDepth: 5
+  autoResizeBoxCollider: 1
+  hideIfOffScreen: 0
+  keepAspectRatio: 1
+  aspectRatio: 1
+  mType: 0
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
+  mFlip: 0
+  centerType: 1
+  leftType: 1
+  rightType: 1
+  bottomType: 1
+  topType: 1
+  mAtlas: {fileID: 11400000, guid: b23d7dc3a51931046a1fbdc82310bb5d, type: 2}
+  mSpriteName: Scroll_Handle_Lines
+  mFillCenter: 1
 --- !u!1 &1829765057
 GameObject:
   m_ObjectHideFlags: 0
@@ -5947,8 +6334,8 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: c49e0b18a2206fa4ea30611008a6dab7, type: 2}
-  mSpriteName: ItemHUD_Stat
+  mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
+  mSpriteName: Widget_ShipAug
   mFillCenter: 1
 --- !u!1 &1857953599
 GameObject:
@@ -6103,8 +6490,8 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: c49e0b18a2206fa4ea30611008a6dab7, type: 2}
-  mSpriteName: ItemHUD_Stat
+  mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
+  mSpriteName: Widget_ShipAug
   mFillCenter: 1
 --- !u!1001 &1997104620
 Prefab:
@@ -6278,7 +6665,7 @@ MonoBehaviour:
     relative: 1
     absolute: 0
   updateAnchors: 1
-  mColor: {r: .0274509806, g: .0274509806, b: .0470588244, a: 1}
+  mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mWidth: 550
   mHeight: 570
@@ -6297,8 +6684,8 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: c49e0b18a2206fa4ea30611008a6dab7, type: 2}
-  mSpriteName: Square
+  mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
+  mSpriteName: Widget_ShipSelect
   mFillCenter: 1
 --- !u!1 &2037685255
 GameObject:
@@ -6413,7 +6800,7 @@ Transform:
   m_PrefabInternal: {fileID: 373307765}
   m_GameObject: {fileID: 2044062786}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -18, y: 7, z: 0}
+  m_LocalPosition: {x: -12, y: 9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 611848874}
@@ -6449,25 +6836,25 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 18
-  mHeight: 15
+  mWidth: 14
+  mHeight: 13
   mDepth: 9
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
-  keepAspectRatio: 0
-  aspectRatio: 1.20000005
+  keepAspectRatio: 1
+  aspectRatio: 1.06666672
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
-  mFlip: 2
+  mFlip: 0
   centerType: 1
   leftType: 1
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: c49e0b18a2206fa4ea30611008a6dab7, type: 2}
-  mSpriteName: ItemHUD_Triangle
+  mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
+  mSpriteName: Widget_ShipStat_Hth
   mFillCenter: 1
 --- !u!1 &2061641370
 GameObject:
@@ -6680,7 +7067,7 @@ Transform:
   m_PrefabInternal: {fileID: 373307765}
   m_GameObject: {fileID: 2072030591}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 4, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 410775815}
