@@ -31,6 +31,12 @@ public class ColorVertices : MonoBehaviour
         if (newColors != null)
         {
             colors = newColors;
+
+            //colors = new int[GetComponent<MeshFilter>().mesh.subMeshCount];
+            //for (int i = 0; i < colors.Length; i++)
+            //{
+            //    colors[i] = newColors[i];
+            //}
         }
         else if (colors == null)
         {
@@ -52,9 +58,12 @@ public class ColorVertices : MonoBehaviour
 #endif
 
         Color[] vertColors = new Color[mesh.vertexCount];
+        int subMeshCount = mesh.subMeshCount;
 
-        for (int i = 0; i < colors.Length; i++)
+        for (int i = 0; i < subMeshCount; i++)
         {
+            if (i >= colors.Length) break;
+
             int[] tris = mesh.GetTriangles(i);
             foreach (int tri in tris)
             {

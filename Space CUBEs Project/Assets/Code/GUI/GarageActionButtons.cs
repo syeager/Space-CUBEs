@@ -75,26 +75,46 @@ namespace SpaceCUBEs
 
         private void OnCursorStatusChanged(object sender, CursorUpdatedArgs args)
         {
+            ConstructionGrid grid = (ConstructionGrid)sender;
+
             switch (args.current)
             {
                 case ConstructionGrid.CursorStatuses.Holding:
+                    // edit
                     buttons[0].buttons[1].isEnabled = true;
                     pickupPlaceLabel.text = Place;
-
                     buttons[0].buttons[0].isEnabled = true;
+
+                    // paint
+                    
+
+                    // abilities
+
                     break;
 
                 case ConstructionGrid.CursorStatuses.Hover:
+                    // edit
                     buttons[0].buttons[1].isEnabled = true;
                     pickupPlaceLabel.text = Pickup;
-
                     buttons[0].buttons[0].isEnabled = false;
+
+                    // paint
+
+
+                    // abilities
+
                     break;
 
                 case ConstructionGrid.CursorStatuses.None:
+                    // edit
                     buttons[0].buttons[1].isEnabled = false;
-
                     buttons[0].buttons[0].isEnabled = false;
+
+                    // paint
+
+
+                    // abilities
+
                     break;
             }
         }

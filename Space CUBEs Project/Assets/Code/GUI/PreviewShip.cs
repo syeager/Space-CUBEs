@@ -58,6 +58,12 @@ namespace SpaceCUBEs
             costLabel.text = string.Format(Cost, costUsed, costTotal);
         }
 
+
+        public void SetShipName(string value)
+        {
+            GarageManager.Main.grid.buildName = value;
+        }
+
         #endregion
     }
 }

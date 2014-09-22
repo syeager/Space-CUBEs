@@ -521,6 +521,17 @@ namespace SpaceCUBEs
         }
 
 
+        public void PaintAll(int primaryColor, int secondaryColor)
+        {
+            int[] colors = {primaryColor, secondaryColor};
+            foreach (var cubeGridInfo in currentBuild)
+            {
+                var colorVertices = cubeGridInfo.Key.GetComponent<ColorVertices>();
+                colorVertices.Bake(colors);
+            }
+        }
+
+
         public void Build(string build, int buildSize, Vector3 startPosition, Vector3 startRotation, float maxTime, Action<BuildFinishedArgs> finshedAction)
         {
             var showShip = (GameObject)Instantiate(Singleton<GameResources>.Main.player_Prefab);

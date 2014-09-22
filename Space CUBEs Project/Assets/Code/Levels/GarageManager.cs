@@ -13,12 +13,6 @@ namespace SpaceCUBEs
 {
     public class GarageManager : Singleton<GarageManager>
     {
-        #region References
-
-        public ConstructionGrid grid;
-
-        #endregion
-
         #region State Fields
 
         public StateMachine States { get; private set; }
@@ -51,6 +45,8 @@ namespace SpaceCUBEs
         private float zoomStart;
 
         private float zoom;
+
+        private const float CameraDist = 15f;
 
         #endregion
 
@@ -90,18 +86,26 @@ namespace SpaceCUBEs
         [SerializeField, UsedImplicitly]
         private GarageActionButtons actionButtons;
 
-        private int[] inventory;
-
         #endregion
 
         #region Edit Fields
 
         [Header("Edit")]
+        public ConstructionGrid grid;
+
         [SerializeField, UsedImplicitly]
         private GameObject previewCube;
 
         [SerializeField, UsedImplicitly]
         private PreviewShip previewShip;
+
+        #endregion
+
+        #region Paint Fields
+
+        [Header("Paint")]
+        [SerializeField, UsedImplicitly]
+        private PaintMenu paintMenu;
 
         #endregion
 
@@ -146,29 +150,6 @@ namespace SpaceCUBEs
 
         #endregion
 
-        #region Selection Fields
-
-        public GameObject CUBESelectionButton_Prefab;
-        private int selectionIndex;
-        public ActivateButton leftFilter;
-        public UILabel filterLabel;
-        public ActivateButton rightFilter;
-        public GameObject[] selections;
-        private UIGrid[] selectionGrids;
-        private UIScrollView[] selectionScrollViews;
-        private UIScrollBar[] selectionScrollBars;
-
-        #endregion
-
-        #region Nav Menu Fields
-
-        public ActivateButton[] positionButtons;
-        public UILabel postionLabel;
-        public ActivateButton[] rotationButtons;
-        public UILabel rotationLabel;
-
-        #endregion
-
         #region Paint Fields
 
         public GameObject paintGrid;
@@ -203,10 +184,8 @@ namespace SpaceCUBEs
 
         #region Save Fields
 
-        public float saveConfirmationTime = 0.6f;
         public GameObject saveConfirmation;
         public UILabel saveShipName;
-        public GameObject saveButton;
 
         #endregion
 
@@ -225,10 +204,7 @@ namespace SpaceCUBEs
         {
             base.Awake();
 
-            if (NavigationBar.Main)
-            {
-                NavigationBar.Main.gameObject.SetActive(false);
-            }
+            if (NavigationBar.Main) NavigationBar.Main.gameObject.SetActive(false);
 
             // states
             States = new StateMachine(this, Menus.Edit.ToString());
@@ -298,17 +274,7 @@ namespace SpaceCUBEs
         {
             // events
             grid.StatusChangedEvent += OnCursorStatusChanged;
-            actionButtons.PickupPlaceEvent += () =>
-                                              {
-                                                  if (grid.cursorStatus == ConstructionGrid.CursorStatuses.Holding)
-                                                  {
-                                                      grid.PlaceCUBE(true);
-                                                  }
-                                                  else
-                                                  {
-                                                      grid.PickupCUBE();
-                                                  }
-                                              };
+            actionButtons.PickupPlaceEvent += PickupPlaceCUBE;
             actionButtons.DeleteEvent += () => grid.DeleteCUBE();
 
             StartCoroutine(ResettingCamera());
@@ -359,7 +325,7 @@ namespace SpaceCUBEs
         /// <returns></returns>
         private Vector3 CalculateTargetPostion(Vector3 direction)
         {
-            return (grid.layer + direction * zoom).Round();
+            return (grid.layer + direction * CameraDist).Round();
         }
 
 
@@ -468,8 +434,6 @@ namespace SpaceCUBEs
             // place/pickup
             if (Input.GetKeyUp(KeyCode.Space))
             {
-                OnActionButtonPressed(this, new ActivateButtonArgs(string.Empty, true));
-                corePointsLabel.text = grid.corePointsAvailable.ToString();
             }
 
             // delete
@@ -493,32 +457,32 @@ namespace SpaceCUBEs
 
 #else
 
-            int touchCount = Input.touchCount;
-            // rotate camera
-            if (touchCount == 1)
-            {
-                Touch touch = Input.GetTouch(0);
-                if (touch.phase == TouchPhase.Began)
-                {
-                    if (touchRect.Contains(mainCamera.camera.ScreenToViewportPoint(touch.position)))
-                    {
-                        StartCoroutine(Swipe(touch));
-                    }
-                }
-            }
-                // zoom camera
-            else if (touchCount == 2)
-            {
-                Touch touchA = Input.GetTouch(0);
-                Touch touchB = Input.GetTouch(1);
-                if (touchA.phase == TouchPhase.Began || touchB.phase == TouchPhase.Began)
-                {
-                    if (touchRect.Contains(mainCamera.camera.ScreenToViewportPoint(touchA.position)) && touchRect.Contains(mainCamera.camera.ScreenToViewportPoint(touchB.position)))
-                    {
-                        StartCoroutine(Pinch());
-                    }
-                }
-            }
+    //int touchCount = Input.touchCount;
+    //// rotate camera
+    //if (touchCount == 1)
+    //{
+    //    Touch touch = Input.GetTouch(0);
+    //    if (touch.phase == TouchPhase.Began)
+    //    {
+    //        if (touchRect.Contains(mainCamera.camera.ScreenToViewportPoint(touch.position)))
+    //        {
+    //            StartCoroutine(Swipe(touch));
+    //        }
+    //    }
+    //}
+    //    // zoom camera
+    //else if (touchCount == 2)
+    //{
+    //    Touch touchA = Input.GetTouch(0);
+    //    Touch touchB = Input.GetTouch(1);
+    //    if (touchA.phase == TouchPhase.Began || touchB.phase == TouchPhase.Began)
+    //    {
+    //        if (touchRect.Contains(mainCamera.camera.ScreenToViewportPoint(touchA.position)) && touchRect.Contains(mainCamera.camera.ScreenToViewportPoint(touchB.position)))
+    //        {
+    //            StartCoroutine(Pinch());
+    //        }
+    //    }
+    //}
 
 #endif
         }
@@ -583,7 +547,7 @@ namespace SpaceCUBEs
 
         #endregion
 
-        #region Mobile Methods
+        #region Touch Methods
 
         [UsedImplicitly]
         private IEnumerator Swipe(Touch startTouch)
@@ -661,13 +625,25 @@ namespace SpaceCUBEs
 
         private void EditInit()
         {
-            inventory = CUBE.GetInventory();
         }
 
 
         private void EditEnter(Dictionary<string, object> info)
         {
             previewCube.SetActive(true);
+
+            States.SetUpdate(EditUpdate());
+        }
+
+
+        private IEnumerator EditUpdate()
+        {
+            while (true)
+            {
+                CameraMovementEdit();
+                UpdateCamera();
+                yield return null;
+            }
         }
 
 
@@ -677,34 +653,16 @@ namespace SpaceCUBEs
         }
 
 
-        /// <summary>
-        /// Handler for cube selection filter button pressed.
-        /// </summary>
-        private void OnFilterChanged(object sender, ActivateButtonArgs args)
+        private void PickupPlaceCUBE()
         {
-            if (!args.isPressed) return;
-
-            FilterCUBEs(selectionIndex + int.Parse(args.value));
-        }
-
-
-        /// <summary>
-        /// Show cubes associated with this filter index.
-        /// </summary>
-        private void FilterCUBEs(int index)
-        {
-            // active selection
-            selections[selectionIndex].SetActive(false);
-            selectionIndex = Mathf.Clamp(index, 0, selections.Length - 1);
-            selections[selectionIndex].SetActive(true);
-            selectionScrollViews[selectionIndex].UpdateScrollbars();
-
-            // toggle filter buttons
-            leftFilter.isEnabled = selectionIndex > 0;
-            rightFilter.isEnabled = selectionIndex < selections.Length - 1;
-
-            // set filter
-            filterLabel.text = Enum.GetNames(typeof(CUBE.Types))[selectionIndex];
+            if (grid.cursorStatus == ConstructionGrid.CursorStatuses.Holding)
+            {
+                grid.PlaceCUBE(true);
+            }
+            else
+            {
+                grid.PickupCUBE();
+            }
         }
 
         #endregion
@@ -719,6 +677,7 @@ namespace SpaceCUBEs
 
         private void PaintEnter(Dictionary<string, object> info)
         {
+            paintMenu.gameObject.SetActive(true);
             colorSelector.SetActive(false);
 
             grid.DeleteCUBE();
@@ -727,199 +686,8 @@ namespace SpaceCUBEs
 
         private void PaintExit(Dictionary<string, object> info)
         {
+            paintMenu.gameObject.SetActive(false);
             colorSelector.SetActive(false);
-        }
-
-        #endregion
-
-        #region Selection Menu Methods
-
-        private void SelectInit()
-        {
-            foreach (GameObject selection in selections)
-            {
-                selection.SetActive(true);
-            }
-
-            selectionGrids = new UIGrid[selections.Length];
-            selectionScrollViews = new UIScrollView[selections.Length];
-            selectionScrollBars = new UIScrollBar[selections.Length];
-            for (int i = 0; i < selections.Length; i++)
-            {
-                selectionGrids[i] = selections[i].GetComponentInChildren(typeof(UIGrid)) as UIGrid;
-                selectionScrollViews[i] = selections[i].GetComponentInChildren(typeof(UIScrollView)) as UIScrollView;
-                selectionScrollBars[i] = selections[i].GetComponentInChildren(typeof(UIScrollBar)) as UIScrollBar;
-            }
-
-            leftFilter.ActivateEvent += OnFilterChanged;
-            rightFilter.ActivateEvent += OnFilterChanged;
-
-            StartCoroutine(CreateItemButtons());
-        }
-
-
-        private void SelectEnter(Dictionary<string, object> info)
-        {
-            FilterCUBEs(selectionIndex);
-
-            States.SetUpdate(SelectUpdate());
-            StartCoroutine("SaveConfirmation");
-        }
-
-
-        private IEnumerator SelectUpdate()
-        {
-            while (true)
-            {
-                // update camera
-                UpdateCamera();
-                {
-                    CameraMovementEdit();
-                }
-
-                // change menu
-                int dir = MenuSwipe();
-                if (dir == 1)
-                {
-                }
-
-                // update ship stats
-                SetShipInfo();
-                yield return null;
-            }
-        }
-
-
-        private void SelectExit(Dictionary<string, object> info)
-        {
-            StopCoroutine("SaveConfirmation");
-        }
-
-
-        /// <summary>
-        /// Create buttons in Selection Menu for all CUBEs.
-        /// </summary>
-        private IEnumerator CreateItemButtons()
-        {
-            mainCamera.camera.rect = new Rect(0f, 0f, 1f, 1f);
-
-            string[] names = Enum.GetNames(typeof(CUBE.Types));
-            foreach (CUBEInfo info in CUBE.AllCUBES)
-            {
-                int index = Array.IndexOf(names, info.type.ToString());
-                var button = (Instantiate(CUBESelectionButton_Prefab) as GameObject).GetComponent(typeof(ScrollviewButton)) as ScrollviewButton;
-                button.Initialize(info.ID.ToString(), info.name + "\n" + inventory[info.ID], info.ID.ToString(), selectionGrids[index].transform, selectionScrollViews[index]);
-                button.ActivateEvent += OnCUBESelected;
-            }
-
-            for (int i = 0; i < selectionScrollViews.Length; i++)
-            {
-                StartCoroutine(Utility.UpdateScrollView(selectionGrids[i], selectionScrollBars[i], selectionScrollViews[i]));
-            }
-
-            yield return new WaitForEndOfFrame();
-
-            foreach (GameObject selection in selections)
-            {
-                selection.SetActive(false);
-            }
-        }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
-        private void OnCUBESelected(object sender, ActivateButtonArgs args)
-        {
-            if (!args.isPressed) return;
-
-            if (GameResources.GetCUBE(int.Parse(args.value)) != null)
-            {
-                SetCurrentCUBE(int.Parse(args.value));
-            }
-        }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ID"></param>
-        private void SetCurrentCUBE(int ID)
-        {
-            grid.CreateCUBE(ID);
-        }
-
-        #endregion
-
-        #region Nav Menu Methods
-
-        private void NavEnter(Dictionary<string, object> info)
-        {
-#if UNITY_ANDROID
-            touchRect = new Rect(0f, 0.125f, 1f, 1f);
-#endif
-
-            mainCamera.camera.rect = new Rect(0.25f, 0f, 1f, 1f);
-            States.SetUpdate(NavUpdate());
-            StartCoroutine("SaveConfirmation");
-        }
-
-
-        private IEnumerator NavUpdate()
-        {
-            while (true)
-            {
-                // update camera
-                UpdateCamera();
-                {
-                    CameraMovementEdit();
-                }
-
-                // detect swipe
-                int dir = MenuSwipe();
-                if (dir == -1)
-                {
-                }
-                else if (dir == 1)
-                {
-                    States.SetState(Menus.Paint.ToString());
-                }
-
-                // update position and rotation
-                postionLabel.text = "Position " + (grid.cursor + Vector3.one).ToString("0");
-                rotationLabel.text = "Rotation " + grid.cursorRotation.eulerAngles.ToString("0");
-
-                // update ship stats
-                SetShipInfo();
-
-                yield return null;
-            }
-        }
-
-
-        private void NavExit(Dictionary<string, object> info)
-        {
-            StopCoroutine("SaveConfirmation");
-        }
-
-
-        private void OnActionButtonPressed(object sender, ActivateButtonArgs args)
-        {
-            if (!args.isPressed) return;
-
-            switch (grid.cursorStatus)
-            {
-                case ConstructionGrid.CursorStatuses.Holding:
-                    grid.PlaceCUBE(true, -1, -1, grid.heldCUBE.GetComponent<ColorVertices>().colors);
-                    break;
-                case ConstructionGrid.CursorStatuses.Hover:
-                    grid.PickupCUBE();
-                    break;
-            }
-
-            corePointsLabel.text = grid.corePointsAvailable.ToString();
         }
 
         #endregion
@@ -1134,7 +902,7 @@ namespace SpaceCUBEs
         public void WeaponEnter(Dictionary<string, object> info)
         {
 #if UNITY_ANDROID
-            touchRect = new Rect(0f, 0.125f, 1f, 1f);
+    //touchRect = new Rect(0f, 0.125f, 1f, 1f);
 #endif
 
             // gui
@@ -1325,6 +1093,7 @@ namespace SpaceCUBEs
         [UsedImplicitly]
         private IEnumerator SaveConfirmation()
         {
+            yield return null;
 #if UNITY_STANDALONE
             while (true)
             {
@@ -1336,27 +1105,27 @@ namespace SpaceCUBEs
                 yield return null;
             }
 #else
-            while (true)
-            {
-                // one finger
-                if (Input.touchCount == 1 && touchRect.Contains(mainCamera.camera.ScreenToViewportPoint(Input.GetTouch(0).position)))
-                {
-                    float heldTime = 0f;
-                    while (Input.touchCount == 1)
-                    {
-                        heldTime += Time.deltaTime;
-                        if (heldTime >= saveConfirmationTime)
-                        {
-                            ConfirmSave();
-                            yield break;
-                        }
+    //while (true)
+    //{
+    //    // one finger
+    //    if (Input.touchCount == 1 && touchRect.Contains(mainCamera.camera.ScreenToViewportPoint(Input.GetTouch(0).position)))
+    //    {
+    //        float heldTime = 0f;
+    //        while (Input.touchCount == 1)
+    //        {
+    //            heldTime += Time.deltaTime;
+    //            if (heldTime >= saveConfirmationTime)
+    //            {
+    //                ConfirmSave();
+    //                yield break;
+    //            }
 
-                        yield return null;
-                    }
-                }
+    //            yield return null;
+    //        }
+    //    }
 
-                yield return null;
-            }
+    //    yield return null;
+    //}
 #endif
         }
 
@@ -1366,7 +1135,6 @@ namespace SpaceCUBEs
             saveConfirmation.SetActive(true);
             saveShipName.text = grid.buildName;
             StopCoroutine("SaveConfirmation");
-            UICamera.selectedObject = saveButton;
         }
 
 
@@ -1426,7 +1194,7 @@ namespace SpaceCUBEs
 
         #endregion
 
-        #region Events
+        #region Event Handlers
 
         private void OnCursorStatusChanged(object sender, CursorUpdatedArgs args)
         {
