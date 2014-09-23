@@ -72,7 +72,7 @@ namespace SpaceCUBEs
         private void Awake()
         {
             scaleSpeed = (1f - deselectedScale) / toggleTime;
-            rotationSpeed = 360f / toggleTime;
+            rotationSpeed = 180f / toggleTime;
 
             SetColor(0);
             primarySelected = false;

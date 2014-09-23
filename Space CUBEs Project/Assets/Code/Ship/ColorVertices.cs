@@ -1,7 +1,7 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2013.12.19
-// Edited: 2014.09.14
+// Edited: 2014.09.22
 
 using UnityEngine;
 
@@ -83,9 +83,16 @@ public class ColorVertices : MonoBehaviour
     public void SetandBake(int index, int colorIndex)
     {
 #if UNITY_EDITOR
-        UnityEditor.SerializedObject so = new UnityEditor.SerializedObject(this);
-        so.FindProperty("colors").GetArrayElementAtIndex(index).intValue = colorIndex;
-        so.ApplyModifiedProperties();
+        if (!Application.isPlaying)
+        {
+            UnityEditor.SerializedObject so = new UnityEditor.SerializedObject(this);
+            so.FindProperty("colors").GetArrayElementAtIndex(index).intValue = colorIndex;
+            so.ApplyModifiedProperties();
+        }
+        else
+        {
+            colors[index] = colorIndex;
+        }
 #else
         colors[index] = colorIndex;
 #endif

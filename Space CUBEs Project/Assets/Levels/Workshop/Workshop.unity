@@ -684,6 +684,7 @@ MonoBehaviour:
   softBorderPadding: 1
   renderQueue: 0
   startingRenderQueue: 3000
+  mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 300, w: 200}
@@ -2489,6 +2490,7 @@ MonoBehaviour:
   softBorderPadding: 1
   renderQueue: 0
   startingRenderQueue: 3000
+  mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 300, w: 200}
@@ -2534,6 +2536,7 @@ Transform:
   - {fileID: 330648652}
   - {fileID: 2141564405}
   - {fileID: 698895383}
+  - {fileID: 475524305}
   m_Father: {fileID: 0}
   m_RootOrder: 5
 --- !u!1 &209023947
@@ -2699,6 +2702,7 @@ MonoBehaviour:
   softBorderPadding: 1
   renderQueue: 0
   startingRenderQueue: 3002
+  mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 300, w: 200}
@@ -3278,7 +3282,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400010, guid: aeed59aee1ea3714da2eb46ccb6175bd, type: 2}
       propertyPath: resetVersion
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: aeed59aee1ea3714da2eb46ccb6175bd, type: 2}
       propertyPath: m_RootOrder
@@ -4219,6 +4223,7 @@ MonoBehaviour:
   softBorderPadding: 1
   renderQueue: 0
   startingRenderQueue: 3013
+  mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 3
   mClipRange: {x: -395.751862, y: 18.0159302, z: 216.017273, w: 467.037354}
@@ -5944,15 +5949,15 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 475524304}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 140, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 477352401}
   - {fileID: 1755593422}
   - {fileID: 150992094}
   - {fileID: 959733561}
-  m_Father: {fileID: 2141564405}
-  m_RootOrder: 3
+  m_Father: {fileID: 193790578}
+  m_RootOrder: 8
 --- !u!114 &475524306
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7178,6 +7183,7 @@ MonoBehaviour:
   softBorderPadding: 1
   renderQueue: 0
   startingRenderQueue: 3017
+  mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 300, w: 200}
@@ -8118,6 +8124,7 @@ MonoBehaviour:
   softBorderPadding: 1
   renderQueue: 0
   startingRenderQueue: 3013
+  mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 3
   mClipRange: {x: -395.751862, y: 18.0159302, z: 216.017273, w: 467.037354}
@@ -9882,7 +9889,7 @@ MonoBehaviour:
   mainSection: {fileID: 1626706153}
   detailSection: {fileID: 975160908}
   deselectedScale: .800000012
-  toggleTime: .100000001
+  toggleTime: .150000006
   actionButtons: {fileID: 451820593}
   pallete: {fileID: 2139935601}
 --- !u!1 &701543971
@@ -11127,7 +11134,7 @@ MonoBehaviour:
   logWarning: 0
   dontDestroy: 0
   version: 1
-  resetVersion: 1
+  resetVersion: 0
 --- !u!1 &770430589
 GameObject:
   m_ObjectHideFlags: 0
@@ -16732,6 +16739,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eventType: 1
+  eventsGoToColliders: 0
   eventReceiverMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -18519,25 +18527,6 @@ MonoBehaviour:
   previewCube: {fileID: 533655216}
   previewShip: {fileID: 228716853}
   paintMenu: {fileID: 698895384}
-  paintGrid: {fileID: 1861999332}
-  pieces:
-  - {fileID: 1229063554}
-  - {fileID: 1822295141}
-  - {fileID: 488500987}
-  colorSelector: {fileID: 2139935601}
-  colorSelectorTitle: {fileID: 1666287010}
-  paintPositionButtons:
-  - {fileID: 1295708812}
-  - {fileID: 237011623}
-  - {fileID: 1825361803}
-  - {fileID: 505455670}
-  - {fileID: 1905041589}
-  - {fileID: 600307284}
-  paintPostionLabel: {fileID: 1994471356}
-  selectPrimary: {fileID: 1732958677}
-  selectSecondary: {fileID: 1151820613}
-  copyPrimary: {fileID: 263254898}
-  copySecondary: {fileID: 712939714}
   weaponButtons:
   - {fileID: 981671700}
   - {fileID: 1334691175}
@@ -20194,7 +20183,7 @@ Transform:
   m_LocalScale: {x: 1.00007999, y: 1.00007999, z: 1.00007999}
   m_Children: []
   m_Father: {fileID: 2141564405}
-  m_RootOrder: 4
+  m_RootOrder: 3
 --- !u!54 &1472219228
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -20247,6 +20236,7 @@ MonoBehaviour:
   softBorderPadding: 1
   renderQueue: 0
   startingRenderQueue: 3000
+  mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 300, w: 200}
@@ -20387,7 +20377,11 @@ MonoBehaviour:
   pressedSprite2D: {fileID: 0}
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
-  onClick: []
+  onClick:
+  - mTarget: {fileID: 1356246779}
+    mMethodName: ConfirmSave
+    mParameters: []
+    oneShot: 0
 --- !u!65 &1497629110
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -23729,6 +23723,7 @@ MonoBehaviour:
   softBorderPadding: 1
   renderQueue: 0
   startingRenderQueue: 3013
+  mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 3
   mClipRange: {x: -395.75473, y: 18.0159454, z: 216, w: 467.000031}
@@ -25384,6 +25379,7 @@ MonoBehaviour:
   softBorderPadding: 1
   renderQueue: 0
   startingRenderQueue: 3004
+  mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 300, w: 200}
@@ -25408,7 +25404,7 @@ Transform:
   - {fileID: 1542175562}
   - {fileID: 246941592}
   m_Father: {fileID: 2141564405}
-  m_RootOrder: 5
+  m_RootOrder: 4
 --- !u!1 &1843013836
 GameObject:
   m_ObjectHideFlags: 0
@@ -25598,6 +25594,7 @@ MonoBehaviour:
   softBorderPadding: 1
   renderQueue: 0
   startingRenderQueue: 3013
+  mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 3
   mClipRange: {x: -395.751862, y: 18.0159302, z: 216.017273, w: 467.037354}
@@ -27476,7 +27473,7 @@ Transform:
   - {fileID: 1898581731}
   - {fileID: 746533806}
   m_Father: {fileID: 2141564405}
-  m_RootOrder: 6
+  m_RootOrder: 5
 --- !u!54 &1947036953
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -27529,6 +27526,7 @@ MonoBehaviour:
   softBorderPadding: 1
   renderQueue: 0
   startingRenderQueue: 3004
+  mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 300, w: 200}
@@ -30527,7 +30525,6 @@ Transform:
   - {fileID: 513755048}
   - {fileID: 211332975}
   - {fileID: 59395956}
-  - {fileID: 475524305}
   - {fileID: 1472219227}
   - {fileID: 1832511908}
   - {fileID: 1947036952}

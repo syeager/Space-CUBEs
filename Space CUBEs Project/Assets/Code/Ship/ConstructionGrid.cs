@@ -528,6 +528,7 @@ namespace SpaceCUBEs
             {
                 var colorVertices = cubeGridInfo.Key.GetComponent<ColorVertices>();
                 colorVertices.Bake(colors);
+                currentBuild[cubeGridInfo.Key].colors = colors;
             }
         }
 

@@ -1,7 +1,7 @@
-﻿// Space CUBEs Project-csharp
+﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2013.11.26
-// Edited: 2014.07.06
+// Edited: 2014.09.22
 
 using System.Collections.Generic;
 using System.IO;
@@ -79,22 +79,22 @@ public class CUBE : MonoBehaviour
             while (reader.BaseStream.Position != reader.BaseStream.Length)
             {
                 infoList.Add(new CUBEInfo
-                    (
-                    reader.ReadString(), // name
-                    reader.ReadInt32(), // ID
-                    (Types)reader.ReadInt32(), // type
-                    (Subsystems)reader.ReadInt32(), // subsystem
-                    (Brands)reader.ReadInt32(), // brand
-                    reader.ReadInt32(), // grade
-                    reader.ReadSingle(), // health
-                    reader.ReadSingle(), // shield
-                    reader.ReadSingle(), // speed
-                    reader.ReadSingle(), // damage
-                    Utility.ParseV3(reader.ReadString()), // size
-                    reader.ReadInt32(), // cost
-                    reader.ReadInt32(), // rarity
-                    reader.ReadInt32() // price
-                    ));
+                                 (
+                                 reader.ReadString(), // name
+                                 reader.ReadInt32(), // ID
+                                 (Types)reader.ReadInt32(), // type
+                                 (Subsystems)reader.ReadInt32(), // subsystem
+                                 (Brands)reader.ReadInt32(), // brand
+                                 reader.ReadInt32(), // grade
+                                 reader.ReadSingle(), // health
+                                 reader.ReadSingle(), // shield
+                                 reader.ReadSingle(), // speed
+                                 reader.ReadSingle(), // damage
+                                 Utility.ParseV3(reader.ReadString()), // size
+                                 reader.ReadInt32(), // cost
+                                 reader.ReadInt32(), // rarity
+                                 reader.ReadInt32() // price
+                                 ));
             }
         }
         AllCUBES = infoList.ToArray();
@@ -148,8 +148,8 @@ public class CUBE : MonoBehaviour
             }
         }
 
-        CUBE.Colors = colors.ToArray();
-        return CUBE.Colors;
+        Colors = colors.ToArray();
+        return Colors;
     }
 
 

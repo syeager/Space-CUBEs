@@ -513,6 +513,7 @@ MonoBehaviour:
   softBorderPadding: 1
   renderQueue: 0
   startingRenderQueue: 3000
+  mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 300, w: 200}
@@ -3122,6 +3123,7 @@ MonoBehaviour:
   softBorderPadding: 0
   renderQueue: 0
   startingRenderQueue: 3010
+  mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 300, w: 200}
@@ -4549,6 +4551,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eventType: 1
+  eventsGoToColliders: 0
   eventReceiverMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -4979,25 +4982,6 @@ MonoBehaviour:
   previewCube: {fileID: 0}
   previewShip: {fileID: 0}
   paintMenu: {fileID: 0}
-  paintGrid: {fileID: 0}
-  pieces:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  colorSelector: {fileID: 0}
-  colorSelectorTitle: {fileID: 0}
-  paintPositionButtons:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  paintPostionLabel: {fileID: 0}
-  selectPrimary: {fileID: 0}
-  selectSecondary: {fileID: 0}
-  copyPrimary: {fileID: 0}
-  copySecondary: {fileID: 0}
   weaponButtons:
   - {fileID: 0}
   - {fileID: 0}
@@ -6081,6 +6065,7 @@ MonoBehaviour:
   softBorderPadding: 1
   renderQueue: 0
   startingRenderQueue: 3012
+  mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 3
   mClipRange: {x: 0, y: 0, z: 510, w: 550}
@@ -6939,6 +6924,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eventType: 1
+  eventsGoToColliders: 0
   eventReceiverMask:
     serializedVersion: 2
     m_Bits: 4294967295

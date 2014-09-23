@@ -150,26 +150,6 @@ namespace SpaceCUBEs
 
         #endregion
 
-        #region Paint Fields
-
-        public GameObject paintGrid;
-        private Color[] colors;
-        private int primaryColor;
-        private int secondaryColor;
-        private bool primarySelected;
-        public ActivateButton[] pieces = new ActivateButton[3];
-        private int pieceSelected;
-        public GameObject colorSelector;
-        public UILabel colorSelectorTitle;
-        public ActivateButton[] paintPositionButtons;
-        public UILabel paintPostionLabel;
-        public ColorButton selectPrimary;
-        public ColorButton selectSecondary;
-        public ColorButton copyPrimary;
-        public ColorButton copySecondary;
-
-        #endregion
-
         #region Weapon Menu Fields
 
         public ActivateButton[] weaponButtons;
@@ -213,7 +193,6 @@ namespace SpaceCUBEs
             //States.CreateState(AbilityState, PaintEnter, PaintExit);
             //States.CreateState(ViewState, PaintEnter, PaintExit);
             EditInit();
-            PaintInit();
             States.Start();
 
             // grid
@@ -237,28 +216,6 @@ namespace SpaceCUBEs
             cameraTarget = new GameObject("Camera Target").transform;
 
             return;
-
-
-            // paint menu
-            ActivateButton[] paints = paintGrid.GetComponentsInChildren<ActivateButton>(true);
-            foreach (ActivateButton paint in paints)
-            {
-                paint.ActivateEvent += OnColorSelected;
-            }
-            foreach (ActivateButton piece in pieces)
-            {
-                piece.ActivateEvent += OnPieceSelected;
-            }
-            foreach (ActivateButton button in paintPositionButtons)
-            {
-                button.ActivateEvent += OnPaintPositionButtonPressed;
-            }
-            copyPrimary.ActivateEvent += CopyColor;
-            copySecondary.ActivateEvent += CopyColor;
-            selectPrimary.ActivateEvent += OpenColorSelector;
-            selectSecondary.ActivateEvent += OpenColorSelector;
-            primaryColor = int.Parse(paints[0].value);
-            secondaryColor = int.Parse(paints[1].value);
 
             // weapon menu
             weaponExpansions = BuildStats.GetWeaponExpansion();
@@ -294,29 +251,6 @@ namespace SpaceCUBEs
         #endregion
 
         #region Camera Methods
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private int MenuSwipe()
-        {
-            int direction = 0;
-
-            if (Input.GetKey(KeyCode.LeftAlt))
-            {
-                if (Input.GetKeyDown(KeyCode.LeftArrow))
-                {
-                    direction = -1;
-                }
-                if (Input.GetKeyDown(KeyCode.RightArrow))
-                {
-                    direction = 1;
-                }
-            }
-
-            return direction;
-        }
-
 
         /// <summary>
         /// 
@@ -663,16 +597,9 @@ namespace SpaceCUBEs
 
         #region Paint Methods
 
-        private void PaintInit()
-        {
-            colors = CUBE.LoadColors();
-        }
-
-
         private void PaintEnter(Dictionary<string, object> info)
         {
             paintMenu.gameObject.SetActive(true);
-            colorSelector.SetActive(false);
 
             grid.DeleteCUBE();
         }
@@ -681,212 +608,6 @@ namespace SpaceCUBEs
         private void PaintExit(Dictionary<string, object> info)
         {
             paintMenu.gameObject.SetActive(false);
-            colorSelector.SetActive(false);
-        }
-
-        #endregion
-
-        #region Paint Methods
-
-        private IEnumerator PaintUpdate()
-        {
-            UpdatePieces();
-
-            while (true)
-            {
-                // update camera
-                UpdateCamera();
-                {
-                    MoveCamera();
-                }
-
-                // detect swipe
-                int dir = MenuSwipe();
-                if (dir == -1)
-                {
-                }
-                else if (dir == 1)
-                {
-                }
-
-                // update position and rotation
-                paintPostionLabel.text = "Position " + (grid.cursor + Vector3.one).ToString("0");
-
-                UpdatePieces();
-                SetShipInfo();
-
-                yield return null;
-            }
-        }
-
-
-        private void OnColorSelected(object sender, ActivateButtonArgs args)
-        {
-            if (args.isPressed) return;
-
-            if (primarySelected)
-            {
-                SetPrimaryColor(int.Parse(args.value));
-            }
-            else
-            {
-                SetSecondaryColor(int.Parse(args.value));
-            }
-
-            colorSelector.SetActive(false);
-        }
-
-
-        private void OnPaint(object sender, ActivateButtonArgs args)
-        {
-            if (args.isPressed) return;
-
-            grid.Paint(pieceSelected, args.value == "action1" ? primaryColor : secondaryColor);
-        }
-
-
-        private void UpdatePieces()
-        {
-            if (grid.cursorStatus == ConstructionGrid.CursorStatuses.Hover)
-            {
-                // enable copy to's
-                copyPrimary.isEnabled = true;
-                copySecondary.isEnabled = true;
-
-                // enable paints
-                SetPrimaryColor(primaryColor);
-                SetSecondaryColor(secondaryColor);
-
-                // enable pieces
-                pieces[pieceSelected].Activate(false);
-                int count = grid.hoveredCUBE.renderer.sharedMaterials.Length;
-                int cursor = 0;
-                while (cursor < count)
-                {
-                    pieces[cursor].isEnabled = true;
-                    cursor++;
-                }
-                while (cursor < 3)
-                {
-                    pieces[cursor].isEnabled = false;
-                    cursor++;
-                }
-
-                while (pieceSelected > count - 1)
-                {
-                    pieceSelected--;
-                }
-                pieces[pieceSelected].Activate(true);
-
-                // copy colors
-                Color copyColor = colors[grid.hoveredCUBE.GetComponent<ColorVertices>().colors[pieceSelected]];
-                copyPrimary.SetColor(copyColor);
-                copySecondary.SetColor(copyColor);
-            }
-            else
-            {
-                // disable copy to's
-                copyPrimary.isEnabled = false;
-                copySecondary.isEnabled = false;
-
-                // disable pieces
-                foreach (ActivateButton piece in pieces)
-                {
-                    piece.Activate(false);
-                    piece.isEnabled = false;
-                }
-
-                // copy colors
-                copyPrimary.SetColor(Color.gray);
-                copySecondary.SetColor(Color.gray);
-            }
-        }
-
-
-        private void OnPieceSelected(object sender, ActivateButtonArgs args)
-        {
-            if (args.isPressed) return;
-            pieces[pieceSelected].Activate(false);
-            pieceSelected = int.Parse(args.value);
-            pieces[pieceSelected].Activate(true);
-
-            // copy colors
-            Color copyColor = colors[grid.hoveredCUBE.GetComponent<ColorVertices>().colors[pieceSelected]];
-            copyPrimary.SetColor(copyColor);
-            copySecondary.SetColor(copyColor);
-        }
-
-
-        private void OpenColorSelector(object sender, ActivateButtonArgs args)
-        {
-            primarySelected = args.value == "Primary";
-            colorSelectorTitle.text = args.value;
-            colorSelector.SetActive(true);
-        }
-
-
-        public void CopyColor(object sender, ActivateButtonArgs args)
-        {
-            if (args.value == "Primary")
-            {
-                Color color = colors[grid.hoveredCUBE.GetComponent<ColorVertices>().colors[pieceSelected]];
-                SetPrimaryColor(Array.IndexOf(CUBE.Colors, color));
-            }
-            else
-            {
-                Color color = colors[grid.hoveredCUBE.GetComponent<ColorVertices>().colors[pieceSelected]];
-                SetSecondaryColor(Array.IndexOf(CUBE.Colors, color));
-            }
-        }
-
-
-        private void OnPaintPositionButtonPressed(object sender, ActivateButtonArgs args)
-        {
-            if (!args.isPressed) return;
-
-            switch (args.value)
-            {
-                case "back":
-                    grid.MoveCursor(-cameraTarget.forward);
-                    CameraZoom(0f);
-                    UpdatePieces();
-                    break;
-                case "forward":
-                    grid.MoveCursor(cameraTarget.forward);
-                    CameraZoom(0f);
-                    UpdatePieces();
-                    break;
-                case "left":
-                    grid.MoveCursor(-cameraTarget.right);
-                    UpdatePieces();
-                    break;
-                case "right":
-                    grid.MoveCursor(cameraTarget.right);
-                    UpdatePieces();
-                    break;
-                case "down":
-                    grid.MoveCursor(-cameraTarget.up);
-                    UpdatePieces();
-                    break;
-                case "up":
-                    grid.MoveCursor(cameraTarget.up);
-                    UpdatePieces();
-                    break;
-            }
-        }
-
-
-        private void SetPrimaryColor(int colorIndex)
-        {
-            primaryColor = colorIndex;
-            selectPrimary.SetColor(CUBE.Colors[primaryColor]);
-        }
-
-
-        private void SetSecondaryColor(int colorIndex)
-        {
-            secondaryColor = colorIndex;
-            selectSecondary.SetColor(CUBE.Colors[secondaryColor]);
         }
 
         #endregion
@@ -936,13 +657,6 @@ namespace SpaceCUBEs
                 UpdateCamera();
                 {
                     MoveCamera();
-                }
-
-                // change menu
-                int dir = MenuSwipe();
-                if (dir == -1)
-                {
-                    States.SetState(Menus.Paint.ToString());
                 }
 
                 // update ship stats
@@ -1052,23 +766,6 @@ namespace SpaceCUBEs
 
         #endregion
 
-        #region Observation Methods
-
-        private void ObservationEnter(Dictionary<string, object> info)
-        {
-        }
-
-
-        private IEnumerator ObservationUpdate()
-        {
-            while (true)
-            {
-                yield return null;
-            }
-        }
-
-        #endregion
-
         #region Info Panel Methods
 
         private void SetShipInfo()
@@ -1084,51 +781,10 @@ namespace SpaceCUBEs
 
         #region Save Methods
 
-        [UsedImplicitly]
-        private IEnumerator SaveConfirmation()
-        {
-            yield return null;
-#if UNITY_STANDALONE
-            while (true)
-            {
-                if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.S))
-                {
-                    ConfirmSave();
-                }
-
-                yield return null;
-            }
-#else
-    //while (true)
-    //{
-    //    // one finger
-    //    if (Input.touchCount == 1 && touchRect.Contains(mainCamera.camera.ScreenToViewportPoint(Input.GetTouch(0).position)))
-    //    {
-    //        float heldTime = 0f;
-    //        while (Input.touchCount == 1)
-    //        {
-    //            heldTime += Time.deltaTime;
-    //            if (heldTime >= saveConfirmationTime)
-    //            {
-    //                ConfirmSave();
-    //                yield break;
-    //            }
-
-    //            yield return null;
-    //        }
-    //    }
-
-    //    yield return null;
-    //}
-#endif
-        }
-
-
-        private void ConfirmSave()
+        public void ConfirmSave()
         {
             saveConfirmation.SetActive(true);
             saveShipName.text = grid.buildName;
-            StopCoroutine("SaveConfirmation");
         }
 
 
@@ -1136,14 +792,12 @@ namespace SpaceCUBEs
         {
             grid.SaveBuild();
             saveConfirmation.SetActive(false);
-            StartCoroutine("SaveConfirmation");
         }
 
 
         public void CancelSave()
         {
             saveConfirmation.SetActive(false);
-            StartCoroutine("SaveConfirmation");
         }
 
         #endregion
