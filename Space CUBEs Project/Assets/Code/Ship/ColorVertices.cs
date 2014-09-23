@@ -93,5 +93,16 @@ public class ColorVertices : MonoBehaviour
         Bake();
     }
 
+
+    public int GetColor(int index)
+    {
+        if (index >= colors.Length)
+        {
+            return colors[colors.Length - 1];
+        }
+
+        return colors[index];
+    }
+
     #endregion
 }

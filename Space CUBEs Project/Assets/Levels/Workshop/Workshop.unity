@@ -1624,7 +1624,13 @@ MonoBehaviour:
   pressedSprite2D: {fileID: 0}
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
-  onClick: []
+  onClick:
+  - mTarget: {fileID: 451820593}
+    mMethodName: ButtonPressed
+    mParameters:
+    - obj: {fileID: 126860688}
+      field: 
+    oneShot: 0
 --- !u!65 &126860689
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2724,7 +2730,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 228716850}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 415, y: 260, z: 0}
+  m_LocalPosition: {x: 415.246155, y: 260, z: 0}
   m_LocalScale: {x: 1.00007999, y: 1.00007999, z: 1.00007999}
   m_Children:
   - {fileID: 1497629108}
@@ -3684,7 +3690,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 297373279}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 565, y: -210, z: -1}
+  m_LocalPosition: {x: 565.246155, y: -210, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 469102053}
@@ -4034,7 +4040,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 330648651}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -360, y: -260, z: 0}
+  m_LocalPosition: {x: -360.246155, y: -260, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 156805705}
@@ -5443,7 +5449,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 451820591}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 190, y: -335, z: 0}
+  m_LocalPosition: {x: 190.246155, y: -335, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 969006004}
@@ -5462,8 +5468,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58ec6c23fa4202248b53beed46e8d620, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2000
-  pickupPlaceLabel: {fileID: 2011522458}
   buttons:
   - buttons:
     - {fileID: 1225038919}
@@ -5476,6 +5480,8 @@ MonoBehaviour:
   - buttons:
     - {fileID: 1303437909}
     - {fileID: 1823696794}
+  speed: 2000
+  pickupPlaceLabel: {fileID: 2011522458}
   buttonPositions: e10000004b000000b5ffffff1fffffff
 --- !u!114 &451820594
 MonoBehaviour:
@@ -8900,7 +8906,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 651433479}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7, y: -110, z: 0}
+  m_LocalPosition: {x: -8.74615479, y: -110, z: 0}
   m_LocalScale: {x: 1.00007999, y: 1.00007999, z: 1.00007999}
   m_Children:
   - {fileID: 1626706152}
@@ -8919,31 +8925,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   leftAnchor:
-    target: {fileID: 0}
+    target: {fileID: 193790578}
     relative: 0
     absolute: 0
   rightAnchor:
-    target: {fileID: 0}
-    relative: 1
-    absolute: 0
-  bottomAnchor:
-    target: {fileID: 0}
+    target: {fileID: 193790578}
     relative: 0
-    absolute: 0
-  topAnchor:
-    target: {fileID: 0}
+    absolute: 185
+  bottomAnchor:
+    target: {fileID: 193790578}
     relative: 1
-    absolute: 0
-  updateAnchors: 1
+    absolute: -280
+  topAnchor:
+    target: {fileID: 193790578}
+    relative: 1
+    absolute: -140
+  updateAnchors: 2
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 186
+  mWidth: 185
   mHeight: 140
   mDepth: 220
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 1.32857144
+  aspectRatio: 1.32142854
 --- !u!114 &651433482
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8983,7 +8989,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 186, y: 140, z: 0}
+  m_Size: {x: 185, y: 140, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &651928103
 GameObject:
@@ -9877,7 +9883,7 @@ MonoBehaviour:
   detailSection: {fileID: 975160908}
   deselectedScale: .800000012
   toggleTime: .100000001
-  buttons: {fileID: 451820593}
+  actionButtons: {fileID: 451820593}
   pallete: {fileID: 2139935601}
 --- !u!1 &701543971
 GameObject:
@@ -13154,7 +13160,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 902729630}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7, y: 30, z: 0}
+  m_LocalPosition: {x: -8.74615479, y: 30, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 297799076}
@@ -13173,31 +13179,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   leftAnchor:
-    target: {fileID: 0}
+    target: {fileID: 193790578}
     relative: 0
     absolute: 0
   rightAnchor:
-    target: {fileID: 0}
-    relative: 1
-    absolute: 0
-  bottomAnchor:
-    target: {fileID: 0}
+    target: {fileID: 193790578}
     relative: 0
-    absolute: 0
+    absolute: 185
+  bottomAnchor:
+    target: {fileID: 193790578}
+    relative: 1
+    absolute: -140
   topAnchor:
-    target: {fileID: 0}
+    target: {fileID: 193790578}
     relative: 1
     absolute: 0
-  updateAnchors: 1
+  updateAnchors: 2
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 186
+  mWidth: 185
   mHeight: 140
   mDepth: 220
   autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 1.32857144
+  aspectRatio: 1.32142854
 --- !u!114 &902729633
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13237,7 +13243,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 186, y: 140, z: 0}
+  m_Size: {x: 185, y: 140, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &914986156
 GameObject:
@@ -19769,7 +19775,13 @@ MonoBehaviour:
   pressedSprite2D: {fileID: 0}
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
-  onClick: []
+  onClick:
+  - mTarget: {fileID: 451820593}
+    mMethodName: ButtonPressed
+    mParameters:
+    - obj: {fileID: 1446519262}
+      field: 
+    oneShot: 0
 --- !u!65 &1446519263
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -30417,7 +30429,7 @@ GameObject:
   - 4: {fileID: 2139935602}
   - 114: {fileID: 2139935603}
   m_Layer: 8
-  m_Name: Color Selector
+  m_Name: Pallete
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

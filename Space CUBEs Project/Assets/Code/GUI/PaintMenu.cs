@@ -1,8 +1,9 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.09.21
-// Edited: 2014.09.21
+// Edited: 2014.09.22
 
+using System;
 using System.Collections;
 using Annotations;
 using UnityEngine;
@@ -55,7 +56,7 @@ namespace SpaceCUBEs
 
         [Header("Buttons")]
         [SerializeField, UsedImplicitly]
-        private GarageActionButtons buttons;
+        private GarageActionButtons actionButtons;
 
         [Header("Colors")]
         [SerializeField, UsedImplicitly]
@@ -87,15 +88,21 @@ namespace SpaceCUBEs
             grid = GarageManager.Main.grid;
 
             // events
-            buttons.PalleteEvent += OnPalleteClicked;
-            buttons.PaintEvent += OnPaintClicked;
-            buttons.PaintAllEvent += OnPaintAllClicked;
+            grid.StatusChangedEvent += OnCursorStatusChanged;
+            actionButtons.PalleteEvent += OnPalleteClicked;
+            actionButtons.PaintEvent += OnPaintClicked;
+            actionButtons.PaintAllEvent += OnPaintAllClicked;
+            actionButtons.SampleEvent += OnSampleClicked;
 
-            var colors = pallete.GetComponentsInChildren<ActivateButton>(true);
-            foreach (var color in colors)
+            ActivateButton[] colors = pallete.GetComponentsInChildren<ActivateButton>(true);
+            foreach (ActivateButton color in colors)
             {
                 color.ActivateEvent += OnColorSelected;
             }
+
+            // setup
+            UpdatePaintButton();
+            UpdateSampleButton();
         }
 
         #endregion
@@ -113,6 +120,7 @@ namespace SpaceCUBEs
             secondaryColorJob = new Job(!primarySelected ? Opening(secondaryColor.transform) : Closing(secondaryColor.transform));
 
             UpdateSections();
+            UpdatePaintButton();
         }
 
 
@@ -125,23 +133,8 @@ namespace SpaceCUBEs
 
             if (detailSegmentJob != null) detailSegmentJob.Kill();
             detailSegmentJob = new Job(!mainSelected ? Opening(detailSection.transform) : Closing(detailSection.transform));
-        }
 
-
-        public void SetColor(int colorIndex)
-        {
-            if (primarySelected)
-            {
-                colorPrimary = colorIndex;;
-                primaryColor.color = CUBE.Colors[colorIndex];
-            }
-            else
-            {
-                colorSecondary = colorIndex;
-                secondaryColor.color = CUBE.Colors[colorIndex];
-            }
-
-            UpdateSections();
+            UpdateSampleButton();
         }
 
         #endregion
@@ -174,6 +167,24 @@ namespace SpaceCUBEs
         }
 
 
+        private void SetColor(int colorIndex)
+        {
+            if (primarySelected)
+            {
+                colorPrimary = colorIndex;
+                primaryColor.color = CUBE.Colors[colorIndex];
+            }
+            else
+            {
+                colorSecondary = colorIndex;
+                secondaryColor.color = CUBE.Colors[colorIndex];
+            }
+
+            UpdateSections();
+            UpdatePaintButton();
+        }
+
+
         private void UpdateSections()
         {
             Color color = CUBE.Colors[primarySelected ? colorPrimary : colorSecondary];
@@ -181,9 +192,31 @@ namespace SpaceCUBEs
             detailSection.color = color;
         }
 
+
+        private void UpdateSampleButton()
+        {
+            Color color = CUBE.Colors[grid.hoveredCUBE.GetComponent<ColorVertices>().GetColor(mainSelected ? 0 : 1)];
+            actionButtons.buttons[1].buttons[1].defaultColor = color;
+        }
+
+
+        private void UpdatePaintButton()
+        {
+            Color color = CUBE.Colors[primarySelected ? colorPrimary : colorSecondary];
+            actionButtons.buttons[1].buttons[0].defaultColor = color;
+        }
+
         #endregion
 
         #region Event Handlers
+
+        private void OnCursorStatusChanged(object sender, CursorUpdatedArgs args)
+        {
+            if (args.current != ConstructionGrid.CursorStatuses.Hover) return;
+
+            UpdateSampleButton();
+        }
+
 
         private void OnColorSelected(object sender, ActivateButtonArgs args)
         {
@@ -206,6 +239,22 @@ namespace SpaceCUBEs
         private void OnPaintAllClicked()
         {
             grid.PaintAll(colorPrimary, colorSecondary);
+        }
+
+
+        private void OnSampleClicked()
+        {
+            Color color = CUBE.Colors[grid.hoveredCUBE.GetComponent<ColorVertices>().GetColor(mainSelected ? 0 : 1)];
+            if (primarySelected)
+            {
+                colorPrimary = Array.IndexOf(CUBE.Colors, color);
+            }
+            else
+            {
+                colorSecondary = Array.IndexOf(CUBE.Colors, color);
+            }
+
+            UpdateSections();
         }
 
         #endregion

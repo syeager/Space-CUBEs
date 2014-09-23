@@ -1,7 +1,7 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.09.16
-// Edited: 2014.09.19
+// Edited: 2014.09.22
 
 using System;
 using System.Collections;
@@ -13,6 +13,12 @@ namespace SpaceCUBEs
 {
     public class GarageActionButtons : MonoBehaviour
     {
+        #region Public Fields
+
+        public ActionButtonGroup[] buttons;
+
+        #endregion
+
         #region Private Fields
 
         [SerializeField, UsedImplicitly]
@@ -20,9 +26,6 @@ namespace SpaceCUBEs
 
         [SerializeField, UsedImplicitly]
         private UILabel pickupPlaceLabel;
-
-        [SerializeField, UsedImplicitly]
-        private ActionButtonGroup[] buttons;
 
         [SerializeField, UsedImplicitly]
         private int[] buttonPositions;
@@ -84,12 +87,6 @@ namespace SpaceCUBEs
                     buttons[0].buttons[1].isEnabled = true;
                     pickupPlaceLabel.text = Place;
                     buttons[0].buttons[0].isEnabled = true;
-
-                    // paint
-                    
-
-                    // abilities
-
                     break;
 
                 case ConstructionGrid.CursorStatuses.Hover:
@@ -97,24 +94,12 @@ namespace SpaceCUBEs
                     buttons[0].buttons[1].isEnabled = true;
                     pickupPlaceLabel.text = Pickup;
                     buttons[0].buttons[0].isEnabled = false;
-
-                    // paint
-
-
-                    // abilities
-
                     break;
 
                 case ConstructionGrid.CursorStatuses.None:
                     // edit
                     buttons[0].buttons[1].isEnabled = false;
                     buttons[0].buttons[0].isEnabled = false;
-
-                    // paint
-
-
-                    // abilities
-
                     break;
             }
         }

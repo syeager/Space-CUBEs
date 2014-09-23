@@ -1,7 +1,7 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2013.11.26
-// Edited: 2014.09.21
+// Edited: 2014.09.22
 
 using System;
 using System.Collections;
@@ -344,7 +344,7 @@ namespace SpaceCUBEs
         /// <summary>
         /// 
         /// </summary>
-        private void CameraMovementEdit()
+        private void MoveCamera()
         {
 #if UNITY_STANDALONE
 
@@ -457,32 +457,26 @@ namespace SpaceCUBEs
 
 #else
 
-    //int touchCount = Input.touchCount;
-    //// rotate camera
-    //if (touchCount == 1)
-    //{
-    //    Touch touch = Input.GetTouch(0);
-    //    if (touch.phase == TouchPhase.Began)
-    //    {
-    //        if (touchRect.Contains(mainCamera.camera.ScreenToViewportPoint(touch.position)))
-    //        {
-    //            StartCoroutine(Swipe(touch));
-    //        }
-    //    }
-    //}
-    //    // zoom camera
-    //else if (touchCount == 2)
-    //{
-    //    Touch touchA = Input.GetTouch(0);
-    //    Touch touchB = Input.GetTouch(1);
-    //    if (touchA.phase == TouchPhase.Began || touchB.phase == TouchPhase.Began)
-    //    {
-    //        if (touchRect.Contains(mainCamera.camera.ScreenToViewportPoint(touchA.position)) && touchRect.Contains(mainCamera.camera.ScreenToViewportPoint(touchB.position)))
-    //        {
-    //            StartCoroutine(Pinch());
-    //        }
-    //    }
-    //}
+            int touchCount = Input.touchCount;
+            // rotate camera
+            if (touchCount == 1)
+            {
+                Touch touch = Input.GetTouch(0);
+                if (touch.phase == TouchPhase.Began)
+                {
+                    StartCoroutine(Swipe(touch));
+                }
+            }
+                // zoom camera
+            else if (touchCount == 2)
+            {
+                Touch touchA = Input.GetTouch(0);
+                Touch touchB = Input.GetTouch(1);
+                if (touchA.phase == TouchPhase.Began || touchB.phase == TouchPhase.Began)
+                {
+                    StartCoroutine(Pinch());
+                }
+            }
 
 #endif
         }
@@ -640,7 +634,7 @@ namespace SpaceCUBEs
         {
             while (true)
             {
-                CameraMovementEdit();
+                MoveCamera();
                 UpdateCamera();
                 yield return null;
             }
@@ -703,7 +697,7 @@ namespace SpaceCUBEs
                 // update camera
                 UpdateCamera();
                 {
-                    CameraMovementEdit();
+                    MoveCamera();
                 }
 
                 // detect swipe
@@ -941,7 +935,7 @@ namespace SpaceCUBEs
                 // update camera
                 UpdateCamera();
                 {
-                    CameraMovementEdit();
+                    MoveCamera();
                 }
 
                 // change menu
