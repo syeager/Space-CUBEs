@@ -8,7 +8,7 @@ using UnityEditor;
 namespace LittleByte.NGUI
 {
     [CustomEditor(typeof(SelectableButton))]
-    public class SelectableButtonInspector : UIButtonEditor
+    public class SelectableButtonInspector : ActivateButtonEditor
     {
         #region Editor Overrides
 
@@ -17,10 +17,11 @@ namespace LittleByte.NGUI
             serializedObject.Update();
             
             EditorGUILayout.PropertyField(serializedObject.FindProperty("group"));
-
-            base.OnInspectorGUI();
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("dragScrollView"));
 
             serializedObject.ApplyModifiedProperties();
+
+            base.OnInspectorGUI();
         }
 
         #endregion

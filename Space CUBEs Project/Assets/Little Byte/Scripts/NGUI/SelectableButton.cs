@@ -1,13 +1,15 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.09.01
-// Edited: 2014.09.01
+// Edited: 2014.09.23
 
 using System.Collections.Generic;
+using Annotations;
+using UnityEngine;
 
 namespace LittleByte.NGUI
 {
-    public class SelectableButton : UIButton
+    public class SelectableButton : ActivateButton
     {
         #region Public Fields
 
@@ -18,6 +20,9 @@ namespace LittleByte.NGUI
         #region Private Fields
 
         private bool selected;
+
+        [SerializeField, UsedImplicitly]
+        private UIDragScrollView dragScrollView;
 
         #endregion
 
@@ -33,6 +38,24 @@ namespace LittleByte.NGUI
         {
             base.OnClick();
             SetSelected(this);
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public void SetScrollView(string name, string label, string value, Transform parent, UIScrollView scrollView)
+        {
+            this.name = name;
+            this.label.text = label;
+            this.value = value;
+            if (dragScrollView != null)
+            {
+                dragScrollView.scrollView = scrollView;
+            }
+            transform.parent = parent;
+            transform.localPosition = Vector3.zero;
+            transform.localScale = Vector3.one;
         }
 
         #endregion
