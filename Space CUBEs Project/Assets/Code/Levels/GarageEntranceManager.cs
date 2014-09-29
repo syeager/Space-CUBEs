@@ -7,6 +7,7 @@ using System.Linq;
 using Annotations;
 using LittleByte.Data;
 using System.Collections.Generic;
+using LittleByte.NGUI;
 using UnityEngine;
 using LittleByte;
 
@@ -27,7 +28,7 @@ namespace SpaceCUBEs
 
         [Header("Builds")]
         [SerializeField, UsedImplicitly]
-        private ScrollviewButton buildPreviewButtonPrefab;
+        private SelectableButton buildPreviewButtonPrefab;
 
         [SerializeField, UsedImplicitly]
         private UIScrollView loadScrollView;
@@ -183,8 +184,8 @@ namespace SpaceCUBEs
             foreach (string buildName in buildNames)
             {
                 BuildInfo info = ConstructionGrid.LoadBuild(buildName);
-                var button = (ScrollviewButton)Instantiate(buildPreviewButtonPrefab);
-                button.Initialize(buildName, buildName, buildName, loadGrid.transform, loadScrollView);
+                var button = (SelectableButton)Instantiate(buildPreviewButtonPrefab);
+                button.SetScrollView(buildName, buildName, buildName, loadGrid.transform, loadScrollView);
                 button.GetComponent<BuildPreview>().Initialize(info);
                 button.ActivateEvent += OnBuildChosen;
 
@@ -222,7 +223,7 @@ namespace SpaceCUBEs
             if (args.isPressed) return;
 
             ConstructionGrid.SelectedBuild = args.value;
-            ScrollviewButton button = (ScrollviewButton)sender;
+            SelectableButton button = (SelectableButton)sender;
             BuildInfo buildInfo = button.GetComponent<BuildPreview>().Info;
             selectedBuildPreview.Initialize(buildInfo);
 

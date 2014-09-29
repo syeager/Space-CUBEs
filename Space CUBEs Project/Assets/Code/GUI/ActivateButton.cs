@@ -4,6 +4,7 @@
 // Edited: 2014.09.15
 
 using System;
+using Annotations;
 using UnityEngine;
 
 /// <summary>
@@ -13,7 +14,6 @@ public class ActivateButton : UIButton
 {
     #region Public Fields
 
-    public Color activatedColor;
     public UILabel label;
     public string value;
     public EventHandler<ActivateButtonArgs> ActivateEvent;
@@ -23,6 +23,17 @@ public class ActivateButton : UIButton
     #region Private Fields
 
     private bool activated;
+    private Color normalColor;
+
+    #endregion
+
+    #region MonoBehaviour Overrides
+
+    [UsedImplicitly]
+    private void Awake()
+    {
+        normalColor = defaultColor;
+    }
 
     #endregion
 
@@ -57,25 +68,18 @@ public class ActivateButton : UIButton
 
     #region Public Methods
 
+    public void Initialize(string label, string value)
+    {
+        this.label.text = label;
+        this.value = value;
+    }
+
+
     public void Activate(bool activate)
     {
         activated = activate;
 
-        if (isEnabled)
-        {
-            TweenColor.Begin(tweenTarget, 0f, activate ? activatedColor : defaultColor);
-        }
-    }
-
-
-    public void Activate(Color color)
-    {
-        activated = true;
-
-        if (isEnabled)
-        {
-            TweenColor.Begin(tweenTarget, 0f, color);
-        }
+        defaultColor = activated ? hover : normalColor;
     }
 
 
