@@ -112,22 +112,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &100014
-GameObject:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 400014}
-  - 114: {fileID: 11400014}
-  m_Layer: 8
-  m_Name: Description
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &100016
 GameObject:
   m_ObjectHideFlags: 1
@@ -283,11 +267,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100010}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -34.2499962, y: -35, z: 0}
+  m_LocalPosition: {x: -34.2500229, y: -30.9999962, z: 0}
   m_LocalScale: {x: 1.00002694, y: 1.00002694, z: 1.00002694}
   m_Children: []
   m_Father: {fileID: 400018}
-  m_RootOrder: 2
+  m_RootOrder: 1
 --- !u!4 &400012
 Transform:
   m_ObjectHideFlags: 1
@@ -295,23 +279,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100012}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 36.2499962, y: -35, z: 0}
+  m_LocalPosition: {x: 36.2499771, y: -30.9999962, z: 0}
   m_LocalScale: {x: 1.00002694, y: 1.00002694, z: 1.00002694}
   m_Children: []
   m_Father: {fileID: 400018}
-  m_RootOrder: 3
---- !u!4 &400014
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100014}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2, y: -5, z: 0}
-  m_LocalScale: {x: 1.00002694, y: 1.00002694, z: 1.00002694}
-  m_Children: []
-  m_Father: {fileID: 400018}
-  m_RootOrder: 1
+  m_RootOrder: 2
 --- !u!4 &400016
 Transform:
   m_ObjectHideFlags: 1
@@ -319,7 +291,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100016}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -68.4999924, y: 30, z: 0}
+  m_LocalPosition: {x: -68.5000229, y: 19.0000267, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400018}
@@ -335,7 +307,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400016}
-  - {fileID: 400014}
   - {fileID: 400010}
   - {fileID: 400012}
   m_Father: {fileID: 400024}
@@ -371,7 +342,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100024}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -214, y: -22, z: 0}
+  m_LocalPosition: {x: 386, y: 310, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400022}
@@ -420,7 +391,7 @@ MonoBehaviour:
     relative: 1
     absolute: 0
   updateAnchors: 1
-  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mColor: {r: 1, g: .403921574, b: 0, a: 1}
   mPivot: 4
   mWidth: 40
   mHeight: 40
@@ -431,9 +402,9 @@ MonoBehaviour:
   aspectRatio: 1
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 0}
-  mFont: {fileID: 11400000, guid: 85f6eb7fbf44bc245aa653dd675e21e2, type: 2}
-  mText: 100
-  mFontSize: 18
+  mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
+  mText: 99
+  mFontSize: 25
   mFontStyle: 1
   mAlignment: 0
   mEncoding: 1
@@ -444,7 +415,7 @@ MonoBehaviour:
   mEffectDistance: {x: 1, y: 1}
   mOverflow: 0
   mMaterial: {fileID: 0}
-  mApplyGradient: 1
+  mApplyGradient: 0
   mGradientTop: {r: 1, g: 1, b: 1, a: 1}
   mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   mSpacingX: 0
@@ -482,7 +453,7 @@ MonoBehaviour:
     relative: 1
     absolute: 0
   updateAnchors: 1
-  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mColor: {r: 1, g: .403921574, b: 0, a: 1}
   mPivot: 4
   mWidth: 40
   mHeight: 40
@@ -493,9 +464,9 @@ MonoBehaviour:
   aspectRatio: 1
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 0}
-  mFont: {fileID: 11400000, guid: 85f6eb7fbf44bc245aa653dd675e21e2, type: 2}
+  mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
   mText: 26
-  mFontSize: 18
+  mFontSize: 25
   mFontStyle: 1
   mAlignment: 0
   mEncoding: 1
@@ -506,7 +477,7 @@ MonoBehaviour:
   mEffectDistance: {x: 1, y: 1}
   mOverflow: 0
   mMaterial: {fileID: 0}
-  mApplyGradient: 1
+  mApplyGradient: 0
   mGradientTop: {r: 1, g: 1, b: 1, a: 1}
   mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   mSpacingX: 0
@@ -563,8 +534,8 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: c49e0b18a2206fa4ea30611008a6dab7, type: 2}
-  mSpriteName: ItemHUD_Triangle
+  mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
+  mSpriteName: Widget_CUBELibrary_Tri
   mFillCenter: 1
 --- !u!114 &11400006
 MonoBehaviour:
@@ -613,8 +584,8 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: c49e0b18a2206fa4ea30611008a6dab7, type: 2}
-  mSpriteName: ItemHUD_Triangle
+  mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
+  mSpriteName: Widget_CUBELibrary_Tri
   mFillCenter: 1
 --- !u!114 &11400008
 MonoBehaviour:
@@ -652,7 +623,7 @@ MonoBehaviour:
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 2.96000004
+  aspectRatio: .589999974
 --- !u!114 &11400010
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -679,22 +650,22 @@ MonoBehaviour:
   topAnchor:
     target: {fileID: 400018}
     relative: .300000012
-    absolute: 0
+    absolute: 8
   updateAnchors: 0
-  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mColor: {r: 1, g: .403921574, b: 0, a: 1}
   mPivot: 4
-  mWidth: 68
-  mHeight: 30
+  mWidth: 69
+  mHeight: 38
   mDepth: 40
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 2.0333333
+  aspectRatio: 1.81578946
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 0}
   mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
-  mText: 1000
-  mFontSize: 16
+  mText: 0000
+  mFontSize: 20
   mFontStyle: 1
   mAlignment: 0
   mEncoding: 1
@@ -705,7 +676,7 @@ MonoBehaviour:
   mEffectDistance: {x: 1, y: 1}
   mOverflow: 0
   mMaterial: {fileID: 0}
-  mApplyGradient: 1
+  mApplyGradient: 0
   mGradientTop: {r: 1, g: 1, b: 1, a: 1}
   mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   mSpacingX: 0
@@ -741,22 +712,22 @@ MonoBehaviour:
   topAnchor:
     target: {fileID: 400018}
     relative: .300000012
-    absolute: 0
+    absolute: 8
   updateAnchors: 0
-  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mColor: {r: 1, g: .403921574, b: 0, a: 1}
   mPivot: 4
-  mWidth: 72
-  mHeight: 30
+  mWidth: 73
+  mHeight: 38
   mDepth: 40
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 2.16666675
+  aspectRatio: 1.92105258
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 0}
   mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
-  mText: 500
-  mFontSize: 16
+  mText: 0000
+  mFontSize: 20
   mFontStyle: 1
   mAlignment: 0
   mEncoding: 1
@@ -767,69 +738,7 @@ MonoBehaviour:
   mEffectDistance: {x: 1, y: 1}
   mOverflow: 0
   mMaterial: {fileID: 0}
-  mApplyGradient: 1
-  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
-  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
-  mSpacingX: 0
-  mSpacingY: 0
-  mShrinkToFit: 0
-  mMaxLineWidth: 0
-  mMaxLineHeight: 0
-  mLineWidth: 0
-  mMultiline: 1
---- !u!114 &11400014
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100014}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  leftAnchor:
-    target: {fileID: 400018}
-    relative: 0
-    absolute: 4
-  rightAnchor:
-    target: {fileID: 400018}
-    relative: 1
-    absolute: 0
-  bottomAnchor:
-    target: {fileID: 400018}
-    relative: .300000012
-    absolute: 0
-  topAnchor:
-    target: {fileID: 400018}
-    relative: .600000024
-    absolute: 0
-  updateAnchors: 0
-  mColor: {r: 1, g: 1, b: 1, a: 1}
-  mPivot: 4
-  mWidth: 141
-  mHeight: 30
-  mDepth: 40
-  autoResizeBoxCollider: 0
-  hideIfOffScreen: 0
-  keepAspectRatio: 0
-  aspectRatio: 4.19999981
-  keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 0}
-  mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
-  mText: Click for Stats
-  mFontSize: 16
-  mFontStyle: 1
-  mAlignment: 0
-  mEncoding: 1
-  mMaxLineCount: 0
-  mEffectStyle: 0
-  mEffectColor: {r: 0, g: 0, b: 0, a: 1}
-  mSymbols: 1
-  mEffectDistance: {x: 1, y: 1}
-  mOverflow: 0
-  mMaterial: {fileID: 0}
-  mApplyGradient: 1
+  mApplyGradient: 0
   mGradientTop: {r: 1, g: 1, b: 1, a: 1}
   mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   mSpacingX: 0
@@ -861,21 +770,21 @@ MonoBehaviour:
   bottomAnchor:
     target: {fileID: 400018}
     relative: .600000024
-    absolute: 0
+    absolute: -22
   topAnchor:
     target: {fileID: 400018}
     relative: 1
     absolute: 0
   updateAnchors: 0
-  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mColor: {r: 1, g: .403921574, b: 0, a: 1}
   mPivot: 3
   mWidth: 141
-  mHeight: 40
+  mHeight: 62
   mDepth: 40
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 3.1500001
+  aspectRatio: 2.27419353
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 0}
   mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
@@ -891,7 +800,7 @@ MonoBehaviour:
   mEffectDistance: {x: 1, y: 1}
   mOverflow: 0
   mMaterial: {fileID: 0}
-  mApplyGradient: 1
+  mApplyGradient: 0
   mGradientTop: {r: 1, g: 1, b: 1, a: 1}
   mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   mSpacingX: 0
@@ -937,7 +846,7 @@ MonoBehaviour:
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: .0199999996
+  aspectRatio: 1.45000005
 --- !u!114 &11400020
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -985,8 +894,8 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: c49e0b18a2206fa4ea30611008a6dab7, type: 2}
-  mSpriteName: ItemHUD_Stat
+  mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
+  mSpriteName: Widget_CUBE_TypeIcon
   mFillCenter: 1
 --- !u!114 &11400022
 MonoBehaviour:
@@ -1102,7 +1011,7 @@ MonoBehaviour:
   preview: {fileID: 11400024}
   icon: {fileID: 11400020}
   itemName: {fileID: 11400016}
-  infoText: {fileID: 11400014}
+  infoText: {fileID: 0}
   buyPrice: {fileID: 11400010}
   sellPrice: {fileID: 11400012}
   cp: {fileID: 11400002}
@@ -1135,7 +1044,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tweenTarget: {fileID: 100024}
   hover: {r: .137254909, g: .137254909, b: .235294119, a: 1}
-  pressed: {r: .87843138, g: .407843143, b: .0784313753, a: 1}
+  pressed: {r: .607072532, g: .349480957, b: .742647052, a: 1}
   disabledColor: {r: .5, g: .5, b: .5, a: 1}
   duration: .200000003
   dragHighlight: 0
@@ -1151,7 +1060,10 @@ MonoBehaviour:
     mMethodName: Clicked
     mParameters: []
     oneShot: 0
+  label: {fileID: 0}
+  value: 
   group: -1
+  dragScrollView: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

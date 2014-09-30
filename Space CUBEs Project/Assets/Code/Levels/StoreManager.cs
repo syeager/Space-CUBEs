@@ -349,7 +349,7 @@ public class StoreManager : Singleton<StoreManager>
     {
         const string pos = "+";
         const string neg = "-";
-        return (positive != null ? (positive.Value ? pos : neg) : string.Empty)+ String.Format("${0:#,###0}", amount);
+        return (positive != null ? (positive.Value ? pos : neg) : string.Empty)+ String.Format("{0:#,###0}", amount);
     } 
 
     #endregion
