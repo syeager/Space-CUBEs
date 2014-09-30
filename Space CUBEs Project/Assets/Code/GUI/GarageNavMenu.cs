@@ -1,15 +1,13 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.09.16
-// Edited: 2014.09.16
+// Edited: 2014.09.30
 
 using Annotations;
 using UnityEngine;
 
 namespace SpaceCUBEs
 {
-    using LittleByte;
-
     public class GarageNavMenu : MonoBehaviour
     {
         #region Private Fields
@@ -43,7 +41,7 @@ namespace SpaceCUBEs
         }
 
         #endregion
-        
+
         #region Public Methods
 
         public void ToggleOpen()
@@ -56,10 +54,9 @@ namespace SpaceCUBEs
         {
             menuButtons[(int)GarageManager.Main.OpenMenu].isEnabled = true;
             menuButtons[(int)menu].isEnabled = false;
-            
-            Toggle(false);
 
             GarageManager.Main.ChangeMenu(menu);
+            Toggle(false);
         }
 
 
@@ -77,7 +74,7 @@ namespace SpaceCUBEs
             this.open = open;
             activeLabel.text = open ? menu : GarageManager.Main.OpenMenu.ToString();
 
-            foreach (var menuButton in menuButtons)
+            foreach (GarageMenuButton menuButton in menuButtons)
             {
                 menuButton.Open(open);
             }
