@@ -1,7 +1,7 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2013.11.26
-// Edited: 2014.09.20
+// Edited: 2014.09.30
 
 using System;
 using System.Collections;
@@ -312,12 +312,10 @@ namespace SpaceCUBEs
             // set up weapons
             weaponSlots = weaponCount;
             weapons = new List<Weapon>();
-            //weapons.Initialize(null, weaponCount);
 
             // set up augmentations
             augmentationSlots = augmentationCount;
             augmentations = new List<Augmentation>();
-            //augmentations.Initialize(null, augmentationCount);
 
             // create grid center
             Center = ((GameObject)Instantiate(Center_Prefab, ship.transform.position, Quaternion.identity)).transform;
@@ -570,6 +568,24 @@ namespace SpaceCUBEs
             StartCoroutine(ShowBuild.Join(LoadBuild(build), buildSize, showShip.transform, maxTime, finshedAction));
         }
 
+
+        /// <summary>
+        /// Toggle ship/grid visibility.
+        /// </summary>
+        public void ShowShip(bool visible)
+        {
+            enabled = !visible;
+            gameObject.SetActive(!visible);
+
+            if (visible)
+            {
+                foreach (Material mat in currentBuild.SelectMany(cube => cube.Key.renderer.materials))
+                {
+                    mat.SetFloat(AlphaName, 1f);
+                }
+            }
+        }
+
         #endregion
 
         #region Private Methods
@@ -607,9 +623,6 @@ namespace SpaceCUBEs
                 Destroy(cube.Key.gameObject);
             }
             currentBuild.Clear();
-
-            //weapons.Initialize(null, weaponSlots);
-            //augmentations.Initialize(null, augmentationSlots);
         }
 
 
@@ -997,6 +1010,8 @@ namespace SpaceCUBEs
         /// </summary>
         private void UpdateGrid()
         {
+            if (!enabled) return;
+
             Vector3 cursorLayer = cursor.Multipy(viewAxis).Round();
 
             // update cells

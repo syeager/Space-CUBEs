@@ -65,8 +65,7 @@ namespace SpaceCUBEs
 
         public void Exit()
         {
-            // TODO: save confirmation
-            SceneManager.LoadScene(Scenes.Scene(Scenes.Menus.Garage));
+            GarageManager.Main.Exit();
         }
 
         #endregion

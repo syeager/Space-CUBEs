@@ -1,12 +1,13 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2013.11.26
-// Edited: 2014.09.22
+// Edited: 2014.09.30
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using Annotations;
+using LittleByte;
 using UnityEngine;
 
 namespace SpaceCUBEs
@@ -187,7 +188,7 @@ namespace SpaceCUBEs
             States.CreateState(Menus.Edit.ToString(), EditEnter, EditExit);
             States.CreateState(Menus.Paint.ToString(), PaintEnter, PaintExit);
             States.CreateState(Menus.Abilities.ToString(), AbilityEnter, AbilityExit);
-            //States.CreateState(ViewState, PaintEnter, PaintExit);
+            States.CreateState(Menus.View.ToString(), ViewEnter, ViewExit);
 
             // grid
 #if UNITY_EDITOR
@@ -232,8 +233,7 @@ namespace SpaceCUBEs
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                CancelSave();
-                States.SetState(States.previousState);
+                Exit();
             }
         }
 
@@ -269,7 +269,7 @@ namespace SpaceCUBEs
         /// </summary>
         private void MoveCamera()
         {
-#if UNITY_STANDALONE
+#if UNITY_STANDALONE || UNITY_EDITOR
 
             // move CUBE
             if (Input.GetKeyDown(KeyCode.A))
@@ -647,15 +647,45 @@ namespace SpaceCUBEs
 
         #endregion
 
-        #region Info Panel Methods
+        #region View Methods
 
-        private void SetShipInfo()
+        private void ViewEnter(Dictionary<string, object> info)
         {
-            // name
-            //grid.buildName = shipName.value;
+            grid.ShowShip(true);
 
-            // stats
-            previewShip.SetValues(grid.CurrentStats, grid.corePointsAvailable);
+            States.SetUpdate(ViewUpdate());
+        }
+
+
+        private IEnumerator ViewUpdate()
+        {
+            while (true)
+            {
+                // zoom
+                MoveCamera();
+                UpdateCamera();
+
+                // reset
+#if UNITY_STANDALONE || UNITY_EDITOR
+                if (Input.GetKeyDown(KeyCode.R))
+                {
+                    StartCoroutine(ResettingCamera());
+                }
+#else
+                if (Input.touchCount > 0 && Input.GetTouch(0).tapCount == 2)
+                {
+                    StartCoroutine(ResettingCamera());
+                }
+#endif
+
+                yield return null;
+            }
+        }
+
+
+        private void ViewExit(Dictionary<string, object> info)
+        {
+            grid.ShowShip(false);
         }
 
         #endregion
@@ -719,6 +749,26 @@ namespace SpaceCUBEs
         public void RotateCursor(Vector3 direction)
         {
             grid.RotateCursor(direction);
+        }
+
+
+        public void Exit()
+        {
+            // TODO: save confirmation
+            SceneManager.LoadScene(Scenes.Scene(Scenes.Menus.Garage));
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private void SetShipInfo()
+        {
+            // name
+            //grid.buildName = shipName.value;
+
+            // stats
+            previewShip.SetValues(grid.CurrentStats, grid.corePointsAvailable);
         }
 
         #endregion
