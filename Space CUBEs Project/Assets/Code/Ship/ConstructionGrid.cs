@@ -311,13 +311,13 @@ namespace SpaceCUBEs
 
             // set up weapons
             weaponSlots = weaponCount;
-            weapons = new List<Weapon>(weaponCount);
-            weapons.Initialize(null, weaponCount);
+            weapons = new List<Weapon>();
+            //weapons.Initialize(null, weaponCount);
 
             // set up augmentations
             augmentationSlots = augmentationCount;
-            augmentations = new List<Augmentation>(augmentationCount);
-            augmentations.Initialize(null, augmentationCount);
+            augmentations = new List<Augmentation>();
+            //augmentations.Initialize(null, augmentationCount);
 
             // create grid center
             Center = ((GameObject)Instantiate(Center_Prefab, ship.transform.position, Quaternion.identity)).transform;
@@ -513,6 +513,35 @@ namespace SpaceCUBEs
         }
 
 
+        /// <summary>
+        /// Swap aug slots.
+        /// </summary>
+        /// <param name="index">Aug slot to move.</param>
+        /// <param name="direction">Direction and distance to move.</param>
+        public int MoveAugMap(int index, int direction)
+        {
+            if (augmentations[index] == null) return index;
+
+            // get new slot index and return if out of bounds
+            int newSlot = index + direction;
+            if (newSlot >= augmentations.Count || newSlot < 0) return index;
+
+            // cache aug
+            Augmentation saved = augmentations[index];
+            // update aug's map
+            currentBuild[saved.GetComponent<CUBE>()].augmentationMap += direction;
+            // swap
+            augmentations[index] = augmentations[newSlot];
+            if (augmentations[index] != null)
+            {
+                currentBuild[augmentations[index].GetComponent<CUBE>()].augmentationMap -= direction;
+            }
+            augmentations[newSlot] = saved;
+
+            return newSlot;
+        }
+
+
         //
         public void Paint(int pieceSelected, int colorIndex)
         {
@@ -579,8 +608,8 @@ namespace SpaceCUBEs
             }
             currentBuild.Clear();
 
-            weapons.Initialize(null, weaponSlots);
-            augmentations.Initialize(null, augmentationSlots);
+            //weapons.Initialize(null, weaponSlots);
+            //augmentations.Initialize(null, augmentationSlots);
         }
 
 

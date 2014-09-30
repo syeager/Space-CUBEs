@@ -109,6 +109,14 @@ namespace SpaceCUBEs
 
         #endregion
 
+        #region Weapon Menu Fields
+
+        [Header("Ability")]
+        [SerializeField, UsedImplicitly]
+        private AbilityMenu abilityMenu;
+
+        #endregion
+
         #region Const Fields
 
         public const string BuildKey = "Build";
@@ -150,18 +158,6 @@ namespace SpaceCUBEs
 
         #endregion
 
-        #region Weapon Menu Fields
-
-        public ActivateButton[] weaponButtons;
-        public ActivateButton[] weaponNavButtons;
-
-        /// <summary>Weapon expansions available.</summary>
-        private int weaponExpansions;
-
-        private int weaponIndex = -1;
-
-        #endregion
-
         #region Save Fields
 
         public GameObject saveConfirmation;
@@ -190,10 +186,8 @@ namespace SpaceCUBEs
             States = new StateMachine(this, Menus.Edit.ToString());
             States.CreateState(Menus.Edit.ToString(), EditEnter, EditExit);
             States.CreateState(Menus.Paint.ToString(), PaintEnter, PaintExit);
-            //States.CreateState(AbilityState, PaintEnter, PaintExit);
+            States.CreateState(Menus.Abilities.ToString(), AbilityEnter, AbilityExit);
             //States.CreateState(ViewState, PaintEnter, PaintExit);
-            EditInit();
-            States.Start();
 
             // grid
 #if UNITY_EDITOR
@@ -214,15 +208,6 @@ namespace SpaceCUBEs
 
             // scene
             cameraTarget = new GameObject("Camera Target").transform;
-
-            return;
-
-            // weapon menu
-            weaponExpansions = BuildStats.GetWeaponExpansion();
-            for (int i = weaponExpansions; i < BuildStats.WeaponExpansions[BuildStats.WeaponExpansions.Length - 1]; i++)
-            {
-                weaponButtons[i].gameObject.SetActive(false);
-            }
         }
 
 
@@ -235,6 +220,10 @@ namespace SpaceCUBEs
             actionButtons.DeleteEvent += () => grid.DeleteCUBE();
 
             StartCoroutine(ResettingCamera());
+
+            EditInit();
+            AbilityInit();
+            States.Start();
         }
 
 
@@ -602,6 +591,19 @@ namespace SpaceCUBEs
             paintMenu.gameObject.SetActive(true);
 
             grid.DeleteCUBE();
+
+            States.SetUpdate(PaintUpdate());
+        }
+
+
+        private IEnumerator PaintUpdate()
+        {
+            while (true)
+            {
+                MoveCamera();
+                UpdateCamera();
+                yield return null;
+            }
         }
 
 
@@ -612,156 +614,35 @@ namespace SpaceCUBEs
 
         #endregion
 
-        #region Weapon Menu Methods
+        #region Ability Methods
 
-        public void WeaponEnter(Dictionary<string, object> info)
+        private void AbilityInit()
         {
-#if UNITY_ANDROID
-    //touchRect = new Rect(0f, 0.125f, 1f, 1f);
-#endif
-
-            // gui
-            mainCamera.camera.rect = new Rect(0.25f, 0f, 1f, 1f);
-
-            // weapon buttons
-            for (int i = 0; i < weaponExpansions; i++)
-            {
-                if (grid.weapons[i] == null)
-                {
-                    weaponButtons[i].isEnabled = false;
-                }
-                else
-                {
-                    weaponButtons[i].isEnabled = true;
-                    weaponButtons[i].ActivateEvent += OnWeaponButtonPressed;
-                }
-            }
-
-            // nav buttons
-            foreach (ActivateButton button in weaponNavButtons)
-            {
-                button.isEnabled = false;
-                button.ActivateEvent += OnWeaponNavButton;
-            }
-
-            States.SetUpdate(WeaponUpdate());
-            StartCoroutine("SaveConfirmation");
+            abilityMenu.Initialize();
         }
 
 
-        public IEnumerator WeaponUpdate()
+        private void AbilityEnter(Dictionary<string, object> info)
+        {
+            abilityMenu.Activate(true);
+            States.SetUpdate(AbilityUpdate());
+        }
+
+
+        private IEnumerator AbilityUpdate()
         {
             while (true)
             {
-                // update camera
+                MoveCamera();
                 UpdateCamera();
-                {
-                    MoveCamera();
-                }
-
-                // update ship stats
-                SetShipInfo();
-
-                // update weapon buttons
-                for (int i = 0; i < weaponExpansions; i++)
-                {
-                    if (grid.weapons[i] == null)
-                    {
-                        weaponButtons[i].isEnabled = false;
-                        weaponButtons[i].label.text = "Weapon " + (i + 1);
-                        weaponButtons[i].Activate(false);
-                    }
-                    else
-                    {
-                        weaponButtons[i].isEnabled = true;
-                        weaponButtons[i].label.text = grid.weapons[i].name;
-                        weaponButtons[i].Activate(i == weaponIndex);
-                    }
-                }
-
                 yield return null;
             }
         }
 
 
-        public void WeaponExit(Dictionary<string, object> info)
+        private void AbilityExit(Dictionary<string, object> info)
         {
-            StopWeaponBlink();
-            weaponIndex = -1;
-
-            // weapon buttons
-            for (int i = 0; i < 4; i++)
-            {
-                weaponButtons[i].ActivateEvent -= OnWeaponButtonPressed;
-            }
-
-            // nav buttons
-            foreach (ActivateButton button in weaponNavButtons)
-            {
-                button.ActivateEvent -= OnWeaponNavButton;
-            }
-
-            StopCoroutine("SaveConfirmation");
-        }
-
-
-        private void OnWeaponButtonPressed(object sender, ActivateButtonArgs args)
-        {
-            if (args.isPressed) return;
-
-            int index = int.Parse(args.value);
-            if (weaponIndex == index)
-            {
-                weaponButtons[index].Activate(false);
-                foreach (ActivateButton button in weaponNavButtons)
-                {
-                    button.isEnabled = false;
-                }
-
-                weaponIndex = -1;
-            }
-            else
-            {
-                weaponButtons[index].Activate(true);
-                StartWeaponBlink(index);
-
-                if (weaponIndex != -1)
-                {
-                    weaponButtons[weaponIndex].Activate(false);
-                }
-                foreach (ActivateButton button in weaponNavButtons)
-                {
-                    button.isEnabled = true;
-                }
-
-                weaponIndex = index;
-            }
-        }
-
-
-        private void OnWeaponNavButton(object sender, ActivateButtonArgs args)
-        {
-            if (!args.isPressed) return;
-
-            int dir = int.Parse(args.value);
-
-            weaponIndex = grid.MoveWeaponMap(weaponIndex, dir);
-        }
-
-
-        private void StartWeaponBlink(int index)
-        {
-            StopWeaponBlink();
-            grid.StartBlink(grid.weapons[index].renderer);
-        }
-
-
-        private void StopWeaponBlink()
-        {
-            if (weaponIndex >= 0)
-            {
-                grid.StopBlink(grid.weapons[weaponIndex].renderer);
-            }
+            abilityMenu.Activate(false);
         }
 
         #endregion

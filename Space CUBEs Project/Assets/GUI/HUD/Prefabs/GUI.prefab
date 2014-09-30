@@ -3126,6 +3126,7 @@ Animator:
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3624,7 +3625,6 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick: []
-  activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
   value: 
 --- !u!114 &11400022
@@ -3938,7 +3938,6 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick: []
-  activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
   value: 
 --- !u!114 &11400034
@@ -4358,6 +4357,7 @@ MonoBehaviour:
   softBorderPadding: 1
   renderQueue: 0
   startingRenderQueue: 3005
+  mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 300, w: 200}
@@ -4674,7 +4674,6 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick: []
-  activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
   value: 
 --- !u!114 &11400066
@@ -4877,7 +4876,6 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick: []
-  activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
   value: 1
 --- !u!114 &11400076
@@ -5282,6 +5280,7 @@ MonoBehaviour:
   softBorderPadding: 1
   renderQueue: 0
   startingRenderQueue: 3000
+  mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 300, w: 200}
@@ -5571,7 +5570,6 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick: []
-  activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
   value: 0
 --- !u!114 &11400106
@@ -6160,7 +6158,6 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick: []
-  activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
   value: 3
 --- !u!114 &11400130
@@ -6636,7 +6633,6 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick: []
-  activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
   value: 2
 --- !u!114 &11400150
@@ -7203,7 +7199,6 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick: []
-  activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
   value: 
 --- !u!114 &11400172
@@ -7832,6 +7827,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eventType: 1
+  eventsGoToColliders: 0
   eventReceiverMask:
     serializedVersion: 2
     m_Bits: 256
@@ -7930,7 +7926,6 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick: []
-  activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
   value: 
 --- !u!114 &11400202
@@ -8008,7 +8003,6 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick: []
-  activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
   value: 
 --- !u!114 &11400206

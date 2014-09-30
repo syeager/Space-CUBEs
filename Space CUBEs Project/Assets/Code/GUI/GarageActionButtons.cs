@@ -78,8 +78,6 @@ namespace SpaceCUBEs
 
         private void OnCursorStatusChanged(object sender, CursorUpdatedArgs args)
         {
-            ConstructionGrid grid = (ConstructionGrid)sender;
-
             switch (args.current)
             {
                 case ConstructionGrid.CursorStatuses.Holding:
