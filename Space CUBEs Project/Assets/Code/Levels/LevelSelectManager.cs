@@ -59,7 +59,7 @@ public class LevelSelectManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            SceneManager.LoadScene(Scenes.Menus.MainMenu.ToString().SplitCamelCase());
+            SceneManager.LoadScene(Scenes.Scene(Scenes.Menus.MainMenu));
         }
     }
 

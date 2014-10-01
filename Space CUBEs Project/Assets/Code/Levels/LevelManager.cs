@@ -229,7 +229,7 @@ namespace SpaceCUBEs
         public void LoadMainMenu()
         {
             GameTime.Pause(false);
-            SceneManager.LoadScene(Scenes.Menus.MainMenu.ToString(), true);
+            SceneManager.LoadScene(Scenes.Scene(Scenes.Menus.MainMenu), true);
         }
 
 

@@ -604,50 +604,6 @@ MonoBehaviour:
   mMaxLineHeight: 0
   mLineWidth: 0
   mMultiline: 1
---- !u!1 &355094010
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 100002, guid: aeed59aee1ea3714da2eb46ccb6175bd, type: 2}
-  m_PrefabInternal: {fileID: 39475939}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 355094011}
-  - 114: {fileID: 355094012}
-  m_Layer: 0
-  m_Name: SceneManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &355094011
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 400002, guid: aeed59aee1ea3714da2eb46ccb6175bd, type: 2}
-  m_PrefabInternal: {fileID: 39475939}
-  m_GameObject: {fileID: 355094010}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 1165463807}
-  m_RootOrder: 2
---- !u!114 &355094012
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400000, guid: aeed59aee1ea3714da2eb46ccb6175bd,
-    type: 2}
-  m_PrefabInternal: {fileID: 39475939}
-  m_GameObject: {fileID: 355094010}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6bc2885fc505400499f13b1beaf74129, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  log: 1
-  timeScale: 1
-  logWarning: 0
-  dontDestroy: 0
 --- !u!1 &371765950
 GameObject:
   m_ObjectHideFlags: 0
@@ -798,7 +754,7 @@ BoxCollider:
   m_GameObject: {fileID: 373685958}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 200, y: 200, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
@@ -1156,6 +1112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eventType: 1
+  eventsGoToColliders: 0
   eventReceiverMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -1269,7 +1226,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tweenTarget: {fileID: 682351919}
   hover: {r: .882352948, g: .784313738, b: .588235319, a: 1}
-  pressed: {r: .717647076, g: .639215708, b: .482352942, a: 1}
+  pressed: {r: .603921592, g: .466666669, b: .698039234, a: 1}
   disabledColor: {r: .5, g: .5, b: .5, a: 1}
   duration: .200000003
   dragHighlight: 0
@@ -1346,8 +1303,8 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: d3bf3c0a54e363846a4a86b312c0a841, type: 2}
-  mSpriteName: NavButton
+  mAtlas: {fileID: 11400000, guid: b23d7dc3a51931046a1fbdc82310bb5d, type: 2}
+  mSpriteName: Btn_MenuNav
   mFillCenter: 1
 --- !u!1 &772211378
 GameObject:
@@ -1485,7 +1442,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tweenTarget: {fileID: 781169304}
   hover: {r: .882352948, g: .784313738, b: .588235319, a: 1}
-  pressed: {r: .717647076, g: .639215708, b: .482352942, a: 1}
+  pressed: {r: .603921592, g: .466666669, b: .698039234, a: 1}
   disabledColor: {r: .5, g: .5, b: .5, a: 1}
   duration: .200000003
   dragHighlight: 0
@@ -1562,8 +1519,8 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: d3bf3c0a54e363846a4a86b312c0a841, type: 2}
-  mSpriteName: NavButton
+  mAtlas: {fileID: 11400000, guid: b23d7dc3a51931046a1fbdc82310bb5d, type: 2}
+  mSpriteName: Btn_MenuNav
   mFillCenter: 1
 --- !u!1001 &802937919
 Prefab:
@@ -1603,6 +1560,26 @@ Prefab:
     - target: {fileID: 400020, guid: e95f85aa3110abc429999d6bba111ed7, type: 2}
       propertyPath: m_RootOrder
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: e95f85aa3110abc429999d6bba111ed7, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -590.380371
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: e95f85aa3110abc429999d6bba111ed7, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 305.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 400024, guid: e95f85aa3110abc429999d6bba111ed7, type: 2}
+      propertyPath: m_LocalScale.x
+      value: .0027739252
+      objectReference: {fileID: 0}
+    - target: {fileID: 400024, guid: e95f85aa3110abc429999d6bba111ed7, type: 2}
+      propertyPath: m_LocalScale.y
+      value: .0027739252
+      objectReference: {fileID: 0}
+    - target: {fileID: 400024, guid: e95f85aa3110abc429999d6bba111ed7, type: 2}
+      propertyPath: m_LocalScale.z
+      value: .0027739252
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e95f85aa3110abc429999d6bba111ed7, type: 2}
@@ -1949,6 +1926,10 @@ Prefab:
       propertyPath: mFontSize
       value: 40
       objectReference: {fileID: 0}
+    - target: {fileID: 6500000, guid: a13cadcd7f29ed140bccc0b4c920b0d6, type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a13cadcd7f29ed140bccc0b4c920b0d6, type: 2}
   m_RootGameObject: {fileID: 1154093518}
@@ -2072,7 +2053,7 @@ Transform:
   m_PrefabInternal: {fileID: 802937919}
   m_GameObject: {fileID: 1011458151}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -590.107422, y: 305, z: 0}
+  m_LocalPosition: {x: -590.380371, y: 305.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1316521024}
@@ -2138,8 +2119,8 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: d3bf3c0a54e363846a4a86b312c0a841, type: 2}
-  mSpriteName: OptionsButton
+  mAtlas: {fileID: 11400000, guid: b23d7dc3a51931046a1fbdc82310bb5d, type: 2}
+  mSpriteName: Btn_Options
   mFillCenter: 1
 --- !u!114 &1011458155
 MonoBehaviour:
@@ -2155,7 +2136,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tweenTarget: {fileID: 1011458151}
   hover: {r: .882352948, g: .784313738, b: .588235319, a: 1}
-  pressed: {r: .717647076, g: .639215708, b: .482352942, a: 1}
+  pressed: {r: .603921592, g: .466666669, b: .698039234, a: 1}
   disabledColor: {r: .5, g: .5, b: .5, a: 1}
   duration: .200000003
   dragHighlight: 0
@@ -2302,6 +2283,10 @@ Prefab:
       propertyPath: mFontSize
       value: 40
       objectReference: {fileID: 0}
+    - target: {fileID: 6500000, guid: a13cadcd7f29ed140bccc0b4c920b0d6, type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a13cadcd7f29ed140bccc0b4c920b0d6, type: 2}
   m_RootGameObject: {fileID: 1087360627}
@@ -2380,7 +2365,7 @@ BoxCollider:
   m_GameObject: {fileID: 1087360627}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 200, y: 200, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
@@ -2763,7 +2748,6 @@ Transform:
   m_Children:
   - {fileID: 2117638822}
   - {fileID: 478473733}
-  - {fileID: 355094011}
   m_Father: {fileID: 0}
   m_RootOrder: 1
 --- !u!114 &1165463808
@@ -2783,7 +2767,7 @@ MonoBehaviour:
   logWarning: 0
   dontDestroy: 0
   version: 1
-  resetVersion: 0
+  resetVersion: 1
 --- !u!114 &1165463810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2985,7 +2969,7 @@ MonoBehaviour:
     relative: 1
     absolute: 0
   updateAnchors: 1
-  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mColor: {r: .760784328, g: .529411793, b: .858823538, a: 1}
   mPivot: 4
   mWidth: 120
   mHeight: 95
@@ -3003,8 +2987,8 @@ MonoBehaviour:
   mAlignment: 0
   mEncoding: 1
   mMaxLineCount: 0
-  mEffectStyle: 1
-  mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mEffectStyle: 2
+  mEffectColor: {r: .4627451, g: .101960786, b: .858823538, a: 1}
   mSymbols: 1
   mEffectDistance: {x: 1, y: 1}
   mOverflow: 0
@@ -3125,7 +3109,7 @@ Transform:
   m_GameObject: {fileID: 1316521023}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: .00277777785, y: .00277777785, z: .00277777785}
+  m_LocalScale: {x: .0027739252, y: .0027739252, z: .0027739252}
   m_Children:
   - {fileID: 661230717}
   - {fileID: 1011458152}
@@ -3186,6 +3170,7 @@ MonoBehaviour:
   softBorderPadding: 0
   renderQueue: 0
   startingRenderQueue: 3007
+  mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 300, w: 200}
@@ -3384,7 +3369,7 @@ Transform:
   m_GameObject: {fileID: 1507509815}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: .00277777785, y: .00277777785, z: .00277777785}
+  m_LocalScale: {x: .0027739252, y: .0027739252, z: .0027739252}
   m_Children:
   - {fileID: 2106657544}
   - {fileID: 161621524}
@@ -3445,6 +3430,7 @@ MonoBehaviour:
   softBorderPadding: 1
   renderQueue: 0
   startingRenderQueue: 3000
+  mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 300, w: 200}
@@ -3688,7 +3674,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tweenTarget: {fileID: 1627660152}
   hover: {r: .882352948, g: .784313738, b: .588235319, a: 1}
-  pressed: {r: .717647076, g: .639215708, b: .482352942, a: 1}
+  pressed: {r: .603921592, g: .466666669, b: .698039234, a: 1}
   disabledColor: {r: .5, g: .5, b: .5, a: 1}
   duration: .200000003
   dragHighlight: 0
@@ -3765,8 +3751,8 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: d3bf3c0a54e363846a4a86b312c0a841, type: 2}
-  mSpriteName: NavButton
+  mAtlas: {fileID: 11400000, guid: b23d7dc3a51931046a1fbdc82310bb5d, type: 2}
+  mSpriteName: Btn_MenuNav
   mFillCenter: 1
 --- !u!1 &1639471851
 GameObject:
@@ -3825,7 +3811,7 @@ MonoBehaviour:
     relative: 1
     absolute: 0
   updateAnchors: 1
-  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mColor: {r: .760784328, g: .529411793, b: .858823538, a: 1}
   mPivot: 4
   mWidth: 120
   mHeight: 95
@@ -3843,8 +3829,8 @@ MonoBehaviour:
   mAlignment: 0
   mEncoding: 1
   mMaxLineCount: 0
-  mEffectStyle: 1
-  mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mEffectStyle: 2
+  mEffectColor: {r: .4627451, g: .101960786, b: .858823538, a: 1}
   mSymbols: 1
   mEffectDistance: {x: 1, y: 1}
   mOverflow: 0
@@ -3916,7 +3902,7 @@ MonoBehaviour:
     relative: 1
     absolute: 0
   updateAnchors: 1
-  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mColor: {r: .760784328, g: .529411793, b: .858823538, a: 1}
   mPivot: 4
   mWidth: 120
   mHeight: 95
@@ -3936,8 +3922,8 @@ MonoBehaviour:
   mAlignment: 0
   mEncoding: 1
   mMaxLineCount: 0
-  mEffectStyle: 1
-  mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mEffectStyle: 2
+  mEffectColor: {r: .4627451, g: .101960786, b: .858823538, a: 1}
   mSymbols: 1
   mEffectDistance: {x: 1, y: 1}
   mOverflow: 0
@@ -4279,7 +4265,7 @@ MonoBehaviour:
     relative: 1
     absolute: 0
   updateAnchors: 1
-  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mColor: {r: .760784328, g: .529411793, b: .858823538, a: 1}
   mPivot: 4
   mWidth: 120
   mHeight: 95
@@ -4299,8 +4285,8 @@ MonoBehaviour:
   mAlignment: 0
   mEncoding: 1
   mMaxLineCount: 0
-  mEffectStyle: 1
-  mEffectColor: {r: 0, g: 0, b: 0, a: 1}
+  mEffectStyle: 2
+  mEffectColor: {r: .4627451, g: .101960786, b: .858823538, a: 1}
   mSymbols: 1
   mEffectDistance: {x: 1, y: 1}
   mOverflow: 0
@@ -4694,6 +4680,10 @@ Prefab:
       propertyPath: mFontSize
       value: 40
       objectReference: {fileID: 0}
+    - target: {fileID: 6500000, guid: a13cadcd7f29ed140bccc0b4c920b0d6, type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a13cadcd7f29ed140bccc0b4c920b0d6, type: 2}
   m_RootGameObject: {fileID: 373685958}
@@ -4954,6 +4944,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eventType: 1
+  eventsGoToColliders: 0
   eventReceiverMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -5228,7 +5219,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tweenTarget: {fileID: 2146070596}
   hover: {r: .882352948, g: .784313738, b: .588235319, a: 1}
-  pressed: {r: .717647076, g: .639215708, b: .482352942, a: 1}
+  pressed: {r: .603921592, g: .466666669, b: .698039234, a: 1}
   disabledColor: {r: .5, g: .5, b: .5, a: 1}
   duration: .200000003
   dragHighlight: 0
@@ -5305,6 +5296,6 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: d3bf3c0a54e363846a4a86b312c0a841, type: 2}
-  mSpriteName: NavButton
+  mAtlas: {fileID: 11400000, guid: b23d7dc3a51931046a1fbdc82310bb5d, type: 2}
+  mSpriteName: Btn_MenuNav
   mFillCenter: 1
