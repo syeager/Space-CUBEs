@@ -780,14 +780,12 @@ namespace SpaceCUBEs
                 }
                 else
                 {
-                    if (weaponIndex >= weapons.Count)
+// ReSharper disable once LoopVariableIsNeverChangedInsideLoop
+                    while (weaponIndex >= weapons.Count)
                     {
-                        weapons.Add((Weapon)heldCUBE.GetComponent(typeof(Weapon)));
+                        weapons.Add(null);
                     }
-                    else
-                    {
-                        weapons[weaponIndex] = (Weapon)heldCUBE.GetComponent(typeof(Weapon));
-                    }
+                    weapons[weaponIndex] = (Weapon)heldCUBE.GetComponent(typeof(Weapon));
                 }
             }
 
@@ -815,14 +813,12 @@ namespace SpaceCUBEs
                 }
                 else
                 {
-                    if (augmentationIndex >= augmentations.Count)
+// ReSharper disable once LoopVariableIsNeverChangedInsideLoop
+                    while (augmentationIndex >= augmentations.Count)
                     {
-                        augmentations.Add((Augmentation)heldCUBE.GetComponent(typeof(Augmentation)));
+                        augmentations.Add(null);
                     }
-                    else
-                    {
-                        augmentations[augmentationIndex] = (Augmentation)heldCUBE.GetComponent(typeof(Augmentation));
-                    }
+                    augmentations[augmentationIndex] = (Augmentation)heldCUBE.GetComponent(typeof(Augmentation));
                 }
             }
 
