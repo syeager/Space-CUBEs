@@ -1,50 +1,116 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.09.09
-// Edited: 2014.09.09
+// Edited: 2014.10.02
 
 using Annotations;
+using GooglePlayGames;
+using LittleByte.Data;
 using UnityEngine;
 
-public class GooglePlay : MonoBehaviour
+namespace LittleByte.GooglePlay
 {
-    #region Private Fields
-
-    [SerializeField, UsedImplicitly]
-    private UITexture button;
-
-    #endregion
-
-    #region MonoBehaviour Overrides
-
-    [UsedImplicitly]
-    private void Awake()
+    public class GooglePlay : MonoBehaviour
     {
-    }
+        #region Private Fields
 
-    #endregion
+        [SerializeField, UsedImplicitly]
+        private UITexture button;
 
-    #region Public Methods
+        [SerializeField, UsedImplicitly]
+        private Texture2D googlePlus;
 
-    public void SignIn()
-    {
-    }
+        [SerializeField, UsedImplicitly]
+        private int size;
 
-    #endregion
+        #endregion
 
-    #region Private Methods
+        #region Static Fields
 
-    private void SignedIn(bool success)
-    {
-        Debug.Log("Signed in: " + success);
+        private static Texture2D playerImage;
+        private static bool autoSignIn;
 
-        if (success)
+        #endregion
+
+        #region Const Fields
+
+        private const string SocialPath = @"Social/";
+        private const string AutoSignInKey = "Auto Sign In";
+
+        #endregion
+
+        #region MonoBehaviour Overrides
+
+        [UsedImplicitly]
+        private void Awake()
         {
-            Debug.Log(Social.localUser.image.name);
-            button.mainTexture = Social.localUser.image;
+            PlayGamesPlatform.Activate();
 
+#if UNITY_ANDROID || UNITY_EDITOR
+            if (Social.localUser.authenticated)
+            {
+                button.mainTexture = playerImage;
+            }
+            else
+            {
+                autoSignIn = SaveData.Load(AutoSignInKey, SocialPath, true);
+
+                if (autoSignIn)
+                {
+                    Social.localUser.Authenticate(SignedIn);
+                }
+            }
+#else
+            Destroy(gameObject);
+#endif
         }
-    }
 
-    #endregion
+        #endregion
+
+        #region Public Methods
+
+        public void SignIn()
+        {
+            if (Social.localUser.authenticated)
+            {
+                // sign out
+                ((PlayGamesPlatform)Social.Active).SignOut();
+                button.mainTexture = googlePlus;
+                playerImage = null;
+            }
+            else
+            {
+                // sign in
+                Social.localUser.Authenticate(SignedIn);
+            }
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private void SignedIn(bool success)
+        {
+            Debugger.Log("Signed in: " + success, this, Debugger.LogTypes.Social);
+
+            if (success)
+            {
+                GoogleProfilePic.LoadProfilePic(Social.localUser.id, size, texture =>
+                                                                           {
+                                                                               playerImage = texture;
+                                                                               button.mainTexture = texture;
+                                                                           });
+                autoSignIn = true;
+            }
+            else
+            {
+                playerImage = null;
+                autoSignIn = false;
+            }
+
+            SaveData.Save(AutoSignInKey, autoSignIn, SocialPath);
+        }
+
+        #endregion
+    }
 }

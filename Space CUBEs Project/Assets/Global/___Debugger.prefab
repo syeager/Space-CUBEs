@@ -46,6 +46,7 @@ Transform:
   m_Children:
   - {fileID: 400002}
   m_Father: {fileID: 0}
+  m_RootOrder: 0
 --- !u!4 &400002
 Transform:
   m_ObjectHideFlags: 1
@@ -57,6 +58,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400000}
+  m_RootOrder: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -71,13 +73,14 @@ MonoBehaviour:
   log: 0
   timeScale: 1
   logWarning: 0
+  dontDestroy: 0
   fps: {fileID: 0}
   fpsPrefab: {fileID: 100000, guid: ede73768352859c47b0ceadd2ebf76fa, type: 2}
   consoleLine: {fileID: 0}
   consoleLinePrefab: {fileID: 100000, guid: 1abf603ef50833b4ba9818e64b0f75db, type: 2}
   showTime: 1
   logSaving: 2
-  logFlags: 010101010001
+  logFlags: 01010101000101
   fpsWarning: 1
   lowFPS: 20
 --- !u!114 &11400002
@@ -105,6 +108,7 @@ MonoBehaviour:
   log: 0
   timeScale: 1
   logWarning: 0
+  dontDestroy: 0
   aboveOne: 1
   belowOne: .100000001
   timeDisplay: {fileID: 13200000}

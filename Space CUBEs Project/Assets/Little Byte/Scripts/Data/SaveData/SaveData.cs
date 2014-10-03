@@ -31,6 +31,7 @@ namespace LittleByte.Data
         #region Const Fields
 
         public const string FileExt = ".dat";
+        // TODO: remove / and always add it in SaveData
         public const string DefaultPath = @"Default/";
 
         #endregion

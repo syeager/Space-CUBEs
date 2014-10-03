@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.Threading;
+using UnityEngine;
 
 /// <summary>
 /// Wrapper for the coroutine class.
@@ -100,15 +101,16 @@ public class Job
     /// <summary>
     /// Run the coroutine.
     /// </summary>
-    public void Start()
+    public Coroutine Start()
     {
         running = true;
-        JobManager.Main.StartCoroutine(Work());
 
         if (runtime > 0f)
         {
             End(runtime);
         }
+
+        return JobManager.Main.StartCoroutine(Work());
     }
 
 

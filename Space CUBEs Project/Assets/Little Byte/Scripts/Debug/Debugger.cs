@@ -53,6 +53,7 @@ public class Debugger : Singleton<Debugger>
         true, // StateMachines
         true, // Construction
         true, // Performance
+        true, // Social
     };
 
     /// <summary>Catagorization for logging. Can be added to but need to update logFlags as well.</summary>
@@ -64,6 +65,7 @@ public class Debugger : Singleton<Debugger>
         StateMachines = 3,
         Construction = 4,
         Performance = 5,
+        Social = 6,
     }
 
     /// <summary>Should the Editor pause if at a low FPS?</summary>

@@ -100,6 +100,9 @@ namespace SpaceCUBEs
         [SerializeField, UsedImplicitly]
         private PreviewShip previewShip;
 
+        [SerializeField, UsedImplicitly]
+        private GameObject cubeLibrary;
+
         #endregion
 
         #region Paint Fields

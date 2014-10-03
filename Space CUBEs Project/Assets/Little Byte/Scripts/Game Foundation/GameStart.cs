@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using Annotations;
 using LittleByte.Data;
+using LittleByte.GooglePlay;
 using SpaceCUBEs;
 
 /// <summary>
@@ -24,6 +25,12 @@ public class GameStart : Singleton<GameStart>
     #region Readonly Fields
 
     private static readonly List<Action> StartActions = new List<Action> {Version1};
+
+    #endregion
+
+    #region Const Fields
+
+    private const string APIKey = "AIzaSyBJJPlSfdMRPvQkmUsqO-4EznFrL1YxgaU"; 
 
     #endregion
 
@@ -79,6 +86,7 @@ public class GameStart : Singleton<GameStart>
         GameTime.Initialize();
         CUBE.LoadAllCUBEInfo();
         ConstructionGrid.Load();
+        GoogleProfilePic.SetKey(APIKey);
     }
 
 
