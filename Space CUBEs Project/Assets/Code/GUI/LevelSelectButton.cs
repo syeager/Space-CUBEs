@@ -17,6 +17,7 @@ public class LevelSelectButton : UIButton
     public UILabel highScoreLabel;
     public UILabel bestTimeLabel;
     public UISprite medal;
+	public Color disabledTextColor;
 
     #endregion
 
@@ -51,10 +52,11 @@ public class LevelSelectButton : UIButton
 
     public void Disable()
     {
+		nameLabel.color = disabledTextColor;
         infoBackground.SetActive(false);
         isEnabled = false;
 
-        const int randomSize = 20;
+        const int randomSize = 14;
         StringBuilder builder = new StringBuilder(randomSize);
         for (int i = 0; i < randomSize /2; i++)
         {

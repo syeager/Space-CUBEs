@@ -13,7 +13,8 @@ public class LevelSelectButtonInspector : UIButtonEditor
         serializedObject.Update();
 
         EditorGUILayout.PropertyField(serializedObject.FindProperty("level"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("nameLabel"));
+		EditorGUILayout.PropertyField(serializedObject.FindProperty("nameLabel"));
+		EditorGUILayout.PropertyField(serializedObject.FindProperty("disabledTextColor"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("infoBackground"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("highScoreLabel"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("bestTimeLabel"));

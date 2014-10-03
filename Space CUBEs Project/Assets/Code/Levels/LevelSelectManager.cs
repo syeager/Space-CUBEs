@@ -37,11 +37,11 @@ public class LevelSelectManager : MonoBehaviour
         for (int i = 0; i < unlocked; i++)
         {
             string key = FormationLevelManager.HighScoreKey + ((Scenes.Levels)i).ToString().SplitCamelCase();
-            levelButtons[i].highScoreLabel.text = SaveData.Load<int[]>(key)[1].ToString("N");
+            levelButtons[i].highScoreLabel.text = SaveData.Load<int[]>(key)[1].ToString("N0");
             levelButtons[i].Toggle(false);
         }
         levelButtons[unlocked].Toggle(true);
-        levelButtons[unlocked].highScoreLabel.text = SaveData.Load(FormationLevelManager.HighScoreKey + ((Scenes.Levels)unlocked).ToString().SplitCamelCase(), "Default/", new[] {0, 0})[1].ToString("N");
+        levelButtons[unlocked].highScoreLabel.text = SaveData.Load(FormationLevelManager.HighScoreKey + ((Scenes.Levels)unlocked).ToString().SplitCamelCase(), "Default/", new[] {0, 0})[1].ToString("N0");
         for (int i = unlocked + 1; i < levelButtons.Length; i++)
         {
             string key = FormationLevelManager.HighScoreKey + ((Scenes.Levels)i).ToString().SplitCamelCase();
