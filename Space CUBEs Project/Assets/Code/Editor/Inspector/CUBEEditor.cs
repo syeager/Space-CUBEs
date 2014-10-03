@@ -74,14 +74,6 @@ public class CUBEEditor : Editor
         {
             CUBEInfo[] cubes = CUBE.AllCUBES ?? CUBE.LoadAllCUBEInfo();
             info = cubes.Single(c => c.name == target.name);
-            //foreach (CUBEInfo cube in cubes)
-            //{
-            //    if (cube.name == target.name)
-            //    {
-            //        info = cube;
-            //        break;
-            //    }
-            //}
         }
     }
 

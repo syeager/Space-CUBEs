@@ -26,7 +26,9 @@ public class GameResources : Singleton<GameResources>
 
     public static CUBE CreateCUBE(int id)
     {
-        return Instantiate(Main.CUBE_Prefabs[id]) as CUBE;
+        var cube = (CUBE)Instantiate(Main.CUBE_Prefabs[id]);
+        cube.name = CUBE.AllCUBES[id].name;
+        return cube;
     }
 
     #endregion
