@@ -23,6 +23,9 @@ namespace LittleByte.GooglePlay
         [SerializeField, UsedImplicitly]
         private int size;
 
+        [SerializeField, UsedImplicitly]
+        private GameObject[] googlePlayButtons;
+
         #endregion
 
         #region Static Fields
@@ -59,6 +62,10 @@ namespace LittleByte.GooglePlay
                 {
                     Social.localUser.Authenticate(SignedIn);
                 }
+                else
+                {
+                    SignInFail();
+                }
             }
 #else
             Destroy(gameObject);
@@ -75,14 +82,25 @@ namespace LittleByte.GooglePlay
             {
                 // sign out
                 ((PlayGamesPlatform)Social.Active).SignOut();
-                button.mainTexture = googlePlus;
-                playerImage = null;
+                SignInFail();
             }
             else
             {
                 // sign in
                 Social.localUser.Authenticate(SignedIn);
             }
+        }
+
+
+        public void Achievements()
+        {
+            Social.ShowAchievementsUI();
+        }
+
+
+        public void Leaderboards()
+        {
+            Social.ShowLeaderboardUI();
         }
 
         #endregion
@@ -95,20 +113,45 @@ namespace LittleByte.GooglePlay
 
             if (success)
             {
-                GoogleProfilePic.LoadProfilePic(Social.localUser.id, size, texture =>
-                                                                           {
-                                                                               playerImage = texture;
-                                                                               button.mainTexture = texture;
-                                                                           });
-                autoSignIn = true;
+                SignInSuccess();
             }
             else
             {
-                playerImage = null;
-                autoSignIn = false;
+                SignInFail();
             }
 
             SaveData.Save(AutoSignInKey, autoSignIn, SocialPath);
+        }
+
+
+        private void SignInSuccess()
+        {
+            GoogleProfilePic.LoadProfilePic(Social.localUser.id, size, texture =>
+                                                                       {
+                                                                           playerImage = texture;
+                                                                           button.mainTexture = texture;
+                                                                       });
+
+            foreach (GameObject playButton in googlePlayButtons)
+            {
+                playButton.SetActive(true);
+            }
+
+            autoSignIn = true;
+        }
+
+
+        private void SignInFail()
+        {
+            button.mainTexture = googlePlus;
+
+            foreach (GameObject playButton in googlePlayButtons)
+            {
+                playButton.SetActive(false);
+            }
+
+            playerImage = null;
+            autoSignIn = false;
         }
 
         #endregion
