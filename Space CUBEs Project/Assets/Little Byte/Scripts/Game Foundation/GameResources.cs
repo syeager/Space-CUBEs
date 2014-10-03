@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 11.26.2013
+﻿// Little Byte Games
+// Author: Steve Yeager
+// Created: 2013.11.27
+// Edited: 2014.10.02
 
 using UnityEngine;
 
@@ -20,12 +22,11 @@ public class GameResources : Singleton<GameResources>
 
     #endregion
 
-
     #region Static Methods
 
-    public static CUBE GetCUBE(int ID)
+    public static CUBE CreateCUBE(int id)
     {
-        return Main.CUBE_Prefabs[ID];
+        return Instantiate(Main.CUBE_Prefabs[id]) as CUBE;
     }
 
     #endregion

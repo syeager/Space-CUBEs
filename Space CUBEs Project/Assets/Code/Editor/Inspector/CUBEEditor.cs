@@ -1,7 +1,7 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2013.11.26
-// Edited: 2014.09.20
+// Edited: 2014.10.02
 
 using System.Linq;
 using UnityEditor;
@@ -20,6 +20,8 @@ public class CUBEEditor : Editor
     public override void OnInspectorGUI()
     {
         LoadInfo();
+
+        if (info == null) return;
 
         // stats
         General();
@@ -71,7 +73,15 @@ public class CUBEEditor : Editor
         if (info == null)
         {
             CUBEInfo[] cubes = CUBE.AllCUBES ?? CUBE.LoadAllCUBEInfo();
-            info = cubes.First(c => c.name == target.name);
+            info = cubes.Single(c => c.name == target.name);
+            //foreach (CUBEInfo cube in cubes)
+            //{
+            //    if (cube.name == target.name)
+            //    {
+            //        info = cube;
+            //        break;
+            //    }
+            //}
         }
     }
 

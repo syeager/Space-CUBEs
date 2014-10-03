@@ -1,14 +1,13 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.04.06
-// Edited: 2014.09.17
+// Edited: 2014.10.02
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using SpaceCUBEs;
 using UnityEngine;
-using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 /// <summary>
@@ -44,7 +43,7 @@ public static class ShowBuild
 
         foreach (var piece in buildInfo.partList)
         {
-            var cube = (CUBE)Object.Instantiate(GameResources.GetCUBE(piece.Key));
+            CUBE cube = GameResources.CreateCUBE(piece.Key);
             cube.transform.parent = transform;
             Material[] materials = new Material[cube.renderer.materials.Length];
             materials.SetAll(material);

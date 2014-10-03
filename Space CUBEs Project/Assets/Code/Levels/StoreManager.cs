@@ -209,7 +209,7 @@ public class StoreManager : Singleton<StoreManager>
                 // selected CUBE
                 itemIndex = ID;
                 CUBEInfo info = CUBE.AllCUBES[itemIndex];
-                if (GameResources.GetCUBE(info.ID) == null) return;
+                if (GameResources.Main.CUBE_Prefabs[info.ID] == null) return;
                 selectedCUBE.text = info.name;
                 count.text = inventory[itemIndex] + OwnSuffix;
 
@@ -231,7 +231,7 @@ public class StoreManager : Singleton<StoreManager>
                 cpLabel.text = info.cost + cp;
 
                 // showcase
-                UpdateShowCase((GameObject)Instantiate(GameResources.GetCUBE(itemIndex).gameObject));
+                UpdateShowCase(GameResources.CreateCUBE(itemIndex).gameObject);
                 break;
             case ItemTypes.Core:
                 currentItemType = ItemTypes.Core;

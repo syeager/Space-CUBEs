@@ -1,7 +1,7 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2013.11.26
-// Edited: 2014.09.30
+// Edited: 2014.10.02
 
 using System;
 using System.Collections;
@@ -406,7 +406,7 @@ namespace SpaceCUBEs
             DeleteCUBE();
 
             // create new CUBE
-            heldCUBE = (CUBE)Instantiate(GameResources.GetCUBE(CUBEID));
+            heldCUBE = GameResources.CreateCUBE(CUBEID);
             heldCUBE.name = CUBE.AllCUBES[CUBEID].name;
             // set materials
             int materialCount = heldCUBE.renderer.materials.Length;
