@@ -1,9 +1,10 @@
-﻿// Steve Yeager
-// 12.3.2013
+﻿// Little Byte Games
+// Author: Steve Yeager
+// Created: 2013.12.03
+// Edited: 2014.10.02
 
-using UnityEngine;
 using System;
-using System.Collections.Generic;
+using UnityEngine;
 
 public class BuildFinishedArgs : EventArgs
 {

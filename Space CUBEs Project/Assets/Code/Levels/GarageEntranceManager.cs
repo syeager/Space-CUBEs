@@ -243,6 +243,7 @@ namespace SpaceCUBEs
             currentPreview = new GameObject();
             currentPreview.transform.parent = previewStage;
             currentPreview.transform.localPosition = new Vector3(-0.5f, -0.5f, -0.5f);
+            currentPreview.transform.localRotation = Quaternion.identity;
 
             if (joinJob != null)
             {

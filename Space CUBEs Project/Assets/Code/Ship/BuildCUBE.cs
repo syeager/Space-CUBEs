@@ -1,5 +1,7 @@
-﻿// Steve Yeager
-// 
+﻿// Little Byte Games
+// Author: Steve Yeager
+// Created: 2013.12.04
+// Edited: 2014.10.02
 
 using UnityEngine;
 
@@ -12,7 +14,7 @@ public class BuildCUBE
     private readonly Vector3 localTarget;
     private float time;
     private readonly float speed;
-    public readonly Vector3 vector;
+    public Vector3 vector;
     private bool done;
 
 
