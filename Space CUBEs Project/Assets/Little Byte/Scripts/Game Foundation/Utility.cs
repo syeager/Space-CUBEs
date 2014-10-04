@@ -136,14 +136,12 @@ public static class Utility
     /// <param name="grid">Grid to update.</param>
     /// <param name="scrollBar">Scrollbar to update.</param>
     ///  <param name="scrollView">ScrollView to update.</param>
-    /// <param name="value">ScrollBar value to set.</param>
-    public static IEnumerator UpdateScrollView(UIGrid grid, UIScrollBar scrollBar, UIScrollView scrollView, float value = 0f)
+    public static IEnumerator UpdateScrollView(UIGrid grid, UIScrollBar scrollBar, UIScrollView scrollView)
     {
-        grid.Reposition();
         yield return new WaitForEndOfFrame();
 
-        scrollBar.value = value;
-        scrollView.UpdateScrollbars();
+        grid.Reposition();
+        scrollView.ResetPosition();
     }
 
     #endregion

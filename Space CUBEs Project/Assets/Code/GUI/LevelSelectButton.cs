@@ -1,11 +1,11 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.08.24
-// Edited: 2014.08.24
+// Edited: 2014.10.03
 
 using System.Text;
-using UnityEngine;
 using SpaceCUBEs;
+using UnityEngine;
 
 public class LevelSelectButton : UIButton
 {
@@ -17,7 +17,7 @@ public class LevelSelectButton : UIButton
     public UILabel highScoreLabel;
     public UILabel bestTimeLabel;
     public UISprite medal;
-	public Color disabledTextColor;
+    public Color disabledTextColor;
 
     #endregion
 
@@ -52,18 +52,18 @@ public class LevelSelectButton : UIButton
 
     public void Disable()
     {
-		nameLabel.color = disabledTextColor;
+        nameLabel.color = disabledTextColor;
         infoBackground.SetActive(false);
         isEnabled = false;
 
         const int randomSize = 14;
         StringBuilder builder = new StringBuilder(randomSize);
-        for (int i = 0; i < randomSize /2; i++)
+        for (int i = 0; i < randomSize / 2; i++)
         {
             builder.Append((char)Random.Range(32, 127));
         }
         builder.Append('\n');
-        for (int i = 0; i < randomSize /2; i++)
+        for (int i = 0; i < randomSize / 2; i++)
         {
             builder.Append((char)Random.Range(32, 127));
         }

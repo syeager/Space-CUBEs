@@ -3,6 +3,7 @@
 // Created: 2014.09.16
 // Edited: 2014.09.17
 
+using System.Collections.ObjectModel;
 using System.Linq;
 using Annotations;
 using LittleByte.Data;
@@ -61,6 +62,8 @@ namespace SpaceCUBEs
         private Job disjoinJob;
         private Job joinJob;
 
+        private readonly List<SelectableButton> buildPreviews = new List<SelectableButton>();
+        
         [Header("Rename")]
         [SerializeField, UsedImplicitly]
         private GameObject renamePanel;
@@ -132,12 +135,15 @@ namespace SpaceCUBEs
 
         public void NewBuild()
         {
-            //CreateGrid();
+            // get name
+            string shipName = CustomName();
+            ConstructionGrid.SelectedBuild = shipName;
 
-            //shipName.value = CustomName();
+            // add build to build list
+            ConstructionGrid.SaveBuild(shipName, new BuildInfo(shipName, new ShipStats(), new Collection<KeyValuePair<CUBE, CUBEGridInfo>>()));
 
-            //corePointsLabel.text = Grid.corePointsAvailable.ToString();
-            //stateMachine.SetState(SelectState);
+            // load workshop
+            SceneManager.LoadScene(Scenes.Scene(Scenes.Menus.Workshop), true, true);
         }
 
 
@@ -152,26 +158,29 @@ namespace SpaceCUBEs
         /// </summary>
         public void DeleteBuild()
         {
-            if (string.IsNullOrEmpty(ConstructionGrid.SelectedBuild)) return;
-
             // delete build
             ConstructionGrid.DeleteBuild(ConstructionGrid.SelectedBuild);
 
             // remove build button
-            ScrollviewButton button = loadGrid.GetComponentsInChildren<ScrollviewButton>().First(b => b.value == ConstructionGrid.SelectedBuild);
+            var button = buildPreviews.Single(b => b.value == ConstructionGrid.SelectedBuild);
             button.ActivateEvent -= OnBuildChosen;
             Destroy(button.gameObject);
 
             // reload grid
-            //StartCoroutine(Utility.UpdateScrollView(loadGrid, loadScrollBar, loadScrollView));
+            StartCoroutine(Utility.UpdateScrollView(loadGrid, (UIScrollBar)loadScrollView.verticalScrollBar, loadScrollView));
 
-            ConstructionGrid.SelectedBuild = ConstructionGrid.BuildNames()[0];
+            // select first build
+//            ConstructionGrid.SelectedBuild = ConstructionGrid.BuildNames()[0];
+            button = buildPreviews[0];
+            SelectableButton.SetSelected(button);
+            OnBuildChosen(button, new ActivateButtonArgs(button.value, false));
+            button.Activate(true);
         }
 
 
         public void EditBuild()
         {
-            SceneManager.LoadScenePayload(Scenes.Menus.Workshop.ToString(), GarageManager.BuildKey, ConstructionGrid.SelectedBuild, true, true); // TODO: send build name
+            SceneManager.LoadScene(Scenes.Scene(Scenes.Menus.Workshop), true, true);
         }
 
         #endregion
@@ -189,8 +198,11 @@ namespace SpaceCUBEs
                 button.GetComponent<BuildPreview>().Initialize(info);
                 button.ActivateEvent += OnBuildChosen;
 
+                buildPreviews.Add(button);
+
                 if (buildName == ConstructionGrid.SelectedBuild)
                 {
+                    SelectableButton.SetSelected(button);
                     OnBuildChosen(button, new ActivateButtonArgs(buildName, false));
                 }
             }

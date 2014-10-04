@@ -123,8 +123,6 @@ namespace SpaceCUBEs
 
         #region Const Fields
 
-        public const string BuildKey = "Build";
-
         private static readonly Vector3[] CameraPositions =
         {
             Vector3.up,

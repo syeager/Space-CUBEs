@@ -224,7 +224,7 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick:
-  - mTarget: {fileID: 1356246781}
+  - mTarget: {fileID: 1795678368}
     mMethodName: NewBuild
     mParameters: []
     oneShot: 0
@@ -672,7 +672,7 @@ Transform:
   m_Children:
   - {fileID: 830012836}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
 --- !u!1001 &373307765
 Prefab:
   m_ObjectHideFlags: 0
@@ -1419,7 +1419,7 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick:
-  - mTarget: {fileID: 1356246779}
+  - mTarget: {fileID: 1795678368}
     mMethodName: DeleteBuild
     mParameters: []
     oneShot: 0
@@ -1802,7 +1802,7 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick:
-  - mTarget: {fileID: 1356246779}
+  - mTarget: {fileID: 0}
     mMethodName: RenameBuild
     mParameters: []
     oneShot: 0
@@ -3150,7 +3150,7 @@ MonoBehaviour:
   anchorOffset: 0
   softBorderPadding: 0
   renderQueue: 0
-  startingRenderQueue: 3003
+  startingRenderQueue: 3008
   mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 0
@@ -3555,7 +3555,6 @@ GameObject:
   - 114: {fileID: 1036628319}
   - 114: {fileID: 1036628318}
   - 54: {fileID: 1036628321}
-  - 114: {fileID: 1036628320}
   m_Layer: 8
   m_Name: Scrollbar
   m_TagString: Untagged
@@ -3653,18 +3652,6 @@ MonoBehaviour:
   hideIfOffScreen: 0
   keepAspectRatio: 0
   aspectRatio: .0677966103
---- !u!114 &1036628320
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400004, guid: a87b15910ea3d334caf6ee28fc12b2e0,
-    type: 2}
-  m_PrefabInternal: {fileID: 1330465359}
-  m_GameObject: {fileID: 1036628316}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1bd99dcf43f97d48bb6215c70f0cd40, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &1036628321
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4713,7 +4700,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
 --- !u!1 &1323662341
 GameObject:
   m_ObjectHideFlags: 0
@@ -4855,7 +4842,8 @@ Prefab:
       propertyPath: m_LocalPosition.y
       value: 246
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 11400004, guid: a87b15910ea3d334caf6ee28fc12b2e0, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: a87b15910ea3d334caf6ee28fc12b2e0, type: 2}
   m_RootGameObject: {fileID: 1036628316}
   m_IsPrefabParent: 0
@@ -5003,7 +4991,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400020, guid: e95f85aa3110abc429999d6bba111ed7, type: 2}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 400024, guid: e95f85aa3110abc429999d6bba111ed7, type: 2}
       propertyPath: m_LocalScale.x
@@ -5034,98 +5022,6 @@ Prefab:
   m_RootGameObject: {fileID: 353192584}
   m_IsPrefabParent: 0
   m_IsExploded: 1
---- !u!1 &1356246778
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 1356246780}
-  - 114: {fileID: 1356246779}
-  - 114: {fileID: 1356246781}
-  m_Layer: 0
-  m_Name: _GarageEntranceManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &1356246779
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1356246778}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 649d344a0b012174191ac4786e232b68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  log: 1
-  timeScale: 1
-  logWarning: 0
-  dontDestroy: 0
-  mainCamera: {fileID: 0}
-  cameraSpeed: 5
-  zoomSpeed: 10
-  zoomMin: 1.5
-  zoomMax: 15
-  zoomStart: 8
-  swipeDist: 200
-  swipeTime: 1.5
-  pinchModifier: 5
-  pinchMin: 15
-  menuSwipeDist: 25
-  actionButtons: {fileID: 0}
-  grid: {fileID: 0}
-  previewCube: {fileID: 0}
-  previewShip: {fileID: 0}
-  cubeLibrary: {fileID: 0}
-  paintMenu: {fileID: 0}
-  abilityMenu: {fileID: 0}
-  saveConfirmation: {fileID: 0}
-  saveShipName: {fileID: 0}
-  menuNavButtons:
-  - {fileID: 0}
-  - {fileID: 0}
-  corePointsLabel: {fileID: 0}
---- !u!4 &1356246780
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1356246778}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.87672234, y: 13.0570908, z: -.751478851}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
---- !u!114 &1356246781
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1356246778}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8b2d64c820f79a4c9df32cba72b4692, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  log: 0
-  timeScale: 1
-  buildPreviewButtonPrefab: {fileID: 0}
-  loadScrollView: {fileID: 0}
-  loadGrid: {fileID: 0}
-  selectedBuildPreview: {fileID: 0}
-  preview: {fileID: 0}
-  previewStage: {fileID: 0}
-  buildMaterial: {fileID: 0}
-  buildTime: 1
-  releaseTime: 2
-  renamePanel: {fileID: 0}
-  renameInput: {fileID: 0}
 --- !u!1 &1402255035
 GameObject:
   m_ObjectHideFlags: 0
@@ -6002,7 +5898,7 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick:
-  - mTarget: {fileID: 1356246779}
+  - mTarget: {fileID: 0}
     mMethodName: CopyBuild
     mParameters: []
     oneShot: 0
@@ -6302,7 +6198,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 4
 --- !u!1 &1806772111
 GameObject:
   m_ObjectHideFlags: 0
