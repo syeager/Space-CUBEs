@@ -149,7 +149,19 @@ namespace SpaceCUBEs
 
         public void CopyBuild()
         {
-            // TODO
+            BuildInfo info = ConstructionGrid.LoadBuild(ConstructionGrid.SelectedBuild);
+
+            // get name
+            string shipName = CustomName();
+            ConstructionGrid.SelectedBuild = shipName;
+
+            info.name = shipName;
+
+            // add build to build list
+            ConstructionGrid.SaveBuild(shipName, info);
+
+            // load workshop
+            SceneManager.LoadScene(Scenes.Scene(Scenes.Menus.Workshop), true, true);
         }
 
 
