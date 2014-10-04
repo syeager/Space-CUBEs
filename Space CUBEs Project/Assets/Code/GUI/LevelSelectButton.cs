@@ -3,10 +3,13 @@
 // Created: 2014.08.24
 // Edited: 2014.10.03
 
+using System;
 using System.Text;
 using SpaceCUBEs;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
+[Obsolete("inherit from selectable button")]
 public class LevelSelectButton : UIButton
 {
     #region Public Fields

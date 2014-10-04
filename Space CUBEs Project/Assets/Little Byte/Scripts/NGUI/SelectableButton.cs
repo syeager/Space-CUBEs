@@ -1,7 +1,7 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.09.01
-// Edited: 2014.09.23
+// Edited: 2014.10.03
 
 using System.Collections.Generic;
 using Annotations;
@@ -14,6 +14,12 @@ namespace LittleByte.NGUI
         #region Public Fields
 
         public int group = -1;
+
+        public bool startSelected;
+
+        public bool toggle;
+
+        public bool onPress = true;
 
         #endregion
 
@@ -32,12 +38,40 @@ namespace LittleByte.NGUI
 
         #endregion
 
+        #region MonoBehaviour Overrides
+
+        protected virtual void Awake()
+        {
+            if (startSelected)
+            {
+                SetSelected(this);
+            }
+        }
+
+        #endregion
+
         #region UIButton Overrides
 
-        protected override void OnClick()
+        protected override void OnPress(bool isPressed)
         {
-            base.OnClick();
-            SetSelected(this);
+            if (onPress && !isPressed) return;
+            if (!onPress && isPressed) return;
+
+            if (SelectedButtons[group] == this)
+            {
+                if (toggle)
+                {
+                    // deselect
+                    base.OnPress(isPressed);
+                    Deselect(this);
+                }
+            }
+            else
+            {
+                // select
+                base.OnPress(isPressed);
+                SetSelected(this);
+            }
         }
 
         #endregion
@@ -88,6 +122,24 @@ namespace LittleByte.NGUI
             button.enabled = false;
             button.SetState(State.Pressed, true);
             SelectedButtons[button.group] = button;
+        }
+
+
+        public static void Deselect(SelectableButton button)
+        {
+            // initialize groups
+            while (SelectedButtons.Count - 1 < button.group)
+            {
+                SelectedButtons.Add(null);
+            }
+
+            button.enabled = true;
+            button.SetState(State.Normal, true);
+
+            if (button.group != -1)
+            {
+                SelectedButtons[button.group] = null;
+            }
         }
 
         #endregion

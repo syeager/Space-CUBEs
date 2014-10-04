@@ -1096,9 +1096,9 @@ namespace SpaceCUBEs
         /// <param name="newName">New name of the build.</param>
         public static void RenameBuild(string oldName, string newName)
         {
-            // update build data
-            string buildInfo = SaveData.Load<string>(oldName, BuildsFolder);
-            SaveData.Delete(oldName);
+            BuildInfo buildInfo = SaveData.Load<BuildInfo>(oldName, BuildsFolder);
+            buildInfo.name = newName;
+            SaveData.Delete(oldName, BuildsFolder);
             SaveData.Save(newName, buildInfo, BuildsFolder);
         }
 

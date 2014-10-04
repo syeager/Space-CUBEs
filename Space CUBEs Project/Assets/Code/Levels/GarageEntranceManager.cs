@@ -1,16 +1,16 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.09.16
-// Edited: 2014.09.17
+// Edited: 2014.10.04
 
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Annotations;
+using LittleByte;
 using LittleByte.Data;
-using System.Collections.Generic;
 using LittleByte.NGUI;
 using UnityEngine;
-using LittleByte;
 
 namespace SpaceCUBEs
 {
@@ -63,7 +63,7 @@ namespace SpaceCUBEs
         private Job joinJob;
 
         private readonly List<SelectableButton> buildPreviews = new List<SelectableButton>();
-        
+
         [Header("Rename")]
         [SerializeField, UsedImplicitly]
         private GameObject renamePanel;
@@ -94,24 +94,20 @@ namespace SpaceCUBEs
 
         #endregion
 
-        #region State Methods
-
-        private void LoadExit(Dictionary<string, object> info)
-        {
-            //CreateGrid();
-            //Grid.CreateBuild(ConstructionGrid.selectedBuild);
-            //shipName.value = Grid.buildName;
-            //corePointsLabel.text = Grid.corePointsAvailable.ToString();
-        }
-
-        #endregion
-
         #region Public Methods
 
         public void ConfirmRename()
         {
-            renamePanel.SetActive(true);
-            renameInput.value = ConstructionGrid.SelectedBuild;
+            if (renamePanel.activeInHierarchy)
+            {
+                CancelRename();
+            }
+            else
+            {
+                renamePanel.SetActive(true);
+                renameInput.value = ConstructionGrid.SelectedBuild;
+                OverlayEventArgs.Fire(this, "Rename", true);
+            }
         }
 
 
@@ -120,16 +116,19 @@ namespace SpaceCUBEs
             ConstructionGrid.RenameBuild(ConstructionGrid.SelectedBuild, renameInput.value);
             renamePanel.SetActive(false);
 
-            ScrollviewButton button = loadGrid.GetComponentsInChildren<ScrollviewButton>().First(b => b.value == ConstructionGrid.SelectedBuild);
+            SelectableButton button = buildPreviews.Single(b => b.value == ConstructionGrid.SelectedBuild);
             ConstructionGrid.SelectedBuild = renameInput.value;
             button.value = ConstructionGrid.SelectedBuild;
             button.label.text = ConstructionGrid.SelectedBuild;
+
+            OverlayEventArgs.Fire(this, "Rename", false);
         }
 
 
         public void CancelRename()
         {
             renamePanel.SetActive(false);
+            OverlayEventArgs.Fire(this, "Rename", false);
         }
 
 
@@ -174,7 +173,7 @@ namespace SpaceCUBEs
             ConstructionGrid.DeleteBuild(ConstructionGrid.SelectedBuild);
 
             // remove build button
-            var button = buildPreviews.Single(b => b.value == ConstructionGrid.SelectedBuild);
+            SelectableButton button = buildPreviews.Single(b => b.value == ConstructionGrid.SelectedBuild);
             button.ActivateEvent -= OnBuildChosen;
             Destroy(button.gameObject);
 
@@ -244,7 +243,7 @@ namespace SpaceCUBEs
 
         private void OnBuildChosen(object sender, ActivateButtonArgs args)
         {
-            if (args.isPressed) return;
+            if (!args.isPressed) return;
 
             ConstructionGrid.SelectedBuild = args.value;
             SelectableButton button = (SelectableButton)sender;
