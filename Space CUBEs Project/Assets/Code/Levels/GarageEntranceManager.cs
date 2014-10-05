@@ -181,11 +181,9 @@ namespace SpaceCUBEs
             StartCoroutine(Utility.UpdateScrollView(loadGrid, (UIScrollBar)loadScrollView.verticalScrollBar, loadScrollView));
 
             // select first build
-//            ConstructionGrid.SelectedBuild = ConstructionGrid.BuildNames()[0];
-            button = buildPreviews[0];
-            SelectableButton.SetSelected(button);
-            OnBuildChosen(button, new ActivateButtonArgs(button.value, false));
-            button.Activate(true);
+            var firstButton = buildPreviews[0];
+            SelectableButton.SetSelected(firstButton);
+            OnBuildChosen(firstButton, new ActivateButtonArgs(firstButton.value, true));
         }
 
 
@@ -214,7 +212,7 @@ namespace SpaceCUBEs
                 if (buildName == ConstructionGrid.SelectedBuild)
                 {
                     SelectableButton.SetSelected(button);
-                    OnBuildChosen(button, new ActivateButtonArgs(buildName, false));
+                    OnBuildChosen(button, new ActivateButtonArgs(buildName, true));
                 }
             }
         }
