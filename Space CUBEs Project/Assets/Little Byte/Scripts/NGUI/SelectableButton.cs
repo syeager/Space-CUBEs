@@ -1,7 +1,7 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.09.01
-// Edited: 2014.10.03
+// Edited: 2014.10.04
 
 using System.Collections.Generic;
 using Annotations;
@@ -13,13 +13,20 @@ namespace LittleByte.NGUI
     {
         #region Public Fields
 
-        public int group = -1;
+        public string group;
 
         public bool startSelected;
 
         public bool toggle;
 
-        public bool onPress = true;
+        public enum ActivateTypes
+        {
+            Press,
+            Release,
+            Click
+        }
+
+        public ActivateTypes activateType;
 
         #endregion
 
@@ -34,7 +41,7 @@ namespace LittleByte.NGUI
 
         #region Static Fields
 
-        private static readonly List<SelectableButton> SelectedButtons = new List<SelectableButton>();
+        private static readonly Dictionary<string, SelectableButton> SelectedButtons = new Dictionary<string, SelectableButton>();
 
         #endregion
 
@@ -42,6 +49,12 @@ namespace LittleByte.NGUI
 
         protected virtual void Awake()
         {
+            // initialize groups
+            if (!SelectedButtons.ContainsKey(group))
+            {
+                SelectedButtons.Add(group, null);
+            }
+
             if (startSelected)
             {
                 SetSelected(this);
@@ -54,8 +67,9 @@ namespace LittleByte.NGUI
 
         protected override void OnPress(bool isPressed)
         {
-            if (onPress && !isPressed) return;
-            if (!onPress && isPressed) return;
+            if (activateType == ActivateTypes.Click) return;
+            if (activateType == ActivateTypes.Press && !isPressed) return;
+            if (activateType == ActivateTypes.Release && isPressed) return;
 
             if (SelectedButtons[group] == this)
             {
@@ -70,6 +84,29 @@ namespace LittleByte.NGUI
             {
                 // select
                 base.OnPress(isPressed);
+                SetSelected(this);
+            }
+        }
+
+
+        protected override void OnClick()
+        {
+            if (activateType != ActivateTypes.Click) return;
+            base.OnClick();
+
+            if (SelectedButtons[group] == this)
+            {
+                if (toggle)
+                {
+                    // deselect
+                    base.OnClick();
+                    Deselect(this);
+                }
+            }
+            else
+            {
+                // select
+                base.OnClick();
                 SetSelected(this);
             }
         }
@@ -99,17 +136,11 @@ namespace LittleByte.NGUI
         public static void SetSelected(SelectableButton button)
         {
             // no group
-            if (button.group == -1)
+            if (string.IsNullOrEmpty(button.group))
             {
                 button.enabled = false;
                 button.SetState(State.Pressed, true);
                 return;
-            }
-
-            // initialize groups
-            while (SelectedButtons.Count - 1 < button.group)
-            {
-                SelectedButtons.Add(null);
             }
 
             // switch selected
@@ -127,16 +158,10 @@ namespace LittleByte.NGUI
 
         public static void Deselect(SelectableButton button)
         {
-            // initialize groups
-            while (SelectedButtons.Count - 1 < button.group)
-            {
-                SelectedButtons.Add(null);
-            }
-
             button.enabled = true;
             button.SetState(State.Normal, true);
 
-            if (button.group != -1)
+            if (string.IsNullOrEmpty(button.group))
             {
                 SelectedButtons[button.group] = null;
             }

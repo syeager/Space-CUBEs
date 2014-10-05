@@ -7,6 +7,7 @@ using UnityEditor;
 
 namespace LittleByte.NGUI
 {
+    [CanEditMultipleObjects]
     [CustomEditor(typeof(SelectableButton))]
     public class SelectableButtonInspector : ActivateButtonEditor
     {
@@ -19,7 +20,7 @@ namespace LittleByte.NGUI
             EditorGUILayout.PropertyField(serializedObject.FindProperty("group"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("startSelected"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("toggle"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onPress"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("activateType"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("dragScrollView"));
 
             serializedObject.ApplyModifiedProperties();

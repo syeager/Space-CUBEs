@@ -13,7 +13,6 @@ public class StoreItem : MonoBehaviour
     public UISprite preview;
     public UISprite icon;
     public UILabel itemName;
-    public UILabel infoText;
     public UILabel buyPrice;
     public UILabel sellPrice;
     public UILabel cp;
@@ -50,14 +49,12 @@ public class StoreItem : MonoBehaviour
 
     #region Public Methods
 
-    public void Initialize(StoreManager.ItemTypes itemType, int ID, string itemName, string infoText, int price, int cp)
+    public void Initialize(StoreManager.ItemTypes itemType, int ID, string itemName, int price, int cp)
     {
         name = itemName;
         this.itemType = itemType;
         this.ID = ID;
-
         this.itemName.text = itemName;
-        this.infoText.text = infoText;
         buyPrice.text = StoreManager.FormatMoney(price, false);
         sellPrice.text = StoreManager.FormatMoney((int)(price * StoreManager.SellPercent), true);
         this.cp.text = cp.ToString();
@@ -66,6 +63,7 @@ public class StoreItem : MonoBehaviour
 
     public void Clicked()
     {
+        Debug.Log("clicked");
         StoreManager.Main.ItemClicked(this, itemType, ID);
     }
 
