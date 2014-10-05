@@ -565,6 +565,7 @@ namespace SpaceCUBEs
             var showShip = (GameObject)Instantiate(Singleton<GameResources>.Main.player_Prefab);
             showShip.name = "Player";
             showShip.transform.SetPosRot(startPosition, Quaternion.Euler(startRotation));
+            ShowBuild.material = GameResources.Main.VertexColor_Mat;
             StartCoroutine(ShowBuild.Join(LoadBuild(build), buildSize, showShip.transform, maxTime, finshedAction));
         }
 
