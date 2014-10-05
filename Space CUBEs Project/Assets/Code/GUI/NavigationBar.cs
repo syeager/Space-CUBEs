@@ -31,7 +31,14 @@ public class NavigationBar : Singleton<NavigationBar>
     [UsedImplicitly]
     private void Start()
     {
-        UpdateButtons(Scenes.Menu(Application.loadedLevelName));
+        if (Scenes.MenuNames.ContainsValue(Application.loadedLevelName))
+        {
+            UpdateButtons(Scenes.Menu(Application.loadedLevelName));
+        }
+        else
+        {
+            UpdateAll(true);
+        }
     }
 
 
@@ -89,6 +96,15 @@ public class NavigationBar : Singleton<NavigationBar>
         garage.isEnabled = menu != Scenes.Menus.Garage;
         store.isEnabled = menu != Scenes.Menus.Store;
         levelSelect.isEnabled = menu != Scenes.Menus.LevelSelectMenu;
+    }
+
+
+    private void UpdateAll(bool on)
+    {
+        mainMenu.isEnabled = on;
+        garage.isEnabled = on;
+        store.isEnabled = on;
+        levelSelect.isEnabled = on;
     }
 
     #endregion
