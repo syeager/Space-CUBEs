@@ -1,7 +1,7 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.09.09
-// Edited: 2014.10.02
+// Edited: 2014.10.04
 
 using Annotations;
 using GooglePlayGames;
@@ -53,6 +53,11 @@ namespace LittleByte.GooglePlay
             if (Social.localUser.authenticated)
             {
                 button.mainTexture = playerImage;
+
+                foreach (GameObject playButton in googlePlayButtons)
+                {
+                    playButton.SetActive(true);
+                }
             }
             else
             {
@@ -82,7 +87,7 @@ namespace LittleByte.GooglePlay
             {
                 // sign out
                 ((PlayGamesPlatform)Social.Active).SignOut();
-                SignInFail();
+                SignedIn(false);
             }
             else
             {
