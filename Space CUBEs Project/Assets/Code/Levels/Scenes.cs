@@ -34,7 +34,7 @@ namespace SpaceCUBEs
 
         #region Const Fields
 
-        private static readonly Dictionary<Levels, string> LevelNames = new Dictionary<Levels, string>
+        public static readonly Dictionary<Levels, string> LevelNames = new Dictionary<Levels, string>
                                                                         {
                                                                             {Levels.TheAbyss, "The Abyss"},
                                                                             {Levels.NebulaForest, "Nebula Forest"},
@@ -43,7 +43,7 @@ namespace SpaceCUBEs
                                                                             {Levels.GalacticCore, "Galactic Core"},
                                                                         };
 
-        private static readonly Dictionary<Menus, string> MenuNames = new Dictionary<Menus, string>
+        public static readonly Dictionary<Menus, string> MenuNames = new Dictionary<Menus, string>
                                                                         {
                                                                             {Menus.MainMenu, "Main Menu"},
                                                                             {Menus.LevelSelectMenu, "Level Select Menu"},
