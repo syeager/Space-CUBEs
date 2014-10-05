@@ -196,7 +196,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &100024
 GameObject:
   m_ObjectHideFlags: 1
@@ -737,6 +737,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400020}
+  m_RootOrder: 4
 --- !u!4 &400002
 Transform:
   m_ObjectHideFlags: 1
@@ -748,6 +749,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400082}
+  m_RootOrder: 0
 --- !u!4 &400004
 Transform:
   m_ObjectHideFlags: 1
@@ -761,6 +763,7 @@ Transform:
   - {fileID: 400012}
   - {fileID: 400088}
   m_Father: {fileID: 400022}
+  m_RootOrder: 4
 --- !u!4 &400006
 Transform:
   m_ObjectHideFlags: 1
@@ -772,6 +775,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400008}
+  m_RootOrder: 0
 --- !u!4 &400008
 Transform:
   m_ObjectHideFlags: 1
@@ -784,6 +788,7 @@ Transform:
   m_Children:
   - {fileID: 400006}
   m_Father: {fileID: 400032}
+  m_RootOrder: 0
 --- !u!4 &400010
 Transform:
   m_ObjectHideFlags: 1
@@ -795,6 +800,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400048}
+  m_RootOrder: 2
 --- !u!4 &400012
 Transform:
   m_ObjectHideFlags: 1
@@ -806,6 +812,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400004}
+  m_RootOrder: 0
 --- !u!4 &400014
 Transform:
   m_ObjectHideFlags: 1
@@ -817,6 +824,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400082}
+  m_RootOrder: 3
 --- !u!4 &400016
 Transform:
   m_ObjectHideFlags: 1
@@ -829,6 +837,7 @@ Transform:
   m_Children:
   - {fileID: 400066}
   m_Father: {fileID: 400036}
+  m_RootOrder: 0
 --- !u!4 &400018
 Transform:
   m_ObjectHideFlags: 1
@@ -840,6 +849,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400022}
+  m_RootOrder: 3
 --- !u!4 &400020
 Transform:
   m_ObjectHideFlags: 1
@@ -857,6 +867,7 @@ Transform:
   - {fileID: 400000}
   - {fileID: 400068}
   m_Father: {fileID: 400022}
+  m_RootOrder: 7
 --- !u!4 &400022
 Transform:
   m_ObjectHideFlags: 1
@@ -864,7 +875,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100022}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 12.4042892, y: 76.7898865, z: 0}
   m_LocalScale: {x: 1.00007999, y: 1.00007999, z: 1.00007999}
   m_Children:
   - {fileID: 400042}
@@ -877,6 +888,7 @@ Transform:
   - {fileID: 400020}
   - {fileID: 400052}
   m_Father: {fileID: 0}
+  m_RootOrder: 0
 --- !u!4 &400024
 Transform:
   m_ObjectHideFlags: 1
@@ -888,6 +900,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400078}
+  m_RootOrder: 0
 --- !u!4 &400026
 Transform:
   m_ObjectHideFlags: 1
@@ -899,6 +912,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400048}
+  m_RootOrder: 0
 --- !u!4 &400028
 Transform:
   m_ObjectHideFlags: 1
@@ -911,6 +925,7 @@ Transform:
   m_Children:
   - {fileID: 400064}
   m_Father: {fileID: 400032}
+  m_RootOrder: 1
 --- !u!4 &400030
 Transform:
   m_ObjectHideFlags: 1
@@ -922,6 +937,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400048}
+  m_RootOrder: 3
 --- !u!4 &400032
 Transform:
   m_ObjectHideFlags: 1
@@ -936,6 +952,7 @@ Transform:
   - {fileID: 400028}
   - {fileID: 400080}
   m_Father: {fileID: 400038}
+  m_RootOrder: 0
 --- !u!4 &400034
 Transform:
   m_ObjectHideFlags: 1
@@ -947,6 +964,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400020}
+  m_RootOrder: 0
 --- !u!4 &400036
 Transform:
   m_ObjectHideFlags: 1
@@ -960,6 +978,7 @@ Transform:
   - {fileID: 400016}
   - {fileID: 400078}
   m_Father: {fileID: 400038}
+  m_RootOrder: 1
 --- !u!4 &400038
 Transform:
   m_ObjectHideFlags: 1
@@ -973,6 +992,7 @@ Transform:
   - {fileID: 400032}
   - {fileID: 400036}
   m_Father: {fileID: 400022}
+  m_RootOrder: 2
 --- !u!4 &400040
 Transform:
   m_ObjectHideFlags: 1
@@ -984,6 +1004,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400048}
+  m_RootOrder: 4
 --- !u!4 &400042
 Transform:
   m_ObjectHideFlags: 1
@@ -997,6 +1018,7 @@ Transform:
   - {fileID: 400062}
   - {fileID: 400056}
   m_Father: {fileID: 400022}
+  m_RootOrder: 0
 --- !u!4 &400044
 Transform:
   m_ObjectHideFlags: 1
@@ -1008,6 +1030,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400082}
+  m_RootOrder: 5
 --- !u!4 &400046
 Transform:
   m_ObjectHideFlags: 1
@@ -1019,6 +1042,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400080}
+  m_RootOrder: 0
 --- !u!4 &400048
 Transform:
   m_ObjectHideFlags: 1
@@ -1035,6 +1059,7 @@ Transform:
   - {fileID: 400030}
   - {fileID: 400040}
   m_Father: {fileID: 400022}
+  m_RootOrder: 5
 --- !u!4 &400050
 Transform:
   m_ObjectHideFlags: 1
@@ -1048,6 +1073,7 @@ Transform:
   - {fileID: 400058}
   - {fileID: 400070}
   m_Father: {fileID: 400022}
+  m_RootOrder: 1
 --- !u!4 &400052
 Transform:
   m_ObjectHideFlags: 1
@@ -1055,10 +1081,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100052}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 239, z: 0}
+  m_LocalPosition: {x: -12.4042969, y: -219.789886, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400022}
+  m_RootOrder: 8
 --- !u!4 &400054
 Transform:
   m_ObjectHideFlags: 1
@@ -1070,6 +1097,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400082}
+  m_RootOrder: 2
 --- !u!4 &400056
 Transform:
   m_ObjectHideFlags: 1
@@ -1081,6 +1109,7 @@ Transform:
   m_LocalScale: {x: .00277799997, y: .00277799997, z: .00277799997}
   m_Children: []
   m_Father: {fileID: 400042}
+  m_RootOrder: 1
 --- !u!4 &400058
 Transform:
   m_ObjectHideFlags: 1
@@ -1092,6 +1121,7 @@ Transform:
   m_LocalScale: {x: .00277799997, y: .00277799997, z: .00277799997}
   m_Children: []
   m_Father: {fileID: 400050}
+  m_RootOrder: 0
 --- !u!4 &400060
 Transform:
   m_ObjectHideFlags: 1
@@ -1103,6 +1133,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400048}
+  m_RootOrder: 1
 --- !u!4 &400062
 Transform:
   m_ObjectHideFlags: 1
@@ -1114,6 +1145,7 @@ Transform:
   m_LocalScale: {x: .00277799997, y: .00277799997, z: .00277799997}
   m_Children: []
   m_Father: {fileID: 400042}
+  m_RootOrder: 0
 --- !u!4 &400064
 Transform:
   m_ObjectHideFlags: 1
@@ -1125,6 +1157,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400028}
+  m_RootOrder: 0
 --- !u!4 &400066
 Transform:
   m_ObjectHideFlags: 1
@@ -1136,6 +1169,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400016}
+  m_RootOrder: 0
 --- !u!4 &400068
 Transform:
   m_ObjectHideFlags: 1
@@ -1147,6 +1181,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400020}
+  m_RootOrder: 5
 --- !u!4 &400070
 Transform:
   m_ObjectHideFlags: 1
@@ -1158,6 +1193,7 @@ Transform:
   m_LocalScale: {x: .00277799997, y: .00277799997, z: .00277799997}
   m_Children: []
   m_Father: {fileID: 400050}
+  m_RootOrder: 1
 --- !u!4 &400072
 Transform:
   m_ObjectHideFlags: 1
@@ -1169,6 +1205,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400082}
+  m_RootOrder: 1
 --- !u!4 &400074
 Transform:
   m_ObjectHideFlags: 1
@@ -1180,6 +1217,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400020}
+  m_RootOrder: 1
 --- !u!4 &400076
 Transform:
   m_ObjectHideFlags: 1
@@ -1191,6 +1229,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400082}
+  m_RootOrder: 4
 --- !u!4 &400078
 Transform:
   m_ObjectHideFlags: 1
@@ -1203,6 +1242,7 @@ Transform:
   m_Children:
   - {fileID: 400024}
   m_Father: {fileID: 400036}
+  m_RootOrder: 1
 --- !u!4 &400080
 Transform:
   m_ObjectHideFlags: 1
@@ -1215,6 +1255,7 @@ Transform:
   m_Children:
   - {fileID: 400046}
   m_Father: {fileID: 400032}
+  m_RootOrder: 2
 --- !u!4 &400082
 Transform:
   m_ObjectHideFlags: 1
@@ -1232,6 +1273,7 @@ Transform:
   - {fileID: 400076}
   - {fileID: 400044}
   m_Father: {fileID: 400022}
+  m_RootOrder: 6
 --- !u!4 &400084
 Transform:
   m_ObjectHideFlags: 1
@@ -1243,6 +1285,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400020}
+  m_RootOrder: 3
 --- !u!4 &400086
 Transform:
   m_ObjectHideFlags: 1
@@ -1254,6 +1297,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400020}
+  m_RootOrder: 2
 --- !u!4 &400088
 Transform:
   m_ObjectHideFlags: 1
@@ -1265,6 +1309,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400004}
+  m_RootOrder: 1
 --- !u!54 &5400000
 Rigidbody:
   m_ObjectHideFlags: 1
@@ -1504,7 +1549,7 @@ MonoBehaviour:
   mEffectDistance: {x: 1, y: 1}
   mOverflow: 0
   mMaterial: {fileID: 0}
-  mApplyGradient: 1
+  mApplyGradient: 0
   mGradientTop: {r: 1, g: 1, b: 1, a: 1}
   mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   mSpacingX: 0
@@ -1601,7 +1646,6 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick: []
-  activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
   value: 
 --- !u!114 &11400010
@@ -1706,7 +1750,7 @@ MonoBehaviour:
   mEffectDistance: {x: 1, y: 1}
   mOverflow: 0
   mMaterial: {fileID: 0}
-  mApplyGradient: 1
+  mApplyGradient: 0
   mGradientTop: {r: 1, g: 1, b: 1, a: 1}
   mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   mSpacingX: 0
@@ -1853,7 +1897,6 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick: []
-  activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
   value: 
 --- !u!114 &11400020
@@ -2027,8 +2070,10 @@ MonoBehaviour:
   cullWhileDragging: 0
   alwaysOnScreen: 1
   anchorOffset: 0
+  softBorderPadding: 1
   renderQueue: 0
-  startingRenderQueue: 3005
+  startingRenderQueue: 3007
+  mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 300, w: 200}
@@ -2194,7 +2239,7 @@ MonoBehaviour:
   mEffectDistance: {x: 1, y: 1}
   mOverflow: 0
   mMaterial: {fileID: 0}
-  mApplyGradient: 1
+  mApplyGradient: 0
   mGradientTop: {r: 1, g: 1, b: 1, a: 1}
   mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   mSpacingX: 0
@@ -2229,7 +2274,6 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick: []
-  activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
   value: 
 --- !u!114 &11400036
@@ -2334,7 +2378,7 @@ MonoBehaviour:
   mEffectDistance: {x: 1, y: 1}
   mOverflow: 0
   mMaterial: {fileID: 0}
-  mApplyGradient: 1
+  mApplyGradient: 0
   mGradientTop: {r: 1, g: 1, b: 1, a: 1}
   mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   mSpacingX: 0
@@ -2396,7 +2440,7 @@ MonoBehaviour:
   mEffectDistance: {x: 1, y: 1}
   mOverflow: 0
   mMaterial: {fileID: 0}
-  mApplyGradient: 1
+  mApplyGradient: 0
   mGradientTop: {r: 1, g: 1, b: 1, a: 1}
   mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   mSpacingX: 0
@@ -2458,7 +2502,7 @@ MonoBehaviour:
   mEffectDistance: {x: 1, y: 1}
   mOverflow: 0
   mMaterial: {fileID: 0}
-  mApplyGradient: 1
+  mApplyGradient: 0
   mGradientTop: {r: 1, g: 1, b: 1, a: 1}
   mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   mSpacingX: 0
@@ -2694,7 +2738,7 @@ MonoBehaviour:
   mEffectDistance: {x: 1, y: 1}
   mOverflow: 0
   mMaterial: {fileID: 0}
-  mApplyGradient: 1
+  mApplyGradient: 0
   mGradientTop: {r: 1, g: 1, b: 1, a: 1}
   mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   mSpacingX: 0
@@ -2778,47 +2822,47 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   leftAnchor:
-    target: {fileID: 0}
-    relative: 0
-    absolute: 0
+    target: {fileID: 400022}
+    relative: .5
+    absolute: -228
   rightAnchor:
-    target: {fileID: 0}
-    relative: 1
-    absolute: 0
+    target: {fileID: 400022}
+    relative: .5
+    absolute: 228
   bottomAnchor:
-    target: {fileID: 0}
-    relative: 0
-    absolute: 0
+    target: {fileID: 400022}
+    relative: 1
+    absolute: -144
   topAnchor:
-    target: {fileID: 0}
+    target: {fileID: 400022}
     relative: 1
     absolute: 0
   updateAnchors: 1
-  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mColor: {r: .513725519, g: .211764708, b: .600000024, a: 1}
   mPivot: 7
-  mWidth: 356
-  mHeight: 66
+  mWidth: 456
+  mHeight: 144
   mDepth: 0
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 5.3939395
+  aspectRatio: .75621891
   keepCrispWhenShrunk: 1
-  mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
+  mTrueTypeFont: {fileID: 12800000, guid: 36de65d05404129449ea7f59298a6cdd, type: 3}
   mFont: {fileID: 0}
-  mText: Battle Ranking
-  mFontSize: 24
+  mText: BATTLE RANKING
+  mFontSize: 80
   mFontStyle: 0
-  mAlignment: 0
+  mAlignment: 2
   mEncoding: 1
   mMaxLineCount: 0
   mEffectStyle: 0
   mEffectColor: {r: 0, g: 0, b: 0, a: 1}
   mSymbols: 1
   mEffectDistance: {x: 1, y: 1}
-  mOverflow: 0
+  mOverflow: 1
   mMaterial: {fileID: 0}
-  mApplyGradient: 1
+  mApplyGradient: 0
   mGradientTop: {r: 1, g: 1, b: 1, a: 1}
   mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   mSpacingX: 0
@@ -2930,7 +2974,7 @@ MonoBehaviour:
   mEffectDistance: {x: 1, y: 1}
   mOverflow: 0
   mMaterial: {fileID: 0}
-  mApplyGradient: 1
+  mApplyGradient: 0
   mGradientTop: {r: 1, g: 1, b: 1, a: 1}
   mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   mSpacingX: 0
@@ -2992,7 +3036,7 @@ MonoBehaviour:
   mEffectDistance: {x: 1, y: 1}
   mOverflow: 0
   mMaterial: {fileID: 0}
-  mApplyGradient: 1
+  mApplyGradient: 0
   mGradientTop: {r: 1, g: 1, b: 1, a: 1}
   mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   mSpacingX: 0
@@ -3054,7 +3098,7 @@ MonoBehaviour:
   mEffectDistance: {x: 1, y: 1}
   mOverflow: 0
   mMaterial: {fileID: 0}
-  mApplyGradient: 1
+  mApplyGradient: 0
   mGradientTop: {r: 1, g: 1, b: 1, a: 1}
   mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   mSpacingX: 0
@@ -3364,7 +3408,7 @@ MonoBehaviour:
   mEffectDistance: {x: 1, y: 1}
   mOverflow: 0
   mMaterial: {fileID: 0}
-  mApplyGradient: 1
+  mApplyGradient: 0
   mGradientTop: {r: 1, g: 1, b: 1, a: 1}
   mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   mSpacingX: 0
@@ -3476,7 +3520,7 @@ MonoBehaviour:
   mEffectDistance: {x: 1, y: 1}
   mOverflow: 0
   mMaterial: {fileID: 0}
-  mApplyGradient: 1
+  mApplyGradient: 0
   mGradientTop: {r: 1, g: 1, b: 1, a: 1}
   mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
   mSpacingX: 0
@@ -3561,7 +3605,6 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick: []
-  activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
   value: 
 --- !u!114 &11400082
@@ -3639,7 +3682,6 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick: []
-  activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
   value: 
 --- !u!114 &11400086

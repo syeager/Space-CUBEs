@@ -46,12 +46,6 @@ public class CampaignOverview : MonoBase
     /// <summary>Time in seconds to delay displaying each piece of salvage.</summary>
     public float salvageDelay;
 
-    public ActivateButton mainMenuButton;
-
-    public ActivateButton garageButton;
-
-    public ActivateButton storeButton;
-
     public ActivateButton replayButton;
 
     public ActivateButton nextButton;
@@ -153,9 +147,6 @@ public class CampaignOverview : MonoBase
         StopAllCoroutines();
 
         // show buttons
-        mainMenuButton.gameObject.SetActive(true);
-        garageButton.gameObject.SetActive(true);
-        storeButton.gameObject.SetActive(true);
         replayButton.gameObject.SetActive(true);
         nextButton.gameObject.SetActive(true);
         nextButton.isEnabled = !lastLevel;
@@ -203,9 +194,6 @@ public class CampaignOverview : MonoBase
         playerSalvage = salvage;
 
         // buttons
-        mainMenuButton.ActivateEvent += (sender, args) => SceneManager.LoadScene(Scenes.Menus.MainMenu.ToString(), true, true);
-        garageButton.ActivateEvent += (sender, args) => SceneManager.LoadScene(Scenes.Menus.Garage.ToString(), true, true);
-        storeButton.ActivateEvent += (sender, args) => SceneManager.LoadScene(Scenes.Menus.Store.ToString(), true, true);
         replayButton.ActivateEvent += (sender, args) => SceneManager.ReloadScene();
         int nextLevel = ((FormationLevelManager)FormationLevelManager.Main).levelIndex + 1;
         if (nextLevel < FormationLevelManager.LevelNames.Length)
