@@ -1,13 +1,12 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.03.25
-// Edited: 2014.09.08
+// Edited: 2014.10.05
 
 using System;
-using LittleByte;
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace SpaceCUBEs
@@ -286,6 +285,7 @@ namespace SpaceCUBEs
             if (moveJob != null) moveJob.Kill();
             if (shieldJob != null) shieldJob.Kill();
 
+            MyHealth.invincible = true;
 
             // clean up
             DeactivateWeapons(true);

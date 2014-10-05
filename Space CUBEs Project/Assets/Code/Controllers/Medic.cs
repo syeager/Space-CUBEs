@@ -1,13 +1,13 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.06.25
-// Edited: 2014.09.08
+// Edited: 2014.10.05
 
 using System;
-using System.Collections.Generic;
-using LittleByte;
-using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace SpaceCUBEs
 {
@@ -195,7 +195,7 @@ namespace SpaceCUBEs
                 yield return wait;
                 yield return minionSpawner.Spawn(1);
                 yield return wait;
-                if (UnityEngine.Random.Range(0, 2) == 0)
+                if (Random.Range(0, 2) == 0)
                 {
                     yield return minionSpawner.BuffHealth();
                 }
@@ -206,7 +206,7 @@ namespace SpaceCUBEs
                 yield return plasmaGun.Activate(true);
                 yield return plasmaGun.Activate(false);
                 yield return wait;
-                if (UnityEngine.Random.Range(0, 2) == 0)
+                if (Random.Range(0, 2) == 0)
                 {
                     yield return minionSpawner.BuffHealth();
                 }
@@ -243,7 +243,7 @@ namespace SpaceCUBEs
                 yield return plasmaGun.Activate(true);
                 yield return plasmaGun.Activate(false);
                 yield return wait;
-                if (UnityEngine.Random.Range(0, 2) == 0)
+                if (Random.Range(0, 2) == 0)
                 {
                     yield return minionSpawner.BuffHealth();
                 }
@@ -258,6 +258,8 @@ namespace SpaceCUBEs
 
         private void DyingEnter(Dictionary<string, object> info)
         {
+            MyHealth.invincible = true;
+
             GameObject root = new GameObject();
             root.transform.SetPosRot(myTransform.position, myTransform.rotation);
             myTransform.parent = root.transform;

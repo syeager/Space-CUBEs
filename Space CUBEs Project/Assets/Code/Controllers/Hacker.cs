@@ -1,13 +1,13 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.07.15
-// Edited: 2014.09.08
+// Edited: 2014.10.05
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Annotations;
 using UnityEngine;
-using System.Collections;
 
 namespace SpaceCUBEs
 {
@@ -312,6 +312,8 @@ namespace SpaceCUBEs
         {
             DeactivateWeapons();
             StopAllCoroutines();
+
+            MyHealth.invincible = true;
 
             GameObject root = new GameObject();
             root.transform.SetPosRot(myTransform.position, myTransform.rotation);
