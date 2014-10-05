@@ -61,6 +61,15 @@ public class ShipMotor : MonoBase
 
     #endregion
 
+    #region Properties
+
+    public bool CanBarrelRoll
+    {
+        get { return barrelRollStatus == BarrelRollStatuses.Ready; }
+    }
+
+    #endregion
+
     #region Const Fields
 
     private const float SpeedModifier = 0.8f;

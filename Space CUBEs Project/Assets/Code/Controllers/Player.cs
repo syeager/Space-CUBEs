@@ -1,11 +1,12 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2013.11.25
-// Edited: 2014.08.25
+// Edited: 2014.10.05
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace SpaceCUBEs
@@ -39,12 +40,12 @@ namespace SpaceCUBEs
 
         #region Input Fields
 
+        private IInputController input;
+
         public float horizontalBounds = 0.05f;
         public float backBounds;
         public float frontBounds;
 
-        private const string WeaponInput = "Weapon";
-        private bool barrelRoll;
         public float swipeNeeded = 10f;
 
         #endregion
@@ -63,22 +64,39 @@ namespace SpaceCUBEs
 
         #endregion
 
+        #region GA Fields
+
+        private const string GAAbilities = "Abilities:";
+        private const string GAWeaponCount = "Weapon_Count";
+        private const string GAAugCount = "Aug_Count:";
+
+        #endregion
+
         #region Unity Overrides
 
         protected override void Awake()
         {
             base.Awake();
 
+            // input
+#if UNITY_EDITOR
+            input = gameObject.AddComponent<DeviceInput>();
+#else
+            if (Input.GetJoystickNames().Length > 0 || !Input.multiTouchEnabled)
+            {
+                input = gameObject.AddComponent<DeviceInput>();
+            }
+            else
+            {
+                input = gameObject.AddComponent<TouchInput>();
+            }
+#endif
+
             // setup
             myScore = new ScoreManager();
             myMoney = new MoneyManager();
             Augmentations = GetComponent<AugmentationManager>();
             Weapons = GetComponent<WeaponManager>() ?? gameObject.AddComponent<WeaponManager>();
-
-            // PC
-#if UNITY_STANDALONE
-        barrelRoll = true;
-#endif
 
             // effects
             if (GameSettings.Main.qualityLevel == 0)
@@ -108,23 +126,17 @@ namespace SpaceCUBEs
             while (true)
             {
                 // roll
-                if (BarrelRollInput())
+                if (MyMotor.CanBarrelRoll && input.BarrelRoll())
                 {
                     stateMachine.SetState(BarrelRollingState, new Dictionary<string, object>());
                     break;
                 }
 
-#if UNITY_STANDALONE
-            // attack
-            List<KeyValuePair<int, bool>> weapons = AttackInput();
-            if (weapons.Count > 0)
-            {
-                Attack(weapons);
-            }
-#endif
+                // attack
+                Attack();
 
                 // move
-                MyMotor.Move(MovementInput());
+                MyMotor.Move(input.Joystick());
 
                 yield return null;
             }
@@ -139,15 +151,12 @@ namespace SpaceCUBEs
 
         private void BarrelRollingEnter(Dictionary<string, object> info)
         {
-#if !UNITY_STANDALONE
-            barrelRoll = false;
-#endif
             collider.enabled = false;
 
             // release all attacks
             Weapons.ActivateAll(false);
 
-            stateMachine.SetUpdate(BarrelRollingUpdate(MovementInput(), MyHealth.invincible));
+            stateMachine.SetUpdate(BarrelRollingUpdate(input.Joystick(), MyHealth.invincible));
             MyHealth.invincible = true;
 
             BarrelRollEvent.Fire(this, new ValueArgs(true));
@@ -157,7 +166,7 @@ namespace SpaceCUBEs
         private IEnumerator BarrelRollingUpdate(Vector2 direction, bool invincible)
         {
             yield return StartCoroutine(MyMotor.BarrelRoll(direction, horizontalBounds));
-            stateMachine.SetState(MovingState, new Dictionary<string, object> { { "invincible", invincible } });
+            stateMachine.SetState(MovingState, new Dictionary<string, object> {{"invincible", invincible}});
         }
 
 
@@ -165,9 +174,6 @@ namespace SpaceCUBEs
         {
             MyHealth.invincible = (bool)info["invincible"];
             collider.enabled = true;
-#if !UNITY_STANDALONE
-            barrelRoll = false;
-#endif
 
             BarrelRollEvent.Fire(this, new ValueArgs(false));
         }
@@ -182,95 +188,6 @@ namespace SpaceCUBEs
         #endregion
 
         #region Input Methods
-
-        private static Vector2 MovementInput()
-        {
-#if UNITY_STANDALONE
-        return new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized;
-#else
-            return HUD.Main.joystick.value;
-#endif
-        }
-
-
-#if UNITY_STANDALONE
-
-    /// <summary>
-    /// Get activated weapons.
-    /// </summary>
-    /// <returns>List of weapons and if they were pressed or released.</returns>
-    private List<KeyValuePair<int, bool>> AttackInput()
-    {
-        var weapons = new List<KeyValuePair<int, bool>>();
-
-        for (int i = 0; i < Weaponlimit; i++)
-        {
-            if (Weapons.CanActivate(i))
-            {
-                string input = WeaponInput + i;
-
-                if (Input.GetButtonDown(input))
-                {
-                    weapons.Add(new KeyValuePair<int, bool>(i, true));
-                }
-                else if (Input.GetButtonUp(input))
-                {
-                    weapons.Add(new KeyValuePair<int, bool>(i, false));
-                }
-            }
-        }
-
-        return weapons;
-    }
-#endif
-
-
-        private bool BarrelRollInput()
-        {
-#if UNITY_STANDALONE
-
-        if (!barrelRoll) return false;
-        bool result = Input.GetAxis("BarrelRoll") >= 0.5f;
-        if (result)
-        {
-            barrelRoll = false;
-            StartCoroutine(BarrelRollReleased());
-        }
-        return result;
-
-#else
-
-            if (barrelRoll)
-            {
-                return true;
-            }
-            else
-            {
-                // get swipe input
-                foreach (var touch in Input.touches)
-                {
-                    if (touch.position.x > Screen.width / 2f)
-                    {
-                        if (touch.deltaPosition.y >= 15f)
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-            return false;
-
-#endif
-        }
-
-
-        private IEnumerator BarrelRollReleased()
-        {
-            while (Input.GetAxis("BarrelRoll") >= 0.5f) yield return null;
-
-            barrelRoll = true;
-            CancelInvoke("BarrelRollReleased");
-        }
 
         #endregion
 
@@ -301,12 +218,13 @@ namespace SpaceCUBEs
             MyHealth.Initialize(maxHealth, maxShield);
             MyMotor.Initialize(speed);
             Weapons.Initialize(this, damage);
+            //GA.API.Design.NewEvent(GAAbilities + GAWeaponCount, Weapons.weapons.Count(w => w != null));
+            GoogleAnalytics.LogEvent(GAAbilities, GAWeaponCount, "", Weapons.weapons.Count(w => w != null));
             Augmentations.Initialize(this);
+            //GA.API.Design.NewEvent(GAAbilities + GAAugCount, Augmentations.augmentations.Count(a => a != null));
+            GoogleAnalytics.LogEvent(GAAbilities, GAAugCount, "", Augmentations.augmentations.Count(a => a != null));
 
             HUD.Initialize(this);
-#if !UNITY_STANDALONE
-            HUD.Main.BarrelRollEvent += OnBarrelRoll;
-#endif
 
             stateMachine.Start();
         }
@@ -315,28 +233,21 @@ namespace SpaceCUBEs
 
         #region Private Methods
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="weapons"></param>
-        private void Attack(List<KeyValuePair<int, bool>> weapons)
+        private void Attack()
         {
-            foreach (var weapon in weapons)
+            ButtonStates[] weaponStates = input.Weapons();
+            for (int i = 0; i < Weaponlimit; i++)
             {
-                Weapons.Activate(weapon.Key, weapon.Value);
+                if (weaponStates[i] == ButtonStates.Pressed)
+                {
+                    Weapons.TryActivate(i, true);
+                }
+                else if (weaponStates[i] == ButtonStates.Released)
+                {
+                    Weapons.TryActivate(i, false);
+                }
             }
         }
-
-        #endregion
-
-        #region Event Handlers
-
-#if !UNITY_STANDALONE
-        private void OnBarrelRoll(object sender, System.EventArgs args)
-        {
-            barrelRoll = true;
-        }
-#endif
 
         #endregion
     }

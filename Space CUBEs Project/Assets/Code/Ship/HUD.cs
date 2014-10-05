@@ -44,12 +44,6 @@ namespace SpaceCUBEs
 
         #endregion
 
-        #region Events
-
-        public EventHandler BarrelRollEvent;
-
-        #endregion
-
         #region MonoBehaviour Overrides
 
         [UsedImplicitly]
@@ -83,9 +77,6 @@ namespace SpaceCUBEs
             player.myScore.PointsUpdateEvent += Main.OnPointsChanged;
             player.myScore.MultiplierUpdateEvent += Main.OnMultiplierChanged;
 
-            // barrel roll
-            Main.barrelRoll.ActivateEvent += Main.OnBarrelRoll;
-
             // initialize weapon icons
             for (int i = 0; i < BuildStats.ExpansionLimit; i++)
             {
@@ -95,7 +86,6 @@ namespace SpaceCUBEs
             {
                 if (player.Weapons.weapons[i] != null)
                 {
-                    Main.weaponButtons[i].ActivateEvent += player.Weapons.OnActivate;
                     ((WeaponButton)Main.weaponButtons[i].GetComponent(typeof(WeaponButton))).Initialize(player.Weapons.weapons[i]);
                 }
             }
@@ -144,17 +134,6 @@ namespace SpaceCUBEs
                     multipliers[i].gameObject.SetActive(true);
                     multipliers[i].spriteName = "multiplier" + multiplier[i];
                 }
-            }
-        }
-
-
-        private void OnBarrelRoll(object sender, ActivateButtonArgs args)
-        {
-            if (!args.isPressed) return;
-
-            if (BarrelRollEvent != null)
-            {
-                BarrelRollEvent(this, EventArgs.Empty);
             }
         }
 

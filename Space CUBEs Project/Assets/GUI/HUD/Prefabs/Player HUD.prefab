@@ -989,6 +989,7 @@ Animator:
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1003,6 +1004,7 @@ MonoBehaviour:
   log: 1
   timeScale: 1
   logWarning: 0
+  dontDestroy: 0
   multX: {fileID: 100006}
   multipliers:
   - {fileID: 11400030}
@@ -1059,7 +1061,7 @@ MonoBehaviour:
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 12800000, guid: f7bd5b50c0108d24ba6869350be5b0e7, type: 3}
   mFont: {fileID: 0}
-  mText: 1.000.000
+  mText: 0
   mFontSize: 30
   mFontStyle: 1
   mAlignment: 0
@@ -1449,7 +1451,6 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick: []
-  activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
   value: 1
 --- !u!114 &11400024
@@ -1702,7 +1703,6 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick: []
-  activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
   value: 0
 --- !u!114 &11400036
@@ -1955,7 +1955,6 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick: []
-  activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
   value: 3
 --- !u!114 &11400048
@@ -2133,7 +2132,6 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick: []
-  activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
   value: 2
 --- !u!114 &11400058
@@ -2311,7 +2309,6 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick: []
-  activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
   value: 
 --- !u!114 &11400066
@@ -2575,6 +2572,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eventType: 1
+  eventsGoToColliders: 0
   eventReceiverMask:
     serializedVersion: 2
     m_Bits: 256

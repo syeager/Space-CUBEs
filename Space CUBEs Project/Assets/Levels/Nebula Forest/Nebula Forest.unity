@@ -107,13 +107,14 @@ MonoBehaviour:
   log: 0
   timeScale: 1
   logWarning: 0
+  dontDestroy: 0
   fps: {fileID: 826694097}
   fpsPrefab: {fileID: 100000, guid: ede73768352859c47b0ceadd2ebf76fa, type: 2}
   consoleLine: {fileID: 0}
   consoleLinePrefab: {fileID: 100000, guid: 1abf603ef50833b4ba9818e64b0f75db, type: 2}
   showTime: 1
   logSaving: 2
-  logFlags: 010101010001
+  logFlags: 00000101000000
   fpsWarning: 1
   lowFPS: 20
 --- !u!4 &6372173
@@ -156,6 +157,7 @@ MonoBehaviour:
   log: 0
   timeScale: 1
   logWarning: 0
+  dontDestroy: 0
   aboveOne: 1
   belowOne: .100000001
   timeDisplay: {fileID: 360899703}
@@ -1954,13 +1956,13 @@ MonoBehaviour:
   updateAnchors: 0
   mColor: {r: .0344827175, g: 1, b: 0, a: 1}
   mPivot: 4
-  mWidth: 16
+  mWidth: 18
   mHeight: 30
   mDepth: 8
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: .533333361
+  aspectRatio: .600000024
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   mFont: {fileID: 0}
@@ -3934,7 +3936,7 @@ Transform:
   m_PrefabInternal: {fileID: 1202612804}
   m_GameObject: {fileID: 273591404}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -557.241638, y: -288, z: 0}
+  m_LocalPosition: {x: -556.902954, y: -288, z: 0}
   m_LocalScale: {x: 1.00007999, y: 1.00007999, z: 1.00007999}
   m_Children:
   - {fileID: 1265950650}
@@ -4002,7 +4004,7 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 167
+  mWidth: 166
   mHeight: 144
   mDepth: 10
   autoResizeBoxCollider: 0
@@ -4363,7 +4365,6 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick: []
-  activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
   value: 
 --- !u!65 &341335054
@@ -4475,6 +4476,7 @@ MonoBehaviour:
   log: 0
   timeScale: 1
   logWarning: 0
+  dontDestroy: 0
   title: {fileID: 160554600}
   titleShowTime: 5
   healthBar: {fileID: 1284898905}
@@ -4660,7 +4662,6 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick: []
-  activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
   value: 2
 --- !u!114 &372664067
@@ -5508,6 +5509,7 @@ MonoBehaviour:
   log: 0
   timeScale: 1
   logWarning: 0
+  dontDestroy: 0
   poolManager: {fileID: 479458515}
 --- !u!1 &490557595
 GameObject:
@@ -5921,6 +5923,26 @@ Prefab:
     - target: {fileID: 400000, guid: 45c62a3fc8a9231409c29375e8f213d8, type: 2}
       propertyPath: m_RootOrder
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 45c62a3fc8a9231409c29375e8f213d8, type: 2}
+      propertyPath: logFlags.Array.data[0]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 45c62a3fc8a9231409c29375e8f213d8, type: 2}
+      propertyPath: logFlags.Array.data[1]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 45c62a3fc8a9231409c29375e8f213d8, type: 2}
+      propertyPath: logFlags.Array.data[2]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 45c62a3fc8a9231409c29375e8f213d8, type: 2}
+      propertyPath: logFlags.Array.data[5]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 45c62a3fc8a9231409c29375e8f213d8, type: 2}
+      propertyPath: logFlags.Array.data[6]
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 45c62a3fc8a9231409c29375e8f213d8, type: 2}
@@ -6661,6 +6683,7 @@ MonoBehaviour:
   log: 0
   timeScale: 1
   logWarning: 0
+  dontDestroy: 0
   poolManager: {fileID: 349858915}
 --- !u!4 &526336002
 Transform:
@@ -7224,7 +7247,6 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick: []
-  activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
   value: 0
 --- !u!114 &569032749
@@ -7669,6 +7691,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eventType: 1
+  eventsGoToColliders: 0
   eventReceiverMask:
     serializedVersion: 2
     m_Bits: 256
@@ -8499,9 +8522,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8d418998a1dfd64e9514aab7c93d4c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 0
+  log: 1
   timeScale: 1
   logWarning: 0
+  dontDestroy: 0
   pauseMenu: {fileID: 1249879360}
   levelMusic: Nebula Forest Soundtrack
   enemyPrefabs:
@@ -9244,7 +9268,6 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick: []
-  activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
   value: 
 --- !u!65 &670756188
@@ -10320,13 +10343,13 @@ MonoBehaviour:
   updateAnchors: 0
   mColor: {r: 0, g: 1, b: 0, a: 1}
   mPivot: 4
-  mWidth: 16
+  mWidth: 18
   mHeight: 30
   mDepth: 8
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: .533333361
+  aspectRatio: .600000024
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   mFont: {fileID: 0}
@@ -10571,7 +10594,7 @@ Transform:
   m_PrefabInternal: {fileID: 1202612804}
   m_GameObject: {fileID: 743019006}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -149.238281, y: -289.799988, z: 0}
+  m_LocalPosition: {x: -149.147568, y: -289.799988, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1926718179}
@@ -11177,7 +11200,6 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick: []
-  activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
   value: 
 --- !u!65 &795229151
@@ -11349,21 +11371,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &824695456
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400000, guid: aeed59aee1ea3714da2eb46ccb6175bd,
-    type: 2}
-  m_PrefabInternal: {fileID: 1933037102}
-  m_GameObject: {fileID: 1741049704}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6bc2885fc505400499f13b1beaf74129, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  log: 1
-  timeScale: 1
-  logWarning: 0
 --- !u!114 &824695457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11388,7 +11395,6 @@ Transform:
   m_Children:
   - {fileID: 1694984399}
   - {fileID: 601560627}
-  - {fileID: 1741049705}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!114 &824695459
@@ -11406,13 +11412,14 @@ MonoBehaviour:
   log: 1
   timeScale: 1
   logWarning: 0
+  dontDestroy: 0
   invincible: 0
   jumpToBoss: 0
   joystickSensitivity: .5
   joystickXBuffer: .0500000007
   joystickYBuffer: .0500000007
   joystickDeadzone: .300000012
-  trailRenderer: 1
+  qualityLevel: 2
 --- !u!114 &824695460
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11428,6 +11435,7 @@ MonoBehaviour:
   log: 0
   timeScale: 1
   logWarning: 0
+  dontDestroy: 0
   CUBE_Prefabs:
   - {fileID: 11400000, guid: c90fae0135712ca4aaf1f938bc7888e3, type: 2}
   - {fileID: 11400000, guid: eb6d282238117c144a5a3b10c4675d5b, type: 2}
@@ -11573,8 +11581,9 @@ MonoBehaviour:
   log: 0
   timeScale: 1
   logWarning: 0
+  dontDestroy: 0
   version: 1
-  resetVersion: 0
+  resetVersion: 1
 --- !u!1 &826694096
 GameObject:
   m_ObjectHideFlags: 0
@@ -12081,7 +12090,7 @@ Transform:
   m_PrefabInternal: {fileID: 1202612804}
   m_GameObject: {fileID: 850226839}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 544.431519, y: 306, z: 0}
+  m_LocalPosition: {x: 544.100586, y: 306, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1926718179}
@@ -12810,7 +12819,6 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick: []
-  activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
   value: 
 --- !u!65 &894237333
@@ -13191,13 +13199,13 @@ MonoBehaviour:
   updateAnchors: 0
   mColor: {r: 0, g: 1, b: 0, a: 1}
   mPivot: 4
-  mWidth: 16
+  mWidth: 18
   mHeight: 30
   mDepth: 8
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: .533333361
+  aspectRatio: .600000024
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   mFont: {fileID: 0}
@@ -13501,6 +13509,7 @@ MonoBehaviour:
   softBorderPadding: 1
   renderQueue: 0
   startingRenderQueue: 3000
+  mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 300, w: 200}
@@ -13963,7 +13972,6 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick: []
-  activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
   value: 
 --- !u!65 &1033765308
@@ -14390,7 +14398,7 @@ Transform:
   m_PrefabInternal: {fileID: 1202612804}
   m_GameObject: {fileID: 1047738691}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 403.519806, y: -288, z: 0}
+  m_LocalPosition: {x: 403.274567, y: -288, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 795229149}
@@ -15144,7 +15152,6 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick: []
-  activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
   value: 1
 --- !u!65 &1143134193
@@ -15530,23 +15537,23 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400052, guid: 7977103051ba00a4c9dc6bababcac883, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -557.241638
+      value: -556.902954
       objectReference: {fileID: 0}
     - target: {fileID: 400104, guid: 7977103051ba00a4c9dc6bababcac883, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -149.238281
+      value: -149.147568
       objectReference: {fileID: 0}
     - target: {fileID: 400016, guid: 7977103051ba00a4c9dc6bababcac883, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 544.431519
+      value: 544.100586
       objectReference: {fileID: 0}
     - target: {fileID: 400128, guid: 7977103051ba00a4c9dc6bababcac883, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 403.519806
+      value: 403.274567
       objectReference: {fileID: 0}
     - target: {fileID: 400120, guid: 7977103051ba00a4c9dc6bababcac883, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -148.597748
+      value: -148.507446
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7977103051ba00a4c9dc6bababcac883, type: 2}
@@ -16273,13 +16280,13 @@ MonoBehaviour:
   updateAnchors: 0
   mColor: {r: 1, g: 0, b: 0, a: 1}
   mPivot: 4
-  mWidth: 16
+  mWidth: 18
   mHeight: 30
   mDepth: 8
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: .533333361
+  aspectRatio: .600000024
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   mFont: {fileID: 0}
@@ -16464,7 +16471,7 @@ MonoBehaviour:
   updateAnchors: 0
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 167
+  mWidth: 166
   mHeight: 144
   mDepth: 20
   autoResizeBoxCollider: 0
@@ -17520,7 +17527,7 @@ Transform:
   m_PrefabInternal: {fileID: 1202612804}
   m_GameObject: {fileID: 1413893274}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -148.597748, y: -299.160004, z: 0}
+  m_LocalPosition: {x: -148.507446, y: -299.160004, z: 0}
   m_LocalScale: {x: 1.00007999, y: 1.00007999, z: 1.00007999}
   m_Children: []
   m_Father: {fileID: 1926718179}
@@ -20302,6 +20309,7 @@ MonoBehaviour:
   log: 1
   timeScale: 1
   logWarning: 0
+  dontDestroy: 0
 --- !u!4 &1630941667
 Transform:
   m_ObjectHideFlags: 0
@@ -21370,34 +21378,6 @@ Transform:
   - {fileID: 1208754218}
   m_Father: {fileID: 1416552250}
   m_RootOrder: 3
---- !u!1 &1741049704
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 100002, guid: aeed59aee1ea3714da2eb46ccb6175bd, type: 2}
-  m_PrefabInternal: {fileID: 1933037102}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 1741049705}
-  - 114: {fileID: 824695456}
-  m_Layer: 0
-  m_Name: SceneManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1741049705
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 400002, guid: aeed59aee1ea3714da2eb46ccb6175bd, type: 2}
-  m_PrefabInternal: {fileID: 1933037102}
-  m_GameObject: {fileID: 1741049704}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 824695458}
-  m_RootOrder: 2
 --- !u!114 &1741798335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22347,7 +22327,6 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick: []
-  activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
   value: 
 --- !u!65 &1877603453
@@ -23177,6 +23156,7 @@ Animator:
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!114 &1926718181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23192,6 +23172,7 @@ MonoBehaviour:
   log: 1
   timeScale: 1
   logWarning: 0
+  dontDestroy: 0
   multX: {fileID: 1326879405}
   multipliers:
   - {fileID: 1541597669}
@@ -23479,7 +23460,7 @@ MonoBehaviour:
   updateAnchors: 0
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 1281
+  mWidth: 1280
   mHeight: 144
   mDepth: 0
   autoResizeBoxCollider: 0
@@ -24955,6 +24936,7 @@ MonoBehaviour:
   softBorderPadding: 1
   renderQueue: 0
   startingRenderQueue: 3005
+  mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 0
   mClipRange: {x: 0, y: 0, z: 300, w: 200}
@@ -25089,7 +25071,6 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick: []
-  activatedColor: {r: 0, g: 0, b: 0, a: 0}
   label: {fileID: 0}
   value: 3
 --- !u!65 &2040580367
