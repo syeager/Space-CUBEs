@@ -1,7 +1,7 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.01.12
-// Edited: 2014.09.08
+// Edited: 2014.10.04
 
 using System;
 using System.Collections.Generic;
@@ -38,6 +38,8 @@ namespace SpaceCUBEs
         private int segmentCursor;
         private bool lastSegment;
 
+        private LevelTime levelTime = new LevelTime();
+
         #endregion
 
         #region Const Fields
@@ -67,24 +69,66 @@ namespace SpaceCUBEs
 
         #endregion
 
+        #region GA Fields
+
+        private const string GALevelCompletedKey = "Level_Completed:";
+
+        private const string GATime = "Time:";
+        private const string GATimeTotal = "Total";
+        private const string GATimeLevel = "Level";
+        private const string GATimeBoss = "Boss";
+
+        private const string GAPoints = "Points:";
+        private const string GAPointsTotal = "Total";
+        private const string GAPointsKills = "Kills";
+        private const string GAPointsTime = "Time";
+        private const string GAPointsHealth = "Health";
+
+        private const string GARank = "Rank";
+
+        private const string GAMoney = "Money";
+
+        #endregion
+
+        #region Classes
+
+        private class LevelTime
+        {
+            public TimeSpan Level { get; private set; }
+            public TimeSpan Boss { get; private set; }
+
+            public TimeSpan Total
+            {
+                get { return Level + Boss; }
+            }
+
+
+            public void StartLevel()
+            {
+                Level = DateTime.Now.TimeOfDay;
+            }
+
+
+            public void StartBoss()
+            {
+                Level = DateTime.Now.TimeOfDay - Level;
+                Boss = DateTime.Now.TimeOfDay;
+            }
+
+
+            public void End()
+            {
+                Boss = DateTime.Now.TimeOfDay - Boss;
+            }
+        }
+
+        #endregion
+
         #region Unity Overrides
 
         protected override void Start()
         {
             base.Start();
-
-#if DEBUG
-            if (Singleton<GameSettings>.Main.jumpToBoss)
-            {
-                SpawnBoss();
-            }
-            else
-            {
-                InvokeAction(SpawnNextFormation, 3f);
-            }
-#else
-        InvokeAction(() => SpawnNextFormation(), 3f);
-#endif
 
             AudioManager.PlayPlaylist(levelMusic);
         }
@@ -137,24 +181,63 @@ namespace SpaceCUBEs
 
         #region LevelManager Overrides
 
+        protected override void OnBuildFinished(BuildFinishedArgs args)
+        {
+            base.OnBuildFinished(args);
+
+#if DEBUG
+            if (Singleton<GameSettings>.Main.jumpToBoss)
+            {
+                SpawnBoss();
+            }
+            else
+            {
+                SpawnNextFormation();
+            }
+#else
+                SpawnNextFormation();
+#endif
+
+            levelTime.StartLevel();
+        }
+
+
         protected override void LevelCompleted(bool won)
         {
             base.LevelCompleted(won);
+            //GA.API.Design.NewEvent(GALevelCompletedKey + LevelNames[levelIndex], won ? 1 : 0);
+            GoogleAnalytics.LogEvent(GALevelCompletedKey, LevelNames[levelIndex], "", won ? 1 : 0);
+
+            // time
+            levelTime.End();
+            float levelSeconds = (float)levelTime.Total.TotalSeconds;
+            //GA.API.Design.NewEvent(GATime + GATimeTotal, levelSeconds);
+            GoogleAnalytics.LogEvent(GATime, GATimeTotal, "", (long)levelSeconds);
+            //GA.API.Design.NewEvent(GATime + GATimeLevel, (float)levelTime.Level.TotalSeconds);
+            GoogleAnalytics.LogEvent(GATime, GATimeLevel, "", (long)levelTime.Level.TotalSeconds);
+            //GA.API.Design.NewEvent(GATime + GATimeBoss, (float)levelTime.Boss.TotalSeconds);
+            GoogleAnalytics.LogEvent(GATime, GATimeBoss, "", (long)levelTime.Boss.TotalSeconds);
 
             // stop spawning
             StopAllCoroutines();
 
             // score
             int score = PlayerController.myScore.points;
+            GA.API.Design.NewEvent(GAPoints + GAPointsKills, score);
 
             // time score
-            int timeScore = TimeScore(Time.timeSinceLevelLoad);
+            int timeScore = TimeScore(levelSeconds);
             score += timeScore;
+            //GA.API.Design.NewEvent(GAPoints + GAPointsTime, timeScore);
+            GoogleAnalytics.LogEvent(GAPoints, GAPointsTime, "", timeScore);
             Debugger.Log("Completion Time: " + Time.timeSinceLevelLoad, this, Debugger.LogTypes.LevelEvents);
             Debugger.Log("Time Score: " + timeScore, this, Debugger.LogTypes.LevelEvents);
 
             // health score
-            score += Mathf.RoundToInt((PlayerController.MyHealth.health / PlayerController.MyHealth.maxHealth) * maxHealthScore);
+            int healthScore = Mathf.RoundToInt((PlayerController.MyHealth.health / PlayerController.MyHealth.maxHealth) * maxHealthScore);
+            score += healthScore;
+            //GA.API.Design.NewEvent(GAPoints + GAPointsHealth, healthScore);
+            GoogleAnalytics.LogEvent(GAPoints, GAPointsHealth, "", healthScore);
 
             // rank
             int rank = rankLimits.Length - 1;
@@ -173,13 +256,17 @@ namespace SpaceCUBEs
                     }
                 }
             }
+            //GA.API.Design.NewEvent(GARank, rank);
+            GoogleAnalytics.LogEvent(GARank, "", "", rank);
 
             // save rank and score
-            SaveData.Save(HighScoreKey + LevelNames[levelIndex], new int[] {rank, score});
+            SaveData.Save(HighScoreKey + LevelNames[levelIndex], new int[]{rank, score});
 
             // money
             int money = PlayerController.myMoney.money;
             PlayerController.myMoney.Save();
+            //GA.API.Design.NewEvent(GAMoney, money);
+            GoogleAnalytics.LogEvent(GAMoney, "", "", money);
 
             // awards
             int[] awards = AwardCUBEs();
@@ -190,7 +277,9 @@ namespace SpaceCUBEs
             }
             CUBE.SetInventory(inventory);
 
-            campaignOverview.Initialize(score, rankLimits, rank, Time.timeSinceLevelLoad, money, awards);
+            campaignOverview.Initialize(score, rankLimits, rank, levelSeconds, money, awards);
+            //GA.API.Design.NewEvent(GAPoints + GAPointsTotal, score);
+            GoogleAnalytics.LogEvent(GAPoints, GAPointsTotal, "", score);
         }
 
         #endregion
@@ -258,6 +347,8 @@ namespace SpaceCUBEs
             ActiveEnemies.Add(boss);
             boss.DeathEvent += OnBossDeath;
             boss.stateMachine.Start();
+
+            levelTime.StartBoss();
 
             AudioManager.CrossFadePlaylist(levelMusic, bossMusic, bossFadeTime);
         }

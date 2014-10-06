@@ -182,7 +182,7 @@ namespace SpaceCUBEs
         {
             base.Awake();
 
-            if (NavigationBar.Main) NavigationBar.Main.gameObject.SetActive(false);
+            if (NavigationBar.Main) NavigationBar.Show(false);
 
             // states
             States = new StateMachine(this, Menus.Edit.ToString());

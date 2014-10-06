@@ -78,7 +78,7 @@ namespace SpaceCUBEs
         [UsedImplicitly]
         private void Awake()
         {
-            NavigationBar.Main.gameObject.SetActive(true);
+            NavigationBar.Show(true);
 
             // states
             states = new StateMachine(this, IdleState);

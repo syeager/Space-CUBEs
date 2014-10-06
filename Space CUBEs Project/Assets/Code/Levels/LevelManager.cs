@@ -1,13 +1,13 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2013.12.03
-// Edited: 2014.09.17
+// Edited: 2014.10.05
 
+using System.Collections;
 using System.Collections.Generic;
 using Annotations;
-using UnityEngine;
-using Random = UnityEngine.Random;
 using LittleByte;
+using UnityEngine;
 
 namespace SpaceCUBEs
 {
@@ -82,8 +82,11 @@ namespace SpaceCUBEs
 
         protected virtual void Start()
         {
-            // register events
+            NavigationBar.Show(false);
+
+            // pause
             GameTime.PausedEvent += OnPause;
+            StartCoroutine("Pause");
 
             // active enemies
             ActiveEnemies = new List<Enemy>();
@@ -103,11 +106,6 @@ namespace SpaceCUBEs
 
         protected virtual void Update()
         {
-            if (Input.GetButtonDown("Pause"))
-            {
-                GameTime.TogglePause();
-            }
-
 #if UNITY_EDITOR
             // invincible
             if (Input.GetKeyDown(KeyCode.KeypadEnter))
@@ -138,10 +136,11 @@ namespace SpaceCUBEs
 
         #region Protected Methods
 
-        // TODO: maybe make abstract
         protected virtual void LevelCompleted(bool won)
         {
             Log("Level Finished.", Debugger.LogTypes.LevelEvents);
+
+            StopCoroutine("Pause");
 
             if (won)
             {
@@ -186,11 +185,26 @@ namespace SpaceCUBEs
             return awards;
         }
 
+
+        [UsedImplicitly]
+        private IEnumerator Pause()
+        {
+            while (true)
+            {
+                if (Input.GetButtonDown("Pause"))
+                {
+                    GameTime.TogglePause();
+                }
+
+                yield return null;
+            }
+        }
+
         #endregion
 
         #region Event Handlers
 
-        private void OnBuildFinished(BuildFinishedArgs args)
+        protected virtual void OnBuildFinished(BuildFinishedArgs args)
         {
             var buildShip = args.ship.AddComponent<ShipCompactor>();
             PlayerController = buildShip.Compact(true) as Player;

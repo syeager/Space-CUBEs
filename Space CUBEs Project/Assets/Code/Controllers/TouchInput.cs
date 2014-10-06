@@ -60,6 +60,16 @@ namespace SpaceCUBEs
         public bool BarrelRoll()
         {
             return barrelRollPressed;
+            //foreach (Touch touch in Input.touches)
+//            {
+//                if (touch.position.x > Screen.width / 2f)
+//                {
+//                    if (touch.deltaPosition.y >= 15f)
+//                    {
+//                        return true;
+//                    }
+//                }
+//            }
         }
 
 
@@ -101,15 +111,3 @@ namespace SpaceCUBEs
         #endregion
     }
 }
-
-
-//foreach (Touch touch in Input.touches)
-//            {
-//                if (touch.position.x > Screen.width / 2f)
-//                {
-//                    if (touch.deltaPosition.y >= 15f)
-//                    {
-//                        return true;
-//                    }
-//                }
-//            }

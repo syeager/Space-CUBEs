@@ -1,14 +1,14 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.08.24
-// Edited: 2014.09.17
+// Edited: 2014.10.05
 
 using System;
 using System.Linq;
 using Annotations;
-using UnityEngine;
 using LittleByte;
 using SpaceCUBEs;
+using UnityEngine;
 
 public class NavigationBar : Singleton<NavigationBar>
 {
@@ -31,9 +31,11 @@ public class NavigationBar : Singleton<NavigationBar>
     [UsedImplicitly]
     private void Start()
     {
-        if (Scenes.MenuNames.ContainsValue(Application.loadedLevelName))
+        string levelName = Application.loadedLevelName;
+        
+        if (Scenes.MenuNames.ContainsValue(levelName))
         {
-            UpdateButtons(Scenes.Menu(Application.loadedLevelName));
+            UpdateButtons(Scenes.Menu(levelName));
         }
         else
         {
@@ -41,11 +43,20 @@ public class NavigationBar : Singleton<NavigationBar>
         }
     }
 
-
     [UsedImplicitly]
     private void OnLevelWasLoaded(int level)
     {
         string levelName = Application.loadedLevelName;
+        
+        if (Scenes.MenuNames.ContainsValue(levelName))
+        {
+            UpdateButtons(Scenes.Menu(levelName));
+        }
+        else
+        {
+            UpdateAll(true);
+        }
+
         root.SetActive(Enum.GetNames(typeof(Scenes.Menus)).Select(l => l.SplitCamelCase()).Contains(levelName));
     }
 
@@ -105,6 +116,15 @@ public class NavigationBar : Singleton<NavigationBar>
         garage.isEnabled = on;
         store.isEnabled = on;
         levelSelect.isEnabled = on;
+    }
+
+    #endregion
+
+    #region Static Methods
+
+    public static void Show(bool on)
+    {
+        Main.root.SetActive(on);
     }
 
     #endregion
