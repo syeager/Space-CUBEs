@@ -124,6 +124,7 @@ namespace SpaceCUBEs
         private void OnDestroy()
         {
             GameTime.PausedEvent -= OnPause;
+            GameTime.Pause(false);
         }
 
         #endregion
@@ -231,6 +232,7 @@ namespace SpaceCUBEs
         protected virtual void OnPause(object sender, PauseArgs args)
         {
             pauseMenu.SetActive(args.paused);
+            NavigationBar.Show(args.paused);
         }
 
         #endregion
