@@ -57,7 +57,7 @@ public class NavigationBar : Singleton<NavigationBar>
             UpdateAll(true);
         }
 
-        root.SetActive(Enum.GetNames(typeof(Scenes.Menus)).Select(l => l.SplitCamelCase()).Contains(levelName));
+        Show(Enum.GetNames(typeof(Scenes.Menus)).Select(l => l.SplitCamelCase()).Contains(levelName) && levelName != Scenes.Menus.Workshop.ToString());
     }
 
     #endregion

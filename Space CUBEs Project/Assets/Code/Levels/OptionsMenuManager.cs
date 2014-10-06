@@ -6,35 +6,36 @@
 using System;
 using System.Linq;
 using Annotations;
+using LittleByte;
 using LittleByte.Data;
-using LittleByte.Options;
-using SpaceCUBEs;
 using UnityEngine;
 
-/// <summary>
-/// Manager for the Options Menu.
-/// </summary>
-public class OptionsMenuManager : MonoBehaviour
+namespace SpaceCUBEs
 {
-    #region Private Fields
-
-    public enum Menus
+    /// <summary>
+    /// Manager for the Options Menu.
+    /// </summary>
+    public class OptionsMenuManager : MonoBehaviour
     {
-        Graphics,
-        Audio,
-        Input,
-        Data,
-    }
+        #region Private Fields
 
-    private Menus menu;
+        public enum Menus
+        {
+            Graphics,
+            Audio,
+            Input,
+            Data,
+        }
 
-    [SerializeField, UsedImplicitly]
-    private UIButton[] menuButtons;
+        private Menus menu;
 
-    [SerializeField, UsedImplicitly]
-    private GameObject[] menus;
+        [SerializeField, UsedImplicitly]
+        private UIButton[] menuButtons;
 
-    private static readonly bool[] NeedDescription =
+        [SerializeField, UsedImplicitly]
+        private GameObject[] menus;
+
+        private static readonly bool[] NeedDescription =
     {
         true,
         false,
@@ -42,324 +43,326 @@ public class OptionsMenuManager : MonoBehaviour
         true,
     };
 
-    [SerializeField, UsedImplicitly]
-    private UILabel description;
+        [SerializeField, UsedImplicitly]
+        private UILabel description;
 
-    #endregion
+        #endregion
 
-    #region Quality Fields
+        #region Quality Fields
 
-    private int qualityLevel;
+        private int qualityLevel;
 
-    [Header("Quality")]
-    [SerializeField, UsedImplicitly]
-    private UIToggle[] fpsToggles;
+        [Header("Quality")]
+        [SerializeField, UsedImplicitly]
+        private UIToggle[] fpsToggles;
 
-    private static readonly int[] FrameRates = {30, 45, 60};
+        private static readonly int[] FrameRates = { 30, 45, 60 };
 
-    private const string FrameRateInfo = "The game will attempt to run at this FPS (Frames Per Second).";
+        private const string FrameRateInfo = "The game will attempt to run at this FPS (Frames Per Second).";
 
-    [SerializeField, UsedImplicitly]
-    private UIToggle[] qualityToggles;
+        [SerializeField, UsedImplicitly]
+        private UIToggle[] qualityToggles;
 
-    private const string QualityLevelInfo = "Quality level.";
+        private const string QualityLevelInfo = "Quality level.";
 
-    #endregion
+        #endregion
 
-    #region Audio Fields
+        #region Audio Fields
 
-    [Header("Audio")]
-    [SerializeField, UsedImplicitly]
-    private UISlider masterVolume;
+        [Header("Audio")]
+        [SerializeField, UsedImplicitly]
+        private UISlider masterVolume;
 
-    [SerializeField, UsedImplicitly]
-    private UISlider[] busVolumes;
+        [SerializeField, UsedImplicitly]
+        private UISlider[] busVolumes;
 
-    [SerializeField, UsedImplicitly]
-    private UIToggle masterMute;
+        [SerializeField, UsedImplicitly]
+        private UIToggle masterMute;
 
-    [SerializeField, UsedImplicitly]
-    private UIToggle[] busMutes;
+        [SerializeField, UsedImplicitly]
+        private UIToggle[] busMutes;
 
-    #endregion
+        #endregion
 
-    #region Input Fields
+        #region Input Fields
 
-    [Header("Input")]
-    public UISlider[] inputSliders;
+        [Header("Input")]
+        public UISlider[] inputSliders;
 
-    public UIInput[] inputInputs;
+        public UIInput[] inputInputs;
 
-    #endregion
+        #endregion
 
-    #region MonoBehaviour Overrides
+        #region MonoBehaviour Overrides
 
-    [UsedImplicitly]
-    private void Start()
-    {
-        LoadQuality();
-        LoadAudio();
-        LoadInput();
-
-        SetMenu(0);
-    }
-
-    #endregion
-
-    #region Public Methods
-
-    public void SetMenuButton(UIButton menuButton)
-    {
-        SetMenu(Array.IndexOf(menuButtons, menuButton));
-    }
-
-
-    public void ResetOptions()
-    {
-        switch (menu)
+        [UsedImplicitly]
+        private void Start()
         {
-            case Menus.Graphics:
-                fpsToggles[2].value = true;
-                qualityToggles[2].value = true;
-                break;
-            case Menus.Audio:
-                const float volumeReset = 0.5f;
-                masterVolume.value = volumeReset;
-                masterMute.value = false;
-                for (int i = 0; i < busVolumes.Length; i++)
-                {
-                    busVolumes[i].value = volumeReset;
-                    busMutes[i].value = false;
-                }
-                break;
-            case Menus.Input:
-                inputSliders[0].value = GameSettings.JoystickSensitivityDefault;
-                inputSliders[1].value = GameSettings.JoystickDeadzoneDefault;
-                inputSliders[2].value = GameSettings.JoystickXBufferDefault;
-                inputSliders[3].value = GameSettings.JoystickYBufferDefault;
-                break;
-        }
-    }
+            LoadQuality();
+            LoadAudio();
+            LoadInput();
 
-
-    public void Exit()
-    {
-        if (qualityLevel != QualitySettings.GetQualityLevel())
-        {
-            QualitySettings.SetQualityLevel(qualityLevel, true);
-        }
-        Save();
-        Destroy(gameObject);
-    }
-
-    #endregion
-
-    #region Private Methods
-
-    private void SetMenu(int index)
-    {
-        int oldIndex = (int)menu;
-        menus[oldIndex].SetActive(false);
-        menuButtons[oldIndex].isEnabled = true;
-
-        menu = (Menus)index;
-        menus[index].SetActive(true);
-        menuButtons[index].isEnabled = false;
-
-        description.transform.parent.gameObject.SetActive(NeedDescription[index]);
-        description.text = string.Empty;
-    }
-
-
-    private static void Save()
-    {
-        AudioManager.Main.Save();
-        GameSettings.Save();
-    }
-
-    #endregion
-
-    #region Quality Methods
-
-    private void LoadQuality()
-    {
-        int fpsIndex = Array.IndexOf(FrameRates, GameTime.targetFPS);
-        fpsToggles[fpsIndex].value = true;
-
-        qualityLevel = GameSettings.Main.qualityLevel;
-        qualityToggles[qualityLevel].value = true;
-    }
-
-
-    public void FrameRateUpdated(UIToggle toggle)
-    {
-        if (!toggle.value) return;
-
-        description.text = FrameRateInfo;
-
-        int index = Array.IndexOf(fpsToggles, toggle);
-        GameTime.CapFPS(FrameRates[index]);
-    }
-
-
-    public void QualityUpdated(UIToggle toggle)
-    {
-        if (!toggle.value) return;
-
-        description.text = QualityLevelInfo;
-
-        int index = Array.IndexOf(qualityToggles, toggle);
-        GameSettings.Main.qualityLevel = index;
-    }
-
-    #endregion
-
-    #region Audio Methods
-
-    private void LoadAudio()
-    {
-        Volume volume = AudioManager.Main.MasterVolume;
-        masterVolume.value = volume.level;
-        masterMute.value = volume.muted;
-
-        for (int i = 0; i < busVolumes.Length; i++)
-        {
-            volume = AudioManager.Main.busVolumes[(AudioManager.Bus)i];
-            busVolumes[i].value = volume.level;
-            busMutes[i].value = volume.muted;
-        }
-    }
-
-
-    public void UpdateVolume(UISlider slider)
-    {
-        if (slider == masterVolume)
-        {
-            AudioManager.SetMasterLevel(slider.value);
-            return;
+            SetMenu(0);
         }
 
-        int index = Array.IndexOf(busVolumes, slider);
-        AudioManager.SetBusLevel((AudioManager.Bus)index, slider.value);
-    }
+        #endregion
 
+        #region Public Methods
 
-    public void UpdateMute(UIToggle toggle)
-    {
-        if (toggle == masterMute)
+        public void SetMenuButton(UIButton menuButton)
         {
-            AudioManager.SetMasterMute(toggle.value);
-            return;
+            SetMenu(Array.IndexOf(menuButtons, menuButton));
         }
 
-        int index = Array.IndexOf(busMutes, toggle);
-        AudioManager.SetBusMute((AudioManager.Bus)index, toggle.value);
-    }
 
-    #endregion
-
-    #region Input Methods
-
-    private void LoadInput()
-    {
-        float input = GameSettings.Main.joystickSensitivity;
-        inputSliders[0].value = input;
-        inputInputs[0].value = FormatInput(input * 100f);
-
-        input = GameSettings.Main.joystickDeadzone;
-        inputSliders[1].value = input;
-        inputInputs[1].value = FormatInput(input * 100f);
-
-        input = GameSettings.Main.joystickXBuffer;
-        inputSliders[2].value = input;
-        inputInputs[2].value = FormatInput(input * 100f);
-
-        input = GameSettings.Main.joystickYBuffer;
-        inputSliders[3].value = input;
-        inputInputs[3].value = FormatInput(input * 100f);
-    }
-
-
-    public void UpdatedInputSlider(UISlider slider)
-    {
-        int index = Array.IndexOf(inputSliders, slider);
-        inputInputs[index].value = FormatInput(slider.value * 100f);
-
-        switch (index)
+        public void ResetOptions()
         {
-            case 0:
-                GameSettings.Main.joystickSensitivity = slider.value;
-                break;
-            case 1:
-                GameSettings.Main.joystickDeadzone = slider.value;
-                break;
-            case 2:
-                GameSettings.Main.joystickXBuffer = slider.value;
-                break;
-            case 3:
-                GameSettings.Main.joystickYBuffer = slider.value;
-                break;
+            switch (menu)
+            {
+                case Menus.Graphics:
+                    fpsToggles[2].value = true;
+                    qualityToggles[2].value = true;
+                    break;
+                case Menus.Audio:
+                    const float volumeReset = 0.5f;
+                    masterVolume.value = volumeReset;
+                    masterMute.value = false;
+                    for (int i = 0; i < busVolumes.Length; i++)
+                    {
+                        busVolumes[i].value = volumeReset;
+                        busMutes[i].value = false;
+                    }
+                    break;
+                case Menus.Input:
+                    inputSliders[0].value = GameSettings.JoystickSensitivityDefault;
+                    inputSliders[1].value = GameSettings.JoystickDeadzoneDefault;
+                    inputSliders[2].value = GameSettings.JoystickXBufferDefault;
+                    inputSliders[3].value = GameSettings.JoystickYBufferDefault;
+                    break;
+            }
         }
-    }
 
 
-    public void UpdatedInputField(UIInput input)
-    {
-        if (string.IsNullOrEmpty(input.value))
+        public void Exit()
         {
-            input.value = "0";
+            if (qualityLevel != QualitySettings.GetQualityLevel())
+            {
+                QualitySettings.SetQualityLevel(qualityLevel, true);
+            }
+            Save();
+            Destroy(gameObject);
         }
-        float value = Mathf.Clamp(float.Parse(input.value), 0f, 100f);
-        input.value = FormatInput(value);
 
-        int index = Array.IndexOf(inputInputs, input);
-        value /= 100f;
-        inputSliders[index].value = value;
+        #endregion
 
-        switch (index)
+        #region Private Methods
+
+        private void SetMenu(int index)
         {
-            case 0:
-                GameSettings.Main.joystickSensitivity = value;
-                break;
-            case 1:
-                GameSettings.Main.joystickDeadzone = value;
-                break;
-            case 2:
-                GameSettings.Main.joystickXBuffer = value;
-                break;
-            case 3:
-                GameSettings.Main.joystickYBuffer = value;
-                break;
+            int oldIndex = (int)menu;
+            menus[oldIndex].SetActive(false);
+            menuButtons[oldIndex].isEnabled = true;
+
+            menu = (Menus)index;
+            menus[index].SetActive(true);
+            menuButtons[index].isEnabled = false;
+
+            description.transform.parent.gameObject.SetActive(NeedDescription[index]);
+            description.text = string.Empty;
         }
-    }
 
 
-    private static string FormatInput(float value)
-    {
-        return Mathf.RoundToInt(value).ToString();
-    }
-
-    #endregion
-
-    #region Data Methods
-
-    public static void GameReset()
-    {
-        Debugger.Log("Resetting game.", null, Debugger.LogTypes.Data);
-        PlayerPrefs.DeleteAll();
-        SaveData.DeleteAll();
-        GameStart.Main.UpdateVersions(true);
-    }
-
-
-    public void ReloadStarterBuilds()
-    {
-        string[] builds = ConstructionGrid.BuildNames().ToArray();
-        foreach (string build in ConstructionGrid.DevBuilds.Where(build => !builds.Contains(build)))
+        private static void Save()
         {
-            ConstructionGrid.SaveBuild(build, SaveData.LoadFromResources<BuildInfo>(build));
+            AudioManager.Main.Save();
+            GameSettings.Save();
         }
-    }
 
-    #endregion
+        #endregion
+
+        #region Quality Methods
+
+        private void LoadQuality()
+        {
+            int fpsIndex = Array.IndexOf(FrameRates, GameTime.targetFPS);
+            fpsToggles[fpsIndex].value = true;
+
+            qualityLevel = GameSettings.Main.qualityLevel;
+            qualityToggles[qualityLevel].value = true;
+        }
+
+
+        public void FrameRateUpdated(UIToggle toggle)
+        {
+            if (!toggle.value) return;
+
+            description.text = FrameRateInfo;
+
+            int index = Array.IndexOf(fpsToggles, toggle);
+            GameTime.CapFPS(FrameRates[index]);
+        }
+
+
+        public void QualityUpdated(UIToggle toggle)
+        {
+            if (!toggle.value) return;
+
+            description.text = QualityLevelInfo;
+
+            int index = Array.IndexOf(qualityToggles, toggle);
+            GameSettings.Main.qualityLevel = index;
+        }
+
+        #endregion
+
+        #region Audio Methods
+
+        private void LoadAudio()
+        {
+            Volume volume = AudioManager.Main.MasterVolume;
+            masterVolume.value = volume.level;
+            masterMute.value = volume.muted;
+
+            for (int i = 0; i < busVolumes.Length; i++)
+            {
+                volume = AudioManager.Main.busVolumes[(AudioManager.Bus)i];
+                busVolumes[i].value = volume.level;
+                busMutes[i].value = volume.muted;
+            }
+        }
+
+
+        public void UpdateVolume(UISlider slider)
+        {
+            if (slider == masterVolume)
+            {
+                AudioManager.SetMasterLevel(slider.value);
+                return;
+            }
+
+            int index = Array.IndexOf(busVolumes, slider);
+            AudioManager.SetBusLevel((AudioManager.Bus)index, slider.value);
+        }
+
+
+        public void UpdateMute(UIToggle toggle)
+        {
+            if (toggle == masterMute)
+            {
+                AudioManager.SetMasterMute(toggle.value);
+                return;
+            }
+
+            int index = Array.IndexOf(busMutes, toggle);
+            AudioManager.SetBusMute((AudioManager.Bus)index, toggle.value);
+        }
+
+        #endregion
+
+        #region Input Methods
+
+        private void LoadInput()
+        {
+            float input = GameSettings.Main.joystickSensitivity;
+            inputSliders[0].value = input;
+            inputInputs[0].value = FormatInput(input * 100f);
+
+            input = GameSettings.Main.joystickDeadzone;
+            inputSliders[1].value = input;
+            inputInputs[1].value = FormatInput(input * 100f);
+
+            input = GameSettings.Main.joystickXBuffer;
+            inputSliders[2].value = input;
+            inputInputs[2].value = FormatInput(input * 100f);
+
+            input = GameSettings.Main.joystickYBuffer;
+            inputSliders[3].value = input;
+            inputInputs[3].value = FormatInput(input * 100f);
+        }
+
+
+        public void UpdatedInputSlider(UISlider slider)
+        {
+            int index = Array.IndexOf(inputSliders, slider);
+            inputInputs[index].value = FormatInput(slider.value * 100f);
+
+            switch (index)
+            {
+                case 0:
+                    GameSettings.Main.joystickSensitivity = slider.value;
+                    break;
+                case 1:
+                    GameSettings.Main.joystickDeadzone = slider.value;
+                    break;
+                case 2:
+                    GameSettings.Main.joystickXBuffer = slider.value;
+                    break;
+                case 3:
+                    GameSettings.Main.joystickYBuffer = slider.value;
+                    break;
+            }
+        }
+
+
+        public void UpdatedInputField(UIInput input)
+        {
+            if (string.IsNullOrEmpty(input.value))
+            {
+                input.value = "0";
+            }
+            float value = Mathf.Clamp(float.Parse(input.value), 0f, 100f);
+            input.value = FormatInput(value);
+
+            int index = Array.IndexOf(inputInputs, input);
+            value /= 100f;
+            inputSliders[index].value = value;
+
+            switch (index)
+            {
+                case 0:
+                    GameSettings.Main.joystickSensitivity = value;
+                    break;
+                case 1:
+                    GameSettings.Main.joystickDeadzone = value;
+                    break;
+                case 2:
+                    GameSettings.Main.joystickXBuffer = value;
+                    break;
+                case 3:
+                    GameSettings.Main.joystickYBuffer = value;
+                    break;
+            }
+        }
+
+
+        private static string FormatInput(float value)
+        {
+            return Mathf.RoundToInt(value).ToString();
+        }
+
+        #endregion
+
+        #region Data Methods
+
+        public void GameReset()
+        {
+            Debugger.Log("Resetting game.", null, Debugger.LogTypes.Data);
+            PlayerPrefs.DeleteAll();
+            SaveData.DeleteAll();
+            GameStart.Main.UpdateVersions(true);
+            SceneManager.LoadScene(Scenes.Scene(Scenes.Menus.MainMenu), true, true);
+        }
+
+
+        public void ReloadStarterBuilds()
+        {
+            string[] builds = ConstructionGrid.BuildNames().ToArray();
+            foreach (string build in ConstructionGrid.DevBuilds.Where(build => !builds.Contains(build)))
+            {
+                ConstructionGrid.SaveBuild(build, SaveData.LoadFromResources<BuildInfo>(build));
+            }
+        }
+
+        #endregion
+    } 
 }

@@ -182,6 +182,7 @@ namespace SpaceCUBEs
         {
             base.Awake();
 
+        Debug.Log("Awake");
             if (NavigationBar.Main) NavigationBar.Show(false);
 
             // states
