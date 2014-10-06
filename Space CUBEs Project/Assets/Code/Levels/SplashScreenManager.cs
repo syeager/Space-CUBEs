@@ -56,6 +56,7 @@ public class SplashScreenManager : Singleton<SplashScreenManager>
     [UsedImplicitly]
     private void Start()
     {
+        GoogleAnalytics.StartSession();
         Invoke("ShowDevSplash", 1f);
     }
 

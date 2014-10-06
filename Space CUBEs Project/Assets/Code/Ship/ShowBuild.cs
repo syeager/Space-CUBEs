@@ -17,6 +17,7 @@ public static class ShowBuild
 {
     #region Public Fields
 
+    [Obsolete("Pass into methods.")]
     public static Material material;
 
     #endregion
