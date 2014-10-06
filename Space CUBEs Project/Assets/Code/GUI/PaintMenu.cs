@@ -244,15 +244,15 @@ namespace SpaceCUBEs
 
         private void OnSampleClicked()
         {
-            Color color = CUBE.Colors[grid.hoveredCUBE.GetComponent<ColorVertices>().GetColor(mainSelected ? 0 : 1)];
-            if (primarySelected)
-            {
-                colorPrimary = Array.IndexOf(CUBE.Colors, color);
-            }
-            else
-            {
-                colorSecondary = Array.IndexOf(CUBE.Colors, color);
-            }
+            SetColor(grid.hoveredCUBE.GetComponent<ColorVertices>().GetColor(mainSelected ? 0 : 1));
+            //if (primarySelected)
+            //{
+            //    colorPrimary = Array.IndexOf(CUBE.Colors, color);
+            //}
+            //else
+            //{
+            //    colorSecondary = Array.IndexOf(CUBE.Colors, color);
+            //}
 
             UpdateSections();
         }
