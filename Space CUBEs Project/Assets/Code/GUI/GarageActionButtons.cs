@@ -34,8 +34,8 @@ namespace SpaceCUBEs
 
         #region Const Fields
 
-        private const string Pickup = "Pickup";
-        private const string Place = "Place";
+        private const string Pickup = "PICKUP";
+        private const string Place = "PLACE";
 
         private const string PickupPlaceButton = "Pickup/Place Button";
         private const string DeleteButton = "Delete Button";
