@@ -4,6 +4,7 @@
 // Edited: 2014.09.01
 
 using LittleByte.Data;
+using UnityEngine;
 
 /// <summary>
 /// Singleton to hold all game settings.
@@ -84,6 +85,7 @@ public class GameSettings : Singleton<GameSettings>
         joystickSensitivity = SaveData.Load("Joystick yBuffer", InputFolder, JoystickYBufferDefault);
         joystickSensitivity = SaveData.Load("Joystick Deadzone", InputFolder, JoystickDeadzoneDefault);
         qualityLevel = SaveData.Load(QualityLevelKey, SettingsFolder, QualityLevelDefault);
+        QualitySettings.SetQualityLevel(qualityLevel);
     }
 
     #endregion

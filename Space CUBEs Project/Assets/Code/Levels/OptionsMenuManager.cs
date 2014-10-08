@@ -145,8 +145,9 @@ namespace SpaceCUBEs
 
         public void Exit()
         {
-            if (qualityLevel != QualitySettings.GetQualityLevel())
+            if (qualityLevel != GameSettings.Main.qualityLevel)
             {
+                GameSettings.Main.qualityLevel = qualityLevel;
                 QualitySettings.SetQualityLevel(qualityLevel, true);
             }
             Save();
@@ -210,7 +211,7 @@ namespace SpaceCUBEs
             description.text = QualityLevelInfo;
 
             int index = Array.IndexOf(qualityToggles, toggle);
-            GameSettings.Main.qualityLevel = index;
+            qualityLevel = index;
         }
 
         #endregion
