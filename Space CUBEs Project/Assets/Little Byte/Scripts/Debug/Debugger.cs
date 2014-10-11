@@ -117,8 +117,8 @@ public class Debugger : Singleton<Debugger>
     /// <summary>Time in seconds to get average FPS.</summary>
     private const float UpdateInterval = 0.5f;
 
-    private const string Yellow = "<color=#ffff00>";
-    private const string Red = "<color=#ff0000>";
+    private const string WarningColor = "<color=#ffa500>";
+    private const string ErrorColor = "<color=#ff0000>";
     private const string EndColor = "</color>";
 
     #endregion
@@ -303,12 +303,12 @@ public class Debugger : Singleton<Debugger>
         {
             if (Main.logFlags[(int)logType])
             {
-                Debug.LogWarning(Yellow + (Main.showTime ? "[" + Time.realtimeSinceStartup + "] " : "") + message + EndColor, context);
+                Debug.LogWarning(WarningColor + (Main.showTime ? "[" + Time.realtimeSinceStartup + "] " : "") + message + EndColor, context);
             }
         }
         else
         {
-            Debug.LogWarning(Yellow + string.Format("[{0}] {1}", DateTime.Now.ToShortTimeString() + EndColor, message), context);
+            Debug.LogWarning(WarningColor + string.Format("[{0}] {1}", DateTime.Now.ToShortTimeString(), message) + EndColor, context);
         }
 
 #if UNITY_EDITOR
@@ -336,11 +336,11 @@ public class Debugger : Singleton<Debugger>
     {
         if (Application.isPlaying)
         {
-            Debug.LogError(Red + (Main.showTime ? "[" + Time.realtimeSinceStartup + "] " : "") + message + EndColor, context);
+            Debug.LogError(ErrorColor + (Main.showTime ? "[" + Time.realtimeSinceStartup + "] " : "") + message + EndColor, context);
         }
         else
         {
-            Debug.LogError(Red + string.Format("[{0}] {1}", DateTime.Now.ToShortTimeString(), message) + EndColor, context);
+            Debug.LogError(ErrorColor + string.Format("[{0}] {1}", DateTime.Now.ToShortTimeString(), message) + EndColor, context);
         }
 
 #if UNITY_EDITOR
@@ -408,7 +408,7 @@ public class Debugger : Singleton<Debugger>
         int count = 0;
         foreach (object item in list)
         {
-            Debug.Log(count + ": " + item);//, item is Object ? (Object)item : context);
+            Debug.Log(count + ": " + item, item is Object ? (Object)item : context);
             count++;
         }
 

@@ -1,12 +1,13 @@
-﻿// Space CUBEs Project-csharp
+﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.06.14
-// Edited: 2014.06.18
+// Edited: 2014.10.11
 
 using System;
 using Annotations;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 /// <summary>
 /// 
@@ -265,7 +266,7 @@ public class AudioManagerCreator : Creator<AudioManager>
         Debug.Log(path);
 
         GameObject surrogate = new GameObject("audio player", typeof(AudioPlayer));
-        UnityEngine.Object prefab = PrefabUtility.CreatePrefab(path, surrogate);
+        Object prefab = PrefabUtility.CreatePrefab(path, surrogate);
         DestroyImmediate(surrogate);
 
         AudioPlayer audioPlayer = ((GameObject)prefab).GetComponent<AudioPlayer>();
@@ -294,7 +295,7 @@ public class AudioManagerCreator : Creator<AudioManager>
 
         AudioClip clip = (AudioClip)Selection.activeObject;
         GameObject surrogate = new GameObject(clip.name, typeof(Playlist));
-        UnityEngine.Object prefab = PrefabUtility.CreatePrefab(path, surrogate);
+        Object prefab = PrefabUtility.CreatePrefab(path, surrogate);
         DestroyImmediate(surrogate);
 
         Playlist playlist = ((GameObject)prefab).GetComponent<Playlist>();
@@ -325,14 +326,14 @@ public class AudioManagerCreator : Creator<AudioManager>
     [MenuItem("Shortcuts/Mute Game %M", false, 150)]
     public static void Mute()
     {
-        AudioManager audioManager = (AudioManager)FindObjectOfType(typeof(AudioManager));
+        AudioManager audioManager = AudioManager.Find();
         audioManager.setMasterMute(!audioManager.MasterVolume);
         if (!Application.isPlaying) audioManager.Save();
 
         if (editor != null)
         {
+            editor.Repaint();
         }
-        editor.Repaint();
     }
 
     #endregion

@@ -4,7 +4,11 @@
 // Edited: 2014.06.13
 
 using System;
+using System.Linq;
+using UnityEditor;
+#if UNITY_EDITOR
 using UnityEngine;
+#endif
 
 /// <summary>
 /// Generic Singleton base class.
@@ -60,9 +64,9 @@ public class Singleton<T> : MonoBase where T : MonoBehaviour
     #region Static Methods
 
 #if UNITY_EDITOR
-    public T Find()
+    public static T Find()
     {
-        var objects = Resources.FindObjectsOfTypeAll<T>();
+        var objects = Resources.FindObjectsOfTypeAll<T>().Where(obj => !AssetDatabase.Contains(obj)).ToArray();
 
         if (objects.Length == 0)
         {
@@ -70,7 +74,7 @@ public class Singleton<T> : MonoBase where T : MonoBehaviour
         }
         else if (objects.Length > 1)
         {
-            Debugger.LogException(new Exception("More than 1 singleton of type " + typeof(T).Name + " found."));
+            Debugger.LogWarning("More than 1 singleton of type " + typeof(T).Name + " found.", objects[1]);
         }
 
         return Resources.FindObjectsOfTypeAll<T>()[0];

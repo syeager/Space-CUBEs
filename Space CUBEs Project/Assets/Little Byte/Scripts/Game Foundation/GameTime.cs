@@ -141,7 +141,10 @@ public static class GameTime
         else
         {
             timeScale = cachedTimeScale;
-            unscaledTimeJob.Kill();
+            if (unscaledTimeJob != null)
+            {
+                unscaledTimeJob.Kill();
+            }
         }
     }
 
