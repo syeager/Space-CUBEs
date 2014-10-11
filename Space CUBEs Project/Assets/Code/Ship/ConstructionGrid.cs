@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Annotations;
 using LittleByte.Data;
+using LittleByte.Extensions;
 using UnityEngine;
 
 namespace SpaceCUBEs
@@ -78,10 +79,10 @@ namespace SpaceCUBEs
         private Vector3 viewAxis;
 
         /// <summary>Total core points allowed.</summary>
-        private int corePointsMax;
+        public int CorePointsMax { get; private set; }
 
         /// <summary>Core points remaining.</summary>
-        public int corePointsAvailable { get; private set; }
+        public int CorePointsAvailable { get; private set; }
 
         /// <summary>Available weapon slots.</summary>
         private int weaponSlots;
@@ -306,8 +307,8 @@ namespace SpaceCUBEs
             CurrentStats = new ShipStats();
 
             // build points
-            corePointsMax = BuildStats.GetCoreCapacity();
-            corePointsAvailable = corePointsMax;
+            CorePointsMax = BuildStats.GetCoreCapacity();
+            CorePointsAvailable = CorePointsMax;
 
             // set up weapons
             weaponSlots = weaponCount;
@@ -739,9 +740,9 @@ namespace SpaceCUBEs
             if (!Fits()) return false;
 
             // build points
-            if (heldInfo.cost <= corePointsAvailable)
+            if (heldInfo.cost <= CorePointsAvailable)
             {
-                corePointsAvailable -= heldInfo.cost;
+                CorePointsAvailable -= heldInfo.cost;
             }
             else
             {
@@ -967,7 +968,7 @@ namespace SpaceCUBEs
             CurrentStats.shield -= cubeInfo.shield;
             CurrentStats.speed -= cubeInfo.speed;
             CurrentStats.damage -= cubeInfo.damage;
-            corePointsAvailable += cubeInfo.cost;
+            CorePointsAvailable += cubeInfo.cost;
 
             cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].renderer.material = CellCursor_Mat;
         }
@@ -1075,7 +1076,7 @@ namespace SpaceCUBEs
         /// <param name="build">Build info.</param>
         public static void SaveBuild(string buildName, BuildInfo build)
         {
-            Debugger.Log("Saving " + buildName + ": " + build, null, Debugger.LogTypes.Data);
+            Debugger.Log("Saving: " + buildName, null, Debugger.LogTypes.Data);
             SaveData.Save(buildName, build, BuildsFolder);
         }
 
@@ -1086,7 +1087,7 @@ namespace SpaceCUBEs
         /// <param name="buildName">Name of build.</param>
         public static void DeleteBuild(string buildName)
         {
-            SaveData.Delete(buildName, BuildsFolder);
+            SaveData.DeleteFile(buildName, BuildsFolder);
         }
 
 
@@ -1099,7 +1100,7 @@ namespace SpaceCUBEs
         {
             BuildInfo buildInfo = SaveData.Load<BuildInfo>(oldName, BuildsFolder);
             buildInfo.name = newName;
-            SaveData.Delete(oldName, BuildsFolder);
+            SaveData.DeleteFile(oldName, BuildsFolder);
             SaveData.Save(newName, buildInfo, BuildsFolder);
         }
 

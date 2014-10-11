@@ -1,7 +1,7 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2013.11.26
-// Edited: 2014.09.30
+// Edited: 2014.10.06
 
 using System;
 using System.Collections;
@@ -171,9 +171,6 @@ namespace SpaceCUBEs
 
         public ActivateButton[] menuNavButtons = new ActivateButton[2];
 
-        /// <summary>Label to display build points remaining.</summary>
-        public UILabel corePointsLabel;
-
         #endregion
 
         #region MonoBehaviour Overrides
@@ -182,7 +179,6 @@ namespace SpaceCUBEs
         {
             base.Awake();
 
-        Debug.Log("Awake");
             if (NavigationBar.Main) NavigationBar.Show(false);
 
             // states
@@ -205,9 +201,6 @@ namespace SpaceCUBEs
 #endif
             grid.CreateGrid(ConstructionGrid.BuildSize, Player.Weaponlimit, Player.Weaponlimit);
             grid.CreateBuild(buildName);
-            previewShip.Initialize(buildName, BuildStats.GetCoreCapacity());
-            SetShipInfo();
-            corePointsLabel.text = grid.corePointsAvailable.ToString();
 
             // scene
             cameraTarget = new GameObject("Camera Target").transform;
@@ -365,7 +358,6 @@ namespace SpaceCUBEs
             if (Input.GetKeyUp(KeyCode.Delete))
             {
                 grid.DeleteCUBE();
-                corePointsLabel.text = grid.corePointsAvailable.ToString();
             }
 
             // build
@@ -544,6 +536,8 @@ namespace SpaceCUBEs
 
         private void EditInit()
         {
+            previewShip.Initialize(grid.buildName, BuildStats.GetCoreCapacity());
+            previewShip.SetValues(grid.CurrentStats, grid.CorePointsAvailable);
         }
 
 
@@ -582,6 +576,8 @@ namespace SpaceCUBEs
             {
                 grid.PickupCUBE();
             }
+
+            previewShip.SetValues(grid.CurrentStats, grid.CorePointsAvailable);
         }
 
         #endregion
@@ -762,36 +758,23 @@ namespace SpaceCUBEs
 
         #endregion
 
-        #region Private Methods
-
-        private void SetShipInfo()
-        {
-            // name
-            //grid.buildName = shipName.value;
-
-            // stats
-            previewShip.SetValues(grid.CurrentStats, grid.corePointsAvailable);
-        }
-
-        #endregion
-
         #region Event Handlers
 
         private void OnCursorStatusChanged(object sender, CursorUpdatedArgs args)
         {
-            switch (args.current)
-            {
-                case ConstructionGrid.CursorStatuses.Holding:
-                    SetShipInfo();
-                    break;
+            //switch (args.current)
+            //{
+            //    case ConstructionGrid.CursorStatuses.Holding:
+            //        SetShipInfo();
+            //        break;
 
-                case ConstructionGrid.CursorStatuses.Hover:
-                    break;
+            //    case ConstructionGrid.CursorStatuses.Hover:
+            //        break;
 
-                case ConstructionGrid.CursorStatuses.None:
-                    SetShipInfo();
-                    break;
-            }
+            //    case ConstructionGrid.CursorStatuses.None:
+            //        SetShipInfo();
+            //        break;
+            //}
         }
 
         #endregion

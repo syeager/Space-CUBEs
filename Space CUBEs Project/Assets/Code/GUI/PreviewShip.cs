@@ -1,7 +1,7 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.09.20
-// Edited: 2014.09.21
+// Edited: 2014.10.06
 
 using Annotations;
 using UnityEngine;
@@ -36,7 +36,7 @@ namespace SpaceCUBEs
 
         #region Const Fields
 
-        private const string Cost = "{0} / {1}";
+        private const string Cost = "{0}/{1}";
 
         #endregion
 
