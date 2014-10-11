@@ -41,9 +41,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   material: {fileID: 2100000, guid: cf607845a9d5f9146bbda5ddb81fbc38, type: 2}
   mSprites:
-  - name: Btn_Color
+  - name: Btn_ClearData
     x: 194
-    y: 59
+    y: 415
+    width: 199
+    height: 199
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Btn_Color
+    x: 394
+    y: 273
     width: 103
     height: 89
     borderLeft: 0
@@ -55,8 +68,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Btn_CUBELib
-    x: 333
-    y: 340
+    x: 300
+    y: 30
     width: 88
     height: 87
     borderLeft: 0
@@ -68,8 +81,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Btn_CUBElibrary_arrow
-    x: 194
-    y: 2
+    x: 779
+    y: 488
     width: 55
     height: 56
     borderLeft: 0
@@ -81,8 +94,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Btn_Focus_Detail
-    x: 194
-    y: 330
+    x: 394
+    y: 454
     width: 103
     height: 90
     borderLeft: 0
@@ -94,8 +107,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Btn_Focus_Main
-    x: 194
-    y: 239
+    x: 394
+    y: 363
     width: 103
     height: 90
     borderLeft: 0
@@ -107,8 +120,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Btn_Focus_OutlineTrail
-    x: 194
-    y: 149
+    x: 394
+    y: 183
     width: 103
     height: 89
     borderLeft: 0
@@ -120,7 +133,7 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Btn_GarageAction
-    x: 487
+    x: 693
     y: 565
     width: 159
     height: 49
@@ -133,7 +146,7 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Btn_GarageNav
-    x: 333
+    x: 539
     y: 562
     width: 153
     height: 52
@@ -146,8 +159,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Btn_Lock
-    x: 333
-    y: 194
+    x: 394
+    y: 110
     width: 83
     height: 72
     borderLeft: 0
@@ -172,8 +185,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Btn_Med
-    x: 333
-    y: 502
+    x: 853
+    y: 555
     width: 132
     height: 59
     borderLeft: 0
@@ -211,8 +224,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Btn_Move_LayerDown
-    x: 333
-    y: 428
+    x: 498
+    y: 471
     width: 105
     height: 73
     borderLeft: 0
@@ -224,8 +237,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Btn_Move_LayerUp
-    x: 333
-    y: 267
+    x: 604
+    y: 472
     width: 105
     height: 72
     borderLeft: 0
@@ -238,7 +251,7 @@ MonoBehaviour:
     paddingBottom: 0
   - name: Btn_Move_Vert
     x: 194
-    y: 518
+    y: 118
     width: 138
     height: 96
     borderLeft: 0
@@ -262,9 +275,22 @@ MonoBehaviour:
     paddingRight: 0
     paddingTop: 0
     paddingBottom: 0
+  - name: Btn_OptionsTab
+    x: 727
+    y: 617
+    width: 143
+    height: 79
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
   - name: Btn_Paint_Brush
-    x: 886
-    y: 641
+    x: 394
+    y: 9
     width: 96
     height: 26
     borderLeft: 0
@@ -289,8 +315,8 @@ MonoBehaviour:
     paddingTop: 1
     paddingBottom: 0
   - name: Btn_Paint_Eyedrop
-    x: 250
-    y: 30
+    x: 937
+    y: 639
     width: 64
     height: 28
     borderLeft: 0
@@ -340,11 +366,11 @@ MonoBehaviour:
     paddingRight: 0
     paddingTop: 0
     paddingBottom: 0
-  - name: Btn_Rot_Horiz
-    x: 727
-    y: 627
-    width: 144
-    height: 69
+  - name: Btn_ReloadStarterBuilds
+    x: 194
+    y: 215
+    width: 199
+    height: 199
     borderLeft: 0
     borderRight: 0
     borderTop: 0
@@ -353,7 +379,7 @@ MonoBehaviour:
     paddingRight: 0
     paddingTop: 0
     paddingBottom: 0
-  - name: Btn_Rot_Vert
+  - name: Btn_Rot_Horiz
     x: 0
     y: 8
     width: 144
@@ -366,9 +392,22 @@ MonoBehaviour:
     paddingRight: 0
     paddingTop: 0
     paddingBottom: 0
+  - name: Btn_Rot_Vert
+    x: 394
+    y: 545
+    width: 144
+    height: 69
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
   - name: Btn_Save
     x: 194
-    y: 421
+    y: 21
     width: 105
     height: 96
     borderLeft: 0
@@ -393,8 +432,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Scroll_Handle
-    x: 422
-    y: 340
+    x: 333
+    y: 127
     width: 37
     height: 87
     borderLeft: 11
@@ -407,7 +446,7 @@ MonoBehaviour:
     paddingBottom: 0
   - name: Scroll_Handle_Lines
     x: 987
-    y: 930
+    y: 860
     width: 19
     height: 18
     borderLeft: 0
@@ -427,6 +466,71 @@ MonoBehaviour:
     borderRight: 10
     borderTop: 10
     borderBottom: 10
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Slider_Active
+    x: 987
+    y: 879
+    width: 19
+    height: 32
+    borderLeft: 3
+    borderRight: 3
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Slider_Handle
+    x: 710
+    y: 476
+    width: 68
+    height: 68
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Slider_Track
+    x: 987
+    y: 912
+    width: 26
+    height: 36
+    borderLeft: 3
+    borderRight: 3
+    borderTop: 3
+    borderBottom: 3
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Toggle_Active
+    x: 886
+    y: 617
+    width: 50
+    height: 50
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: Toggle_BG
+    x: 394
+    y: 36
+    width: 72
+    height: 73
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
