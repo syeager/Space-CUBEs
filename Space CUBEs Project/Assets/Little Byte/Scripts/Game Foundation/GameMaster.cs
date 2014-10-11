@@ -1,9 +1,10 @@
-﻿// Steve Yeager
-// 11.26.2013
+﻿// Little Byte Games
+// Author: Steve Yeager
+// Created: 2013.11.27
+// Edited: 2014.10.10
 
 using System;
 using Annotations;
-using LittleByte.Data;
 using UnityEngine;
 
 public class GameMaster : MonoBehaviour
@@ -16,10 +17,9 @@ public class GameMaster : MonoBehaviour
 
     #region Events
 
-    public static EventHandler QuitEvent;
+    public static Action QuitEvent;
 
     #endregion
-
 
     #region MonoBehaviour Overrides
 
@@ -43,7 +43,10 @@ public class GameMaster : MonoBehaviour
     [UsedImplicitly]
     private void OnApplicationQuit()
     {
-        QuitEvent.Fire();
+        if (QuitEvent != null)
+        {
+            QuitEvent();
+        }
     }
 
     #endregion

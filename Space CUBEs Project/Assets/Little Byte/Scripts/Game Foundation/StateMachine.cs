@@ -6,6 +6,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using LittleByte.Extensions;
 
 /// <summary>
 /// State Machine to be inherited from other base classes.

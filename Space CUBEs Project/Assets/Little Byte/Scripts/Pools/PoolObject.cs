@@ -4,6 +4,7 @@
 // Edited: 2014.06.15
 
 using System;
+using LittleByte.Extensions;
 using UnityEngine;
 
 /// <summary>

@@ -4,6 +4,7 @@
 // Edited: 2014.06.30
 
 using System;
+using LittleByte.Extensions;
 
 namespace LittleByte.Debug.Attributes
 {

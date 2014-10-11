@@ -4,6 +4,7 @@
 // Edited: 2014.06.25
 
 using System.Collections;
+using LittleByte.Extensions;
 using UnityEngine;
 
 public class PlasmaCannon : PlayerWeapon

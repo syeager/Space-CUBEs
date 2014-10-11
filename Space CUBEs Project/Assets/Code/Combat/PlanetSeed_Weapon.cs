@@ -3,6 +3,7 @@
 // Created: 2014.02.19
 // Edited: 2014.06.25
 
+using LittleByte.Extensions;
 using UnityEngine;
 
 public class PlanetSeed_Weapon : PlayerWeapon

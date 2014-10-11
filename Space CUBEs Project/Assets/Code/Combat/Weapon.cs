@@ -6,6 +6,7 @@
 using System;
 using System.Collections;
 using Annotations;
+using LittleByte.Extensions;
 using UnityEngine;
 
 public abstract class Weapon : MonoBase

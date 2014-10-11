@@ -7,6 +7,7 @@ using System;
 using System.Collections;
 using LittleByte;
 using LittleByte.Data;
+using LittleByte.Extensions;
 using UnityEngine;
 using Object = UnityEngine.Object;
 

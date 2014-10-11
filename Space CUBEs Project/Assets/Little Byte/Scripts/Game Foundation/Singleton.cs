@@ -3,6 +3,7 @@
 // Created: 2013.12.03
 // Edited: 2014.06.13
 
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -14,7 +15,7 @@ public class Singleton<T> : MonoBase where T : MonoBehaviour
     #region Public Fields
 
     /// <summary>Should a warning be logged if there are multiple occurences of singleton.</summary>
-    [Header("Singleton")]
+    //[Header("Singleton")]
     [Tooltip("Should a warning be logged if there are multiple occurences of singleton.")]
     public bool logWarning;
 
@@ -53,6 +54,28 @@ public class Singleton<T> : MonoBase where T : MonoBehaviour
             }
         }
     }
+
+    #endregion
+
+    #region Static Methods
+
+#if UNITY_EDITOR
+    public T Find()
+    {
+        var objects = Resources.FindObjectsOfTypeAll<T>();
+
+        if (objects.Length == 0)
+        {
+            Debugger.LogException(new Exception("No singleton of type " + typeof(T).Name + " found."));
+        }
+        else if (objects.Length > 1)
+        {
+            Debugger.LogException(new Exception("More than 1 singleton of type " + typeof(T).Name + " found."));
+        }
+
+        return Resources.FindObjectsOfTypeAll<T>()[0];
+    } 
+#endif
 
     #endregion
 }

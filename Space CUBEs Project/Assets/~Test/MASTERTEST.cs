@@ -19,54 +19,31 @@ public class MASTERTEST : MonoBehaviour
 {
     public bool save;
     public bool load;
-    public bool delete;
-    public AudioPlayer clip;
 
-    public List<int> hello;
+    public Dictionary<string, int> numbers;
 
-    [NotNull]
-    public GameObject testGameObject;
-
-    [LittleByte.Debug.Attributes.Range(-5, 5)]
-    public int test = -1;
-
-    public string build;
-    private const string TestFolder = @"Tests/";
 
     private void Start()
     {
-        BuildInfo buildInfo = build;
-        SaveData.Save(buildInfo.name, buildInfo, TestFolder);
+        numbers = new Dictionary<string, int>
+                  {
+                      {"Sup", 7},
+                      {"Stud", 10},
+                  };
     }
-
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (save)
         {
-            AudioManager.Play(clip);
+            save = false;
+            SaveData.Save("Testing Dict", numbers);
         }
-        if (Input.GetKeyDown(KeyCode.Space))
+
+        if (load)
         {
-            Instantiate(testGameObject);
+            load = false;
+            numbers = SaveData.Load<Dictionary<string, int>>("Testing Dict");
         }
-    }
-
-
-    private void Delete()
-    {
-        delete = false;
-    }
-
-
-    private void Load()
-    {
-        load = false;
-    }
-
-
-    private void Save()
-    {
-        save = false;
     }
 }

@@ -6,6 +6,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using LittleByte.Extensions;
 using ProtoBuf;
 using UnityEngine;
 

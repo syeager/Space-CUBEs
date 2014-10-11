@@ -3,6 +3,7 @@
 // Created: 2014.03.05
 // Edited: 2014.09.08
 
+using LittleByte.Extensions;
 using UnityEngine;
 
 namespace SpaceCUBEs

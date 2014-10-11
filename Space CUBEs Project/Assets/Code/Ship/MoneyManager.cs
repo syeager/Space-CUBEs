@@ -5,6 +5,7 @@
 
 using System;
 using LittleByte.Data;
+using LittleByte.Extensions;
 
 /// <summary>
 /// Hnadles the players money.

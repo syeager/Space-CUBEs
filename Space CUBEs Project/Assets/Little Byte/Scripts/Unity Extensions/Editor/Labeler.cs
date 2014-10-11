@@ -215,7 +215,7 @@ public class Labeler : EditorWindow
 
     private void Save()
     {
-        EditorPrefs.SetString(LabelPath, labels.Join(LabelSep));
+        //EditorPrefs.SetString(LabelPath, labels.Join(LabelSep));
     }
 
     #endregion

@@ -1,35 +1,39 @@
-﻿// Steve Yeager
-// 4.6.2014
-// Found online.
+﻿// Little Byte Games
+// Author: Steve Yeager
+// Created: 2014.09.01
+// Edited: 2014.09.01
 
 using System;
 
-/// <summary>
-/// Extension methods for EventHandlers.
-/// </summary>
-public static class EventHandlerExtension
+namespace LittleByte.Extensions
 {
-    #region Extension Methods
-
     /// <summary>
-    /// Send event if it is not empty.
+    /// Extension methods for EventHandlers.
     /// </summary>
-    public static void Fire<T>(this EventHandler<T> self, object sender, T args) where T : EventArgs
+    public static class EventHandlerExtension
     {
-        if (self != null)
+        #region Extension Methods
+
+        /// <summary>
+        /// Send event if it is not empty.
+        /// </summary>
+        public static void Fire<T>(this EventHandler<T> self, object sender, T args) where T : EventArgs
         {
-            self(sender, args);
+            if (self != null)
+            {
+                self(sender, args);
+            }
         }
-    }
 
 
-    /// <summary>
-    /// Send event if it is not empty.
-    /// </summary>
-    public static void Fire(this EventHandler self, object sender = null, EventArgs args = null)
-    {
-        if (self != null) self(sender, args ?? EventArgs.Empty);
-    }
-    
-    #endregion
+        /// <summary>
+        /// Send event if it is not empty.
+        /// </summary>
+        public static void Fire(this EventHandler self, object sender = null, EventArgs args = null)
+        {
+            if (self != null) self(sender, args ?? EventArgs.Empty);
+        }
+
+        #endregion
+    } 
 }
