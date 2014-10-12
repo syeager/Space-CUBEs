@@ -5,6 +5,7 @@
 
 using System.Collections.Generic;
 using System.Collections;
+using Annotations;
 using Paths;
 using UnityEngine;
 
@@ -53,6 +54,9 @@ namespace SpaceCUBEs
         /// <summary>Cached Player transform.</summary>
         private Transform player;
 
+        [SerializeField, UsedImplicitly]
+        private float attackTime;
+
         #endregion
 
         #region Const Fields
@@ -74,6 +78,7 @@ namespace SpaceCUBEs
             stateMachine.CreateState(SpawningState, SpawnEnter, info => { });
             stateMachine.CreateState(MovingState, info => stateMachine.SetUpdate(MovingUpdate()), info => { });
             stateMachine.CreateState(AttackingState, AttackingEnter, info => { });
+            stateMachine.CreateState(LeavingState, LeavingEnter, info => { });
             stateMachine.CreateState(DyingState, DieEnter, info => { });
 
             // weapons
@@ -95,6 +100,8 @@ namespace SpaceCUBEs
 
             // decide target distance
             targetDistance = Random.Range(minTargetDistance, maxTargetDistance);
+
+            InvokeAction(() => stateMachine.SetState(LeavingState), attackTime);
 
             stateMachine.SetState(MovingState);
         }

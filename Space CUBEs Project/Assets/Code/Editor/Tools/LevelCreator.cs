@@ -309,6 +309,7 @@ public class LevelCreator : EditorWindow
 
         EditorGUI.DrawRect(new Rect(FormationWidth, formationTotalHeight, 1f, height), Color.grey);
         EditorGUI.DrawRect(new Rect(0f, formationTotalHeight + height, w, 1f), Color.grey);
+
         return height;
     }
 

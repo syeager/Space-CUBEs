@@ -56,6 +56,7 @@ Transform:
   m_Children:
   - {fileID: 400008}
   m_Father: {fileID: 0}
+  m_RootOrder: 0
 --- !u!4 &400008
 Transform:
   m_ObjectHideFlags: 1
@@ -67,6 +68,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 200}
   m_Children: []
   m_Father: {fileID: 400006}
+  m_RootOrder: 0
 --- !u!23 &2300000
 Renderer:
   m_ObjectHideFlags: 1
@@ -85,9 +87,8 @@ Renderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_SortingLayer: 0
-  m_SortingOrder: 0
   m_SortingLayerID: 0
+  m_SortingOrder: 0
 --- !u!23 &2300006
 Renderer:
   m_ObjectHideFlags: 1
@@ -106,9 +107,8 @@ Renderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_SortingLayer: 0
-  m_SortingOrder: 0
   m_SortingLayerID: 0
+  m_SortingOrder: 0
 --- !u!33 &3300000
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -199,6 +199,7 @@ MonoBehaviour:
   idleCycles: 1
   idleSpeed: 2
   idleAmp: 10
+  attacksAllowed: 3
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -212,13 +213,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 0
   timeScale: 1
-  speed: 0
+  speed: 25
   barrelRollMoveSpeed: 0
   barrelRollTime: .300000012
   barrelRollBuffer: .5
-  hasVerticalBounds: 1
+  hasVerticalBounds: 0
   verticalBounds: .0500000007
-  hasHorizontalBounds: 1
+  hasHorizontalBounds: 0
   leftBound: .00999999978
   rightBound: .00999999978
 --- !u!114 &11400006
@@ -287,6 +288,7 @@ MonoBehaviour:
   timeScale: 1
   name: 
   cooldownTime: 0
+  canActivate: 1
   laser: {fileID: 100008}
   damage: 20
 --- !u!1001 &100100000

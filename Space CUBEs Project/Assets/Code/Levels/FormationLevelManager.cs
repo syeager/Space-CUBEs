@@ -112,6 +112,7 @@ namespace SpaceCUBEs
             public void StartBoss()
             {
                 Level = DateTime.Now.TimeOfDay - Level;
+                Debugger.Log("Level Time: " + Level, null, Debugger.LogTypes.LevelEvents);
                 Boss = DateTime.Now.TimeOfDay;
             }
 
@@ -119,6 +120,7 @@ namespace SpaceCUBEs
             public void End()
             {
                 Boss = DateTime.Now.TimeOfDay - Boss;
+                Debugger.Log("Bos Time: " + Boss, null, Debugger.LogTypes.LevelEvents);
             }
         }
 

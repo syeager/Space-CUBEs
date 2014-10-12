@@ -3,6 +3,10 @@
 // Created: 2013.12.16
 // Edited: 2014.09.08
 
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
 namespace SpaceCUBEs
 {
     /// <summary>
@@ -45,6 +49,7 @@ namespace SpaceCUBEs
         #region Protected Fields
 
         protected Path path;
+        protected const string LeavingState = "Leaving";
 
         #endregion
 
@@ -69,7 +74,27 @@ namespace SpaceCUBEs
 
         #endregion
 
-        #region Private Methods
+        #region State Methods
+
+        protected void LeavingEnter(Dictionary<string, object> info)
+        {
+            StopAllCoroutines();
+            stateMachine.SetUpdate(LeavingUpdate());
+        }
+
+
+        private IEnumerator LeavingUpdate()
+        {
+            while (true)
+            {
+                MyMotor.Move((Vector2)myTransform.forward);
+                yield return null;
+            }
+        }
+
+        #endregion
+
+        #region Event Handlers
 
         private void OnDie(object sender, DieArgs args)
         {

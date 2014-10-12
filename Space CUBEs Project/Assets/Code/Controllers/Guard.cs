@@ -6,6 +6,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Annotations;
 using LittleByte.Debug.Attributes;
 using UnityEngine;
 
@@ -55,6 +56,13 @@ namespace SpaceCUBEs
 
         #endregion
 
+        #region Leaving Fields
+
+        [SerializeField, UsedImplicitly]
+        private int attacksAllowed;
+
+        #endregion
+
         #region MonoBehaviour Overrides
 
         protected override void Awake()
@@ -67,6 +75,7 @@ namespace SpaceCUBEs
             stateMachine.CreateState(MovingState, info => stateMachine.SetUpdate(MovingUpdate()), info => { });
             stateMachine.CreateState(AttackingState, AttackEnter, info => { });
             stateMachine.CreateState(IdlingState, info => stateMachine.SetUpdate(IdlingUpdate()), info => { });
+            stateMachine.CreateState(LeavingState, LeavingEnter, info => { });
             stateMachine.CreateState(DyingState, DyingEnter, info => { });
 
             // weapons
@@ -120,12 +129,13 @@ namespace SpaceCUBEs
 
         private IEnumerator AttackingUpdate()
         {
+            attacksAllowed--;
             yield return new WaitForSeconds(attackBuffer);
             laser.Activate(true);
             yield return new WaitForSeconds(attackTime);
             laser.Activate(false);
             yield return new WaitForSeconds(attackBuffer / 2f);
-            stateMachine.SetState(IdlingState);
+            stateMachine.SetState(attacksAllowed > 0 ? IdlingState : LeavingState);
         }
 
 
