@@ -6,6 +6,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -78,6 +79,22 @@ public static class Utility
     public static Vector3 RandomVector3(Vector3 bl, Vector3 tr)
     {
         return new Vector3(Random.Range(bl.x, tr.x), Random.Range(bl.y, tr.y), Random.Range(bl.z, tr.z));
+    }
+
+    #endregion
+
+    #region Clone Methods
+
+    public static T DeepClone<T>(T obj)
+    {
+        using (var ms = new MemoryStream())
+        {
+            var formatter = new BinaryFormatter();
+            formatter.Serialize(ms, obj);
+            ms.Position = 0;
+
+            return (T)formatter.Deserialize(ms);
+        }
     }
 
     #endregion

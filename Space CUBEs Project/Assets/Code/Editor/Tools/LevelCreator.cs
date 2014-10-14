@@ -287,8 +287,7 @@ public class LevelCreator : EditorWindow
             // save
             if (GUI.Button(new Rect(610f, formationHeight, 50f, 20f), "Save"))
             {
-                var window = GetWindow<SaveWindow>(true, "Save Formation", true);
-                window.minSize = window.maxSize = new Vector2(300f, 100f);
+                SaveFormationGroup(formationSeg);
             }
             // load
             if (GUI.Button(new Rect(660f, formationHeight, 50f, 20f), "Load"))
@@ -556,15 +555,23 @@ public class LevelCreator : EditorWindow
         sLevelManager.ApplyModifiedProperties();
     }
 
+
+    private void SaveFormationGroup(FormationGroup formationGroup)
+    {
+        var window = GetWindow<SaveWindow>(true, "Save Formation", true);
+        window.minSize = window.maxSize = new Vector2(300f, 100f);
+        window.Initialize(formationGroup);
+    }
+
     #endregion
 }
 
 
 public class SaveWindow : EditorWindow
 {
-    private const string SavePath = "";
-    private string saveName = "-----";
-
+    private const string SavePath = @"Assets/Formation Groups/{0}.prefab";
+    private string saveName = string.Empty;
+    private FormationGroup formationGroup;
 
     private void OnEnable()
     {
@@ -587,6 +594,11 @@ public class SaveWindow : EditorWindow
         {
             if (GUILayout.Button("Save"))
             {
+                GameObject created = new GameObject(saveName, typeof(FormationGroupContainer));
+                created.GetComponent<FormationGroupContainer>().Set(formationGroup);
+                EditorGUIUtility.PingObject(PrefabUtility.CreatePrefab(string.Format(SavePath, saveName), created));
+                DestroyImmediate(created);
+
                 Close();
             }
 
@@ -596,5 +608,11 @@ public class SaveWindow : EditorWindow
             }
         }
         GUILayout.EndHorizontal();
+    }
+
+
+    public void Initialize(FormationGroup formationGroup)
+    {
+        this.formationGroup = formationGroup;
     }
 }

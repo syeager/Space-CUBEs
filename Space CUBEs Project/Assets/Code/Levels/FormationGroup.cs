@@ -1,9 +1,11 @@
-﻿// Steve Yeager
-// 1.12.2014
+﻿// Little Byte Games
+// Author: Steve Yeager
+// Created: 2014.01.12
+// Edited: 2014.10.12
 
+using System;
 using SpaceCUBEs;
 using UnityEngine;
-using System;
 
 [Serializable]
 public class FormationGroup
