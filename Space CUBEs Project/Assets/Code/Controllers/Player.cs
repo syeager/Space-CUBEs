@@ -7,6 +7,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Annotations;
 using LittleByte.Extensions;
 using UnityEngine;
 
@@ -29,6 +30,13 @@ namespace SpaceCUBEs
 
         public ScoreManager myScore;
         public MoneyManager myMoney;
+
+        #endregion
+
+        #region Private Fields
+
+        [SerializeField, UsedImplicitly]
+        private ShipStats statMultipliers;
 
         #endregion
 
@@ -214,11 +222,13 @@ namespace SpaceCUBEs
         /// <summary>
         /// Initialize ship components. Health, Motor, and Weapons.
         /// </summary>
-        public void Initialize(float maxHealth, float maxShield, float speed, float damage)
+        public void Initialize(ShipStats stats)
         {
-            MyHealth.Initialize(maxHealth, maxShield);
-            MyMotor.Initialize(speed);
-            Weapons.Initialize(this, damage);
+            // TODO: multiplier for all stats
+
+            MyHealth.Initialize(stats.health * statMultipliers.health, stats.shield * statMultipliers.shield);
+            MyMotor.Initialize(stats.speed * statMultipliers.speed);
+            Weapons.Initialize(this, stats.damage * statMultipliers.damage);
             //GA.API.Design.NewEvent(GAAbilities + GAWeaponCount, Weapons.weapons.Count(w => w != null));
             GoogleAnalytics.LogEvent(GAAbilities, GAWeaponCount, "", Weapons.weapons.Count(w => w != null));
             Augmentations.Initialize(this);

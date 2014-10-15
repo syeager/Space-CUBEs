@@ -83,7 +83,7 @@ public static class ShowBuild
 
         if (finishedAction != null)
         {
-            finishedAction(new BuildFinishedArgs(transform.gameObject, buildInfo.stats.health, buildInfo.stats.shield, buildInfo.stats.speed, buildInfo.stats.damage));
+            finishedAction(new BuildFinishedArgs(transform.gameObject, buildInfo.stats));
         }
     }
 

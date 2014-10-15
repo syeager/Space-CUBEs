@@ -51,6 +51,7 @@ Transform:
   m_Children:
   - {fileID: 400002}
   m_Father: {fileID: 0}
+  m_RootOrder: 0
 --- !u!4 &400002
 Transform:
   m_ObjectHideFlags: 1
@@ -62,6 +63,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400000}
+  m_RootOrder: 0
 --- !u!23 &2300000
 Renderer:
   m_ObjectHideFlags: 1
@@ -80,9 +82,8 @@ Renderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_SortingLayer: 0
-  m_SortingOrder: 0
   m_SortingLayerID: 0
+  m_SortingOrder: 0
 --- !u!33 &3300000
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -123,9 +124,8 @@ TrailRenderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_SortingLayer: 0
-  m_SortingOrder: 0
   m_SortingLayerID: 0
+  m_SortingOrder: 0
   m_Time: .5
   m_StartWidth: 1.5
   m_EndWidth: 0
@@ -166,7 +166,7 @@ MonoBehaviour:
   invincible: 0
   maxHealth: 0
   health: 0
-  rechargeSpeed: 20
+  rechargeSpeed: 3
   rechargeDelay: 3
   maxShield: 0
   shield: 0
@@ -218,10 +218,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   log: 0
   timeScale: 1
-  myWeapons: {fileID: 11400004}
   trailRenderer: {fileID: 100002}
   myScore:
     multiplierLife: 1.5
+    points: 0
+  statMultipliers:
+    health: 2
+    shield: 1
+    speed: 1.10000002
+    damage: 1
   horizontalBounds: .0500000007
   backBounds: 0
   frontBounds: 0

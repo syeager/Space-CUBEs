@@ -6,6 +6,7 @@
 using System;
 using System.Linq;
 using Annotations;
+using GooglePlayGames;
 using LittleByte;
 using LittleByte.Data;
 using UnityEngine;
@@ -350,6 +351,10 @@ namespace SpaceCUBEs
             Debugger.Log("Resetting game.", null, Debugger.LogTypes.Data);
             PlayerPrefs.DeleteAll();
             SaveData.DeleteAll();
+            if (Social.localUser.authenticated)
+            {
+                ((PlayGamesPlatform)Social.Active).UpdateState(0, null, GoogleCloud.Main);
+            }
             GameStart.Main.UpdateVersions(true);
             SceneManager.LoadScene(Scenes.Scene(Scenes.Menus.MainMenu), true, true);
         }

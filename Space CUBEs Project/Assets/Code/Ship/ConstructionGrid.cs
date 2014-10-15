@@ -982,13 +982,17 @@ namespace SpaceCUBEs
         public static BuildInfo LoadBuild(string buildName)
         {
             // get buildInfo string from data
+            Debugger.Log("Loading: " + buildName, null, Debugger.LogTypes.Data);
+            if (!SaveData.Contains(buildName, BuildsFolder))
+            {
+                Debugger.Log("Not found.", null, Debugger.LogTypes.Data);
+            }
             BuildInfo build = SaveData.Load<BuildInfo>(buildName, BuildsFolder);
             if (build == null)
             {
                 Debugger.Log(buildName + " is not in data.", null, Debugger.LogTypes.Data, false);
                 return null;
             }
-            Debugger.Log("Loading: " + build, null, Debugger.LogTypes.Data);
 
             return build;
         }
