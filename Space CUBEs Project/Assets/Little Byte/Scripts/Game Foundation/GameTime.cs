@@ -19,7 +19,7 @@ public static class GameTime
     #region Public Fields
 
     /// <summary>TimeScale before the game is paused.</summary>
-    private static float cachedTimeScale;
+    private static float cachedTimeScale = 1f;
 
     /// <summary>Unmodified Time.fixedDeltaTime.</summary>
     private static float fixedDeltaTime;
