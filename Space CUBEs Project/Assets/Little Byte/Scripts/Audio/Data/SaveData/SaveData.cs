@@ -213,7 +213,7 @@ namespace LittleByte.Data
         /// <returns>True, if the file is found.</returns>
         public static bool Contains(string file, string path = DefaultPath)
         {
-            path = DataPath + path;
+            path = DataPath + path + Slash;
             file = path + file + FileExt;
             return Directory.Exists(path) && File.Exists(file);
         }
@@ -371,7 +371,7 @@ namespace LittleByte.Data
         public static string[] GetFiles(string path)
         {
             path = DataPath + path;
-            return Directory.GetFiles(path, "*" + FileExt).Select(f => f.Remove(0, path.Length).Replace(FileExt, "")).ToArray();
+            return Directory.GetFiles(path, "*" + FileExt).Select(f => f.Remove(0, path.Length + 1).Replace(FileExt, "")).ToArray();
         } 
 
         #endregion
