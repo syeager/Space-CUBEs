@@ -1,7 +1,7 @@
-﻿// Space CUBEs Project-csharp
+﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.01.26
-// Edited: 2014.06.10
+// Edited: 2014.10.14
 
 using System;
 using System.Collections.Generic;
@@ -87,7 +87,7 @@ public class LevelCreator : EditorWindow
         }
 
         // path types
-        var pathTypesList = Assembly.GetAssembly(typeof(Path)).GetTypes().Where(t => t.Namespace == "Paths").ToList();
+        List<Type> pathTypesList = Assembly.GetAssembly(typeof(Path)).GetTypes().Where(t => t.Namespace == "Paths").ToList();
         pathTypesList.Insert(0, null);
         pathTypes = pathTypesList.ToArray();
         pathNames = pathTypes.Select(p => p == null ? "None" : p.Name).ToArray();
@@ -549,8 +549,15 @@ public class LevelCreator : EditorWindow
             sFormationGroups.GetArrayElementAtIndex(formation).FindPropertyRelative("enemies").GetArrayElementAtIndex(index).intValue;
 
         // path
-        sFormationGroups.GetArrayElementAtIndex(formation).FindPropertyRelative("paths").GetArrayElementAtIndex(dest).objectReferenceValue =
-            Instantiate(levelManager.formationGroups[formation].paths[index]);
+        if (levelManager.formationGroups[formation].paths[index] != null)
+        {
+            sFormationGroups.GetArrayElementAtIndex(formation).FindPropertyRelative("paths").GetArrayElementAtIndex(dest).objectReferenceValue =
+                Instantiate(levelManager.formationGroups[formation].paths[index]);
+        }
+        else
+        {
+            sFormationGroups.GetArrayElementAtIndex(formation).FindPropertyRelative("paths").GetArrayElementAtIndex(dest).objectReferenceValue = null;
+        }
 
         sLevelManager.ApplyModifiedProperties();
     }
@@ -573,6 +580,7 @@ public class SaveWindow : EditorWindow
     private string saveName = string.Empty;
     private FormationGroup formationGroup;
 
+
     private void OnEnable()
     {
         Focus();
@@ -583,6 +591,7 @@ public class SaveWindow : EditorWindow
     {
         GUI.FocusControl("SaveName");
     }
+
 
     private void OnGUI()
     {

@@ -143,7 +143,7 @@ Transform:
   m_PrefabInternal: {fileID: 1771123510}
   m_GameObject: {fileID: 95062131}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -314.5, z: 0}
+  m_LocalPosition: {x: 0, y: -274.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 772211379}
@@ -357,7 +357,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 161621523}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 328, z: 0}
+  m_LocalPosition: {x: 0, y: 288, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1357417708}
@@ -454,7 +454,7 @@ Transform:
   - {fileID: 725594731}
   - {fileID: 1104129539}
   m_Father: {fileID: 1908783858}
-  m_RootOrder: 1
+  m_RootOrder: 2
 --- !u!114 &208832374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -656,6 +656,10 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 629729126}
     m_Modifications:
+    - target: {fileID: 11400002, guid: a13cadcd7f29ed140bccc0b4c920b0d6, type: 2}
+      propertyPath: medalNames.Array.size
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: a13cadcd7f29ed140bccc0b4c920b0d6, type: 2}
       propertyPath: m_LocalPosition.x
       value: -343.063812
@@ -713,6 +717,34 @@ Prefab:
     - target: {fileID: 11400002, guid: a13cadcd7f29ed140bccc0b4c920b0d6, type: 2}
       propertyPath: disabledTextColor.a
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: a13cadcd7f29ed140bccc0b4c920b0d6, type: 2}
+      propertyPath: bestTimeLabel
+      value: 
+      objectReference: {fileID: 252911497}
+    - target: {fileID: 11400002, guid: a13cadcd7f29ed140bccc0b4c920b0d6, type: 2}
+      propertyPath: medalSprite
+      value: 
+      objectReference: {fileID: 817997202}
+    - target: {fileID: 11400002, guid: a13cadcd7f29ed140bccc0b4c920b0d6, type: 2}
+      propertyPath: medalNames.Array.data[1]
+      value: Widget_Badge_D
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: a13cadcd7f29ed140bccc0b4c920b0d6, type: 2}
+      propertyPath: medalNames.Array.data[2]
+      value: Widget_Badge_C
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: a13cadcd7f29ed140bccc0b4c920b0d6, type: 2}
+      propertyPath: medalNames.Array.data[3]
+      value: Widget_Badge_B
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: a13cadcd7f29ed140bccc0b4c920b0d6, type: 2}
+      propertyPath: medalNames.Array.data[4]
+      value: Widget_Badge_A
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: a13cadcd7f29ed140bccc0b4c920b0d6, type: 2}
+      propertyPath: medalNames.Array.data[5]
+      value: Widget_Badge_S
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a13cadcd7f29ed140bccc0b4c920b0d6, type: 2}
@@ -1063,6 +1095,18 @@ Prefab:
     - target: {fileID: 11400008, guid: 67c09ac23cd921540a5d87e3f7d260ff, type: 2}
       propertyPath: disabledTextColor.a
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400012, guid: 67c09ac23cd921540a5d87e3f7d260ff, type: 2}
+      propertyPath: mWidth
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400012, guid: 67c09ac23cd921540a5d87e3f7d260ff, type: 2}
+      propertyPath: aspectRatio
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400012, guid: 67c09ac23cd921540a5d87e3f7d260ff, type: 2}
+      propertyPath: mHeight
+      value: 90
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 67c09ac23cd921540a5d87e3f7d260ff, type: 2}
@@ -1444,6 +1488,18 @@ Prefab:
     - target: {fileID: 11400008, guid: 67c09ac23cd921540a5d87e3f7d260ff, type: 2}
       propertyPath: disabledTextColor.a
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400012, guid: 67c09ac23cd921540a5d87e3f7d260ff, type: 2}
+      propertyPath: mWidth
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400012, guid: 67c09ac23cd921540a5d87e3f7d260ff, type: 2}
+      propertyPath: aspectRatio
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400012, guid: 67c09ac23cd921540a5d87e3f7d260ff, type: 2}
+      propertyPath: mHeight
+      value: 90
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 67c09ac23cd921540a5d87e3f7d260ff, type: 2}
@@ -1906,25 +1962,104 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: e95f85aa3110abc429999d6bba111ed7, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 345
+      value: 305
       objectReference: {fileID: 0}
     - target: {fileID: 400024, guid: e95f85aa3110abc429999d6bba111ed7, type: 2}
       propertyPath: m_LocalScale.x
-      value: .00249999994
+      value: .00277777785
       objectReference: {fileID: 0}
     - target: {fileID: 400024, guid: e95f85aa3110abc429999d6bba111ed7, type: 2}
       propertyPath: m_LocalScale.y
-      value: .00249999994
+      value: .00277777785
       objectReference: {fileID: 0}
     - target: {fileID: 400024, guid: e95f85aa3110abc429999d6bba111ed7, type: 2}
       propertyPath: m_LocalScale.z
-      value: .00249999994
+      value: .00277777785
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e95f85aa3110abc429999d6bba111ed7, type: 2}
   m_RootGameObject: {fileID: 240233798}
   m_IsPrefabParent: 0
   m_IsExploded: 1
+--- !u!1 &817997201
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100010, guid: 67c09ac23cd921540a5d87e3f7d260ff, type: 2}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 817997203}
+  - 114: {fileID: 817997202}
+  m_Layer: 8
+  m_Name: Medal
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &817997202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400012, guid: 67c09ac23cd921540a5d87e3f7d260ff,
+    type: 2}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 817997201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftAnchor:
+    target: {fileID: 0}
+    relative: 0
+    absolute: 0
+  rightAnchor:
+    target: {fileID: 0}
+    relative: 1
+    absolute: 0
+  bottomAnchor:
+    target: {fileID: 0}
+    relative: 0
+    absolute: 0
+  topAnchor:
+    target: {fileID: 0}
+    relative: 1
+    absolute: 0
+  updateAnchors: 1
+  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mPivot: 4
+  mWidth: 90
+  mHeight: 90
+  mDepth: 8
+  autoResizeBoxCollider: 0
+  hideIfOffScreen: 0
+  keepAspectRatio: 0
+  aspectRatio: 1
+  mType: 1
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
+  mFlip: 0
+  centerType: 1
+  leftType: 1
+  rightType: 1
+  bottomType: 1
+  topType: 1
+  mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
+  mSpriteName: Widget_Badge_D
+  mFillCenter: 1
+--- !u!4 &817997203
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400010, guid: 67c09ac23cd921540a5d87e3f7d260ff, type: 2}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 817997201}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -90, y: -98, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2055547792}
+  m_RootOrder: 2
 --- !u!1 &843278695
 GameObject:
   m_ObjectHideFlags: 0
@@ -1955,6 +2090,7 @@ Transform:
   m_Children:
   - {fileID: 2027014250}
   - {fileID: 981976491}
+  - {fileID: 1126761666}
   m_Father: {fileID: 629729126}
   m_RootOrder: 2
 --- !u!114 &843278697
@@ -1990,6 +2126,14 @@ MonoBehaviour:
   bestTimeLabel: {fileID: 388140360}
   medal: {fileID: 0}
   disabledTextColor: {r: .501960814, g: .501960814, b: .501960814, a: 1}
+  medalSprite: {fileID: 1126761667}
+  medalNames:
+  - 
+  - Widget_Badge_D
+  - Widget_Badge_C
+  - Widget_Badge_B
+  - Widget_Badge_A
+  - Widget_Badge_S
 --- !u!65 &843278698
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2061,6 +2205,10 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 629729126}
     m_Modifications:
+    - target: {fileID: 11400002, guid: a13cadcd7f29ed140bccc0b4c920b0d6, type: 2}
+      propertyPath: medalNames.Array.size
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: a13cadcd7f29ed140bccc0b4c920b0d6, type: 2}
       propertyPath: m_LocalPosition.x
       value: 5.26588821
@@ -2139,6 +2287,30 @@ Prefab:
       propertyPath: disabledTextColor.a
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: a13cadcd7f29ed140bccc0b4c920b0d6, type: 2}
+      propertyPath: medalNames.Array.data[1]
+      value: Widget_Badge_D
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: a13cadcd7f29ed140bccc0b4c920b0d6, type: 2}
+      propertyPath: medalNames.Array.data[2]
+      value: Widget_Badge_C
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: a13cadcd7f29ed140bccc0b4c920b0d6, type: 2}
+      propertyPath: medalNames.Array.data[3]
+      value: Widget_Badge_B
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: a13cadcd7f29ed140bccc0b4c920b0d6, type: 2}
+      propertyPath: medalNames.Array.data[4]
+      value: Widget_Badge_A
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: a13cadcd7f29ed140bccc0b4c920b0d6, type: 2}
+      propertyPath: medalNames.Array.data[5]
+      value: Widget_Badge_S
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: a13cadcd7f29ed140bccc0b4c920b0d6, type: 2}
+      propertyPath: medalSprite
+      value: 
+      objectReference: {fileID: 1126761667}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a13cadcd7f29ed140bccc0b4c920b0d6, type: 2}
   m_RootGameObject: {fileID: 843278695}
@@ -2384,7 +2556,7 @@ Transform:
   m_PrefabInternal: {fileID: 802937919}
   m_GameObject: {fileID: 1011458151}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -590.283203, y: 345, z: 0}
+  m_LocalPosition: {x: -590.283203, y: 305, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1316521024}
@@ -2521,9 +2693,10 @@ Transform:
   m_GameObject: {fileID: 1031001733}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 208.11438, y: 120.50106, z: 0}
-  m_LocalScale: {x: 1.00002694, y: 1.00002694, z: 1.00002694}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1101044821}
+  - {fileID: 1758898617}
   - {fileID: 2130145672}
   m_Father: {fileID: 629729126}
   m_RootOrder: 3
@@ -2560,6 +2733,14 @@ MonoBehaviour:
   bestTimeLabel: {fileID: 128592571}
   medal: {fileID: 0}
   disabledTextColor: {r: .501960814, g: .501960814, b: .501960814, a: 1}
+  medalSprite: {fileID: 1758898616}
+  medalNames:
+  - 
+  - Widget_Badge_D
+  - Widget_Badge_C
+  - Widget_Badge_B
+  - Widget_Badge_A
+  - Widget_Badge_S
 --- !u!65 &1031001736
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2624,6 +2805,85 @@ MonoBehaviour:
   mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
   mSpriteName: Widget_LvlSelect_Lvl_inactive
   mFillCenter: 1
+--- !u!1 &1064809833
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100010, guid: 67c09ac23cd921540a5d87e3f7d260ff, type: 2}
+  m_PrefabInternal: {fileID: 1527040468}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1064809835}
+  - 114: {fileID: 1064809834}
+  m_Layer: 8
+  m_Name: Medal
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1064809834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400012, guid: 67c09ac23cd921540a5d87e3f7d260ff,
+    type: 2}
+  m_PrefabInternal: {fileID: 1527040468}
+  m_GameObject: {fileID: 1064809833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftAnchor:
+    target: {fileID: 0}
+    relative: 0
+    absolute: 0
+  rightAnchor:
+    target: {fileID: 0}
+    relative: 1
+    absolute: 0
+  bottomAnchor:
+    target: {fileID: 0}
+    relative: 0
+    absolute: 0
+  topAnchor:
+    target: {fileID: 0}
+    relative: 1
+    absolute: 0
+  updateAnchors: 1
+  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mPivot: 4
+  mWidth: 90
+  mHeight: 90
+  mDepth: 8
+  autoResizeBoxCollider: 0
+  hideIfOffScreen: 0
+  keepAspectRatio: 0
+  aspectRatio: 1
+  mType: 1
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
+  mFlip: 0
+  centerType: 1
+  leftType: 1
+  rightType: 1
+  bottomType: 1
+  topType: 1
+  mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
+  mSpriteName: Widget_Badge_D
+  mFillCenter: 1
+--- !u!4 &1064809835
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400010, guid: 67c09ac23cd921540a5d87e3f7d260ff, type: 2}
+  m_PrefabInternal: {fileID: 1527040468}
+  m_GameObject: {fileID: 1064809833}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -260, y: -15, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1908783858}
+  m_RootOrder: 1
 --- !u!1 &1101044820
 GameObject:
   m_ObjectHideFlags: 0
@@ -2806,6 +3066,164 @@ MonoBehaviour:
   mMaxLineHeight: 0
   mLineWidth: 0
   mMultiline: 1
+--- !u!1 &1106718059
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100010, guid: 67c09ac23cd921540a5d87e3f7d260ff, type: 2}
+  m_PrefabInternal: {fileID: 691103884}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1106718061}
+  - 114: {fileID: 1106718060}
+  m_Layer: 8
+  m_Name: Medal
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1106718060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400012, guid: 67c09ac23cd921540a5d87e3f7d260ff,
+    type: 2}
+  m_PrefabInternal: {fileID: 691103884}
+  m_GameObject: {fileID: 1106718059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftAnchor:
+    target: {fileID: 0}
+    relative: 0
+    absolute: 0
+  rightAnchor:
+    target: {fileID: 0}
+    relative: 1
+    absolute: 0
+  bottomAnchor:
+    target: {fileID: 0}
+    relative: 0
+    absolute: 0
+  topAnchor:
+    target: {fileID: 0}
+    relative: 1
+    absolute: 0
+  updateAnchors: 1
+  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mPivot: 4
+  mWidth: 90
+  mHeight: 90
+  mDepth: 8
+  autoResizeBoxCollider: 0
+  hideIfOffScreen: 0
+  keepAspectRatio: 0
+  aspectRatio: 1
+  mType: 1
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
+  mFlip: 0
+  centerType: 1
+  leftType: 1
+  rightType: 1
+  bottomType: 1
+  topType: 1
+  mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
+  mSpriteName: Widget_Badge_D
+  mFillCenter: 1
+--- !u!4 &1106718061
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400010, guid: 67c09ac23cd921540a5d87e3f7d260ff, type: 2}
+  m_PrefabInternal: {fileID: 691103884}
+  m_GameObject: {fileID: 1106718059}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 115, y: 18, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1154093519}
+  m_RootOrder: 1
+--- !u!1 &1126761665
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100010, guid: 67c09ac23cd921540a5d87e3f7d260ff, type: 2}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1126761666}
+  - 114: {fileID: 1126761667}
+  m_Layer: 8
+  m_Name: Medal
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1126761666
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400010, guid: 67c09ac23cd921540a5d87e3f7d260ff, type: 2}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1126761665}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -90, y: -98, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 843278696}
+  m_RootOrder: 2
+--- !u!114 &1126761667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400012, guid: 67c09ac23cd921540a5d87e3f7d260ff,
+    type: 2}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1126761665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftAnchor:
+    target: {fileID: 0}
+    relative: 0
+    absolute: 0
+  rightAnchor:
+    target: {fileID: 0}
+    relative: 1
+    absolute: 0
+  bottomAnchor:
+    target: {fileID: 0}
+    relative: 0
+    absolute: 0
+  topAnchor:
+    target: {fileID: 0}
+    relative: 1
+    absolute: 0
+  updateAnchors: 1
+  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mPivot: 4
+  mWidth: 90
+  mHeight: 90
+  mDepth: 8
+  autoResizeBoxCollider: 0
+  hideIfOffScreen: 0
+  keepAspectRatio: 0
+  aspectRatio: 1
+  mType: 1
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
+  mFlip: 0
+  centerType: 1
+  leftType: 1
+  rightType: 1
+  bottomType: 1
+  topType: 1
+  mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
+  mSpriteName: Widget_Badge_D
+  mFillCenter: 1
 --- !u!1 &1154093518
 GameObject:
   m_ObjectHideFlags: 0
@@ -2832,9 +3250,10 @@ Transform:
   m_GameObject: {fileID: 1154093518}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -446.34137, y: 116.258224, z: 0}
-  m_LocalScale: {x: 1.00002694, y: 1.00002694, z: 1.00002694}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 969636171}
+  - {fileID: 1106718061}
   - {fileID: 1380862460}
   m_Father: {fileID: 629729126}
   m_RootOrder: 0
@@ -2871,6 +3290,14 @@ MonoBehaviour:
   bestTimeLabel: {fileID: 796747732}
   medal: {fileID: 0}
   disabledTextColor: {r: .501960814, g: .501960814, b: .501960814, a: 1}
+  medalSprite: {fileID: 1106718060}
+  medalNames:
+  - 
+  - Widget_Badge_D
+  - Widget_Badge_C
+  - Widget_Badge_B
+  - Widget_Badge_A
+  - Widget_Badge_S
 --- !u!65 &1154093521
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2978,12 +3405,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9997cc572df21f40a28b4140136f1dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  log: 0
+  log: 1
   timeScale: 1
   logWarning: 0
   dontDestroy: 0
   version: 1
-  resetVersion: 1
+  resetVersion: 0
 --- !u!114 &1165463810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3337,7 +3764,7 @@ Transform:
   m_GameObject: {fileID: 1316521023}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: .00249999994, y: .00249999994, z: .00249999994}
+  m_LocalScale: {x: .00277777785, y: .00277777785, z: .00277777785}
   m_Children:
   - {fileID: 661230717}
   - {fileID: 1011458152}
@@ -3397,7 +3824,7 @@ MonoBehaviour:
   anchorOffset: 0
   softBorderPadding: 0
   renderQueue: 0
-  startingRenderQueue: 3009
+  startingRenderQueue: 3008
   mClipTexture: {fileID: 0}
   mAlpha: 1
   mClipping: 0
@@ -3663,7 +4090,7 @@ Transform:
   - {fileID: 563784046}
   - {fileID: 796747731}
   m_Father: {fileID: 1154093519}
-  m_RootOrder: 1
+  m_RootOrder: 2
 --- !u!1 &1474835620
 GameObject:
   m_ObjectHideFlags: 0
@@ -3744,7 +4171,7 @@ Transform:
   m_GameObject: {fileID: 1507509815}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: .00249999994, y: .00249999994, z: .00249999994}
+  m_LocalScale: {x: .00277777785, y: .00277777785, z: .00277777785}
   m_Children:
   - {fileID: 2106657544}
   - {fileID: 161621524}
@@ -4034,6 +4461,26 @@ Prefab:
     - target: {fileID: 11400008, guid: 67c09ac23cd921540a5d87e3f7d260ff, type: 2}
       propertyPath: disabledTextColor.a
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400010, guid: 67c09ac23cd921540a5d87e3f7d260ff, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -260
+      objectReference: {fileID: 0}
+    - target: {fileID: 400010, guid: 67c09ac23cd921540a5d87e3f7d260ff, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -15
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400012, guid: 67c09ac23cd921540a5d87e3f7d260ff, type: 2}
+      propertyPath: mWidth
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400012, guid: 67c09ac23cd921540a5d87e3f7d260ff, type: 2}
+      propertyPath: aspectRatio
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400012, guid: 67c09ac23cd921540a5d87e3f7d260ff, type: 2}
+      propertyPath: mHeight
+      value: 90
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 67c09ac23cd921540a5d87e3f7d260ff, type: 2}
@@ -4634,6 +5081,85 @@ MonoBehaviour:
   belowOne: .100000001
   timeDisplay: {fileID: 1186006982}
   displayTime: 1
+--- !u!1 &1758898615
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100010, guid: 67c09ac23cd921540a5d87e3f7d260ff, type: 2}
+  m_PrefabInternal: {fileID: 620973434}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1758898617}
+  - 114: {fileID: 1758898616}
+  m_Layer: 8
+  m_Name: Medal
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1758898616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400012, guid: 67c09ac23cd921540a5d87e3f7d260ff,
+    type: 2}
+  m_PrefabInternal: {fileID: 620973434}
+  m_GameObject: {fileID: 1758898615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftAnchor:
+    target: {fileID: 0}
+    relative: 0
+    absolute: 0
+  rightAnchor:
+    target: {fileID: 0}
+    relative: 1
+    absolute: 0
+  bottomAnchor:
+    target: {fileID: 0}
+    relative: 0
+    absolute: 0
+  topAnchor:
+    target: {fileID: 0}
+    relative: 1
+    absolute: 0
+  updateAnchors: 1
+  mColor: {r: 1, g: 1, b: 1, a: 1}
+  mPivot: 4
+  mWidth: 90
+  mHeight: 90
+  mDepth: 8
+  autoResizeBoxCollider: 0
+  hideIfOffScreen: 0
+  keepAspectRatio: 0
+  aspectRatio: 1
+  mType: 1
+  mFillDirection: 4
+  mFillAmount: 1
+  mInvert: 0
+  mFlip: 0
+  centerType: 1
+  leftType: 1
+  rightType: 1
+  bottomType: 1
+  topType: 1
+  mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
+  mSpriteName: Widget_Badge_D
+  mFillCenter: 1
+--- !u!4 &1758898617
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400010, guid: 67c09ac23cd921540a5d87e3f7d260ff, type: 2}
+  m_PrefabInternal: {fileID: 620973434}
+  m_GameObject: {fileID: 1758898615}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 115, y: 18, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1031001734}
+  m_RootOrder: 1
 --- !u!1 &1764832466
 GameObject:
   m_ObjectHideFlags: 0
@@ -4744,7 +5270,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: b9df4d6867724814a8ae70c200036c19, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -314.5
+      value: -274.5
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: b9df4d6867724814a8ae70c200036c19, type: 2}
       propertyPath: m_LocalPosition.z
@@ -4929,6 +5455,7 @@ Transform:
   m_LocalScale: {x: 1.00007999, y: 1.00007999, z: 1.00007999}
   m_Children:
   - {fileID: 1510527082}
+  - {fileID: 1064809835}
   - {fileID: 208832373}
   m_Father: {fileID: 629729126}
   m_RootOrder: 4
@@ -4965,6 +5492,14 @@ MonoBehaviour:
   bestTimeLabel: {fileID: 1104129540}
   medal: {fileID: 0}
   disabledTextColor: {r: .501960814, g: .501960814, b: .501960814, a: 1}
+  medalSprite: {fileID: 1064809834}
+  medalNames:
+  - 
+  - Widget_Badge_D
+  - Widget_Badge_C
+  - Widget_Badge_B
+  - Widget_Badge_A
+  - Widget_Badge_S
 --- !u!65 &1908783860
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5322,6 +5857,7 @@ Transform:
   m_Children:
   - {fileID: 1553567433}
   - {fileID: 1237657721}
+  - {fileID: 817997203}
   m_Father: {fileID: 629729126}
   m_RootOrder: 1
 --- !u!114 &2055547793
@@ -5354,9 +5890,17 @@ MonoBehaviour:
   nameLabel: {fileID: 1553567434}
   infoBackground: {fileID: 1237657720}
   highScoreLabel: {fileID: 1282294119}
-  bestTimeLabel: {fileID: 0}
+  bestTimeLabel: {fileID: 252911497}
   medal: {fileID: 0}
   disabledTextColor: {r: .501960814, g: .501960814, b: .501960814, a: 1}
+  medalSprite: {fileID: 817997202}
+  medalNames:
+  - 
+  - Widget_Badge_D
+  - Widget_Badge_C
+  - Widget_Badge_B
+  - Widget_Badge_A
+  - Widget_Badge_S
 --- !u!65 &2055547794
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5729,7 +6273,7 @@ Transform:
   - {fileID: 2048942209}
   - {fileID: 128592570}
   m_Father: {fileID: 1031001734}
-  m_RootOrder: 1
+  m_RootOrder: 2
 --- !u!114 &2130145673
 MonoBehaviour:
   m_ObjectHideFlags: 0

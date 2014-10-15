@@ -1,9 +1,8 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.07.06
-// Edited: 2014.10.05
+// Edited: 2014.10.14
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using Annotations;
@@ -174,12 +173,12 @@ namespace SpaceCUBEs
 
         #region Public Methods
 
-        public void Initialize(float score, int[] ranks, int rank, float time, float loot, int[] salvage)
+        public void Initialize(Highscore score, int[] ranks, float loot, int[] salvage)
         {
             // cache data
-            playerScore = score;
+            playerScore = score.score;
             rankThresholds = ranks;
-            playerRank = rank;
+            playerRank = score.rank;
             playerLoot = loot;
             playerSalvage = salvage;
 
@@ -188,7 +187,7 @@ namespace SpaceCUBEs
             int nextLevel = ((FormationLevelManager)FormationLevelManager.Main).levelIndex + 1;
             if (nextLevel < FormationLevelManager.LevelNames.Length)
             {
-                nextButton.ActivateEvent += (sender, args) => SceneManager.LoadScene(FormationLevelManager.LevelNames[nextLevel]);
+                nextButton.ActivateEvent += (sender, args) => SceneManager.ReloadScene();
             }
             else
             {
@@ -199,8 +198,7 @@ namespace SpaceCUBEs
             states.CreateState(InitializingState, InitializingEnter, info => { });
             states.CreateState(TimeState, info =>
                                           {
-                                              TimeSpan timeSpan = TimeSpan.FromSeconds(time);
-                                              timeLabel.text = string.Format("{0:D2}:{1:D2}:{2:D3}", timeSpan.Minutes, timeSpan.Seconds, timeSpan.Milliseconds);
+                                              timeLabel.text = score.TimeString;
                                               states.SetState(LootState);
                                           }, info => { });
             states.CreateState(LootState, info => states.SetUpdate(LootUpdate()), info => { });

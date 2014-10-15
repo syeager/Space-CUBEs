@@ -225,10 +225,12 @@ namespace SpaceCUBEs
 
             // score
             int score = PlayerController.myScore.points;
+            Debugger.Log("Kill Score: " + score, this, Debugger.LogTypes.Data);
             GA.API.Design.NewEvent(GAPoints + GAPointsKills, score);
 
             // time score
             int timeScore = TimeScore(levelSeconds);
+            Debugger.Log("Time Score: " + timeScore, this, Debugger.LogTypes.Data);
             score += timeScore;
             //GA.API.Design.NewEvent(GAPoints + GAPointsTime, timeScore);
             GoogleAnalytics.LogEvent(GAPoints, GAPointsTime, "", timeScore);
@@ -237,6 +239,7 @@ namespace SpaceCUBEs
 
             // health score
             int healthScore = Mathf.RoundToInt((PlayerController.MyHealth.health / PlayerController.MyHealth.maxHealth) * maxHealthScore);
+            Debugger.Log("Health Score: " + healthScore, this, Debugger.LogTypes.Data);
             score += healthScore;
             //GA.API.Design.NewEvent(GAPoints + GAPointsHealth, healthScore);
             GoogleAnalytics.LogEvent(GAPoints, GAPointsHealth, "", healthScore);
@@ -262,7 +265,13 @@ namespace SpaceCUBEs
             GoogleAnalytics.LogEvent(GARank, "", "", rank);
 
             // save rank and score
-            SaveData.Save(HighScoreKey + LevelNames[levelIndex], new int[]{rank, score});
+            Highscore playerScore = new Highscore(rank, score, levelTime.Total);
+
+            Highscore currentHighscore = SaveData.Load<Highscore>(HighScoreKey + LevelNames[levelIndex], LevelsFolder);
+            if (score > currentHighscore.score || (score == currentHighscore.score && levelTime.Total < currentHighscore.time))
+            {
+                SaveData.Save(HighScoreKey + LevelNames[levelIndex], playerScore, LevelsFolder);
+            }
 
             // money
             int money = PlayerController.myMoney.money;
@@ -279,7 +288,7 @@ namespace SpaceCUBEs
             }
             CUBE.SetInventory(inventory);
 
-            campaignOverview.Initialize(score, rankLimits, rank, levelSeconds, money, awards);
+            campaignOverview.Initialize(playerScore, rankLimits, money, awards);
             //GA.API.Design.NewEvent(GAPoints + GAPointsTotal, score);
             GoogleAnalytics.LogEvent(GAPoints, GAPointsTotal, "", score);
         }

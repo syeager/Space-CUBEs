@@ -1,15 +1,13 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.08.24
-// Edited: 2014.10.03
+// Edited: 2014.10.14
 
-using System;
 using System.Text;
+using Annotations;
 using SpaceCUBEs;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
-[Obsolete("inherit from selectable button")]
 public class LevelSelectButton : UIButton
 {
     #region Public Fields
@@ -21,6 +19,16 @@ public class LevelSelectButton : UIButton
     public UILabel bestTimeLabel;
     public UISprite medal;
     public Color disabledTextColor;
+
+    #endregion
+
+    #region Private Fields
+
+    [SerializeField, UsedImplicitly]
+    private UISprite medalSprite;
+
+    [SerializeField, UsedImplicitly]
+    private string[] medalNames;
 
     #endregion
 
@@ -46,10 +54,30 @@ public class LevelSelectButton : UIButton
 
     #region Public Methods
 
+    public void Initialize(bool on, Highscore highscore)
+    {
+        Toggle(on);
+        highScoreLabel.text = highscore.score.ToString("N0");
+        bestTimeLabel.text = highscore.TimeString;
+        if (highscore.rank > 0)
+        {
+            medalSprite.spriteName = medalNames[highscore.rank];
+        }
+        else
+        {
+            medalSprite.enabled = false;
+        }
+    }
+
+
     public void Toggle(bool on)
     {
-        ActiveButton = this;
+        if (on)
+        {
+            ActiveButton = this;
+        }
         infoBackground.SetActive(on);
+        medalSprite.gameObject.SetActive(on);
     }
 
 

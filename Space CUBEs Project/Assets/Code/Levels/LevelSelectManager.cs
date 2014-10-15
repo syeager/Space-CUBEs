@@ -38,18 +38,16 @@ public class LevelSelectManager : MonoBehaviour
         for (int i = 0; i < unlocked; i++)
         {
             string key = FormationLevelManager.HighScoreKey + ((Scenes.Levels)i).ToString().SplitCamelCase();
-            levelButtons[i].highScoreLabel.text = SaveData.Load<int[]>(key)[1].ToString("N0");
+            Highscore highscore = SaveData.Load<Highscore>(key, FormationLevelManager.LevelsFolder);
+
+            levelButtons[i].Initialize(false, highscore);
             levelButtons[i].Toggle(false);
         }
-        levelButtons[unlocked].Toggle(true);
-        levelButtons[unlocked].highScoreLabel.text = SaveData.Load(FormationLevelManager.HighScoreKey + ((Scenes.Levels)unlocked).ToString().SplitCamelCase(), "Default/", new[] {0, 0})[1].ToString("N0");
+        levelButtons[unlocked].Initialize(true, SaveData.Load<Highscore>(FormationLevelManager.HighScoreKey + ((Scenes.Levels)unlocked).ToString().SplitCamelCase(), FormationLevelManager.LevelsFolder));
         for (int i = unlocked + 1; i < levelButtons.Length; i++)
         {
             string key = FormationLevelManager.HighScoreKey + ((Scenes.Levels)i).ToString().SplitCamelCase();
-            if (SaveData.Contains(key))
-            {
-                levelButtons[i].highScoreLabel.text = SaveData.Load<int[]>(key, "Default/", new[] {0, 0})[1].ToString("N");
-            }
+            levelButtons[i].Initialize(false, SaveData.Load<Highscore>(key, FormationLevelManager.LevelsFolder));
             levelButtons[i].Disable();
         }
     }
