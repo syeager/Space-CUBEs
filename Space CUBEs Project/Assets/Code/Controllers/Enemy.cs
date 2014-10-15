@@ -53,6 +53,12 @@ namespace SpaceCUBEs
 
         #endregion
 
+        #region Const Fields
+
+        protected const string LeavingVectorKey = "Leaving Vector";
+
+        #endregion
+
         #region MonoBehaviour Overrides
 
         protected override void Awake()
@@ -79,15 +85,16 @@ namespace SpaceCUBEs
         protected void LeavingEnter(Dictionary<string, object> info)
         {
             StopAllCoroutines();
-            stateMachine.SetUpdate(LeavingUpdate());
+            stateMachine.SetUpdate(LeavingUpdate((Vector3)info[LeavingVectorKey]));
         }
 
 
-        private IEnumerator LeavingUpdate()
+        private IEnumerator LeavingUpdate(Vector3 exitVector)
         {
+            Vector2 move = exitVector;
             while (true)
             {
-                MyMotor.Move((Vector2)myTransform.forward);
+                MyMotor.Move(move);
                 yield return null;
             }
         }

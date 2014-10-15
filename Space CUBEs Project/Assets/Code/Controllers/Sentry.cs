@@ -101,7 +101,7 @@ namespace SpaceCUBEs
             // decide target distance
             targetDistance = Random.Range(minTargetDistance, maxTargetDistance);
 
-            InvokeAction(() => stateMachine.SetState(LeavingState), attackTime);
+            InvokeAction(() => stateMachine.SetState(LeavingState, new Dictionary<string, object>{{LeavingVectorKey, myTransform.forward}}), attackTime);
 
             stateMachine.SetState(MovingState);
         }

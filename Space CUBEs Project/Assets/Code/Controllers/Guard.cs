@@ -61,6 +61,8 @@ namespace SpaceCUBEs
         [SerializeField, UsedImplicitly]
         private int attacksAllowed;
 
+        private int attacksRemaining;
+
         #endregion
 
         #region MonoBehaviour Overrides
@@ -89,6 +91,8 @@ namespace SpaceCUBEs
         private void SpawnEnter(Dictionary<string, object> info)
         {
             MyHealth.Initialize();
+
+            attacksRemaining = attacksAllowed;
 
             // initialize path from level manager
             path = (Path)info["path"];
@@ -129,13 +133,20 @@ namespace SpaceCUBEs
 
         private IEnumerator AttackingUpdate()
         {
-            attacksAllowed--;
+            attacksRemaining--;
             yield return new WaitForSeconds(attackBuffer);
             laser.Activate(true);
             yield return new WaitForSeconds(attackTime);
             laser.Activate(false);
             yield return new WaitForSeconds(attackBuffer / 2f);
-            stateMachine.SetState(attacksAllowed > 0 ? IdlingState : LeavingState);
+            if (attacksRemaining <= 0)
+            {
+                stateMachine.SetState(LeavingState, new Dictionary<string, object>{{LeavingVectorKey, myTransform.position.y >= 0f ? myTransform.right : -myTransform.right}});
+            }
+            else
+            {
+                stateMachine.SetState(IdlingState);
+            }
         }
 
 
