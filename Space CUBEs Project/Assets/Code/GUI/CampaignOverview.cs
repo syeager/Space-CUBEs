@@ -57,7 +57,7 @@ namespace SpaceCUBEs
         [Header("Ranks")]
         [NotEmpty]
         [SerializeField, UsedImplicitly]
-        private Animation[] rankMedals;
+        private UISprite[] rankMedals;
 
         [SerializeField, UsedImplicitly]
         private UITexture rankLetter;
@@ -67,6 +67,18 @@ namespace SpaceCUBEs
 
         [SerializeField, UsedImplicitly]
         private float rankHeight = 0.1675f;
+
+        [SerializeField, UsedImplicitly]
+        private float rollBackSpeed;
+
+        [SerializeField, UsedImplicitly]
+        private float rollBackDelay;
+
+        [SerializeField, UsedImplicitly]
+        private AnimationCurve rankIntroCurve;
+
+        [SerializeField, UsedImplicitly]
+        private float medalSize;
 
         #endregion
 
@@ -216,39 +228,40 @@ namespace SpaceCUBEs
         {
             float scoreCursor = 0f;
             int rankCursor = 0;
+
+            // snap to D rank
+            if (playerRank > 0)
+            {
+                UpdateRank(1, rankThresholds[1]); 
+                rankLetter.uvRect = new Rect(0f, rankHeightStart + rankHeight, 1f, rankLetter.uvRect.height);
+                StartCoroutine(NewRank(1));
+            }
+
+            // roll up
             while (scoreCursor < playerScore)
             {
                 scoreCursor += scoreRollup * deltaTime;
-
-                // label
                 scoreLabel.text = Mathf.FloorToInt(scoreCursor).ToString("N0");
 
-                // rank
-                if (playerRank > 0 && rankCursor < rankThresholds.Length - 1)
-                {
-                    float scoreProgress = scoreCursor;
-                    scoreProgress -= rankThresholds[rankCursor];
-                    float rankProgress = rankThresholds[rankCursor + 1];
-                    rankProgress -= rankThresholds[rankCursor];
-
-                    float rankPercent = scoreProgress / rankProgress;
-
-                    rankLetter.uvRect = new Rect(0f, rankHeightStart + rankCursor * rankHeight + rankHeight * rankPercent, 1f, 0.1459f);
-
-                    // new rank
-                    if (scoreCursor >= rankThresholds[rankCursor + 1])
-                    {
-                        rankCursor++;
-                        StartCoroutine(NewRank(rankCursor));
-                    }
-                }
+                rankCursor = UpdateRank(rankCursor, scoreCursor);
 
                 yield return null;
             }
-            scoreCursor = playerScore;
 
-            // label
+            // snap
+            scoreCursor = playerScore;
             scoreLabel.text = Mathf.FloorToInt(scoreCursor).ToString("N0");
+
+            // roll back
+            yield return new WaitForSeconds(rollBackDelay);
+            while (scoreCursor > rankThresholds[rankCursor])
+            {
+                scoreCursor -= rollBackSpeed * deltaTime;
+
+                UpdateRank(rankCursor, scoreCursor);
+
+                yield return null;
+            }
 
             scoreCompleted = true;
             if (states.IsCurrentState(IdleState))
@@ -258,12 +271,51 @@ namespace SpaceCUBEs
         }
 
 
+        private int UpdateRank(int rankCursor, float scoreCursor)
+        {
+            // rank
+            if (playerRank > 0 && rankCursor < rankThresholds.Length - 1 && scoreCursor > rankThresholds[1])
+            {
+                float scoreProgress = scoreCursor;
+                scoreProgress -= rankThresholds[rankCursor];
+                float rankProgress = rankThresholds[rankCursor + 1];
+                rankProgress -= rankThresholds[rankCursor];
+
+                float rankPercent = scoreProgress / rankProgress;
+
+                rankLetter.uvRect = new Rect(0f, rankHeightStart + rankCursor * rankHeight + rankHeight * rankPercent, 1f, rankLetter.uvRect.height);
+
+                // new rank
+                if (scoreCursor >= rankThresholds[rankCursor + 1])
+                {
+                    rankCursor++;
+                    StartCoroutine(NewRank(rankCursor));
+                }
+            }
+
+            return rankCursor;
+        }
+
+
         private IEnumerator NewRank(int rank)
         {
-            rankMedals[rank].gameObject.SetActive(true);
-            rankMedals[rank].Play();
+            if (rankMedals[rank].gameObject.activeInHierarchy) yield break;
 
-            yield return new WaitForSeconds(rankMedals[rank].clip.length);
+            rankMedals[rank].width = rankMedals[rank].height = Mathf.RoundToInt(medalSize * rankIntroCurve.Evaluate(0));
+            rankMedals[rank].gameObject.SetActive(true);
+            //rankMedals[rank].Play();
+
+            float time = rankIntroCurve[rankIntroCurve.length - 1].time;
+            float timer = 0f;
+            while (timer < time)
+            {
+                timer += Time.deltaTime;
+                rankMedals[rank].width = rankMedals[rank].height = Mathf.RoundToInt(medalSize * rankIntroCurve.Evaluate(timer));
+                yield return null;
+            }
+                rankMedals[rank].width = rankMedals[rank].height = Mathf.RoundToInt(medalSize * rankIntroCurve.Evaluate(time));
+
+            //yield return new WaitForSeconds(rankMedals[rank].clip.length);
 
             if (rank > 1)
             {
