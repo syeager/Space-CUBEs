@@ -4,6 +4,7 @@
 // Edited: 2014.10.04
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using LittleByte.Data;
 using UnityEngine;
@@ -37,8 +38,9 @@ namespace SpaceCUBEs
 
         private int segmentCursor;
         private bool lastSegment;
+        private Job spawnJob;
 
-        private LevelTime levelTime = new LevelTime();
+        private readonly LevelTime levelTime = new LevelTime();
 
         #endregion
 
@@ -319,14 +321,16 @@ namespace SpaceCUBEs
             // last segment
             lastSegment = segmentCursor + 1 == formationGroups.Length;
 
-            // create enemies
+            // create enemies 
             Vector3 formationCenter = formationGroups[segmentCursor].position;
             for (int i = 0; i < formationGroups[segmentCursor].formation.positions.Length; i++)
             {
                 if (formationGroups[segmentCursor].enemies[i] == Enemy.Classes.None) continue;
 
-                GameObject enemyObject = Prefabs.Pop(enemies[formationGroups[segmentCursor].enemies[i]].GetComponent<PoolObject>());
-                enemyObject.transform.SetPosRot(Utility.RotateVector(formationGroups[segmentCursor].formation.positions[i], Quaternion.AngleAxis(formationGroups[segmentCursor].rotation, Vector3.back)) + formationCenter, SpawnRotation);
+                GameObject enemyObject = Prefabs.Pop((PoolObject)enemies[formationGroups[segmentCursor].enemies[i]].GetComponent(typeof(PoolObject)));
+                enemyObject.transform.position = Utility.RotateVector(formationGroups[segmentCursor].formation.positions[i], Quaternion.AngleAxis(formationGroups[segmentCursor].rotation, Vector3.back)) + formationCenter;
+                enemyObject.transform.rotation = SpawnRotation;
+
                 Enemy enemy = (Enemy)enemyObject.GetComponent(typeof(Enemy));
                 enemy.stateMachine.Start(new Dictionary<string, object> {{"path", (formationGroups[segmentCursor].paths[i])}});
                 ((ShieldHealth)enemy.GetComponent(typeof(ShieldHealth))).DieEvent += OnEnemyDeath;
@@ -346,7 +350,7 @@ namespace SpaceCUBEs
                 }
                 else
                 {
-                    InvokeAction(SpawnNextFormation, formationGroups[segmentCursor].spawnTime);
+                    spawnJob = new Job(Spawning(formationGroups[segmentCursor].spawnTime));
                 }
             }
         }
@@ -364,13 +368,20 @@ namespace SpaceCUBEs
             AudioManager.CrossFadePlaylist(levelMusic, bossMusic, bossFadeTime);
         }
 
+
+        private IEnumerator Spawning(float time)
+        {
+            yield return new WaitForSeconds(time);
+            SpawnNextFormation();
+        }
+
         #endregion
 
         #region EventHandlers
 
         private void OnEnemyDeath(object sender, DieArgs args)
         {
-            ShieldHealth enemyHealth = sender as ShieldHealth;
+            ShieldHealth enemyHealth = (ShieldHealth)sender;
             enemyHealth.DieEvent -= OnEnemyDeath;
             ActiveEnemies.Remove((Enemy)enemyHealth.GetComponent(typeof(Enemy)));
             if (ActiveEnemies.Count == 0)
@@ -382,7 +393,12 @@ namespace SpaceCUBEs
                 }
                 else
                 {
-                    InvokeAction(SpawnNextFormation, 3f);
+                    if (spawnJob != null)
+                    {
+                        spawnJob.Kill();
+                        spawnJob = null;
+                    }
+                    SpawnNextFormation();
                 }
             }
         }
