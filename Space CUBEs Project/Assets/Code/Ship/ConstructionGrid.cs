@@ -119,7 +119,7 @@ namespace SpaceCUBEs
         private static readonly Vector3 StartCursorPosition = new Vector3(4f, 5f, 4f);
 
         /// <summary>File name for save data that contains all builds.</summary>
-        public const string BuildsFolder = @"Builds/";
+        public const string BuildsFolder = "Builds";
 
         public const string SelectedBuildKey = "Selected Build";
 

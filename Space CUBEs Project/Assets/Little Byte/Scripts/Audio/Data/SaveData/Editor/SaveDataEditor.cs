@@ -281,7 +281,7 @@ public class SaveDataEditor : EditorWindow
         SaveData.FileSavedEvent -= OnFileSaved;
         SaveData.FileSavedEvent += OnFileSaved;
 
-        files = SaveData.GetAllFiles();
+        files = SaveData.GetAllFiles().ToArray();
         rootNode = new FolderNode {value = "root"};
 
         foreach (string file in files)

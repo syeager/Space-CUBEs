@@ -39,7 +39,7 @@ namespace LittleByte.Data
         public const string DefaultPath = "Default";
 
         /// <summary>Slash used in folder paths.</summary>
-        public const string Slash = "\\";
+        public const string Slash = "/";
 
         /// <summary>Prefix for backup files.</summary>
         public const string BackupName = "Backup-";
@@ -357,9 +357,9 @@ namespace LittleByte.Data
         /// Get list of all files in Data folder.
         /// </summary>
         /// <returns>List of file titles in data folder. Doesn't contain paths or postfixes.</returns>
-        public static string[] GetAllFiles()
+        public static IEnumerable<string> GetAllFiles()
         {
-            return Directory.GetFiles(DataPath, "*" + FileExt, SearchOption.AllDirectories).Select(f => f.Remove(0, DataPath.Length).Replace(FileExt, "")).ToArray();
+            return Directory.GetFiles(DataPath, "*" + FileExt, SearchOption.AllDirectories).Select(f => f.Substring(DataPath.Length, f.Length - DataPath.Length - FileExt.Length));
         }
 
 
@@ -368,10 +368,11 @@ namespace LittleByte.Data
         /// </summary>
         /// <param name="path">Path to the folder.</param>
         /// <returns>List of file titles in the folder. Doesn't contain paths or postfixes.</returns>
-        public static string[] GetFiles(string path)
+        public static IEnumerable<string> GetFiles(string path)
         {
-            path = DataPath + path;
-            return Directory.GetFiles(path, "*" + FileExt).Select(f => f.Remove(0, path.Length + 1).Replace(FileExt, "")).ToArray();
+            path = DataPath + path + Slash;
+
+            return Directory.GetFiles(path, "*" + FileExt).Select(f => f.Substring(path.Length, f.Length - path.Length - FileExt.Length));
         } 
 
         #endregion
