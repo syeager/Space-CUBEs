@@ -1,9 +1,10 @@
-﻿// Space CUBEs Project-csharp
+﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.04.01
-// Edited: 2014.06.25
+// Edited: 2014.10.16
 
 using System.Collections;
+using Annotations;
 using UnityEngine;
 
 /// <summary>
@@ -39,6 +40,13 @@ public class DeathLaser : Weapon
 
     #endregion
 
+    #region Private Fields
+
+    [SerializeField, UsedImplicitly]
+    private float retractDelay;
+
+    #endregion
+
     #region Weapon Overrides
 
     public override Coroutine Activate(bool pressed)
@@ -51,8 +59,7 @@ public class DeathLaser : Weapon
         else if (gameObject.activeInHierarchy)
         {
             laser.SetActive(false);
-            animation.Play(retractClip);
-            InvokeAction(() => gameObject.SetActive(false), retractClip.length);
+            return StartCoroutine(Retract());
         }
 
         return null;
@@ -79,6 +86,15 @@ public class DeathLaser : Weapon
         yield return new WaitForSeconds(fireTime);
         player.Stop();
         laser.SetActive(false);
+        yield return new WaitForSeconds(retractDelay);
+    }
+
+
+    private IEnumerator Retract()
+    {
+        animation.Play(retractClip);
+        yield return new WaitForSeconds(retractClip.length);
+        gameObject.SetActive(false);
     }
 
     #endregion

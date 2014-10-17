@@ -448,13 +448,12 @@ namespace SpaceCUBEs
             myAnimation.Play("Doors_Open");
             doorsOpen = true;
             yield return deathLaser.Activate(true);
-            yield return new WaitForSeconds(stage1SwitchTime);
+            //yield return new WaitForSeconds(stage1SwitchTime);
 
             // close
             myAnimation.Play("Doors_Close");
             doorsOpen = false;
-            deathLaser.Activate(false);
-            yield return new WaitForSeconds(stage1SwitchTime);
+            yield return deathLaser.Activate(false);
             moveJob.Pause(false);
         }
 
