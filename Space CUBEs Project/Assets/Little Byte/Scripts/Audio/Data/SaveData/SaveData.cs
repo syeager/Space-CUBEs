@@ -38,8 +38,13 @@ namespace LittleByte.Data
         /// <summary>Default folder to save data if none is specified.</summary>
         public const string DefaultPath = "Default";
 
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
+        /// <summary>Slash used in folder paths.</summary>
+        public const string Slash = "\\";
+#else
         /// <summary>Slash used in folder paths.</summary>
         public const string Slash = "/";
+#endif
 
         /// <summary>Prefix for backup files.</summary>
         public const string BackupName = "Backup-";
