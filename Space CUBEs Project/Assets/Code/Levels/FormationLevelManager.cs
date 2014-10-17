@@ -104,24 +104,28 @@ namespace SpaceCUBEs
                 get { return Level + Boss; }
             }
 
-
             public void StartLevel()
             {
-                Level = DateTime.Now.TimeOfDay;
+                Level = new TimeSpan(0, 0, 0, 0, Mathf.RoundToInt(Time.timeSinceLevelLoad * 1000));
+            }
+
+
+            public void StopLevel()
+            {
+                Level = new TimeSpan(0, 0, 0, 0, Mathf.RoundToInt(Time.timeSinceLevelLoad * 1000)) - Level;
+                Debugger.Log("Level Time: " + Level, null, Debugger.LogTypes.LevelEvents);
             }
 
 
             public void StartBoss()
             {
-                Level = DateTime.Now.TimeOfDay - Level;
-                Debugger.Log("Level Time: " + Level, null, Debugger.LogTypes.LevelEvents);
-                Boss = DateTime.Now.TimeOfDay;
+                Boss = new TimeSpan(0, 0, 0, 0, Mathf.RoundToInt(Time.timeSinceLevelLoad * 1000));
             }
 
 
-            public void End()
+            public void StopBoss()
             {
-                Boss = DateTime.Now.TimeOfDay - Boss;
+                Boss = new TimeSpan(0, 0, 0, 0, Mathf.RoundToInt(Time.timeSinceLevelLoad * 1000)) - Boss;
                 Debugger.Log("Bos Time: " + Boss, null, Debugger.LogTypes.LevelEvents);
             }
         }
@@ -213,7 +217,7 @@ namespace SpaceCUBEs
             GoogleAnalytics.LogEvent(GALevelCompletedKey, LevelNames[levelIndex], "", won ? 1 : 0);
 
             // time
-            levelTime.End();
+            levelTime.StopBoss();
             float levelSeconds = (float)levelTime.Total.TotalSeconds;
             //GA.API.Design.NewEvent(GATime + GATimeTotal, levelSeconds);
             GoogleAnalytics.LogEvent(GATime, GATimeTotal, "", (long)levelSeconds);
@@ -360,9 +364,11 @@ namespace SpaceCUBEs
         {
             boss = (Instantiate(bossPrefab, bossSpawnPosition, SpawnRotation) as GameObject).GetComponent<Boss>();
             ActiveEnemies.Add(boss);
+            boss.ReadyEvent += levelTime.StartBoss;
             boss.DeathEvent += OnBossDeath;
             boss.stateMachine.Start();
 
+            levelTime.StopLevel();
             levelTime.StartBoss();
 
             AudioManager.CrossFadePlaylist(levelMusic, bossMusic, bossFadeTime);

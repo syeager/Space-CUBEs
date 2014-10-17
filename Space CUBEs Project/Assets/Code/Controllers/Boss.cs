@@ -19,6 +19,12 @@ namespace SpaceCUBEs
 
         #endregion
 
+        #region State Fields
+
+        protected const string EnteringState = "Entering"; 
+
+        #endregion
+
         #region Public Fields
 
         public float[] stages;
@@ -32,6 +38,8 @@ namespace SpaceCUBEs
         #endregion
 
         #region Events
+
+        public event Action ReadyEvent;
 
         public EventHandler<ValueArgs> NextStageEvent;
 
@@ -51,6 +59,18 @@ namespace SpaceCUBEs
 
             CurrentStage = 1;
             MyHealth.HealthUpdateEvent += OnHit;
+        }
+
+        #endregion
+
+        #region Protected Methods
+
+        protected void Ready()
+        {
+            if (ReadyEvent != null)
+            {
+                ReadyEvent();
+            }
         }
 
         #endregion
