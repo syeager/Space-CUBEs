@@ -102,7 +102,6 @@ namespace SpaceCUBEs
 #endif
 
             // setup
-            myScore = new ScoreManager();
             myMoney = new MoneyManager();
             Augmentations = GetComponent<AugmentationManager>();
             Weapons = GetComponent<WeaponManager>() ?? gameObject.AddComponent<WeaponManager>();

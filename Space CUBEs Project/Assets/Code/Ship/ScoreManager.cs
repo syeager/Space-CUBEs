@@ -1,13 +1,13 @@
-﻿// Space CUBEs Project-csharp
+﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.01.10
-// Edited: 2014.07.12
+// Edited: 2014.10.17
 
-using LittleByte;
+using System;
+using System.Collections;
+using Annotations;
 using LittleByte.Extensions;
 using UnityEngine;
-using System.Collections;
-using System;
 
 /// <summary>
 /// Hnadles the player's score.
@@ -26,12 +26,11 @@ public class ScoreManager
     private int cursor;
     private Job multiplierJob;
 
-    #endregion
+    [SerializeField, UsedImplicitly]
+    private int groupSize = 10;
 
-    #region Const Fields
-
-    private const int GroupSize = 10;
-    private const int MaxMultiplier = 10;
+    [SerializeField, UsedImplicitly]
+    private int maxMultiplier = 10;
 
     #endregion
 
@@ -42,7 +41,7 @@ public class ScoreManager
     private int Multiplier
     {
         get { return multiplier; }
-        set { multiplier = Mathf.Clamp(value, 1, MaxMultiplier); }
+        set { multiplier = Mathf.Clamp(value, 1, maxMultiplier); }
     }
 
     public int points; // { get; private set; }
@@ -71,7 +70,7 @@ public class ScoreManager
     public void IncreaseMultiplier(int amount = 1)
     {
         cursor += amount;
-        int mult = cursor / GroupSize + 1;
+        int mult = cursor / groupSize + 1;
 
         if (multiplierJob != null) multiplierJob.Kill();
         multiplierJob = new Job(MultiplierLife());
@@ -91,6 +90,7 @@ public class ScoreManager
         {
             MultiplierUpdateEvent(this, new MultiplierUpdateArgs(-Multiplier + 1, 1));
         }
+        multiplier = 1;
         cursor = 0;
     }
 
