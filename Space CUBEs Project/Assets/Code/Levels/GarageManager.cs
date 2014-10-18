@@ -191,6 +191,7 @@ namespace SpaceCUBEs
             // grid
 #if UNITY_EDITOR
             string buildName = ConstructionGrid.SelectedBuild;
+            Debug.Log(buildName);
             if (string.IsNullOrEmpty(buildName))
             {
                 buildName = ConstructionGrid.DevBuilds[0];
@@ -536,7 +537,7 @@ namespace SpaceCUBEs
 
         private void EditInit()
         {
-            previewShip.Initialize(grid.buildName, BuildStats.GetCoreCapacity());
+            previewShip.Initialize(ConstructionGrid.SelectedBuild, BuildStats.GetCoreCapacity());
             previewShip.SetValues(grid.CurrentStats, grid.CorePointsAvailable);
         }
 

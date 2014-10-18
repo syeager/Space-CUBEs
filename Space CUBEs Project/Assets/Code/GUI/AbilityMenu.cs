@@ -17,7 +17,7 @@ namespace SpaceCUBEs
         private GarageActionButtons actionButtons;
 
         [SerializeField, UsedImplicitly]
-        private ScrollviewButton extraButtonPrefab;
+        private AbilityButton extraButtonPrefab;
 
         private ConstructionGrid grid;
 
@@ -44,11 +44,11 @@ namespace SpaceCUBEs
         private Transform weaponGrid;
 
         [SerializeField, UsedImplicitly]
-        private ActivateButton[] activeWeapons;
+        private AbilityButton[] activeWeapons;
 
-        private List<ActivateButton> extraWeapons;
+        private List<AbilityButton> extraWeapons;
 
-        private ActivateButton selectedWeapon;
+        private AbilityButton selectedWeapon;
 
         private int? weaponIndex;
 
@@ -67,11 +67,11 @@ namespace SpaceCUBEs
         private Transform augGrid;
 
         [SerializeField, UsedImplicitly]
-        private ActivateButton[] activeAugs;
+        private AbilityButton[] activeAugs;
 
-        private List<ActivateButton> extraAugs;
+        private List<AbilityButton> extraAugs;
 
-        private ActivateButton selectedAug;
+        private AbilityButton selectedAug;
 
         private int? augIndex;
 
@@ -86,8 +86,8 @@ namespace SpaceCUBEs
             actionButtons.WeaponEvent += OnWeaponPressed;
             actionButtons.AugEvent += OnAugPressed;
 
-            extraWeapons = new List<ActivateButton>();
-            extraAugs = new List<ActivateButton>();
+            extraWeapons = new List<AbilityButton>();
+            extraAugs = new List<AbilityButton>();
 
             openMenu = Abilities.Weapon;
 
@@ -107,11 +107,11 @@ namespace SpaceCUBEs
             else
             {
                 gameObject.SetActive(false);
-                foreach (ActivateButton button in extraWeapons)
+                foreach (AbilityButton button in extraWeapons)
                 {
                     Destroy(button.gameObject);
                 }
-                extraWeapons = new List<ActivateButton>();
+                extraWeapons = new List<AbilityButton>();
 
                 Deselect(openMenu);
             }
@@ -134,55 +134,51 @@ namespace SpaceCUBEs
         private void CreateButtons()
         {
             // weapons
+            int weaponLevel = BuildStats.GetWeaponLevel();
             for (int i = 0; i < grid.weapons.Count; i++)
             {
-                if (i < Player.Weaponlimit)
+                if (i <= weaponLevel)
                 {
-                    activeWeapons[i].Initialize(grid.weapons[i].name, i.ToString());
+                    activeWeapons[i].Initialize(grid.weapons[i].name, i, i, false);
                     activeWeapons[i].isEnabled = true;
                 }
                 else
                 {
-                    var extraWeapon = (ScrollviewButton)Instantiate(extraButtonPrefab);
-                    extraWeapon.Initialize(i.ToString(), grid.weapons[i].name, i.ToString(), weaponGrid, weaponScrollview);
+                    var extraWeapon = (AbilityButton)Instantiate(extraButtonPrefab);
+                    extraWeapon.Initialize(grid.weapons[i].name, i, extraWeapons.Count, true, weaponGrid, weaponScrollview);
                     extraWeapon.ActivateEvent += OnActivatedWeaponPressed;
                     extraWeapons.Add(extraWeapon);
                 }
             }
 
             // disable unused active buttons
-            if (grid.weapons.Count < Player.Weaponlimit)
+            for (int i = 0; i < Player.Weaponlimit; i++)
             {
-                for (int i = grid.weapons.Count; i < Player.Weaponlimit; i++)
-                {
-                    activeWeapons[i].isEnabled = false;
-                }
+                activeWeapons[i].isEnabled = i <= weaponLevel;
             }
 
             // augs
+            int augLevel = BuildStats.GetAugmentationLevel();
             for (int i = 0; i < grid.augmentations.Count; i++)
             {
-                if (i < Player.Weaponlimit)
+                if (i <= augLevel)
                 {
-                    activeAugs[i].Initialize(grid.augmentations[i].name, i.ToString());
+                    activeAugs[i].Initialize(grid.augmentations[i].name, i, i, false);
                     activeAugs[i].isEnabled = true;
                 }
-                else
+                else if (i < Player.Weaponlimit)
                 {
-                    var extraAug = (ScrollviewButton)Instantiate(extraButtonPrefab);
-                    extraAug.Initialize(i.ToString(), grid.augmentations[i].name, i.ToString(), augGrid, augScrollview);
+                    var extraAug = (AbilityButton)Instantiate(extraButtonPrefab);
+                    extraAug.Initialize(grid.augmentations[i].name, i, extraAugs.Count, true, augGrid, augScrollview);
                     extraAug.ActivateEvent += OnActivatedAugPressed;
                     extraAugs.Add(extraAug);
                 }
             }
 
             // disable unused active buttons
-            if (grid.augmentations.Count < Player.Weaponlimit)
+            for (int i = 0; i < Player.Weaponlimit; i++)
             {
-                for (int i = grid.augmentations.Count; i < Player.Weaponlimit; i++)
-                {
-                    activeAugs[i].isEnabled = false;
-                }
+                activeAugs[i].isEnabled = i <= augLevel;
             }
         }
 
@@ -270,54 +266,52 @@ namespace SpaceCUBEs
         {
             if (!args.isPressed) return;
 
-            int targetIndex = int.Parse(args.value);
-            ActivateButton button = (ActivateButton)sender;
+            AbilityButton clickedButton = (AbilityButton)sender;
 
             if (selectedWeapon == null)
             {
-                selectedWeapon = button;
-                button.Activate(true);
-                StartBlink(targetIndex, true);
-                weaponIndex = targetIndex;
+                selectedWeapon = clickedButton;
+                clickedButton.Activate(true);
+                StartBlink(clickedButton.AbilityIndex, true);
+                weaponIndex = clickedButton.AbilityIndex;
             }
-            else if (selectedWeapon == button)
+            else if (selectedWeapon == clickedButton)
             {
-                button.Activate(false);
+                clickedButton.Activate(false);
                 selectedWeapon = null;
-                StopBlink(targetIndex, true);
+                StopBlink(clickedButton.AbilityIndex, true);
                 weaponIndex = null;
             }
             else
             {
                 // swap
-                int sourceIndex = int.Parse(selectedWeapon.value);
-                grid.MoveWeaponMap(sourceIndex, targetIndex - sourceIndex);
+                grid.MoveWeaponMap(selectedWeapon.AbilityIndex, clickedButton.AbilityIndex - selectedWeapon.AbilityIndex);
 
-                if (targetIndex >= Player.Weaponlimit)
+                // moving to extra
+                if (clickedButton.IsExtra)
                 {
-                    int extraIndex = targetIndex - Player.Weaponlimit;
-                    extraWeapons[extraIndex].Initialize(grid.weapons[targetIndex].name, targetIndex.ToString());
+                    extraWeapons[clickedButton.ButtonIndex].Initialize(grid.weapons[clickedButton.AbilityIndex].name, clickedButton.AbilityIndex, clickedButton.ButtonIndex, true);
                 }
                 else
                 {
-                    activeWeapons[targetIndex].Initialize(grid.weapons[targetIndex].name, targetIndex.ToString());
+                    activeWeapons[clickedButton.ButtonIndex].Initialize(grid.weapons[clickedButton.AbilityIndex].name, clickedButton.AbilityIndex, clickedButton.ButtonIndex, false);
                 }
 
-                if (sourceIndex >= Player.Weaponlimit)
+                // moving from extra
+                if (selectedWeapon.IsExtra)
                 {
-                    int extraIndex = sourceIndex - Player.Weaponlimit;
-                    extraWeapons[extraIndex].Initialize(grid.weapons[sourceIndex].name, sourceIndex.ToString());
+                    extraWeapons[selectedWeapon.ButtonIndex].Initialize(grid.weapons[selectedWeapon.AbilityIndex].name, selectedWeapon.AbilityIndex, selectedWeapon.ButtonIndex, true);
                 }
                 else
                 {
-                    activeWeapons[sourceIndex].Initialize(grid.weapons[sourceIndex].name, sourceIndex.ToString());
+                    activeWeapons[selectedWeapon.ButtonIndex].Initialize(grid.weapons[selectedWeapon.AbilityIndex].name, selectedWeapon.AbilityIndex, selectedWeapon.ButtonIndex, false);
                 }
 
-                button.Activate(false);
+                clickedButton.Activate(false);
                 selectedWeapon.Activate(false);
 
                 Deselect(Abilities.Weapon);
-                StopBlink(targetIndex, true);
+                StopBlink(clickedButton.AbilityIndex, true);
                 weaponIndex = null;
             }
         }
@@ -327,54 +321,52 @@ namespace SpaceCUBEs
         {
             if (!args.isPressed) return;
 
-            int targetIndex = int.Parse(args.value);
-            ActivateButton button = (ActivateButton)sender;
+            AbilityButton clickedButton = (AbilityButton)sender;
 
             if (selectedAug == null)
             {
-                selectedAug = button;
-                button.Activate(true);
-                StartBlink(targetIndex, false);
-                augIndex = targetIndex;
+                selectedAug = clickedButton;
+                clickedButton.Activate(true);
+                StartBlink(clickedButton.AbilityIndex, true);
+                augIndex = clickedButton.AbilityIndex;
             }
-            else if (selectedAug == button)
+            else if (selectedAug == clickedButton)
             {
-                button.Activate(false);
+                clickedButton.Activate(false);
                 selectedAug = null;
-                StopBlink(targetIndex, false);
+                StopBlink(clickedButton.AbilityIndex, true);
                 augIndex = null;
             }
             else
             {
                 // swap
-                int sourceIndex = int.Parse(selectedAug.value);
-                grid.MoveAugMap(sourceIndex, targetIndex - sourceIndex);
+                grid.MoveAugMap(selectedAug.AbilityIndex, clickedButton.AbilityIndex - selectedAug.AbilityIndex);
 
-                if (targetIndex >= Player.Weaponlimit)
+                // moving to extra
+                if (clickedButton.IsExtra)
                 {
-                    int extraIndex = targetIndex - Player.Weaponlimit;
-                    extraAugs[extraIndex].Initialize(grid.augmentations[targetIndex].name, targetIndex.ToString());
+                    extraAugs[clickedButton.ButtonIndex].Initialize(grid.augmentations[clickedButton.AbilityIndex].name, clickedButton.AbilityIndex, clickedButton.ButtonIndex, true);
                 }
                 else
                 {
-                    activeAugs[targetIndex].Initialize(grid.augmentations[targetIndex].name, targetIndex.ToString());
+                    activeAugs[clickedButton.ButtonIndex].Initialize(grid.augmentations[clickedButton.AbilityIndex].name, clickedButton.AbilityIndex, clickedButton.ButtonIndex, false);
                 }
 
-                if (sourceIndex >= Player.Weaponlimit)
+                // moving from extra
+                if (selectedAug.IsExtra)
                 {
-                    int extraIndex = sourceIndex - Player.Weaponlimit;
-                    extraAugs[extraIndex].Initialize(grid.augmentations[sourceIndex].name, sourceIndex.ToString());
+                    extraAugs[selectedAug.ButtonIndex].Initialize(grid.augmentations[selectedAug.AbilityIndex].name, selectedAug.AbilityIndex, selectedAug.ButtonIndex, true);
                 }
                 else
                 {
-                    activeAugs[sourceIndex].Initialize(grid.augmentations[sourceIndex].name, sourceIndex.ToString());
+                    activeAugs[selectedAug.ButtonIndex].Initialize(grid.augmentations[selectedAug.AbilityIndex].name, selectedAug.AbilityIndex, selectedAug.ButtonIndex, false);
                 }
 
-                button.Activate(false);
+                clickedButton.Activate(false);
                 selectedAug.Activate(false);
 
-                selectedAug = null;
-                StopBlink(targetIndex, false);
+                Deselect(Abilities.Aug);
+                StopBlink(clickedButton.AbilityIndex, true);
                 augIndex = null;
             }
         }
