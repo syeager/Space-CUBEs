@@ -287,6 +287,7 @@ namespace SpaceCUBEs
             if (shieldJob != null) shieldJob.Kill();
 
             MyHealth.invincible = true;
+            FormationLevelManager.Main.PlayerController.MyHealth.invincible = true;
 
             // clean up
             DeactivateWeapons(true);
