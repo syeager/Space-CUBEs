@@ -102,7 +102,7 @@ public static class Utility
     #region Editor Methods
 
 #if UNITY_EDITOR
-    public static IEnumerable<T> LoadObjects<T>(string path, bool recursive) where T : Component
+    public static IEnumerable<T> LoadObjects<T>(string path = "Assets/", bool recursive = true) where T : Component
     {
         string[] files = recursive ? Directory.GetFiles(path, "*.*", SearchOption.AllDirectories) : Directory.GetFiles(path);
         List<T> objects = new List<T>();

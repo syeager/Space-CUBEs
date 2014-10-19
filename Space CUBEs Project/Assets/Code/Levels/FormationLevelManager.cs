@@ -213,6 +213,7 @@ namespace SpaceCUBEs
         protected override void LevelCompleted(bool won)
         {
             base.LevelCompleted(won);
+
             //GA.API.Design.NewEvent(GALevelCompletedKey + LevelNames[levelIndex], won ? 1 : 0);
             GoogleAnalytics.LogEvent(GALevelCompletedKey, LevelNames[levelIndex], "", won ? 1 : 0);
 
@@ -235,7 +236,7 @@ namespace SpaceCUBEs
             GA.API.Design.NewEvent(GAPoints + GAPointsKills, score);
 
             // time score
-            int timeScore = TimeScore(levelSeconds);
+            int timeScore = won ? TimeScore(levelSeconds) : 0;
             Debugger.Log("Time Score: " + timeScore, this, Debugger.LogTypes.Data);
             score += timeScore;
             //GA.API.Design.NewEvent(GAPoints + GAPointsTime, timeScore);
