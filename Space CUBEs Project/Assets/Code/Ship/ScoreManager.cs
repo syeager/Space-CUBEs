@@ -70,7 +70,7 @@ public class ScoreManager
     public void IncreaseMultiplier(int amount = 1)
     {
         cursor += amount;
-        int mult = cursor / groupSize + 1;
+        int mult = Mathf.Clamp(cursor / groupSize + 1, 1, maxMultiplier);
 
         if (multiplierJob != null) multiplierJob.Kill();
         multiplierJob = new Job(MultiplierLife());
@@ -90,7 +90,7 @@ public class ScoreManager
         {
             MultiplierUpdateEvent(this, new MultiplierUpdateArgs(-Multiplier + 1, 1));
         }
-        multiplier = 1;
+        Multiplier = 1;
         cursor = 0;
     }
 
