@@ -29,7 +29,6 @@ namespace SpaceCUBEs
 
         #region State Fields
 
-        private const string EnteringState = "Entering";
         private const string StagingState = "Staging";
         private const string Stage1State = "Stage1";
         private const string Stage2State = "Stage2";
