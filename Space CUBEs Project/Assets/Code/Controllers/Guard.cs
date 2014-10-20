@@ -106,10 +106,10 @@ namespace SpaceCUBEs
         {
             while (true)
             {
-                Vector3 direction = path.Direction(deltaTime);
+                Vector2 direction = path.Direction(deltaTime);
 
                 // reached destination
-                if (direction == Vector3.zero)
+                if (direction == Vector2.zero)
                 {
                     stateMachine.SetState(AttackingState);
                     yield break;
