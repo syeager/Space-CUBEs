@@ -73,7 +73,7 @@ public class NavigationBar : Singleton<NavigationBar>
 
     public void LoadMainMenu()
     {
-        SceneManager.LoadScene(Scenes.Scene(Scenes.Menus.MainMenu));
+        SceneManager.LoadScene(Scenes.Scene(Scenes.Menus.MainMenu), false, true);
         UpdateButtons(Scenes.Menus.MainMenu);
     }
 
@@ -87,7 +87,7 @@ public class NavigationBar : Singleton<NavigationBar>
 
     public void LoadStore()
     {
-        SceneManager.LoadScene(Scenes.Scene(Scenes.Menus.Store));
+        SceneManager.LoadScene(Scenes.Scene(Scenes.Menus.Store), true);
         UpdateButtons(Scenes.Menus.Store);
     }
 

@@ -7,24 +7,24 @@ using System;
 
 public class OverlayEventArgs : EventArgs
 {
-    public readonly string controller;
+    public readonly string group;
     public readonly bool activated;
 
     public static EventHandler<OverlayEventArgs> OverlayEvent;
 
 
-    public OverlayEventArgs(string controller, bool activated)
+    public OverlayEventArgs(string group, bool activated)
     {
-        this.controller = controller;
+        this.group = group;
         this.activated = activated;
     }
 
 
-    public static void Fire(object sender, string controller, bool activated)
+    public static void Fire(object sender, string group, bool activated)
     {
         if (OverlayEvent != null)
         {
-            OverlayEvent(sender, new OverlayEventArgs(controller, activated));
+            OverlayEvent(sender, new OverlayEventArgs(group, activated));
         }
     }
 }

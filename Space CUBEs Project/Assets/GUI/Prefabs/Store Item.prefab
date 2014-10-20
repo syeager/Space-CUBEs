@@ -1016,7 +1016,8 @@ MonoBehaviour:
   cp: {fileID: 11400002}
   own: {fileID: 11400000}
   itemType: 0
-  ID: 1
+  id: 0
+  library: {fileID: 0}
 --- !u!114 &11400030
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1054,17 +1055,13 @@ MonoBehaviour:
   pressedSprite2D: {fileID: 0}
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
-  onClick:
-  - mTarget: {fileID: 11400026}
-    mMethodName: Clicked
-    mParameters: []
-    oneShot: 0
+  onClick: []
   label: {fileID: 0}
   value: 
   group: 
   startSelected: 0
   toggle: 0
-  activateType: 2
+  activateType: 1
   dragScrollView: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:

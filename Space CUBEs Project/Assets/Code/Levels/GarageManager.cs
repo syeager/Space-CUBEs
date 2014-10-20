@@ -101,7 +101,7 @@ namespace SpaceCUBEs
         private PreviewShip previewShip;
 
         [SerializeField, UsedImplicitly]
-        private GameObject cubeLibrary;
+        private CubeLibrary cubeLibrary;
 
         #endregion
 
@@ -375,6 +375,8 @@ namespace SpaceCUBEs
 
 #else
 
+            if (cubeLibrary.IsActive) return;
+
             int touchCount = Input.touchCount;
             // rotate camera
             if (touchCount == 1)
@@ -539,6 +541,7 @@ namespace SpaceCUBEs
         {
             previewShip.Initialize(ConstructionGrid.SelectedBuild, BuildStats.GetCoreCapacity());
             previewShip.SetValues(grid.CurrentStats, grid.CorePointsAvailable);
+            cubeLibrary.ItemSelectedEvent += (sender, args) => SelectCube(args.id);
         }
 
 
@@ -579,6 +582,20 @@ namespace SpaceCUBEs
             }
 
             previewShip.SetValues(grid.CurrentStats, grid.CorePointsAvailable);
+        }
+
+
+        public void ToggleCubeLibrary()
+        {
+            bool activate = !cubeLibrary.IsActive;
+            cubeLibrary.Activate(activate);
+        }
+
+
+        private void SelectCube(int id)
+        {
+            cubeLibrary.Activate(false);
+            grid.CreateCUBE(id);
         }
 
         #endregion

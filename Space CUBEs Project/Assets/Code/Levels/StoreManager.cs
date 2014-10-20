@@ -1,10 +1,11 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.01.16
-// Edited: 2014.08.31
+// Edited: 2014.10.19
 
 using System;
 using Annotations;
+using SpaceCUBEs;
 using UnityEngine;
 
 /// <summary>
@@ -14,18 +15,9 @@ public class StoreManager : Singleton<StoreManager>
 {
     #region Public Fields
 
-    public StoreItem buttonPrefab;
-
-    [Header("Filter")]
-    public ActivateButton filterLeft;
-
+    [Header("Library")]
     [SerializeField, UsedImplicitly]
-    private UILabel filterLabel;
-
-    [SerializeField, UsedImplicitly]
-    private ActivateButton filterRight;
-
-    public GameObject[] itemGrids;
+    private CubeLibrary cubeLibrary;
 
     [Header("HUD")]
     [SerializeField, UsedImplicitly]
@@ -99,19 +91,6 @@ public class StoreManager : Singleton<StoreManager>
 
     #endregion
 
-    #region Static Fields
-
-    private static readonly string[] Items =
-    {
-        "System",
-        "Hull",
-        "Weapon",
-        "Aug",
-        "Upgrade",
-    };
-
-    #endregion
-
     #region Const Fields
 
     public const float SellPercent = 0.5f;
@@ -134,7 +113,8 @@ public class StoreManager : Singleton<StoreManager>
         sellButton.isEnabled = false;
         buyButton.isEnabled = false;
 
-        ChangeFilter("-1");
+        // events
+        cubeLibrary.ItemSelectedEvent += OnItemSelected;
     }
 
     #endregion
@@ -196,107 +176,6 @@ public class StoreManager : Singleton<StoreManager>
         }
     }
 
-
-    public void ItemClicked(StoreItem storeItem, ItemTypes itemType, int ID)
-    {
-        currentItem = storeItem;
-
-        switch (itemType)
-        {
-            case ItemTypes.CUBE:
-                currentItemType = ItemTypes.CUBE;
-
-                // selected CUBE
-                itemIndex = ID;
-                CUBEInfo info = CUBE.AllCUBES[itemIndex];
-                if (GameResources.Main.CUBE_Prefabs[info.ID] == null) return;
-                selectedCUBE.text = info.name;
-                count.text = inventory[itemIndex] + OwnSuffix;
-
-                // prices
-                sellPrice.text = FormatMoney((int)(info.price * SellPercent), true);
-                buyPrice.text = FormatMoney(info.price, false);
-
-                // enable buttons
-                UpdateShopButtons(itemIndex);
-
-                // stats
-                health.text = info.health.ToString();
-                shield.text = info.shield.ToString();
-                speed.text = info.speed.ToString();
-                damage.text = info.damage.ToString();
-
-                // cp
-                const string cp = " CP";
-                cpLabel.text = info.cost + cp;
-
-                // showcase
-                UpdateShowCase(GameResources.CreateCUBE(itemIndex).gameObject);
-                break;
-            case ItemTypes.Core:
-                currentItemType = ItemTypes.Core;
-
-                // showcase
-                selectedCUBE.text = "Ship Core Lv " + (ID + 1);
-                count.text = (BuildStats.GetCoreLevel() >= ID ? "1" : "0") + OwnSuffix;
-                UpdateShowCase(GameObject.CreatePrimitive(PrimitiveType.Cube));
-
-                // prices
-                sellPrice.text = string.Empty;
-                buyPrice.text = FormatMoney(BuildStats.CorePrices[ID], false);
-
-                // buttons
-                UpdateShopButtons(ID);
-                break;
-            case ItemTypes.Weapon:
-                currentItemType = ItemTypes.Weapon;
-
-                // showcase
-                selectedCUBE.text = "Weapon Exp Lv " + (ID + 1);
-                count.text = (BuildStats.GetWeaponLevel() >= ID ? "1" : "0") + OwnSuffix;
-                UpdateShowCase(GameObject.CreatePrimitive(PrimitiveType.Capsule));
-
-                // prices
-                sellPrice.text = string.Empty;
-                buyPrice.text = FormatMoney(BuildStats.WeaponPrices[ID], false);
-
-                // buttons
-                UpdateShopButtons(ID);
-                break;
-            case ItemTypes.Augmentation:
-                currentItemType = ItemTypes.Augmentation;
-                // showcase
-                selectedCUBE.text = "Aug Exp Lv " + (ID + 1);
-                count.text = (BuildStats.GetAugmentationLevel() >= ID ? "1" : "0") + OwnSuffix;
-                UpdateShowCase(GameObject.CreatePrimitive(PrimitiveType.Cylinder));
-
-                // prices
-                sellPrice.text = string.Empty;
-                buyPrice.text = FormatMoney(BuildStats.AugmentationPrices[ID], false);
-
-                // buttons
-                UpdateShopButtons(ID);
-                break;
-        }
-    }
-
-
-    /// <summary>
-    /// Change current filter for items.
-    /// </summary>
-    /// <param name="index">Moving left or right.</param>
-    public void ChangeFilter(string index)
-    {
-        itemGrids[filter].SetActive(false);
-
-        filter = Mathf.Clamp(filter + int.Parse(index), 0, Items.Length - 1);
-
-        itemGrids[filter].SetActive(true);
-        filterLabel.text = Items[filter];
-        filterLeft.isEnabled = filter != 0;
-        filterRight.isEnabled = filter != Items.Length - 1;
-    }
-
     #endregion
 
     #region Private Methods
@@ -349,8 +228,95 @@ public class StoreManager : Singleton<StoreManager>
     {
         const string pos = "+";
         const string neg = "-";
-        return (positive != null ? (positive.Value ? pos : neg) : string.Empty)+ String.Format("{0:#,###0}", amount);
-    } 
+        return (positive != null ? (positive.Value ? pos : neg) : string.Empty) + String.Format("{0:#,###0}", amount);
+    }
+
+    #endregion
+
+    #region Event Handlers
+
+    private void OnItemSelected(object sender, ItemSelectedArgs args)
+    {
+        currentItem = (StoreItem)sender;
+
+        switch (args.itemType)
+        {
+            case ItemTypes.CUBE:
+                currentItemType = ItemTypes.CUBE;
+
+                // selected CUBE
+                itemIndex = args.id;
+                CUBEInfo info = CUBE.AllCUBES[itemIndex];
+                if (GameResources.Main.CUBE_Prefabs[info.ID] == null) return;
+                selectedCUBE.text = info.name;
+                count.text = inventory[itemIndex] + OwnSuffix;
+
+                // prices
+                sellPrice.text = FormatMoney((int)(info.price * SellPercent), true);
+                buyPrice.text = FormatMoney(info.price, false);
+
+                // enable buttons
+                UpdateShopButtons(itemIndex);
+
+                // stats
+                health.text = info.health.ToString();
+                shield.text = info.shield.ToString();
+                speed.text = info.speed.ToString();
+                damage.text = info.damage.ToString();
+
+                // cp
+                const string cp = " CP";
+                cpLabel.text = info.cost + cp;
+
+                // showcase
+                UpdateShowCase(GameResources.CreateCUBE(itemIndex).gameObject);
+                break;
+            case ItemTypes.Core:
+                currentItemType = ItemTypes.Core;
+
+                // showcase
+                selectedCUBE.text = "Ship Core Lv " + (args.id + 1);
+                count.text = (BuildStats.GetCoreLevel() >= args.id ? "1" : "0") + OwnSuffix;
+                UpdateShowCase(GameObject.CreatePrimitive(PrimitiveType.Cube));
+
+                // prices
+                sellPrice.text = string.Empty;
+                buyPrice.text = FormatMoney(BuildStats.CorePrices[args.id], false);
+
+                // buttons
+                UpdateShopButtons(args.id);
+                break;
+            case ItemTypes.Weapon:
+                currentItemType = ItemTypes.Weapon;
+
+                // showcase
+                selectedCUBE.text = "Weapon Exp Lv " + (args.id + 1);
+                count.text = (BuildStats.GetWeaponLevel() >= args.id ? "1" : "0") + OwnSuffix;
+                UpdateShowCase(GameObject.CreatePrimitive(PrimitiveType.Capsule));
+
+                // prices
+                sellPrice.text = string.Empty;
+                buyPrice.text = FormatMoney(BuildStats.WeaponPrices[args.id], false);
+
+                // buttons
+                UpdateShopButtons(args.id);
+                break;
+            case ItemTypes.Augmentation:
+                currentItemType = ItemTypes.Augmentation;
+                // showcase
+                selectedCUBE.text = "Aug Exp Lv " + (args.id + 1);
+                count.text = (BuildStats.GetAugmentationLevel() >= args.id ? "1" : "0") + OwnSuffix;
+                UpdateShowCase(GameObject.CreatePrimitive(PrimitiveType.Cylinder));
+
+                // prices
+                sellPrice.text = string.Empty;
+                buyPrice.text = FormatMoney(BuildStats.AugmentationPrices[args.id], false);
+
+                // buttons
+                UpdateShopButtons(args.id);
+                break;
+        }
+    }
 
     #endregion
 }
