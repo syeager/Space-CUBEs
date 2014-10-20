@@ -23,10 +23,7 @@ public class LevelCreator : EditorWindow
     private static Type[] pathTypes;
     private static string[] pathNames;
 
-    private static readonly Dictionary<Enemy.Classes, int> EnemyPoints = new Dictionary<Enemy.Classes, int>
-                                                                         {
-                                                                             {SpaceCUBEs.Enemy.Classes.None, 0}
-                                                                         };
+    private static Dictionary<Enemy.Classes, int> enemyPoints;
 
     #endregion
 
@@ -102,10 +99,12 @@ public class LevelCreator : EditorWindow
         formationNames = formationPrefabs.Select(f => f.name).ToArray();
 
         // enemy points
+        enemyPoints = new Dictionary<Enemy.Classes, int>();
+        enemyPoints.Add(SpaceCUBEs.Enemy.Classes.None, 0);
         var enemies = Utility.LoadObjects<Enemy>("Assets/Ship/Enemies/Basic/");
         foreach (var enemy in enemies)
         {
-            EnemyPoints.Add(enemy.enemyClass, enemy.score);
+            enemyPoints.Add(enemy.enemyClass, enemy.score);
         }
     }
 
@@ -590,7 +589,7 @@ public class LevelCreator : EditorWindow
 
     private int TotalPoints()
     {
-        return levelManager.formationGroups.Sum(fg => fg.enemies.Sum(e => EnemyPoints[e]));
+        return levelManager.formationGroups.Sum(fg => fg.enemies.Sum(e => enemyPoints[e]));
     }
 
     #endregion
