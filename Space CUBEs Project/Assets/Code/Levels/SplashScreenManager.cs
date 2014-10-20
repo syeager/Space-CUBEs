@@ -56,7 +56,6 @@ public class SplashScreenManager : Singleton<SplashScreenManager>
     [UsedImplicitly]
     private void Start()
     {
-        GoogleAnalytics.StartSession();
         Invoke("ShowDevSplash", 1f);
     }
 
@@ -64,12 +63,10 @@ public class SplashScreenManager : Singleton<SplashScreenManager>
     [UsedImplicitly]
     private void Update()
     {
-        bool skip;
-
 #if UNITY_STANDALONE
-        skip = Input.anyKeyDown;
+        bool skip = Input.anyKeyDown;
 #else
-        skip = Input.GetKeyDown(KeyCode.Escape) || (Input.touchCount > 0 && Input.GetTouch(0).tapCount > 0);
+        bool skip = Input.GetKeyDown(KeyCode.Escape) || (Input.touchCount > 0 && Input.GetTouch(0).tapCount > 0);
 #endif
 
         if (skip)

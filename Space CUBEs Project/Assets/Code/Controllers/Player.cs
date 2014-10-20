@@ -229,10 +229,8 @@ namespace SpaceCUBEs
             MyMotor.Initialize(stats.speed * statMultipliers.speed);
             Weapons.Initialize(this, stats.damage * statMultipliers.damage);
             //GA.API.Design.NewEvent(GAAbilities + GAWeaponCount, Weapons.weapons.Count(w => w != null));
-            GoogleAnalytics.LogEvent(GAAbilities, GAWeaponCount, "", Weapons.weapons.Count(w => w != null));
             Augmentations.Initialize(this);
             //GA.API.Design.NewEvent(GAAbilities + GAAugCount, Augmentations.augmentations.Count(a => a != null));
-            GoogleAnalytics.LogEvent(GAAbilities, GAAugCount, "", Augmentations.augmentations.Count(a => a != null));
 
             HUD.Initialize(this);
 

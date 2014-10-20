@@ -1,7 +1,7 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.01.12
-// Edited: 2014.10.04
+// Edited: 2014.10.19
 
 using System;
 using System.Collections;
@@ -73,7 +73,7 @@ namespace SpaceCUBEs
 
         #region GA Fields
 
-        private const string GALevelCompletedKey = "Level_Completed:";
+        private const string GALevelKey = "Level:";
 
         private const string GATime = "Time:";
         private const string GATimeTotal = "Total";
@@ -90,43 +90,51 @@ namespace SpaceCUBEs
 
         private const string GAMoney = "Money";
 
+        private string GALevel
+        {
+            get { return GALevelKey + LevelNames[levelIndex] + ":"; }
+        }
+
         #endregion
 
         #region Classes
 
         private class LevelTime
         {
-            public TimeSpan Level { get; private set; }
-            public TimeSpan Boss { get; private set; }
+            private TimeSpan level;
+            private TimeSpan boss;
 
             public TimeSpan Total
             {
-                get { return Level + Boss; }
+                get { return level + boss; }
             }
+
 
             public void StartLevel()
             {
-                Level = new TimeSpan(0, 0, 0, 0, Mathf.RoundToInt(Time.timeSinceLevelLoad * 1000));
+                level = new TimeSpan(0, 0, 0, 0, Mathf.RoundToInt(Time.timeSinceLevelLoad * 1000));
             }
 
 
             public void StopLevel()
             {
-                Level = new TimeSpan(0, 0, 0, 0, Mathf.RoundToInt(Time.timeSinceLevelLoad * 1000)) - Level;
-                Debugger.Log("Level Time: " + Level, null, Debugger.LogTypes.LevelEvents);
+                level = new TimeSpan(0, 0, 0, 0, Mathf.RoundToInt(Time.timeSinceLevelLoad * 1000)) - level;
+                Debugger.Log("Level Time: " + level, null, Debugger.LogTypes.LevelEvents);
+                GA.API.Design.NewEvent(GALevelKey + GATime + GATimeLevel, (float)level.TotalMinutes);
             }
 
 
             public void StartBoss()
             {
-                Boss = new TimeSpan(0, 0, 0, 0, Mathf.RoundToInt(Time.timeSinceLevelLoad * 1000));
+                boss = new TimeSpan(0, 0, 0, 0, Mathf.RoundToInt(Time.timeSinceLevelLoad * 1000));
             }
 
 
             public void StopBoss()
             {
-                Boss = new TimeSpan(0, 0, 0, 0, Mathf.RoundToInt(Time.timeSinceLevelLoad * 1000)) - Boss;
-                Debugger.Log("Bos Time: " + Boss, null, Debugger.LogTypes.LevelEvents);
+                boss = new TimeSpan(0, 0, 0, 0, Mathf.RoundToInt(Time.timeSinceLevelLoad * 1000)) - boss;
+                Debugger.Log("Bos Time: " + boss, null, Debugger.LogTypes.LevelEvents);
+                GA.API.Design.NewEvent(GALevelKey + GATime + GATimeBoss, (float)boss.TotalMinutes);
             }
         }
 
@@ -214,18 +222,10 @@ namespace SpaceCUBEs
         {
             base.LevelCompleted(won);
 
-            //GA.API.Design.NewEvent(GALevelCompletedKey + LevelNames[levelIndex], won ? 1 : 0);
-            GoogleAnalytics.LogEvent(GALevelCompletedKey, LevelNames[levelIndex], "", won ? 1 : 0);
 
             // time
             levelTime.StopBoss();
-            float levelSeconds = (float)levelTime.Total.TotalSeconds;
-            //GA.API.Design.NewEvent(GATime + GATimeTotal, levelSeconds);
-            GoogleAnalytics.LogEvent(GATime, GATimeTotal, "", (long)levelSeconds);
-            //GA.API.Design.NewEvent(GATime + GATimeLevel, (float)levelTime.Level.TotalSeconds);
-            GoogleAnalytics.LogEvent(GATime, GATimeLevel, "", (long)levelTime.Level.TotalSeconds);
-            //GA.API.Design.NewEvent(GATime + GATimeBoss, (float)levelTime.Boss.TotalSeconds);
-            GoogleAnalytics.LogEvent(GATime, GATimeBoss, "", (long)levelTime.Boss.TotalSeconds);
+            GA.API.Design.NewEvent(GALevel + GATime + GATimeTotal, (float)levelTime.Total.TotalMinutes);
 
             // stop spawning
             StopAllCoroutines();
@@ -233,23 +233,19 @@ namespace SpaceCUBEs
             // score
             int score = PlayerController.myScore.points;
             Debugger.Log("Kill Score: " + score, this, Debugger.LogTypes.Data);
-            GA.API.Design.NewEvent(GAPoints + GAPointsKills, score);
+            GA.API.Design.NewEvent(GALevel + GAPoints + GAPointsKills, score);
 
             // time score
-            int timeScore = won ? TimeScore(levelSeconds) : 0;
-            Debugger.Log("Time Score: " + timeScore, this, Debugger.LogTypes.Data);
+            int timeScore = won ? TimeScore((float)levelTime.Total.TotalSeconds) : 0;
             score += timeScore;
-            //GA.API.Design.NewEvent(GAPoints + GAPointsTime, timeScore);
-            GoogleAnalytics.LogEvent(GAPoints, GAPointsTime, "", timeScore);
-            Debugger.Log("Completion Time: " + Time.timeSinceLevelLoad, this, Debugger.LogTypes.LevelEvents);
-            Debugger.Log("Time Score: " + timeScore, this, Debugger.LogTypes.LevelEvents);
+            Debugger.Log("Time Score: " + timeScore, this, Debugger.LogTypes.Data);
+            GA.API.Design.NewEvent(GALevel + GAPoints + GAPointsTime, timeScore);
 
             // health score
             int healthScore = Mathf.RoundToInt((PlayerController.MyHealth.health / PlayerController.MyHealth.maxHealth) * maxHealthScore);
-            Debugger.Log("Health Score: " + healthScore, this, Debugger.LogTypes.Data);
             score += healthScore;
-            //GA.API.Design.NewEvent(GAPoints + GAPointsHealth, healthScore);
-            GoogleAnalytics.LogEvent(GAPoints, GAPointsHealth, "", healthScore);
+            Debugger.Log("Health Score: " + healthScore, this, Debugger.LogTypes.Data);
+            GA.API.Design.NewEvent(GALevel + GAPoints + GAPointsHealth, healthScore);
 
             // rank
             int rank = rankLimits.Length - 1;
@@ -268,12 +264,10 @@ namespace SpaceCUBEs
                     }
                 }
             }
-            //GA.API.Design.NewEvent(GARank, rank);
-            GoogleAnalytics.LogEvent(GARank, "", "", rank);
+            GA.API.Design.NewEvent(GALevel + GARank, rank);
 
             // save rank and score
             Highscore playerScore = new Highscore(rank, score, levelTime.Total);
-
             Highscore currentHighscore = SaveData.Load<Highscore>(HighScoreKey + LevelNames[levelIndex], LevelsFolder);
             if (score > currentHighscore.score || (score == currentHighscore.score && levelTime.Total < currentHighscore.time))
             {
@@ -283,8 +277,7 @@ namespace SpaceCUBEs
             // money
             int money = PlayerController.myMoney.money;
             PlayerController.myMoney.Save();
-            //GA.API.Design.NewEvent(GAMoney, money);
-            GoogleAnalytics.LogEvent(GAMoney, "", "", money);
+            GA.API.Design.NewEvent(GALevel + GAMoney, money);
 
             // awards
             int[] awards = AwardCUBEs();
@@ -296,8 +289,7 @@ namespace SpaceCUBEs
             CUBE.SetInventory(inventory);
 
             campaignOverview.Initialize(playerScore, rankLimits, money, awards);
-            //GA.API.Design.NewEvent(GAPoints + GAPointsTotal, score);
-            GoogleAnalytics.LogEvent(GAPoints, GAPointsTotal, "", score);
+            GA.API.Design.NewEvent(GALevel + GAPoints + GAPointsTotal, score);
         }
 
         #endregion
@@ -343,7 +335,7 @@ namespace SpaceCUBEs
             }
 
             // increase segmentCursor
-            Log("Formation " + (segmentCursor + 1)+ " spawned.", Debugger.LogTypes.LevelEvents);
+            Log("Formation " + (segmentCursor + 1) + " spawned.", Debugger.LogTypes.LevelEvents);
             segmentCursor++;
 
             // get next segment ready if time
