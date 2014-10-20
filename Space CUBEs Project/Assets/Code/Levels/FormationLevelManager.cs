@@ -343,7 +343,7 @@ namespace SpaceCUBEs
             }
 
             // increase segmentCursor
-            Log("Formation " + segmentCursor + " spawned.", Debugger.LogTypes.LevelEvents);
+            Log("Formation " + (segmentCursor + 1)+ " spawned.", Debugger.LogTypes.LevelEvents);
             segmentCursor++;
 
             // get next segment ready if time
