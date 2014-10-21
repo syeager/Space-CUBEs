@@ -160,6 +160,8 @@ public class Health : MonoBase
     /// <returns>True, if health is 0.</returns>
     public float ChangeHealth(float amount)
     {
+        if (!enabled) return 0f;
+
         float amountAdded;
         if (amount > 0)
         {

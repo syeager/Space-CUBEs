@@ -67,6 +67,7 @@ public class ShieldHealth : Health
     public override float RecieveHit(Ship sender, float damage)
     {
         if (invincible) return 0f;
+        if (!enabled) return 0f;
 
         float damageToHealth = damage - shield;
         float damageDone = ChangeShield(-damage);
@@ -134,6 +135,8 @@ public class ShieldHealth : Health
     /// <returns>Amount actually applied.</returns>
     public float ChangeShield(float amount)
     {
+        if (!enabled) return 0f;
+
         float amountAdded;
         if (amount > 0)
         {
