@@ -1,12 +1,12 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
-// Created: 2014.09.05
-// Edited: 2014.09.05
+// Created: 2014.10.11
+// Edited: 2014.10.20
 
 using System;
-using Annotations;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace LittleByte
 {
@@ -24,12 +24,6 @@ namespace LittleByte
 
         #region Editor Overrides
 
-        [UsedImplicitly]
-        private void OnEnable()
-        {
-        }
-
-
         public override void OnInspectorGUI()
         {
             MonoScript script = (MonoScript)target;
@@ -43,10 +37,10 @@ namespace LittleByte
                 string path = AssetDatabase.GenerateUniqueAssetPath(assetPath.Substring(0, assetPath.Length - 3) + ".asset");
                 AssetDatabase.CreateAsset(scriptableObject, path);
 
-                EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath(path, typeof(UnityEngine.Object)));
+                EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath(path, typeof(Object)));
             }
         }
 
         #endregion
-    } 
+    }
 }
