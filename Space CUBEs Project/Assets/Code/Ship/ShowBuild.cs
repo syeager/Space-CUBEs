@@ -83,7 +83,7 @@ public static class ShowBuild
 
         if (finishedAction != null)
         {
-            finishedAction(new BuildFinishedArgs(transform.gameObject, buildInfo.stats));
+            finishedAction(new BuildFinishedArgs(transform.gameObject, buildInfo.stats, buildInfo.trimColor));
         }
     }
 

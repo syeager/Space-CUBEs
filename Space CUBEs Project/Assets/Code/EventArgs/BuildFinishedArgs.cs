@@ -1,20 +1,25 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2013.12.03
-// Edited: 2014.10.15
+// Edited: 2014.10.22
 
 using System;
 using UnityEngine;
 
-public class BuildFinishedArgs : EventArgs
+namespace SpaceCUBEs
 {
-    public readonly GameObject ship;
-    public readonly ShipStats stats;
-
-
-    public BuildFinishedArgs(GameObject ship, ShipStats stats)
+    public class BuildFinishedArgs : EventArgs
     {
-        this.ship = ship;
-        this.stats = stats;
+        public readonly GameObject ship;
+        public readonly ShipStats stats;
+        public readonly int trimColor;
+
+
+        public BuildFinishedArgs(GameObject ship, ShipStats stats, int trimColor)
+        {
+            this.ship = ship;
+            this.stats = stats;
+            this.trimColor = trimColor;
+        }
     }
 }

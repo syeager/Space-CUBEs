@@ -1,12 +1,11 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2013.11.25
-// Edited: 2014.10.05
+// Edited: 2014.10.22
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Annotations;
 using LittleByte.Extensions;
 using UnityEngine;
@@ -20,7 +19,7 @@ namespace SpaceCUBEs
     {
         #region References
 
-        public GameObject trailRenderer;
+        public TrailRenderer trailRenderer;
         public AugmentationManager Augmentations { get; private set; }
         public WeaponManager Weapons { get; private set; }
 
@@ -105,12 +104,6 @@ namespace SpaceCUBEs
             myMoney = new MoneyManager();
             Augmentations = GetComponent<AugmentationManager>();
             Weapons = GetComponent<WeaponManager>() ?? gameObject.AddComponent<WeaponManager>();
-
-            // effects
-            if (GameSettings.Main.qualityLevel == 0)
-            {
-                Destroy(trailRenderer);
-            }
 
             // create states
             stateMachine = new StateMachine(this, MovingState);
@@ -221,7 +214,7 @@ namespace SpaceCUBEs
         /// <summary>
         /// Initialize ship components. Health, Motor, and Weapons.
         /// </summary>
-        public void Initialize(ShipStats stats)
+        public void Initialize(ShipStats stats, Color trimColor)
         {
             // TODO: multiplier for all stats
 
@@ -231,6 +224,9 @@ namespace SpaceCUBEs
             //GA.API.Design.NewEvent(GAAbilities + GAWeaponCount, Weapons.weapons.Count(w => w != null));
             Augmentations.Initialize(this);
             //GA.API.Design.NewEvent(GAAbilities + GAAugCount, Augmentations.augmentations.Count(a => a != null));
+
+            // effects
+            trailRenderer.material.color = trimColor;
 
             HUD.Initialize(this);
 

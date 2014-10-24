@@ -139,7 +139,7 @@ namespace SpaceCUBEs
             ConstructionGrid.SelectedBuild = shipName;
 
             // add build to build list
-            ConstructionGrid.SaveBuild(shipName, new BuildInfo(shipName, new ShipStats(), new Collection<KeyValuePair<CUBE, CUBEGridInfo>>()));
+            ConstructionGrid.SaveBuild(shipName, new BuildInfo{name = shipName});
 
             // load workshop
             SceneManager.LoadScene(Scenes.Scene(Scenes.Menus.Workshop), true, true);

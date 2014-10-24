@@ -210,7 +210,7 @@ namespace SpaceCUBEs
             var buildShip = args.ship.AddComponent<ShipCompactor>();
             PlayerController = buildShip.Compact(true) as Player;
             PlayerTransform = PlayerController.transform;
-            PlayerController.Initialize(args.stats);
+            PlayerController.Initialize(args.stats, CUBE.Colors[args.trimColor]);
 
 #if DEBUG
             if (GameSettings.Main.invincible)

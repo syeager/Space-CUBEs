@@ -1,9 +1,8 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.09.21
-// Edited: 2014.09.22
+// Edited: 2014.10.23
 
-using System;
 using System.Collections;
 using Annotations;
 using UnityEngine;
@@ -42,6 +41,11 @@ namespace SpaceCUBEs
         private Job mainSegmentJob;
 
         private Job detailSegmentJob;
+
+        [SerializeField, UsedImplicitly]
+        private UISprite trimColor;
+
+        private bool trimSelected;
 
         [Header("Animations")]
         [SerializeField, UsedImplicitly]
@@ -103,6 +107,7 @@ namespace SpaceCUBEs
             // setup
             UpdatePaintButton();
             UpdateSampleButton();
+            trimColor.color = CUBE.Colors[grid.currentTrimColor];
         }
 
         #endregion
@@ -137,6 +142,13 @@ namespace SpaceCUBEs
             UpdateSampleButton();
         }
 
+
+        public void ToggleTrim()
+        {
+            trimSelected = !trimSelected;
+            TogglePallette(!pallete.activeSelf);
+        }
+
         #endregion
 
         #region Private Methods
@@ -169,7 +181,12 @@ namespace SpaceCUBEs
 
         private void SetColor(int colorIndex)
         {
-            if (primarySelected)
+            if (trimSelected)
+            {
+                grid.currentTrimColor = colorIndex;
+                trimColor.color = CUBE.Colors[colorIndex];
+            }
+            else if (primarySelected)
             {
                 colorPrimary = colorIndex;
                 primaryColor.color = CUBE.Colors[colorIndex];
@@ -206,6 +223,13 @@ namespace SpaceCUBEs
             actionButtons.buttons[1].buttons[0].defaultColor = color;
         }
 
+
+        private void TogglePallette(bool open)
+        {
+            if (!open) trimSelected = false;
+            pallete.SetActive(open);
+        }
+
         #endregion
 
         #region Event Handlers
@@ -221,12 +245,13 @@ namespace SpaceCUBEs
         private void OnColorSelected(object sender, ActivateButtonArgs args)
         {
             SetColor(int.Parse(args.value));
+            TogglePallette(false);
         }
 
 
         private void OnPalleteClicked()
         {
-            pallete.SetActive(!pallete.activeSelf);
+            TogglePallette(!pallete.activeSelf);
         }
 
 
@@ -245,15 +270,6 @@ namespace SpaceCUBEs
         private void OnSampleClicked()
         {
             SetColor(grid.hoveredCUBE.GetComponent<ColorVertices>().GetColor(mainSelected ? 0 : 1));
-            //if (primarySelected)
-            //{
-            //    colorPrimary = Array.IndexOf(CUBE.Colors, color);
-            //}
-            //else
-            //{
-            //    colorSecondary = Array.IndexOf(CUBE.Colors, color);
-            //}
-
             UpdateSections();
         }
 

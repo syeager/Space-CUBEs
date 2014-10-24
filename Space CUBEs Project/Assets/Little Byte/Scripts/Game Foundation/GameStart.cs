@@ -85,6 +85,7 @@ public class GameStart : Singleton<GameStart>
     {
         GameTime.Initialize();
         CUBE.LoadAllCUBEInfo();
+        CUBE.LoadColors();
         ConstructionGrid.Load();
         GoogleProfilePic.SetKey(APIKey);
     }

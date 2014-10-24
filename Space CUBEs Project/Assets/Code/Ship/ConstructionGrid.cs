@@ -207,6 +207,8 @@ namespace SpaceCUBEs
         /// <summary>Current stats for the build.</summary>
         public ShipStats CurrentStats { get; private set; }
 
+        public int currentTrimColor;
+
         /// <summary>Current weapon count of the ship.</summary>
         public int shipWeapons { get; private set; }
 
@@ -1003,7 +1005,7 @@ namespace SpaceCUBEs
         /// </summary>
         public void SaveBuild()
         {
-            SaveBuild(buildName, new BuildInfo(buildName, CurrentStats, currentBuild));
+            SaveBuild(buildName, new BuildInfo(buildName, CurrentStats, currentTrimColor, currentBuild));
         }
 
 

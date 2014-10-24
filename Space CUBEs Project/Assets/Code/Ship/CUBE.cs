@@ -137,6 +137,8 @@ public class CUBE : MonoBehaviour
 
     public static Color[] LoadColors()
     {
+        if (Colors != null && Colors.Length > 0) return Colors;
+
         var binaryFile = (TextAsset)Resources.Load(ColorList);
         Stream binaryStream = new MemoryStream(binaryFile.bytes);
         var colors = new List<Color>();
