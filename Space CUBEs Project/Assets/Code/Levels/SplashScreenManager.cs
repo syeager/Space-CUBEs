@@ -63,11 +63,7 @@ public class SplashScreenManager : Singleton<SplashScreenManager>
     [UsedImplicitly]
     private void Update()
     {
-#if UNITY_STANDALONE
-        bool skip = Input.anyKeyDown;
-#else
-        bool skip = Input.GetKeyDown(KeyCode.Escape) || (Input.touchCount > 0 && Input.GetTouch(0).tapCount > 0);
-#endif
+        bool skip = Input.GetButtonUp("Pause") || (Input.touchCount > 0 && Input.GetTouch(0).tapCount > 0);
 
         if (skip)
         {

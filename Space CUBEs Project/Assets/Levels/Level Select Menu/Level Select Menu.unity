@@ -129,6 +129,7 @@ GameObject:
   - 114: {fileID: 95062135}
   - 65: {fileID: 95062134}
   - 114: {fileID: 95062133}
+  - 114: {fileID: 95062136}
   m_Layer: 8
   m_Name: Play Button
   m_TagString: Untagged
@@ -163,7 +164,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tweenTarget: {fileID: 95062131}
   hover: {r: .882352948, g: .784313738, b: .588235319, a: 1}
-  pressed: {r: .717647076, g: .639215708, b: .482352942, a: 1}
+  pressed: {r: .603921592, g: .466666669, b: .698039234, a: 1}
   disabledColor: {r: .5, g: .5, b: .5, a: 1}
   duration: .200000003
   dragHighlight: 0
@@ -243,6 +244,25 @@ MonoBehaviour:
   mAtlas: {fileID: 11400000, guid: b23d7dc3a51931046a1fbdc82310bb5d, type: 2}
   mSpriteName: Btn_Play
   mFillCenter: 1
+--- !u!114 &95062136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400006, guid: b9df4d6867724814a8ae70c200036c19,
+    type: 2}
+  m_PrefabInternal: {fileID: 1771123510}
+  m_GameObject: {fileID: 95062131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 643ea4bc79b55444d974ddbd31a6cd5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  constraint: 0
+  onUp: {fileID: 0}
+  onDown: {fileID: 0}
+  onLeft: {fileID: 0}
+  onRight: {fileID: 0}
+  onClick: {fileID: 0}
+  startsSelected: 1
 --- !u!1 &128592569
 GameObject:
   m_ObjectHideFlags: 0
@@ -887,7 +907,7 @@ Transform:
   m_PrefabParentObject: {fileID: 400004, guid: aeed59aee1ea3714da2eb46ccb6175bd, type: 2}
   m_PrefabInternal: {fileID: 39475939}
   m_GameObject: {fileID: 478473731}
-  m_LocalRotation: {x: -.428198785, y: -.48876363, z: .299594402, w: -.698569357}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children: []
@@ -1420,6 +1440,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1f9f577e4529c14a85ac2e86b029019, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  groups: []
 --- !u!1001 &691103884
 Prefab:
   m_ObjectHideFlags: 0
@@ -1620,7 +1641,7 @@ Transform:
   m_PrefabInternal: {fileID: 1771123510}
   m_GameObject: {fileID: 772211378}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -4.88598633, z: 0}
+  m_LocalPosition: {x: -3, y: -4.88598633, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 95062132}
@@ -1669,7 +1690,7 @@ MonoBehaviour:
   mText: PLAY
   mFontSize: 100
   mFontStyle: 0
-  mAlignment: 0
+  mAlignment: 2
   mEncoding: 1
   mMaxLineCount: 0
   mEffectStyle: 0
@@ -1680,7 +1701,7 @@ MonoBehaviour:
   mMaterial: {fileID: 0}
   mApplyGradient: 0
   mGradientTop: {r: 1, g: 1, b: 1, a: 1}
-  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
+  mGradientBottom: {r: 1, g: 1, b: 0, a: 1}
   mSpacingX: 0
   mSpacingY: 0
   mShrinkToFit: 0
@@ -1826,6 +1847,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1f9f577e4529c14a85ac2e86b029019, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  groups: []
 --- !u!1 &796747730
 GameObject:
   m_ObjectHideFlags: 0
@@ -1976,6 +1998,10 @@ Prefab:
       propertyPath: m_LocalScale.z
       value: .00277777785
       objectReference: {fileID: 0}
+    - target: {fileID: 100020, guid: e95f85aa3110abc429999d6bba111ed7, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e95f85aa3110abc429999d6bba111ed7, type: 2}
   m_RootGameObject: {fileID: 240233798}
@@ -2071,6 +2097,7 @@ GameObject:
   - 114: {fileID: 843278699}
   - 65: {fileID: 843278698}
   - 114: {fileID: 843278697}
+  - 114: {fileID: 843278700}
   m_Layer: 8
   m_Name: Forsaken Colonies
   m_TagString: Untagged
@@ -2198,6 +2225,24 @@ MonoBehaviour:
   mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
   mSpriteName: Widget_LvlSelect_Lvl_inactive
   mFillCenter: 1
+--- !u!114 &843278700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 843278695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 643ea4bc79b55444d974ddbd31a6cd5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  constraint: 0
+  onUp: {fileID: 0}
+  onDown: {fileID: 0}
+  onLeft: {fileID: 0}
+  onRight: {fileID: 0}
+  onClick: {fileID: 0}
+  startsSelected: 0
 --- !u!1001 &896737147
 Prefab:
   m_ObjectHideFlags: 0
@@ -2602,7 +2647,7 @@ MonoBehaviour:
     target: {fileID: 1316521024}
     relative: 1
     absolute: -15
-  updateAnchors: 0
+  updateAnchors: 2
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mWidth: 70
@@ -2667,6 +2712,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1f9f577e4529c14a85ac2e86b029019, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  groups: []
 --- !u!1 &1031001733
 GameObject:
   m_ObjectHideFlags: 0
@@ -2678,6 +2724,7 @@ GameObject:
   - 114: {fileID: 1031001737}
   - 65: {fileID: 1031001736}
   - 114: {fileID: 1031001735}
+  - 114: {fileID: 1031001738}
   m_Layer: 8
   m_Name: The Capital
   m_TagString: Untagged
@@ -2805,6 +2852,24 @@ MonoBehaviour:
   mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
   mSpriteName: Widget_LvlSelect_Lvl_inactive
   mFillCenter: 1
+--- !u!114 &1031001738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1031001733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 643ea4bc79b55444d974ddbd31a6cd5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  constraint: 0
+  onUp: {fileID: 0}
+  onDown: {fileID: 0}
+  onLeft: {fileID: 0}
+  onRight: {fileID: 0}
+  onClick: {fileID: 0}
+  startsSelected: 0
 --- !u!1 &1064809833
 GameObject:
   m_ObjectHideFlags: 0
@@ -3235,6 +3300,7 @@ GameObject:
   - 114: {fileID: 1154093522}
   - 65: {fileID: 1154093521}
   - 114: {fileID: 1154093520}
+  - 114: {fileID: 1154093523}
   m_Layer: 8
   m_Name: The Abyss
   m_TagString: Untagged
@@ -3362,6 +3428,24 @@ MonoBehaviour:
   mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
   mSpriteName: Widget_LvlSelect_Lvl_inactive
   mFillCenter: 1
+--- !u!114 &1154093523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1154093518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 643ea4bc79b55444d974ddbd31a6cd5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  constraint: 0
+  onUp: {fileID: 0}
+  onDown: {fileID: 0}
+  onLeft: {fileID: 0}
+  onRight: {fileID: 0}
+  onClick: {fileID: 0}
+  startsSelected: 0
 --- !u!1 &1165463806
 GameObject:
   m_ObjectHideFlags: 0
@@ -4718,6 +4802,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1f9f577e4529c14a85ac2e86b029019, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  groups: []
 --- !u!1 &1632015682
 GameObject:
   m_ObjectHideFlags: 0
@@ -5421,6 +5506,10 @@ Prefab:
       propertyPath: m_LocalPosition.y
       value: -4.88598633
       objectReference: {fileID: 0}
+    - target: {fileID: 11400006, guid: b9df4d6867724814a8ae70c200036c19, type: 2}
+      propertyPath: constraint
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b9df4d6867724814a8ae70c200036c19, type: 2}
   m_RootGameObject: {fileID: 95062131}
@@ -5437,6 +5526,7 @@ GameObject:
   - 114: {fileID: 1908783861}
   - 65: {fileID: 1908783860}
   - 114: {fileID: 1908783859}
+  - 114: {fileID: 1908783862}
   m_Layer: 8
   m_Name: Galactic Core
   m_TagString: Untagged
@@ -5564,6 +5654,24 @@ MonoBehaviour:
   mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
   mSpriteName: Widget_LvlSelect_Lvl_inactive
   mFillCenter: 1
+--- !u!114 &1908783862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1908783857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 643ea4bc79b55444d974ddbd31a6cd5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  constraint: 0
+  onUp: {fileID: 0}
+  onDown: {fileID: 0}
+  onLeft: {fileID: 0}
+  onRight: {fileID: 0}
+  onClick: {fileID: 0}
+  startsSelected: 0
 --- !u!1 &2019357977
 GameObject:
   m_ObjectHideFlags: 0
@@ -5838,6 +5946,7 @@ GameObject:
   - 114: {fileID: 2055547795}
   - 65: {fileID: 2055547794}
   - 114: {fileID: 2055547793}
+  - 114: {fileID: 2055547796}
   m_Layer: 8
   m_Name: Nebula Forest
   m_TagString: Untagged
@@ -5965,6 +6074,24 @@ MonoBehaviour:
   mAtlas: {fileID: 11400000, guid: d3a30051b06928343a594a8c8262df3f, type: 2}
   mSpriteName: Widget_LvlSelect_Lvl_inactive
   mFillCenter: 1
+--- !u!114 &2055547796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2055547791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 643ea4bc79b55444d974ddbd31a6cd5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  constraint: 0
+  onUp: {fileID: 0}
+  onDown: {fileID: 95062131}
+  onLeft: {fileID: 0}
+  onRight: {fileID: 0}
+  onClick: {fileID: 0}
+  startsSelected: 0
 --- !u!1 &2106657543
 GameObject:
   m_ObjectHideFlags: 0
@@ -6463,3 +6590,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1f9f577e4529c14a85ac2e86b029019, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  groups: []
