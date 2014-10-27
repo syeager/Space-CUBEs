@@ -1,13 +1,19 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.01.12
-// Edited: 2014.10.19
+// Edited: 2014.10.26
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Annotations;
 using LittleByte.Data;
 using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace SpaceCUBEs
 {
@@ -30,7 +36,7 @@ namespace SpaceCUBEs
         public float minutesToBeat = 10f;
 
         /// <summary>Points given for winning with max health.</summary>
-        public float maxHealthScore;
+        public int maxHealthScore;
 
         #endregion
 
@@ -41,6 +47,9 @@ namespace SpaceCUBEs
         private Job spawnJob;
 
         private readonly LevelTime levelTime = new LevelTime();
+
+        [SerializeField, UsedImplicitly]
+        private float scoreMod;
 
         #endregion
 
@@ -140,7 +149,7 @@ namespace SpaceCUBEs
 
         #endregion
 
-        #region Unity Overrides
+        #region MonoBehaviour Overrides
 
         protected override void Start()
         {
@@ -191,6 +200,33 @@ namespace SpaceCUBEs
                 }
             }
         }
+#endif
+
+        #endregion
+
+        #region Editor Methods
+
+#if UNITY_EDITOR
+
+        [MenuItem("CONTEXT/FormationLevelManager/Calculate Points"), UsedImplicitly]
+        private static void CalcPoints(MenuCommand command)
+        {
+            var enemyPoints = new Dictionary<Enemy.Classes, int> {{Enemy.Classes.None, 0}};
+            IEnumerable<Enemy> enemies = Utility.LoadObjects<Enemy>("Assets/Ship/Enemies/Basic/");
+            foreach (Enemy enemy in enemies)
+            {
+                enemyPoints.Add(enemy.enemyClass, enemy.score);
+            }
+
+            FormationLevelManager manager = (FormationLevelManager)command.context;
+            int points = manager.maxTimeScore + manager.maxHealthScore + manager.bossPrefab.GetComponent<Boss>().score + manager.formationGroups.Sum(group => group.enemies.Sum(enemy => enemyPoints[enemy]));
+            for (int i = manager.rankLimits.Length - 1; i < manager.rankLimits.Length; i--)
+            {
+                manager.rankLimits[i] = points;
+                points = Mathf.CeilToInt(points / manager.scoreMod);
+            }
+        }
+
 #endif
 
         #endregion
