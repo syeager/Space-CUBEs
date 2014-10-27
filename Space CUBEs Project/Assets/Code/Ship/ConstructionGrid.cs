@@ -1,7 +1,7 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2013.11.26
-// Edited: 2014.10.02
+// Edited: 2014.10.26
 
 using System;
 using System.Collections;
@@ -384,14 +384,14 @@ namespace SpaceCUBEs
                 heldCUBE.transform.position += vector;
                 SetStatus(CursorStatuses.Holding);
             }
-                // set status to hover
             else if (grid[(int)cursor.y][(int)cursor.z][(int)cursor.x] != null)
             {
+                // set status to hover
                 SetStatus(CursorStatuses.Hover);
             }
-                // set status to none
             else
             {
+                // set status to none
                 SetStatus(CursorStatuses.None);
             }
 
