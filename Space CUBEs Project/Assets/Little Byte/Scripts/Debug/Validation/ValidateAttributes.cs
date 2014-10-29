@@ -47,25 +47,6 @@ namespace LittleByte.Debug.Attributes
                 }
             }
 
-            // properties
-            foreach (PropertyInfo propertyInfo in type.GetProperties())
-            {
-                foreach (ValidationAttribute attribute in propertyInfo.GetCustomAttributes(true).Where(validatingAttrib => validatingAttrib is ValidationAttribute))
-                {
-                    if (log)
-                    {
-                        Debugger.Log("Testing " + attribute.GetType().Name + " on: Class \'" + objInstance.GetType() +
-                                     "\' with Instance \'" + objInstance + "\' with a Field \'" + propertyInfo.Name +
-                                     "\' which has value of \'" + propertyInfo.GetValue(objInstance, null) + "\'. ");
-                    }
-
-                    if (!attribute.IsValidValue(propertyInfo.GetValue(objInstance, null)))
-                    {
-                        exceptions.Add(new Exception(propertyInfo.Name + ": " + attribute.ErrorMessage));
-                    }
-                }
-            }
-
             // class
             foreach (ValidationAttribute attribute in type.GetCustomAttributes(true).Where(v => v is ValidationAttribute))
             {
