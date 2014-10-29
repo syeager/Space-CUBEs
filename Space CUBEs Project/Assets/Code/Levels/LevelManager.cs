@@ -261,11 +261,6 @@ namespace SpaceCUBEs
 
         public void TogglePause()
         {
-            if (firstPause)
-            {
-                firstPause = false;
-                return;
-            }
             GameTime.TogglePause();
         }
 
