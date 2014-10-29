@@ -1,11 +1,12 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.06.22
-// Edited: 2014.09.08
+// Edited: 2014.10.26
 
-using System.Collections.Generic;
-using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using Annotations;
+using UnityEngine;
 
 namespace SpaceCUBEs
 {
@@ -29,6 +30,12 @@ namespace SpaceCUBEs
 
         /// <summary>Time in seconds to sit and attack.</summary>
         public float attackingTime = 3f;
+
+        [SerializeField, UsedImplicitly]
+        private int attacks = 2;
+
+        [SerializeField, UsedImplicitly]
+        private float attackDelay;
 
         #endregion
 
@@ -88,8 +95,13 @@ namespace SpaceCUBEs
 
         private IEnumerator AttackingUpdate()
         {
-            yield return laser.Activate(true);
-            laser.Activate(false);
+            for (int i = 0; i < attacks; i++)
+            {
+                yield return laser.Activate(true);
+                laser.Activate(false);
+                yield return new WaitForSeconds(attackDelay);
+            }
+
             stateMachine.SetState(ExitingState);
         }
 

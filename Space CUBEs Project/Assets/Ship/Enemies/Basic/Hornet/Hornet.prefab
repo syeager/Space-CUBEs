@@ -56,6 +56,7 @@ Transform:
   m_Children:
   - {fileID: 400008}
   m_Father: {fileID: 0}
+  m_RootOrder: 0
 --- !u!4 &400008
 Transform:
   m_ObjectHideFlags: 1
@@ -67,6 +68,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 200}
   m_Children: []
   m_Father: {fileID: 400006}
+  m_RootOrder: 0
 --- !u!23 &2300000
 Renderer:
   m_ObjectHideFlags: 1
@@ -85,9 +87,8 @@ Renderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_SortingLayer: 0
-  m_SortingOrder: 0
   m_SortingLayerID: 0
+  m_SortingOrder: 0
 --- !u!23 &2300006
 Renderer:
   m_ObjectHideFlags: 1
@@ -106,9 +107,8 @@ Renderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_SortingLayer: 0
-  m_SortingOrder: 0
   m_SortingLayerID: 0
+  m_SortingOrder: 0
 --- !u!33 &3300000
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -241,9 +241,9 @@ MonoBehaviour:
   invincible: 0
   maxHealth: 100
   health: 0
-  rechargeSpeed: 20
-  rechargeDelay: 3
-  maxShield: 10
+  rechargeSpeed: 0
+  rechargeDelay: 0
+  maxShield: 0
   shield: 0
 --- !u!114 &11400008
 MonoBehaviour:
@@ -259,10 +259,12 @@ MonoBehaviour:
   log: 0
   timeScale: 1
   enemyClass: 4
-  score: 100
-  money: 100
+  score: 1000
+  money: 1000
   laser: {fileID: 11400000}
   attackingTime: 3
+  attacks: 2
+  attackDelay: 3
 --- !u!114 &11400010
 MonoBehaviour:
   m_ObjectHideFlags: 1
