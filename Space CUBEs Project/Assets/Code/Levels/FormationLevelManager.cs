@@ -217,10 +217,10 @@ namespace SpaceCUBEs
             {
                 enemyPoints.Add(enemy.enemyClass, enemy.score);
             }
-
             FormationLevelManager manager = (FormationLevelManager)command.context;
+            Debug.Log(manager.name, manager);
             int points = manager.maxTimeScore + manager.maxHealthScore + manager.bossPrefab.GetComponent<Boss>().score + manager.formationGroups.Sum(group => group.enemies.Sum(enemy => enemyPoints[enemy]));
-            for (int i = manager.rankLimits.Length - 1; i < manager.rankLimits.Length; i--)
+            for (int i = manager.rankLimits.Length - 1; i >= 0; i--)
             {
                 manager.rankLimits[i] = points;
                 points = Mathf.CeilToInt(points / manager.scoreMod);
