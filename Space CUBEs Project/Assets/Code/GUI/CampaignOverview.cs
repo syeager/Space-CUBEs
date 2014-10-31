@@ -199,7 +199,7 @@ namespace SpaceCUBEs
             int nextLevel = ((FormationLevelManager)FormationLevelManager.Main).levelIndex + 1;
             if (nextLevel < FormationLevelManager.LevelNames.Length)
             {
-                nextButton.ActivateEvent += (sender, args) => SceneManager.ReloadScene();
+                nextButton.ActivateEvent += (sender, args) => SceneManager.LoadScene(Scenes.Scene((Scenes.Levels)((FormationLevelManager)FormationLevelManager.Main).levelIndex + 1));
             }
             else
             {
@@ -303,7 +303,6 @@ namespace SpaceCUBEs
 
             rankMedals[rank].width = rankMedals[rank].height = Mathf.RoundToInt(medalSize * rankIntroCurve.Evaluate(0));
             rankMedals[rank].gameObject.SetActive(true);
-            //rankMedals[rank].Play();
 
             float time = rankIntroCurve[rankIntroCurve.length - 1].time;
             float timer = 0f;
@@ -314,8 +313,6 @@ namespace SpaceCUBEs
                 yield return null;
             }
                 rankMedals[rank].width = rankMedals[rank].height = Mathf.RoundToInt(medalSize * rankIntroCurve.Evaluate(time));
-
-            //yield return new WaitForSeconds(rankMedals[rank].clip.length);
 
             if (rank > 1)
             {
