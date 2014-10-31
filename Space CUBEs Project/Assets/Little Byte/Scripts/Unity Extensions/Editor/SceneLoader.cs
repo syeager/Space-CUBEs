@@ -1,14 +1,16 @@
-﻿// Space CUBEs Project-csharp
+﻿// Little Byte Games
 // Author: Steve Yeager
-// Created: 2014.07.12
-// Edited: 2014.07.12
+// Created: 2014.09.01
+// Edited: 2014.10.30
 
 using System;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using Annotations;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace LittleByte.UnityExtensions
 {
@@ -20,10 +22,7 @@ namespace LittleByte.UnityExtensions
         #region Private Fields
 
         private static string[] scenePaths;
-
         private static string[] sceneNames;
-
-        private static GUIStyle buttonStyle;
 
         private static bool initial = true;
 
@@ -32,6 +31,11 @@ namespace LittleByte.UnityExtensions
         #endregion
 
         #region Const Fields
+
+        private static readonly GUIStyle ButtonStyle = new GUIStyle("button") {alignment = TextAnchor.MiddleLeft};
+        private static readonly GUIStyle ToolbarStyle = new GUIStyle("Toolbar");
+        private static readonly GUIStyle SearchbarStyle = new GUIStyle("ToolbarSeachTextField");
+        private static readonly GUIStyle CancelButtonStyle = new GUIStyle("ToolbarSeachCancelButton");
 
         private const string SceneExt = ".unity";
 
@@ -52,7 +56,7 @@ namespace LittleByte.UnityExtensions
         private static void Init()
         {
             scenePaths = AssetDatabase.GetAllAssetPaths().Where(path => path.EndsWith(SceneExt)).OrderByDescending(path => path).Reverse().ToArray();
-            sceneNames = scenePaths.Select(path => System.IO.Path.GetFileNameWithoutExtension(path)).ToArray();
+            sceneNames = scenePaths.Select(path => Path.GetFileNameWithoutExtension(path)).ToArray();
             initial = true;
 
             EditorWindow window = GetWindow<SceneLoader>("Scenes");
@@ -63,10 +67,6 @@ namespace LittleByte.UnityExtensions
         [UsedImplicitly]
         private void OnGUI()
         {
-            // create style
-            buttonStyle = GUI.skin.button;
-            buttonStyle.alignment = TextAnchor.MiddleLeft;
-
             // set current scene if not moved
             if (initial)
             {
@@ -118,7 +118,7 @@ namespace LittleByte.UnityExtensions
                     if (Event.current.control)
                     {
                         // select
-                        UnityEngine.Object scene = AssetDatabase.LoadAssetAtPath(GUI.GetNameOfFocusedControl(), typeof(UnityEngine.Object));
+                        Object scene = AssetDatabase.LoadAssetAtPath(GUI.GetNameOfFocusedControl(), typeof(Object));
                         Selection.activeObject = scene;
                         EditorGUIUtility.PingObject(scene);
                     }
@@ -140,9 +140,7 @@ namespace LittleByte.UnityExtensions
                 // clear search
                 if (key == KeyCode.Delete)
                 {
-                    search = "";
-                    initial = true;
-                    Repaint();
+                    ClearSearch();
                 }
 
                 // backspace search
@@ -178,7 +176,16 @@ namespace LittleByte.UnityExtensions
 
         private void SearchGUI()
         {
-            EditorGUILayout.LabelField(search);
+            EditorGUILayout.BeginHorizontal(ToolbarStyle);
+            {
+                EditorGUILayout.TextField(search, SearchbarStyle);
+
+                if (GUILayout.Button("", CancelButtonStyle))
+                {
+                    ClearSearch();
+                }
+            }
+            EditorGUILayout.EndHorizontal();
         }
 
 
@@ -188,7 +195,7 @@ namespace LittleByte.UnityExtensions
             {
                 string scenePath = scenePaths[i];
                 GUI.SetNextControlName(scenePath);
-                if (GUILayout.Button(sceneNames[i], buttonStyle))
+                if (GUILayout.Button(sceneNames[i], ButtonStyle))
                 {
                     LoadScene(scenePath, true);
                 }
@@ -204,7 +211,6 @@ namespace LittleByte.UnityExtensions
             if (!save || EditorApplication.SaveCurrentSceneIfUserWantsTo())
             {
                 EditorApplication.OpenScene(scenePath);
-                Close();
             }
         }
 
@@ -222,6 +228,14 @@ namespace LittleByte.UnityExtensions
                 initial = true;
                 EditorApplication.Beep();
             }
+            Repaint();
+        }
+
+
+        private void ClearSearch()
+        {
+            search = "";
+            initial = true;
             Repaint();
         }
 
