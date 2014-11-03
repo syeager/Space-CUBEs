@@ -11,7 +11,7 @@ using UnityEngine;
 /// <summary>
 /// 
 /// </summary>
-[CustomEditor(typeof(AudioPlayer))]
+[CustomEditor(typeof(AudioPlayer), true)]
 public class AudioPlayerEditor : Editor
 {
     #region Private Fields

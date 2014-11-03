@@ -46,7 +46,8 @@ namespace SpaceCUBEs
             }
             else if (gameObject.activeInHierarchy)
             {
-                return null;
+                laser.Stop();
+                gameObject.SetActive(false);
             }
 
             return null;

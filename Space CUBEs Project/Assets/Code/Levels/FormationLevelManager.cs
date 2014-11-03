@@ -257,7 +257,6 @@ namespace SpaceCUBEs
         {
             base.LevelCompleted(won);
 
-
             // time
             levelTime.StopBoss();
             GA.API.Design.NewEvent(GALevel + GATime + GATimeTotal, (float)levelTime.Total.TotalMinutes);

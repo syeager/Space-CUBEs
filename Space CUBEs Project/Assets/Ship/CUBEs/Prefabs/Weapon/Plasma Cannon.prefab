@@ -31,6 +31,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+  m_RootOrder: 0
 --- !u!23 &2300000
 Renderer:
   m_ObjectHideFlags: 1
@@ -50,9 +51,8 @@ Renderer:
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_SortingLayer: 0
-  m_SortingOrder: 0
   m_SortingLayerID: 0
+  m_SortingOrder: 0
 --- !u!33 &3300000
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -99,10 +99,12 @@ MonoBehaviour:
   timeScale: 1
   name: Plasma Cannon
   cooldownTime: .100000001
+  canActivate: 1
   laserPrefab: {fileID: 11400002, guid: 5a19f2fa1cd2e0347ba232995a185ac1, type: 2}
   damage: 10
   laserOffset: {x: 0, y: 0, z: 1}
   speed: 67
+  fireClip: {fileID: 11400002, guid: c6791a74f3746d149be708fdf7cf8d57, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

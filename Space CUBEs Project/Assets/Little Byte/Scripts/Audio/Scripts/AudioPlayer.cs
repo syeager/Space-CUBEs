@@ -14,10 +14,7 @@ public class AudioPlayer : PoolObject
 {
     #region References
 
-    [HideInInspector]
     public AudioSource myAudio;
-
-    [HideInInspector]
     public Transform myTransform;
 
     #endregion
@@ -51,7 +48,7 @@ public class AudioPlayer : PoolObject
     /// <param name="levelScale">Local level scale to cache.</param>
     /// <param name="level">Volume level from Audio Manager.</param>
     /// <param name="muted">Mute from Audio Manager.</param>
-    public void PlayClipAtPoint(Vector3 position, float levelScale, float level, bool muted)
+    public virtual void PlayClipAtPoint(Vector3 position, float level, bool muted, float? levelScale = null)
     {
         myTransform.position = position;
         Play(level, muted, levelScale);
@@ -64,7 +61,7 @@ public class AudioPlayer : PoolObject
     /// <param name="level">Volume level from Audio Manager.</param>
     /// <param name="muted">Mute from Audio Manager.</param>
     /// <param name="levelScale">Local level scale to cache.</param>
-    public void Play(float level, bool muted, float? levelScale = null)
+    public virtual void Play(float level, bool muted, float? levelScale = null)
     {
         if (levelScale != null)
         {

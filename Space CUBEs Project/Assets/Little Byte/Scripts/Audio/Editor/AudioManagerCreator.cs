@@ -1,13 +1,12 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
-// Created: 2014.06.14
-// Edited: 2014.10.11
+// Created: 2014.07.29
+// Edited: 2014.07.31
 
 using System;
 using Annotations;
 using UnityEditor;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 /// <summary>
 /// 
@@ -67,7 +66,7 @@ public class AudioManagerCreator : Creator<AudioManager>
     [MenuItem("GameObject/Singletons/Audio Manager", false, 4)]
     public static void Create()
     {
-        Create(PrefabName, PrefabPath, true);
+        Create(PrefabName, "", true);
     }
 
     #endregion
@@ -77,6 +76,7 @@ public class AudioManagerCreator : Creator<AudioManager>
     [UsedImplicitly]
     private void OnEnable()
     {
+        if (PrefabUtility.GetPrefabType(target) == PrefabType.Prefab) return;
         editor = this;
         audioManager = target as AudioManager;
         poolManager = new SerializedObject(audioManager.poolManager);
@@ -97,6 +97,12 @@ public class AudioManagerCreator : Creator<AudioManager>
 
     public override void OnInspectorGUI()
     {
+        if (PrefabUtility.GetPrefabType(target) == PrefabType.Prefab)
+        {
+            GUILayout.Label("Need instance.");
+            return;
+        }
+
         if (poolManager == null) poolManager = new SerializedObject(audioManager.poolManager);
         poolManager.Update();
         serializedObject.Update();
@@ -258,6 +264,13 @@ public class AudioManagerCreator : Creator<AudioManager>
 
     #region Menu Methods
 
+    [MenuItem("Assets/Audio/Create Audio Player", true, 0)]
+    public static bool ValidateCreateAudioPlayer()
+    {
+        return Selection.activeObject is AudioClip;
+    }
+
+
     [MenuItem("Assets/Audio/Create Audio Player", false, 0)]
     public static void CreateAudioPlayer()
     {
@@ -266,7 +279,7 @@ public class AudioManagerCreator : Creator<AudioManager>
         Debug.Log(path);
 
         GameObject surrogate = new GameObject("audio player", typeof(AudioPlayer));
-        Object prefab = PrefabUtility.CreatePrefab(path, surrogate);
+        UnityEngine.Object prefab = PrefabUtility.CreatePrefab(path, surrogate);
         DestroyImmediate(surrogate);
 
         AudioPlayer audioPlayer = ((GameObject)prefab).GetComponent<AudioPlayer>();
@@ -279,14 +292,42 @@ public class AudioManagerCreator : Creator<AudioManager>
     }
 
 
-    [MenuItem("Assets/Audio/Create Audio Player", true, 0)]
-    public static bool ValidateCreateAudioPlayer()
+    [MenuItem("Assets/Audio/Create Audio Player Variation", true, 1)]
+    public static bool ValidateCreateAudioPlayerVariation()
     {
         return Selection.activeObject is AudioClip;
     }
 
 
-    [MenuItem("Assets/Audio/Create Playlist", false, 1)]
+    [MenuItem("Assets/Audio/Create Audio Player Variation", false, 1)]
+    public static void CreateAudioPlayerVariation()
+    {
+        string path = AssetDatabase.GetAssetPath(Selection.activeObject);
+        path = path.Substring(0, path.Length - 4) + ".prefab";
+        Debug.Log(path);
+
+        GameObject surrogate = new GameObject("audio player", typeof(AudioPlayerVariation));
+        UnityEngine.Object prefab = PrefabUtility.CreatePrefab(path, surrogate);
+        DestroyImmediate(surrogate);
+
+        AudioPlayerVariation audioPlayer = ((GameObject)prefab).GetComponent<AudioPlayerVariation>();
+        audioPlayer.audio.playOnAwake = false;
+        audioPlayer.audio.clip = (AudioClip)Selection.activeObject;
+        audioPlayer.myAudio = audioPlayer.audio;
+        audioPlayer.myTransform = audioPlayer.transform;
+
+        Selection.activeObject = prefab;
+    }
+
+
+    [MenuItem("Assets/Audio/Create Playlist", true, 2)]
+    public static bool ValidateCreatePlaylist()
+    {
+        return Selection.activeObject is AudioClip;
+    }
+
+
+    [MenuItem("Assets/Audio/Create Playlist", false, 2)]
     public static void CreatePlaylist()
     {
         string path = AssetDatabase.GetAssetPath(Selection.activeObject);
@@ -295,7 +336,7 @@ public class AudioManagerCreator : Creator<AudioManager>
 
         AudioClip clip = (AudioClip)Selection.activeObject;
         GameObject surrogate = new GameObject(clip.name, typeof(Playlist));
-        Object prefab = PrefabUtility.CreatePrefab(path, surrogate);
+        UnityEngine.Object prefab = PrefabUtility.CreatePrefab(path, surrogate);
         DestroyImmediate(surrogate);
 
         Playlist playlist = ((GameObject)prefab).GetComponent<Playlist>();
@@ -309,13 +350,6 @@ public class AudioManagerCreator : Creator<AudioManager>
     }
 
 
-    [MenuItem("Assets/Audio/Create Playlist", true, 0)]
-    public static bool ValidateCreatePlaylist()
-    {
-        return Selection.activeObject is AudioClip;
-    }
-
-
     [MenuItem("Shortcuts/Mute Game %M", true, 150)]
     public static bool ValidateMute()
     {
@@ -326,7 +360,7 @@ public class AudioManagerCreator : Creator<AudioManager>
     [MenuItem("Shortcuts/Mute Game %M", false, 150)]
     public static void Mute()
     {
-        AudioManager audioManager = AudioManager.Find();
+        AudioManager audioManager = (AudioManager)FindObjectOfType(typeof(AudioManager));
         audioManager.setMasterMute(!audioManager.MasterVolume);
         if (!Application.isPlaying) audioManager.Save();
 

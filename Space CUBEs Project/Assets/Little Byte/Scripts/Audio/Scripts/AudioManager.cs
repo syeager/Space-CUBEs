@@ -1,7 +1,7 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
-// Created: 2014.03.26
-// Edited: 2014.08.25
+// Created: 2014.07.19
+// Edited: 2014.07.27
 
 using System;
 using System.Collections;
@@ -50,7 +50,7 @@ public class AudioManager : Singleton<AudioManager>
     private const string VolumeFolder = @"Volume/";
 
     /// <summary>Data file for saving master volume.</summary>
-    private const string MasterFile = "Master";
+    private const string MasterFile = "Master Volume";
 
     #endregion
 
@@ -152,12 +152,27 @@ public class AudioManager : Singleton<AudioManager>
     {
         Bus playerGroup = audioPlayer.bus;
 
-        AudioPlayer player = poolManager.Pop(audioPlayer).GetComponent(typeof(AudioPlayer)) as AudioPlayer;
+        AudioPlayer player = (AudioPlayer)poolManager.Pop(audioPlayer).GetComponent(typeof(AudioPlayer));
 
         activePlayers[playerGroup].Add(player);
         player.DisableEvent += OnAudioDone;
 
         player.Play(busVolumes[playerGroup] * MasterVolume, busVolumes[playerGroup] || MasterVolume, levelScale);
+        return player;
+    }
+
+
+    public AudioPlayer playClipAtPoint(AudioPlayer audioPlayer, Vector3 position, float? levelScale = null)
+    {
+        Bus playerGroup = audioPlayer.bus;
+
+        AudioPlayer player = (AudioPlayer)poolManager.Pop(audioPlayer).GetComponent(typeof(AudioPlayer));
+
+        activePlayers[playerGroup].Add(player);
+        player.DisableEvent += OnAudioDone;
+
+        player.PlayClipAtPoint(position, busVolumes[playerGroup] * MasterVolume, busVolumes[playerGroup] || MasterVolume, levelScale);
+
         return player;
     }
 
@@ -256,7 +271,13 @@ public class AudioManager : Singleton<AudioManager>
     /// <returns>AudioPlayer being played.</returns>
     public static AudioPlayer Play(AudioPlayer audioPlayer, float? levelScale = null)
     {
-        return audioPlayer == null ? null : Main.play(audioPlayer, levelScale);
+        return Main.play(audioPlayer, levelScale);
+    }
+
+
+    public static AudioPlayer PlayClipAtPoint(AudioPlayer audioPlayer, Vector3 position, float? levelScale = null)
+    {
+        return Main.playClipAtPoint(audioPlayer, position, levelScale);
     }
 
 

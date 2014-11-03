@@ -1,7 +1,7 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2014.06.25
-// Edited: 2014.10.05
+// Edited: 2014.11.02
 
 using System;
 using System.Collections;
@@ -122,7 +122,7 @@ namespace SpaceCUBEs
 
             swayJob.Pause(true);
             StopAllCoroutines();
-            plasmaGun.Activate(false);
+            DeactivateWeapons();
 
             minionSpawner.BuffHealth();
 
@@ -258,19 +258,20 @@ namespace SpaceCUBEs
 
         private void DyingEnter(Dictionary<string, object> info)
         {
-            MyHealth.invincible = true;
+            if (swayJob != null) swayJob.Kill();
+            DeactivateWeapons();
 
-            GameObject root = new GameObject();
-            root.transform.SetPosRot(myTransform.position, myTransform.rotation);
-            myTransform.parent = root.transform;
-            if (swayJob != null)
-            {
-                swayJob.Kill();
-            }
-            myAnimation.Play("Switchblade_Death");
+            MyHealth.invincible = true;
+            FormationLevelManager.Main.PlayerController.MyHealth.enabled = false;
 
             // kill minions
             minionSpawner.KillAll();
+
+            // die
+            GameObject root = new GameObject();
+            root.transform.SetPosRot(myTransform.position, myTransform.rotation);
+            myTransform.parent = root.transform;
+            myAnimation.Play("Switchblade_Death");
 
             stateMachine.SetUpdate(DeathUpdate());
         }
@@ -296,6 +297,14 @@ namespace SpaceCUBEs
                 myTransform.position = startPosition + swayDistance * (float)Math.Sin(timer * swaySpeed) * Vector3.up;
                 yield return null;
             }
+        }
+
+
+        private void DeactivateWeapons()
+        {
+            syringeLaser.Activate(false);
+            burstCannon.Activate(false);
+            plasmaGun.Activate(false);
         }
 
         #endregion

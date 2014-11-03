@@ -2323,7 +2323,7 @@ MonoBehaviour:
   score: 500
   money: 500
   laser: {fileID: 185794463}
-  attackBuffer: 2
+  attackBuffer: 1.5
   attackTime: 1.5
   idleCycles: 1
   idleSpeed: 2
@@ -2778,10 +2778,10 @@ MonoBehaviour:
   minTargetDistance: 15
   maxTargetDistance: 50
   targetMoveSpeed: 25
-  idleDistanceBuffer: 25
+  idleDistanceBuffer: 30
   idlingSpeed: 8
   angularSpeed: 5
-  attackBuffer: 2
+  attackBuffer: 1.5
   attackTime: 15
 --- !u!114 &218534987
 MonoBehaviour:
@@ -5065,7 +5065,7 @@ MonoBehaviour:
   score: 500
   money: 500
   laser: {fileID: 501673504}
-  attackBuffer: 2
+  attackBuffer: 1.5
   attackTime: 1.5
   idleCycles: 1
   idleSpeed: 2
@@ -5684,10 +5684,10 @@ MonoBehaviour:
   minTargetDistance: 15
   maxTargetDistance: 50
   targetMoveSpeed: 25
-  idleDistanceBuffer: 25
+  idleDistanceBuffer: 30
   idlingSpeed: 8
   angularSpeed: 5
-  attackBuffer: 2
+  attackBuffer: 1.5
   attackTime: 15
 --- !u!114 &521797409
 MonoBehaviour:
@@ -6433,10 +6433,10 @@ MonoBehaviour:
   minTargetDistance: 15
   maxTargetDistance: 50
   targetMoveSpeed: 25
-  idleDistanceBuffer: 25
+  idleDistanceBuffer: 30
   idlingSpeed: 8
   angularSpeed: 5
-  attackBuffer: 2
+  attackBuffer: 1.5
   attackTime: 15
 --- !u!114 &568965464
 MonoBehaviour:
@@ -7324,7 +7324,7 @@ MonoBehaviour:
   score: 500
   money: 500
   laser: {fileID: 615295978}
-  attackBuffer: 2
+  attackBuffer: 1.5
   attackTime: 1.5
   idleCycles: 1
   idleSpeed: 2
@@ -8442,7 +8442,7 @@ Transform:
   m_GameObject: {fileID: 686265113}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -557.053955, y: -288, z: 0}
-  m_LocalScale: {x: 1.00007999, y: 1.00007999, z: 1.00007999}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1701126472}
   m_Father: {fileID: 658625856}
@@ -8493,16 +8493,16 @@ MonoBehaviour:
     target: {fileID: 921408840}
     relative: .200000003
     absolute: 0
-  updateAnchors: 1
+  updateAnchors: 2
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mWidth: 166
-  mHeight: 144
+  mHeight: 166
   mDepth: 10
-  autoResizeBoxCollider: 0
+  autoResizeBoxCollider: 1
   hideIfOffScreen: 0
-  keepAspectRatio: 0
-  aspectRatio: 1.15277779
+  keepAspectRatio: 1
+  aspectRatio: 1
 --- !u!65 &686265117
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8514,7 +8514,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 154, y: 144, z: 0}
+  m_Size: {x: 166, y: 166, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &687801259
 GameObject:
@@ -13686,10 +13686,10 @@ MonoBehaviour:
   minTargetDistance: 15
   maxTargetDistance: 50
   targetMoveSpeed: 25
-  idleDistanceBuffer: 25
+  idleDistanceBuffer: 30
   idlingSpeed: 8
   angularSpeed: 5
-  attackBuffer: 2
+  attackBuffer: 1.5
   attackTime: 15
 --- !u!114 &1207665147
 MonoBehaviour:
@@ -14289,10 +14289,10 @@ MonoBehaviour:
   minTargetDistance: 15
   maxTargetDistance: 50
   targetMoveSpeed: 25
-  idleDistanceBuffer: 25
+  idleDistanceBuffer: 30
   idlingSpeed: 8
   angularSpeed: 5
-  attackBuffer: 2
+  attackBuffer: 1.5
   attackTime: 15
 --- !u!114 &1267147015
 MonoBehaviour:
@@ -16154,12 +16154,12 @@ MonoBehaviour:
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
   mWidth: 1281
-  mHeight: 144
+  mHeight: 160
   mDepth: 0
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
-  keepAspectRatio: 0
-  aspectRatio: 8.89583302
+  keepAspectRatio: 1
+  aspectRatio: 8
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
@@ -16639,7 +16639,7 @@ MonoBehaviour:
   score: 500
   money: 500
   laser: {fileID: 1510592172}
-  attackBuffer: 2
+  attackBuffer: 1.5
   attackTime: 1.5
   idleCycles: 1
   idleSpeed: 2
@@ -19238,7 +19238,7 @@ Transform:
   m_PrefabInternal: {fileID: 1564446486}
   m_GameObject: {fileID: 1701126471}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -5, y: 2.99997044, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 686265114}
@@ -19257,30 +19257,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leftAnchor:
     target: {fileID: 686265114}
-    relative: 0
+    relative: .0180722885
     absolute: 0
   rightAnchor:
     target: {fileID: 686265114}
-    relative: 1
+    relative: .921686769
     absolute: 0
   bottomAnchor:
     target: {fileID: 686265114}
-    relative: 0
+    relative: .475903571
     absolute: 0
   topAnchor:
     target: {fileID: 686265114}
-    relative: 1
+    relative: .560240924
     absolute: 0
-  updateAnchors: 0
+  updateAnchors: 2
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mWidth: 166
-  mHeight: 144
+  mWidth: 150
+  mHeight: 150
   mDepth: 20
   autoResizeBoxCollider: 0
   hideIfOffScreen: 0
-  keepAspectRatio: 0
-  aspectRatio: 1.15277779
+  keepAspectRatio: 1
+  aspectRatio: 1
   mType: 0
   mFillDirection: 4
   mFillAmount: 1
@@ -20852,7 +20852,7 @@ MonoBehaviour:
   score: 500
   money: 500
   laser: {fileID: 1882523052}
-  attackBuffer: 2
+  attackBuffer: 1.5
   attackTime: 1.5
   idleCycles: 1
   idleSpeed: 2

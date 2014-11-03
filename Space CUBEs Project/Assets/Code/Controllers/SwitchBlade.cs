@@ -292,6 +292,7 @@ namespace SpaceCUBEs
             // clean up
             DeactivateWeapons(true);
 
+            // die
             GameObject root = new GameObject();
             root.transform.SetPosRot(myTransform.position, myTransform.rotation);
             myTransform.parent = root.transform;

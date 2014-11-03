@@ -1,6 +1,6 @@
 ﻿// Little Byte Games
 // Author: Steve Yeager
-// Created: 2014.05.19
+// Created: 2014.09.01
 // Edited: 2014.10.10
 
 using System;
@@ -10,6 +10,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Annotations;
+using LittleByte;
 using LittleByte.Data;
 using UnityClasses;
 using UnityEditor;
@@ -36,11 +37,9 @@ public class SaveDataEditor : EditorWindow
 
     private static bool autoRefresh = true;
     private static SaveDataEditor window;
+    private int openFile;
     private Vector2 valueScrollPosition;
     private Vector2 fileScroll;
-
-    private static GUISkin skin;
-    //private const string SkinPath = "Editor/SaveDataSkin.guiskin";
 
     private const float Margin = 5f;
     private const float FilesWidth = 0.5f;
@@ -88,8 +87,11 @@ public class SaveDataEditor : EditorWindow
     [UsedImplicitly]
     private void OnGUI()
     {
-        EditorGUIUtility.labelWidth = 80;
+        //GUI.skin = skin;
 
+        InfoBarGUI();
+
+        GUILayout.Space(Margin);
 
         GUILayout.BeginHorizontal();
         {
@@ -97,6 +99,7 @@ public class SaveDataEditor : EditorWindow
             GUILayout.FlexibleSpace();
             if (currentData != null)
             {
+                EditorGUI.indentLevel = 0;
                 DataGUI();
             }
         }
@@ -109,47 +112,54 @@ public class SaveDataEditor : EditorWindow
 
     #region GUI Methods
 
+    private void InfoBarGUI()
+    {
+        Color cachedColor = GUI.color;
+        GUI.color = Color.gray;
+        EditorGUILayout.BeginHorizontal("toolbar");
+        {
+            GUI.color = cachedColor;
+            EditorGUIUtility.labelWidth = 80;
+            if (GUILayout.Button("Auto Refresh " + (autoRefresh ? "On" : "Off"), EditorStyles.toolbarButton, GUILayout.MaxWidth(100f)))
+            {
+                autoRefresh = !autoRefresh;
+            }
+            EditorGUIUtility.labelWidth = 0;
+
+            GUI.enabled = !autoRefresh;
+            if (GUILayout.Button("Refresh", EditorStyles.toolbarButton, GUILayout.MaxWidth(80f)))
+            {
+                Reload(files[openFile]);
+            }
+            GUI.enabled = true;
+
+            GUILayout.FlexibleSpace();
+
+            if (GUILayout.Button("Save", EditorStyles.toolbarButton, GUILayout.MaxWidth(80f)))
+            {
+                Save();
+            }
+
+            if (GUILayout.Button("Backup", EditorStyles.toolbarButton, GUILayout.MaxWidth(80f)))
+            {
+                SaveData.Backup();
+            }
+
+            if (GUILayout.Button("Restore", EditorStyles.toolbarButton, GUILayout.MaxWidth(80f)))
+            {
+                SaveData.RestoreGameState(SaveData.GetLatestBackup());
+            }
+        }
+        EditorGUILayout.EndHorizontal();
+    }
+
+
     private void FilesGUI()
     {
         GUILayout.BeginVertical(GUILayout.Width(Screen.width * FilesWidth - Margin));
         {
             GUILayout.BeginVertical("box");
             {
-                Color cachedColor = GUI.color;
-                GUI.color = Color.gray;
-                EditorGUILayout.BeginHorizontal("toolbar", GUILayout.ExpandWidth(true));
-                {
-                    GUI.color = cachedColor;
-                    EditorGUILayout.LabelField("Files", EditorStyles.whiteBoldLabel);
-
-                    GUILayout.FlexibleSpace();
-
-                    if (GUILayout.Button("Auto Refresh " + (autoRefresh ? "On" : "Off"), EditorStyles.toolbarButton, GUILayout.MaxWidth(100f)))
-                    {
-                        autoRefresh = !autoRefresh;
-                    }
-                    EditorGUIUtility.labelWidth = 0;
-
-                    GUI.enabled = !autoRefresh;
-                    if (GUILayout.Button("Refresh", EditorStyles.toolbarButton, GUILayout.MaxWidth(80f)))
-                    {
-                        ReloadAll();
-                    }
-                    GUI.enabled = true;
-
-                    if (GUILayout.Button("Backup", EditorStyles.toolbarButton, GUILayout.MaxWidth(80f)))
-                    {
-                        SaveData.Backup();
-                    }
-
-                    if (GUILayout.Button("Restore", EditorStyles.toolbarButton, GUILayout.MaxWidth(80f)))
-                    {
-                        SaveData.RestoreGameState(SaveData.GetLatestBackup());
-                        ReloadAll();
-                    }
-                }
-                EditorGUILayout.EndHorizontal();
-
                 fileScroll = EditorGUILayout.BeginScrollView(fileScroll);
                 {
                     DrawNode(rootNode);
@@ -160,8 +170,6 @@ public class SaveDataEditor : EditorWindow
             GUILayout.FlexibleSpace();
         }
         GUILayout.EndVertical();
-
-        EditorGUI.indentLevel = 0;
     }
 
 
@@ -169,40 +177,15 @@ public class SaveDataEditor : EditorWindow
     {
         GUILayout.BeginVertical(GUILayout.Width(Screen.width * DataWidth - Margin));
         {
-            GUILayout.BeginVertical("box");
+            GUILayout.BeginHorizontal("box");
             {
-                Color cachedColor = GUI.color;
-                GUI.color = Color.gray;
-                EditorGUILayout.BeginHorizontal("toolbar", GUILayout.ExpandWidth(true));
-                {
-                    GUI.color = cachedColor;
-                    EditorGUILayout.LabelField("Data", EditorStyles.whiteBoldLabel);
-                    GUILayout.FlexibleSpace();
-
-                    if (GUILayout.Button("Save", EditorStyles.toolbarButton, GUILayout.MaxWidth(80f)))
-                    {
-                        Save();
-                    }
-
-                    if (GUILayout.Button("Delete", EditorStyles.toolbarButton, GUILayout.MaxWidth(80f)))
-                    {
-                        SaveData.DeleteFile(currentFile, currentPath);
-                        currentData = null;
-                        currentFile = string.Empty;
-                        currentPath = string.Empty;
-                        currentParent = null;
-                        ReloadAll();
-                    }
-                }
-                EditorGUILayout.EndHorizontal();
-
                 valueScrollPosition = EditorGUILayout.BeginScrollView(valueScrollPosition);
                 {
                     currentData = DrawData(currentFile, currentData);
                 }
                 EditorGUILayout.EndScrollView();
             }
-            GUILayout.EndVertical();
+            GUILayout.EndHorizontal();
             GUILayout.FlexibleSpace();
         }
         GUILayout.EndVertical();
@@ -281,7 +264,7 @@ public class SaveDataEditor : EditorWindow
         SaveData.FileSavedEvent -= OnFileSaved;
         SaveData.FileSavedEvent += OnFileSaved;
 
-        files = SaveData.GetAllFiles().ToArray();
+        files = SaveData.GetAllFiles();
         rootNode = new FolderNode {value = "root"};
 
         foreach (string file in files)
@@ -294,8 +277,6 @@ public class SaveDataEditor : EditorWindow
 
     private static void Reload(string filePath)
     {
-        if (filePath != currentPath) return;
-
         currentData = SaveData.LoadFromPath<object>(filePath);
         if (window != null)
         {
@@ -320,9 +301,7 @@ public class SaveDataEditor : EditorWindow
 
     private static object DrawData(string key, object data)
     {
-        if (data == null) return null;
-
-        if (IsEditor(data))
+        if (IsEditor(currentData))
         {
             return DrawUnity(key, data);
         }
@@ -383,9 +362,10 @@ public class SaveDataEditor : EditorWindow
         Type type = data.GetType();
 
         // list
-        if (type.GetInterfaces().Any(x => x == typeof(IList)))
+        if (type.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IList<>)))
         {
             var list = data as IList;
+
             // empty
             if (list.Count == 0)
             {
@@ -405,37 +385,29 @@ public class SaveDataEditor : EditorWindow
                 }
                 else
                 {
-                    list[i] = DrawObject(i.ToString(), list[i]);
+                    DrawObject(i.ToString(), list[i]);
                 }
             }
-
-            //var list = (IEnumerable)data;
-            //IEnumerator cursor = list.GetEnumerator();
-            //int count = 0;
-            //while (cursor.MoveNext())
+        }
+            //else if (data != null && data.GetType() == typeof(KeyValuePair<,>))
             //{
-            //    object current = cursor.Current;
-            //    if (current is IUnityClass)
-            //    {
-            //        IUnityClass item = (IUnityClass)current;
-            //        current = DrawUnity(count.ToString(), item.Cast());
-            //    }
-            //    if (IsEditor(current))
-            //    {
-            //        current = DrawUnity(count.ToString(), current);
-            //    }
-            //    else
-            //    {
-            //        current = DrawData(count.ToString(), current);
-            //    }
-            //    count++;
+            //    Debug.Log("haldfj;al");
             //}
-        }
-        else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(KeyValuePair<,>))
-        {
-            // TODO: can't set keyvaluepair
-            DrawData(type.GetProperty("Key").GetValue(data, null).ToString(), type.GetProperty("Value").GetValue(data, null));
-        }
+            //else if (dict != null)
+            //{
+            //    Debug.Log("here");
+            //    foreach (var entry in dict)
+            //    {
+            //        if (EditorTypes.Contains(entry.Value.GetType()))
+            //        {
+            //            dict[entry.Key] = DrawUnity(entry.Key.ToString(), entry.Value);
+            //        }
+            //        else
+            //        {
+            //            DrawObject(entry.Key.ToString(), entry.Value);
+            //        }
+            //    }
+            //}
         else
         {
             FieldInfo[] fieldInfo = data.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
@@ -447,7 +419,7 @@ public class SaveDataEditor : EditorWindow
                 }
                 else
                 {
-                    info.SetValue(data, DrawData(info.Name, info.GetValue(data)));
+                    DrawData(info.Name, info.GetValue(data));
                 }
             }
         }

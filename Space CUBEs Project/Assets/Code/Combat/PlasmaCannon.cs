@@ -1,9 +1,10 @@
-﻿// Space CUBEs Project-csharp
+﻿// Little Byte Games
 // Author: Steve Yeager
 // Created: 2013.12.01
-// Edited: 2014.06.25
+// Edited: 2014.11.02
 
 using System.Collections;
+using Annotations;
 using LittleByte.Extensions;
 using UnityEngine;
 
@@ -15,6 +16,13 @@ public class PlasmaCannon : PlayerWeapon
     public float damage;
     public Vector3 laserOffset;
     public float speed;
+
+    #endregion
+
+    #region Private Fields
+
+    [SerializeField, UsedImplicitly]
+    private AudioPlayer fireClip;
 
     #endregion
 
@@ -45,6 +53,7 @@ public class PlasmaCannon : PlayerWeapon
         comp.damage = damage;
         comp.laserOffset = laserOffset + myTransform.localPosition;
         comp.speed = speed;
+        comp.fireClip = fireClip;
 
         return comp;
     }
@@ -60,6 +69,8 @@ public class PlasmaCannon : PlayerWeapon
             GameObject laser = Prefabs.Pop(laserPrefab);
             laser.transform.SetPosRot(myTransform.position + myTransform.TransformDirection(laserOffset), myTransform.rotation);
             laser.GetComponent<Hitbox>().Initialize(myShip, damage * multiplier, myTransform.forward * speed);
+
+            AudioManager.Play(fireClip);
 
             ActivatedEvent.Fire(this);
             yield return StartCoroutine(CoolingDown(true, false));

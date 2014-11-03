@@ -38,13 +38,8 @@ namespace LittleByte.Data
         /// <summary>Default folder to save data if none is specified.</summary>
         public const string DefaultPath = "Default";
 
-#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
         /// <summary>Slash used in folder paths.</summary>
         public const string Slash = "\\";
-#else
-        /// <summary>Slash used in folder paths.</summary>
-        public const string Slash = "/";
-#endif
 
         /// <summary>Prefix for backup files.</summary>
         public const string BackupName = "Backup-";
@@ -218,7 +213,7 @@ namespace LittleByte.Data
         /// <returns>True, if the file is found.</returns>
         public static bool Contains(string file, string path = DefaultPath)
         {
-            path = DataPath + path + Slash;
+            path = DataPath + path;
             file = path + file + FileExt;
             return Directory.Exists(path) && File.Exists(file);
         }
@@ -276,7 +271,7 @@ namespace LittleByte.Data
         /// Restore the game state from serialized data.
         /// </summary>
         /// <param name="data">Serialized data to restore.</param>
-        public static void RestoreGameState(byte[] data, Action onComplete = null)
+        public static void RestoreGameState(byte[] data)
         {
             using (var profiler = new Profiler("RestoreGameState"))
             {
@@ -294,11 +289,6 @@ namespace LittleByte.Data
                         SaveFile(path, fileData);
                     }
                 }
-            }
-
-            if (onComplete != null)
-            {
-                onComplete();
             }
         }
 
@@ -362,9 +352,9 @@ namespace LittleByte.Data
         /// Get list of all files in Data folder.
         /// </summary>
         /// <returns>List of file titles in data folder. Doesn't contain paths or postfixes.</returns>
-        public static IEnumerable<string> GetAllFiles()
+        public static string[] GetAllFiles()
         {
-            return Directory.GetFiles(DataPath, "*" + FileExt, SearchOption.AllDirectories).Select(f => f.Substring(DataPath.Length, f.Length - DataPath.Length - FileExt.Length));
+            return Directory.GetFiles(DataPath, "*" + FileExt, SearchOption.AllDirectories).Select(f => f.Remove(0, DataPath.Length).Replace(FileExt, "")).ToArray();
         }
 
 
@@ -373,11 +363,10 @@ namespace LittleByte.Data
         /// </summary>
         /// <param name="path">Path to the folder.</param>
         /// <returns>List of file titles in the folder. Doesn't contain paths or postfixes.</returns>
-        public static IEnumerable<string> GetFiles(string path)
+        public static string[] GetFiles(string path)
         {
-            path = DataPath + path + Slash;
-
-            return Directory.GetFiles(path, "*" + FileExt).Select(f => f.Substring(path.Length, f.Length - path.Length - FileExt.Length));
+            path = DataPath + path;
+            return Directory.GetFiles(path, "*" + FileExt).Select(f => f.Remove(0, path.Length).Replace(FileExt, "")).ToArray();
         } 
 
         #endregion
