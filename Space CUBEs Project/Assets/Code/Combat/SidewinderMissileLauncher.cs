@@ -1,10 +1,8 @@
 ﻿// Little Byte Games
-// Author: Steve Yeager
-// Created: 2014.03.25
-// Edited: 2014.09.08
 
-using UnityEngine;
 using System.Collections;
+using LittleByte.Audio;
+using UnityEngine;
 
 namespace SpaceCUBEs
 {
@@ -76,7 +74,6 @@ namespace SpaceCUBEs
                 yield return wait;
             }
         }
-
 
         private IEnumerator Retract()
         {

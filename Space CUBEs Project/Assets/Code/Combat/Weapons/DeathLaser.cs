@@ -1,10 +1,8 @@
 ﻿// Little Byte Games
-// Author: Steve Yeager
-// Created: 2014.04.01
-// Edited: 2014.10.16
 
 using System.Collections;
 using Annotations;
+using LittleByte.Audio;
 using UnityEngine;
 
 /// <summary>
@@ -88,7 +86,6 @@ public class DeathLaser : Weapon
         laser.SetActive(false);
         yield return new WaitForSeconds(retractDelay);
     }
-
 
     private IEnumerator Retract()
     {

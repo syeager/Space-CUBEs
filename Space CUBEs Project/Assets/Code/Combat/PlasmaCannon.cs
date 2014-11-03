@@ -1,10 +1,8 @@
 ﻿// Little Byte Games
-// Author: Steve Yeager
-// Created: 2013.12.01
-// Edited: 2014.11.02
 
 using System.Collections;
 using Annotations;
+using LittleByte.Audio;
 using LittleByte.Extensions;
 using UnityEngine;
 

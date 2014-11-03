@@ -1,10 +1,8 @@
-﻿// Space CUBEs Project-csharp
-// Author: Steve Yeager
-// Created: 2014.03.31
-// Edited: 2014.06.11
+﻿// Little Byte Games
 
-using UnityEngine;
 using System.Collections;
+using LittleByte.Audio;
+using UnityEngine;
 
 /// <summary>
 /// 
@@ -35,7 +33,6 @@ public class WeaponStacker : Weapon
         }
     }
 
-
     public override Coroutine Activate(bool pressed)
     {
         if (pressed)
@@ -46,7 +43,7 @@ public class WeaponStacker : Weapon
         else if (gameObject.activeInHierarchy)
         {
             StopAllCoroutines();
-            
+
             return StartCoroutine(Retract());
         }
 
@@ -74,7 +71,6 @@ public class WeaponStacker : Weapon
             weapons[i].Activate(true);
         }
     }
-
 
     private IEnumerator Retract()
     {

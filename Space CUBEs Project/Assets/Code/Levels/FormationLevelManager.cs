@@ -1,18 +1,16 @@
 ﻿// Little Byte Games
-// Author: Steve Yeager
-// Created: 2014.01.12
-// Edited: 2014.10.26
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Annotations;
+using LittleByte.Audio;
 using LittleByte.Data;
 using UnityEngine;
-
 #if UNITY_EDITOR
 using UnityEditor;
+
 #endif
 
 namespace SpaceCUBEs
@@ -118,12 +116,10 @@ namespace SpaceCUBEs
                 get { return level + boss; }
             }
 
-
             public void StartLevel()
             {
                 level = new TimeSpan(0, 0, 0, 0, Mathf.RoundToInt(Time.timeSinceLevelLoad * 1000));
             }
-
 
             public void StopLevel()
             {
@@ -132,12 +128,10 @@ namespace SpaceCUBEs
                 GA.API.Design.NewEvent(GALevelKey + GATime + GATimeLevel, (float)level.TotalMinutes);
             }
 
-
             public void StartBoss()
             {
                 boss = new TimeSpan(0, 0, 0, 0, Mathf.RoundToInt(Time.timeSinceLevelLoad * 1000));
             }
-
 
             public void StopBoss()
             {
@@ -157,7 +151,6 @@ namespace SpaceCUBEs
 
             AudioManager.PlayPlaylist(levelMusic);
         }
-
 
 #if UNITY_EDITOR
         protected override void Update()
@@ -251,7 +244,6 @@ namespace SpaceCUBEs
 
             levelTime.StartLevel();
         }
-
 
         protected override void LevelCompleted(bool won)
         {
@@ -386,7 +378,6 @@ namespace SpaceCUBEs
             }
         }
 
-
         private void SpawnBoss()
         {
             boss = (Instantiate(bossPrefab, bossSpawnPosition, SpawnRotation) as GameObject).GetComponent<Boss>();
@@ -400,7 +391,6 @@ namespace SpaceCUBEs
 
             AudioManager.CrossFadePlaylist(levelMusic, bossMusic, bossFadeTime);
         }
-
 
         private IEnumerator Spawning(float time)
         {
@@ -436,7 +426,6 @@ namespace SpaceCUBEs
             }
         }
 
-
         private void OnBossDeath(object sender, EventArgs args)
         {
             if (levelIndex >= SaveData.Load<int>(LevelSelectManager.UnlockedLevelsKey, LevelsFolder))
@@ -446,7 +435,6 @@ namespace SpaceCUBEs
 
             LevelCompleted(true);
         }
-
 
         private int TimeScore(float time)
         {

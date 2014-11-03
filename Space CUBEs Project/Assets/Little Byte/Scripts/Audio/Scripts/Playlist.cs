@@ -1,12 +1,9 @@
-﻿// Space CUBEs Project-csharp
-// Author: Steve Yeager
-// Created: 2014.06.17
-// Edited: 2014.06.19
+﻿// Little Byte Games
 
 using Annotations;
+using LittleByte.Audio;
 using LittleByte.Debug.Attributes;
 using UnityEngine;
-using Bus = AudioManager.Bus;
 
 /// <summary>
 /// Plays a music track.
@@ -23,7 +20,7 @@ public class Playlist : MonoBehaviour
     public string playlistName;
 
     /// <summary>AudioManager bus.</summary>
-    public Bus bus;
+    public AudioManager.Bus bus;
 
     /// <summary>Don't get destroyed on load.</summary>
     public bool persist;
@@ -56,7 +53,6 @@ public class Playlist : MonoBehaviour
         AudioManager.AddPlaylist(playlistName, this);
     }
 
-
     [UsedImplicitly]
     private void OnDestroy()
     {
@@ -78,7 +74,6 @@ public class Playlist : MonoBehaviour
         myAudio.mute = volume.muted;
     }
 
-
     /// <summary>
     /// Set local volume level scale.
     /// </summary>
@@ -97,7 +92,6 @@ public class Playlist : MonoBehaviour
         }
     }
 
-
     /// <summary>
     /// Start playing audio from beginning.
     /// </summary>
@@ -105,7 +99,6 @@ public class Playlist : MonoBehaviour
     {
         myAudio.Play();
     }
-
 
     /// <summary>
     /// Pause audio.
@@ -116,7 +109,7 @@ public class Playlist : MonoBehaviour
         if (pause && myAudio.isPlaying)
         {
             paused = true;
-            myAudio.Pause(); 
+            myAudio.Pause();
         }
         else if (paused)
         {
@@ -124,7 +117,6 @@ public class Playlist : MonoBehaviour
             myAudio.Play();
         }
     }
-
 
     /// <summary>
     /// Stop audio.

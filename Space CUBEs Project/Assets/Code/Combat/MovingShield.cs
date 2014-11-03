@@ -1,11 +1,9 @@
-﻿// Space CUBEs Project-csharp
-// Author: Steve Yeager
-// Created: 2014.03.28
-// Edited: 2014.06.25
+﻿// Little Byte Games
 
 using System;
-using UnityEngine;
 using System.Collections;
+using LittleByte.Audio;
+using UnityEngine;
 
 /// <summary>
 /// 
@@ -58,7 +56,6 @@ public class MovingShield : Weapon
             yield return null;
         }
     }
-
 
     private IEnumerator Retract()
     {

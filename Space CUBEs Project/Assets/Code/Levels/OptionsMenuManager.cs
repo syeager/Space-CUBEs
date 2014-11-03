@@ -1,13 +1,11 @@
 ﻿// Little Byte Games
-// Author: Steve Yeager
-// Created: 2014.02.17
-// Edited: 2014.09.01
 
 using System;
 using System.Linq;
 using Annotations;
 using GooglePlayGames;
 using LittleByte;
+using LittleByte.Audio;
 using LittleByte.Data;
 using UnityEngine;
 
@@ -37,12 +35,12 @@ namespace SpaceCUBEs
         private GameObject[] menus;
 
         private static readonly bool[] NeedDescription =
-    {
-        true,
-        false,
-        true,
-        true,
-    };
+        {
+            true,
+            false,
+            true,
+            true,
+        };
 
         [SerializeField, UsedImplicitly]
         private UILabel description;
@@ -57,7 +55,7 @@ namespace SpaceCUBEs
         [SerializeField, UsedImplicitly]
         private UIToggle[] fpsToggles;
 
-        private static readonly int[] FrameRates = { 30, 45, 60 };
+        private static readonly int[] FrameRates = {30, 45, 60};
 
         private const string FrameRateInfo = "The game will attempt to run at this FPS (Frames Per Second).";
 
@@ -115,7 +113,6 @@ namespace SpaceCUBEs
             SetMenu(Array.IndexOf(menuButtons, menuButton));
         }
 
-
         public void ResetOptions()
         {
             switch (menu)
@@ -142,7 +139,6 @@ namespace SpaceCUBEs
                     break;
             }
         }
-
 
         public void Exit()
         {
@@ -173,7 +169,6 @@ namespace SpaceCUBEs
             description.text = string.Empty;
         }
 
-
         private static void Save()
         {
             AudioManager.Main.Save();
@@ -193,7 +188,6 @@ namespace SpaceCUBEs
             qualityToggles[qualityLevel].value = true;
         }
 
-
         public void FrameRateUpdated(UIToggle toggle)
         {
             if (!toggle.value) return;
@@ -203,7 +197,6 @@ namespace SpaceCUBEs
             int index = Array.IndexOf(fpsToggles, toggle);
             GameTime.CapFPS(FrameRates[index]);
         }
-
 
         public void QualityUpdated(UIToggle toggle)
         {
@@ -233,7 +226,6 @@ namespace SpaceCUBEs
             }
         }
 
-
         public void UpdateVolume(UISlider slider)
         {
             if (slider == masterVolume)
@@ -245,7 +237,6 @@ namespace SpaceCUBEs
             int index = Array.IndexOf(busVolumes, slider);
             AudioManager.SetBusLevel((AudioManager.Bus)index, slider.value);
         }
-
 
         public void UpdateMute(UIToggle toggle)
         {
@@ -282,7 +273,6 @@ namespace SpaceCUBEs
             inputInputs[3].value = FormatInput(input * 100f);
         }
 
-
         public void UpdatedInputSlider(UISlider slider)
         {
             int index = Array.IndexOf(inputSliders, slider);
@@ -304,7 +294,6 @@ namespace SpaceCUBEs
                     break;
             }
         }
-
 
         public void UpdatedInputField(UIInput input)
         {
@@ -336,7 +325,6 @@ namespace SpaceCUBEs
             }
         }
 
-
         private static string FormatInput(float value)
         {
             return Mathf.RoundToInt(value).ToString();
@@ -359,7 +347,6 @@ namespace SpaceCUBEs
             SceneManager.LoadScene(Scenes.Scene(Scenes.Menus.MainMenu), true, true);
         }
 
-
         public void ReloadStarterBuilds()
         {
             string[] builds = ConstructionGrid.BuildNames().ToArray();
@@ -370,5 +357,5 @@ namespace SpaceCUBEs
         }
 
         #endregion
-    } 
+    }
 }

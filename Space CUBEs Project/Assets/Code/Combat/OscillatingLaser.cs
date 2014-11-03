@@ -1,10 +1,8 @@
-﻿// Space CUBEs Project-csharp
-// Author: Steve Yeager
-// Created: 2014.03.26
-// Edited: 2014.06.25
+﻿// Little Byte Games
 
-using UnityEngine;
 using System.Collections;
+using LittleByte.Audio;
+using UnityEngine;
 
 /// <summary>
 /// Laser that moves up and down.

@@ -1,8 +1,6 @@
-﻿// Space CUBEs Project-csharp
-// Author: Steve Yeager
-// Created: 2014.03.27
-// Edited: 2014.06.25
+﻿// Little Byte Games
 
+using LittleByte.Audio;
 using UnityEngine;
 
 /// <summary>
@@ -49,7 +47,7 @@ public class BurstBulletPattern : Weapon
         {
             Vector3 rotation = Utility.RotateVector(Vector3.left, angle * i + startAngle, Vector3.back);
             Prefabs.Pop(bulletPrefab, position, Quaternion.LookRotation(rotation, Vector3.back)).
-                GetComponent<Hitbox>().Initialize(myShip, damage, rotation * speed);
+                    GetComponent<Hitbox>().Initialize(myShip, damage, rotation * speed);
         }
     }
 
