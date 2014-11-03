@@ -1,65 +1,69 @@
-﻿// Steve Yeager
-// 3.9.2014
+﻿// Little Byte Games
 
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
 
-public class CBombExplosion : Hitbox
+namespace SpaceCUBEs
 {
-    #region Public Fields
+    // Steve Yeager
+    // 3.9.2014
     
-    public GameObject shockwave;
-    public float radius;
-    
-    #endregion
-
-
-    #region Hitbox Overrides
-
-    public void Initialize(Ship sender, float damage, float growTime, float explosionTime, float shrinkTime)
+    public class CBombExplosion : Hitbox
     {
-        Initialize(sender, damage);
-        shockwave.layer = gameObject.layer;
+        #region Public Fields
 
-        // reset
-        collider.enabled = true;
-        shockwave.collider.enabled = true;
+        public GameObject shockwave;
+        public float radius;
 
-        StartCoroutine(Explode(growTime, explosionTime, shrinkTime));
-    }
+        #endregion
 
-    #endregion
+        #region Hitbox Overrides
 
-    #region Private Methods
-
-    private IEnumerator Explode(float growTime, float explosionTime, float shrinkTime)
-    {
-        // grow
-        myTransform.localScale = Vector3.zero;
-        float growSpeed = radius/growTime;
-        while (growTime > 0f)
+        public void Initialize(Ship sender, float damage, float growTime, float explosionTime, float shrinkTime)
         {
-            growTime -= deltaTime;
-            myTransform.localScale += Vector3.one*growSpeed*deltaTime;
-            yield return null;
+            Initialize(sender, damage);
+            shockwave.layer = gameObject.layer;
+
+            // reset
+            collider.enabled = true;
+            shockwave.collider.enabled = true;
+
+            StartCoroutine(Explode(growTime, explosionTime, shrinkTime));
         }
 
-        // hold
-        yield return new WaitForSeconds(explosionTime);
-        collider.enabled = false;
-        shockwave.collider.enabled = false;
+        #endregion
 
-        // shrink
-        float shrinkSpeed = radius / shrinkTime;
-        while (shrinkTime > 0f)
+        #region Private Methods
+
+        private IEnumerator Explode(float growTime, float explosionTime, float shrinkTime)
         {
-            shrinkTime -=  deltaTime;
-            myTransform.localScale -= Vector3.one*shrinkSpeed*deltaTime;
-            yield return null;
+            // grow
+            myTransform.localScale = Vector3.zero;
+            float growSpeed = radius / growTime;
+            while (growTime > 0f)
+            {
+                growTime -= deltaTime;
+                myTransform.localScale += Vector3.one * growSpeed * deltaTime;
+                yield return null;
+            }
+
+            // hold
+            yield return new WaitForSeconds(explosionTime);
+            collider.enabled = false;
+            shockwave.collider.enabled = false;
+
+            // shrink
+            float shrinkSpeed = radius / shrinkTime;
+            while (shrinkTime > 0f)
+            {
+                shrinkTime -= deltaTime;
+                myTransform.localScale -= Vector3.one * shrinkSpeed * deltaTime;
+                yield return null;
+            }
+
+            myPoolObject.Disable();
         }
 
-        myPoolObject.Disable();
+        #endregion
     }
-
-    #endregion
 }

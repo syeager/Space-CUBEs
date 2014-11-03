@@ -1,33 +1,33 @@
-﻿// Steve Yeager
-// 3.25.2014
+﻿// Little Byte Games
 
 using Annotations;
 
-/// <summary>
-/// Send hit information to parent.
-/// </summary>
-public class HealthChild : Health
+namespace SpaceCUBEs
 {
-    #region Public Fields
-    
-    public Health parent;
-    
-    #endregion
-
-
-    #region MonoBehaviour Overrides
-
-    [UsedImplicitly]
-    private void Start()
+    /// <summary>
+    /// Send hit information to parent.
+    /// </summary>
+    public class HealthChild : Health
     {
-        myTransform = parent.myTransform;
+        #region Public Fields
+
+        public Health parent;
+
+        #endregion
+
+        #region MonoBehaviour Overrides
+
+        [UsedImplicitly]
+        private void Start()
+        {
+            myTransform = parent.myTransform;
+        }
+
+        public override float RecieveHit(Ship sender, float damage)
+        {
+            return parent.RecieveHit(sender, damage);
+        }
+
+        #endregion
     }
-
-
-    public override float RecieveHit(Ship sender, float damage)
-    {
-        return parent.RecieveHit(sender, damage);
-    }
-
-    #endregion
 }

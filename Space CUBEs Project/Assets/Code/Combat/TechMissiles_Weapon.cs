@@ -1,71 +1,75 @@
-﻿// Space CUBEs Project-csharp
-// Author: Steve Yeager
-// Created: 2014.03.09
-// Edited: 2014.06.25
+﻿// Little Byte Games
 
+using System.Collections;
 using LittleByte.Extensions;
 using UnityEngine;
-using System.Collections;
 
-public class TechMissiles_Weapon : PlayerWeapon
+namespace SpaceCUBEs
 {
-    #region Public Fields
+    // Space CUBEs Project-csharp
+    // Author: Steve Yeager
+    // Created: 2014.03.09
+    // Edited: 2014.06.25
 
-    public PoolObject missilePrefab;
-    public float damage;
-    public Vector3[] launchPositions = new Vector3[8];
-    public float delay;
-    public float speed;
-
-    #endregion
-
-    #region Weapon Overrides
-
-    public override Coroutine Activate(bool pressed, float multiplier)
+    public class TechMissiles_Weapon : PlayerWeapon
     {
-        if (!pressed) return null;
+        #region Public Fields
 
-        return StartCoroutine(Fire(multiplier));
-    }
+        public PoolObject missilePrefab;
+        public float damage;
+        public Vector3[] launchPositions = new Vector3[8];
+        public float delay;
+        public float speed;
 
+        #endregion
 
-    public override PlayerWeapon Bake(GameObject parent)
-    {
-        var comp = parent.AddComponent<TechMissiles_Weapon>();
-        comp.index = index;
-        comp.cooldownTime = cooldownTime;
-        comp.missilePrefab = missilePrefab;
-        comp.damage = damage;
-        comp.launchPositions = new Vector3[8];
-        for (int i = 0; i < 8; i++)
+        #region Weapon Overrides
+
+        public override Coroutine Activate(bool pressed, float multiplier)
         {
-            comp.launchPositions[i] = launchPositions[i] + myTransform.localPosition;
-        }
-        comp.delay = delay;
-        comp.speed = speed;
+            if (!pressed) return null;
 
-        return comp;
-    }
-
-    #endregion
-
-    #region Private Methods
-
-    private IEnumerator Fire(float multiplier)
-    {
-        canActivate = false;
-
-        WaitForSeconds wait = new WaitForSeconds(delay);
-
-        for (int i = 0; i < 8; i++)
-        {
-            Prefabs.Pop(missilePrefab, myTransform.TransformPoint(launchPositions[i]), myTransform.rotation).GetComponent<TechMissile>().Initialize(myShip, damage * multiplier, myTransform.forward * speed);
-            yield return wait;
+            return StartCoroutine(Fire(multiplier));
         }
 
-        ActivatedEvent.Fire(this);
-        StartCoroutine(CoolingDown(true));
-    }
+        public override PlayerWeapon Bake(GameObject parent)
+        {
+            var comp = parent.AddComponent<TechMissiles_Weapon>();
+            comp.index = index;
+            comp.cooldownTime = cooldownTime;
+            comp.missilePrefab = missilePrefab;
+            comp.damage = damage;
+            comp.launchPositions = new Vector3[8];
+            for (int i = 0; i < 8; i++)
+            {
+                comp.launchPositions[i] = launchPositions[i] + myTransform.localPosition;
+            }
+            comp.delay = delay;
+            comp.speed = speed;
 
-    #endregion
+            return comp;
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private IEnumerator Fire(float multiplier)
+        {
+            canActivate = false;
+
+            WaitForSeconds wait = new WaitForSeconds(delay);
+
+            for (int i = 0; i < 8; i++)
+            {
+                Prefabs.Pop(missilePrefab, myTransform.TransformPoint(launchPositions[i]), myTransform.rotation).GetComponent<TechMissile>().Initialize(myShip, damage * multiplier, myTransform.forward * speed);
+                yield return wait;
+            }
+
+            ActivatedEvent.Fire(this);
+            StartCoroutine(CoolingDown(true));
+        }
+
+        #endregion
+    }
 }

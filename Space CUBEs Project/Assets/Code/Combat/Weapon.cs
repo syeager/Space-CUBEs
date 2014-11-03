@@ -1,133 +1,128 @@
-﻿// Space CUBEs Project-csharp
-// Author: Steve Yeager
-// Created: 2013.12.01
-// Edited: 2014.06.28
+﻿// Little Byte Games
 
 using System;
 using System.Collections;
-using Annotations;
 using LittleByte.Extensions;
 using UnityEngine;
 
-public abstract class Weapon : MonoBase
+namespace SpaceCUBEs
 {
-    #region References
-
-    protected Transform myTransform;
-    protected Ship myShip;
-
-    #endregion
-
-    #region Public Fields
-
-    public new string name;
-
-    /// <summary>Time in seconds to completely refill power gauge.</summary>
-    public float cooldownTime;
-
-    /// <summary>Power regenerated every second.</summary>
-    public float cooldownSpeed { get; set; }
-
-    public bool canActivate = true;
-
-    #endregion
-
-    #region Const Fields
-
-    public const float FullPower = 100f;
-
-    #endregion
-
-    #region Properties
-
-    public float power { get; protected set; }
-    public int index { get; set; }
-
-    #endregion
-
-    #region Events
-
-    public EventHandler<ValueArgs> PowerUpdateEvent;
-    public EventHandler ActivatedEvent;
-    public EventHandler<ValueArgs> EnabledEvent;
-
-    #endregion
-
-    #region Public Methods
-
-    public Coroutine CoolDown()
+    public abstract class Weapon : MonoBase
     {
-        return StartCoroutine(CoolingDown(true));
-    }
+        #region References
 
+        protected Transform myTransform;
+        protected Ship myShip;
 
-    public void Enable()
-    {
-        canActivate = true;
-        EnabledEvent.Fire(this, new ValueArgs(true));
-    }
+        #endregion
 
+        #region Public Fields
 
-    public void Disable()
-    {
-        canActivate = false;
-        EnabledEvent.Fire(this, new ValueArgs(false));
-    }
+        public new string name;
 
-    #endregion
+        /// <summary>Time in seconds to completely refill power gauge.</summary>
+        public float cooldownTime;
 
-    #region Protected Methods
+        /// <summary>Power regenerated every second.</summary>
+        public float cooldownSpeed { get; set; }
 
-    protected IEnumerator CoolingDown(bool empty = false, bool deActivate = true)
-    {
-        if (empty) power = 0f;
-        if (deActivate)
+        public bool canActivate = true;
+
+        #endregion
+
+        #region Const Fields
+
+        public const float FullPower = 100f;
+
+        #endregion
+
+        #region Properties
+
+        public float power { get; protected set; }
+        public int index { get; set; }
+
+        #endregion
+
+        #region Events
+
+        public EventHandler<ValueArgs> PowerUpdateEvent;
+        public EventHandler ActivatedEvent;
+        public EventHandler<ValueArgs> EnabledEvent;
+
+        #endregion
+
+        #region Public Methods
+
+        public Coroutine CoolDown()
         {
-            ActivatedEvent.Fire();
-            canActivate = false;
+            return StartCoroutine(CoolingDown(true));
         }
 
-        do
+        public void Enable()
         {
-            power += cooldownSpeed * deltaTime;
-            if (PowerUpdateEvent != null)
+            canActivate = true;
+            EnabledEvent.Fire(this, new ValueArgs(true));
+        }
+
+        public void Disable()
+        {
+            canActivate = false;
+            EnabledEvent.Fire(this, new ValueArgs(false));
+        }
+
+        #endregion
+
+        #region Protected Methods
+
+        protected IEnumerator CoolingDown(bool empty = false, bool deActivate = true)
+        {
+            if (empty) power = 0f;
+            if (deActivate)
             {
-                PowerUpdateEvent(this, new ValueArgs(power));
+                ActivatedEvent.Fire();
+                canActivate = false;
             }
-            yield return null;
-        } while (power < FullPower);
 
-        power = FullPower;
-        canActivate = true;
+            do
+            {
+                power += cooldownSpeed * deltaTime;
+                if (PowerUpdateEvent != null)
+                {
+                    PowerUpdateEvent(this, new ValueArgs(power));
+                }
+                yield return null;
+            } while (power < FullPower);
+
+            power = FullPower;
+            canActivate = true;
+        }
+
+        #endregion
+
+        #region Virtual Methods
+
+        public virtual void Initialize(Ship sender)
+        {
+            myTransform = transform;
+            myShip = sender;
+            power = FullPower;
+            cooldownSpeed = FullPower / cooldownTime;
+        }
+
+        public virtual bool CanActivate()
+        {
+            return canActivate;
+        }
+
+        /// <summary>
+        /// Activate weapon with extra info.
+        /// </summary>
+        /// <param name="pressed">Is the weapon being pressed?</param>
+        public virtual Coroutine Activate(bool pressed)
+        {
+            return null;
+        }
+
+        #endregion
     }
-
-    #endregion
-
-    #region Virtual Methods
-
-    public virtual void Initialize(Ship sender)
-    {
-        myTransform = transform;
-        myShip = sender;
-        power = FullPower;
-        cooldownSpeed = FullPower / cooldownTime;
-    }
-
-
-    public virtual bool CanActivate()
-    {
-        return canActivate;
-    }
-
-
-    /// <summary>
-    /// Activate weapon with extra info.
-    /// </summary>
-    /// <param name="pressed">Is the weapon being pressed?</param>
-    public virtual Coroutine Activate(bool pressed)
-    {
-        return null;
-    }
-
-    #endregion
 }

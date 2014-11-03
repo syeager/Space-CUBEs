@@ -1,29 +1,34 @@
-﻿// Steve Yeager
-// 1.14.2014
+﻿// Little Byte Games
 
 using Annotations;
 using UnityEngine;
 
-public class Destroyer : MonoBehaviour
+namespace SpaceCUBEs
 {
-    #region MonoBehaviour Overrides
-
-    [UsedImplicitly]
-    private void OnTriggerExit(Collider other)
+    // Steve Yeager
+    // 1.14.2014
+    
+    public class Destroyer : MonoBehaviour
     {
-        ShieldHealth health = other.GetComponent<ShieldHealth>();
-        if (health != null)
+        #region MonoBehaviour Overrides
+
+        [UsedImplicitly]
+        private void OnTriggerExit(Collider other)
         {
-            health.Trash();
-            return;
+            ShieldHealth health = other.GetComponent<ShieldHealth>();
+            if (health != null)
+            {
+                health.Trash();
+                return;
+            }
+
+            PoolObject po = other.GetComponent<PoolObject>();
+            if (po != null)
+            {
+                po.Disable();
+            }
         }
 
-        PoolObject po = other.GetComponent<PoolObject>();
-        if (po != null)
-        {
-            po.Disable();
-        }
+        #endregion
     }
-
-    #endregion
 }

@@ -1,15 +1,10 @@
-﻿// Space CUBEs Project-csharp
-// Author: Steve Yeager
-// Created: 2013.12.11
-// Edited: 2014.06.15
+﻿// Little Byte Games
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using LittleByte;
 using UnityEngine;
-
 
 /// <summary>
 /// Singleton manager for all pools.
@@ -68,7 +63,6 @@ public class PoolManager : ScriptableObject
         }
     }
 
-
     /// <summary>
     /// Clear all pools.
     /// </summary>
@@ -86,7 +80,6 @@ public class PoolManager : ScriptableObject
 
         pools.Clear();
     }
-
 
     /// <summary>
     /// 
@@ -109,7 +102,6 @@ public class PoolManager : ScriptableObject
         return pool;
     }
 
-
     /// <summary>
     /// 
     /// </summary>
@@ -119,7 +111,6 @@ public class PoolManager : ScriptableObject
     {
         return poolList.FirstOrDefault(p => p.prefab == prefab);
     }
-
 
     /// <summary>
     /// Retrieve the next available gameObject from the corresponding pool. Creates a new pool if necessary.
@@ -140,7 +131,6 @@ public class PoolManager : ScriptableObject
         }
     }
 
-
     /// <summary>
     /// Retrieve the next available gameObject from the corresponding pool. Creates a new pool if necessary.
     /// </summary>
@@ -160,7 +150,6 @@ public class PoolManager : ScriptableObject
             CreatePool(prefab);
         }
     }
-
 
     /// <summary>
     /// Retrieve the next available gameObject from the corresponding pool. Creates a new pool if necessary.
@@ -185,7 +174,6 @@ public class PoolManager : ScriptableObject
             CreatePool(prefab);
         }
     }
-
 
     /// <summary>
     /// Retrieve the next available gameObject from the corresponding pool. Creates a new pool if necessary.
@@ -212,7 +200,6 @@ public class PoolManager : ScriptableObject
         }
     }
 
-
     /// <summary>
     /// Retrieve the next available gameObject from the corresponding pool. Creates a new pool if necessary.
     /// </summary>
@@ -227,7 +214,6 @@ public class PoolManager : ScriptableObject
 
         return poolList[poolIndex].Pop();
     }
-
 
     /// <summary>
     /// Retrieve the next available gameObject from the corresponding pool. Creates a new pool if necessary.
@@ -244,7 +230,6 @@ public class PoolManager : ScriptableObject
 
         return poolList[poolIndex].Pop(life);
     }
-
 
     /// <summary>
     /// Retrieve the next available gameObject from the corresponding pool. Creates a new pool if necessary.
@@ -266,7 +251,6 @@ public class PoolManager : ScriptableObject
 
         return poppped.gameObject;
     }
-
 
     /// <summary>
     /// Retrieve the next available gameObject from the corresponding pool. Creates a new pool if necessary.
@@ -290,7 +274,6 @@ public class PoolManager : ScriptableObject
         return poppped.gameObject;
     }
 
-
     /// <summary>
     /// Add pool to culling list.
     /// </summary>
@@ -299,7 +282,6 @@ public class PoolManager : ScriptableObject
     {
         cullList.Add(pool);
     }
-
 
     /// <summary>
     /// Cull each pool in the cull list.

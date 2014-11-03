@@ -1,16 +1,21 @@
 ﻿// Little Byte Games
-// Author: Steve Yeager
-// Created: 2014.08.16
-// Edited: 2014.08.16
 
-public class TechMissile : Hitbox, IEMPBlastListener
+namespace SpaceCUBEs
 {
-    #region IEMPBlastListener
+    // Little Byte Games
+    // Author: Steve Yeager
+    // Created: 2014.08.16
+    // Edited: 2014.08.16
 
-    public void InteractEMP()
+    public class TechMissile : Hitbox, IEMPBlastListener
     {
-        myPoolObject.Disable();
-    }
+        #region IEMPBlastListener
 
-    #endregion
+        public void InteractEMP()
+        {
+            myPoolObject.Disable();
+        }
+
+        #endregion
+    }
 }

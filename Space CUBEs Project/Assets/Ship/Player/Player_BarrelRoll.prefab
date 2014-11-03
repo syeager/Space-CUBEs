@@ -9,9 +9,9 @@ GameObject:
   m_Component:
   - 4: {fileID: 400000}
   - 82: {fileID: 8200000}
-  - 114: {fileID: 11400002}
+  - 114: {fileID: 11400000}
   m_Layer: 0
-  m_Name: PlasmaCannon_Fire
+  m_Name: Player_BarrelRoll
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37,7 +37,7 @@ AudioSource:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   serializedVersion: 3
-  m_audioClip: {fileID: 8300000, guid: 9a71f197443185e4bb222f5ca64626a9, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 497434ec133481b4f99616b3e98f2d7d, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -87,7 +87,7 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
---- !u!114 &11400002
+--- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -95,18 +95,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f32d8ee8dbe33f8429cbf5c1c2643f2b, type: 3}
+  m_Script: {fileID: 11500000, guid: c693568fb83952945940dba9317b5065, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   myAudio: {fileID: 8200000}
   myTransform: {fileID: 400000}
   bus: 0
-  levelScale: .300000012
-  randomVolume: 1
-  volumeVar: .150000006
-  randomPitch: 1
-  pitchMin: .850000024
-  pitchMax: 1.14999998
+  levelScale: 1
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

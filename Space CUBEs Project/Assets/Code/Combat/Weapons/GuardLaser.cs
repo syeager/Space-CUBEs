@@ -1,38 +1,43 @@
-﻿// Space CUBEs Project-csharp
-// Author: Steve Yeager
-// Created: 2014.04.14
-// Edited: 2014.06.25
+﻿// Little Byte Games
 
 using UnityEngine;
 
-/// <summary>
-/// Laser shot by Guard enemy.
-/// </summary>
-public class GuardLaser : Weapon
+namespace SpaceCUBEs
 {
-    #region Public Fields
-
-    public GameObject laser;
-    public float damage;
-
-    #endregion
-
-    #region Weapon Overrides
-
-    public override Coroutine Activate(bool pressed)
+    // Space CUBEs Project-csharp
+    // Author: Steve Yeager
+    // Created: 2014.04.14
+    // Edited: 2014.06.25
+    
+    /// <summary>
+    /// Laser shot by Guard enemy.
+    /// </summary>
+    public class GuardLaser : Weapon
     {
-        if (pressed)
+        #region Public Fields
+
+        public GameObject laser;
+        public float damage;
+
+        #endregion
+
+        #region Weapon Overrides
+
+        public override Coroutine Activate(bool pressed)
         {
-            laser.SetActive(true);
-            laser.GetComponent<Hitbox>().Initialize(myShip, damage);
-        }
-        else
-        {
-            laser.SetActive(false);
+            if (pressed)
+            {
+                laser.SetActive(true);
+                laser.GetComponent<Hitbox>().Initialize(myShip, damage);
+            }
+            else
+            {
+                laser.SetActive(false);
+            }
+
+            return null;
         }
 
-        return null;
+        #endregion
     }
-
-    #endregion
 }

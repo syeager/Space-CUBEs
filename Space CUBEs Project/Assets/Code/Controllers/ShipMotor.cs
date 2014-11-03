@@ -1,11 +1,9 @@
-﻿// Space CUBEs Project-csharp
-// Author: Steve Yeager
-// Created: 2013.11.25
-// Edited: 2014.07.12
+﻿// Little Byte Games
 
-using Annotations;
-using UnityEngine;
 using System.Collections;
+using Annotations;
+using LittleByte.Audio;
+using UnityEngine;
 
 /// <summary>
 /// Controls movement for a ship.
@@ -59,6 +57,9 @@ public class ShipMotor : MonoBase
     /// <summary>Velocity to be applied to the ship next step.</summary>
     private Vector3 velocity;
 
+    [SerializeField, UsedImplicitly]
+    private AudioPlayer barrelRollClip;
+
     #endregion
 
     #region Properties
@@ -87,13 +88,11 @@ public class ShipMotor : MonoBase
         myRigidbody = rigidbody;
     }
 
-
     [UsedImplicitly]
     private void Start()
     {
         levelCamera = Camera.main;
     }
-
 
     [UsedImplicitly]
     private void FixedUpdate()
@@ -116,7 +115,6 @@ public class ShipMotor : MonoBase
         enabled = true;
     }
 
-
     public void Move(Vector2 input)
     {
         if (hasVerticalBounds || hasHorizontalBounds)
@@ -127,12 +125,10 @@ public class ShipMotor : MonoBase
         velocity = input.normalized * speed;
     }
 
-
     public void Move(Vector3 vector)
     {
         velocity = vector;
     }
-
 
     /// <summary>
     /// Sets velocity to zero.
@@ -141,7 +137,6 @@ public class ShipMotor : MonoBase
     {
         velocity = Vector3.zero;
     }
-
 
     /// <summary>
     /// 
@@ -156,6 +151,8 @@ public class ShipMotor : MonoBase
         barrelRollStatus = BarrelRollStatuses.Rolling;
         float rollingSpeed = 360f / barrelRollTime;
         Vector3 eulerAngles = myTransform.eulerAngles;
+
+        AudioManager.Play(barrelRollClip);
 
         float timer = barrelRollTime;
         while (timer > 0f)

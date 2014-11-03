@@ -4,80 +4,85 @@ using System.Collections;
 using LittleByte.Audio;
 using UnityEngine;
 
-/// <summary>
-/// 
-/// </summary>
-public class WeaponStacker : Weapon
+namespace SpaceCUBEs
 {
-    #region Public Fields
+    // Little Byte Games
 
-    public AudioPlayer deployAudio;
-    public AnimationClip deployClip;
-    public AudioPlayer retractAudio;
-    public AnimationClip retractClip;
-
-    public Weapon[] weapons;
-    public float[] delays;
-
-    #endregion
-
-    #region Weapon Overrides
-
-    public override void Initialize(Ship sender)
+    /// <summary>
+    /// 
+    /// </summary>
+    public class WeaponStacker : Weapon
     {
-        base.Initialize(sender);
+        #region Public Fields
 
-        foreach (Weapon weapon in weapons)
+        public AudioPlayer deployAudio;
+        public AnimationClip deployClip;
+        public AudioPlayer retractAudio;
+        public AnimationClip retractClip;
+
+        public Weapon[] weapons;
+        public float[] delays;
+
+        #endregion
+
+        #region Weapon Overrides
+
+        public override void Initialize(Ship sender)
         {
-            weapon.Initialize(sender);
-        }
-    }
+            base.Initialize(sender);
 
-    public override Coroutine Activate(bool pressed)
-    {
-        if (pressed)
-        {
-            gameObject.SetActive(true);
-            return StartCoroutine(Fire());
-        }
-        else if (gameObject.activeInHierarchy)
-        {
-            StopAllCoroutines();
-
-            return StartCoroutine(Retract());
-        }
-
-        return null;
-    }
-
-    #endregion
-
-    #region Protected Methods
-
-    protected virtual IEnumerator Fire()
-    {
-        // deploy
-        AudioManager.Play(deployAudio);
-        animation.Play(deployClip);
-
-        // fire
-        for (int i = 0; i < weapons.Length; i++)
-        {
-            if (delays[i] > 0f)
+            foreach (Weapon weapon in weapons)
             {
-                yield return new WaitForSeconds(delays[i]);
+                weapon.Initialize(sender);
+            }
+        }
+
+        public override Coroutine Activate(bool pressed)
+        {
+            if (pressed)
+            {
+                gameObject.SetActive(true);
+                return StartCoroutine(Fire());
+            }
+            else if (gameObject.activeInHierarchy)
+            {
+                StopAllCoroutines();
+
+                return StartCoroutine(Retract());
             }
 
-            weapons[i].Activate(true);
+            return null;
         }
-    }
 
-    private IEnumerator Retract()
-    {
-        animation.Play(retractClip);
-        AudioManager.Play(retractAudio);
-        yield return new WaitForSeconds(retractClip == null ? 0f : retractClip.length);
-    }
+        #endregion
 
-    #endregion
+        #region Protected Methods
+
+        protected virtual IEnumerator Fire()
+        {
+            // deploy
+            AudioManager.Play(deployAudio);
+            animation.Play(deployClip);
+
+            // fire
+            for (int i = 0; i < weapons.Length; i++)
+            {
+                if (delays[i] > 0f)
+                {
+                    yield return new WaitForSeconds(delays[i]);
+                }
+
+                weapons[i].Activate(true);
+            }
+        }
+
+        private IEnumerator Retract()
+        {
+            animation.Play(retractClip);
+            AudioManager.Play(retractAudio);
+            yield return new WaitForSeconds(retractClip == null ? 0f : retractClip.length);
+        }
+
+        #endregion
+    }
 }

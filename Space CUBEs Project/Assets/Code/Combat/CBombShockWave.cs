@@ -1,26 +1,30 @@
-﻿// Steve Yeager
-// 3.8.2014
+﻿// Little Byte Games
 
 using UnityEngine;
 
-public class CBombShockWave : Hitbox
+namespace SpaceCUBEs
 {
-    #region Public Fields
+    // Steve Yeager
+    // 3.8.2014
     
-    public float strength;
-    
-    #endregion
-
-
-    #region MonoBehaviour Overrides
-
-    protected override void OnTriggerEnter(Collider other)
+    public class CBombShockWave : Hitbox
     {
-        Rigidbody otherRigidbody = other.rigidbody;
-        if (otherRigidbody == null) return;
+        #region Public Fields
 
-        otherRigidbody.AddExplosionForce(strength, myTransform.position, 0f);
+        public float strength;
+
+        #endregion
+
+        #region MonoBehaviour Overrides
+
+        protected override void OnTriggerEnter(Collider other)
+        {
+            Rigidbody otherRigidbody = other.rigidbody;
+            if (otherRigidbody == null) return;
+
+            otherRigidbody.AddExplosionForce(strength, myTransform.position, 0f);
+        }
+
+        #endregion
     }
-
-    #endregion
 }

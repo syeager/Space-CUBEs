@@ -1,17 +1,19 @@
-﻿// Steve Yeager
-// 12.16.2013
+﻿// Little Byte Games
 
-using UnityEngine;
 using System;
-using System.Collections.Generic;
 
-public class DieArgs : EventArgs
+namespace SpaceCUBEs
 {
-    public readonly Ship killer;
-
-
-    public DieArgs(Ship killer)
+    // Steve Yeager
+    // 12.16.2013
+    
+    public class DieArgs : EventArgs
     {
-        this.killer = killer;
+        public readonly Ship killer;
+
+        public DieArgs(Ship killer)
+        {
+            this.killer = killer;
+        }
     }
 }

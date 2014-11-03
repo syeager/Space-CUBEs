@@ -3,53 +3,56 @@
 using LittleByte.Audio;
 using UnityEngine;
 
-/// <summary>
-/// Fires bullets in a circle.
-/// </summary>
-public class BurstBulletPattern : Weapon
+namespace SpaceCUBEs
 {
-    #region Public Fields
-
-    public PoolObject bulletPrefab;
-    public AudioPlayer fireAudio;
-    public int number;
-    public float speed;
-    public float damage;
-    public Vector3 offset;
-    public float startAngle;
-
-    #endregion
-
-    #region Weapon Overrides
-
-    public override Coroutine Activate(bool pressed)
+    /// <summary>
+    /// Fires bullets in a circle.
+    /// </summary>
+    public class BurstBulletPattern : Weapon
     {
-        if (pressed)
+        #region Public Fields
+
+        public PoolObject bulletPrefab;
+        public AudioPlayer fireAudio;
+        public int number;
+        public float speed;
+        public float damage;
+        public Vector3 offset;
+        public float startAngle;
+
+        #endregion
+
+        #region Weapon Overrides
+
+        public override Coroutine Activate(bool pressed)
         {
-            Fire();
+            if (pressed)
+            {
+                Fire();
+            }
+
+            return null;
         }
 
-        return null;
-    }
+        #endregion
 
-    #endregion
+        #region Private Methods
 
-    #region Private Methods
-
-    private void Fire()
-    {
-        float angle = 360f / number;
-        Vector3 position = myTransform.position + myTransform.TransformDirection(offset);
-
-        AudioManager.Play(fireAudio);
-
-        for (int i = 0; i < number; i++)
+        private void Fire()
         {
-            Vector3 rotation = Utility.RotateVector(Vector3.left, angle * i + startAngle, Vector3.back);
-            Prefabs.Pop(bulletPrefab, position, Quaternion.LookRotation(rotation, Vector3.back)).
-                    GetComponent<Hitbox>().Initialize(myShip, damage, rotation * speed);
-        }
-    }
+            float angle = 360f / number;
+            Vector3 position = myTransform.position + myTransform.TransformDirection(offset);
 
-    #endregion
+            AudioManager.Play(fireAudio);
+
+            for (int i = 0; i < number; i++)
+            {
+                Vector3 rotation = Utility.RotateVector(Vector3.left, angle * i + startAngle, Vector3.back);
+                Prefabs.Pop(bulletPrefab, position, Quaternion.LookRotation(rotation, Vector3.back)).
+                        GetComponent<Hitbox>().Initialize(myShip, damage, rotation * speed);
+            }
+        }
+
+        #endregion
+    }
 }

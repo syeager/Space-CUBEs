@@ -1,56 +1,55 @@
-﻿// Space CUBEs Project-csharp
-// Author: Steve Yeager
-// Created: 2014.01.12
-// Edited: 2014.06.25
+﻿// Little Byte Games
 
 using System;
 using UnityEngine;
 
-public class CBomb_Weapon : PlayerWeapon
+namespace SpaceCUBEs
 {
-    #region Public Fields
-
-    public PoolObject bombPrefab;
-    public Vector3 attackOffset;
-    public float time = 4f;
-    public float speed;
-    public float damage;
-
-    #endregion
-
-    #region Weapon Overrides
-
-    public override Coroutine Activate(bool pressed, float multiplier)
+    public class CBomb_Weapon : PlayerWeapon
     {
-        if (!pressed) return null;
+        #region Public Fields
 
-        // replace with pool
-        GameObject bomb = Prefabs.Pop(bombPrefab, myTransform.position + myTransform.TransformDirection(attackOffset), myTransform.rotation);
-        bomb.GetComponent<Hitbox>().Initialize(myShip, damage * multiplier, time, myTransform.forward * speed);
-        StartCoroutine(CoolingDown(true));
+        public PoolObject bombPrefab;
+        public Vector3 attackOffset;
+        public float time = 4f;
+        public float speed;
+        public float damage;
 
-        if (ActivatedEvent != null)
+        #endregion
+
+        #region Weapon Overrides
+
+        public override Coroutine Activate(bool pressed, float multiplier)
         {
-            ActivatedEvent(this, EventArgs.Empty);
+            if (!pressed) return null;
+
+            // replace with pool
+            GameObject bomb = Prefabs.Pop(bombPrefab, myTransform.position + myTransform.TransformDirection(attackOffset), myTransform.rotation);
+            bomb.GetComponent<Hitbox>().Initialize(myShip, damage * multiplier, time, myTransform.forward * speed);
+            StartCoroutine(CoolingDown(true));
+
+            if (ActivatedEvent != null)
+            {
+                ActivatedEvent(this, EventArgs.Empty);
+            }
+
+            return null;
         }
 
-        return null;
+        public override PlayerWeapon Bake(GameObject parent)
+        {
+            var comp = parent.AddComponent<CBomb_Weapon>();
+            comp.index = index;
+            comp.cooldownTime = cooldownTime;
+            comp.bombPrefab = bombPrefab;
+            comp.attackOffset = attackOffset + myTransform.localPosition;
+            comp.time = time;
+            comp.speed = speed;
+            comp.damage = damage;
+
+            return comp;
+        }
+
+        #endregion
     }
-
-
-    public override PlayerWeapon Bake(GameObject parent)
-    {
-        var comp = parent.AddComponent<CBomb_Weapon>();
-        comp.index = index;
-        comp.cooldownTime = cooldownTime;
-        comp.bombPrefab = bombPrefab;
-        comp.attackOffset = attackOffset + myTransform.localPosition;
-        comp.time = time;
-        comp.speed = speed;
-        comp.damage = damage;
-
-        return comp;
-    }
-
-    #endregion
 }
