@@ -90,6 +90,9 @@ namespace SpaceCUBEs
 
         public UIInput[] inputInputs;
 
+        [SerializeField, UsedImplicitly]
+        private GameObject[] inputRoots;
+
         #endregion
 
         #region MonoBehaviour Overrides
@@ -271,6 +274,23 @@ namespace SpaceCUBEs
             input = GameSettings.Main.joystickYBuffer;
             inputSliders[3].value = input;
             inputInputs[3].value = FormatInput(input * 100f);
+
+            switch (InputManager.ActiveInput)
+            {
+                case InputManager.Inputs.Keyboard:
+                    for (int i = 0; i < inputRoots.Length; i++)
+                    {
+                        inputRoots[i].SetActive(false);
+                    }
+                    break;
+
+                case InputManager.Inputs.Gamepad:
+                    for (int i = 2; i < inputRoots.Length; i++)
+                    {
+                        inputRoots[i].SetActive(false);
+                    }
+                    break;
+            }
         }
 
         public void UpdatedInputSlider(UISlider slider)

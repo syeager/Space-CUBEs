@@ -1,7 +1,4 @@
 ﻿// Little Byte Games
-// Author: Steve Yeager
-// Created: 2013.11.25
-// Edited: 2014.10.22
 
 using System;
 using System.Collections;
@@ -90,13 +87,13 @@ namespace SpaceCUBEs
 #if UNITY_EDITOR
             input = gameObject.AddComponent<DeviceInput>();
 #else
-            if (Input.GetJoystickNames().Length > 0 || !Input.multiTouchEnabled)
+            if (InputManager.ActiveInput == InputManager.Inputs.Touch)
             {
-                input = gameObject.AddComponent<DeviceInput>();
+                input = gameObject.AddComponent<TouchInput>();
             }
             else
             {
-                input = gameObject.AddComponent<TouchInput>();
+                input = gameObject.AddComponent<DeviceInput>();
             }
 #endif
 
@@ -121,7 +118,6 @@ namespace SpaceCUBEs
             stateMachine.SetUpdate(MovingUpdate());
         }
 
-
         private IEnumerator MovingUpdate()
         {
             while (true)
@@ -143,12 +139,10 @@ namespace SpaceCUBEs
             }
         }
 
-
         private void MovingExit(Dictionary<string, object> info)
         {
             stateMachine.SetUpdate(MovingUpdate());
         }
-
 
         private void BarrelRollingEnter(Dictionary<string, object> info)
         {
@@ -163,13 +157,11 @@ namespace SpaceCUBEs
             BarrelRollEvent.Fire(this, new ValueArgs(true));
         }
 
-
         private IEnumerator BarrelRollingUpdate(Vector2 direction, bool invincible)
         {
             yield return StartCoroutine(MyMotor.BarrelRoll(direction, horizontalBounds));
             stateMachine.SetState(MovingState, new Dictionary<string, object> {{"invincible", invincible}});
         }
-
 
         private void BarrelRollingExit(Dictionary<string, object> info)
         {
@@ -178,7 +170,6 @@ namespace SpaceCUBEs
 
             BarrelRollEvent.Fire(this, new ValueArgs(false));
         }
-
 
         private void DyingEnter(Dictionary<string, object> info)
         {
@@ -209,7 +200,6 @@ namespace SpaceCUBEs
 
             KillRecievedEvent.Fire(this, new KillRecievedArgs(enemy, points, money, enemyHealthMax));
         }
-
 
         /// <summary>
         /// Initialize ship components. Health, Motor, and Weapons.
