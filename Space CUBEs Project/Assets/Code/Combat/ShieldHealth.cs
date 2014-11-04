@@ -2,6 +2,8 @@
 
 using System;
 using System.Collections;
+using Annotations;
+using LittleByte.Audio;
 using UnityEngine;
 
 namespace SpaceCUBEs
@@ -24,6 +26,9 @@ namespace SpaceCUBEs
 
         private Job rechargeJob;
         private Material shieldHitMat;
+
+        [SerializeField, UsedImplicitly]
+        private AudioPlayer shieldHitClip;
 
         #endregion
 
@@ -76,6 +81,7 @@ namespace SpaceCUBEs
             else
             {
                 HitMat(shieldHitMat);
+                AudioManager.Play(shieldHitClip);
             }
 
             if (health <= 0f)
@@ -132,7 +138,7 @@ namespace SpaceCUBEs
             if (!enabled) return 0f;
 
             float amountAdded;
-            if (amount > 0)
+            if (amount >= 0)
             {
                 amountAdded = shield + amount > maxShield ? maxShield - shield : amount;
             }

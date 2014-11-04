@@ -1,6 +1,8 @@
 ﻿// Little Byte Games
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Annotations;
 using UnityEditor;
 using UnityEngine;
@@ -311,13 +313,42 @@ namespace LittleByte.Audio
             Selection.activeObject = prefab;
         }
 
-        [MenuItem("Assets/Audio/Create Playlist", true, 2)]
+        [MenuItem("Assets/Audio/Create Audio Player Random", true, 2)]
+        private static bool ValidateCreateAudioPlayerRandom()
+        {
+            return Selection.objects.Any(obj => obj is AudioClip);
+        }
+
+        [MenuItem("Assets/Audio/Create Audio Player Random", false, 2)]
+        private static void CreateAudioPlayerRandom()
+        {
+            string path = AssetDatabase.GetAssetPath(Selection.activeObject);
+            path = path.Substring(0, path.Length - 4) + ".prefab";
+            Debugger.Log(path);
+
+            GameObject surrogate = new GameObject("audio player", typeof(AudioPlayerRandom));
+            Object prefab = PrefabUtility.CreatePrefab(path, surrogate);
+            DestroyImmediate(surrogate);
+
+            AudioPlayerRandom audioPlayer = ((GameObject)prefab).GetComponent<AudioPlayerRandom>();
+            audioPlayer.audio.playOnAwake = false;
+            audioPlayer.myAudio = audioPlayer.audio;
+            audioPlayer.myTransform = audioPlayer.transform;
+
+            List<AudioClip> clips = Selection.objects.OfType<AudioClip>().ToList(); 
+            clips.Sort((x, y) => x.name.CompareTo(y.name));
+            audioPlayer.clips = clips.ToArray();
+
+            Selection.activeObject = prefab;
+        }
+
+        [MenuItem("Assets/Audio/Create Playlist", true, 3)]
         public static bool ValidateCreatePlaylist()
         {
             return Selection.activeObject is AudioClip;
         }
 
-        [MenuItem("Assets/Audio/Create Playlist", false, 2)]
+        [MenuItem("Assets/Audio/Create Playlist", false, 3)]
         public static void CreatePlaylist()
         {
             string path = AssetDatabase.GetAssetPath(Selection.activeObject);

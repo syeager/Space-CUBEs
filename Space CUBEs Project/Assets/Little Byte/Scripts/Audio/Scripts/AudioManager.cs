@@ -143,9 +143,14 @@ namespace LittleByte.Audio
         /// <returns>AudioPlayer being played.</returns>
         public AudioPlayer play(AudioPlayer audioPlayer, float? levelScale = null)
         {
+            if (audioPlayer == null) return null;
+
             Bus playerGroup = audioPlayer.bus;
 
-            AudioPlayer player = (AudioPlayer)poolManager.Pop(audioPlayer).GetComponent(typeof(AudioPlayer));
+            GameObject popped = poolManager.Pop(audioPlayer);
+            if (popped == null) return null;
+
+            AudioPlayer player = (AudioPlayer)popped.GetComponent(typeof(AudioPlayer));
 
             activePlayers[playerGroup].Add(player);
             player.DisableEvent += OnAudioDone;
@@ -156,6 +161,8 @@ namespace LittleByte.Audio
 
         public AudioPlayer playClipAtPoint(AudioPlayer audioPlayer, Vector3 position, float? levelScale = null)
         {
+            if (audioPlayer == null) return null;
+
             Bus playerGroup = audioPlayer.bus;
 
             AudioPlayer player = (AudioPlayer)poolManager.Pop(audioPlayer).GetComponent(typeof(AudioPlayer));

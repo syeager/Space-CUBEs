@@ -3,6 +3,7 @@
 using System;
 using System.Collections;
 using Annotations;
+using LittleByte.Audio;
 using LittleByte.Extensions;
 using UnityEngine;
 
@@ -40,6 +41,16 @@ namespace SpaceCUBEs
 
         /// <summary>Material when gameobject is created.</summary>
         protected Material Normal_Mat;
+
+        #endregion
+
+        #region Private Fields
+
+        [SerializeField, UsedImplicitly]
+        private AudioPlayer hitClip;
+
+        [SerializeField, UsedImplicitly]
+        private AudioPlayer deathClip;
 
         #endregion
 
@@ -162,6 +173,8 @@ namespace SpaceCUBEs
             else
             {
                 amountAdded = health + amount < 0f ? health : amount;
+
+                AudioManager.Play(hitClip);
             }
             health = Mathf.Clamp(health + amount, 0f, maxHealth);
 
@@ -208,7 +221,9 @@ namespace SpaceCUBEs
         protected virtual void Killed(Ship sender)
         {
             DieEvent.Fire(this, new DieArgs(sender));
+
             myRenderer.material = Normal_Mat;
+            AudioManager.Play(deathClip);
         }
 
         #endregion

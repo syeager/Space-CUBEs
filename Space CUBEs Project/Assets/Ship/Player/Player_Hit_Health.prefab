@@ -11,7 +11,7 @@ GameObject:
   - 82: {fileID: 8200000}
   - 114: {fileID: 11400000}
   m_Layer: 0
-  m_Name: Last stand
+  m_Name: Player_Hit_Health
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37,11 +37,11 @@ AudioSource:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   serializedVersion: 3
-  m_audioClip: {fileID: 8300000, guid: 8f2d91c4b772ff3439e7a89dc715b328, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 606e2614ca25d6c459edd9aff7547ab0, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Priority: 128
   DopplerLevel: 1
@@ -95,14 +95,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 206be813d5185664a90c8f156b4cc6db, type: 3}
+  m_Script: {fileID: 11500000, guid: f32d8ee8dbe33f8429cbf5c1c2643f2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   myAudio: {fileID: 8200000}
-  playlistName: Last stand
-  bus: 1
-  persist: 0
-  levelScale: 1
+  myTransform: {fileID: 400000}
+  bus: 0
+  levelScale: .25
+  randomVolume: 1
+  volumeVar: .100000001
+  randomPitch: 1
+  pitchMin: .899999976
+  pitchMax: 1.10000002
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

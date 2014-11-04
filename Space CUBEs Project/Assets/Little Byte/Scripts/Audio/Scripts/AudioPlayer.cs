@@ -70,7 +70,7 @@ namespace LittleByte.Audio
 
             if (!myAudio.loop)
             {
-                Invoke("Disable", myAudio.clip.length);
+                Stop(myAudio.clip.length);
             }
         }
 
@@ -93,18 +93,20 @@ namespace LittleByte.Audio
         /// <summary>
         /// Stop playing audio.
         /// </summary>
-        /// <param name="delay">Time in seconds to delay the stop call.</param>
-        public void Stop(float delay = 0f)
+        public void Stop()
         {
-            if (delay == 0f)
-            {
-                CancelInvoke();
-                myAudio.Stop();
-            }
-            else
-            {
-                Invoke("Stop", delay);
-            }
+            CancelInvoke();
+            myAudio.Stop();
+            Disable();
+        }
+
+        /// <summary>
+        /// Stop playing audio.
+        /// </summary>
+        /// <param name="delay">Time in seconds to delay the stop call.</param>
+        public void Stop(float delay)
+        {
+            Invoke("Stop", delay);
         }
 
         /// <summary>

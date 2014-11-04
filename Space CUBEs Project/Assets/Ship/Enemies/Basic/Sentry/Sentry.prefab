@@ -235,6 +235,7 @@ MonoBehaviour:
   hasHorizontalBounds: 0
   leftBound: .00999999978
   rightBound: .00999999978
+  barrelRollClip: {fileID: 0}
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -252,12 +253,15 @@ MonoBehaviour:
   HealthHit_Mat: {fileID: 2100000, guid: 714fd6fe39d4b7e4786c808fbccc8dd9, type: 2}
   healthHitMatTime: .5
   invincible: 0
+  hitClip: {fileID: 0}
+  deathClip: {fileID: 11400000, guid: db500a66cd266984cb34192d9f01f943, type: 2}
   maxHealth: 50
   health: 0
   rechargeSpeed: 0
   rechargeDelay: 0
   maxShield: 0
   shield: 0
+  shieldHitClip: {fileID: 0}
 --- !u!114 &11400008
 MonoBehaviour:
   m_ObjectHideFlags: 1

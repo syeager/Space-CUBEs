@@ -28,6 +28,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+  m_RootOrder: 0
 --- !u!82 &8200000
 AudioSource:
   m_ObjectHideFlags: 1
@@ -99,8 +100,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myAudio: {fileID: 8200000}
   playlistName: Last stand
-  bus: 0
+  bus: 1
   persist: 0
+  levelScale: 1
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

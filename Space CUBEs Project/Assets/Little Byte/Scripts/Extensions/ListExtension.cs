@@ -1,7 +1,4 @@
 ﻿// Little Byte Games
-// Author: Steve Yeager
-// Created: 2014.09.01
-// Edited: 2014.09.01
 
 using System.Collections;
 using System.Collections.Generic;
@@ -25,7 +22,6 @@ namespace LittleByte.Extensions
             }
         }
 
-
         /// <summary>
         /// Give all entries the same value.
         /// </summary>
@@ -37,6 +33,17 @@ namespace LittleByte.Extensions
             {
                 list[i] = value;
             }
+        }
+
+        /// <summary>
+        /// Randomly return an entry.
+        /// </summary>
+        /// <typeparam name="T">List generic.</typeparam>
+        /// <param name="list">List instance.</param>
+        /// <returns>An entry in the list.</returns>
+        public static T Random<T>(this IList<T> list)
+        {
+            return list[UnityEngine.Random.Range(0, list.Count - 1)];
         }
     }
 }

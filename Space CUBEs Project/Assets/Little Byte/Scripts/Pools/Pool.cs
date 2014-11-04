@@ -1,17 +1,18 @@
-// Space CUBEs Project-csharp
-// Author: Steve Yeager
-// Created: 2013.12.09
-// Edited: 2014.06.24
+// Little Byte Games
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using System.Collections.Generic;
+using Object = UnityEngine.Object;
 
 /// <summary>
 /// Holds references to already instantiated objects.
 /// </summary>
 [Serializable]
+[Obsolete("HardLimit is broken.")]
+// TODO: Rename fields. Cull vs HardLimit.
+// TODO: Serialized private fields
 public class Pool
 {
     #region Public Fields
@@ -81,7 +82,6 @@ public class Pool
         pool = new Stack<GameObject>();
     }
 
-
     /// <summary>
     /// Create pool and cache prefab.
     /// </summary>
@@ -138,12 +138,10 @@ public class Pool
         }
     }
 
-
     public Stack<GameObject> GetInactive()
     {
         return pool;
     }
-
 
     /// <summary>
     /// Get the next available gameObject from the pool.
@@ -173,7 +171,6 @@ public class Pool
         }
     }
 
-
     /// <summary>
     /// Get the next available gameObject from the pool and disable after a timer.
     /// </summary>
@@ -185,13 +182,11 @@ public class Pool
         if (go != null)
         {
             ((PoolObject)go.GetComponent(typeof(PoolObject))).StartLifeTimer(life);
-            ActiveCount++;
             return go;
         }
 
         return null;
     }
-
 
     /// <summary>
     /// Push gameObject back into the pool.
@@ -203,7 +198,6 @@ public class Pool
         ActiveCount--;
     }
 
-
     /// <summary>
     /// Destroy all gameObjects in pool.
     /// </summary>
@@ -211,12 +205,11 @@ public class Pool
     {
         while (pool.Count > 0)
         {
-            UnityEngine.Object.Destroy(pool.Pop());
+            Object.Destroy(pool.Pop());
         }
 
         pool.Clear();
     }
-
 
     /// <summary>
     /// Destroy extra gameObjects.
@@ -225,7 +218,7 @@ public class Pool
     {
         while (pool.Count > cullLimit)
         {
-            UnityEngine.Object.Destroy(pool.Pop());
+            Object.Destroy(pool.Pop());
         }
     }
 
@@ -246,12 +239,11 @@ public class Pool
 
         for (int i = 0; i < size; i++)
         {
-            GameObject go = UnityEngine.Object.Instantiate(prefab.gameObject) as GameObject;
+            GameObject go = Object.Instantiate(prefab.gameObject) as GameObject;
             go.transform.parent = parent;
             ((PoolObject)go.GetComponent(typeof(PoolObject))).Initialize(this);
             pool.Push(go);
             go.SetActive(false);
-            ActiveCount++;
         }
     }
 

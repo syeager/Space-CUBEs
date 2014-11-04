@@ -1,19 +1,31 @@
 ﻿// Little Byte Games
 
+using Annotations;
 using UnityEngine;
 
 namespace LittleByte.Audio
 {
     public class AudioPlayerVariation : AudioPlayer
     {
-        #region Public Fields
+        #region Private Fields
 
-        public bool randomVolume = true;
-        public float volumeVar = 0.2f;
+        [SerializeField, UsedImplicitly]
+        private bool randomVolume = true;
 
-        public bool randomPitch = true;
-        public float pitchMin = 0.75f;
-        public float pitchMax = 1.5f;
+        [SerializeField, UsedImplicitly]
+        [Range(0, 1)]
+        private float volumeVar = 0.2f;
+
+        [SerializeField, UsedImplicitly]
+        private bool randomPitch = true;
+
+        [SerializeField, UsedImplicitly]
+        [Range(0, 3)]
+        private float pitchMin = 0.75f;
+
+        [SerializeField, UsedImplicitly]
+        [Range(0, 3)]
+        private float pitchMax = 1.5f;
 
         #endregion
 

@@ -11,7 +11,7 @@ GameObject:
   - 82: {fileID: 8200000}
   - 114: {fileID: 11400000}
   m_Layer: 0
-  m_Name: Last stand
+  m_Name: Enemy_Death
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37,11 +37,11 @@ AudioSource:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   serializedVersion: 3
-  m_audioClip: {fileID: 8300000, guid: 8f2d91c4b772ff3439e7a89dc715b328, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Priority: 128
   DopplerLevel: 1
@@ -95,14 +95,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 206be813d5185664a90c8f156b4cc6db, type: 3}
+  m_Script: {fileID: 11500000, guid: 86baa006bcaa4cd46a8973af7133aadf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   myAudio: {fileID: 8200000}
-  playlistName: Last stand
-  bus: 1
-  persist: 0
-  levelScale: 1
+  myTransform: {fileID: 400000}
+  bus: 0
+  levelScale: .200000003
+  randomVolume: 1
+  volumeVar: .100000001
+  randomPitch: 1
+  pitchMin: .75
+  pitchMax: 1.5
+  clips:
+  - {fileID: 8300000, guid: f3b26649619c7b047a235386b4c13580, type: 3}
+  - {fileID: 8300000, guid: b9da1652e43482a45a4c12e2d58ec253, type: 3}
+  - {fileID: 8300000, guid: 1bf49a5fa0e9f8244a722321eb9571e6, type: 3}
+  - {fileID: 8300000, guid: c8b9589430f71c94cb9139a3fa9a4ccf, type: 3}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
