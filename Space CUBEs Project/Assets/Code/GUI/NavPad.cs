@@ -1,7 +1,4 @@
 ﻿// Little Byte Games
-// Author: Steve Yeager
-// Created: 2014.09.19
-// Edited: 2014.09.19
 
 using System.Collections;
 using Annotations;
@@ -65,58 +62,49 @@ namespace SpaceCUBEs
             GarageManager.Main.MoveCursor(Vector3.forward);
         }
 
-
         public void MoveUp()
         {
             GarageManager.Main.MoveCursor(Vector3.back);
         }
-
 
         public void MoveLeft()
         {
             GarageManager.Main.MoveCursor(Vector3.left);
         }
 
-
         public void MoveRight()
         {
             GarageManager.Main.MoveCursor(Vector3.right);
         }
-
 
         public void MoveBack()
         {
             GarageManager.Main.MoveCursor(Vector3.down);
         }
 
-
         public void MoveForward()
         {
             GarageManager.Main.MoveCursor(Vector3.up);
         }
 
-
         public void RotateYLeft()
-        {
-            GarageManager.Main.RotateCursor(Vector3.down);
-        }
-
-
-        public void RotateYRight()
-        {
-            GarageManager.Main.RotateCursor(Vector3.up);
-        }
-
-
-        public void RotateZLeft()
         {
             GarageManager.Main.RotateCursor(Vector3.forward);
         }
 
+        public void RotateYRight()
+        {
+            GarageManager.Main.RotateCursor(Vector3.back);
+        }
+
+        public void RotateZLeft()
+        {
+            GarageManager.Main.RotateCursor(Vector3.down);
+        }
 
         public void RotateZRight()
         {
-            GarageManager.Main.RotateCursor(Vector3.back);
+            GarageManager.Main.RotateCursor(Vector3.up);
         }
 
         #endregion
@@ -142,7 +130,6 @@ namespace SpaceCUBEs
             yield return null;
         }
 
-
         private IEnumerator Full()
         {
             // layers and nav buttons
@@ -160,7 +147,6 @@ namespace SpaceCUBEs
             rotateYButtons.gameObject.SetActive(true);
         }
 
-
         private IEnumerator Half()
         {
             yield return null;
@@ -171,7 +157,6 @@ namespace SpaceCUBEs
             rotateZButtons.gameObject.SetActive(false);
             rotateYButtons.gameObject.SetActive(false);
         }
-
 
         private IEnumerator Closed()
         {
