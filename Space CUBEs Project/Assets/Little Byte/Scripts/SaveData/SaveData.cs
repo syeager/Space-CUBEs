@@ -27,10 +27,10 @@ namespace LittleByte.Data
         private static readonly BinaryFormatter Formatter = new BinaryFormatter();
 
         /// <summary>Parent folder location for all data.</summary>
-        private static readonly string DataPath = Application.persistentDataPath + "/Data/";
+        private static readonly string DataPath = Application.persistentDataPath + Slash + "Data" + Slash;
 
         /// <summary>Path for the backed up data.</summary>
-        private static readonly string BackupPath = Application.persistentDataPath + "/Backup/";
+        private static readonly string BackupPath = Application.persistentDataPath + Slash + "Backup" + Slash;
 
         /// <summary>File extension for data files.</summary>
         public const string FileExt = ".dat";
@@ -39,7 +39,7 @@ namespace LittleByte.Data
         public const string DefaultPath = "Default";
 
         /// <summary>Slash used in folder paths.</summary>
-        public const string Slash = "\\";
+        public const string Slash = "/";
 
         /// <summary>Prefix for backup files.</summary>
         public const string BackupName = "Backup-";
@@ -214,7 +214,7 @@ namespace LittleByte.Data
         public static bool Contains(string file, string path = DefaultPath)
         {
             path = DataPath + path;
-            file = path + file + FileExt;
+            file = path + Slash + file + FileExt;
             return Directory.Exists(path) && File.Exists(file);
         }
 
@@ -366,7 +366,7 @@ namespace LittleByte.Data
         public static string[] GetFiles(string path)
         {
             path = DataPath + path;
-            return Directory.GetFiles(path, "*" + FileExt).Select(f => f.Remove(0, path.Length).Replace(FileExt, "")).ToArray();
+            return Directory.GetFiles(path, "*" + FileExt).Select(f => f.Remove(0, path.Length+1).Replace(FileExt, "")).ToArray();
         } 
 
         #endregion

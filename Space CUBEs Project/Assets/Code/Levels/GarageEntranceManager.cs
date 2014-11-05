@@ -1,10 +1,6 @@
 ﻿// Little Byte Games
-// Author: Steve Yeager
-// Created: 2014.09.16
-// Edited: 2014.10.04
 
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Annotations;
 using LittleByte;
@@ -110,7 +106,6 @@ namespace SpaceCUBEs
             }
         }
 
-
         public void RenameBuild()
         {
             ConstructionGrid.RenameBuild(ConstructionGrid.SelectedBuild, renameInput.value);
@@ -124,13 +119,11 @@ namespace SpaceCUBEs
             OverlayEventArgs.Fire(this, "Rename", false);
         }
 
-
         public void CancelRename()
         {
             renamePanel.SetActive(false);
             OverlayEventArgs.Fire(this, "Rename", false);
         }
-
 
         public void NewBuild()
         {
@@ -139,12 +132,11 @@ namespace SpaceCUBEs
             ConstructionGrid.SelectedBuild = shipName;
 
             // add build to build list
-            ConstructionGrid.SaveBuild(shipName, new BuildInfo{name = shipName});
+            ConstructionGrid.SaveBuild(shipName, new BuildInfo {name = shipName});
 
             // load workshop
             SceneManager.LoadScene(Scenes.Scene(Scenes.Menus.Workshop), true, true);
         }
-
 
         public void CopyBuild()
         {
@@ -163,7 +155,6 @@ namespace SpaceCUBEs
             SceneManager.LoadScene(Scenes.Scene(Scenes.Menus.Workshop), true, true);
         }
 
-
         /// <summary>
         /// Delete selected build from data.
         /// </summary>
@@ -181,11 +172,10 @@ namespace SpaceCUBEs
             StartCoroutine(Utility.UpdateScrollView(loadGrid, (UIScrollBar)loadScrollView.verticalScrollBar, loadScrollView));
 
             // select first build
-            var firstButton = buildPreviews[0];
+            SelectableButton firstButton = buildPreviews[0];
             SelectableButton.SetSelected(firstButton);
             OnBuildChosen(firstButton, new ActivateButtonArgs(firstButton.value, true));
         }
-
 
         public void EditBuild()
         {
@@ -199,6 +189,7 @@ namespace SpaceCUBEs
         private void CreateBuildPreviews()
         {
             string[] buildNames = ConstructionGrid.BuildNames().ToArray();
+            Debugger.LogList(buildNames);
             foreach (string buildName in buildNames)
             {
                 BuildInfo info = ConstructionGrid.LoadBuild(buildName);

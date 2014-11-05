@@ -984,7 +984,6 @@ namespace SpaceCUBEs
         public static BuildInfo LoadBuild(string buildName)
         {
             // get buildInfo string from data
-            Debugger.Log("Loading: " + buildName, null, Debugger.LogTypes.Data);
             if (!SaveData.Contains(buildName, BuildsFolder))
             {
                 Debugger.Log("Not found.", null, Debugger.LogTypes.Data);
