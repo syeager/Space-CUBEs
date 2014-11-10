@@ -212,7 +212,6 @@ namespace SpaceCUBEs
         private void Start()
         {
             // events
-            grid.StatusChangedEvent += OnCursorStatusChanged;
             actionButtons.PickupPlaceEvent += PickupPlaceCUBE;
             actionButtons.DeleteEvent += () => grid.DeleteCUBE();
 
@@ -772,27 +771,6 @@ namespace SpaceCUBEs
         {
             // TODO: save confirmation
             SceneManager.LoadScene(Scenes.Scene(Scenes.Menus.Garage));
-        }
-
-        #endregion
-
-        #region Event Handlers
-
-        private void OnCursorStatusChanged(object sender, CursorUpdatedArgs args)
-        {
-            //switch (args.current)
-            //{
-            //    case ConstructionGrid.CursorStatuses.Holding:
-            //        SetShipInfo();
-            //        break;
-
-            //    case ConstructionGrid.CursorStatuses.Hover:
-            //        break;
-
-            //    case ConstructionGrid.CursorStatuses.None:
-            //        SetShipInfo();
-            //        break;
-            //}
         }
 
         #endregion

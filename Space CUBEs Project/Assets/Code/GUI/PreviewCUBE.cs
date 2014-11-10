@@ -41,6 +41,7 @@ namespace SpaceCUBEs
         private void Start()
         {
             GarageManager.Main.grid.StatusChangedEvent += OnCursorUpdated;
+            OnCursorUpdated(GarageManager.Main.grid, new CursorUpdatedArgs(ConstructionGrid.CursorStatuses.None, GarageManager.Main.grid.cursorStatus));
         }
 
         #endregion
