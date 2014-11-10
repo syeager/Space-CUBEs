@@ -40,6 +40,9 @@ namespace SpaceCUBEs
 
         #region Private Fields
 
+        [SerializeField, UsedImplicitly]
+        private string conquerAchievement;
+
         private int segmentCursor;
         private bool lastSegment;
         private Job spawnJob;
@@ -316,6 +319,12 @@ namespace SpaceCUBEs
 
             campaignOverview.Initialize(playerScore, rankLimits, money, awards);
             GA.API.Design.NewEvent(GALevel + GAPoints + GAPointsTotal, score);
+            
+            // achievements
+            if (won && Social.localUser.authenticated)
+            {
+                Social.ReportProgress(conquerAchievement, 100, null);
+            }
         }
 
         #endregion

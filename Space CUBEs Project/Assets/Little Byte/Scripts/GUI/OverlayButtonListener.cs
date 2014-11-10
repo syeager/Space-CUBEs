@@ -39,7 +39,7 @@ public class OverlayButtonListener : MonoBehaviour
 
     private void OnOverlay(object sender, OverlayEventArgs overlayEventArgs)
     {
-        if (groups.Length > 0 && !groups.Contains(overlayEventArgs.group)) return;
+        if (groups.Length > 0 && groups.Contains(overlayEventArgs.group)) return;
 
         var button = GetComponent<UIButton>();
 

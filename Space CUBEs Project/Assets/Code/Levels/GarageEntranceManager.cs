@@ -67,6 +67,10 @@ namespace SpaceCUBEs
         [SerializeField, UsedImplicitly]
         private UIInput renameInput;
 
+        [Header("Delete")]
+        [SerializeField, UsedImplicitly]
+        private ConfirmationPopup deletePopup;
+
         #endregion
 
         #region MonoBehaviour Overrides
@@ -160,21 +164,8 @@ namespace SpaceCUBEs
         /// </summary>
         public void DeleteBuild()
         {
-            // delete build
-            ConstructionGrid.DeleteBuild(ConstructionGrid.SelectedBuild);
-
-            // remove build button
-            SelectableButton button = buildPreviews.Single(b => b.value == ConstructionGrid.SelectedBuild);
-            button.ActivateEvent -= OnBuildChosen;
-            Destroy(button.gameObject);
-
-            // reload grid
-            StartCoroutine(Utility.UpdateScrollView(loadGrid, (UIScrollBar)loadScrollView.verticalScrollBar, loadScrollView));
-
-            // select first build
-            SelectableButton firstButton = buildPreviews[0];
-            SelectableButton.SetSelected(firstButton);
-            OnBuildChosen(firstButton, new ActivateButtonArgs(firstButton.value, true));
+            deletePopup.Initialize(ConfirmDelete, "Delete " + ConstructionGrid.SelectedBuild + " build?", "Cancel", "Delete");
+            OverlayEventArgs.Fire(this, "Confirm Delete", true);
         }
 
         public void EditBuild()
@@ -206,6 +197,29 @@ namespace SpaceCUBEs
                     OnBuildChosen(button, new ActivateButtonArgs(buildName, true));
                 }
             }
+        }
+
+        private void ConfirmDelete(bool confirmed)
+        {
+            Debug.Log(confirmed);
+            OverlayEventArgs.Fire(this, "Confirm Delete", false);
+            if (!confirmed) return;
+
+            // delete build
+            ConstructionGrid.DeleteBuild(ConstructionGrid.SelectedBuild);
+
+            // remove build button
+            SelectableButton button = buildPreviews.Single(b => b.value == ConstructionGrid.SelectedBuild);
+            button.ActivateEvent -= OnBuildChosen;
+            Destroy(button.gameObject);
+
+            // reload grid
+            StartCoroutine(Utility.UpdateScrollView(loadGrid, (UIScrollBar)loadScrollView.verticalScrollBar, loadScrollView));
+
+            // select first build
+            SelectableButton firstButton = buildPreviews[0];
+            SelectableButton.SetSelected(firstButton);
+            OnBuildChosen(firstButton, new ActivateButtonArgs(firstButton.value, true));
         }
 
         #endregion
