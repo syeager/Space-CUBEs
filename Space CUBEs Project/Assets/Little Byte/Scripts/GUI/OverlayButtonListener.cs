@@ -1,7 +1,4 @@
 ﻿// Little Byte Games
-// Author: Steve Yeager
-// Created: 2014.10.03
-// Edited: 2014.10.19
 
 using System.Linq;
 using Annotations;
@@ -25,7 +22,6 @@ public class OverlayButtonListener : MonoBehaviour
     {
         OverlayEventArgs.OverlayEvent += OnOverlay;
     }
-
 
     [UsedImplicitly]
     private void OnDestroy()
@@ -55,10 +51,7 @@ public class OverlayButtonListener : MonoBehaviour
                 button.isEnabled = cachedEnable;
             }
         }
-        else
-        {
-            collider.enabled = !overlayEventArgs.activated;
-        }
+        collider.enabled = !overlayEventArgs.activated;
     }
 
     #endregion

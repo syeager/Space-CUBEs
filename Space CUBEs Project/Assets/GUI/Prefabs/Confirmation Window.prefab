@@ -137,7 +137,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 80, y: -60, z: 0}
+  m_LocalPosition: {x: 81.0000153, y: -60, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400004}
@@ -187,7 +187,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100010}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 32, z: 0}
+  m_LocalPosition: {x: -1, y: 32, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400012}
@@ -242,6 +242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 517ffd5182b0d434ea745e9d471cef88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  messageLabel: {fileID: 11400012}
   denyLabel: {fileID: 11400008}
   confirmLabel: {fileID: 11400006}
 --- !u!114 &11400002
@@ -553,7 +554,7 @@ MonoBehaviour:
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 0}
   mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
-  mText: This is a sample confirmation message. Does it satisfy you?
+  mText: Are you sure you want to delete?
   mFontSize: 35
   mFontStyle: 1
   mAlignment: 0
