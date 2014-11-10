@@ -41,11 +41,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   material: {fileID: 2100000, guid: 36735687c9b6e764d9f26acdbcac3204, type: 2}
   mSprites:
+  - name: Bar_BG
+    x: 0
+    y: 1787
+    width: 586
+    height: 145
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
   - name: barrelRollBtn
     x: 0
-    y: 1157
-    width: 240
-    height: 240
+    y: 1349
+    width: 135
+    height: 135
     borderLeft: 0
     borderRight: 0
     borderTop: 0
@@ -55,10 +68,10 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: healthBar
-    x: 1025
-    y: 1823
-    width: 917
-    height: 225
+    x: 1167
+    y: 1805
+    width: 516
+    height: 127
     borderLeft: 0
     borderRight: 0
     borderTop: 0
@@ -69,9 +82,9 @@ MonoBehaviour:
     paddingBottom: 0
   - name: hudBG
     x: 0
-    y: 1666
+    y: 1933
     width: 1024
-    height: 128
+    height: 115
     borderLeft: 0
     borderRight: 0
     borderTop: 0
@@ -82,9 +95,9 @@ MonoBehaviour:
     paddingBottom: 0
   - name: joystick
     x: 0
-    y: 1398
-    width: 267
-    height: 267
+    y: 1636
+    width: 150
+    height: 150
     borderLeft: 0
     borderRight: 0
     borderTop: 0
@@ -95,7 +108,7 @@ MonoBehaviour:
     paddingBottom: 0
   - name: multiplier0
     x: 0
-    y: 1001
+    y: 919
     width: 80
     height: 155
     borderLeft: 0
@@ -107,8 +120,8 @@ MonoBehaviour:
     paddingTop: 12
     paddingBottom: 25
   - name: multiplier1
-    x: 146
-    y: 680
+    x: 0
+    y: 126
     width: 62
     height: 160
     borderLeft: 0
@@ -120,8 +133,8 @@ MonoBehaviour:
     paddingTop: 5
     paddingBottom: 27
   - name: multiplier2
-    x: 76
-    y: 687
+    x: 81
+    y: 921
     width: 69
     height: 153
     borderLeft: 0
@@ -133,8 +146,8 @@ MonoBehaviour:
     paddingTop: 12
     paddingBottom: 27
   - name: multiplier3
-    x: 150
-    y: 845
+    x: 76
+    y: 603
     width: 71
     height: 155
     borderLeft: 0
@@ -146,8 +159,8 @@ MonoBehaviour:
     paddingTop: 11
     paddingBottom: 26
   - name: multiplier4
-    x: 1943
-    y: 1897
+    x: 0
+    y: 1075
     width: 92
     height: 151
     borderLeft: 0
@@ -160,7 +173,7 @@ MonoBehaviour:
     paddingBottom: 27
   - name: multiplier5
     x: 77
-    y: 841
+    y: 759
     width: 72
     height: 159
     borderLeft: 0
@@ -173,7 +186,7 @@ MonoBehaviour:
     paddingBottom: 25
   - name: multiplier6
     x: 0
-    y: 679
+    y: 597
     width: 75
     height: 161
     borderLeft: 0
@@ -185,8 +198,8 @@ MonoBehaviour:
     paddingTop: 7
     paddingBottom: 24
   - name: multiplier7
-    x: 158
-    y: 1003
+    x: 0
+    y: 287
     width: 76
     height: 153
     borderLeft: 0
@@ -198,8 +211,8 @@ MonoBehaviour:
     paddingTop: 14
     paddingBottom: 25
   - name: multiplier8
-    x: 81
-    y: 1001
+    x: 0
+    y: 441
     width: 76
     height: 155
     borderLeft: 0
@@ -212,7 +225,7 @@ MonoBehaviour:
     paddingBottom: 25
   - name: multiplier9
     x: 0
-    y: 841
+    y: 759
     width: 76
     height: 159
     borderLeft: 0
@@ -224,8 +237,8 @@ MonoBehaviour:
     paddingTop: 11
     paddingBottom: 22
   - name: multiplierX
-    x: 1517
-    y: 1673
+    x: 0
+    y: 1227
     width: 131
     height: 121
     borderLeft: 0
@@ -237,10 +250,10 @@ MonoBehaviour:
     paddingTop: 4
     paddingBottom: 12
   - name: shieldBar
-    x: 0
-    y: 1795
-    width: 1024
-    height: 253
+    x: 587
+    y: 1789
+    width: 579
+    height: 143
     borderLeft: 0
     borderRight: 0
     borderTop: 0
@@ -250,10 +263,23 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: weaponBtn
-    x: 1271
-    y: 1667
-    width: 245
-    height: 127
+    x: 1025
+    y: 1977
+    width: 138
+    height: 71
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: weaponBtn_BG
+    x: 0
+    y: 1485
+    width: 145
+    height: 150
     borderLeft: 0
     borderRight: 0
     borderTop: 0
@@ -263,8 +289,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: weaponBtnCooldown
-    x: 1025
-    y: 1667
+    x: 1684
+    y: 1805
     width: 245
     height: 127
     borderLeft: 0
