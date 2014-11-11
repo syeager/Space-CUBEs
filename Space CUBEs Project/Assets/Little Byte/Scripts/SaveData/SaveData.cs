@@ -39,7 +39,7 @@ namespace LittleByte.Data
         public const string DefaultPath = "Default";
 
         /// <summary>Slash used in folder paths.</summary>
-        public const string Slash = "/";
+        public const string Slash = "\\";
 
         /// <summary>Prefix for backup files.</summary>
         public const string BackupName = "Backup-";
@@ -429,7 +429,7 @@ namespace LittleByte.Data
         /// <returns>True, if a file was deleted.</returns>
         public static bool DeleteFile(string file, string path = DefaultPath)
         {
-            path = DataPath + path;
+            path = DataPath + path + Slash;
             file = path + file + FileExt;
             if (Directory.Exists(path) && File.Exists(file))
             {

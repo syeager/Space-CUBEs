@@ -1,7 +1,4 @@
 ﻿// Little Byte Games
-// Author: Steve Yeager
-// Created: 2013.11.26
-// Edited: 2014.10.26
 
 using System;
 using System.Collections;
@@ -46,9 +43,6 @@ namespace SpaceCUBEs
 
         public float cellSize = 0.9f;
         public float cursorSize = 0.7f;
-
-        /// <summary>Name of the build. Set in a textfield by player.</summary>
-        public string buildName;
 
         public Color blinkColor;
         public float blinkTime;
@@ -324,7 +318,6 @@ namespace SpaceCUBEs
             Center = ((GameObject)Instantiate(Center_Prefab, ship.transform.position, Quaternion.identity)).transform;
         }
 
-
         /// <summary>
         /// Rotate the grid.
         /// </summary>
@@ -334,7 +327,6 @@ namespace SpaceCUBEs
             viewAxis = plane.Round();
             MoveCursor(Vector3.zero);
         }
-
 
         /// <summary>
         /// Rotate the cursor around an axis.
@@ -352,7 +344,6 @@ namespace SpaceCUBEs
                 PositionCUBE();
             }
         }
-
 
         /// <summary>
         /// Move the cursor to another cell.
@@ -398,7 +389,6 @@ namespace SpaceCUBEs
             UpdateGrid();
         }
 
-
         /// <summary>
         /// Creates CUBE and added to cursor.
         /// </summary>
@@ -439,7 +429,6 @@ namespace SpaceCUBEs
             SetStatus(CursorStatuses.Holding);
         }
 
-
         /// <summary>
         /// If there is a CUBE being held, delete it.
         /// </summary>
@@ -452,7 +441,6 @@ namespace SpaceCUBEs
             heldCUBE = null;
             SetStatus(hoveredCUBE == null ? CursorStatuses.None : CursorStatuses.Hover);
         }
-
 
         /// <summary>
         /// Loads build from data and creates it in grid.
@@ -484,7 +472,6 @@ namespace SpaceCUBEs
             UpdateGrid();
         }
 
-
         /// <summary>
         /// Swap weapon slots.
         /// </summary>
@@ -512,7 +499,6 @@ namespace SpaceCUBEs
 
             return newSlot;
         }
-
 
         /// <summary>
         /// Swap aug slots.
@@ -542,14 +528,12 @@ namespace SpaceCUBEs
             return newSlot;
         }
 
-
         //
         public void Paint(int pieceSelected, int colorIndex)
         {
             hoveredCUBE.GetComponent<ColorVertices>().SetandBake(pieceSelected, colorIndex);
             currentBuild[hoveredCUBE].colors[pieceSelected] = colorIndex;
         }
-
 
         public void PaintAll(int primaryColor, int secondaryColor)
         {
@@ -562,7 +546,6 @@ namespace SpaceCUBEs
             }
         }
 
-
         public void Build(string build, int buildSize, Vector3 startPosition, Vector3 startRotation, float maxTime, Action<BuildFinishedArgs> finshedAction)
         {
             var showShip = (GameObject)Instantiate(Singleton<GameResources>.Main.player_Prefab);
@@ -571,7 +554,6 @@ namespace SpaceCUBEs
             ShowBuild.material = GameResources.Main.VertexColor_Mat;
             StartCoroutine(ShowBuild.Join(LoadBuild(build), buildSize, showShip.transform, maxTime, finshedAction));
         }
-
 
         /// <summary>
         /// Toggle ship/grid visibility.
@@ -629,7 +611,6 @@ namespace SpaceCUBEs
             currentBuild.Clear();
         }
 
-
         private void PositionCUBE()
         {
             Vector3 pivotOffset = RotateVector(new Vector3(-0.5f, -0.5f, -0.5f));
@@ -639,7 +620,6 @@ namespace SpaceCUBEs
             Debugger.Log("pivotOffset: " + pivotOffset, this, Debugger.LogTypes.Construction);
             heldCUBE.transform.position = cursorWorldPosition + RotateVector(cursorOffset).Round() + pivotOffset;
         }
-
 
         /// <summary>
         /// Checks to see if the currently held CUBE fits in the grid and is not in other CUBEs.
@@ -690,7 +670,6 @@ namespace SpaceCUBEs
             return true;
         }
 
-
         /// <summary>
         /// Rotates a CUBE piece by the cursorRotation.
         /// </summary>
@@ -703,7 +682,6 @@ namespace SpaceCUBEs
             rot.SetTRS(Vector3.zero, reverse ? Quaternion.Inverse(cursorRotation) : cursorRotation, Vector3.one);
             return rot.MultiplyVector(localVector);
         }
-
 
         /// <summary>
         /// Pick up a CUBE from the grid.
@@ -723,12 +701,10 @@ namespace SpaceCUBEs
             SetStatus(CursorStatuses.Holding);
         }
 
-
         public void PickupCUBE()
         {
             PickupCUBE(hoveredCUBE);
         }
-
 
         /// <summary>
         /// Place held CUBE into the build.
@@ -865,7 +841,6 @@ namespace SpaceCUBEs
             return true;
         }
 
-
         /// <summary>
         /// Place held CUBE into the build and create another if applicable.
         /// </summary>
@@ -883,7 +858,6 @@ namespace SpaceCUBEs
                 CreateCUBE(id, colors);
             }
         }
-
 
         /// <summary>
         /// Remove CUBE from grid and all stats.
@@ -975,7 +949,6 @@ namespace SpaceCUBEs
             cells[(int)cursor.y][(int)cursor.z][(int)cursor.x].renderer.material = CellCursor_Mat;
         }
 
-
         /// <summary>
         /// Get build data from data.
         /// </summary>
@@ -998,15 +971,13 @@ namespace SpaceCUBEs
             return build;
         }
 
-
         /// <summary>
         /// Save current build to data.
         /// </summary>
         public void SaveBuild()
         {
-            SaveBuild(buildName, new BuildInfo(buildName, CurrentStats, currentTrimColor, currentBuild));
+            SaveBuild(SelectedBuild, new BuildInfo(SelectedBuild, CurrentStats, currentTrimColor, currentBuild));
         }
-
 
         /// <summary>
         /// Update all cell's visibility and CUBE's alpha.
@@ -1053,7 +1024,6 @@ namespace SpaceCUBEs
             }
         }
 
-
         private void SetStatus(CursorStatuses nextStatus)
         {
             StatusChangedEvent.Fire(this, new CursorUpdatedArgs(cursorStatus, nextStatus));
@@ -1073,7 +1043,6 @@ namespace SpaceCUBEs
             return SaveData.GetFiles(BuildsFolder).ToList();
         }
 
-
         /// <summary>
         /// Save build to data.
         /// </summary>
@@ -1085,7 +1054,6 @@ namespace SpaceCUBEs
             SaveData.Save(buildName, build, BuildsFolder);
         }
 
-
         /// <summary>
         /// Delete build from data.
         /// </summary>
@@ -1094,7 +1062,6 @@ namespace SpaceCUBEs
         {
             SaveData.DeleteFile(buildName, BuildsFolder);
         }
-
 
         /// <summary>
         /// Rename a build in data.
@@ -1109,12 +1076,16 @@ namespace SpaceCUBEs
             SaveData.Save(newName, buildInfo, BuildsFolder);
         }
 
-
         public static void Load()
         {
             selectedBuild = SaveData.Load(SelectedBuildKey, SaveData.DefaultPath, DevBuilds[0]);
         }
 
+        public static bool Contains(string buildName)
+        {
+            return SaveData.Contains(buildName, BuildsFolder);
+        }
+        
         #endregion
 
         #region Blink Methods
@@ -1127,7 +1098,6 @@ namespace SpaceCUBEs
             }
             StartCoroutine("Blinking", target);
         }
-
 
         [UsedImplicitly]
         private IEnumerator Blinking(Renderer target)
@@ -1161,7 +1131,6 @@ namespace SpaceCUBEs
             StartCoroutine("Blinking", target);
         }
 
-
         public void StopBlink(Renderer target)
         {
             StopCoroutine("Blinking");
@@ -1179,7 +1148,6 @@ namespace SpaceCUBEs
     {
         public readonly ConstructionGrid.CursorStatuses previous;
         public readonly ConstructionGrid.CursorStatuses current;
-
 
         public CursorUpdatedArgs(ConstructionGrid.CursorStatuses previous, ConstructionGrid.CursorStatuses current)
         {

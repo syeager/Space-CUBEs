@@ -164,7 +164,7 @@ namespace SpaceCUBEs
         /// </summary>
         public void DeleteBuild()
         {
-            deletePopup.Initialize(ConfirmDelete, "Delete " + ConstructionGrid.SelectedBuild + " build?", "Cancel", "Delete");
+            deletePopup.Initialize(ConfirmDelete, "Delete " + ConstructionGrid.SelectedBuild + " build?", "Delete");
             OverlayEventArgs.Fire(this, "Confirm Delete", true);
         }
 

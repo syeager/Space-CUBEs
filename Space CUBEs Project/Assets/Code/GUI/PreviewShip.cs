@@ -40,6 +40,15 @@ namespace SpaceCUBEs
 
         #endregion
 
+        #region Properties
+
+        public string ShipName
+        {
+            get { return nameInput.value; }
+        }
+
+        #endregion
+
         #region Public Methods
 
         public void Initialize(string shipName, int costTotal)
@@ -56,12 +65,6 @@ namespace SpaceCUBEs
             speedLabel.text = stats.speed.ToString();
             damageLabel.text = stats.damage.ToString();
             costLabel.text = string.Format(Cost, costUsed, costTotal);
-        }
-
-
-        public void SetShipName(string value)
-        {
-            GarageManager.Main.grid.buildName = value;
         }
 
         #endregion

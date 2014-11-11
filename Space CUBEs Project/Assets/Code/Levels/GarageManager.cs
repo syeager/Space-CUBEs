@@ -1,7 +1,4 @@
 ﻿// Little Byte Games
-// Author: Steve Yeager
-// Created: 2013.11.26
-// Edited: 2014.10.06
 
 using System;
 using System.Collections;
@@ -14,6 +11,13 @@ namespace SpaceCUBEs
 {
     public class GarageManager : Singleton<GarageManager>
     {
+        #region Private Fields
+
+        [SerializeField, UsedImplicitly]
+        private ConfirmationPopup popupPrefab;
+
+        #endregion
+
         #region State Fields
 
         public StateMachine States { get; private set; }
@@ -160,13 +164,6 @@ namespace SpaceCUBEs
 
         #endregion
 
-        #region Save Fields
-
-        public GameObject saveConfirmation;
-        public UILabel saveShipName;
-
-        #endregion
-
         #region Info Panel Fields
 
         public ActivateButton[] menuNavButtons = new ActivateButton[2];
@@ -207,7 +204,6 @@ namespace SpaceCUBEs
             cameraTarget = new GameObject("Camera Target").transform;
         }
 
-
         [UsedImplicitly]
         private void Start()
         {
@@ -221,7 +217,6 @@ namespace SpaceCUBEs
             AbilityInit();
             States.Start();
         }
-
 
         [UsedImplicitly]
         private void Update()
@@ -246,7 +241,6 @@ namespace SpaceCUBEs
             return (grid.layer + direction * CameraDist).Round();
         }
 
-
         /// <summary>
         /// Move and rotate camera to target position and rotation.
         /// </summary>
@@ -257,7 +251,6 @@ namespace SpaceCUBEs
 
             mainCamera.camera.orthographicSize = Mathf.Lerp(mainCamera.camera.orthographicSize, zoom, Time.deltaTime * zoomSpeed);
         }
-
 
         /// <summary>
         /// 
@@ -400,7 +393,6 @@ namespace SpaceCUBEs
 #endif
         }
 
-
         /// <summary>
         /// Sets position and rotation target of camera. Starts movement.
         /// </summary>
@@ -429,7 +421,6 @@ namespace SpaceCUBEs
             cameraTarget.rotation = Quaternion.Euler(CameraRotations[index]);
         }
 
-
         /// <summary>
         /// Set zoom and target camera position.
         /// </summary>
@@ -438,7 +429,6 @@ namespace SpaceCUBEs
         {
             zoom = Mathf.Clamp(zoom + (strength * zoomSpeed * Time.deltaTime), zoomMin, zoomMax);
         }
-
 
         /// <summary>
         /// Return camera back to original position and rotation over time.
@@ -508,7 +498,6 @@ namespace SpaceCUBEs
             }
         }
 
-
         [UsedImplicitly]
         private IEnumerator Pinch()
         {
@@ -543,14 +532,12 @@ namespace SpaceCUBEs
             cubeLibrary.ItemSelectedEvent += (sender, args) => SelectCube(args.id);
         }
 
-
         private void EditEnter(Dictionary<string, object> info)
         {
             previewCube.SetActive(true);
 
             States.SetUpdate(EditUpdate());
         }
-
 
         private IEnumerator EditUpdate()
         {
@@ -562,12 +549,10 @@ namespace SpaceCUBEs
             }
         }
 
-
         private void EditExit(Dictionary<string, object> info)
         {
             previewCube.SetActive(false);
         }
-
 
         private void PickupPlaceCUBE()
         {
@@ -583,13 +568,11 @@ namespace SpaceCUBEs
             previewShip.SetValues(grid.CurrentStats, grid.CorePointsAvailable);
         }
 
-
         public void ToggleCubeLibrary()
         {
             bool activate = !cubeLibrary.IsActive;
             cubeLibrary.Activate(activate);
         }
-
 
         private void SelectCube(int id)
         {
@@ -610,7 +593,6 @@ namespace SpaceCUBEs
             States.SetUpdate(PaintUpdate());
         }
 
-
         private IEnumerator PaintUpdate()
         {
             while (true)
@@ -620,7 +602,6 @@ namespace SpaceCUBEs
                 yield return null;
             }
         }
-
 
         private void PaintExit(Dictionary<string, object> info)
         {
@@ -636,13 +617,11 @@ namespace SpaceCUBEs
             abilityMenu.Initialize();
         }
 
-
         private void AbilityEnter(Dictionary<string, object> info)
         {
             abilityMenu.Activate(true);
             States.SetUpdate(AbilityUpdate());
         }
-
 
         private IEnumerator AbilityUpdate()
         {
@@ -653,7 +632,6 @@ namespace SpaceCUBEs
                 yield return null;
             }
         }
-
 
         private void AbilityExit(Dictionary<string, object> info)
         {
@@ -670,7 +648,6 @@ namespace SpaceCUBEs
 
             States.SetUpdate(ViewUpdate());
         }
-
 
         private IEnumerator ViewUpdate()
         {
@@ -697,7 +674,6 @@ namespace SpaceCUBEs
             }
         }
 
-
         private void ViewExit(Dictionary<string, object> info)
         {
             grid.ShowShip(false);
@@ -709,21 +685,34 @@ namespace SpaceCUBEs
 
         public void ConfirmSave()
         {
-            saveConfirmation.SetActive(true);
-            saveShipName.text = grid.buildName;
+            ConfirmationPopup popup = (ConfirmationPopup)Instantiate(popupPrefab);
+            popup.Initialize(Save, "Save " + previewShip.ShipName + "?", "Save", "Cancel", true);
         }
 
-
-        public void Save()
+        private void Save(bool saved)
         {
-            grid.SaveBuild();
-            saveConfirmation.SetActive(false);
+            if (!saved) return;
+
+            if (previewShip.ShipName != ConstructionGrid.SelectedBuild && ConstructionGrid.Contains(previewShip.ShipName))
+            {
+                ConfirmationPopup popup = (ConfirmationPopup)Instantiate(popupPrefab);
+                popup.Initialize(Overwrite, "Overwrite " + previewShip.ShipName + "?", "Overwrite", "Cancel", true);
+            }
+            else
+            {
+                grid.SaveBuild();
+            }
         }
 
-
-        public void CancelSave()
+        private void Overwrite(bool saved)
         {
-            saveConfirmation.SetActive(false);
+            if (!saved) return;
+
+            // delete
+            ConstructionGrid.DeleteBuild(ConstructionGrid.SelectedBuild);
+
+            ConstructionGrid.SelectedBuild = previewShip.ShipName;
+            Save(true);
         }
 
         #endregion
@@ -746,7 +735,6 @@ namespace SpaceCUBEs
             States.SetState(menu.ToString());
         }
 
-
         /// <summary>
         /// Move the cursor inside the grid.
         /// </summary>
@@ -756,7 +744,6 @@ namespace SpaceCUBEs
             grid.MoveCursor(cameraTarget.TransformDirection(direction));
         }
 
-
         /// <summary>
         /// Rotate the cursor inside the grid.
         /// </summary>
@@ -765,7 +752,6 @@ namespace SpaceCUBEs
         {
             grid.RotateCursor(direction);
         }
-
 
         public void Exit()
         {
