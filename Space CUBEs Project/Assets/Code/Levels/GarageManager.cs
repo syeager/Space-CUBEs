@@ -686,7 +686,7 @@ namespace SpaceCUBEs
         public void ConfirmSave()
         {
             ConfirmationPopup popup = (ConfirmationPopup)Instantiate(popupPrefab);
-            popup.Initialize(Save, "Save " + previewShip.ShipName + "?", "Save", "Cancel", true);
+            popup.Initialize(Save, "Save " + previewShip.ShipName + "?", "Save", true);
         }
 
         private void Save(bool saved)
@@ -696,7 +696,7 @@ namespace SpaceCUBEs
             if (previewShip.ShipName != ConstructionGrid.SelectedBuild && ConstructionGrid.Contains(previewShip.ShipName))
             {
                 ConfirmationPopup popup = (ConfirmationPopup)Instantiate(popupPrefab);
-                popup.Initialize(Overwrite, "Overwrite " + previewShip.ShipName + "?", "Overwrite", "Cancel", true);
+                popup.Initialize(Overwrite, "Overwrite " + previewShip.ShipName + "?", "Overwrite", true);
             }
             else
             {

@@ -38,7 +38,7 @@ namespace SpaceCUBEs
 
         #region Public Methods
 
-        public void Initialize(Action<bool> onComplete, string message = "", string confirm = "Accept", string deny = "Cancel", bool destroy = false)
+        public void Initialize(Action<bool> onComplete, string message = "", string confirm = "Accept", bool destroy = false, string deny = "Cancel")
         {
             gameObject.SetActive(true);
             this.onComplete = onComplete;

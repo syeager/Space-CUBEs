@@ -60,16 +60,12 @@ namespace SpaceCUBEs
 
         private readonly List<SelectableButton> buildPreviews = new List<SelectableButton>();
 
-        [Header("Rename")]
+        [Header("Popups")]
         [SerializeField, UsedImplicitly]
-        private GameObject renamePanel;
+        private ConfirmationPopup popupPrefab;
 
         [SerializeField, UsedImplicitly]
-        private UIInput renameInput;
-
-        [Header("Delete")]
-        [SerializeField, UsedImplicitly]
-        private ConfirmationPopup deletePopup;
+        private InputPopup renamePopup;
 
         #endregion
 
@@ -98,35 +94,29 @@ namespace SpaceCUBEs
 
         public void ConfirmRename()
         {
-            if (renamePanel.activeInHierarchy)
+            if (renamePopup.gameObject.activeInHierarchy)
             {
-                CancelRename();
+                renamePopup.gameObject.SetActive(false);
+                OverlayEventArgs.Fire(this, "Rename", false);
             }
             else
             {
-                renamePanel.SetActive(true);
-                renameInput.value = ConstructionGrid.SelectedBuild;
+                renamePopup.Initialize(RenameBuild, ConstructionGrid.SelectedBuild, "Rename " + ConstructionGrid.SelectedBuild + " to");
                 OverlayEventArgs.Fire(this, "Rename", true);
             }
         }
 
-        public void RenameBuild()
+        private void RenameBuild(bool saved)
         {
-            ConstructionGrid.RenameBuild(ConstructionGrid.SelectedBuild, renameInput.value);
-            renamePanel.SetActive(false);
+            OverlayEventArgs.Fire(this, "Rename", false);
+            if (!saved) return;
+
+            ConstructionGrid.RenameBuild(ConstructionGrid.SelectedBuild, renamePopup.input.value);
 
             SelectableButton button = buildPreviews.Single(b => b.value == ConstructionGrid.SelectedBuild);
-            ConstructionGrid.SelectedBuild = renameInput.value;
+            ConstructionGrid.SelectedBuild = renamePopup.input.value;
             button.value = ConstructionGrid.SelectedBuild;
             button.label.text = ConstructionGrid.SelectedBuild;
-
-            OverlayEventArgs.Fire(this, "Rename", false);
-        }
-
-        public void CancelRename()
-        {
-            renamePanel.SetActive(false);
-            OverlayEventArgs.Fire(this, "Rename", false);
         }
 
         public void NewBuild()
@@ -164,7 +154,8 @@ namespace SpaceCUBEs
         /// </summary>
         public void DeleteBuild()
         {
-            deletePopup.Initialize(ConfirmDelete, "Delete " + ConstructionGrid.SelectedBuild + " build?", "Delete");
+            var deletePopup = (ConfirmationPopup)Instantiate(popupPrefab);
+            deletePopup.Initialize(ConfirmDelete, "Delete " + ConstructionGrid.SelectedBuild + " build?", "Delete", true);
             OverlayEventArgs.Fire(this, "Confirm Delete", true);
         }
 
@@ -201,7 +192,6 @@ namespace SpaceCUBEs
 
         private void ConfirmDelete(bool confirmed)
         {
-            Debug.Log(confirmed);
             OverlayEventArgs.Fire(this, "Confirm Delete", false);
             if (!confirmed) return;
 
