@@ -110,13 +110,43 @@ namespace SpaceCUBEs
         {
             OverlayEventArgs.Fire(this, "Rename", false);
             if (!saved) return;
+            if (renamePopup.input.value == ConstructionGrid.SelectedBuild) return;
 
-            ConstructionGrid.RenameBuild(ConstructionGrid.SelectedBuild, renamePopup.input.value);
+            if (ConstructionGrid.Contains(renamePopup.input.value))
+            {
+                ConfirmationPopup popup = (ConfirmationPopup)Instantiate(popupPrefab);
+                popup.Initialize(Overwrite, "Overwrite " + renamePopup.input.value + "?", "Overwrite", true);
+            }
+            else
+            {
+                ConstructionGrid.RenameBuild(ConstructionGrid.SelectedBuild, renamePopup.input.value);
 
-            SelectableButton button = buildPreviews.Single(b => b.value == ConstructionGrid.SelectedBuild);
-            ConstructionGrid.SelectedBuild = renamePopup.input.value;
-            button.value = ConstructionGrid.SelectedBuild;
-            button.label.text = ConstructionGrid.SelectedBuild;
+                SelectableButton button = buildPreviews.Single(b => b.value == ConstructionGrid.SelectedBuild);
+                ConstructionGrid.SelectedBuild = renamePopup.input.value;
+                button.value = ConstructionGrid.SelectedBuild;
+                button.label.text = ConstructionGrid.SelectedBuild;
+
+                // reload grid
+                StartCoroutine(Utility.UpdateScrollView(loadGrid, (UIScrollBar)loadScrollView.verticalScrollBar, loadScrollView));
+
+                // select first build
+                SelectableButton.SetSelected(button);
+                OnBuildChosen(button, new ActivateButtonArgs(button.value, true));
+            }
+        }
+
+        private void Overwrite(bool saved)
+        {
+            if (!saved) return;
+
+            ConstructionGrid.DeleteBuild(renamePopup.input.value);
+
+            // remove build button
+            SelectableButton button = buildPreviews.Single(b => b.value == renamePopup.input.value);
+            button.ActivateEvent -= OnBuildChosen;
+            Destroy(button.gameObject);
+
+            RenameBuild(true);
         }
 
         public void NewBuild()
@@ -171,7 +201,6 @@ namespace SpaceCUBEs
         private void CreateBuildPreviews()
         {
             string[] buildNames = ConstructionGrid.BuildNames().ToArray();
-            Debugger.LogList(buildNames);
             foreach (string buildName in buildNames)
             {
                 BuildInfo info = ConstructionGrid.LoadBuild(buildName);

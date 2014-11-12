@@ -1,7 +1,4 @@
 ﻿// Little Byte Games
-// Author: Steve Yeager
-// Created: 2014.09.01
-// Edited: 2014.10.08
 
 using System;
 using System.Collections;
@@ -38,8 +35,13 @@ namespace LittleByte.Data
         /// <summary>Default folder to save data if none is specified.</summary>
         public const string DefaultPath = "Default";
 
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
         /// <summary>Slash used in folder paths.</summary>
         public const string Slash = "\\";
+#else
+        /// <summary>Slash used in folder paths.</summary>
+        public const string Slash = "/";
+#endif
 
         /// <summary>Prefix for backup files.</summary>
         public const string BackupName = "Backup-";
@@ -87,7 +89,6 @@ namespace LittleByte.Data
             FileSavedEvent.Fire(value, new FileSavedArgs(path, file));
         }
 
-
         /// <summary>
         /// Save a Unity value to data.
         /// </summary>
@@ -98,7 +99,6 @@ namespace LittleByte.Data
         {
             Save(file, UnityTypes.UnityCast(value), path);
         }
-
 
         /// <summary>
         /// Save all contents of a file.
@@ -161,7 +161,6 @@ namespace LittleByte.Data
             }
         }
 
-
         /// <summary>
         /// Load data from a path and file.
         /// </summary>
@@ -177,7 +176,6 @@ namespace LittleByte.Data
 
             return Load(file, folderPath, defaultValue);
         }
-
 
         /// <summary>
         /// Load data from the Resources folder.
@@ -204,7 +202,6 @@ namespace LittleByte.Data
             }
         }
 
-
         /// <summary>
         /// Checks for the existance of a file.
         /// </summary>
@@ -217,7 +214,6 @@ namespace LittleByte.Data
             file = path + Slash + file + FileExt;
             return Directory.Exists(path) && File.Exists(file);
         }
-
 
         /// <summary>
         /// Save all data to a byte[].
@@ -247,7 +243,6 @@ namespace LittleByte.Data
             }
         }
 
-
         /// <summary>
         /// Save the current game state in a backup file.
         /// </summary>
@@ -265,7 +260,6 @@ namespace LittleByte.Data
                 writer.Write(bytes);
             }
         }
-
 
         /// <summary>
         /// Restore the game state from serialized data.
@@ -291,7 +285,6 @@ namespace LittleByte.Data
                 }
             }
         }
-
 
         /// <summary>
         /// Get the latest backup file.
@@ -347,7 +340,6 @@ namespace LittleByte.Data
             return found;
         }
 
-
         /// <summary>
         /// Get list of all files in Data folder.
         /// </summary>
@@ -357,7 +349,6 @@ namespace LittleByte.Data
             return Directory.GetFiles(DataPath, "*" + FileExt, SearchOption.AllDirectories).Select(f => f.Remove(0, DataPath.Length).Replace(FileExt, "")).ToArray();
         }
 
-
         /// <summary>
         /// Get list of all files in this folder.
         /// </summary>
@@ -366,8 +357,8 @@ namespace LittleByte.Data
         public static string[] GetFiles(string path)
         {
             path = DataPath + path;
-            return Directory.GetFiles(path, "*" + FileExt).Select(f => f.Remove(0, path.Length+1).Replace(FileExt, "")).ToArray();
-        } 
+            return Directory.GetFiles(path, "*" + FileExt).Select(f => f.Remove(0, path.Length + 1).Replace(FileExt, "")).ToArray();
+        }
 
         #endregion
 
@@ -385,8 +376,7 @@ namespace LittleByte.Data
         {
             T value = Load(file, path, defaultValue);
             return (T)UnityTypes.sCast(value);
-        } 
-
+        }
 
         private static bool IsUnityList(object value)
         {
@@ -401,7 +391,6 @@ namespace LittleByte.Data
 
             return false;
         }
-
 
         private static bool IsSList(object value)
         {
@@ -446,7 +435,6 @@ namespace LittleByte.Data
             return false;
         }
 
-
         /// <summary>
         /// Delete a whole data folder.
         /// </summary>
@@ -464,7 +452,6 @@ namespace LittleByte.Data
 
             return false;
         }
-
 
         /// <summary>
         /// Delete all data files.
@@ -499,7 +486,6 @@ namespace LittleByte.Data
             //FileSavedEvent.Fire(converted, new FileSavedArgs(DataPath + path + file + FileExt));
         }
 
-
         private static T LoadList<T>(IList list)
         {
             Type type = typeof(T).GetGenericParameterConstraints()[0];
@@ -515,7 +501,6 @@ namespace LittleByte.Data
         #endregion
     }
 
-
     /// <summary>
     /// Args for file saving.
     /// </summary>
@@ -528,7 +513,6 @@ namespace LittleByte.Data
         {
             get { return folder + SaveData.Slash + file; }
         }
-
 
         public FileSavedArgs(string folder, string file)
         {

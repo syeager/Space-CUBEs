@@ -1060,6 +1060,7 @@ namespace SpaceCUBEs
         /// <param name="buildName">Name of build.</param>
         public static void DeleteBuild(string buildName)
         {
+            Debugger.Log("Deleting: " + buildName, null, Debugger.LogTypes.Data);
             SaveData.DeleteFile(buildName, BuildsFolder);
         }
 
@@ -1070,6 +1071,7 @@ namespace SpaceCUBEs
         /// <param name="newName">New name of the build.</param>
         public static void RenameBuild(string oldName, string newName)
         {
+            Debugger.Log("Renaming: " + oldName + " to " + newName, null, Debugger.LogTypes.Data);
             BuildInfo buildInfo = SaveData.Load<BuildInfo>(oldName, BuildsFolder);
             buildInfo.name = newName;
             SaveData.DeleteFile(oldName, BuildsFolder);

@@ -78,8 +78,9 @@ GameObject:
   - 4: {fileID: 400008}
   - 114: {fileID: 11400016}
   - 114: {fileID: 11400000}
+  - 65: {fileID: 6500004}
   m_Layer: 8
-  m_Name: Label
+  m_Name: Input
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -117,6 +118,22 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!1 &100014
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400014}
+  - 114: {fileID: 11400022}
+  m_Layer: 8
+  m_Name: Label
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &400000
 Transform:
@@ -142,7 +159,7 @@ Transform:
   m_Children:
   - {fileID: 400000}
   m_Father: {fileID: 400006}
-  m_RootOrder: 1
+  m_RootOrder: 2
 --- !u!4 &400004
 Transform:
   m_ObjectHideFlags: 1
@@ -165,6 +182,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 400014}
   - {fileID: 400008}
   - {fileID: 400002}
   - {fileID: 400010}
@@ -177,11 +195,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100008}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1, y: 32, z: 0}
+  m_LocalPosition: {x: 0, y: 5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400006}
-  m_RootOrder: 0
+  m_RootOrder: 1
 --- !u!4 &400010
 Transform:
   m_ObjectHideFlags: 1
@@ -194,7 +212,7 @@ Transform:
   m_Children:
   - {fileID: 400004}
   m_Father: {fileID: 400006}
-  m_RootOrder: 2
+  m_RootOrder: 3
 --- !u!4 &400012
 Transform:
   m_ObjectHideFlags: 1
@@ -207,6 +225,18 @@ Transform:
   m_Children:
   - {fileID: 400006}
   m_Father: {fileID: 0}
+  m_RootOrder: 0
+--- !u!4 &400014
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100014}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1, y: 70, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400006}
   m_RootOrder: 0
 --- !u!65 &6500000
 BoxCollider:
@@ -231,6 +261,18 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 132, y: 59, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!65 &6500004
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100008}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 336, y: 54, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &11400000
 MonoBehaviour:
@@ -269,7 +311,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8d015668c3c0124a93cc39900fd8f7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  messageLabel: {fileID: 11400016}
+  messageLabel: {fileID: 11400022}
   denyLabel: {fileID: 11400020}
   confirmLabel: {fileID: 11400018}
   input: {fileID: 11400000}
@@ -348,7 +390,7 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick:
-  - mTarget: {fileID: 0}
+  - mTarget: {fileID: 11400002}
     mMethodName: Deny
     mParameters: []
     oneShot: 0
@@ -427,7 +469,7 @@ MonoBehaviour:
   disabledSprite2D: {fileID: 0}
   pixelSnap: 0
   onClick:
-  - mTarget: {fileID: 0}
+  - mTarget: {fileID: 11400002}
     mMethodName: Confirm
     mParameters: []
     oneShot: 0
@@ -540,33 +582,33 @@ MonoBehaviour:
   leftAnchor:
     target: {fileID: 400006}
     relative: 0
-    absolute: 31
+    absolute: 32
   rightAnchor:
     target: {fileID: 400006}
     relative: 1
-    absolute: -33
+    absolute: -32
   bottomAnchor:
     target: {fileID: 400006}
-    relative: 0
-    absolute: 85
+    relative: .5
+    absolute: -22
   topAnchor:
     target: {fileID: 400006}
-    relative: 1
-    absolute: -21
-  updateAnchors: 1
+    relative: .5
+    absolute: 32
+  updateAnchors: 2
   mColor: {r: .168627456, g: .784313738, b: .847058833, a: 1}
   mPivot: 4
   mWidth: 336
-  mHeight: 134
+  mHeight: 54
   mDepth: 101
-  autoResizeBoxCollider: 0
+  autoResizeBoxCollider: 1
   hideIfOffScreen: 0
   keepAspectRatio: 0
-  aspectRatio: 2.50746274
+  aspectRatio: 6.22222233
   keepCrispWhenShrunk: 1
   mTrueTypeFont: {fileID: 0}
   mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
-  mText: Are you sure you want to delete?
+  mText: Input here
   mFontSize: 35
   mFontStyle: 1
   mAlignment: 0
@@ -698,6 +740,68 @@ MonoBehaviour:
   mMaxLineCount: 0
   mEffectStyle: 2
   mEffectColor: {r: .678431392, g: .298039228, b: .109803922, a: 1}
+  mSymbols: 1
+  mEffectDistance: {x: 1, y: 1}
+  mOverflow: 1
+  mMaterial: {fileID: 0}
+  mApplyGradient: 0
+  mGradientTop: {r: 1, g: 1, b: 1, a: 1}
+  mGradientBottom: {r: .699999988, g: .699999988, b: .699999988, a: 1}
+  mSpacingX: 0
+  mSpacingY: 0
+  mShrinkToFit: 0
+  mMaxLineWidth: 0
+  mMaxLineHeight: 0
+  mLineWidth: 0
+  mMultiline: 1
+--- !u!114 &11400022
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftAnchor:
+    target: {fileID: 400006}
+    relative: 0
+    absolute: 31
+  rightAnchor:
+    target: {fileID: 400006}
+    relative: 1
+    absolute: -33
+  bottomAnchor:
+    target: {fileID: 400006}
+    relative: .5
+    absolute: 3
+  topAnchor:
+    target: {fileID: 400006}
+    relative: 1
+    absolute: 17
+  updateAnchors: 2
+  mColor: {r: .168627456, g: .784313738, b: .847058833, a: 1}
+  mPivot: 4
+  mWidth: 336
+  mHeight: 134
+  mDepth: 101
+  autoResizeBoxCollider: 0
+  hideIfOffScreen: 0
+  keepAspectRatio: 0
+  aspectRatio: 2.50746274
+  keepCrispWhenShrunk: 1
+  mTrueTypeFont: {fileID: 0}
+  mFont: {fileID: 11400000, guid: e0d8bd96e6d525842bd3848afe1e414b, type: 2}
+  mText: Message here
+  mFontSize: 35
+  mFontStyle: 1
+  mAlignment: 0
+  mEncoding: 1
+  mMaxLineCount: 0
+  mEffectStyle: 0
+  mEffectColor: {r: 0, g: 0, b: 0, a: 1}
   mSymbols: 1
   mEffectDistance: {x: 1, y: 1}
   mOverflow: 1

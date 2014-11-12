@@ -700,6 +700,11 @@ namespace SpaceCUBEs
             }
             else
             {
+                if (previewShip.ShipName != ConstructionGrid.SelectedBuild)
+                {
+                    ConstructionGrid.DeleteBuild(ConstructionGrid.SelectedBuild);
+                }
+                ConstructionGrid.SelectedBuild = previewShip.ShipName;
                 grid.SaveBuild();
             }
         }
