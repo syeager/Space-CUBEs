@@ -99,7 +99,7 @@ namespace SpaceCUBEs
         public ConstructionGrid grid;
 
         [SerializeField, UsedImplicitly]
-        private GameObject previewCube;
+        private PreviewCUBE previewCube;
 
         [SerializeField, UsedImplicitly]
         private PreviewShip previewShip;
@@ -527,6 +527,7 @@ namespace SpaceCUBEs
 
         private void EditInit()
         {
+            previewCube.RegisterToGrid();
             previewShip.Initialize(ConstructionGrid.SelectedBuild, BuildStats.GetCoreCapacity());
             previewShip.SetValues(grid.CurrentStats, grid.CorePointsAvailable);
             cubeLibrary.ItemSelectedEvent += (sender, args) => SelectCube(args.id);
@@ -534,7 +535,7 @@ namespace SpaceCUBEs
 
         private void EditEnter(Dictionary<string, object> info)
         {
-            previewCube.SetActive(true);
+            previewCube.gameObject.SetActive(true);
 
             States.SetUpdate(EditUpdate());
         }
@@ -551,7 +552,7 @@ namespace SpaceCUBEs
 
         private void EditExit(Dictionary<string, object> info)
         {
-            previewCube.SetActive(false);
+            previewCube.gameObject.SetActive(false);
         }
 
         private void PickupPlaceCUBE()

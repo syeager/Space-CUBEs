@@ -21,25 +21,27 @@ public class StoreManager : Singleton<StoreManager>
 
     [Header("HUD")]
     [SerializeField, UsedImplicitly]
-    private UILabel selectedCUBE;
+    private PreviewCUBE preview;
+    //[SerializeField, UsedImplicitly]
+    //private UILabel selectedCUBE;
 
-    [SerializeField, UsedImplicitly]
-    private UILabel health;
+    //[SerializeField, UsedImplicitly]
+    //private UILabel health;
 
-    [SerializeField, UsedImplicitly]
-    private UILabel shield;
+    //[SerializeField, UsedImplicitly]
+    //private UILabel shield;
 
-    [SerializeField, UsedImplicitly]
-    private UILabel speed;
+    //[SerializeField, UsedImplicitly]
+    //private UILabel speed;
 
-    [SerializeField, UsedImplicitly]
-    private UILabel damage;
+    //[SerializeField, UsedImplicitly]
+    //private UILabel damage;
 
-    [SerializeField, UsedImplicitly]
-    private UILabel count;
+    //[SerializeField, UsedImplicitly]
+    //private UILabel count;
 
-    [SerializeField, UsedImplicitly]
-    private UILabel cpLabel;
+    //[SerializeField, UsedImplicitly]
+    //private UILabel cpLabel;
 
     [Header("Bank")]
     [SerializeField, UsedImplicitly]
@@ -94,7 +96,6 @@ public class StoreManager : Singleton<StoreManager>
     #region Const Fields
 
     public const float SellPercent = 0.5f;
-    private const string OwnSuffix = " Own";
 
     #endregion
 
@@ -107,7 +108,7 @@ public class StoreManager : Singleton<StoreManager>
 
         // reset GUI
         bank.text = FormatMoney(MoneyManager.Balance());
-        selectedCUBE.text = "";
+        preview.Blank();
         sellPrice.text = "";
         buyPrice.text = "";
         sellButton.isEnabled = false;
@@ -130,7 +131,7 @@ public class StoreManager : Singleton<StoreManager>
         currentItem.SetOwn(inventory[itemIndex]);
         int balance = MoneyManager.Transaction((int)(CUBE.AllCUBES[itemIndex].price * SellPercent));
         bank.text = FormatMoney(balance);
-        count.text = inventory[itemIndex] + OwnSuffix;
+        preview.SetStock(inventory[itemIndex]);
         UpdateShopButtons(itemIndex);
     }
 
@@ -146,7 +147,7 @@ public class StoreManager : Singleton<StoreManager>
                 currentItem.SetOwn(inventory[itemIndex]);
                 balance = MoneyManager.Transaction(-CUBE.AllCUBES[itemIndex].price);
                 bank.text = FormatMoney(balance);
-                count.text = inventory[itemIndex] + OwnSuffix;
+                preview.SetStock(inventory[itemIndex]);
                 UpdateShopButtons(itemIndex);
                 break;
             case ItemTypes.Core:
@@ -154,7 +155,7 @@ public class StoreManager : Singleton<StoreManager>
                 BuildStats.SetCoreLevel(BuildStats.GetCoreLevel() + 1);
                 currentItem.SetOwn(1);
                 bank.text = FormatMoney(balance);
-                count.text = 1 + OwnSuffix;
+                preview.SetStock(1);
                 UpdateShopButtons(BuildStats.GetCoreLevel());
                 break;
             case ItemTypes.Weapon:
@@ -162,7 +163,7 @@ public class StoreManager : Singleton<StoreManager>
                 BuildStats.SetWeaponLevel(BuildStats.GetWeaponLevel() + 1);
                 currentItem.SetOwn(1);
                 bank.text = FormatMoney(balance);
-                count.text = 1 + OwnSuffix;
+                preview.SetStock(1);
                 UpdateShopButtons(BuildStats.GetWeaponLevel());
                 break;
             case ItemTypes.Augmentation:
@@ -170,7 +171,7 @@ public class StoreManager : Singleton<StoreManager>
                 BuildStats.SetAugmentationLevel(BuildStats.GetAugmentationLevel() + 1);
                 currentItem.SetOwn(1);
                 bank.text = FormatMoney(balance);
-                count.text = 1 + OwnSuffix;
+                preview.SetStock(1);
                 UpdateShopButtons(BuildStats.GetAugmentationLevel());
                 break;
         }
@@ -248,8 +249,9 @@ public class StoreManager : Singleton<StoreManager>
                 itemIndex = args.id;
                 CUBEInfo info = CUBE.AllCUBES[itemIndex];
                 if (GameResources.Main.CUBE_Prefabs[info.ID] == null) return;
-                selectedCUBE.text = info.name;
-                count.text = inventory[itemIndex] + OwnSuffix;
+
+                preview.SetStats(info);
+                preview.SetStock(inventory[itemIndex]);
 
                 // prices
                 sellPrice.text = FormatMoney((int)(info.price * SellPercent), true);
@@ -258,16 +260,6 @@ public class StoreManager : Singleton<StoreManager>
                 // enable buttons
                 UpdateShopButtons(itemIndex);
 
-                // stats
-                health.text = info.health.ToString();
-                shield.text = info.shield.ToString();
-                speed.text = info.speed.ToString();
-                damage.text = info.damage.ToString();
-
-                // cp
-                const string cp = " CP";
-                cpLabel.text = info.cost + cp;
-
                 // showcase
                 UpdateShowCase(GameResources.CreateCUBE(itemIndex).gameObject);
                 break;
@@ -275,8 +267,9 @@ public class StoreManager : Singleton<StoreManager>
                 currentItemType = ItemTypes.Core;
 
                 // showcase
-                selectedCUBE.text = "Ship Core Lv " + (args.id + 1);
-                count.text = (BuildStats.GetCoreLevel() >= args.id ? "1" : "0") + OwnSuffix;
+                preview.SetDescription("Ship Core Lv " + (args.id + 1), "Core Description");
+                preview.SetStock(BuildStats.GetCoreLevel() >= args.id ? 1 : 0);
+
                 UpdateShowCase(GameObject.CreatePrimitive(PrimitiveType.Cube));
 
                 // prices
@@ -290,8 +283,8 @@ public class StoreManager : Singleton<StoreManager>
                 currentItemType = ItemTypes.Weapon;
 
                 // showcase
-                selectedCUBE.text = "Weapon Exp Lv " + (args.id + 1);
-                count.text = (BuildStats.GetWeaponLevel() >= args.id ? "1" : "0") + OwnSuffix;
+                preview.SetDescription("Weapon Exp Lv " + (args.id + 1), "Weapon Description");
+                preview.SetStock(BuildStats.GetWeaponLevel() >= args.id ? 1 : 0);
                 UpdateShowCase(GameObject.CreatePrimitive(PrimitiveType.Capsule));
 
                 // prices
@@ -304,8 +297,8 @@ public class StoreManager : Singleton<StoreManager>
             case ItemTypes.Augmentation:
                 currentItemType = ItemTypes.Augmentation;
                 // showcase
-                selectedCUBE.text = "Aug Exp Lv " + (args.id + 1);
-                count.text = (BuildStats.GetAugmentationLevel() >= args.id ? "1" : "0") + OwnSuffix;
+                preview.SetDescription("Aug Exp Lv " + (args.id + 1), "Aug Description");
+                preview.SetStock(BuildStats.GetAugmentationLevel() >= args.id ? 1 : 0);
                 UpdateShowCase(GameObject.CreatePrimitive(PrimitiveType.Cylinder));
 
                 // prices
