@@ -1,9 +1,7 @@
 ﻿// Little Byte Games
-// Author: Steve Yeager
-// Created: 2014.08.24
-// Edited: 2014.10.05
 
 using System;
+using System.Collections;
 using System.Linq;
 using Annotations;
 using LittleByte;
@@ -33,7 +31,7 @@ public class NavigationBar : Singleton<NavigationBar>
     private void Start()
     {
         string levelName = Application.loadedLevelName;
-        
+
         if (Scenes.MenuNames.ContainsValue(levelName))
         {
             UpdateButtons(Scenes.Menu(levelName));
@@ -48,7 +46,7 @@ public class NavigationBar : Singleton<NavigationBar>
     private void OnLevelWasLoaded(int level)
     {
         string levelName = Application.loadedLevelName;
-        
+
         if (Scenes.MenuNames.ContainsValue(levelName))
         {
             UpdateButtons(Scenes.Menu(levelName));
@@ -58,7 +56,13 @@ public class NavigationBar : Singleton<NavigationBar>
             UpdateAll(true);
         }
 
-        Show(Enum.GetNames(typeof(Scenes.Menus)).Select(l => l.SplitCamelCase()).Contains(levelName) && levelName != Scenes.Menus.Workshop.ToString());
+        bool show = Enum.GetNames(typeof(Scenes.Menus)).Select(l => l.SplitCamelCase()).Contains(levelName) && levelName != Scenes.Menus.Workshop.ToString();
+        Show(show);
+
+        if (show && Application.loadedLevelName != Scenes.Scene(Scenes.Menus.MainMenu))
+        {
+            StartCoroutine(SetSelected());
+        }
     }
 
     #endregion
@@ -70,13 +74,11 @@ public class NavigationBar : Singleton<NavigationBar>
         Instantiate(optionsMenuPrefab, Vector3.left * 5000f, Quaternion.identity);
     }
 
-
     public void LoadMainMenu()
     {
         SceneManager.LoadScene(Scenes.Scene(Scenes.Menus.MainMenu), false, true);
         UpdateButtons(Scenes.Menus.MainMenu);
     }
-
 
     public void LoadGarage()
     {
@@ -84,13 +86,11 @@ public class NavigationBar : Singleton<NavigationBar>
         UpdateButtons(Scenes.Menus.Garage);
     }
 
-
     public void LoadStore()
     {
         SceneManager.LoadScene(Scenes.Scene(Scenes.Menus.Store), true);
         UpdateButtons(Scenes.Menus.Store);
     }
-
 
     public void LoadLevelSelect()
     {
@@ -110,13 +110,19 @@ public class NavigationBar : Singleton<NavigationBar>
         levelSelect.isEnabled = menu != Scenes.Menus.LevelSelectMenu;
     }
 
-
     private void UpdateAll(bool on)
     {
         mainMenu.isEnabled = on;
         garage.isEnabled = on;
         store.isEnabled = on;
         levelSelect.isEnabled = on;
+    }
+
+    private IEnumerator SetSelected()
+    {
+        yield return new WaitForEndOfFrame();
+        UICamera.selectedObject = mainMenu.gameObject;
+        mainMenu.SetState(UIButtonColor.State.Hover, true);
     }
 
     #endregion

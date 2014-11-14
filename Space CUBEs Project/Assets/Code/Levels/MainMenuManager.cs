@@ -1,13 +1,11 @@
 ﻿// Little Byte Games
-// Author: Steve Yeager
-// Created: 2014.01.15
-// Edited: 2014.09.17
 
 using Annotations;
 using LittleByte;
 using LittleByte.Data;
 using LittleByte.Extensions;
 using SpaceCUBEs;
+using UnityEditor;
 using UnityEngine;
 
 /// <summary>
@@ -23,7 +21,20 @@ public class MainMenuManager : MonoBehaviour
 
     #endregion
 
+    #region Private Fields
+
+    [SerializeField, UsedImplicitly]
+    private UIButton playButton;
+
+    #endregion
+
     #region MonoBehaviour Overrides
+
+    private void Start()
+    {
+        UICamera.selectedObject = playButton.gameObject;
+        playButton.SetState(UIButtonColor.State.Hover, true);
+    }
 
 #if DEBUG
     [UsedImplicitly]
@@ -54,14 +65,13 @@ public class MainMenuManager : MonoBehaviour
         SceneManager.LoadScene(((Scenes.Levels)unlocked).ToString().SplitCamelCase(), true, true);
     }
 
-
     /// <summary>
     /// Exit game.
     /// </summary>
     public void QuitGame()
     {
 #if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
+        EditorApplication.isPlaying = false;
 #else
         Application.Quit();
 #endif
