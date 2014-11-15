@@ -16,12 +16,18 @@ public class NavigationBar : Singleton<NavigationBar>
     public GameObject root;
 
     public UIButton options;
-    public GameObject optionsMenuPrefab;
+    public OptionsMenuManager optionsMenuPrefab;
 
     public UIButton mainMenu;
     public UIButton garage;
     public UIButton store;
     public UIButton levelSelect;
+
+    #endregion
+
+    #region Private Fields
+
+    private OptionsMenuManager optionMenu;
 
     #endregion
 
@@ -65,13 +71,29 @@ public class NavigationBar : Singleton<NavigationBar>
         }
     }
 
+    [UsedImplicitly]
+    private void Update()
+    {
+        if (Input.GetButtonDown("Options"))
+        {
+            ToggleOptions();
+        }
+    }
+
     #endregion
 
     #region Public Methods
 
     public void ToggleOptions()
     {
-        Instantiate(optionsMenuPrefab, Vector3.left * 5000f, Quaternion.identity);
+        if (optionMenu == null)
+        {
+            optionMenu = Instantiate(optionsMenuPrefab, Vector3.left * 5000f, Quaternion.identity) as OptionsMenuManager;
+        }
+        else
+        {
+            Destroy(optionMenu.gameObject);
+        }
     }
 
     public void LoadMainMenu()
@@ -121,8 +143,7 @@ public class NavigationBar : Singleton<NavigationBar>
     private IEnumerator SetSelected()
     {
         yield return new WaitForEndOfFrame();
-        UICamera.selectedObject = mainMenu.gameObject;
-        mainMenu.SetState(UIButtonColor.State.Hover, true);
+        NGUIUtility.SetSelected(mainMenu);
     }
 
     #endregion

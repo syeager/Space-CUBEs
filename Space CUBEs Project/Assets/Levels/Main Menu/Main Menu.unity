@@ -1101,6 +1101,7 @@ MonoBehaviour:
     y: 0
     width: 100
     height: 100
+  playButton: {fileID: 1708809540}
 --- !u!4 &497402237
 Transform:
   m_ObjectHideFlags: 0
@@ -2779,6 +2780,11 @@ Prefab:
       propertyPath: hover.b
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11400026, guid: e95f85aa3110abc429999d6bba111ed7, type: 2}
+      propertyPath: optionsMenuPrefab
+      value: 
+      objectReference: {fileID: 11400076, guid: d7579329213a0b14abaa054e02eb134a,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e95f85aa3110abc429999d6bba111ed7, type: 2}
   m_RootGameObject: {fileID: 1857346788}
@@ -3378,7 +3384,7 @@ MonoBehaviour:
   dontDestroy: 1
   root: {fileID: 2001038390}
   options: {fileID: 170718075}
-  optionsMenuPrefab: {fileID: 100072, guid: d7579329213a0b14abaa054e02eb134a, type: 2}
+  optionsMenuPrefab: {fileID: 11400076, guid: d7579329213a0b14abaa054e02eb134a, type: 2}
   mainMenu: {fileID: 1174386116}
   garage: {fileID: 1964749341}
   store: {fileID: 1496382279}

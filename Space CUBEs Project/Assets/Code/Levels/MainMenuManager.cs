@@ -5,8 +5,10 @@ using LittleByte;
 using LittleByte.Data;
 using LittleByte.Extensions;
 using SpaceCUBEs;
-using UnityEditor;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 /// <summary>
 /// Manager for the Main Menu.
@@ -32,8 +34,7 @@ public class MainMenuManager : MonoBehaviour
 
     private void Start()
     {
-        UICamera.selectedObject = playButton.gameObject;
-        playButton.SetState(UIButtonColor.State.Hover, true);
+        NGUIUtility.SetSelected(playButton);
     }
 
 #if DEBUG
