@@ -1,7 +1,4 @@
 ﻿// Little Byte Games
-// Author: Steve Yeager
-// Created: 2014.07.13
-// Edited: 2014.09.08
 
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +8,7 @@ using UnityEngine;
 namespace SpaceCUBEs
 {
     /// <summary>
-    /// 
+    /// Suicide enemy.
     /// </summary>
     public class Kamikaze : Enemy
     {
@@ -61,20 +58,17 @@ namespace SpaceCUBEs
             stateMachine.CreateState(DyingState, DyingEnter, info => { });
         }
 
-
         [UsedImplicitly]
         private void FixedUpdate()
         {
             myRigidbody.AddForce(momentum * speed, ForceMode.VelocityChange);
         }
 
-
         [UsedImplicitly]
         private void OnTriggerEnter(Collider other)
         {
             if (!other.CompareTag(Player.Tag)) return;
 
-            //stateMachine.SetState(DyingState);
             MyHealth.Trash();
         }
 
@@ -89,7 +83,6 @@ namespace SpaceCUBEs
             stateMachine.SetState(HomingState);
         }
 
-
         private IEnumerator HomingUpdate()
         {
             Transform player = LevelManager.Main.PlayerTransform;
@@ -101,9 +94,8 @@ namespace SpaceCUBEs
                 yield return null;
             }
 
-            stateMachine.SetState(DyingState);
+            MyHealth.Trash();
         }
-
 
         private void DyingEnter(Dictionary<string, object> info)
         {
