@@ -1,7 +1,4 @@
 ﻿// Little Byte Games
-// Author: Steve Yeager
-// Created: 2014.07.06
-// Edited: 2014.10.14
 
 using System.Collections;
 using System.Collections.Generic;
@@ -52,7 +49,7 @@ namespace SpaceCUBEs
 
         private bool scoreCompleted;
 
-        private bool lastLevel;
+        private bool nextAvailable;
 
         [Header("Ranks")]
         [NotEmpty]
@@ -117,7 +114,6 @@ namespace SpaceCUBEs
             states.SetState(TimeState);
         }
 
-
         private IEnumerator LootUpdate()
         {
             float cursor = 0f;
@@ -134,7 +130,6 @@ namespace SpaceCUBEs
             states.SetState(SalvageState);
         }
 
-
         private IEnumerator SalvageUpdate()
         {
             WaitForSeconds wait = new WaitForSeconds(salvageDelay);
@@ -148,7 +143,6 @@ namespace SpaceCUBEs
             states.SetState(scoreCompleted ? CompleteState : IdleState);
         }
 
-
         private void CompleteEnter(Dictionary<string, object> info = null)
         {
             StopAllCoroutines();
@@ -156,7 +150,7 @@ namespace SpaceCUBEs
             // show buttons
             replayButton.gameObject.SetActive(true);
             nextButton.gameObject.SetActive(true);
-            nextButton.isEnabled = !lastLevel;
+            nextButton.isEnabled = !nextAvailable;
             NavigationBar.Show(true);
 
             // loot
@@ -185,7 +179,7 @@ namespace SpaceCUBEs
 
         #region Public Methods
 
-        public void Initialize(Highscore score, int[] ranks, float loot, int[] salvage)
+        public void Initialize(Highscore score, int[] ranks, float loot, int[] salvage, bool nextIsUnlocked)
         {
             // cache data
             playerScore = score.score;
@@ -197,13 +191,13 @@ namespace SpaceCUBEs
             // buttons
             replayButton.ActivateEvent += (sender, args) => SceneManager.ReloadScene();
             int nextLevel = ((FormationLevelManager)FormationLevelManager.Main).levelIndex + 1;
-            if (nextLevel < FormationLevelManager.LevelNames.Length)
+            if (nextLevel < FormationLevelManager.LevelNames.Length && (score.rank != 0 || nextIsUnlocked))
             {
                 nextButton.ActivateEvent += (sender, args) => SceneManager.LoadScene(Scenes.Scene((Scenes.Levels)((FormationLevelManager)FormationLevelManager.Main).levelIndex + 1));
             }
             else
             {
-                lastLevel = true;
+                nextAvailable = true;
             }
 
             states = new StateMachine(this, InitializingState);
@@ -232,7 +226,7 @@ namespace SpaceCUBEs
             // snap to D rank
             if (playerRank > 0)
             {
-                UpdateRank(1, rankThresholds[1]); 
+                UpdateRank(1, rankThresholds[1]);
                 rankLetter.uvRect = new Rect(0f, rankHeightStart + rankHeight, 1f, rankLetter.uvRect.height);
                 StartCoroutine(NewRank(1));
             }
@@ -270,7 +264,6 @@ namespace SpaceCUBEs
             }
         }
 
-
         private int UpdateRank(int rankCursor, float scoreCursor)
         {
             // rank
@@ -296,7 +289,6 @@ namespace SpaceCUBEs
             return rankCursor;
         }
 
-
         private IEnumerator NewRank(int rank)
         {
             if (rankMedals[rank].gameObject.activeInHierarchy) yield break;
@@ -312,14 +304,13 @@ namespace SpaceCUBEs
                 rankMedals[rank].width = rankMedals[rank].height = Mathf.RoundToInt(medalSize * rankIntroCurve.Evaluate(timer));
                 yield return null;
             }
-                rankMedals[rank].width = rankMedals[rank].height = Mathf.RoundToInt(medalSize * rankIntroCurve.Evaluate(time));
+            rankMedals[rank].width = rankMedals[rank].height = Mathf.RoundToInt(medalSize * rankIntroCurve.Evaluate(time));
 
             if (rank > 1)
             {
                 rankMedals[rank - 1].gameObject.SetActive(false);
             }
         }
-
 
         private IEnumerator Slam()
         {

@@ -316,7 +316,17 @@ namespace SpaceCUBEs
             }
             CUBE.SetInventory(inventory);
 
-            campaignOverview.Initialize(playerScore, rankLimits, money, awards);
+            int unlockedLevels = SaveData.Load<int>(LevelSelectManager.UnlockedLevelsKey, LevelsFolder);
+            if (won)
+            {
+                if (levelIndex >= unlockedLevels)
+                {
+                    SaveData.Save(LevelSelectManager.UnlockedLevelsKey, levelIndex + 1, LevelsFolder);
+                }
+            }
+
+            bool nextIsUnlocked = levelIndex < unlockedLevels;
+            campaignOverview.Initialize(playerScore, rankLimits, money, awards, nextIsUnlocked);
             GA.API.Design.NewEvent(GALevel + GAPoints + GAPointsTotal, score);
 
             // achievements
@@ -436,11 +446,6 @@ namespace SpaceCUBEs
 
         private void OnBossDeath(object sender, EventArgs args)
         {
-            if (levelIndex >= SaveData.Load<int>(LevelSelectManager.UnlockedLevelsKey, LevelsFolder))
-            {
-                SaveData.Save(LevelSelectManager.UnlockedLevelsKey, levelIndex + 1, LevelsFolder);
-            }
-
             LevelCompleted(true);
         }
 
