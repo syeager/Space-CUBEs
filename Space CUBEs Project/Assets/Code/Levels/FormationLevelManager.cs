@@ -10,7 +10,6 @@ using LittleByte.Data;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
-
 #endif
 
 namespace SpaceCUBEs
@@ -319,7 +318,7 @@ namespace SpaceCUBEs
 
             campaignOverview.Initialize(playerScore, rankLimits, money, awards);
             GA.API.Design.NewEvent(GALevel + GAPoints + GAPointsTotal, score);
-            
+
             // achievements
             if (won && Social.localUser.authenticated)
             {

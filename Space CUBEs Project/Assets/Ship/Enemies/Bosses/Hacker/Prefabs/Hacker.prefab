@@ -583,12 +583,15 @@ MonoBehaviour:
   HealthHit_Mat: {fileID: 2100000, guid: 714fd6fe39d4b7e4786c808fbccc8dd9, type: 2}
   healthHitMatTime: .5
   invincible: 0
+  hitClip: {fileID: 0}
+  deathClip: {fileID: 0}
   maxHealth: 3000
   health: 0
   rechargeSpeed: 50
   rechargeDelay: 2
   maxShield: 100
   shield: 0
+  shieldHitClip: {fileID: 0}
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -633,6 +636,7 @@ MonoBehaviour:
   hasHorizontalBounds: 1
   leftBound: .00999999978
   rightBound: .00999999978
+  barrelRollClip: {fileID: 0}
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1

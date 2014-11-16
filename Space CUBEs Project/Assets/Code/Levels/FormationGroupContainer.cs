@@ -15,12 +15,17 @@ namespace SpaceCUBEs
 
         public void Set(FormationGroup group)
         {
+#if UNITY_EDITOR
             formationGroup = (FormationGroup)group.Clone(this, true);
+#endif
         }
 
         public FormationGroup Get()
         {
+#if UNITY_EDITOR
             return (FormationGroup)formationGroup.Clone(this, false);
+#endif
+            return null;
         }
     }
 }
