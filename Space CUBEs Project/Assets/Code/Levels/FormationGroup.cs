@@ -1,20 +1,57 @@
 ﻿// Little Byte Games
-// Author: Steve Yeager
-// Created: 2014.01.12
-// Edited: 2014.10.12
 
 using System;
-using SpaceCUBEs;
+using System.Reflection;
+using UnityEditor;
 using UnityEngine;
 
-[Serializable]
-public class FormationGroup
+namespace SpaceCUBEs
 {
-    public Formation formation;
-    public Vector3 position;
-    public float rotation;
-    public Enemy.Classes[] enemies = new Enemy.Classes[1];
-    public Path[] paths = new Path[1];
-    public bool needsClearing;
-    public float spawnTime;
+    [Serializable]
+    public class FormationGroup
+    {
+        public Formation formation;
+        public Vector3 position;
+        public float rotation;
+        public Enemy.Classes[] enemies = new Enemy.Classes[1];
+        public Path[] paths = new Path[1];
+        public bool needsClearing;
+        public float spawnTime;
+
+#if UNITY_EDITOR
+
+        public object Clone(FormationGroupContainer container, bool asset)
+        {
+            FormationGroup clone = new FormationGroup {formation = formation, position = position, rotation = rotation, needsClearing = needsClearing, spawnTime = spawnTime};
+
+            // enemies
+            clone.enemies = new Enemy.Classes[enemies.Length];
+            Array.Copy(enemies, clone.enemies, enemies.Length);
+
+            // paths
+            clone.paths = new Path[paths.Length];
+            for (int i = 0; i < paths.Length; i++)
+            {
+                if (paths[i] == null) continue;
+
+                Type pathType = paths[i].GetType();
+                Path path = (Path)ScriptableObject.CreateInstance(pathType.Name);
+
+                if (asset)
+                {
+                    AssetDatabase.AddObjectToAsset(path, container);
+                }
+
+                clone.paths[i] = path;
+                FieldInfo[] fields = pathType.GetFields();
+                foreach (FieldInfo field in fields)
+                {
+                    field.SetValue(clone.paths[i], field.GetValue(paths[i]));
+                }
+            }
+
+            return clone;
+        }
+#endif
+    }
 }

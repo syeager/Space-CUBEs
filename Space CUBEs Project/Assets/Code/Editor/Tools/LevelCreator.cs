@@ -1,16 +1,15 @@
 ﻿// Little Byte Games
-// Author: Steve Yeager
-// Created: 2014.01.26
-// Edited: 2014.10.14
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using Annotations;
 using SpaceCUBEs;
 using UnityEditor;
 using UnityEngine;
+using Path = SpaceCUBEs.Path;
 
 /// <summary>
 /// Create list of formations for the level to spawn.
@@ -65,7 +64,6 @@ public class LevelCreator : EditorWindow
         return levelManager != null;
     }
 
-
     [MenuItem("CUBEs/Level Creator &L", false, 51)]
     public static void Init()
     {
@@ -101,20 +99,18 @@ public class LevelCreator : EditorWindow
         // enemy points
         enemyPoints = new Dictionary<Enemy.Classes, int>();
         enemyPoints.Add(SpaceCUBEs.Enemy.Classes.None, 0);
-        var enemies = Utility.LoadObjects<Enemy>("Assets/Ship/Enemies/Basic/");
-        foreach (var enemy in enemies)
+        IEnumerable<Enemy> enemies = Utility.LoadObjects<Enemy>("Assets/Ship/Enemies/Basic/");
+        foreach (Enemy enemy in enemies)
         {
             enemyPoints.Add(enemy.enemyClass, enemy.score);
         }
     }
-
 
     [UsedImplicitly]
     private void OnDisable()
     {
         EditorUtility.UnloadUnusedAssets();
     }
-
 
     [UsedImplicitly]
     private void OnGUI()
@@ -193,13 +189,11 @@ public class LevelCreator : EditorWindow
             // data
             // TODO: total points
             GUI.Label(new Rect(400f, 25f, 120f, 20f), "Points: " + TotalPoints());
-
         }
         GUI.EndGroup();
 
         return false;
     }
-
 
     private void Formations()
     {
@@ -213,7 +207,6 @@ public class LevelCreator : EditorWindow
         }
         GUI.EndScrollView();
     }
-
 
     private float DrawFormation(int formationIndex)
     {
@@ -308,6 +301,7 @@ public class LevelCreator : EditorWindow
             // load
             if (GUI.Button(new Rect(660f, formationHeight, 50f, 20f), "Load"))
             {
+                LoadFormationGroup(formationIndex);
             }
         }
         GUI.EndGroup();
@@ -327,7 +321,6 @@ public class LevelCreator : EditorWindow
 
         return height;
     }
-
 
     private float Enemy(int formationIndex, int enemyIndex, float y, SerializedProperty sformationGroup)
     {
@@ -447,7 +440,6 @@ public class LevelCreator : EditorWindow
         return height;
     }
 
-
     private void AddFormation()
     {
         int formationIndex = levelManager.formationGroups.Length;
@@ -460,7 +452,6 @@ public class LevelCreator : EditorWindow
 
         UpdateFormation(formationIndex, 0);
     }
-
 
     private void DuplicateFormation(int formationIndex)
     {
@@ -478,7 +469,6 @@ public class LevelCreator : EditorWindow
         sLevelManager.ApplyModifiedProperties();
     }
 
-
     private void DeleteFormation(int formationIndex)
     {
         sLevelManager.Update();
@@ -492,7 +482,6 @@ public class LevelCreator : EditorWindow
 
         sLevelManager.ApplyModifiedProperties();
     }
-
 
     private void UpdateFormation(int formationIndex, int prefabIndex)
     {
@@ -525,7 +514,6 @@ public class LevelCreator : EditorWindow
         EditorUtility.UnloadUnusedAssets();
     }
 
-
     private void MoveFormation(int formationIndex, int dest)
     {
         // formation
@@ -542,7 +530,6 @@ public class LevelCreator : EditorWindow
         sLevelManager.ApplyModifiedProperties();
     }
 
-
     private void MoveEnemy(int formation, int index, int dest)
     {
         // move enemies and paths
@@ -556,7 +543,6 @@ public class LevelCreator : EditorWindow
 
         sLevelManager.ApplyModifiedProperties();
     }
-
 
     private void CopyEnemy(int formation, int index, int dest)
     {
@@ -578,7 +564,6 @@ public class LevelCreator : EditorWindow
         sLevelManager.ApplyModifiedProperties();
     }
 
-
     private void SaveFormationGroup(FormationGroup formationGroup)
     {
         var window = GetWindow<SaveWindow>(true, "Save Formation", true);
@@ -586,6 +571,19 @@ public class LevelCreator : EditorWindow
         window.Initialize(formationGroup);
     }
 
+    private void LoadFormationGroup(int formationIndex)
+    {
+        var window = GetWindow<LoadWindow>(true, "Load Formation", true);
+        window.minSize = window.maxSize = new Vector2(300f, 100f);
+        window.Initialize(formationIndex, CreateFormationGroup);
+    }
+
+    private void CreateFormationGroup(int formationIndex, FormationGroup formationGroup)
+    {
+        levelManager.formationGroups[formationIndex] = formationGroup;
+        enemyToggles[formationIndex] = new bool[formationGroup.enemies.Length];
+        Repaint();
+    }
 
     private int TotalPoints()
     {
@@ -595,25 +593,21 @@ public class LevelCreator : EditorWindow
     #endregion
 }
 
-
 public class SaveWindow : EditorWindow
 {
     private const string SavePath = @"Assets/Formation Groups/{0}.prefab";
     private string saveName = string.Empty;
     private FormationGroup formationGroup;
 
-
     private void OnEnable()
     {
         Focus();
     }
 
-
     private void OnFocus()
     {
         GUI.FocusControl("SaveName");
     }
-
 
     private void OnGUI()
     {
@@ -625,9 +619,17 @@ public class SaveWindow : EditorWindow
         {
             if (GUILayout.Button("Save"))
             {
+                string assetPath = string.Format(SavePath, saveName);
                 GameObject created = new GameObject(saveName, typeof(FormationGroupContainer));
-                created.GetComponent<FormationGroupContainer>().Set(formationGroup);
-                EditorGUIUtility.PingObject(PrefabUtility.CreatePrefab(string.Format(SavePath, saveName), created));
+                var prefab = PrefabUtility.CreatePrefab(assetPath, created);
+                prefab.GetComponent<FormationGroupContainer>().Set(formationGroup);
+
+                if (!Directory.Exists(SavePath))
+                {
+                    Directory.CreateDirectory(SavePath);
+                }
+
+                EditorGUIUtility.PingObject(prefab);
                 DestroyImmediate(created);
 
                 Close();
@@ -641,9 +643,56 @@ public class SaveWindow : EditorWindow
         GUILayout.EndHorizontal();
     }
 
-
     public void Initialize(FormationGroup formationGroup)
     {
         this.formationGroup = formationGroup;
+    }
+}
+
+public class LoadWindow : EditorWindow
+{
+    private const string LoadPath = @"Assets/Formation Groups/{0}.prefab";
+    private string loadName = string.Empty;
+    private int formationIndex;
+    private Action<int, FormationGroup> onComplete;
+
+    private void OnEnable()
+    {
+        Focus();
+    }
+
+    private void OnFocus()
+    {
+        GUI.FocusControl("LoadName");
+    }
+
+    private void OnGUI()
+    {
+        GUI.SetNextControlName("LoadName");
+        loadName = EditorGUILayout.TextField("Load", loadName);
+
+        GUILayout.FlexibleSpace();
+        GUILayout.BeginHorizontal();
+        {
+            if (GUILayout.Button("Load") && !string.IsNullOrEmpty(loadName))
+            {
+                string assetPath = string.Format(LoadPath, loadName);
+                FormationGroupContainer container = (FormationGroupContainer)AssetDatabase.LoadAssetAtPath(assetPath, typeof(FormationGroupContainer));
+                onComplete(formationIndex, container.Get());
+                Close();
+            }
+
+            if (GUILayout.Button("Cancel"))
+            {
+                Close();
+            }
+        }
+        GUILayout.EndHorizontal();
+    }
+
+    public void Initialize(int formationIndex, Action<int, FormationGroup> onComplete)
+    {
+        this.formationIndex = formationIndex;
+        this.onComplete = onComplete;
     }
 }
