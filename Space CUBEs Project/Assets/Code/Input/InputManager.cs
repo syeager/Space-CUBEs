@@ -16,12 +16,19 @@ namespace SpaceCUBEs
             Keyboard,
         }
 
-        public static Inputs ActiveInput { get; private set; }
+        [SerializeField, UsedImplicitly]
+        private Inputs activeInput;
+
+        public static Inputs ActiveInput
+        {
+            get { return Main.activeInput; }
+        }
 
         #endregion
 
         #region MonoBehaviour Overrides
 
+#if !UNITY_EDITOR
         [UsedImplicitly]
         private void Update()
         {
@@ -32,12 +39,12 @@ namespace SpaceCUBEs
                     {
                         if (Input.multiTouchEnabled)
                         {
-                            ActiveInput = Inputs.Touch;
+                            activeInput = Inputs.Touch;
                         }
                         else
                         {
                             Screen.showCursor = true;
-                            ActiveInput = Inputs.Keyboard;
+                            activeInput = Inputs.Keyboard;
                         }
                     }
                     break;
@@ -46,18 +53,19 @@ namespace SpaceCUBEs
                     if (Input.GetJoystickNames().Length >= 1)
                     {
                         Screen.showCursor = false;
-                        ActiveInput = Inputs.Gamepad;
+                        activeInput = Inputs.Gamepad;
                     }
                     break;
 
                 case Inputs.Touch:
                     if (Input.GetJoystickNames().Length >= 1)
                     {
-                        ActiveInput = Inputs.Gamepad;
+                        activeInput = Inputs.Gamepad;
                     }
                     break;
             }
         }
+#endif
 
         #endregion
     }

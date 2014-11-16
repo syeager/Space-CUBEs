@@ -21,8 +21,8 @@ namespace SpaceCUBEs
         {
             BasicButton,
             Cancel,
-            Save,
             Confirm,
+            Play,
         }
 
         #endregion

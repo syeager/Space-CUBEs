@@ -1,7 +1,4 @@
 ﻿// Little Byte Games
-// Author: Steve Yeager
-// Created: 2014.01.16
-// Edited: 2014.10.19
 
 using System;
 using Annotations;
@@ -22,26 +19,6 @@ public class StoreManager : Singleton<StoreManager>
     [Header("HUD")]
     [SerializeField, UsedImplicitly]
     private PreviewCUBE preview;
-    //[SerializeField, UsedImplicitly]
-    //private UILabel selectedCUBE;
-
-    //[SerializeField, UsedImplicitly]
-    //private UILabel health;
-
-    //[SerializeField, UsedImplicitly]
-    //private UILabel shield;
-
-    //[SerializeField, UsedImplicitly]
-    //private UILabel speed;
-
-    //[SerializeField, UsedImplicitly]
-    //private UILabel damage;
-
-    //[SerializeField, UsedImplicitly]
-    //private UILabel count;
-
-    //[SerializeField, UsedImplicitly]
-    //private UILabel cpLabel;
 
     [Header("Bank")]
     [SerializeField, UsedImplicitly]
@@ -66,6 +43,10 @@ public class StoreManager : Singleton<StoreManager>
     #endregion
 
     #region Private Fields
+
+    [Header("Upgrades")]
+    [SerializeField, UsedImplicitly]
+    private GameObject[] corePrefabs;
 
     private int[] inventory;
 
@@ -134,7 +115,6 @@ public class StoreManager : Singleton<StoreManager>
         preview.SetStock(inventory[itemIndex]);
         UpdateShopButtons(itemIndex);
     }
-
 
     public void Buy()
     {
@@ -210,7 +190,6 @@ public class StoreManager : Singleton<StoreManager>
         }
     }
 
-
     private void UpdateShowCase(GameObject newShowcase)
     {
         if (showcaseItem != null) Destroy(showcaseItem.gameObject);
@@ -270,7 +249,7 @@ public class StoreManager : Singleton<StoreManager>
                 preview.SetDescription("Ship Core Lv " + (args.id + 1), "Core Description");
                 preview.SetStock(BuildStats.GetCoreLevel() >= args.id ? 1 : 0);
 
-                UpdateShowCase(GameObject.CreatePrimitive(PrimitiveType.Cube));
+                UpdateShowCase(Instantiate(corePrefabs[0]) as GameObject);
 
                 // prices
                 sellPrice.text = string.Empty;
