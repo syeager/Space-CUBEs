@@ -1,7 +1,4 @@
 ﻿// Little Byte Games
-// Author: Steve Yeager
-// Created: 2014.06.30
-// Edited: 2014.09.08
 
 using System.Collections;
 using UnityEngine;
@@ -67,20 +64,21 @@ namespace SpaceCUBEs
             yield return StartCoroutine(ShowHealth());
         }
 
-
         private IEnumerator ShowTitle()
         {
             title.SetActive(true);
             Time.timeScale = 0f;
-            float target = Time.realtimeSinceStartup + titleShowTime;
-            while (Time.realtimeSinceStartup < target)
+
+            float timer = 0f;
+            while (timer < titleShowTime)
             {
+                timer += GameTime.Paused ? 0f : Time.unscaledDeltaTime;
                 yield return null;
             }
+
             Time.timeScale = 1f;
             title.SetActive(false);
         }
-
 
         private IEnumerator ShowHealth()
         {
