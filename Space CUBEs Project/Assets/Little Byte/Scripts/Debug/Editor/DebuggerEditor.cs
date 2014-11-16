@@ -106,7 +106,7 @@ public class DebuggerEditor : Creator<Debugger>
         EditorGUILayout.PropertyField(fpsWarning, new GUIContent("FPS Warning"));
         if (fpsWarning.boolValue)
         {
-            lowFPS.intValue = EditorGUILayout.IntSlider("Low FPS", lowFPS.intValue, 1, GameTime.targetFPS);
+            lowFPS.intValue = EditorGUILayout.IntSlider("Low FPS", lowFPS.intValue, 1, GameTime.TargetFPS);
         }
     }
 

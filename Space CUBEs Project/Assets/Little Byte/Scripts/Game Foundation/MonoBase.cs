@@ -18,7 +18,7 @@ public class MonoBase : MonoBehaviour
 
     #region Properties
 
-    public float deltaTime { get { return GameTime.deltaTime * timeScale; } }
+    public float deltaTime { get { return GameTime.DeltaTime * timeScale; } }
 
     #endregion
 

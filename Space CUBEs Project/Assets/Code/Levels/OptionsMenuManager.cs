@@ -184,7 +184,7 @@ namespace SpaceCUBEs
 
         private void LoadQuality()
         {
-            int fpsIndex = Array.IndexOf(FrameRates, GameTime.targetFPS);
+            int fpsIndex = Array.IndexOf(FrameRates, GameTime.TargetFPS);
             fpsToggles[fpsIndex].value = true;
 
             qualityLevel = GameSettings.Main.qualityLevel;

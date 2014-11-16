@@ -17,8 +17,8 @@ public class GameMasterEditor : Creator<GameMaster>
     {
         serializedObject.Update();
 
-        int targetFPS = EditorGUILayout.IntSlider("Target FPS", GameTime.targetFPS, GameTime.MinFPS, GameTime.MaxFPS);
-        if (targetFPS != GameTime.targetFPS)
+        int targetFPS = EditorGUILayout.IntSlider("Target FPS", GameTime.TargetFPS, GameTime.MinFPS, GameTime.MaxFPS);
+        if (targetFPS != GameTime.TargetFPS)
         {
             GameTime.CapFPS(targetFPS);
         }
