@@ -7,11 +7,45 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: ShaderForgeInternal
-  m_Shader: {fileID: 4800000, guid: e5ef7a26f0800a44593b5f0ca22d8ae1, type: 3}
+  m_Shader: {fileID: 4800000, guid: f4492a8330c2a1142a460551d3a167fb, type: 3}
   m_ShaderKeywords: []
   m_CustomRenderQueue: -1
   m_SavedProperties:
     serializedVersion: 2
-    m_TexEnvs: {}
-    m_Floats: {}
+    m_TexEnvs:
+      data:
+        first:
+          name: _RefractionBump
+        second:
+          m_Texture: {fileID: 2800000, guid: 348d3407b81faa342b5ffba6b8d977c7, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _EmitCubemap
+        second:
+          m_Texture: {fileID: 8900000, guid: 1c5b6b0015b3622489503c11a6c00db5, type: 2}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _Cutoff
+        second: .5
+      data:
+        first:
+          name: _SpecSlider
+        second: 5
+      data:
+        first:
+          name: _GlossSlider
+        second: .615384579
+      data:
+        first:
+          name: _RefractionIntensity
+        second: 1
+      data:
+        first:
+          name: _AlphaFresnelSlider
+        second: 2.46977401
     m_Colors: {}

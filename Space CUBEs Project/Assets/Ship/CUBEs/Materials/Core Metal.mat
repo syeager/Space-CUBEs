@@ -6,8 +6,8 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: VertexColor_Mat
-  m_Shader: {fileID: 4800000, guid: 1937090eeefa6494aa686dd288cc4e3b, type: 3}
+  m_Name: Core Metal
+  m_Shader: {fileID: 4800000, guid: cde26ad4dc5d2204481aa429f054d33e, type: 3}
   m_ShaderKeywords: []
   m_CustomRenderQueue: -1
   m_SavedProperties:
@@ -15,49 +15,49 @@ Material:
     m_TexEnvs:
       data:
         first:
-          name: _MainTex
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
           name: _NormalTex
         second:
-          m_Texture: {fileID: 2800000, guid: d58856ad933706c4da9fba9ebb116d3a, type: 3}
+          m_Texture: {fileID: 2800000, guid: 777f7c809dffa814789d0fd9b5e190dc, type: 3}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
       data:
         first:
           name: _SpecCubemap
         second:
-          m_Texture: {fileID: 8900000, guid: 1c5b6b0015b3622489503c11a6c00db5, type: 2}
+          m_Texture: {fileID: 8900000, guid: 476dfa2c635d92443aac5535c8e6e6c5, type: 2}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
       data:
         first:
           name: _DiffuseTex
         second:
-          m_Texture: {fileID: 2800000, guid: d58856ad933706c4da9fba9ebb116d3a, type: 3}
+          m_Texture: {fileID: 2800000, guid: 777f7c809dffa814789d0fd9b5e190dc, type: 3}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
       data:
         first:
           name: _node_5
         second:
-          m_Texture: {fileID: 0}
+          m_Texture: {fileID: 2800000, guid: 777f7c809dffa814789d0fd9b5e190dc, type: 3}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
       data:
         first:
           name: _node_217
         second:
-          m_Texture: {fileID: 0}
+          m_Texture: {fileID: 8900000, guid: 476dfa2c635d92443aac5535c8e6e6c5, type: 2}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
       data:
         first:
           name: _node_312
+        second:
+          m_Texture: {fileID: 2800000, guid: 777f7c809dffa814789d0fd9b5e190dc, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _DiffuseTexture
         second:
           m_Texture: {fileID: 0}
           m_Scale: {x: 1, y: 1}
@@ -75,19 +75,7 @@ Material:
         first:
           name: _SpecularSlider
         second: .239317298
-      data:
-        first:
-          name: _Alpha
-        second: 1
-      data:
-        first:
-          name: _Attenu
-        second: 2
     m_Colors:
-      data:
-        first:
-          name: _Color
-        second: {r: 1, g: 0, b: 0, a: 1}
       data:
         first:
           name: _DiffuseClr
