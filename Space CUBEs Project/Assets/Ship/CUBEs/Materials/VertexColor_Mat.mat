@@ -7,7 +7,7 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: VertexColor_Mat
-  m_Shader: {fileID: 4800000, guid: 1937090eeefa6494aa686dd288cc4e3b, type: 3}
+  m_Shader: {fileID: 4800000, guid: 493aa4cc507fe1b47a982c0333dd4539, type: 3}
   m_ShaderKeywords: []
   m_CustomRenderQueue: -1
   m_SavedProperties:
@@ -16,6 +16,27 @@ Material:
       data:
         first:
           name: _MainTex
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _node_5
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _node_217
+        second:
+          m_Texture: {fileID: 0}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _node_312
         second:
           m_Texture: {fileID: 0}
           m_Scale: {x: 1, y: 1}
@@ -41,40 +62,7 @@ Material:
           m_Texture: {fileID: 2800000, guid: d58856ad933706c4da9fba9ebb116d3a, type: 3}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _node_5
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _node_217
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _node_312
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
     m_Floats:
-      data:
-        first:
-          name: _SpecSlider
-        second: .239317298
-      data:
-        first:
-          name: _GlossSlider
-        second: .264958292
-      data:
-        first:
-          name: _SpecularSlider
-        second: .239317298
       data:
         first:
           name: _Alpha
@@ -83,16 +71,32 @@ Material:
         first:
           name: _Attenu
         second: 2
+      data:
+        first:
+          name: _Mix
+        second: 0
+      data:
+        first:
+          name: _SpecularSlider
+        second: .239317298
+      data:
+        first:
+          name: _GlossSlider
+        second: .264958292
+      data:
+        first:
+          name: _SpecSlider
+        second: .239317298
     m_Colors:
       data:
         first:
           name: _Color
-        second: {r: 1, g: 0, b: 0, a: 1}
-      data:
-        first:
-          name: _DiffuseClr
-        second: {r: .300000012, g: .300000012, b: .300000012, a: 1}
+        second: {r: 1, g: 1, b: 1, a: 1}
       data:
         first:
           name: _color
+        second: {r: .300000012, g: .300000012, b: .300000012, a: 1}
+      data:
+        first:
+          name: _DiffuseClr
         second: {r: .300000012, g: .300000012, b: .300000012, a: 1}

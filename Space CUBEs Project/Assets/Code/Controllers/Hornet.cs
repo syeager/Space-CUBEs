@@ -24,7 +24,7 @@ namespace SpaceCUBEs
 
         #endregion
 
-        #region Attacking Fields
+        #region Private Fields
 
         public Weapon laser;
 
@@ -36,6 +36,12 @@ namespace SpaceCUBEs
 
         [SerializeField, UsedImplicitly]
         private float attackDelay;
+
+        [SerializeField, UsedImplicitly]
+        private float enterSpeed;
+
+        [SerializeField, UsedImplicitly]
+        private float exitSpeed;
 
         #endregion
 
@@ -66,6 +72,8 @@ namespace SpaceCUBEs
             path = (Path)info["path"];
             MyHealth.Initialize();
             path.Initialize(myTransform);
+
+            MyMotor.speed = enterSpeed;
 
             stateMachine.SetState(EnteringState);
         }
@@ -108,6 +116,8 @@ namespace SpaceCUBEs
 
         private IEnumerator ExitingUpdate()
         {
+            MyMotor.speed = exitSpeed;
+
             while (true)
             {
                 MyMotor.Move((Vector2)path.Direction(deltaTime));
